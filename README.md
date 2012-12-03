@@ -18,7 +18,7 @@ var client = new Auth0({
 ### getConnections(callback)
 
 ~~~js
-strategy.getConnections(function (err, connections){
+client.getConnections(function (err, connections){
   //.....
 });
 ~~~
@@ -64,7 +64,7 @@ var myNewConnection =  {
     "status": 0
   };
 
-strategy.createConnection(myNewConnection, function (err) {
+client.createConnection(myNewConnection, function (err) {
   //.....
 });
 ~~~
@@ -72,7 +72,7 @@ strategy.createConnection(myNewConnection, function (err) {
 ### getConnection(id, callback)
 
 ~~~js
-strategy.getConnection(function (err, connection){
+client.getConnection(function (err, connection){
   //.....
 });
 ~~~
