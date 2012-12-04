@@ -32,36 +32,11 @@ var myNewConnection =  {
     "client_id": "aaa",
     "options": {
       "client_secret": "aadsadsadsa",
-      "email": true,
-      "profile": true,
-      "contacts": false,
-      "blogger": false,
-      "calendar": false,
-      "gmail": false,
-      "google_plus": false,
-      "orkut": false,
-      "picasa_web": false,
-      "tasks": false,
-      "youtube": false,
-      "adsense_management": false,
-      "google_affiliate_network": false,
-      "analytics": false,
-      "google_books": false,
-      "google_cloud_storage": false,
-      "content_api_for_shopping": false,
-      "chrome_web_store": false,
-      "document_list": false,
-      "google_drive": false,
-      "google_drive_files": false,
-      "latitude_best": false,
-      "latitude_city": false,
-      "moderator": false,
-      "sites": false,
-      "spreadsheets": false,
-      "url_shortener": false,
-      "webmaster_tools": false
-    },
-    "status": 0
+      "sites": true,
+      "spreadsheets": true,
+      "url_shortener": true,
+      "webmaster_tools": true
+    }
   };
 
 client.createConnection(myNewConnection, function (err) {
