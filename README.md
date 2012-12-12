@@ -44,10 +44,21 @@ client.createConnection(myNewConnection, function (err) {
 });
 ~~~
 
-### getConnection(id, callback)
+### getConnection(name, callback)
 
 ~~~js
-client.getConnection(function (err, connection){
+client.getConnection('my-connection', function (err, connection){
   //.....
+});
+~~~
+
+
+### connection.getUsers (callback)
+
+~~~js
+client.getConnection('my-connection', function (err, connection){
+  connection.getUsers(function (err, users) {
+    //....
+  });
 });
 ~~~
