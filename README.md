@@ -15,7 +15,7 @@ var client = new Auth0({
 });
 ~~~
 
-### getConnections(callback)
+### client.getConnections(callback)
 
 ~~~js
 client.getConnections(function (err, connections){
@@ -23,7 +23,7 @@ client.getConnections(function (err, connections){
 });
 ~~~
 
-### createConnection(callback)
+### client.createConnection(callback)
 
 ~~~js
 var myNewConnection =  {
@@ -44,7 +44,21 @@ client.createConnection(myNewConnection, function (err) {
 });
 ~~~
 
-### getConnection(name, callback)
+### client.getUsers({[connection: connection], [limit: limit], [skip: skip]}, callback)
+
+This method returns a list of users. It supports pagination and also you can filter by connection name.
+
+Example return the first 50 users from all connections.
+
+~~~js
+client.getUsers({limit: 50, skip:0}, function (err, result) {
+  //result.users is an array with the user objects
+  //result.total total amount of users that this query can return
+});
+~~~
+
+
+### client.getConnection(name, callback)
 
 ~~~js
 client.getConnection('my-connection', function (err, connection){
@@ -55,9 +69,11 @@ client.getConnection('my-connection', function (err, connection){
 
 ### connection.getUsers (callback)
 
+The skip and limit parameters are optional.
+
 ~~~js
 client.getConnection('my-connection', function (err, connection){
-  connection.getUsers(function (err, users) {
+  connection.getUsers([{skip: x, limit: y}], function (err, users) {
     //....
   });
 });
