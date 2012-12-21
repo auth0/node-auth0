@@ -29,8 +29,8 @@ client.getConnections(function (err, connections){
 var myNewConnection =  {
     "name": "a-new-connection",
     "strategy": "google-oauth2",
-    "client_id": "aaa",
     "options": {
+      "client_id": "aaa",
       "client_secret": "aadsadsadsa",
       "sites": true,
       "spreadsheets": true,
