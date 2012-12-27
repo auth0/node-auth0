@@ -44,16 +44,28 @@ client.createConnection(myNewConnection, function (err) {
 });
 ~~~
 
-### client.getUsers({[connection: connection], [limit: limit], [skip: skip]}, callback)
+### client.getUsers({[connection: connection], [per_page: 10]}, callback)
 
-This method returns a list of users. It supports pagination and also you can filter by connection name.
+This method returns a list of users.
 
-Example return the first 50 users from all connections.
+If ```connection``` name is passed on the options, it will search the users on the directory of the connection. Suppose it is a **Windows Azure Active Directory** connection it will fetch all the users from the directory. If the connection doesn't have a directory or it is a Social connection like **Google Auth 2** it will return all the users that have logged in to your application at least once.
+
+The amount of items per page is optional (defaults to 100) and it is not supported for all directories, eg: connections using **Google Apps** ignores this argument and uses 100.
 
 ~~~js
-client.getUsers({limit: 50, skip:0}, function (err, result) {
-  //result.users is an array with the user objects
-  //result.total total amount of users that this query can return
+client.getUsers({connection: 'a-waad-connection'}, function (err, result) {
+  //result is an array with the user objects
+});
+~~~
+
+The callback has the common signature for node.js method [err, result] where result is an array of users with an special hidden property called ```nextPageLink```. These links are safe to be shared since they will work for a short period of time and have an special signature that make them safe. 
+
+Although you can do a simple GET to that link to fetch the next page, you can use the library as well:
+
+~~~js
+client.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResults) {
+  client.getUsers({page: firstPageOfResults.nextPageLink}, function (err, secondPageOfResults) {
+  });
 });
 ~~~
 
@@ -63,18 +75,5 @@ client.getUsers({limit: 50, skip:0}, function (err, result) {
 ~~~js
 client.getConnection('my-connection', function (err, connection){
   //.....
-});
-~~~
-
-
-### connection.getUsers (callback)
-
-The skip and limit parameters are optional.
-
-~~~js
-client.getConnection('my-connection', function (err, connection){
-  connection.getUsers([{skip: x, limit: y}], function (err, users) {
-    //....
-  });
 });
 ~~~
