@@ -70,6 +70,10 @@ client.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfRes
 ~~~
 
 
+### client.getSocialUsers({[per_page: 10]}, callback)
+
+The same than ```getUsers``` but this method returns users for all social connections, ie: not enterprise connections.
+
 ### client.getConnection(name, callback)
 
 ~~~js
