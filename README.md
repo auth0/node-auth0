@@ -26,24 +26,40 @@ client.getConnections(function (err, connections){
 
 ### client.createConnection(callback)
 
+Normally you will create what we call **enterprise connections** from your application. 
+
+When a new customer sign up to your product, you will ask him for his **directory's** credentials. Then you will be able to create the connection by using our API or in this case this client library: 
+
 ~~~js
 var myNewConnection =  {
-    "name": "a-new-connection",
-    "strategy": "google-oauth2",
-    "options": {
-      "client_id": "aaa",
-      "client_secret": "aadsadsadsa",
-      "sites": true,
-      "spreadsheets": true,
-      "url_shortener": true,
-      "webmaster_tools": true
-    }
-  };
+    //a friendly name to identify the connection
+    'name': 'thesuperstore-connection',
+    
+    //this is the strategy: office365, google-apps, adfs
+    'strategy': 'office365', 
+    'options': {
+      
+      // these are the credentials of your application in the provider
+      'app_domain':    'your-app-domain.com',
+      'client_id':     'xxx',       
+      'client_secret': 'xxx',
+      
+      // this field is provided by the user when he registers:
+      'tenant_domain': 'your tenants domain',
+      
+      // these are the grants you want:
+      'user_id':          true,
+      'email':            true,
+      'ext_profile':      true
+    };
 
-client.createConnection(myNewConnection, function (err) {
+client.createConnection(myNewConnection, function (err, connection) {
   //.....
 });
 ~~~
+
+The returned connection will have a ```provisioning_ticket_url``` field to which you have to redirect the client in order to complete the authorization process.
+
 
 ### client.getUsers({[connection: connection], [per_page: 10]}, callback)
 
