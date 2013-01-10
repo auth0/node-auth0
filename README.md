@@ -52,10 +52,13 @@ var myNewConnection =  {
       // These fields are provided by the user:
       'tenant_domain': 'bigcompany.com or bicompany.onmicrosoft.com',
       
+      // attributes:
+      'ext_profile':      	true,
+      'ext_groups': 	  	true, 
+      'ext_assigned_plans': 	true,
+      
       // grants:
-      'user_id':          true,
-      'email':            true,
-      'ext_profile':      true
+      'api_enable_users':	true
     };
 
 client.createConnection(myNewConnection, function (err, connection) {
