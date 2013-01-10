@@ -106,3 +106,20 @@ client.getConnection('my-connection', function (err, connection){
   //.....
 });
 ~~~
+
+## Authentication
+
+This library is useful to consume the rest api of auth0, in order to authenticate users you can use the [passport strategy](https://github.com/qraftlabs/passport-auth0). 
+
+## Complete example
+
+A complete example of using this library [here](http://github.com/qraftlabs/passport-auth0).
+
+
+## Documentation
+
+For more information about [auth0](http://auth0..com) contact our [documentation page](http://docs.auth0.com/).
+
+## License
+
+This client library is MIT licensed.
