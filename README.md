@@ -10,9 +10,9 @@ Node.js client library for the Auth0 platform.
 var Auth0 = require('auth0');
 
 var client = new Auth0({
+  domain:       'yourdomain.auth0.com',
   clientID:     'your-client-id',
-  clientSecret: 'your-client-secret',
-  domain:       'yourdomain.auth0.com'
+  clientSecret: 'your-client-secret'
 });
 ~~~
 
