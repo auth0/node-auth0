@@ -6,6 +6,8 @@ Node.js client library for the Auth0 platform.
 
 ## Usage
 
+Initialice your client class with the credentials in the [settings section](https://app.auth0.com/#/settings) of the dashboard.
+
 ~~~js
 var Auth0 = require('auth0');
 
@@ -17,6 +19,8 @@ var client = new Auth0({
 ~~~
 
 ### client.getConnections(callback)
+
+Return a list of all the connections in your application:
 
 ~~~js
 client.getConnections(function (err, connections){
@@ -34,7 +38,7 @@ When a new customer sign up to your product, you will ask him for his **director
 var myNewConnection =  {
     //a friendly name to identify the connection
     'name': 'thesuperstore-connection',
-    
+
     //this is the strategy: office365, google-apps, adfs
     'strategy': 'office365', 
     'options': {
