@@ -30,9 +30,7 @@ client.getConnections(function (err, connections){
 
 ### client.createConnection(callback)
 
-Normally you will create what we call **enterprise connections** from your application. 
-
-When a new customer sign up to your product, you will ask him for his **directory's** credentials. Then you will be able to create the connection by using our API or in this case this client library: 
+Let's say one of your customers wants to use its own directory to authenticate to your app. You will have to create a **connection** in Auth0 for this customer and if you want to automate that for N customers, you will want to use the API. Typically, you will ask the customer domain name and depending on the directory you are connecting to, some metadata. Together with other information, like the attributes your app needs, a set of credentials, etc. you can call the API.
 
 ~~~js
 var myNewConnection =  {
@@ -41,17 +39,20 @@ var myNewConnection =  {
 
     //this is the strategy: office365, google-apps, adfs
     'strategy': 'office365', 
+    
     'options': {
       
-      // these are the credentials of your application in the provider
-      'app_domain':    'your-app-domain.com',
+      // depending on the strategy, you will need a set of credentials to authenticate 
+      // your app against the directory (office365 and google apps use this)
+      // Note: you will use the same values for these fields 
+      // for all connections with same strategy (in this case office365)
       'client_id':     'xxx',       
       'client_secret': 'xxx',
       
-      // this field is provided by the user when he registers:
-      'tenant_domain': 'your tenants domain',
+      // These fields are provided by the user:
+      'tenant_domain': 'bigcompany.com or bicompany.onmicrosoft.com',
       
-      // these are the grants you want:
+      // grants:
       'user_id':          true,
       'email':            true,
       'ext_profile':      true
