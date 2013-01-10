@@ -11,7 +11,8 @@ var Auth0 = require('auth0');
 
 var client = new Auth0({
   clientID:     'your-client-id',
-  clientSecret: 'your-client-secret'
+  clientSecret: 'your-client-secret',
+  domain:       ''
 });
 ~~~
 
