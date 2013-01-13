@@ -6,7 +6,7 @@ Node.js client library for the Auth0 platform.
 
 ## Usage
 
-Initialice your client class with the credentials in the [settings section](https://app.auth0.com/#/settings) of the dashboard.
+Initialize your client class with the credentials in the [settings section](https://app.auth0.com/#/settings) of the dashboard.
 
 ~~~js
 var Auth0 = require('auth0');
@@ -66,8 +66,7 @@ client.createConnection(myNewConnection, function (err, connection) {
 });
 ~~~
 
-The returned connection will have a ```provisioning_ticket_url``` field to which you have to redirect the client in order to complete the authorization process.
-
+Because this example uses Office 365, the returned connection object will have a ```provisioning_ticket_url``` field to which you have to redirect the client in order to complete the authorization process.
 
 ### client.getUsers({[connection: connection], [per_page: 10]}, callback)
 
@@ -113,7 +112,7 @@ This library is useful to consume the rest api of auth0, in order to authenticat
 
 ## Complete example
 
-A complete example of using this library [here](http://github.com/qraftlabs/passport-auth0).
+A complete example of using this library [here](http://github.com/auth0/passport-auth0).
 
 
 ## Documentation
