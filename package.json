@@ -7,7 +7,7 @@
     "test": "mocha"
   },
   "repository": "",
-  "author": "qraftlabs",
+  "author": "Auth0",
   "license": "MIT",
   "devDependencies": {
     "mocha": "~1.7.0",
