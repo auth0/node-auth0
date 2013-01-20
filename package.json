@@ -6,7 +6,10 @@
   "scripts": {
     "test": "mocha"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/auth0/node-auth0.git"
+  },
   "author": "Auth0",
   "license": "MIT",
   "devDependencies": {
