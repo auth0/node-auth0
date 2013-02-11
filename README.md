@@ -41,24 +41,9 @@ var myNewConnection =  {
     'strategy': 'office365', 
     
     'options': {
-      
       // depending on the strategy, you will need a set of credentials to authenticate 
       // your app against the directory (office365 and google apps use this)
-      // Note: you will use the same values for these fields 
-      // for all connections with same strategy (in this case office365)
-      'client_id':     'xxx',       
-      'client_secret': 'xxx',
-      
-      // These fields are provided by the user:
-      'tenant_domain': 'bigcompany.com or bicompany.onmicrosoft.com',
-      
-      // attributes:
-      'ext_profile':      	true,
-      'ext_groups': 	  	true, 
-      'ext_assigned_plans': 	true,
-      
-      // grants:
-      'api_enable_users':	true
+      'tenant_domain': 'bigcompany.com or bicompany.onmicrosoft.com'
     };
 
 client.createConnection(myNewConnection, function (err, connection) {
