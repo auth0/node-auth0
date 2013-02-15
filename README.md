@@ -28,6 +28,8 @@ client.getConnections(function (err, connections){
 });
 ~~~
 
+Additionally there is a ```getSocialConnections``` and ```getEnterpriseConnections```.
+
 ### client.createConnection(callback)
 
 Let's say one of your customers wants to use its own directory to authenticate to your app. You will have to create a **connection** in Auth0 for this customer and if you want to automate that for N customers, you will want to use the API. Typically, you will ask the customer domain name and depending on the directory you are connecting to, some metadata. Together with other information, like the attributes your app needs, a set of credentials, etc. you can call the API.
