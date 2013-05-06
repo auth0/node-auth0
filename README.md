@@ -93,6 +93,14 @@ client.getConnection('my-connection', function (err, connection){
 });
 ~~~
 
+### client.getStrategies(callback)
+
+~~~js
+client.getStrategies(function (err, strategies){
+  //.....
+});
+~~~
+
 ## Authentication
 
 This library is useful to consume the rest api of auth0, in order to authenticate users you can use the [passport strategy](https://github.com/qraftlabs/passport-auth0). 
