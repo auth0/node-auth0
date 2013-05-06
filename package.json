@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Client library for the Auth0 platform",
   "main": "lib/index.js",
   "scripts": {
