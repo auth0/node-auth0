@@ -11,26 +11,26 @@ Initialize your client class with the credentials in the [settings section](http
 ~~~js
 var Auth0 = require('auth0');
 
-var client = new Auth0({
+var api = new Auth0({
   domain:       'yourdomain.auth0.com',
   clientID:     'your-client-id',
   clientSecret: 'your-client-secret'
 });
 ~~~
 
-### client.getConnections(callback)
+### api.getConnections(callback)
 
 Return a list of all the connections in your application:
 
 ~~~js
-client.getConnections(function (err, connections){
+api.getConnections(function (err, connections){
   //.....
 });
 ~~~
 
 Additionally there is a ```getSocialConnections``` and ```getEnterpriseConnections```.
 
-### client.createConnection(callback)
+### api.createConnection(callback)
 
 Let's say one of your customers wants to use its own directory to authenticate to your app. You will have to create a **connection** in Auth0 for this customer and if you want to automate that for N customers, you will want to use the API. Typically, you will ask the customer domain name and depending on the directory you are connecting to, some metadata. Together with other information, like the attributes your app needs, a set of credentials, etc. you can call the API.
 
@@ -48,14 +48,14 @@ var myNewConnection =  {
       'tenant_domain': 'bigcompany.com or bicompany.onmicrosoft.com'
     };
 
-client.createConnection(myNewConnection, function (err, connection) {
+api.createConnection(myNewConnection, function (err, connection) {
   //.....
 });
 ~~~
 
 Because this example uses Office 365, the returned connection object will have a ```provisioning_ticket_url``` field to which you have to redirect the client in order to complete the authorization process.
 
-### client.getUsers({[connection: connection], [per_page: 10]}, callback)
+### api.getUsers({[connection: connection], [per_page: 10]}, callback)
 
 This method returns a list of users.
 
@@ -64,7 +64,7 @@ If ```connection``` name is passed on the options, it will search the users on t
 The amount of items per page is optional (defaults to 100) and it is not supported for all directories, eg: connections using **Google Apps** ignores this argument and uses 100.
 
 ~~~js
-client.getUsers({connection: 'a-waad-connection'}, function (err, result) {
+api.getUsers({connection: 'a-waad-connection'}, function (err, result) {
   //result is an array with the user objects
 });
 ~~~
@@ -74,29 +74,91 @@ The callback has the common signature for node.js method [err, result] where res
 Although you can do a simple GET to that link to fetch the next page, you can use the library as well:
 
 ~~~js
-client.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResults) {
-  client.getUsers({page: firstPageOfResults.nextPageLink}, function (err, secondPageOfResults) {
+api.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResults) {
+  api.getUsers({page: firstPageOfResults.nextPageLink}, function (err, secondPageOfResults) {
   });
 });
 ~~~
 
 
-### client.getSocialUsers({[per_page: 10]}, callback)
+### api.getSocialUsers({[per_page: 10]}, callback)
 
 The same than ```getUsers``` but this method returns users for all social connections, ie: not enterprise connections.
 
-### client.getConnection(name, callback)
+### api.getConnection(name, callback)
 
 ~~~js
-client.getConnection('my-connection', function (err, connection){
+api.getConnection('my-connection', function (err, connection) {
   //.....
 });
 ~~~
 
-### client.getStrategies(callback)
+### api.getStrategies(callback)
 
 ~~~js
-client.getStrategies(function (err, strategies){
+api.getStrategies(function (err, strategies) {
+  //.....
+});
+~~~
+
+### api.deleteTenant
+
+~~~js
+api.deleteTenant(name, function (err) {
+  //.....
+});
+~~~
+
+### api.createClient
+
+~~~js
+api.createClient(client, function (err, newClient) {
+  //.....
+});
+~~~
+
+### api.updateClient
+
+~~~js
+api.updateClient(client, function (err) {
+  //.....
+});
+~~~
+
+### api.deleteClient
+
+~~~js
+api.deleteClient(clientID, function (err) {
+  //.....
+});
+~~~
+
+### api.getClients
+
+Returns a list of all the tenant's clients.
+
+~~~js
+api.getClients(function (err, clients) {
+  //.....
+});
+~~~
+
+### api.getClients
+
+Returns client by clientID.
+
+~~~js
+api.getClients(clientID, function (err, client) {
+  //.....
+});
+~~~
+
+### api.getClientsByUserId
+
+Returns a list of all the user's clients.
+
+~~~js
+api.getClientsByUserId(userId, function (err, clients) {
   //.....
 });
 ~~~
