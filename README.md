@@ -163,6 +163,53 @@ api.getClientsByUserId(userId, function (err, clients) {
 });
 ~~~
 
+### api.createRule
+
+Creates a new transformation Rule
+
+~~~js
+var rule = {
+  name: "A rule",
+  status: true,
+  script: "function(user, context, done) {}"
+};
+
+api.createRule(rule, function (err, rule) {
+  //.....
+});
+~~~
+
+### api.getRule
+
+Returns a specific transformaion rule
+
+~~~js
+api.getRule(ruleName, function (err, rule) {
+  //.....
+});
+~~~
+
+### api.deleteRule
+
+Returns a specific transformaion rule
+
+~~~js
+api.deleteRule(ruleName, function (err) {
+  //.....
+});
+~~~
+
+### api.updateRule
+
+Updates an existing rule
+
+~~~js
+api.updateRule(rule, function (err, rule) {
+  //.....
+});
+~~~
+
+
 ## Authentication
 
 This library is useful to consume the rest api of auth0, in order to authenticate users you can use the [passport strategy](https://github.com/qraftlabs/passport-auth0). 
