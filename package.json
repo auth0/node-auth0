@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "xtend": "~1.0.3",
-    "request": "~2.12.0",
+    "request": "~2.27.0",
     "parse-links": "0.0.1"
   }
 }
