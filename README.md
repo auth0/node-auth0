@@ -55,6 +55,16 @@ api.createConnection(myNewConnection, function (err, connection) {
 
 Because this example uses Office 365, the returned connection object will have a ```provisioning_ticket_url``` field to which you have to redirect the client in order to complete the authorization process.
 
+### api.getUser(userId, callback)
+
+This method returns a single user, referenced by its ID.
+
+~~~js
+api.getUser("long-20-byte-id", function(err, user) {
+  // user is a user! error might be an error!
+});
+~~~
+
 ### api.getUsers({[connection: connection], [per_page: 10]}, callback)
 
 This method returns a list of users.
@@ -84,6 +94,26 @@ api.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResult
 ### api.getSocialUsers({[per_page: 10]}, callback)
 
 The same than ```getUsers``` but this method returns users for all social connections, ie: not enterprise connections.
+
+### api.updateUserMetadata(userId, metadata, callback)
+
+This method updates the metadata for a user. `metadata` is an object, and the fields in that object will be set on the user referenced by `userId`.
+
+~~~js
+api.updateUserMetadata("a-user-id", {my_special_data: {a: "b", c: "d"}}, function(err) {
+  // if there was a problem, err will be non-null
+});
+~~~
+
+### api.deleteUser(userId, callback)
+
+This method removes a user by ID. Be careful!
+
+~~~js
+api.deleteUser("i-dont-like-this-guy", function(err) {
+  // yep, err will be truthy if there was a problem
+});
+~~~
 
 ### api.getConnection(name, callback)
 
