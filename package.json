@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "0.1.16",
+  "version": "0.2.0",
   "description": "Client library for the Auth0 platform",
   "main": "lib/index.js",
   "scripts": {
@@ -11,11 +11,13 @@
     "url": "git://github.com/auth0/node-auth0.git"
   },
   "author": "Auth0",
-  "contributors": [{
-    "name": "Conrad Pankoff",
-    "email": "deoxxa@fknsrs.biz",
-    "url": "http://www.fknsrs.biz/"
-  }],
+  "contributors": [
+    {
+      "name": "Conrad Pankoff",
+      "email": "deoxxa@fknsrs.biz",
+      "url": "http://www.fknsrs.biz/"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "mocha": "~1.7.0",
