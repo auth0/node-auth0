@@ -83,7 +83,8 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .post('/api/users/?access_token=' + accessToken, reqUserData)
+        .post('/api/users/', reqUserData)
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(200, resUserData);
       api.createUser(reqUserData, function (err, userData) {
         expect(err).to.not.exist;
@@ -94,7 +95,7 @@ describe('API', function () {
       });
     });
     it('should fail when request fail', function (done) {
-      var reqUserData = {email: 'john@doe.com'}, resError = "Error creating user";
+      var reqUserData = {email: 'john@doe.com'}, resError = 'Error creating user';
 
       var scope = nock('https://' + domain)
         .post('/oauth/token', qs)
@@ -102,7 +103,8 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .post('/api/users/?access_token=' + accessToken, reqUserData)
+        .post('/api/users/', reqUserData)
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(401, resError);
 
       api.createUser(reqUserData, function (err, userData) {
