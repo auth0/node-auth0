@@ -95,6 +95,24 @@ api.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResult
 
 The same than ```getUsers``` but this method returns users for all social connections, ie: not enterprise connections.
 
+
+### api.getAccessToken(callback)
+
+Retrieves an Access Token to make direct HTTP calls to Auth0 API.
+```js
+
+api.getAccessToken(function (err, token) {
+  if (err) {
+    console.log('Error fetching token: ' + err);
+    return;
+  }
+
+  // Do something with token
+  ...
+});
+
+```
+
 ### api.updateUserMetadata(userId, metadata, callback)
 
 This method updates the metadata for a user. `metadata` is an object, and the fields in that object will be set on the user referenced by `userId`.
