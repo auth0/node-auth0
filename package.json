@@ -4,7 +4,7 @@
   "description": "Client library for the Auth0 platform",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha test"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "mocha": "~1.7.0",
-    "should": "~1.2.1"
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0",
+    "nock": "~0.27.2"
   },
   "dependencies": {
     "xtend": "~1.0.3",
