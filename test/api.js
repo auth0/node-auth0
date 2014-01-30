@@ -39,6 +39,8 @@ describe('API', function () {
       api.getAccessToken(function (err, token) {
         expect(err).to.not.exist;
         expect(token).to.be.equal(accessToken);
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
         done();
       });
     });
@@ -73,6 +75,8 @@ describe('API', function () {
         expect(err.name).to.be.equal('ApiError');
         expect(err.statusCode).to.be.equal(401);
         expect(token).to.not.exist;
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
         done();
       });
     });
