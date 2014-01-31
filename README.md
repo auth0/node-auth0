@@ -113,6 +113,34 @@ api.getAccessToken(function (err, token) {
 
 ```
 
+### api.createUser(userData, callback)
+Creates a new user. `userData` is an object that must contain the following mandatory fields:
+
+ * email: User's email
+ * password: User's password
+ * connection: The name of the connection where to create the user.
+
+Also, custom fields can be added with more information about the user.
+
+```js
+var newUser = {
+  email:          'john@doe.com',
+  password:       'somepass',
+  connection:     'mydb',
+
+  /* custom field */
+  favoriteColor:  'red'
+};
+api.createUser(newUser, function (err, userInfo) {
+  if (err) {
+    console.log('Error creating user: ' + err);
+    return;
+  }
+
+  console.log('User favorite color: ' + userInfo.favoriteColor);
+});
+```
+
 ### api.updateUserMetadata(userId, metadata, callback)
 
 This method updates the metadata for a user. `metadata` is an object, and the fields in that object will be set on the user referenced by `userId`.
