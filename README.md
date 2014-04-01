@@ -141,6 +141,36 @@ api.createUser(newUser, function (err, userInfo) {
 });
 ```
 
+### api.updateUserEmail(userId, newEmail, verify, callback)
+
+This method updates the email field of an user identified by `userId`. When `verify` boolean flag is on it sends an email to the affected user to confirm the change.
+
+```js
+api.updateUserEmail("my-user-id", "john.new.email@foo.com", false, function (err, result) {
+  if (err) {
+    console.log('Error updating email: ', + err);
+    return;
+  }
+  console.log(result);
+});
+```
+
+### api.updateUserPassword(userId, newPassword, verify, callback)
+
+This method updates the user password of an user identified by `userId`. When `verify` boolean flag is on it sends an email to the affected user to confirm the change.
+
+```js
+api.updateUserPassword("my-user-id", "johnthisisyournewpassword!shhh", false, function (err, result) {
+  if (err) {
+    console.log('Error updating password: ', + err);
+    return;
+  }
+  console.log(result);
+});
+```
+
+> Note: Result is not the password but a string with a success message.
+
 ### api.updateUserMetadata(userId, metadata, callback)
 
 This method updates the metadata for a user. `metadata` is an object, and the fields in that object will be set on the user referenced by `userId`.
