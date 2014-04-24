@@ -1,4 +1,4 @@
-Node.js client library for the Auth0 platform.
+Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Installation
 
