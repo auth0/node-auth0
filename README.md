@@ -315,6 +315,23 @@ api.updateRule(rule, function (err, rule) {
 });
 ~~~
 
+## Auth0
+
+### Auth0.getUserInfo
+
+Gets a profile using an user Access Token. For instance, an user access token is returned  (together with the id token) by the `/ro` end point.
+
+```js
+
+var options = {domain: 'my-domain.auth0.com', userAccessToken: 'XXXXXX'};
+
+Auth0.getUserInfo(options, function (err, profile) {
+  if (err) { throw err; }
+
+  // Use user profile here
+});
+```
+
 
 ## Authentication
 
