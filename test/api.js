@@ -231,3 +231,56 @@ describe('API', function () {
     });
   });
 });
+
+describe('Client', function () {
+  describe('getUserInfo', function () {
+    it('should work on request success', function (done) {
+      var domain = 'my-domain.auth0.com';
+      var userAccessToken = 'an-user-access-token';
+      var resUserData = {foo: 'bar'};
+      
+      var qs = querystring.stringify({
+          access_token: userAccessToken
+        });
+
+      var options = {domain: domain, userAccessToken: userAccessToken};
+
+      var scope = nock('https://' + domain)
+        .get('/userinfo?' + qs)
+        .reply(200, resUserData);
+
+      Auth0.getUserInfo(options, function (err, profile) {
+        expect(err).to.not.exist;
+        expect(profile).to.be.deep.equal(resUserData);
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+    });
+    it('should fail when request fail', function (done) {
+      var domain = 'my-domain.auth0.com';
+      var userAccessToken = 'an-user-access-token';
+      var resError = 'Invalid access token';
+      
+      var qs = querystring.stringify({
+          access_token: userAccessToken
+        });
+
+      var options = {domain: domain, userAccessToken: userAccessToken};
+
+      var scope = nock('https://' + domain)
+        .get('/userinfo?' + qs)
+        .reply(401, resError);
+
+      Auth0.getUserInfo(options, function (err, profile) {
+        expect(err.name).to.be.equal('ApiError');
+        expect(err.message).to.be.equal(resError);
+        expect(profile).to.not.exist;
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+    });
+    
+  });
+});
