@@ -1,0 +1,17 @@
+{
+  "name": "auth0-nodejsapi-sample",
+  "version": "0.1.0",
+  "description": "Auth0 + NodeJS API Seed",
+  "repository": "git://github.com/auth0/auth0-nodejsapi-sample",
+  "author": "Martin Gontovnikas",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.3.1",
+    "dotenv": "^0.2.8",
+    "express": "~3.3.8",
+    "express-jwt": "0.2.1"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
