@@ -14,12 +14,12 @@ var authenticate = jwt({
 
 
 app.configure(function () {
-  
+
  // Request body parsing middleware should be above methodOverride
   app.use(express.bodyParser());
   app.use(express.urlencoded());
   app.use(express.json());
-  
+
   app.use('/api', authenticate);
   app.use(cors());
 
@@ -35,7 +35,7 @@ app.get('/api/ping', function(req, res) {
   res.send(200, {text: "All good. You only get this message if you're authenticated"});
 })
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001;
 
 http.createServer(app).listen(port, function (err) {
   console.log('listening in http://localhost:' + port);
