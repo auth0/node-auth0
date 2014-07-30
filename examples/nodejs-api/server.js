@@ -20,7 +20,7 @@ app.configure(function () {
   app.use(express.urlencoded());
   app.use(express.json());
 
-  app.use('/api', authenticate);
+  app.use('/secured', authenticate);
   app.use(cors());
 
   app.use(app.router);
@@ -31,7 +31,7 @@ app.get('/ping', function(req, res) {
   res.send(200, {text: "All good. You don't need to be authenticated to call this"});
 });
 
-app.get('/api/ping', function(req, res) {
+app.get('/secured/ping', function(req, res) {
   res.send(200, {text: "All good. You only get this message if you're authenticated"});
 })
 
