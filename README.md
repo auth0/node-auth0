@@ -335,7 +335,7 @@ Auth0.getUserInfo(options, function (err, profile) {
 
 ## Authentication
 
-This library is useful to consume the rest api of auth0, in order to authenticate users you can use the [passport strategy](https://github.com/qraftlabs/passport-auth0). 
+This library is useful to consume the rest api of auth0, in order to authenticate users you can use the [passport strategy](https://github.com/auth0/passport-auth0). 
 
 ## Complete example
 
