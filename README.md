@@ -344,7 +344,7 @@ A complete example of using this library [here](http://github.com/auth0/passport
 
 ## Documentation
 
-For more information about [auth0](http://auth0..com) contact our [documentation page](http://docs.auth0.com/).
+For more information about [auth0](http://auth0.com) contact our [documentation page](http://docs.auth0.com/).
 
 ## License
 
