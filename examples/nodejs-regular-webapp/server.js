@@ -30,6 +30,9 @@ config.session(app);
 // Configure passport
 config.passport(app);
 
+// Configure static folders
+config.static(app);
+
 walker.routeWalker(__dirname + '/routes', app);
 
 var port = process.env.PORT || 3001;

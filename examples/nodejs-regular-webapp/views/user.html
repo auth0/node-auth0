@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- font awesome from BootstrapCDN -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+        <link href="/public/app.css" rel="stylesheet">
+    </head>
+    <body class="home">
+        <div class="container">
+            <div class="login-page clearfix">
+              <div class="logged-in-box auth0-box logged-in">
+                <h1 id="logo"><img src="/public/auth0_logo_final_blue_RGB.png" /></h1>
+                <img class="avatar" src="{{user.picture}}"/>
+                <h2>Welcome {{user.nickname}}</h2>
+              </div>
+            </div>
+        </div>
+    </body>
+</html>

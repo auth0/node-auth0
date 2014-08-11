@@ -2,6 +2,7 @@ var swig =          require('swig'),
     passport =      require('passport'),
     logger =        require('morgan'),
     cors =          require('cors'),
+    express =       require('express'),
     Auth0Strategy = require('passport-auth0');
     cookieParser =  require('cookie-parser'),
     session =       require('express-session'),
@@ -29,12 +30,16 @@ exports.session = function(app) {
   app.use(session({ secret: 'my super secret' }));
 }
 
+exports.static = function(app) {
+  app.use('/public', express.static(__dirname + '/public'));
+}
+
 exports.passport = function(app) {
   var strategy = new Auth0Strategy({
     domain:       process.env['AUTH0_DOMAIN'],
     clientID:     process.env['AUTH0_CLIENT_ID'],
     clientSecret: process.env['AUTH0_CLIENT_SECRET'],
-    callbackURL:  process.env['AUTH0_CALLBACK_URL']
+    callbackURL:  'http://localhost:3001/callback'
   }, function(accessToken, refreshToken, profile, done) {
     //Some tracing info
     console.log('profile is', profile);
