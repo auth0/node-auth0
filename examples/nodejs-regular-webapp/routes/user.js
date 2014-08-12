@@ -1,10 +1,9 @@
-var passport = require('passport');
+var passport =      require('passport'),
+    login = require('./middlewares/login');
 
 module.exports = function(app) {
   app.get('/user',
-    passport.authenticate('auth0', {
-      failureRedirect: '/'
-    }),
+    login.required,
     function(req, res) {
       res.render('user', {
         user: req.user

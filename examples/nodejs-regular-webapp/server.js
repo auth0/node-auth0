@@ -35,7 +35,7 @@ config.static(app);
 
 walker.routeWalker(__dirname + '/routes', app);
 
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 3000;
 
 http.createServer(app).listen(port, function (err) {
   console.log('listening in http://localhost:' + port);
