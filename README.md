@@ -96,6 +96,25 @@ api.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResult
 The same than ```getUsers``` but this method returns users for all social connections, ie: not enterprise connections.
 
 
+### api.impersonateUser(userId, options, callback)
+
+Returns the impersonation link: 
+
+~~~js
+api.impersonateUser('github|123', {
+  protocol: 'oauth2',
+  impersonator_id: 'gonto',
+  client_id: 'client',
+  additionalParameters: {
+    response_type: 'code'
+  }
+}, function (err, result){
+  //.....
+});
+~~~
+
+Check it on the [API Explorer](https://docs.auth0.com/auth-api#!#post--users--user_id--impersonate);
+
 ### api.getAccessToken(callback)
 
 Retrieves an Access Token to make direct HTTP calls to Auth0 API.
