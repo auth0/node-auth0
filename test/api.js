@@ -119,6 +119,44 @@ describe('API', function () {
     });
   });
 
+describe('impersonateUser', function () {
+    it('should work on request success', function (done) {
+      var reqData = {
+        protocol: 'oauth2',
+        impersonator_id: 'gonto',
+        client_id: 'client',
+        additionalParameters: {
+          response_type: 'code'
+        }
+      };
+
+      var reqUserId = 'userid';
+
+      var resData = {some: 'data'};
+
+
+
+      var scope = nock('https://' + domain)
+        .post('/oauth/token', qs)
+        .reply(200, {
+          'access_token': accessToken,
+          'token_type':   'bearer'
+        })
+        .post('/api/users/' + reqUserId + '/impersonate', reqData)
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
+        .reply(200, resData);
+
+      api.impersonateUser(reqUserId, reqData, function (err, userData) {
+        expect(err).to.not.exist;
+        expect(userData).to.be.deep.equal(resData);
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+
+    });
+  });
+
   describe('updateUserEmail', function () {
     it('should work on request success', function (done) {
       var reqUserData = {userId: 'auth0|omguser', email: 'doge@auth0.com', verify: true};
@@ -238,7 +276,7 @@ describe('Client', function () {
       var domain = 'my-domain.auth0.com';
       var userAccessToken = 'an-user-access-token';
       var resUserData = {foo: 'bar'};
-      
+
       var qs = querystring.stringify({
           access_token: userAccessToken
         });
@@ -261,7 +299,7 @@ describe('Client', function () {
       var domain = 'my-domain.auth0.com';
       var userAccessToken = 'an-user-access-token';
       var resError = 'Invalid access token';
-      
+
       var qs = querystring.stringify({
           access_token: userAccessToken
         });
@@ -281,6 +319,6 @@ describe('Client', function () {
         done();
       });
     });
-    
+
   });
 });
