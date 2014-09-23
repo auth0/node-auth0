@@ -142,7 +142,7 @@ describe('impersonateUser', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .post('/api/users/' + reqUserId + '/impersonate', reqData)
+        .post('/users/' + reqUserId + '/impersonate', reqData)
         .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(200, resData);
 
