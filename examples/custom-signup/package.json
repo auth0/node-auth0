@@ -1,0 +1,13 @@
+{
+  "name": "auth0-signup-sample",
+  "description": "Auth0 custom sign up sample.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "auth0": "~0.6.3",
+    "dotenv": "^0.2.8",
+    "express": "3.x",
+    "express-jwt": "~0.1.0",
+    "xtend": "~2.1.2"
+  }
+}
