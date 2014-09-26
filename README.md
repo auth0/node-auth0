@@ -190,12 +190,32 @@ api.updateUserPassword("my-user-id", "johnthisisyournewpassword!shhh", false, fu
 
 > Note: Result is not the password but a string with a success message.
 
+### api.getUserMetadata(userId, callback)
+
+This method retrieves the metadata for a user. `metadata` is an object that includes custom fields for the user referenced by `userId`.
+
+~~~js
+api.getUserMetadata("a-user-id", function(err, metadata) {
+  // returns error if there was a problem, otherwise the user's metadata
+});
+~~~
+
 ### api.updateUserMetadata(userId, metadata, callback)
 
-This method updates the metadata for a user. `metadata` is an object, and the fields in that object will be set on the user referenced by `userId`.
+This method updates the metadata for a user. `metadata` is an object, and the fields in that object will be set on the user referenced by `userId`. **Note:** the entire `metadata` object is replaced with this method. To update select fields, use the `patchUserMetadata` method.
 
 ~~~js
 api.updateUserMetadata("a-user-id", {my_special_data: {a: "b", c: "d"}}, function(err) {
+  // if there was a problem, err will be non-null
+});
+~~~
+
+### api.patchUserMetadata(userId, metadata, callback)
+
+This method patches the metadata for a user. `metadata` is an object, and only the fields included in the patch will be updated for the user referenced by `userId`.
+
+~~~js
+api.patchUserMetadata("a-user-id", {my_special_data: {a: "e"}}, function(err) {
   // if there was a problem, err will be non-null
 });
 ~~~
