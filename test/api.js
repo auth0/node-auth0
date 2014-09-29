@@ -48,7 +48,7 @@ describe('API', function () {
       });
     });
 
-    it('should fail when request fail', function (done) {
+    it('should fail when request fails', function (done) {
       var error = 'Error: Token could not be retrieved';
 
       var qs = querystring.stringify({
@@ -94,7 +94,7 @@ describe('API', function () {
         done();
       });
     });
-    it('should fail when request fail', function (done) {
+    it('should fail when request fails', function (done) {
       var reqUserData = {email: 'john@doe.com'}, resError = 'Error creating user';
 
       var scope = nock('https://' + domain)
@@ -119,7 +119,7 @@ describe('API', function () {
     });
   });
 
-describe('impersonateUser', function () {
+  describe('impersonateUser', function () {
     it('should work on request success', function (done) {
       var reqData = {
         protocol: 'oauth2',
@@ -183,7 +183,7 @@ describe('impersonateUser', function () {
         done();
       });
     });
-    it('should fail when request fail', function (done) {
+    it('should fail when request fails', function (done) {
       var reqUserData = {userId: 'auth0|omguser', email: 'doge@auth0.com', verify: true};
       var resError = 'Error creating user';
 
@@ -239,7 +239,7 @@ describe('impersonateUser', function () {
         done();
       });
     });
-    it('should fail when request fail', function (done) {
+    it('should fail when request fails', function (done) {
       var reqUserData = {userId: 'auth0|omguser', password: 'sosecretsuchcrypto', verify: true};
       var resError = 'Error creating user';
 
@@ -262,6 +262,102 @@ describe('impersonateUser', function () {
         expect(err.name).to.be.equal('ApiError');
         expect(err.statusCode).to.be.equal(401);
         expect(userData).to.not.exist;
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+    });
+  });
+
+  describe('getUserMetadata', function () {
+    it('should work on request success', function (done) {
+      var reqUserData = {userId: 'auth0|omguser'};
+      var resUserData = {some: 'metadata'};
+
+      var scope = nock('https://' + domain)
+        .post('/oauth/token', qs)
+        .reply(200, {
+          'access_token': accessToken,
+          'token_type':   'bearer'
+        })
+        .get('/api/users/' + reqUserData.userId + '/metadata')
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
+        .reply(200, resUserData);
+      api.getUserMetadata(reqUserData.userId, function (err, userData) {
+        expect(err).to.not.exist;
+        expect(userData).to.be.deep.equal(resUserData);
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+    });
+    it('should fail when request fails', function (done) {
+      var reqUserData = {userId: 'auth0|omguser'};
+      var resError = 'Error creating user';
+
+      var scope = nock('https://' + domain)
+        .post('/oauth/token', qs)
+        .reply(200, {
+          'access_token': accessToken,
+          'token_type':   'bearer'
+        })
+        .get('/api/users/' + reqUserData.userId + '/metadata')
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
+        .reply(401, resError);
+
+      api.getUserMetadata(reqUserData.userId, function (err, userData) {
+        expect(err).not.to.be.equal(null);
+        expect(err.name).to.be.equal('ApiError');
+        expect(err.statusCode).to.be.equal(401);
+        expect(userData).to.not.exist;
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+    });
+  });
+
+  describe('patchUserMetadata', function () {
+    it('should work on request success', function (done) {
+      var reqUserData = {userId: 'auth0|omguser'};
+      var reqUserMetadata = {some: 'metadata'};
+      var resUserData = {some: 'metadata'};
+
+      var scope = nock('https://' + domain)
+        .post('/oauth/token', qs)
+        .reply(200, {
+          'access_token': accessToken,
+          'token_type':   'bearer'
+        })
+        .patch('/api/users/' + reqUserData.userId + '/metadata', reqUserMetadata)
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
+        .reply(200, resUserData);
+      api.patchUserMetadata(reqUserData.userId, reqUserMetadata, function (err) {
+        expect(err).to.not.exist;
+        expect(scope.isDone()).to.be.equal(true);
+        nock.cleanAll();
+        done();
+      });
+    });
+    it('should fail when request fails', function (done) {
+      var reqUserData = {userId: 'auth0|omguser'};
+      var reqUserMetadata = {some: 'metadata'};
+      var resError = 'Error creating user';
+
+      var scope = nock('https://' + domain)
+        .post('/oauth/token', qs)
+        .reply(200, {
+          'access_token': accessToken,
+          'token_type':   'bearer'
+        })
+        .patch('/api/users/' + reqUserData.userId + '/metadata', reqUserMetadata)
+        .matchHeader('Authorization', 'Bearer ' + accessToken)
+        .reply(401, resError);
+
+      api.patchUserMetadata(reqUserData.userId, reqUserMetadata, function (err) {
+        expect(err).not.to.be.equal(null);
+        expect(err.name).to.be.equal('ApiError');
+        expect(err.statusCode).to.be.equal(401);
         expect(scope.isDone()).to.be.equal(true);
         nock.cleanAll();
         done();
@@ -295,7 +391,7 @@ describe('Client', function () {
         done();
       });
     });
-    it('should fail when request fail', function (done) {
+    it('should fail when request fails', function (done) {
       var domain = 'my-domain.auth0.com';
       var userAccessToken = 'an-user-access-token';
       var resError = 'Invalid access token';
