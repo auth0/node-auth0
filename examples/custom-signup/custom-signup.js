@@ -21,10 +21,12 @@ $('#create-user').submit(function (event) {
     contentType: 'application/json',
     dataType: 'json',
     success: function(status) {
-        widget.getClient().login({
+        auth0.login({
           username: userData.email,
           password: userData.password,
-          connection: CONNECTION});
+          connection: CONNECTION,
+          scope: 'openid profile'
+        });
     },
     error: function() {
       // Show error here
@@ -34,19 +36,28 @@ $('#create-user').submit(function (event) {
   return false;
 });
 
-  window.widget = new Auth0Widget({
-    domain:                     'contoso.auth0.com',                // your domain
-    clientID:                   'DyG9nCwIEofSy66QM3oo5xU6NFs3TmvT', // your clientID
-    callbackURL:                'http://localhost:1337/',           // your callbackURL
-    callbackOnLocationHash:     true,
-    enableReturnUserExperience: false
+  var auth0Domain; // e.g. contoso.auth0.com
+  var auth0ClientId; // e.g. DyG9nCwIEofSy66QM3oo5xU6NFs3TmvT
+  var auth0CallbackUrl; // e.g. http://localhost:1337/
+
+  if (!auth0Domain || !auth0ClientId || !auth0CallbackUrl) {
+    var err = 'Make sure to fill out your Auth0 domain, client ID and callback URL in custom-signup.js';
+    alert(err);
+    throw new Error(err);
+  }
+  window.auth0 = new Auth0({
+    domain: auth0domain,
+    clientID: auth0cid,
+    callbackURL: auth0CallbackUrl,
+    callbackOnLocationHash: true
   });
 
-  widget.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
-    $('#user-profile .email').text(profile.email);
-    $('#user-profile .color').text(profile.color);
-    $('#user-profile .food').text(profile.food);
-  });
+  var result = auth0.parseHash(window.location.hash);
+  if (result) {
+    $('#user-profile .email').text(result.profile.email);
+    $('#user-profile .color').text(result.profile.color);
+    $('#user-profile .food').text(result.profile.food);
+  }
 
 
 });
