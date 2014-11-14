@@ -385,6 +385,10 @@ A complete example of using this library [here](http://github.com/auth0/passport
 
 For more information about [auth0](http://auth0.com) contact our [documentation page](http://docs.auth0.com/).
 
+## Issue Reporting
+
+If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
+
 ## License
 
 This client library is MIT licensed.
