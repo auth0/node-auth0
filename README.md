@@ -65,6 +65,16 @@ api.getUser("long-20-byte-id", function(err, user) {
 });
 ~~~
 
+### api.getUserBySearch(searchCriteria, callback)
+
+This method returns an array of users and their full user objects, including metadata. Metadata cannot be searched on as of time of writing (2/26/15).
+
+~~~js
+api.getUserBySearch('email: "someuseremail@gmail.com"', function(err, users) {
+  // returns an array of user objects if there is no error
+});
+~~~
+
 ### api.getUsers({[connection: connection], [per_page: 10]}, callback)
 
 This method returns a list of users.
