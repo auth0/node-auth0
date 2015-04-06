@@ -31,3 +31,13 @@ utils.responseHandler = function(onError, onSuccess){
     onSuccess(resp);
   };
 };
+
+utils.successCallback = function(cb, res){
+  return function(x){
+    if (cb){
+      return cb(null, x);
+    } else {
+      return res(x);
+    }
+  };
+};

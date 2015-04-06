@@ -2,7 +2,6 @@ var request = require('superagent');
 var Promise = require('bluebird');
 var util = require('util');
 var urlJoin  = require('url-join');
-var ApiError = require('./apiError');
 var utils = require('./utils');
 
 var USER_PATCH_URL = '/users/%s';
@@ -21,16 +20,13 @@ Metadata.prototype.update = function(updatedMetadata, cb) {
   body[this.type] = updatedMetadata;
 
   return new Promise(function(res, rej){
+    var done = utils.successCallback(cb, res);
     request
     .patch(fullUrl)
     .set('Authorization', 'Bearer ' + this.accessToken)
     .send(body)
     .end(utils.responseHandler(cb || rej, function(resp){
-      if (cb) {
-        return cb(null, resp.body);
-      } else {
-        return res(resp.body);
-      }
+      done(resp.body);
     }));
   });
 };

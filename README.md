@@ -16,7 +16,7 @@ var auth0 = require('auth0')(token);
 ~~~
 
 ### User's metadata
-Auth0 allows use to store data about a user that does not come from the user's identity provider. This is known as "metadata". There are two types of metadata: `user_metadata` and `app_metadata`. You can find out more [here](https://auth0.com/docs/apiv2Changes#8).
+You can store data about a user that does not come from the user's identity provider. This is known as "metadata". There are two types of metadata: `user_metadata` and `app_metadata`. You can find out more [here](https://auth0.com/docs/apiv2Changes#8).
 
 #### app_metadata
 To update the value of a property or create it if it does not exist:
@@ -27,6 +27,8 @@ auth0.users(user_id).appMetadata.update({
 }).then(function(user){
   // assert.equal(user.app_metadata.roles.length, 1);
   // assert.equal(user.app_metadata.roles[0], 'reader');
+}).catch(function(err){
+  // handle error if any
 });
 ~~~
 
@@ -50,7 +52,9 @@ auth0.users(user_id).userMetadata.update({
   hobby: 'surf'
 }).then(function(user){
   // assert.equal(user.user_metadata.hobby, 'surf');
-})
+}).catch(function(err){
+  // handle error if any
+});
 ~~~
 
 To delete a property:
