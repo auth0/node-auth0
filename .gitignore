@@ -2,3 +2,5 @@ node_modules
 *.log
 *.tgz
 .idea
+
+.DS_Store
