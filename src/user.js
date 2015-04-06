@@ -1,4 +1,5 @@
 var AppMetadata = require('./appMetadata');
+var UserMetadata = require('./userMetadata');
 
 function User(client, id){
   this.id = id;
@@ -13,6 +14,17 @@ Object.defineProperty(User.prototype, 'appMetadata', {
     }
 
     return this.__appMetadata;
+  }
+});
+
+Object.defineProperty(User.prototype, 'userMetadata', {
+  enumerable: true,
+  get: function(){
+    if (!this.__userMetadata){
+      this.__userMetadata = new UserMetadata(this);
+    }
+
+    return this.__userMetadata;
   }
 });
 
