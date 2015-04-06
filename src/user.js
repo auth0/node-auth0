@@ -1,5 +1,4 @@
-var AppMetadata = require('./appMetadata');
-var UserMetadata = require('./userMetadata');
+var metadata = require('./metadata');
 var utils = require('./utils');
 
 function User(client, id){
@@ -7,7 +6,7 @@ function User(client, id){
   this.client = client;
 }
 
-utils.subEntity(User, 'appMetadata', AppMetadata);
-utils.subEntity(User, 'userMetadata', UserMetadata);
+utils.subEntity(User, 'appMetadata', metadata.AppMetadata);
+utils.subEntity(User, 'userMetadata', metadata.UserMetadata);
 
 module.exports = User;
