@@ -37,6 +37,27 @@ auth0.users(user_id).appMetadata.update({
 });
 ~~~
 
+### user_metadata
+To update the value of a property or create it if it does not exist:
+~~~js
+var user_id = '...'
+auth0.users(user_id).userMetadata.update({
+  hobby: 'surf'
+}, function(err, user){
+  // assert.equal(user.user_metadata.hobby, 'surf');
+})
+~~~
+
+To delete a property:
+~~~js
+var user_id = '...'
+auth0.users(user_id).userMetadata.update({
+  hobby: null
+}, function(err, user){
+  // assert.equal(typeof user.user_metadata.hobby, 'undefined');
+});
+~~~
+
 ## Authentication
 
 This library can be used to access Auth0's [API v2](https://auth0.com/docs/apiv2). To authenticate users use the [passport strategy](https://github.com/auth0/passport-auth0).
