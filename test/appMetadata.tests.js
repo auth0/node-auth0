@@ -1,16 +1,15 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 var util = require('util');
+var constants = require('./constants');
 
 var TOKEN = 'token';
 var auth0 = require('..')(TOKEN);
 
 describe('app metadata', function(){
   describe('update', function(){
-    var PARTIAL_URL = '/users/%s';
-    var BASE_URL = 'https://login.auth0.com:443/api/v2/';
     var user_id = 'google-oauth|1234';
-    var url = util.format(PARTIAL_URL, user_id);
+    var url = util.format(constants.USER_SUB_ROUTE, user_id);
     var update = {
       roles: ['reader', 'writer'],
       permissions: null
@@ -22,7 +21,7 @@ describe('app metadata', function(){
 
     var baseNock;
     beforeEach(function(){
-      baseNock = nock(BASE_URL, {
+      baseNock = nock(constants.BASE_API_URL, {
         reqheaders: {
           'Authorization': 'Bearer ' + TOKEN
         }
