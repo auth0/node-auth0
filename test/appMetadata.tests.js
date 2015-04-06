@@ -40,17 +40,17 @@ describe('app metadata', function(){
         'message': 'Invalid token'
       });
 
-      auth0.user(user_id).appMetadata.update(update, function(err, body){
+      auth0.user(user_id).appMetadata.update(update, function(err){
         expect(err).to.not.be.undefined;
-        expect(body.statusCode).to.equal(401);
-        expect(body.error).to.equal('Unauthorized');
-        expect(body.message).to.equal('Invalid token');
+        expect(err.statusCode).to.equal(401);
+        expect(err.error).to.equal('Unauthorized');
+        expect(err.message).to.equal('Invalid token');
         localNock.done();
         done();
       });
     });
 
-    it('should pass body to callback if response code is 200', function(done){
+    it('should pass body to callback if response code is 200', function(){
       var localNock = baseNock.reply(200, {
         app_metadata: {
           roles: [ 'reader', 'writer' ],
@@ -58,15 +58,14 @@ describe('app metadata', function(){
         id: user_id
       });
 
-      auth0.user(user_id).appMetadata.update(update, function(err, body){
-        expect(err).to.be.equal(null);
-        expect(body.id).to.equal(user_id);
-        expect(body.app_metadata.roles).to.have.length(2);
-        expect(body.app_metadata.roles[0]).to.equal('reader');
-        expect(body.app_metadata.roles[1]).to.equal('writer');
-        localNock.done();
-        done();
-      });
+      return auth0.user(user_id).appMetadata.update(update)
+        .then(function(body){
+          expect(body.id).to.equal(user_id);
+          expect(body.app_metadata.roles).to.have.length(2);
+          expect(body.app_metadata.roles[0]).to.equal('reader');
+          expect(body.app_metadata.roles[1]).to.equal('writer');
+          localNock.done();
+        });
     });
   });
 });

@@ -6,13 +6,13 @@ var constants = require('./constants');
 var TOKEN = 'token';
 var auth0 = require('..')(TOKEN);
 
-describe('app metadata', function(){
+describe('user metadata', function(){
   describe('update', function(){
     var user_id = 'google-oauth|1234';
     var url = util.format(constants.USER_SUB_ROUTE, user_id);
     var update = {
-      roles: ['reader', 'writer'],
-      permissions: null
+      hobby: 'surf',
+      theme: null
     };
 
     var body = {
@@ -40,33 +40,28 @@ describe('app metadata', function(){
         'message': 'Invalid token'
       });
 
-      auth0.user(user_id).userMetadata.update(update, function(err, body){
+      auth0.user(user_id).userMetadata.update(update, function(err){
         expect(err).to.not.be.undefined;
-        expect(body.statusCode).to.equal(401);
-        expect(body.error).to.equal('Unauthorized');
-        expect(body.message).to.equal('Invalid token');
+        expect(err.statusCode).to.equal(401);
+        expect(err.error).to.equal('Unauthorized');
+        expect(err.message).to.equal('Invalid token');
         localNock.done();
         done();
       });
     });
 
-    it('should pass body to callback if response code is 200', function(done){
+    it('should pass body to callback if response code is 200', function(){
       var localNock = baseNock.reply(200, {
-        user_metadata: {
-          roles: [ 'reader', 'writer' ],
-        },
+        user_metadata: update,
         id: user_id
       });
 
-      auth0.user(user_id).userMetadata.update(update, function(err, body){
-        expect(err).to.be.equal(null);
-        expect(body.id).to.equal(user_id);
-        expect(body.user_metadata.roles).to.have.length(2);
-        expect(body.user_metadata.roles[0]).to.equal('reader');
-        expect(body.user_metadata.roles[1]).to.equal('writer');
-        localNock.done();
-        done();
-      });
+      return auth0.user(user_id).userMetadata.update(update)
+        .then(function(body){
+          expect(body.id).to.equal(user_id);
+          expect(body.user_metadata.hobby).to.equal('surf');
+          localNock.done();
+        });
     });
   });
 });

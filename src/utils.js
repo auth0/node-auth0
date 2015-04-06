@@ -1,3 +1,5 @@
+var ApiError = require('./apiError');
+
 var utils = module.exports = {};
 
 utils.subEntity = function(Parent, name, Constructor){
@@ -12,4 +14,20 @@ utils.subEntity = function(Parent, name, Constructor){
       return this[underlyingFieldName];
     }
   });
+};
+
+utils.responseHandler = function(onError, onSuccess){
+  return function(err, resp){
+    if (err) {
+      var error = err;
+      if (err.response && err.response.body){
+        var body = err.response.body;
+        error = new ApiError(body.statusCode, body.error, body.message);
+      }
+
+      return onError(error);
+    }
+
+    onSuccess(resp);
+  };
 };
