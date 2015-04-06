@@ -1,3 +1,5 @@
+# node-auth0 ![build status](https://travis-ci.org/auth0/node-auth0.svg?branch=v2)
+
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Installation
