@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0-alpha.0",
   "description": "node.js SDK for Auth0 API v2",
   "main": "index.js",
   "scripts": {
