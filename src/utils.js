@@ -1,4 +1,4 @@
-var ApiError = require('./apiError');
+var ApiError = require('./errors').ApiError;
 
 var utils = module.exports = {};
 

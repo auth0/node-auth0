@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "node.js SDK for Auth0 API v2",
   "main": "index.js",
   "scripts": {
@@ -21,9 +21,10 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
-    "url-join": "0.0.1",
+    "bluebird": "^2.9.24",
+    "mocha": "^2.2.4",
     "superagent": "^1.1.0",
-    "bluebird": "^2.9.24"
+    "url-join": "0.0.1"
   },
   "devDependencies": {
     "mocha": "^2.2.1",

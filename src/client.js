@@ -1,9 +1,28 @@
 var User = require('./user');
-var BASE_URL = 'https://login.auth0.com/api/v2';
+var util = require('util');
+var DEFAULT_REGION = 'us';
+var BASE_URL_FORMAT = 'https://%s/api/v2';
+var ArgumentError = require('./errors').ArgumentError;
 
-function Client(accessToken){
-  this.accessToken = accessToken;
-  this.baseUrl = BASE_URL;
+var REGIONS_TO_DOMAINS = {
+  us: 'login.auth0.com',
+  eu: 'login.eu.auth0.com'
+};
+
+function Client(options){
+  if (!options.token){
+    throw new ArgumentError('Missing token');
+  }
+
+  var domain = REGIONS_TO_DOMAINS[options.region || DEFAULT_REGION];
+
+  if (!domain){
+    throw new ArgumentError('The region is invalid, valid values are any of: "' +
+      Object.keys(REGIONS_TO_DOMAINS).join('","') + '"');
+  }
+
+  this.accessToken = options.token;
+  this.baseUrl = util.format(BASE_URL_FORMAT, domain);
 }
 
 Client.prototype.user = function(id){
