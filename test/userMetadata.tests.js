@@ -4,11 +4,11 @@ var util = require('util');
 var constants = require('./constants');
 
 var TOKEN = 'token';
-var auth0 = require('..')(TOKEN);
+var auth0 = require('..')({ token: TOKEN });
 
 describe('user metadata', function(){
   describe('update', function(){
-    var user_id = 'google-oauth|1234';
+    var user_id = 'google-oauth%7C1234';
     var url = util.format(constants.USER_SUB_ROUTE, user_id);
     var update = {
       hobby: 'surf',
