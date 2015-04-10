@@ -26,6 +26,15 @@ var auth0 = require('auth0')({
 });
 ~~~
 
+Alternatively you can just set the domain:
+~~~js
+var token = '{YOUR_API_V2_TOKEN}';
+var auth0 = require('auth0')({
+  token: token,
+  domain: 'login.eu.auth0.com'
+});
+~~~
+
 ### User's metadata
 You can store data about a user that does not come from the user's identity provider. This is known as "metadata". There are two types of metadata: `user_metadata` and `app_metadata`. You can find out more [here](https://auth0.com/docs/apiv2Changes#8).
 

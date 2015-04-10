@@ -13,4 +13,9 @@ describe('errors', function(){
     expect(Auth0.bind(null, { token: '' }))
       .to.throw(ArgumentError, 'Missing token');
   });
+
+  it('should not allow domain and region', function(){
+    expect(Auth0.bind(null, { token: 'token', region: 'sa', domain: 'login.sa.auth0.com' }))
+      .to.throw(ArgumentError, 'Cannot provide both region and domain');
+  });
 });
