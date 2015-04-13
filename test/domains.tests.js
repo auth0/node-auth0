@@ -42,7 +42,7 @@ describe('regions', function(){
   after(nock.cleanAll);
 
   it ('should perform request against correct domain', function(){
-    return auth0.user(user_id).appMetadata.update(update).catch(function(err){
+    return auth0.users.updateAppMetadata(user_id, update).catch(function(err){
       expect(err).to.not.be.undefined;
       expect(err.statusCode).to.equal(401);
       expect(err.error).to.equal('Unauthorized');
@@ -88,7 +88,7 @@ describe('domains', function(){
   after(nock.cleanAll);
 
   it ('should perform request against correct domain', function(){
-    return auth0.user(user_id).appMetadata.update(update).catch(function(err){
+    return auth0.users.updateAppMetadata(user_id, update).catch(function(err){
       expect(err).to.not.be.undefined;
       expect(err.statusCode).to.equal(401);
       expect(err.error).to.equal('Unauthorized');

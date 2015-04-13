@@ -4,7 +4,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Installation
 
-	npm install auth0@2.0.0-alpha.3
+	npm install auth0@2.0.0-alpha.5
 
 ## Usage
 
@@ -42,7 +42,7 @@ You can store data about a user that does not come from the user's identity prov
 To update the value of a property or create it if it does not exist:
 ~~~js
 var user_id = '...'
-auth0.users(user_id).appMetadata.update({
+auth0.users.updateAppMetadata(user_id, {
   roles: ['reader']
 }).then(function(user){
   // assert.equal(user.app_metadata.roles.length, 1);
@@ -55,7 +55,7 @@ auth0.users(user_id).appMetadata.update({
 To delete a property:
 ~~~js
 var user_id = '...'
-auth0.users(user_id).appMetadata.update({
+auth0.users.updateAppMetadata(user_id, {
   roles: null
 }, function(err, user){
   // assert.equal(typeof user.app_metadata.roles, 'undefined');
@@ -68,7 +68,7 @@ auth0.users(user_id).appMetadata.update({
 To update the value of a property or create it if it does not exist:
 ~~~js
 var user_id = '...'
-auth0.users(user_id).userMetadata.update({
+auth0.users.updateUserMetadata(user_id,{
   hobby: 'surf'
 }).then(function(user){
   // assert.equal(user.user_metadata.hobby, 'surf');
@@ -80,7 +80,7 @@ auth0.users(user_id).userMetadata.update({
 To delete a property:
 ~~~js
 var user_id = '...'
-auth0.users(user_id).userMetadata.update({
+auth0.users.updateUserMetadata(user_id,{
   hobby: null
 }, function(err, user){
   // assert.equal(typeof user.user_metadata.hobby, 'undefined');
