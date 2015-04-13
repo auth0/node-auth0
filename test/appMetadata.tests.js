@@ -21,11 +21,8 @@ describe('app metadata', function(){
 
     var baseNock;
     beforeEach(function(){
-      baseNock = nock(constants.BASE_API_URL, {
-        reqheaders: {
-          'Authorization': 'Bearer ' + TOKEN
-        }
-      })
+      baseNock = nock(constants.BASE_API_URL)
+      .matchHeader('authorization', 'Bearer ' + TOKEN)
       .patch(url, body);
     });
 

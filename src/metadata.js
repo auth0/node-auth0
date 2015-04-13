@@ -19,11 +19,13 @@ Metadata.prototype.update = function(updatedMetadata, cb) {
   var body = {};
   body[this.type] = updatedMetadata;
 
+  var self = this;
+
   return new Promise(function(res, rej){
     var done = utils.successCallback(cb, res);
     request
     .patch(fullUrl)
-    .set('Authorization', 'Bearer ' + this.accessToken)
+    .set('Authorization', 'Bearer ' + self.accessToken)
     .send(body)
     .end(utils.responseHandler(cb || rej, function(resp){
       done(resp.body);
