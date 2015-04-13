@@ -1,5 +1,7 @@
-var User = require('./user');
+var Users = require('./users');
 var util = require('util');
+var utils = require('./utils');
+
 var DEFAULT_REGION = 'us';
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var ArgumentError = require('./errors').ArgumentError;
@@ -30,9 +32,6 @@ function Client(options){
   this.baseUrl = util.format(BASE_URL_FORMAT, domain);
 }
 
-Client.prototype.user = function(id){
-  // TODO: caching
-  return new User(this, id);
-};
+utils.subEntity(Client, 'users', Users);
 
 module.exports = Client;

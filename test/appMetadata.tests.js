@@ -37,7 +37,7 @@ describe('app metadata', function(){
         'message': 'Invalid token'
       });
 
-      auth0.user(user_id).appMetadata.update(update, function(err){
+      auth0.users.updateAppMetadata(user_id, update, function(err){
         expect(err).to.not.be.undefined;
         expect(err.statusCode).to.equal(401);
         expect(err.error).to.equal('Unauthorized');
@@ -55,7 +55,7 @@ describe('app metadata', function(){
         id: user_id
       });
 
-      return auth0.user(user_id).appMetadata.update(update)
+      return auth0.users.updateAppMetadata(user_id, update)
         .then(function(body){
           expect(body.id).to.equal(user_id);
           expect(body.app_metadata.roles).to.have.length(2);
