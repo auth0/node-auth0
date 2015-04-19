@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "dependencies": {
-    "auth0": "~0.6.3",
+    "auth0": "~0.8.0",
     "dotenv": "^0.2.8",
     "express": "3.x",
     "express-jwt": "~0.1.0",
