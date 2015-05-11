@@ -1,14 +1,10 @@
 $(document).ready(function() {
-    var widget = new Auth0Widget({
-        // All this properties are set on auth0-variables.js
-        domain: AUTH0_DOMAIN,
-        clientID: AUTH0_CLIENT_ID,
-        callbackURL: AUTH0_CALLBACK_URL,
-        callbackOnLocationHash: false
-    });
+    var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
 
     $('.btn-login').click(function(e) {
       e.preventDefault();
-      widget.signin();
+      lock.showSignin({
+          callbackURL: AUTH0_CALLBACK_URL
+      });
     });
 });
