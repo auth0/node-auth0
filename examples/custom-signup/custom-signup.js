@@ -8,45 +8,49 @@ $('#create-user').submit(function (event) {
   }
 
   var userData = {};
-
-  userData.email     = $('#create-user input[name=email]').val();
-  userData.password  = $('#create-user input[name=password]').val();
-  userData.color     = $('#create-user input[name=color]').val();
-  userData.food      = $('#create-user input[name=food]').val();
+  var userForm = $('#create-user');
+  userData.email     = userForm.find('input[name=email]').val();
+  userData.password  = userForm.find('input[name=password]').val();
+  userData.color     = userForm.find('input[name=color]').val();
+  userData.food      = userForm.find('input[name=food]').val();
 
   $.ajax({
-    url: '/signup',
+    url: 'http://localhost:3001/signup',
     type: 'POST',
     data: JSON.stringify(userData),
     contentType: 'application/json',
     dataType: 'json',
     success: function(status) {
-        widget.getClient().login({
-          username: userData.email,
-          password: userData.password,
-          connection: CONNECTION});
+      auth0.login({
+        username: userData.email,
+        password: userData.password,
+        connection: CONNECTION,
+        scope: 'openid email color food'
+      });
     },
-    error: function() {
-      // Show error here
+    error: function(err) {
+      console.error(err);
     }
   });
 
   return false;
 });
 
-  window.widget = new Auth0Widget({
-    domain:                     'contoso.auth0.com',                // your domain
-    clientID:                   'DyG9nCwIEofSy66QM3oo5xU6NFs3TmvT', // your clientID
-    callbackURL:                'http://localhost:1337/',           // your callbackURL
-    callbackOnLocationHash:     true,
-    enableReturnUserExperience: false
+  window.auth0 = new Auth0({
+    clientID: 'CDxL8sxaPMzl37bcQcVfS0JzdqWXFsmt',
+    domain: 'contoso.auth0.com',
+    callbackOnLocationHash: true,
+    callbackURL: 'http://localhost:3000/'
   });
 
-  widget.parseHash(window.location.hash, function (profile, id_token, access_token, state) {
-    $('#user-profile .email').text(profile.email);
-    $('#user-profile .color').text(profile.color);
-    $('#user-profile .food').text(profile.food);
-  });
-
+  var hash = auth0.parseHash();
+  if (hash && hash.error) {
+    console.error(hash.error);
+  } else if (hash) {
+    var profileList = $('#user-profile');
+    profileList.find('.email').text(hash.profile.email);
+    profileList.find('.color').text(hash.profile.color);
+    profileList.find('.food').text(hash.profile.food);
+  }
 
 });
