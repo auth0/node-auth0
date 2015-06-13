@@ -6,9 +6,11 @@ This example is deployed at Heroku at http://auth0-nodejsapi-sample.herokuapp.co
 #Running the example
 In order to run the example you need to have npm and nodejs installed.
 
+Run `npm install` to ensure local dependencies are available.
+
 You also need to set the ClientSecret and ClientId for your Auth0 app as enviroment variables with the following names respectively: `AUTH0_CLIENT_SECRET` and `AUTH0_CLIENT_ID`.
 
-For that, if you just create a file named `.env` in the directory and set the values like the following, the app will just work:
+For that, the following should have been already created for you; if not, just create a file named `.env` in the directory and set the values like the following, the app will just work:
 
 ````bash
 # .env file
