@@ -4,7 +4,9 @@
   "description": "node.js SDK for Auth0 API v2",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha --timeout 5000 test/*.tests.js"
+    "test": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js)",
+    "test-watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch"
+
   },
   "repository": {
     "type": "git",
@@ -22,12 +24,11 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.9.24",
-    "mocha": "^2.2.4",
-    "superagent": "^1.1.0",
     "url-join": "0.0.1"
   },
   "devDependencies": {
-    "mocha": "^2.2.1",
+    "superagent": "^1.1.0",
+    "mocha": "^2.2.4",
     "chai": "^2.2.0",
     "nock": "^1.5.0"
   }
