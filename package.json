@@ -23,6 +23,7 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.10.2",
+    "rest-orm": "^0.3.0",
     "url-join": "0.0.1"
   },
   "devDependencies": {
