@@ -1,5 +1,8 @@
 var Client = require('./client');
 
-module.exports = function(accessToken){
+var exports = module.exports = function(accessToken){
   return new Client(accessToken);
 };
+
+exports.Client = Client;
+exports.User = require('./user');
