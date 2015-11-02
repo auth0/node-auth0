@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var Client = require('../../src/client');
+var Client = require('../../src/Client');
 var ArgumentError = require('../../src/exceptions').ArgumentError;
 var domains = require('../../src/constants').DOMAINS_BY_REGION;
 

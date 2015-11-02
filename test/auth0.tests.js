@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var auth0 = require('../src');
-var Client = require('../src/client');
-var User = require('../src/user');
+var Client = require('../src/Client');
+var User = require('../src/User');
 
 
 describe('Auth0 module', function () {
