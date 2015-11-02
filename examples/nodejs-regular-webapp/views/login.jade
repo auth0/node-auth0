@@ -12,7 +12,7 @@ block content
       , callbackURL: '#{env.AUTH0_CALLBACK_URL}'
       , responseType: 'code'
       , authParams: {
-        scope: 'openid profile'
+        scope: 'openid name email picture'
       }
     });
 
