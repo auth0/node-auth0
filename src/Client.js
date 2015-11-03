@@ -39,14 +39,14 @@ var Client = function (options){
   /**
    * Auth0 servers region. If not provided, defaults to US.
    *
-   * @type {string}
+   * @type {String}
    */
   this.region = (options.region || constants.DEFAULT_REGION).toLowerCase();
 
   /**
    * Auth0 domain being used (depends on the region).
    *
-   * @type {string}
+   * @type {String}
    */
   this.domain = options.domain || constants.DOMAINS_BY_REGION[this.region]
 
@@ -62,35 +62,96 @@ var Client = function (options){
   /**
    * Access token provided by the user.
    *
-   * @type {string}
+   * @type {String}
    */
   this.accessToken = options.token;
 
   /**
    * URL of the API being consumed.
    *
-   * @type {string}
+   * @type {String}
    */
   this.baseUrl = util.format(BASE_URL_FORMAT, this.domain);
 
   /**
    * Authentication headers required by the API.
    *
-   * @type {object}
+   * @type {Object}
    */
   this.authHeaders = { Authorization: 'Bearer ' + this.accessToken };
 
   /**
-   * Provides abstraction for consuming the
+   * Options object for the Rest Client instance.
+   *
+   * @type {Object}
+   */
+  this.restClientOpts = {
+    headers: this.authHeaders,
+    query: { convertCase: 'snakeCase' }
+  };
+
+  /**
+   * Provides an abstraction layer for consuming the
    * [Clients endpoint]{@link https://auth0.com/docs/api/v2#!/Clients}.
    *
-   * @type {object}
+   * @type {Object}
    */
-  this.clients = new rest.Client(this.baseUrl + '/clients', { headers: this.authHeaders });
+  this.clients = new rest.Client(this.baseUrl + '/clients/:clientId', this.restClientOpts);
 };
+
+/**
+ * Create an Auth0 client.
+ *
+ * @method
+ * @return    {Promise}
+ */
+Client.prototype.createClient = function () {
+  return this.clients.create.apply(this.clients, arguments);
+};
+
+/**
+ * Get all Auth0 clients.
+ *
+ * @method
+ * @return  {Promise}               Returns a promise if no callback is received.
+ */
+Client.prototype.getClients = function () {
+  return this.clients.getAll.apply(this.clients, arguments);
+};
+
+/**
+ * Get an Auth0 client.
+ *
+ * @method
+ * @return  {Promise}
+ */
+Client.prototype.getClient = function () {
+  return this.clients.get.apply(this.clients, arguments);
+};
+
+/**
+ * Update an Auth0 client.
+ *
+ * @method
+ * @return    {Promise}
+ */
+Client.prototype.updateClient = function () {
+  return this.clients.update.apply(this.clients, arguments);
+};
+
+/**
+ * Delete an Auth0 client.
+ *
+ * @method
+k* @return    {Promise}
+ */
+Client.prototype.deleteClient = function () {
+  return this.clients.delete.apply(this.clients, arguments);
+};
+
 
 utils.subEntity(Client, 'users', User);
 //utils.subEntity(Client, 'connections', Connection);
-//
+
 
 module.exports = Client;
