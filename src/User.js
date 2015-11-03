@@ -2,7 +2,9 @@ var rest = require('rest-orm');
 var MetadataUpdater = require('./MetadataUpdater');
 
 /**
+ * @class
  * Abstracts interaction with the users endpoint.
+ * @constructor
  */
 var Users = function (client, id){
   this.id = id;
@@ -30,8 +32,8 @@ Users.prototype.create = function (data, cb) {
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}         Users retrieval promise.
  */
-Users.prototype.getAll = function (cb) {
-  return this.resource.getAll(cb);
+Users.prototype.getAll = function () {
+  return this.resource.getAll.apply(this.resource, arguments);
 };
 
 /**
@@ -42,21 +44,32 @@ Users.prototype.getAll = function (cb) {
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}         User retrieval promise.
  */
-Users.prototype.get = function (id, cb) {
-  return this.resource.get(id, cb);
+Users.prototype.get = function () {
+  return this.resource.get.apply(this.resource, arguments);
 };
 
 /**
  * Update a user by its id.
  *
  * @method
- * @param   {any}       id    The user id.
- * @param   {Object}    data  New user data.
- * @param   {Function}  [cb]  Callback function
- * @return  {Promise}         User update promise.
+ * @param   {any}       params  The user id.
+ * @param   {Object}    data    New user data.
+ * @param   {Function}  [cb]    Callback function
+ * @return  {Promise}           User update promise.
  */
-Users.prototype.update = function (id, data, cb) {
-  return this.resource.update(id, data, cb);
+Users.prototype.update = function () {
+  return this.resource.update.apply(this.resource, arguments);
+};
+
+
+/**
+ * Delete a user by its id.
+ *
+ * @method
+ * @return  {Promise}           User delete promise.
+ */
+Users.prototype.delete = function () {
+  return this.resource.delete.apply(this.resource, arguments);
 };
 
 Users.prototype.updateAppMetadata = function(id, updatedMetadata, cb){
