@@ -11,7 +11,7 @@ describe('Errors', function(){
 
   it('should fail if token is not provided', function(){
     expect(Auth0.bind(null, { token: '' }))
-      .to.throw(ArgumentError, 'Missing token');
+      .to.throw(ArgumentError, 'An access token must be provided');
   });
 
   it('should not allow domain and region', function(){

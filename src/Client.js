@@ -1,5 +1,7 @@
 var RestClient = require('rest-facade').Client;
+var ArgumentError = require('./exceptions').ArgumentError;
 var utils = require('./utils');
+
 
 /**
  * @class Client
@@ -12,6 +14,10 @@ var utils = require('./utils');
  * @param {String} [options.domain]   The API domain for the region in use.
  */
 var Client = function (options) {
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide client options');
+  }
+
   /**
    * Options object for the Rest Client instance.
    *
