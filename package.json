@@ -23,7 +23,7 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.10.2",
-    "rest-orm": "^1.0.0",
+    "rest-facade": "^1.1.1",
     "url-join": "0.0.1"
   },
   "devDependencies": {
@@ -32,6 +32,7 @@
     "istanbul": "^0.4.0",
     "mocha": "^2.2.4",
     "nock": "^1.5.0",
+    "rest-facade": "^1.1.1",
     "sinon": "^1.17.1",
     "superagent": "^1.1.0"
   }

@@ -1,4 +1,4 @@
-var rest = require('rest-orm');
+var RestClient = require('rest-facade').Client;
 var MetadataUpdater = require('./MetadataUpdater');
 
 /**
@@ -6,11 +6,15 @@ var MetadataUpdater = require('./MetadataUpdater');
  * Abstracts interaction with the users endpoint.
  * @constructor
  */
-var Users = function (client, id){
-  this.id = id;
-  this.client = client;
-  this.resource = new rest.Client(client.domain + '/users', client.options);
-  this.metadataUpdater = new MetadataUpdater(client);
+var Users = function (options){
+  var clientOptions = {
+    headers: {
+      'Authorization': 'Bearer ' + options.accessToken
+    }
+  };
+
+  this.resource = new RestClient(options.baseUrl + '/users/:userId', clientOptions);
+  this.metadataUpdater = new MetadataUpdater(options);
 };
 
 /**
@@ -60,7 +64,6 @@ Users.prototype.get = function () {
 Users.prototype.update = function () {
   return this.resource.update.apply(this.resource, arguments);
 };
-
 
 /**
  * Delete a user by its id.
