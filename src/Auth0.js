@@ -6,6 +6,9 @@ var ArgumentError = require('./exceptions').ArgumentError;
 var Client = require('./Client');
 var User = require('./User');
 var Connection = require('./Connection');
+var BlacklistedToken = require('./BlacklistedToken');
+var Rule = require('./Rule');
+var DeviceCredential = require('DeviceCredential');
 
 
 /**
@@ -71,6 +74,9 @@ var Auth0 = function (options) {
   this.clients = new Client(this);
   this.users = new User(this);
   this.connections = new Connection(this);
+  this.deviceCredentials = new DeviceCredential(this);
+  this.rules = new Rule(this);
+  this.blacklistedTokens = new BlacklistedToken(this);
 };
 
 
