@@ -10,7 +10,7 @@ var utils = require('./utils');
 
 /**
  * @class BlacklistedToken
- * Auth0 BlacklistedToken.
+ * Blacklisted Tokens.
  * @constructor
  *
  * @param {Object} options            The client options.
@@ -43,7 +43,7 @@ var BlacklistedToken = function (options) {
 };
 
 /**
- * Create an Auth0 client.
+ * Blacklist a new token.
  *
  * @method    create
  * @memberOf  BlacklistedToken
@@ -52,7 +52,7 @@ var BlacklistedToken = function (options) {
 utils.wrapPropertyMethod(BlacklistedToken, 'add', 'resource.create');
 
 /**
- * Get all Auth0 clients.
+ * Get all blacklisted tokens.
  *
  * @method  getAll
  * @memberOf  BlacklistedToken
