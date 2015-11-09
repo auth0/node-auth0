@@ -8,8 +8,8 @@ var User = require('./User');
 var Connection = require('./Connection');
 var BlacklistedToken = require('./BlacklistedToken');
 var Rule = require('./Rule');
-var DeviceCredential = require('DeviceCredential');
-
+var DeviceCredential = require('./DeviceCredential');
+var EmailProvider = require('./EmailProvider');
 
 /**
  * @class
@@ -77,6 +77,7 @@ var Auth0 = function (options) {
   this.deviceCredentials = new DeviceCredential(this);
   this.rules = new Rule(this);
   this.blacklistedTokens = new BlacklistedToken(this);
+  this.emailProvider = new EmailProvider(this);
 };
 
 
