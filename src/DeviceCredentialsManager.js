@@ -39,7 +39,7 @@ var DeviceCredentialsManager = function (options) {
    *
    * @type {external:RestDeviceCredentialsManager}
    */
-  this.resource = new RestDeviceCredentialsManager(options.baseUrl + '/device-credentials/:credentialId', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/device-credentials/:credentialId', clientOptions);
 };
 
 /**
