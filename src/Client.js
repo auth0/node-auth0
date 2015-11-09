@@ -2,6 +2,11 @@ var RestClient = require('rest-facade').Client;
 var ArgumentError = require('./exceptions').ArgumentError;
 var utils = require('./utils');
 
+/**
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
+ */
 
 /**
  * @class Client
@@ -32,7 +37,7 @@ var Client = function (options) {
    * Provides an abstraction layer for consuming the
    * [Auth0 Clients endpoint]{@link https://auth0.com/docs/api/v2#!/Clients}.
    *
-   * @type {Object}
+   * @type {external:RestClient}
    */
   this.resource = new RestClient(options.baseUrl + '/clients/:clientId', clientOptions);
 };
@@ -71,7 +76,7 @@ utils.wrapPropertyMethod(Client, 'get', 'resource.get');
  * @memberOf  Client
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(Client, 'update', 'resource.update');
+utils.wrapPropertyMethod(Client, 'update', 'resource.patch');
 
 /**
  * Delete an Auth0 client.
