@@ -9,8 +9,8 @@ var utils = require('./utils');
  */
 
 /**
- * @class Client
- * Auth0 Client.
+ * @class BlacklistedTokensManager
+ * Blacklisted Tokens Manager.
  * @constructor
  *
  * @param {Object} options            The client options.
@@ -18,13 +18,13 @@ var utils = require('./utils');
  * @param {String} [options.region]   The code for the region in use.
  * @param {String} [options.domain]   The API domain for the region in use.
  */
-var Client = function (options) {
+var BlacklistedTokensManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
 
   /**
-   * Options object for the Rest Client instance.
+   * Options object for the Rest Client instace.
    *
    * @type {Object}
    */
@@ -35,57 +35,30 @@ var Client = function (options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Auth0 Clients endpoint]{@link https://auth0.com/docs/api/v2#!/Clients}.
+   * [Auth0 Blacklisted Tokens endpoint]{@link https://auth0.com/docs/api/v2#!/Clients}.
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/clients/:clientId', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/blacklists/tokens/', clientOptions);
 };
 
 /**
- * Create an Auth0 client.
+ * Blacklist a new token.
  *
  * @method    create
- * @memberOf  Client
+ * @memberOf  BlacklistedTokensManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(Client, 'create', 'resource.create');
+utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
 
 /**
- * Get all Auth0 clients.
+ * Get all blacklisted tokens.
  *
  * @method  getAll
- * @memberOf  Client
+ * @memberOf  BlacklistedTokensManager
  * @return  {Promise}               Returns a promise if no callback is received.
  */
-utils.wrapPropertyMethod(Client, 'getAll', 'resource.getAll');
-
-/**
- * Get an Auth0 client.
- *
- * @method  get
- * @memberOf  Client
- * @return  {Promise}
- */
-utils.wrapPropertyMethod(Client, 'get', 'resource.get');
-
-/**
- * Update an Auth0 client.
- *
- * @method    update
- * @memberOf  Client
- * @return    {Promise}
- */
-utils.wrapPropertyMethod(Client, 'update', 'resource.patch');
-
-/**
- * Delete an Auth0 client.
- *
- * @method    delete
- * @memberOf  Client
- * @return    {Promise}
- */
-utils.wrapPropertyMethod(Client, 'delete', 'resource.delete');
+utils.wrapPropertyMethod(BlacklistedTokensManager, 'getAll', 'resource.getAll');
 
 
-module.exports = Client;
+module.exports = BlacklistedTokensManager;

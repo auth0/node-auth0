@@ -9,7 +9,7 @@ var utils = require('./utils');
  */
 
 /**
- * @class DeviceCredential
+ * @class DeviceCredentialsManager
  * Manages Auth0 Device Credentials.
  * @constructor
  *
@@ -18,7 +18,7 @@ var utils = require('./utils');
  * @param {String} [options.region]   The code for the region in use.
  * @param {String} [options.domain]   The API domain for the region in use.
  */
-var DeviceCredential = function (options) {
+var DeviceCredentialsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide credential options');
   }
@@ -35,39 +35,39 @@ var DeviceCredential = function (options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Auth0 DeviceCredentials endpoint]{@link https://auth0.com/docs/api/v2#!/Device_Credentials}.
+   * [Auth0 DeviceCredentialsManagers endpoint]{@link https://auth0.com/docs/api/v2#!/Device_Credentials}.
    *
-   * @type {external:RestDeviceCredential}
+   * @type {external:RestDeviceCredentialsManager}
    */
-  this.resource = new RestDeviceCredential(options.baseUrl + '/device-credentials/:credentialId', clientOptions);
+  this.resource = new RestDeviceCredentialsManager(options.baseUrl + '/device-credentials/:credentialId', clientOptions);
 };
 
 /**
  * Create an Auth0 credential.
  *
  * @method    create
- * @memberOf  DeviceCredential
+ * @memberOf  DeviceCredentialsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(DeviceCredential, 'createPublicKey', 'resource.create');
+utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.create');
 
 /**
  * Get all Auth0 credentials.
  *
  * @method  getAll
- * @memberOf  DeviceCredential
+ * @memberOf  DeviceCredentialsManager
  * @return  {Promise}               Returns a promise if no callback is received.
  */
-utils.wrapPropertyMethod(DeviceCredential, 'getAll', 'resource.getAll');
+utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
 
 /**
  * Delete an Auth0 device credential.
  *
  * @method    delete
- * @memberOf  DeviceCredential
+ * @memberOf  DeviceCredentialsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(DeviceCredential, 'delete', 'resource.delete');
+utils.wrapPropertyMethod(DeviceCredentialsManager, 'delete', 'resource.delete');
 
 
-module.exports = DeviceCredential;
+module.exports = DeviceCredentialsManager;

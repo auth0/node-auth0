@@ -6,7 +6,7 @@ var MetadataUpdater = require('./MetadataUpdater');
  * Abstracts interaction with the users endpoint.
  * @constructor
  */
-var Users = function (options){
+var UsersManager = function (options){
   var clientOptions = {
     headers: {
       'Authorization': 'Bearer ' + options.accessToken
@@ -25,7 +25,7 @@ var Users = function (options){
  * @param   {Function}  [cb]    Callback function.
  * @return  {Promise}           User creation promise.
  */
-Users.prototype.create = function (data, cb) {
+UsersManager.prototype.create = function (data, cb) {
   return this.resource.create(data, cb);
 };
 
@@ -34,9 +34,9 @@ Users.prototype.create = function (data, cb) {
  *
  * @method
  * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}         Users retrieval promise.
+ * @return  {Promise}         UsersManager retrieval promise.
  */
-Users.prototype.getAll = function () {
+UsersManager.prototype.getAll = function () {
   return this.resource.getAll.apply(this.resource, arguments);
 };
 
@@ -48,7 +48,7 @@ Users.prototype.getAll = function () {
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}         User retrieval promise.
  */
-Users.prototype.get = function () {
+UsersManager.prototype.get = function () {
   return this.resource.get.apply(this.resource, arguments);
 };
 
@@ -61,7 +61,7 @@ Users.prototype.get = function () {
  * @param   {Function}  [cb]    Callback function
  * @return  {Promise}           User update promise.
  */
-Users.prototype.update = function () {
+UsersManager.prototype.update = function () {
   return this.resource.update.apply(this.resource, arguments);
 };
 
@@ -71,22 +71,22 @@ Users.prototype.update = function () {
  * @method
  * @return  {Promise}           User delete promise.
  */
-Users.prototype.delete = function () {
+UsersManager.prototype.delete = function () {
   return this.resource.delete.apply(this.resource, arguments);
 };
 
-Users.prototype.updateAppMetadata = function(id, updatedMetadata, cb){
+UsersManager.prototype.updateAppMetadata = function(id, updatedMetadata, cb){
   return this.metadataUpdater.update(id, {
     updatedMetadata: updatedMetadata,
     type: 'app_metadata'
   }, cb);
 };
 
-Users.prototype.updateUserMetadata = function(id, updatedMetadata, cb){
+UsersManager.prototype.updateUserMetadata = function(id, updatedMetadata, cb){
   return this.metadataUpdater.update(id, {
     updatedMetadata: updatedMetadata,
     type: 'user_metadata'
   }, cb);
 };
 
-module.exports = Users;
+module.exports = UsersManager;

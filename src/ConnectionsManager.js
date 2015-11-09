@@ -9,14 +9,13 @@ var utils = require('./utils');
  */
 
 /**
- * @class Rule
- * The rule class provides a simple abstraction for performing CRUD operations
- * on Auth0 Rules.
+ * @class ConnectionsManager
+ * Represents the relationship between Auth0 and an Iidentity provider.
  * @constructor
  *
  * @param   {Object}   options
  */
-var Rule = function (options) {
+var ConnectionsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -33,57 +32,57 @@ var Rule = function (options) {
 
   /**
    * Provides an abstraction layer for performing CRUD operations on
-   * [Auth0 Rules]{@link https://auth0.com/docs/api/v2#!/Rules}.
+   * [Auth0 Connections]{@link https://auth0.com/docs/api/v2#!/ConnectionsManagers}.
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/rules/:id ', apiOptions);
+  this.resource = new RestClient(options.baseUrl + '/connections/:id ', apiOptions);
 };
 
 /**
- * Create a new rule.
+ * Create a new connection.
  *
  * @method    create
- * @memberOf  Rule
+ * @memberOf  ConnectionsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(Rule, 'create', 'resource.create');
+utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
 
 /**
- * Get all rules.
+ * Get all connections.
  *
  * @method  getAll
- * @memberOf  Rule
+ * @memberOf  ConnectionsManager
  * @return  {Promise}               Returns a promise if no callback is received.
  */
-utils.wrapPropertyMethod(Rule, 'getAll', 'resource.getAll');
+utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
 
 /**
- * Get an Auth0 rule.
+ * Get an Auth0 connection.
  *
  * @method  get
- * @memberOf  Rule
+ * @memberOf  ConnectionsManager
  * @return  {Promise}
  */
-utils.wrapPropertyMethod(Rule, 'get', 'resource.get');
+utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
 
 /**
- * Update an existing rule.
+ * Update an existing connection.
  *
  * @method    update
- * @memberOf  Rule
+ * @memberOf  ConnectionsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(Rule, 'update', 'resource.patch');
+utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
 
 /**
- * Delete an existing rule.
+ * Delete an existing connection.
  *
  * @method    delete
- * @memberOf  Rule
+ * @memberOf  ConnectionsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(Rule, 'delete', 'resource.delete');
+utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
 
 
-module.exports = Rule;
+module.exports = ConnectionsManager;

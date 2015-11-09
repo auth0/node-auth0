@@ -3,13 +3,13 @@ var constants = require('./constants');
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var ArgumentError = require('./exceptions').ArgumentError;
 
-var Client = require('./Client');
-var User = require('./User');
-var Connection = require('./Connection');
-var BlacklistedToken = require('./BlacklistedToken');
-var Rule = require('./Rule');
-var DeviceCredential = require('./DeviceCredential');
-var EmailProvider = require('./EmailProvider');
+var ClientsManager = require('./ClientsManager');
+var UsersManager = require('./UsersManager');
+var ConnectionsManager = require('./ConnectionsManager');
+var BlacklistedTokensManager = require('./BlacklistedTokensManager');
+var RulesManager = require('./RulesManager');
+var DeviceCredentialsManager = require('./DeviceCredentialsManager');
+var EmailProviderManager = require('./EmailProviderManager');
 
 /**
  * @class
@@ -71,13 +71,13 @@ var Auth0 = function (options) {
     );
   }
 
-  this.clients = new Client(this);
-  this.users = new User(this);
-  this.connections = new Connection(this);
-  this.deviceCredentials = new DeviceCredential(this);
-  this.rules = new Rule(this);
-  this.blacklistedTokens = new BlacklistedToken(this);
-  this.emailProvider = new EmailProvider(this);
+  this.clients = new ClientsManager(this);
+  this.users = new UsersManager(this);
+  this.connections = new ConnectionsManager(this);
+  this.deviceCredentials = new DeviceCredentialsManager(this);
+  this.rules = new RulesManager(this);
+  this.blacklistedTokens = new BlacklistedTokensManager(this);
+  this.emailProvider = new EmailProviderManager(this);
 };
 
 

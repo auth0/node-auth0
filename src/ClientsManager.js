@@ -9,8 +9,8 @@ var utils = require('./utils');
  */
 
 /**
- * @class EmailProvider
- * Auth0 Email Provider.
+ * @class ClientsManager
+ * Auth0 Clients Manager.
  * @constructor
  *
  * @param {Object} options            The client options.
@@ -18,9 +18,9 @@ var utils = require('./utils');
  * @param {String} [options.region]   The code for the region in use.
  * @param {String} [options.domain]   The API domain for the region in use.
  */
-var EmailProvider = function (options) {
+var ClientsManager = function (options) {
   if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide client options');h
+    throw new ArgumentError('Must provide client options');
   }
 
   /**
@@ -39,45 +39,53 @@ var EmailProvider = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/emails/provider', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/clients/:clientId', clientOptions);
 };
 
 /**
- * Configure the email provider.
+ * Create an Auth0 client.
  *
- * @method  configure
- * @memberOf  EmailProvider
- * @return  {Promise}               Returns a promise if no callback is received.
+ * @method    create
+ * @memberOf  ClientsManager
+ * @return    {Promise}
  */
-utils.wrapPropertyMethod(EmailProvider, 'configure', 'resource.create');
+utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
 
 /**
- * Get the email provider.
+ * Get all Auth0 clients.
+ *
+ * @method  getAll
+ * @memberOf  ClientsManager
+ * @return  {Promise}               Returns a promise if no callback is received.
+ */
+utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
+
+/**
+ * Get an Auth0 client.
  *
  * @method  get
- * @memberOf  EmailProvider
- * @return  {Promise}               Returns a promise if no callback is received.
+ * @memberOf  ClientsManager
+ * @return  {Promise}
  */
-utils.wrapPropertyMethod(EmailProvider, 'get', 'resource.get');
-
+utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
 
 /**
- * Update the email provider.
+ * Update an Auth0 client.
  *
  * @method    update
- * @memberOf  EmailProvider
+ * @memberOf  ClientsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(EmailProvider, 'update', 'resource.patch');
+utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
 
 /**
- * Delete email provider.
+ * Delete an Auth0 client.
  *
  * @method    delete
- * @memberOf  EmailProvider
+ * @memberOf  ClientsManager
  * @return    {Promise}
  */
-utils.wrapPropertyMethod(EmailProvider, 'delete', 'resource.delete');
+utils.wrapPropertyMethod(ClientsManager, 'delete', 'resource.delete');
 
 
-module.exports = EmailProvider;
+module.exports = ClientsManager;
