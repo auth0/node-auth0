@@ -29,6 +29,6 @@
   "devDependencies": {
     "mocha": "^2.2.1",
     "chai": "^2.2.0",
-    "nock": "^1.5.0"
+    "nock": "^2.17.0"
   }
 }
