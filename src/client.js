@@ -30,6 +30,7 @@ function Client(options){
 
   this.accessToken = options.token;
   this.baseUrl = util.format(BASE_URL_FORMAT, domain);
+  this.connection = options.connection;
 }
 
 utils.subEntity(Client, 'users', Users);

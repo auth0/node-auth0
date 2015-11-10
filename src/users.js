@@ -1,9 +1,11 @@
 var MetadataUpdater = require('./metadataUpdater');
+var UserCreator     = require('./userCreator');
 
 function Users(client, id){
   this.id = id;
   this.client = client;
   this.metadataUpdater = new MetadataUpdater(client);
+  this.userCreator = new UserCreator(client);
 }
 
 Users.prototype.updateAppMetadata = function(id, updatedMetadata, cb){
@@ -20,4 +22,7 @@ Users.prototype.updateUserMetadata = function(id, updatedMetadata, cb){
   }, cb);
 };
 
+module.exports = Users;Users.prototype.createUser = function(userData, cb){
+  return this.userCreator.create(userData, cb);
+};
 module.exports = Users;
