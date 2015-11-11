@@ -8,9 +8,8 @@ var MetadataUpdater = require('./MetadataUpdater');
  */
 var UsersManager = function (options){
   var clientOptions = {
-    headers: {
-      'Authorization': 'Bearer ' + options.accessToken
-    }
+    headers: { 'Authorization': 'Bearer ' + options.accessToken },
+    query: { convertCase: 'snakeCase', repeatParams: false }
   };
 
   this.resource = new RestClient(options.baseUrl + '/users/:userId', clientOptions);

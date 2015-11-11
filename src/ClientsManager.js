@@ -30,7 +30,7 @@ var ClientsManager = function (options) {
    */
   clientOptions = {
     headers: { 'Authorization': 'Bearer ' + options.accessToken },
-    query: { convertCase: 'snakeCase' }
+    query: { convertCase: 'snakeCase', repeatParams: false }
   };
 
   /**
