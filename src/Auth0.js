@@ -74,7 +74,7 @@ var Auth0 = function (options) {
 
   this.clients = new ClientsManager(this);
   this.users = new UsersManager(this);
-  this.client = new ConnectionsManager(this);
+  this.connections = new ConnectionsManager(this);
   this.deviceCredentials = new DeviceCredentialsManager(this);
   this.rules = new RulesManager(this);
   this.blacklistedTokens = new BlacklistedTokensManager(this);
