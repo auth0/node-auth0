@@ -1,5 +1,6 @@
 var RestClient = require('rest-facade').Client;
 var MetadataUpdater = require('./MetadataUpdater');
+var ArgumentError = require('./exceptions').ArgumentError;
 
 /**
  * @class
@@ -70,7 +71,25 @@ UsersManager.prototype.update = function () {
  * @method
  * @return  {Promise}           User delete promise.
  */
-UsersManager.prototype.delete = function () {
+UsersManager.prototype.delete = function (params) {
+  if (typeof params !== 'object') {
+    throw new ArgumentError('You must provide an id for the delete method');
+  }
+
+  return this.resource.delete.apply(this.resource, arguments);
+};
+
+/**
+ * Delete all users.
+ *
+ * @method
+ * @return  {Promise}
+ */
+UsersManager.prototype.deleteAll = function (cb) {
+  if (typeof cb !== 'function') {
+    throw new ArgumentError('The deleteAll method only accepts a callback as argument');
+  }
+
   return this.resource.delete.apply(this.resource, arguments);
 };
 
