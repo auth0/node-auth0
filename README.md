@@ -63,9 +63,121 @@ auth0
   });
 ~~~
 
+## Clients
+[Clients](https://auth0.com/docs/api/v2#!/Clients) represent applications. You can learn more about this in the [Applications](https://auth0.com/docs/applications) section of the documentation.
+
+### Get all clients
+~~~js
+// Using auth0 instance.
+auth0.getClients(function (err, clients) {
+  console.log(clients.length);
+});
+
+
+// Using the clients manager directly.
+auth0.clients.getAll(function (err, clients) {
+  console.log(clients.length);
+});
+~~~
+
+### Create a client
+
+~~~js
+// Using auth0 instance.
+auth0.createClient(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client created.
+});
+
+
+// Using the clients manager directly.
+auth0.clients.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client created.
+});
+~~~
+
+### Get a client
+
+~~~js
+// Using auth0 instance.
+auth0.getClient({ id: CLIENT_ID }, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client);
+});
+
+
+// Using the clients manager directly.
+auth0.clients.get({ id: CLIENT_ID }, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client);
+});
+~~~
+
+### Delete a client
+
+~~~js
+// Using auth0 instance.
+auth0.deleteClient({ id: CLIENT_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client deleted.
+});
+
+
+// Using the clients manager directly.
+auth0.clients.delete({ id: CLIENT_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client deleted.
+});
+~~~
+
+### Update a client
+
+~~~js
+var data = { name: 'newClientName' };
+var params = { id: CLIENT_ID };
+
+
+// Using auth0 instance.
+auth0.updateClient(params, data, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client.name);  // 'newClientName'
+});
+
+
+// Using the clients manager directly.
+auth0.clients.update(params, data, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client.name);  // 'newClientName'
+});
+~~~
 
 ## Connections
-[Connections](https://auth0.com/docs/api/v2#!/Connections/get_connections) represent the relationships between Auth0 and each one of the Identity Providers.
+[Connections](https://auth0.com/docs/api/v2#!/Connections) represent the relationships between Auth0 and each one of the Identity Providers.
 
 ### Get all connections
 ~~~js
