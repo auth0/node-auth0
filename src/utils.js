@@ -18,20 +18,14 @@ utils.subEntity = function(Parent, name, Constructor){
 
 utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
   var path = propertyMethod.split('.');
+  var property = path.shift();
   var method = path.pop();
-  var property = null;
-
 
   Object.defineProperty(Parent.prototype, name, {
     enumerable: false,
     get: function () {
-      property = this;
 
-      while(path.length > 0) {
-        property = property[path.shift()];
-      }
-
-      return property[method].bind(property);
+      return this[property][method].bind(this[property]);
     }
   });
 }
