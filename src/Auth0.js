@@ -1,5 +1,5 @@
 var util = require('util');
-var utils = require('utils');
+var utils = require('./utils');
 var constants = require('./constants');
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var ArgumentError = require('./exceptions').ArgumentError;
