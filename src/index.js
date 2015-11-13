@@ -1,5 +1,6 @@
-var Client = require('./client');
+var Auth0 = require('./Auth0');
 
-module.exports = function(accessToken){
-  return new Client(accessToken);
+var exports = module.exports = function (options) {
+  return new Auth0(options);
 };
+

@@ -1,15 +1,15 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 var util = require('util');
-var constants = require('./constants');
+var constants = require('../constants');
 
 var TOKEN = 'token';
-var auth0 = require('..')({ token: TOKEN });
+var auth0 = require('../../src')({ token: TOKEN });
 
-describe('app metadata', function(){
+describe('App Metadata', function(){
   describe('update', function(){
     var user_id = 'google-oauth%7C1234';
-    var url = util.format(constants.USER_SUB_ROUTE, user_id);
+    var url = util.format(constants.USERS_ENDPOINT, user_id);
     var update = {
       roles: ['reader', 'writer'],
       permissions: null

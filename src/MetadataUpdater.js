@@ -6,9 +6,9 @@ var utils = require('./utils');
 
 var USER_PATCH_URL = '/users/%s';
 
-function MetadataUpdater(client){
-  this.baseUrl = client.baseUrl;
-  this.accessToken = client.accessToken;
+function MetadataUpdater(options){
+  this.baseUrl = options.baseUrl;
+  this.accessToken = options.accessToken;
 }
 
 MetadataUpdater.prototype.update = function(id, params, cb) {
