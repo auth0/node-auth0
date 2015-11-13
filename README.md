@@ -291,7 +291,7 @@ auth0.connections.update(params, data, function (err, connection) {
 
 
 ## Device Credentials
-[Connections](https://auth0.com/docs/api/v2#!/Connections) represent the relationships between Auth0 and each one of the Identity Providers.
+Managing of [Device Credentials](https://auth0.com/docs/api/v2#!/Device_Credentials/get_device_credentials) with Auth0 SDK.
 
 ### List device credentials
 ~~~js
@@ -352,6 +352,120 @@ auth0.deviceCredentials.delete(params, function (err) {
   }
   
   // Credential deleted.
+});
+~~~
+
+
+## Rules
+[Rules](https://auth0.com/docs/api/v2#!/Rules) are code snippets written in JavaScript that are executed as part of the authentication pipeline in Auth0. Learn more about them in the [Rules](https://auth0.com/docs/rules) section of the documentation.
+
+### Get all rules
+~~~js
+// Using auth0 instance.
+auth0.getRules(function (err, rules) {
+  console.log(rules.length);
+});
+
+
+// Using the rules manager directly.
+auth0.rules.getAll(function (err, rules) {
+  console.log(rules.length);
+});
+~~~
+
+### Create a rule
+
+~~~js
+// Using auth0 instance.
+auth0.createRule(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule created.
+});
+
+
+// Using the rules manager directly.
+auth0.rules.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule created.
+});
+~~~
+
+### Get a rule
+
+~~~js
+// Using auth0 instance.
+auth0.getRule({ id: RULE_ID }, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule);
+});
+
+
+// Using the rules manager directly.
+auth0.rules.get({ id: RULE_ID }, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule);
+});
+~~~
+
+### Delete a rule
+
+~~~js
+// Using auth0 instance.
+auth0.deleteRule({ id: RULE_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule deleted.
+});
+
+
+// Using the rules manager directly.
+auth0.rules.delete({ id: RULE_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule deleted.
+});
+~~~
+
+### Update a rule
+
+~~~js
+var data = { name: 'New name' };
+var params = { id: RULE_ID };
+
+
+// Using auth0 instance.
+auth0.updateRule(params, data, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule.name);  // 'New name'
+});
+
+
+// Using the rules manager directly.
+auth0.rules.update(params, data, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule.name);  // 'New name'
 });
 ~~~
 
