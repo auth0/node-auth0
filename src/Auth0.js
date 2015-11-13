@@ -1,4 +1,5 @@
 var util = require('util');
+var utils = require('utils');
 var constants = require('./constants');
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var ArgumentError = require('./exceptions').ArgumentError;
@@ -73,12 +74,257 @@ var Auth0 = function (options) {
 
   this.clients = new ClientsManager(this);
   this.users = new UsersManager(this);
-  this.connections = new ConnectionsManager(this);
+  this.client = new ConnectionsManager(this);
   this.deviceCredentials = new DeviceCredentialsManager(this);
   this.rules = new RulesManager(this);
   this.blacklistedTokens = new BlacklistedTokensManager(this);
   this.emailProvider = new EmailProviderManager(this);
 };
+
+/**
+ * Wrapper for auth0.connections.getAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getConnections', 'connections.getAll');
+
+/**
+ * Wrapper for auth0.connections.create()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createConnection', 'connections.create');
+
+/**
+ * Wrapper for auth0.connections.get()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getConnection', 'connections.get');
+
+/**
+ * Wrapper for auth0.connections.delete()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteConnection', 'connections.delete');
+
+/**
+ * Wrapper for auth0.connections.update()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateConnection', 'connections.update');
+
+/**
+ * Wrapper for auth0.clients.getAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getClients', 'clients.getAll');
+
+/**
+ * Wrapper for auth0.clients.get()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getClient', 'clients.get');
+
+/**
+ * Wrapper for auth0.clients.create()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createClient', 'clients.create');
+
+/**
+ * Wrapper for auth0.clients.update()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateClient', 'clients.update');
+
+/**
+ * Wrapper for auth0.clients.delete()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteClient', 'clients.delete');
+
+
+/**
+ * Wrapper for auth0.deviceCredentials.createPubicKey()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createDevicePublicKey', 'deviceCredentials.createPublicKey');
+
+
+/**
+ * Wrapper for auth0.deviceCredentials.getAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getDeviceCredentials', 'deviceCredentials.getAll');
+
+
+/**
+ * Wrapper for auth0.deviceCredentials.delete()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteDeviceCredential', 'deviceCredentials.delete');
+
+
+/**
+ * Wrapper for auth0.rules.getAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getRules', 'rules.getAll');
+
+
+/**
+ * Wrapper for auth0.rules.create()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createRule', 'rules.create');
+
+/**
+ * Wrapper for auth0.rules.get()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getRule', 'rules.get');
+
+/**
+ * Wrapper for auth0.rules.delete()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteRule', 'rules.delete');
+
+/**
+ * Wrapper for auth0.rules.update()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateRule', 'rules.update');
+
+/**
+ * Wrapper for auth0.users.getAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getUsers', 'users.getAll');
+
+/**
+ * Wrapper for auth0.users.get()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getUser', 'users.get');
+
+/**
+ * Wrapper for auth0.users.deleteAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteAllUsers', 'users.deleteAll');
+
+/**
+ * Wrapper for auth0.users.delete()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteUser', 'users.delete');
+
+/**
+ * Wrapper for auth0.users.create()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createUser', 'users.create');
+
+/**
+ * Wrapper for auth0.users.update()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateUser', 'users.update');
+
+/**
+ * Wrapper for auth0.blacklistedTokens.getAll()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
+
+/**
+ * Wrapper for auth0.blacklistedTokens.add()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'blacklistToken', 'blacklistedTokens.add');
+
+/**
+ * Wrapper for auth0.emailProvider.get()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getEmailProvider', 'emailProvider.get');
+
+/**
+ * Wrapper for auth0.emailProvider.configure()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'configureEmailProvider', 'emailProvider.configure');
+
+/**
+ * Wrapper for auth0.emailProvider.delete()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteEmailProvider', 'emailProvider.delete');
+
+/**
+ * Wrapper for auth0.emailProvider.update()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateEmailProvider', 'emailProvider.update');
 
 
 module.exports = Auth0;
