@@ -62,7 +62,7 @@ UsersManager.prototype.get = function () {
  * @return  {Promise}           User update promise.
  */
 UsersManager.prototype.update = function () {
-  return this.resource.update.apply(this.resource, arguments);
+  return this.resource.patch.apply(this.resource, arguments);
 };
 
 /**
