@@ -290,6 +290,72 @@ auth0.connections.update(params, data, function (err, connection) {
 ~~~
 
 
+## Device Credentials
+[Connections](https://auth0.com/docs/api/v2#!/Connections) represent the relationships between Auth0 and each one of the Identity Providers.
+
+### List device credentials
+~~~js
+// Using auth0 instance.
+auth0.getDeviceCredentials(function (err, credentials) {
+  console.log(credentials.length);
+});
+
+
+// Using the device credentials manager directly.
+auth0.deviceCredentials.getAll(function (err, credentials) {
+  console.log(credentials.length);
+});
+~~~
+
+### Create device public key
+
+~~~js
+// Using auth0 instance.
+auth0.createConnection(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential created.
+});
+
+
+// Using the device credentials manager directly.
+auth0.deviceCredentials.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential created.
+});
+~~~
+
+### Delete a device credential
+
+~~~js
+var params = { id: CREDENTIAL_ID };
+
+// Using auth0 instance.
+auth0.deleteDeviceCredential(params, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential deleted.
+});
+
+
+// Using the credentials manager directly.
+auth0.deviceCredentials.delete(params, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential deleted.
+});
+~~~
+
+
 ## Authentication
 
 This library can be used to access Auth0's [API v2](https://auth0.com/docs/apiv2). To authenticate users use the [passport strategy](https://github.com/auth0/passport-auth0).
