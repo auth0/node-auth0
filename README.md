@@ -469,6 +469,143 @@ auth0.rules.update(params, data, function (err, rule) {
 });
 ~~~
 
+## Users
+Performing CRUD operations on the [Users](https://auth0.com/docs/api/v2#!/Users) endpoint.
+
+### List or search users
+This method takes an optional object as first argument that may be used to specify pagination settings and the search query.
+
+~~~js
+// Pagination settings. 
+var params = {
+  perPage: 10,
+  page: 2
+};
+
+// Using auth0 instance.
+auth0.getUsers(params, function (err, users) {
+  console.log(users.length);
+});
+
+// Using the users manager directly.
+auth0.users.getAll(function (err, users) {
+  console.log(users.length);
+});
+~~~
+
+### Create a user
+
+~~~js
+// Using auth0 instance.
+auth0.createUser(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // User created.
+});
+
+
+// Using the users manager directly.
+auth0.users.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // User created.
+});
+~~~
+
+### Get a user
+
+~~~js
+
+// Using auth0 instance.
+auth0.getUser({ userId: USER_ID }, function (err, user) {
+  console.log(user);
+});
+
+// Using the users manager directly.
+auth0.users.get({ userId: USER_ID }, function (err, user) {
+  console.log(user);
+});
+~~~
+
+
+
+### Delete all users
+
+~~~js
+// Using auth0 instance.
+auth0.deleteAllUsers(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users deleted
+});
+
+
+// Using the users manager directly.
+auth0.users.deleteAll(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users deleted
+});
+~~~
+
+### Delete a user
+
+~~~js
+// Using auth0 instance.
+auth0.deleteRule({ id: RULE_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule deleted.
+});
+
+
+// Using the rules manager directly.
+auth0.rules.delete({ id: RULE_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule deleted.
+});
+~~~
+
+### Update a user
+
+~~~js
+var params = { id: USER_ID };
+
+// Using auth0 instance.
+auth0.updateUser(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+
+
+// Using the rules manager directly.
+auth0.users.update(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+~~~
+
 
 ## Authentication
 
