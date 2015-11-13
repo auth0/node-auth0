@@ -20,6 +20,7 @@ var auth0 = require('auth0')({
 ~~~
 
 By default the code assumes your account is running in the US West region. If you are running in Europe you can specify:
+
 ~~~js
 var token = '{YOUR_API_V2_TOKEN}';
 var auth0 = require('auth0')({
@@ -29,6 +30,7 @@ var auth0 = require('auth0')({
 ~~~
 
 Alternatively you can just set the domain:
+
 ~~~js
 var token = '{YOUR_API_V2_TOKEN}';
 var auth0 = require('auth0')({
@@ -37,59 +39,144 @@ var auth0 = require('auth0')({
 });
 ~~~
 
-### User's metadata
-You can store data about a user that does not come from the user's identity provider. This is known as "metadata". There are two types of metadata: `user_metadata` and `app_metadata`. You can find out more [here](https://auth0.com/docs/apiv2Changes#8).
+## Promises and Callbacks
+Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided, no Promise will be returned.
 
-#### app_metadata
-To update the value of a property or create it if it does not exist:
 ~~~js
-var user_id = '...'
-auth0.users.updateAppMetadata(user_id, {
-  roles: ['reader']
-}).then(function(user){
-  // assert.equal(user.app_metadata.roles.length, 1);
-  // assert.equal(user.app_metadata.roles[0], 'reader');
-}).catch(function(err){
-  // handle error if any
+// Using callbacks.
+auth0.getUsers(function (err, users) {
+  if (err) {
+    // Handle error.
+  }
+  console.log(users);
+});
+
+
+// Using promises.
+auth0
+  .getUsers()
+  .then(function (users) {
+    console.log(users);	
+  })
+  .catch(function (err) {
+    // Handle error.
+  });
+~~~
+
+
+## Connections
+[Connections](https://auth0.com/docs/api/v2#!/Connections/get_connections) represent the relationships between Auth0 and each one of the Identity Providers.
+
+### Get all connections
+~~~js
+// Using auth0 instance.
+auth0.getConnections(function (err, connections) {
+  console.log(connections.length);
+});
+
+
+// Using the connections manager directly.
+auth0.connections.getAll(function (err, connections) {
+  console.log(connections.length);
 });
 ~~~
 
-To delete a property:
+### Create a connection
+
 ~~~js
-var user_id = '...'
-auth0.users.updateAppMetadata(user_id, {
-  roles: null
-}, function(err, user){
-  // assert.equal(typeof user.app_metadata.roles, 'undefined');
+// Using auth0 instance.
+auth0.createConnection(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection created.
+});
+
+
+// Using the connections manager directly.
+auth0.connections.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection created.
 });
 ~~~
 
->Note that you can use either callbacks or promises.
+### Get a connection
 
-#### user_metadata
-To update the value of a property or create it if it does not exist:
 ~~~js
-var user_id = '...'
-auth0.users.updateUserMetadata(user_id,{
-  hobby: 'surf'
-}).then(function(user){
-  // assert.equal(user.user_metadata.hobby, 'surf');
-}).catch(function(err){
-  // handle error if any
+// Using auth0 instance.
+auth0.getConnection({ id: CONNECTION_ID }, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection);
+});
+
+
+// Using the connections manager directly.
+auth0.connections.get({ id: CONNECTION_ID }, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection);
 });
 ~~~
 
-To delete a property:
+### Delete a connection
+
 ~~~js
-var user_id = '...'
-auth0.users.updateUserMetadata(user_id,{
-  hobby: null
-}, function(err, user){
-  // assert.equal(typeof user.user_metadata.hobby, 'undefined');
+// Using auth0 instance.
+auth0.deleteConnection({ id: CONNECTION_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection deleted.
+});
+
+
+// Using the connections manager directly.
+auth0.connections.delete({ id: CONNECTION_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection deleted.
 });
 ~~~
 
->Note that you can use either callbacks or promises.
+### Update a connection
+
+~~~js
+var data = { name: 'newConnectionName' };
+var params = { id: CONNECTION_ID };
+
+
+// Using auth0 instance.
+auth0.updateConnection(params, data, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection.name);  // 'newConnectionName'
+});
+
+
+// Using the connections manager directly.
+auth0.connections.update(params, data, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection.name);  // 'newConnectionName'
+});
+~~~
+
 
 ## Authentication
 
