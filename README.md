@@ -606,6 +606,138 @@ auth0.users.update(params, data, function (err, user) {
 });
 ~~~
 
+## Blacklisted Tokens
+Managing [Blacklisted tokens](https://auth0.com/docs/api/v2#!/Blacklists) with the SDK.
+
+### Get all blacklisted tokens
+~~~js
+// Using auth0 instance.
+auth0.getBlacklistedTokens(function (err, tokens) {
+  console.log(tokens.length);
+});
+
+
+// Using the blacklisted tokens manager directly.
+auth0.blacklistedTokens.getAll(function (err, tokens) {
+  console.log(tokens.length);
+});
+~~~
+
+### Blacklist a token
+
+~~~js
+var token = {
+ aud: 'aud',
+ jti: 'jti'
+};
+
+// Using auth0 instance.
+auth0.blacklistToken(token, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Token blacklisted.
+});
+
+
+// Using the blacklisted tokens manager directly.
+auth0.blacklistedTokens.add(token, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Token blacklisted.
+});
+~~~
+
+## Email Provider
+Configuring the [Email Provider](https://auth0.com/docs/api/v2#!/Emails).
+
+### Get the email provider
+~~~js
+// Using auth0 instance.
+auth0.getEmailProvider(function (err, provider) {
+  console.log(provider.length);
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.getAll(function (err, provider) {
+  console.log(provider);
+});
+~~~
+
+### Configure the email provider
+
+~~~js
+// Using auth0 instance.
+auth0.configureEmailProvider(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Email provider configured.
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Email provider configured.
+});
+~~~
+
+### Delete the email provider
+
+~~~js
+// Using auth0 instance.
+auth0.deleteEmailProvider(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Email provider deleted.
+});
+
+
+// Using the rules manager directly.
+auth0.emailProvider.delete(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Email provider configured.
+});
+~~~
+
+### Update the email provider
+
+~~~js
+// Using auth0 instance.
+auth0.updateEmailProvider(data, function (err, provider) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated email provider.
+  console.log(provider);
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.update(function (err, provider) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated email provider.
+  console.log(provider);
+});
+~~~
 
 ## Authentication
 
