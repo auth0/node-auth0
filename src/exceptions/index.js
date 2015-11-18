@@ -1,4 +1,4 @@
 module.exports = {
-  APIError: require('./APIError.js'),
+  ApiError: require('./ApiError.js'),
   ArgumentError: require('./ArgumentError.js')
 };

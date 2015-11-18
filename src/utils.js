@@ -1,4 +1,4 @@
-var APIError = require('./exceptions').APIError;
+var ApiError = require('./exceptions').ApiError;
 
 var utils = module.exports = {};
 
@@ -36,7 +36,7 @@ utils.responseHandler = function(onError, onSuccess){
       var error = err;
       if (err.response && err.response.body){
         var body = err.response.body;
-        error = new APIError(body.statusCode, body.error, body.message);
+        error = new ApiError(body.statusCode, body.error, body.message);
       }
 
       return onError(error);
