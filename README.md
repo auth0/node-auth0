@@ -560,22 +560,22 @@ auth0.users.deleteAll(function (err) {
 
 ~~~js
 // Using auth0 instance.
-auth0.deleteRule({ id: RULE_ID }, function (err) {
+auth0.deleteUser({ id: USER_ID }, function (err) {
   if (err) {
     // Handle error.
   }
   
-  // Rule deleted.
+  // User deleted.
 });
 
 
-// Using the rules manager directly.
-auth0.rules.delete({ id: RULE_ID }, function (err) {
+// Using the users manager directly.
+auth0.users.delete({ id: USER_ID }, function (err) {
   if (err) {
     // Handle error.
   }
   
-  // Rule deleted.
+  // User deleted.
 });
 ~~~
 
@@ -595,7 +595,7 @@ auth0.updateUser(params, data, function (err, user) {
 });
 
 
-// Using the rules manager directly.
+// Using the users manager directly.
 auth0.users.update(params, data, function (err, user) {
   if (err) {
     // Handle error.
@@ -704,7 +704,7 @@ auth0.deleteEmailProvider(function (err) {
 });
 
 
-// Using the rules manager directly.
+// Using the email provider manager directly.
 auth0.emailProvider.delete(function (err) {
   if (err) {
     // Handle error.
