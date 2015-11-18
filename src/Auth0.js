@@ -1,9 +1,7 @@
 var util = require('util');
-var utils = require('./utils');
-var constants = require('./constants');
-var BASE_URL_FORMAT = 'https://%s/api/v2';
-var ArgumentError = require('./exceptions').ArgumentError;
 
+var utils = require('./utils');
+var ArgumentError = require('./exceptions').ArgumentError;
 var ClientsManager = require('./ClientsManager');
 var UsersManager = require('./UsersManager');
 var ConnectionsManager = require('./ConnectionsManager');
@@ -11,6 +9,9 @@ var BlacklistedTokensManager = require('./BlacklistedTokensManager');
 var RulesManager = require('./RulesManager');
 var DeviceCredentialsManager = require('./DeviceCredentialsManager');
 var EmailProviderManager = require('./EmailProviderManager');
+
+var BASE_URL_FORMAT = 'https://%s/api/v2';
+
 
 /**
  * @class
@@ -20,34 +21,26 @@ var EmailProviderManager = require('./EmailProviderManager');
  * @param   {Object}  options           Options for the Auth0 SDK.
  * @param   {String}  options.token     API access token.
  * @param   {String}  [options.domain]  Auth0 server domain.
- * @param   {String}  [options.region]  Auth0 server region.
  */
 var Auth0 = function (options) {
   if (!options || typeof options !== 'object') {
     throw new ArgumentError('Auth0 SDK options must be an object');
   }
 
-  if (!options.token || options.token.length === 0){
+  if (!options.token || options.token.length === 0) {
     throw new ArgumentError('An access token must be provided');
   }
 
-  if (options.domain && options.region){
-    throw new ArgumentError('Cannot provide both region and domain');
+  if (!options.domain || options.domain.length === 0) {
+    throw new ArgumentError('Must provide a domain');
   }
-
-  /**
-   * Auth0 servers region. If not provided, defaults to US.
-   *
-   * @property {String} region
-   */
-  this.region = (options.region || constants.DEFAULT_REGION).toLowerCase();
 
   /**
    * Auth0 domain being used (depends on the region).
    *
    * @type {String}
    */
-  this.domain = options.domain || constants.DOMAINS_BY_REGION[this.region]
+  this.domain = options.domain;
 
   /**
    * Access token provided by the user.
@@ -63,23 +56,63 @@ var Auth0 = function (options) {
    */
   this.baseUrl = util.format(BASE_URL_FORMAT, this.domain);
 
-  if (!this.domain){
-    var regions = Object.keys(constants.DOMAINS_BY_REGION);
-
-    throw new ArgumentError(
-      'The region is invalid, valid values are any of: "' +
-      regions.join('","') + '"'
-    );
-  }
-
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * clients endpoint.
+   *
+   * @type {ClientsManager}.
+   */
   this.clients = new ClientsManager(this);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * users endpoint.
+   *
+   * @type {UsersManager}
+   */
   this.users = new UsersManager(this);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * connections endpoint.
+   *
+   * @type {ConnectionsManager}
+   */
   this.connections = new ConnectionsManager(this);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * device credentials endpoint.
+   *
+   * @type {DeviceCredentialsManager}
+   */
   this.deviceCredentials = new DeviceCredentialsManager(this);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * rules endpoint.
+   *
+   * @type {RulesManager}
+   */
   this.rules = new RulesManager(this);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * blacklisted tokens endpoint.
+   *
+   * @type {BlacklistedtokensManager}
+   */
   this.blacklistedTokens = new BlacklistedTokensManager(this);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * email provider endpoint.
+   *
+   * @type {EmailProviderManager}
+   */
   this.emailProvider = new EmailProviderManager(this);
 };
+
 
 /**
  * Wrapper for auth0.connections.getAll()
@@ -89,6 +122,7 @@ var Auth0 = function (options) {
  */
 utils.wrapPropertyMethod(Auth0, 'getConnections', 'connections.getAll');
 
+
 /**
  * Wrapper for auth0.connections.create()
  *
@@ -96,6 +130,7 @@ utils.wrapPropertyMethod(Auth0, 'getConnections', 'connections.getAll');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createConnection', 'connections.create');
+
 
 /**
  * Wrapper for auth0.connections.get()
@@ -105,6 +140,7 @@ utils.wrapPropertyMethod(Auth0, 'createConnection', 'connections.create');
  */
 utils.wrapPropertyMethod(Auth0, 'getConnection', 'connections.get');
 
+
 /**
  * Wrapper for auth0.connections.delete()
  *
@@ -112,6 +148,7 @@ utils.wrapPropertyMethod(Auth0, 'getConnection', 'connections.get');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteConnection', 'connections.delete');
+
 
 /**
  * Wrapper for auth0.connections.update()
@@ -121,6 +158,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteConnection', 'connections.delete');
  */
 utils.wrapPropertyMethod(Auth0, 'updateConnection', 'connections.update');
 
+
 /**
  * Wrapper for auth0.clients.getAll()
  *
@@ -128,6 +166,7 @@ utils.wrapPropertyMethod(Auth0, 'updateConnection', 'connections.update');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getClients', 'clients.getAll');
+
 
 /**
  * Wrapper for auth0.clients.get()
@@ -137,6 +176,7 @@ utils.wrapPropertyMethod(Auth0, 'getClients', 'clients.getAll');
  */
 utils.wrapPropertyMethod(Auth0, 'getClient', 'clients.get');
 
+
 /**
  * Wrapper for auth0.clients.create()
  *
@@ -145,6 +185,7 @@ utils.wrapPropertyMethod(Auth0, 'getClient', 'clients.get');
  */
 utils.wrapPropertyMethod(Auth0, 'createClient', 'clients.create');
 
+
 /**
  * Wrapper for auth0.clients.update()
  *
@@ -152,6 +193,7 @@ utils.wrapPropertyMethod(Auth0, 'createClient', 'clients.create');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateClient', 'clients.update');
+
 
 /**
  * Wrapper for auth0.clients.delete()
@@ -206,6 +248,7 @@ utils.wrapPropertyMethod(Auth0, 'getRules', 'rules.getAll');
  */
 utils.wrapPropertyMethod(Auth0, 'createRule', 'rules.create');
 
+
 /**
  * Wrapper for auth0.rules.get()
  *
@@ -213,6 +256,7 @@ utils.wrapPropertyMethod(Auth0, 'createRule', 'rules.create');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getRule', 'rules.get');
+
 
 /**
  * Wrapper for auth0.rules.delete()
@@ -222,6 +266,7 @@ utils.wrapPropertyMethod(Auth0, 'getRule', 'rules.get');
  */
 utils.wrapPropertyMethod(Auth0, 'deleteRule', 'rules.delete');
 
+
 /**
  * Wrapper for auth0.rules.update()
  *
@@ -229,6 +274,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteRule', 'rules.delete');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateRule', 'rules.update');
+
 
 /**
  * Wrapper for auth0.users.getAll()
@@ -238,6 +284,7 @@ utils.wrapPropertyMethod(Auth0, 'updateRule', 'rules.update');
  */
 utils.wrapPropertyMethod(Auth0, 'getUsers', 'users.getAll');
 
+
 /**
  * Wrapper for auth0.users.get()
  *
@@ -245,6 +292,7 @@ utils.wrapPropertyMethod(Auth0, 'getUsers', 'users.getAll');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getUser', 'users.get');
+
 
 /**
  * Wrapper for auth0.users.deleteAll()
@@ -254,6 +302,7 @@ utils.wrapPropertyMethod(Auth0, 'getUser', 'users.get');
  */
 utils.wrapPropertyMethod(Auth0, 'deleteAllUsers', 'users.deleteAll');
 
+
 /**
  * Wrapper for auth0.users.delete()
  *
@@ -261,6 +310,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteAllUsers', 'users.deleteAll');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteUser', 'users.delete');
+
 
 /**
  * Wrapper for auth0.users.create()
@@ -270,6 +320,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteUser', 'users.delete');
  */
 utils.wrapPropertyMethod(Auth0, 'createUser', 'users.create');
 
+
 /**
  * Wrapper for auth0.users.update()
  *
@@ -277,6 +328,7 @@ utils.wrapPropertyMethod(Auth0, 'createUser', 'users.create');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateUser', 'users.update');
+
 
 /**
  * Wrapper for auth0.blacklistedTokens.getAll()
@@ -286,6 +338,7 @@ utils.wrapPropertyMethod(Auth0, 'updateUser', 'users.update');
  */
 utils.wrapPropertyMethod(Auth0, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
 
+
 /**
  * Wrapper for auth0.blacklistedTokens.add()
  *
@@ -293,6 +346,7 @@ utils.wrapPropertyMethod(Auth0, 'getBlacklistedTokens', 'blacklistedTokens.getAl
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'blacklistToken', 'blacklistedTokens.add');
+
 
 /**
  * Wrapper for auth0.emailProvider.get()
@@ -302,6 +356,7 @@ utils.wrapPropertyMethod(Auth0, 'blacklistToken', 'blacklistedTokens.add');
  */
 utils.wrapPropertyMethod(Auth0, 'getEmailProvider', 'emailProvider.get');
 
+
 /**
  * Wrapper for auth0.emailProvider.configure()
  *
@@ -310,6 +365,7 @@ utils.wrapPropertyMethod(Auth0, 'getEmailProvider', 'emailProvider.get');
  */
 utils.wrapPropertyMethod(Auth0, 'configureEmailProvider', 'emailProvider.configure');
 
+
 /**
  * Wrapper for auth0.emailProvider.delete()
  *
@@ -317,6 +373,7 @@ utils.wrapPropertyMethod(Auth0, 'configureEmailProvider', 'emailProvider.configu
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteEmailProvider', 'emailProvider.delete');
+
 
 /**
  * Wrapper for auth0.emailProvider.update()
