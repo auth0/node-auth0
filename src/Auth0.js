@@ -1,6 +1,8 @@
 var util = require('util');
 
+var pkg = require('../package.json');
 var utils = require('./utils');
+var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('./exceptions').ArgumentError;
 var ClientsManager = require('./ClientsManager');
 var UsersManager = require('./UsersManager');
@@ -11,6 +13,8 @@ var DeviceCredentialsManager = require('./DeviceCredentialsManager');
 var EmailProviderManager = require('./EmailProviderManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
+var clientInfo = null;
+var b65ClientInfo = null;
 
 
 /**
@@ -35,26 +39,15 @@ var Auth0 = function (options) {
     throw new ArgumentError('Must provide a domain');
   }
 
-  /**
-   * Auth0 domain being used (depends on the region).
-   *
-   * @type {String}
-   */
-  this.domain = options.domain;
-
-  /**
-   * Access token provided by the user.
-   *
-   * @type {String}
-   */
-  this.accessToken = options.token;
-
-  /**
-   * URL of the API being consumed.
-   *
-   * @type {String}
-   */
-  this.baseUrl = util.format(BASE_URL_FORMAT, this.domain);
+  var managerOptions = {
+    headers: {
+      'Authorization': 'Bearer ' + options.token,
+      'User-agent': 'node.js/' + process.version.replace('v', ''),
+      'Auth0-Client': jsonToBase64(this.getAuth0ClientInfo()),
+      'Content-Type': 'application/json'
+    },
+    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+  };
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -62,7 +55,7 @@ var Auth0 = function (options) {
    *
    * @type {ClientsManager}.
    */
-  this.clients = new ClientsManager(this);
+  this.clients = new ClientsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -70,7 +63,7 @@ var Auth0 = function (options) {
    *
    * @type {UsersManager}
    */
-  this.users = new UsersManager(this);
+  this.users = new UsersManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -78,7 +71,7 @@ var Auth0 = function (options) {
    *
    * @type {ConnectionsManager}
    */
-  this.connections = new ConnectionsManager(this);
+  this.connections = new ConnectionsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -86,7 +79,7 @@ var Auth0 = function (options) {
    *
    * @type {DeviceCredentialsManager}
    */
-  this.deviceCredentials = new DeviceCredentialsManager(this);
+  this.deviceCredentials = new DeviceCredentialsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -94,7 +87,7 @@ var Auth0 = function (options) {
    *
    * @type {RulesManager}
    */
-  this.rules = new RulesManager(this);
+  this.rules = new RulesManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -102,7 +95,7 @@ var Auth0 = function (options) {
    *
    * @type {BlacklistedtokensManager}
    */
-  this.blacklistedTokens = new BlacklistedTokensManager(this);
+  this.blacklistedTokens = new BlacklistedTokensManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -110,7 +103,42 @@ var Auth0 = function (options) {
    *
    * @type {EmailProviderManager}
    */
-  this.emailProvider = new EmailProviderManager(this);
+  this.emailProvider = new EmailProviderManager(managerOptions);
+};
+
+
+/**
+ * Return an object with information about the current client,
+ *
+ * @method
+ * @memberOf Auth0
+ *
+ * @return {Object}   Object containing client information.
+ */
+Auth0.prototype.getAuth0ClientInfo = function () {
+  var clientInfo = {
+    name: 'node-auth0',
+    version: pkg.version,
+    dependencies: [],
+    environment: [{
+      name: 'node.js',
+      version: process.version.replace('v', '')
+    }]
+  };
+
+  // Add the dependencies to the client info object.
+  Object
+    .keys(pkg.dependencies)
+    .forEach(function (name) {
+      clientInfo.dependencies.push({
+        name: name,
+        version: pkg.dependencies[name]
+      });
+    });
+
+  console.log(clientInfo);
+
+  return clientInfo;
 };
 
 

@@ -45,7 +45,7 @@ var ClientsManager = function (options) {
    * @type {Object}
    */
   clientOptions = {
-    headers: { 'Authorization': 'Bearer ' + options.accessToken },
+    headers: headers,
     query: { convertCase: 'snakeCase', repeatParams: false }
   };
 

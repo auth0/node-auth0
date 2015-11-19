@@ -2,6 +2,10 @@ var ApiError = require('./exceptions').ApiError;
 
 var utils = module.exports = {};
 
+utils.jsonToBase64 = function (json) {
+  return (new Buffer(JSON.stringify(json))).toString('base64');
+};
+
 utils.subEntity = function(Parent, name, Constructor){
   var underlyingFieldName = '__' + name;
   Object.defineProperty(Parent.prototype, name, {

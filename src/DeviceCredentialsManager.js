@@ -29,7 +29,7 @@ var DeviceCredentialsManager = function (options) {
    * @type {Object}
    */
   clientOptions = {
-    headers: { 'Authorization': 'Bearer ' + options.accessToken },
+    headers: options.headers,
     query: { convertCase: 'snakeCase', repeatParams: false }
   };
 

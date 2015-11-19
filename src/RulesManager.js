@@ -27,7 +27,7 @@ var RulesManager = function (options) {
    * @type {Object}
    */
   apiOptions = {
-    headers: { 'Authorization': 'Bearer ' + options.accessToken },
+    headers: options.headers,
     query: { convertCase: 'snakeCase', repeatParams: false }
   };
 

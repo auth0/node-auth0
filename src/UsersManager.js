@@ -1,5 +1,4 @@
 var RestClient = require('rest-facade').Client;
-var MetadataUpdater = require('./MetadataUpdater');
 var ArgumentError = require('./exceptions').ArgumentError;
 
 /**
@@ -9,12 +8,26 @@ var ArgumentError = require('./exceptions').ArgumentError;
  */
 var UsersManager = function (options){
   var clientOptions = {
-    headers: { 'Authorization': 'Bearer ' + options.accessToken },
+    headers: options.headers,
     query: { convertCase: 'snakeCase', repeatParams: false }
   };
 
-  this.resource = new RestClient(options.baseUrl + '/users/:userId', clientOptions);
-  this.metadataUpdater = new MetadataUpdater(options);
+  this.resource = new RestClient(options.baseUrl + '/users/:id', clientOptions);
+
+  /**
+   * Provides an abstraction layer for consuming the
+   * [Multifactor Provider endpoint]{@link https://auth0.com/docs/api/v2#!/Users/delete_multifactor_by_provider}.
+   *
+   * @type {external:RestClient}
+   */
+  this.resource = new RestClient(options.baseUrl + '/users/:id/multifactor/:provider', clientOptions);
+
+  /**
+   * Provides a simple abstraction layer for linking user accounts.
+   *
+   * @type {external:RestClient}
+   */
+  this.resource = new RestClient(options.baseUrl + '/users/:id/identities/:userId', clientOptions);
 };
 
 /**
@@ -91,20 +104,6 @@ UsersManager.prototype.deleteAll = function (cb) {
   }
 
   return this.resource.delete.apply(this.resource, arguments);
-};
-
-UsersManager.prototype.updateAppMetadata = function(id, updatedMetadata, cb){
-  return this.metadataUpdater.update(id, {
-    updatedMetadata: updatedMetadata,
-    type: 'app_metadata'
-  }, cb);
-};
-
-UsersManager.prototype.updateUserMetadata = function(id, updatedMetadata, cb){
-  return this.metadataUpdater.update(id, {
-    updatedMetadata: updatedMetadata,
-    type: 'user_metadata'
-  }, cb);
 };
 
 module.exports = UsersManager;
