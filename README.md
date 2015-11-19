@@ -521,12 +521,12 @@ auth0.users.create(data, function (err) {
 ~~~js
 
 // Using auth0 instance.
-auth0.getUser({ userId: USER_ID }, function (err, user) {
+auth0.getUser({ id: USER_ID }, function (err, user) {
   console.log(user);
 });
 
 // Using the users manager directly.
-auth0.users.get({ userId: USER_ID }, function (err, user) {
+auth0.users.get({ id: USER_ID }, function (err, user) {
   console.log(user);
 });
 ~~~
