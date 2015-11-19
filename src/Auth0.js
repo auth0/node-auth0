@@ -12,6 +12,7 @@ var RulesManager = require('./RulesManager');
 var DeviceCredentialsManager = require('./DeviceCredentialsManager');
 var EmailProviderManager = require('./EmailProviderManager');
 var StatsManager = require('./StatsManager');
+var TenantManager = require('./TenantManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var clientInfo = null;
@@ -112,6 +113,13 @@ var Auth0 = function (options) {
    * @type {StatsManager}
    */
   this.stats = new StatsManager(managerOptions);
+
+  /**
+   * Auth0 tenant settings manager.
+   *
+   * @type {TenantManager}
+   */
+  this.tenant = new TenantManager(managerOptions);
 };
 
 
@@ -434,6 +442,24 @@ utils.wrapPropertyMethod(Auth0, 'getActiveUsersCount', 'stats.getActiveUsersCoun
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getDailyStats', 'stats.getDaily');
+
+
+/**
+ * Wrapper for auth0.tenatn.getSettings()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getTenantSettings', 'tenant.getSettings');
+
+
+/**
+ * Wrapper for auth0.tenant.updateSettings()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateTenantSettings', 'tenant.updateSettings');
 
 
 module.exports = Auth0;
