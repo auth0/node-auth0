@@ -11,6 +11,7 @@ var BlacklistedTokensManager = require('./BlacklistedTokensManager');
 var RulesManager = require('./RulesManager');
 var DeviceCredentialsManager = require('./DeviceCredentialsManager');
 var EmailProviderManager = require('./EmailProviderManager');
+var StatsManager = require('./StatsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var clientInfo = null;
@@ -104,6 +105,13 @@ var Auth0 = function (options) {
    * @type {EmailProviderManager}
    */
   this.emailProvider = new EmailProviderManager(managerOptions);
+
+  /**
+   * Auth0 account statistics manager.
+   *
+   * @type {StatsManager}
+   */
+  this.stats = new StatsManager(managerOptions);
 };
 
 
@@ -135,8 +143,6 @@ Auth0.prototype.getAuth0ClientInfo = function () {
         version: pkg.dependencies[name]
       });
     });
-
-  console.log(clientInfo);
 
   return clientInfo;
 };
@@ -410,6 +416,24 @@ utils.wrapPropertyMethod(Auth0, 'deleteEmailProvider', 'emailProvider.delete');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateEmailProvider', 'emailProvider.update');
+
+
+/**
+ * Wrapper for auth0.stats.getActiveUsersCount()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getActiveUsersCount', 'stats.getActiveUsersCount');
+
+
+/**
+ * Wrapper for auth0.stats.getDaily()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getDailyStats', 'stats.getDaily');
 
 
 module.exports = Auth0;
