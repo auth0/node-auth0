@@ -31,21 +31,13 @@ var ClientsManager = function (options) {
     throw new ArgumentError('The provided base URL is invalid');
   }
 
-  if (options.accessToken === null || options.accessToken === undefined) {
-    throw new ArgumentError('Must provide an access token');
-  }
-
-  if ('string' !== typeof options.accessToken|| options.accessToken.length === 0) {
-    throw new ArgumentError('Invalid access token');
-  }
-
   /**
    * Options object for the Rest Client instance.
    *
    * @type {Object}
    */
   clientOptions = {
-    headers: headers,
+    headers: options.headers,
     query: { convertCase: 'snakeCase', repeatParams: false }
   };
 
