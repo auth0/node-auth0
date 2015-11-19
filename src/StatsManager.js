@@ -28,15 +28,15 @@ var StatsManager = function (options){
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-StatsManager.prototype.getDaily = function (cb) {
-  var options = { type: 'daily' };
+StatsManager.prototype.getDaily = function (params, cb) {
+  params = params || {};
+  params.type = 'daily';
 
   if (cb && cb instanceof Function) {
-    return this.stats.get(options, cb);
+    return this.stats.get(params, cb);
   }
 
-  // Return a promise.
-  return this.stats.get(options)
+  return this.stats.get(params);
 };
 
 /**
