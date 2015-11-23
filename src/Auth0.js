@@ -13,6 +13,7 @@ var DeviceCredentialsManager = require('./DeviceCredentialsManager');
 var EmailProviderManager = require('./EmailProviderManager');
 var StatsManager = require('./StatsManager');
 var TenantManager = require('./TenantManager');
+var JobsManager = require('./JobsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var clientInfo = null;
@@ -120,6 +121,13 @@ var Auth0 = function (options) {
    * @type {TenantManager}
    */
   this.tenant = new TenantManager(managerOptions);
+
+  /**
+   * Jobs manager.
+   *
+   * @type {JobsManager}
+   */
+  this.jobs = new JobsManager(managerOptions);
 };
 
 
