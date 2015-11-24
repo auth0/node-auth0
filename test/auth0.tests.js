@@ -14,6 +14,7 @@ var RulesManager = require('../src/RulesManager');
 var StatsManager = require('../src/StatsManager');
 var TenantManager = require('../src/TenantManager');
 
+
 describe('Auth0 module', function () {
 
     it('should raise an error when no options object is provided', function () {
