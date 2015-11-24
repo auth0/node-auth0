@@ -606,6 +606,42 @@ auth0.users.update(params, data, function (err, user) {
 });
 ~~~
 
+### Update user and app metadata
+
+~~~js
+var params = { id: USER_ID };
+var data = {
+  app_metadata: {
+    foo: 'bar'
+  },
+  user_metadata: {
+    address: '123th Node.js Street'
+  }
+};
+
+// Using auth0 instance.
+auth0.updateUser(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+
+
+// Using the users manager directly.
+auth0.users.update(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+~~~
+
+
 ## Blacklisted Tokens
 Managing [Blacklisted tokens](https://auth0.com/docs/api/v2#!/Blacklists) with the SDK.
 
