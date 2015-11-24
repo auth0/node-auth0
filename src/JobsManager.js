@@ -1,4 +1,5 @@
 var request = require('superagent');
+var extend = require('util')._extend;
 
 var RestClient = require('rest-facade').Client;
 var ArgumentError = require('./exceptions').ArgumentError;
@@ -63,11 +64,14 @@ JobsManager.prototype.get = function (params, cb) {
  * @return  {Promise}
  */
 JobsManager.prototype.importUsers = function (data, cb) {
-  var headers = this.options.headers;
+  var options = this.options;
+  var headers = extend({}, options.headers);
+
+  headers['Content-Type'] = 'multipart/form-data';
 
   var promise = new Promise(function (resolve, reject) {
     var req = request
-      .post(this.options.baseUrl + '/jobs/users-imports')
+      .post(options.baseUrl + '/jobs/users-imports')
       .send('connection_id', data.connectionId)
       .attach('users', data.users)
 
