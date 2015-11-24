@@ -10,6 +10,7 @@ var BASE_API_URL = 'https://tenant.auth0.com';
 describe('ClientsManager', function () {
 
   beforeEach(function () {
+    this.token = 'TOKEN';
     this.clients = new ClientsManager({
       headers: {
         authorization: 'Bearer ' + this.token
@@ -324,11 +325,13 @@ describe('ClientsManager', function () {
         .reply(200, this.data);
     });
 
+
     it('should accept a callback', function (done) {
       this
         .clients
         .update({ client_id: 5 }, {}, done.bind(null, null));
     });
+
 
     it('should return a promise if no callback is given', function (done) {
       this
@@ -338,12 +341,73 @@ describe('ClientsManager', function () {
         .catch(done.bind(null, null));
     });
 
+
     it('should perform a PATCH request to /api/v2/clients/5', function (done) {
       var request = this.request;
 
       this
         .clients
         .update({ client_id: 5 }, {})
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the new data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(BASE_API_URL)
+        .patch('/clients/' + this.data.id, this.data)
+        .reply(200);
+
+      this
+        .clients
+        .update({ client_id: 5 }, this.data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
+  describe('#delete', function () {
+    var id = 5;
+
+    beforeEach(function () {
+      this.request = nock(BASE_API_URL)
+        .delete('/clients/' + id)
+        .reply(200);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .clients
+        .delete({ client_id: id }, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is given', function (done) {
+      this
+        .clients
+        .delete({ client_id: id })
+        .then(done.bind(null, null));
+    });
+
+
+    it('should perform a DELETE request to /clients/' + id, function (done) {
+      var request = this.request;
+
+      this
+        .clients
+        .delete({ client_id: id })
         .then(function () {
           expect(request.isDone())
             .to.be.true;
