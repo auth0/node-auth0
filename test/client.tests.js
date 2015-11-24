@@ -313,5 +313,44 @@ describe('ClientsManager', function () {
         });
     });
   });
+
+
+  describe('#update', function () {
+    beforeEach(function () {
+      this.data = { id: 5 };
+
+      this.request = nock(BASE_API_URL)
+        .patch('/clients/' + this.data.id)
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function (done) {
+      this
+        .clients
+        .update({ clientId: 5 }, {}, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .clients
+        .update({ clientId: 5 }, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PATCH request to /api/v2/clients/5', function (done) {
+      var request = this.request;
+
+      this
+        .clients
+        .update({ clientId: 5 }, {})
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
 });
 
