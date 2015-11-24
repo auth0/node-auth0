@@ -46,11 +46,15 @@ var Auth0 = function (options) {
     headers: {
       'Authorization': 'Bearer ' + options.token,
       'User-agent': 'node.js/' + process.version.replace('v', ''),
-      'Auth0-Client': jsonToBase64(this.getAuth0ClientInfo()),
       'Content-Type': 'application/json'
     },
     baseUrl: util.format(BASE_URL_FORMAT, options.domain)
   };
+
+  if (options.telemetry !== false) {
+    var telemetry = jsonToBase64(this.getAuth0ClientInfo());
+    managerOptions.headers['Auth0-Client'] = telemetry;
+  }
 
   /**
    * Simple abstraction for performing CRUD operations on the
