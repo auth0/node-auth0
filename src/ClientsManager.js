@@ -38,7 +38,7 @@ var ClientsManager = function (options) {
    */
   clientOptions = {
     headers: options.headers,
-    query: { convertCase: 'snakeCase', repeatParams: false }
+    query: { repeatParams: false }
   };
 
   /**
@@ -47,7 +47,7 @@ var ClientsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/clients/:clientId', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/clients/:client_id', clientOptions);
 };
 
 /**

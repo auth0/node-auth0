@@ -10,7 +10,7 @@ var ArgumentError = require('./exceptions').ArgumentError;
 var UsersManager = function (options){
   var clientOptions = {
     headers: options.headers,
-    query: { convertCase: 'snakeCase', repeatParams: false }
+    query: { repeatParams: false }
   };
 
   this.users = new RestClient(options.baseUrl + '/users/:id', clientOptions);

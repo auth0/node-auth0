@@ -30,7 +30,7 @@ var BlacklistedTokensManager = function (options) {
    */
   clientOptions = {
     headers: options.headers,
-    query: { convertCase: 'snakeCase', repeatParams: false }
+    query: { repeatParams: false }
   };
 
   /**

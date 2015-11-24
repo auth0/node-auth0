@@ -30,7 +30,7 @@ var DeviceCredentialsManager = function (options) {
    */
   clientOptions = {
     headers: options.headers,
-    query: { convertCase: 'snakeCase', repeatParams: false }
+    query: { repeatParams: false }
   };
 
   /**
@@ -39,7 +39,7 @@ var DeviceCredentialsManager = function (options) {
    *
    * @type {external:RestDeviceCredentialsManager}
    */
-  this.resource = new RestClient(options.baseUrl + '/device-credentials/:credentialId', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/device-credentials/:id', clientOptions);
 };
 
 /**

@@ -9,7 +9,7 @@ var RestClient = require('rest-facade').Client;
 var StatsManager = function (options){
   var clientOptions = {
     headers: options.headers,
-    query: { convertCase: 'snakeCase', repeatParams: false }
+    query: { repeatParams: false }
   };
 
   /**

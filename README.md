@@ -107,7 +107,7 @@ auth0.clients.create(data, function (err) {
 
 ~~~js
 // Using auth0 instance.
-auth0.getClient({ id: CLIENT_ID }, function (err, client) {
+auth0.getClient({ client_id: CLIENT_ID }, function (err, client) {
   if (err) {
     // Handle error.
   }
@@ -117,7 +117,7 @@ auth0.getClient({ id: CLIENT_ID }, function (err, client) {
 
 
 // Using the clients manager directly.
-auth0.clients.get({ id: CLIENT_ID }, function (err, client) {
+auth0.clients.get({ client_id: CLIENT_ID }, function (err, client) {
   if (err) {
     // Handle error.
   }
@@ -130,7 +130,7 @@ auth0.clients.get({ id: CLIENT_ID }, function (err, client) {
 
 ~~~js
 // Using auth0 instance.
-auth0.deleteClient({ id: CLIENT_ID }, function (err) {
+auth0.deleteClient({ client_id: CLIENT_ID }, function (err) {
   if (err) {
     // Handle error.
   }
@@ -140,7 +140,7 @@ auth0.deleteClient({ id: CLIENT_ID }, function (err) {
 
 
 // Using the clients manager directly.
-auth0.clients.delete({ id: CLIENT_ID }, function (err) {
+auth0.clients.delete({ client_id: CLIENT_ID }, function (err) {
   if (err) {
     // Handle error.
   }
@@ -153,7 +153,7 @@ auth0.clients.delete({ id: CLIENT_ID }, function (err) {
 
 ~~~js
 var data = { name: 'newClientName' };
-var params = { id: CLIENT_ID };
+var params = { client_id: CLIENT_ID };
 
 
 // Using auth0 instance.
@@ -478,7 +478,7 @@ This method takes an optional object as first argument that may be used to speci
 ~~~js
 // Pagination settings. 
 var params = {
-  perPage: 10,
+  per_page: 10,
   page: 2
 };
 
@@ -698,7 +698,7 @@ auth0.getEmailProvider(function (err, provider) {
 
 
 // Using the email provider manager directly.
-auth0.emailProvider.getAll(function (err, provider) {
+auth0.emailProvider.get(function (err, provider) {
   console.log(provider);
 });
 ~~~
@@ -717,7 +717,7 @@ auth0.configureEmailProvider(data, function (err) {
 
 
 // Using the email provider manager directly.
-auth0.emailProvider.create(data, function (err) {
+auth0.emailProvider.configure(data, function (err) {
   if (err) {
     // Handle error.
   }

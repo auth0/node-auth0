@@ -28,7 +28,7 @@ var RulesManager = function (options) {
    */
   apiOptions = {
     headers: options.headers,
-    query: { convertCase: 'snakeCase', repeatParams: false }
+    query: { repeatParams: false }
   };
 
   /**

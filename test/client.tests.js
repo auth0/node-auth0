@@ -304,7 +304,7 @@ describe('ClientsManager', function () {
 
       this
         .clients
-        .get({ clientId: this.data.id })
+        .get({ client_id: this.data.id })
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -327,13 +327,13 @@ describe('ClientsManager', function () {
     it('should accept a callback', function (done) {
       this
         .clients
-        .update({ clientId: 5 }, {}, done.bind(null, null));
+        .update({ client_id: 5 }, {}, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function (done) {
       this
         .clients
-        .update({ clientId: 5 }, {})
+        .update({ client_id: 5 }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -343,7 +343,7 @@ describe('ClientsManager', function () {
 
       this
         .clients
-        .update({ clientId: 5 }, {})
+        .update({ client_id: 5 }, {})
         .then(function () {
           expect(request.isDone())
             .to.be.true;
