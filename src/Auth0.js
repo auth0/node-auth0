@@ -14,6 +14,7 @@ var EmailProviderManager = require('./EmailProviderManager');
 var StatsManager = require('./StatsManager');
 var TenantManager = require('./TenantManager');
 var JobsManager = require('./JobsManager');
+var TicketsManager = require('./TicketsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var clientInfo = null;
@@ -132,6 +133,13 @@ var Auth0 = function (options) {
    * @type {JobsManager}
    */
   this.jobs = new JobsManager(managerOptions);
+
+  /**
+   * Tickets manager.
+   *
+   * @type {TicketsManager}
+   */
+  this.tickets = new TicketsManager(managerOptions);
 };
 
 
@@ -472,6 +480,51 @@ utils.wrapPropertyMethod(Auth0, 'getTenantSettings', 'tenant.getSettings');
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateTenantSettings', 'tenant.updateSettings');
+
+
+/**
+ * Wrapper for auth0.jobs.get()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'getJob', 'jobs.get');
+
+
+/**
+ * Wrapper for auth0.jobs.importUsers()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'importUsers', 'jobs.importUsers');
+
+
+/**
+ * Wrapper for auth0.jobs.verifyEmail()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'sendEmailVerification', 'jobs.verifyEmail');
+
+
+/**
+ * Wrapper for auth0.tickets.changePassword()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createPasswordChangeTicket', 'tickets.changePassword');
+
+
+/**
+ * Wrapper for auth0.tickets.verifyEmail()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'createEmailVerificationTicket', 'tickets.verifyEmail');
 
 
 module.exports = Auth0;
