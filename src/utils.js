@@ -1,6 +1,10 @@
-var ApiError = require('./errors').ApiError;
+var ApiError = require('./exceptions').ApiError;
 
 var utils = module.exports = {};
+
+utils.jsonToBase64 = function (json) {
+  return (new Buffer(JSON.stringify(json))).toString('base64');
+};
 
 utils.subEntity = function(Parent, name, Constructor){
   var underlyingFieldName = '__' + name;
@@ -15,6 +19,20 @@ utils.subEntity = function(Parent, name, Constructor){
     }
   });
 };
+
+utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
+  var path = propertyMethod.split('.');
+  var property = path.shift();
+  var method = path.pop();
+
+  Object.defineProperty(Parent.prototype, name, {
+    enumerable: false,
+    get: function () {
+
+      return this[property][method].bind(this[property]);
+    }
+  });
+}
 
 utils.responseHandler = function(onError, onSuccess){
   return function(err, resp){
