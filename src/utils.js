@@ -1,25 +1,28 @@
-var ApiError = require('./exceptions').ApiError;
-
+/**
+ * @module utils
+ */
 var utils = module.exports = {};
 
+
+/**
+ * Given a JSON string, convert it to its base64 representation.
+ *
+ * @method
+ * @memberOf utils
+ */
 utils.jsonToBase64 = function (json) {
   return (new Buffer(JSON.stringify(json))).toString('base64');
 };
 
-utils.subEntity = function(Parent, name, Constructor){
-  var underlyingFieldName = '__' + name;
-  Object.defineProperty(Parent.prototype, name, {
-    enumerable: true,
-    get: function(){
-      if (!this[underlyingFieldName]){
-        this[underlyingFieldName] = new Constructor(this);
-      }
 
-      return this[underlyingFieldName];
-    }
-  });
-};
-
+/**
+ * Simple wrapper that, given a class, a property name and a method name,
+ * creates a new method in the class that is a wrapper for the given
+ * property method.
+ *
+ * @method
+ * @memberOf utils
+ */
 utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
   var path = propertyMethod.split('.');
   var property = path.shift();
@@ -34,28 +37,3 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
   });
 }
 
-utils.responseHandler = function(onError, onSuccess){
-  return function(err, resp){
-    if (err) {
-      var error = err;
-      if (err.response && err.response.body){
-        var body = err.response.body;
-        error = new ApiError(body.statusCode, body.error, body.message);
-      }
-
-      return onError(error);
-    }
-
-    onSuccess(resp);
-  };
-};
-
-utils.successCallback = function(cb, res){
-  return function(x){
-    if (cb){
-      return cb(null, x);
-    } else {
-      return res(x);
-    }
-  };
-};
