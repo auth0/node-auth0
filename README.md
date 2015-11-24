@@ -1,4 +1,6 @@
-# node-auth0 ![build status](https://travis-ci.org/auth0/node-auth0.svg?branch=v2)
+
+
+# node-auth0 [![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
@@ -18,6 +20,7 @@ var auth0 = require('auth0')({
 ~~~
 
 By default the code assumes your account is running in the US West region. If you are running in Europe you can specify:
+
 ~~~js
 var token = '{YOUR_API_V2_TOKEN}';
 var auth0 = require('auth0')({
@@ -27,6 +30,7 @@ var auth0 = require('auth0')({
 ~~~
 
 Alternatively you can just set the domain:
+
 ~~~js
 var token = '{YOUR_API_V2_TOKEN}';
 var auth0 = require('auth0')({
@@ -35,59 +39,740 @@ var auth0 = require('auth0')({
 });
 ~~~
 
-### User's metadata
-You can store data about a user that does not come from the user's identity provider. This is known as "metadata". There are two types of metadata: `user_metadata` and `app_metadata`. You can find out more [here](https://auth0.com/docs/apiv2Changes#8).
+## Promises and Callbacks
+Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided, no Promise will be returned.
 
-#### app_metadata
-To update the value of a property or create it if it does not exist:
 ~~~js
-var user_id = '...'
-auth0.users.updateAppMetadata(user_id, {
-  roles: ['reader']
-}).then(function(user){
-  // assert.equal(user.app_metadata.roles.length, 1);
-  // assert.equal(user.app_metadata.roles[0], 'reader');
-}).catch(function(err){
-  // handle error if any
+// Using callbacks.
+auth0.getUsers(function (err, users) {
+  if (err) {
+    // Handle error.
+  }
+  console.log(users);
+});
+
+
+// Using promises.
+auth0
+  .getUsers()
+  .then(function (users) {
+    console.log(users);	
+  })
+  .catch(function (err) {
+    // Handle error.
+  });
+~~~
+
+## Clients
+[Clients](https://auth0.com/docs/api/v2#!/Clients) represent applications. You can learn more about this in the [Applications](https://auth0.com/docs/applications) section of the documentation.
+
+### Get all clients
+~~~js
+// Using auth0 instance.
+auth0.getClients(function (err, clients) {
+  console.log(clients.length);
+});
+
+
+// Using the clients manager directly.
+auth0.clients.getAll(function (err, clients) {
+  console.log(clients.length);
 });
 ~~~
 
-To delete a property:
+### Create a client
+
 ~~~js
-var user_id = '...'
-auth0.users.updateAppMetadata(user_id, {
-  roles: null
-}, function(err, user){
-  // assert.equal(typeof user.app_metadata.roles, 'undefined');
+// Using auth0 instance.
+auth0.createClient(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client created.
+});
+
+
+// Using the clients manager directly.
+auth0.clients.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client created.
 });
 ~~~
 
->Note that you can use either callbacks or promises.
+### Get a client
 
-#### user_metadata
-To update the value of a property or create it if it does not exist:
 ~~~js
-var user_id = '...'
-auth0.users.updateUserMetadata(user_id,{
-  hobby: 'surf'
-}).then(function(user){
-  // assert.equal(user.user_metadata.hobby, 'surf');
-}).catch(function(err){
-  // handle error if any
+// Using auth0 instance.
+auth0.getClient({ client_id: CLIENT_ID }, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client);
+});
+
+
+// Using the clients manager directly.
+auth0.clients.get({ client_id: CLIENT_ID }, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client);
 });
 ~~~
 
-To delete a property:
+### Delete a client
+
 ~~~js
-var user_id = '...'
-auth0.users.updateUserMetadata(user_id,{
-  hobby: null
-}, function(err, user){
-  // assert.equal(typeof user.user_metadata.hobby, 'undefined');
+// Using auth0 instance.
+auth0.deleteClient({ client_id: CLIENT_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client deleted.
+});
+
+
+// Using the clients manager directly.
+auth0.clients.delete({ client_id: CLIENT_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Client deleted.
 });
 ~~~
 
->Note that you can use either callbacks or promises.
+### Update a client
+
+~~~js
+var data = { name: 'newClientName' };
+var params = { client_id: CLIENT_ID };
+
+
+// Using auth0 instance.
+auth0.updateClient(params, data, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client.name);  // 'newClientName'
+});
+
+
+// Using the clients manager directly.
+auth0.clients.update(params, data, function (err, client) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(client.name);  // 'newClientName'
+});
+~~~
+
+## Connections
+[Connections](https://auth0.com/docs/api/v2#!/Connections) represent the relationships between Auth0 and each one of the Identity Providers.
+
+### Get all connections
+~~~js
+// Using auth0 instance.
+auth0.getConnections(function (err, connections) {
+  console.log(connections.length);
+});
+
+
+// Using the connections manager directly.
+auth0.connections.getAll(function (err, connections) {
+  console.log(connections.length);
+});
+~~~
+
+### Create a connection
+
+~~~js
+// Using auth0 instance.
+auth0.createConnection(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection created.
+});
+
+
+// Using the connections manager directly.
+auth0.connections.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection created.
+});
+~~~
+
+### Get a connection
+
+~~~js
+// Using auth0 instance.
+auth0.getConnection({ id: CONNECTION_ID }, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection);
+});
+
+
+// Using the connections manager directly.
+auth0.connections.get({ id: CONNECTION_ID }, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection);
+});
+~~~
+
+### Delete a connection
+
+~~~js
+// Using auth0 instance.
+auth0.deleteConnection({ id: CONNECTION_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection deleted.
+});
+
+
+// Using the connections manager directly.
+auth0.connections.delete({ id: CONNECTION_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Conection deleted.
+});
+~~~
+
+### Update a connection
+
+~~~js
+var data = { name: 'newConnectionName' };
+var params = { id: CONNECTION_ID };
+
+
+// Using auth0 instance.
+auth0.updateConnection(params, data, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection.name);  // 'newConnectionName'
+});
+
+
+// Using the connections manager directly.
+auth0.connections.update(params, data, function (err, connection) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(connection.name);  // 'newConnectionName'
+});
+~~~
+
+
+## Device Credentials
+Managing of [Device Credentials](https://auth0.com/docs/api/v2#!/Device_Credentials/get_device_credentials) with Auth0 SDK.
+
+### List device credentials
+~~~js
+// Using auth0 instance.
+auth0.getDeviceCredentials(function (err, credentials) {
+  console.log(credentials.length);
+});
+
+
+// Using the device credentials manager directly.
+auth0.deviceCredentials.getAll(function (err, credentials) {
+  console.log(credentials.length);
+});
+~~~
+
+### Create device public key
+
+~~~js
+// Using auth0 instance.
+auth0.createConnection(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential created.
+});
+
+
+// Using the device credentials manager directly.
+auth0.deviceCredentials.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential created.
+});
+~~~
+
+### Delete a device credential
+
+~~~js
+var params = { id: CREDENTIAL_ID };
+
+// Using auth0 instance.
+auth0.deleteDeviceCredential(params, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential deleted.
+});
+
+
+// Using the credentials manager directly.
+auth0.deviceCredentials.delete(params, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Credential deleted.
+});
+~~~
+
+
+## Rules
+[Rules](https://auth0.com/docs/api/v2#!/Rules) are code snippets written in JavaScript that are executed as part of the authentication pipeline in Auth0. Learn more about them in the [Rules](https://auth0.com/docs/rules) section of the documentation.
+
+### Get all rules
+~~~js
+// Using auth0 instance.
+auth0.getRules(function (err, rules) {
+  console.log(rules.length);
+});
+
+
+// Using the rules manager directly.
+auth0.rules.getAll(function (err, rules) {
+  console.log(rules.length);
+});
+~~~
+
+### Create a rule
+
+~~~js
+// Using auth0 instance.
+auth0.createRule(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule created.
+});
+
+
+// Using the rules manager directly.
+auth0.rules.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule created.
+});
+~~~
+
+### Get a rule
+
+~~~js
+// Using auth0 instance.
+auth0.getRule({ id: RULE_ID }, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule);
+});
+
+
+// Using the rules manager directly.
+auth0.rules.get({ id: RULE_ID }, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule);
+});
+~~~
+
+### Delete a rule
+
+~~~js
+// Using auth0 instance.
+auth0.deleteRule({ id: RULE_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule deleted.
+});
+
+
+// Using the rules manager directly.
+auth0.rules.delete({ id: RULE_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Rule deleted.
+});
+~~~
+
+### Update a rule
+
+~~~js
+var data = { name: 'New name' };
+var params = { id: RULE_ID };
+
+
+// Using auth0 instance.
+auth0.updateRule(params, data, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule.name);  // 'New name'
+});
+
+
+// Using the rules manager directly.
+auth0.rules.update(params, data, function (err, rule) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(rule.name);  // 'New name'
+});
+~~~
+
+## Users
+Performing CRUD operations on the [Users](https://auth0.com/docs/api/v2#!/Users) endpoint.
+
+### List or search users
+This method takes an optional object as first argument that may be used to specify pagination settings and the search query.
+
+~~~js
+// Pagination settings. 
+var params = {
+  per_page: 10,
+  page: 2
+};
+
+// Using auth0 instance.
+auth0.getUsers(params, function (err, users) {
+  console.log(users.length);
+});
+
+// Using the users manager directly.
+auth0.users.getAll(function (err, users) {
+  console.log(users.length);
+});
+~~~
+
+### Create a user
+
+~~~js
+// Using auth0 instance.
+auth0.createUser(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // User created.
+});
+
+
+// Using the users manager directly.
+auth0.users.create(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // User created.
+});
+~~~
+
+### Get a user
+
+~~~js
+
+// Using auth0 instance.
+auth0.getUser({ id: USER_ID }, function (err, user) {
+  console.log(user);
+});
+
+// Using the users manager directly.
+auth0.users.get({ id: USER_ID }, function (err, user) {
+  console.log(user);
+});
+~~~
+
+
+
+### Delete all users
+
+~~~js
+// Using auth0 instance.
+auth0.deleteAllUsers(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users deleted
+});
+
+
+// Using the users manager directly.
+auth0.users.deleteAll(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users deleted
+});
+~~~
+
+### Delete a user
+
+~~~js
+// Using auth0 instance.
+auth0.deleteUser({ id: USER_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // User deleted.
+});
+
+
+// Using the users manager directly.
+auth0.users.delete({ id: USER_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // User deleted.
+});
+~~~
+
+### Update a user
+
+~~~js
+var params = { id: USER_ID };
+
+// Using auth0 instance.
+auth0.updateUser(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+
+
+// Using the users manager directly.
+auth0.users.update(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+~~~
+
+### Update user and app metadata
+
+~~~js
+var params = { id: USER_ID };
+var data = {
+  app_metadata: {
+    foo: 'bar'
+  },
+  user_metadata: {
+    address: '123th Node.js Street'
+  }
+};
+
+// Using auth0 instance.
+auth0.updateUser(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+
+// Using the users manager directly.
+auth0.users.update(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+~~~
+
+
+## Blacklisted Tokens
+Managing [Blacklisted tokens](https://auth0.com/docs/api/v2#!/Blacklists) with the SDK.
+
+### Get all blacklisted tokens
+~~~js
+// Using auth0 instance.
+auth0.getBlacklistedTokens(function (err, tokens) {
+  console.log(tokens.length);
+});
+
+
+// Using the blacklisted tokens manager directly.
+auth0.blacklistedTokens.getAll(function (err, tokens) {
+  console.log(tokens.length);
+});
+~~~
+
+### Blacklist a token
+
+~~~js
+var token = {
+ aud: 'aud',
+ jti: 'jti'
+};
+
+// Using auth0 instance.
+auth0.blacklistToken(token, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Token blacklisted.
+});
+
+
+// Using the blacklisted tokens manager directly.
+auth0.blacklistedTokens.add(token, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Token blacklisted.
+});
+~~~
+
+## Email Provider
+Configuring the [Email Provider](https://auth0.com/docs/api/v2#!/Emails).
+
+### Get the email provider
+~~~js
+// Using auth0 instance.
+auth0.getEmailProvider(function (err, provider) {
+  console.log(provider.length);
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.get(function (err, provider) {
+  console.log(provider);
+});
+~~~
+
+### Configure the email provider
+
+~~~js
+// Using auth0 instance.
+auth0.configureEmailProvider(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Email provider configured.
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.configure(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Email provider configured.
+});
+~~~
+
+### Delete the email provider
+
+~~~js
+// Using auth0 instance.
+auth0.deleteEmailProvider(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Email provider deleted.
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.delete(function (err) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Email provider configured.
+});
+~~~
+
+### Update the email provider
+
+~~~js
+// Using auth0 instance.
+auth0.updateEmailProvider(data, function (err, provider) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated email provider.
+  console.log(provider);
+});
+
+
+// Using the email provider manager directly.
+auth0.emailProvider.update(function (err, provider) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated email provider.
+  console.log(provider);
+});
+~~~
 
 ## Authentication
 
