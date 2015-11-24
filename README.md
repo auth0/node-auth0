@@ -629,7 +629,6 @@ auth0.updateUser(params, data, function (err, user) {
   console.log(user);
 });
 
-
 // Using the users manager directly.
 auth0.users.update(params, data, function (err, user) {
   if (err) {
