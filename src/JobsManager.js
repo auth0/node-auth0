@@ -72,7 +72,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
   var promise = new Promise(function (resolve, reject) {
     var req = request
       .post(options.baseUrl + '/jobs/users-imports')
-      .send('connection_id', data.connectionId)
+      .field('connection_id', data.connectionId)
       .attach('users', data.users)
 
     for (var name in headers) {
