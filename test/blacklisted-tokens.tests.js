@@ -8,13 +8,10 @@ var API_URL = 'https://tenant.auth0.com';
 
 
 describe('BlacklistedTokensManager', function () {
-
   before(function () {
     this.token = 'TOKEN';
     this.blacklistedTokens = new BlacklistedTokensManager({
-      headers: {
-        authorization: 'Bearer ' + this.token
-      },
+      headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
   });
@@ -63,6 +60,7 @@ describe('BlacklistedTokensManager', function () {
         .get('/blacklists/tokens')
         .reply(200);
     })
+
 
     it('should accept a callback', function (done) {
       this
@@ -137,6 +135,7 @@ describe('BlacklistedTokensManager', function () {
         });
     });
 
+
     it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
@@ -154,6 +153,7 @@ describe('BlacklistedTokensManager', function () {
         });
     });
 
+
     it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
@@ -168,6 +168,105 @@ describe('BlacklistedTokensManager', function () {
       this
         .blacklistedTokens
         .getAll({ includeFields: true, fields: 'test' })
+        .then(function () {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+  });
+
+
+  describe('#add', function () {
+    var tokenData = {
+      aud: '',
+      jti: ''
+    };
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .post('/blacklists/tokens')
+        .reply(200);
+    })
+
+
+    it('should accept a callback', function (done) {
+      this
+        .blacklistedTokens
+        .add(tokenData, function () {
+          done();
+        });
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .blacklistedTokens
+        .add(tokenData)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/blacklists/tokens')
+        .reply(500);
+
+      this
+        .blacklistedTokens
+        .add(tokenData)
+        .catch(function (err) {
+          expect(err).to.exist;
+          done();
+        });
+    });
+
+
+    it('should perform a POST request to /api/v2/blacklists/tokens', function (done) {
+      var request = this.request;
+
+      this
+        .blacklistedTokens
+        .add(tokenData)
+        .then(function () {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+
+
+    it('should pass the token data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/blacklists/tokens', tokenData)
+        .reply(200);
+
+      this
+        .blacklistedTokens
+        .add(tokenData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/blacklists/tokens')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200)
+
+      this
+        .blacklistedTokens
+        .add(tokenData)
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
