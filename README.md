@@ -10,34 +10,16 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Usage
 
-Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)).
-
-~~~js
-var token = '{YOUR_API_V2_TOKEN}';
-var auth0 = require('auth0')({
-  token: token
-});
-~~~
-
-By default the code assumes your account is running in the US West region. If you are running in Europe you can specify:
+Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain.
 
 ~~~js
 var token = '{YOUR_API_V2_TOKEN}';
 var auth0 = require('auth0')({
   token: token,
-  region: 'eu'
+  domain: 'YOUR_ACCOUNT.auth0.com'
 });
 ~~~
 
-Alternatively you can just set the domain:
-
-~~~js
-var token = '{YOUR_API_V2_TOKEN}';
-var auth0 = require('auth0')({
-  token: token,
-  domain: 'login.eu.auth0.com'
-});
-~~~
 
 ## Promises and Callbacks
 Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided, no Promise will be returned.
