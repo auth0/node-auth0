@@ -1,9 +1,10 @@
 var expect = require('chai').expect;
 var nock = require('nock');
-var BlacklistedTokensManager = require('../src/BlacklistedTokensManager');
-var API_URL = 'https://tenant.auth0.com';
 
+var BlacklistedTokensManager = require('../src/BlacklistedTokensManager');
 var ArgumentError = require('../src/exceptions').ArgumentError;
+
+var API_URL = 'https://tenant.auth0.com';
 
 
 describe('BlacklistedTokensManager', function () {
@@ -52,6 +53,125 @@ describe('BlacklistedTokensManager', function () {
 
       expect(client)
         .to.throw(ArgumentError, 'The provided base URL is invalid');
+    });
+  });
+
+
+  describe('#getAll', function () {
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .reply(200);
+    })
+
+    it('should accept a callback', function (done) {
+      this
+        .blacklistedTokens
+        .getAll(function () {
+        done();
+      });
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .blacklistedTokens
+        .getAll()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .reply(500);
+
+      this
+        .blacklistedTokens
+        .getAll()
+        .catch(function (err) {
+          expect(err).to.exist;
+          done();
+        });
+    });
+
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      nock.cleanAll();
+
+      var data = [{ test: true }];
+      var request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .reply(200, data);
+
+      this
+        .blacklistedTokens
+        .getAll()
+        .then(function (blacklistedTokens) {
+          expect(blacklistedTokens)
+            .to.be.an.instanceOf(Array);
+
+          expect(blacklistedTokens.length)
+            .to.equal(data.length);
+
+          expect(blacklistedTokens[0].test)
+            .to.equal(data[0].test);
+
+          done();
+        });
+    });
+
+
+    it('should perform a GET request to /api/v2/blacklists/tokens', function (done) {
+      var request = this.request;
+
+      this
+        .blacklistedTokens
+        .getAll()
+        .then(function () {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200)
+
+      this
+        .blacklistedTokens
+        .getAll()
+        .then(function () {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+
+    it('should pass the parameters in the query-string', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .query({
+          include_fields: true,
+          fields: 'test'
+        })
+        .reply(200)
+
+      this
+        .blacklistedTokens
+        .getAll({ includeFields: true, fields: 'test' })
+        .then(function () {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
     });
   });
 
