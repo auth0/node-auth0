@@ -47,7 +47,7 @@ var BlacklistedTokensManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/blacklists/tokens/', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/blacklists/tokens', clientOptions);
 };
 
 /**
