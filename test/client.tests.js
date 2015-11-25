@@ -4,23 +4,37 @@ var Promise = require('bluebird');
 var ClientsManager = require('../src/ClientsManager');
 
 var ArgumentError = require('../src/exceptions').ArgumentError;
-var BASE_API_URL = 'https://tenant.auth0.com';
+var API_URL = 'https://tenant.auth0.com';
 
 
 describe('ClientsManager', function () {
 
-  beforeEach(function () {
+  before(function () {
+    this.token = 'TOKEN';
     this.clients = new ClientsManager({
       headers: {
         authorization: 'Bearer ' + this.token
       },
-      baseUrl: BASE_API_URL
+      baseUrl: API_URL
     });
   });
 
 
   afterEach(function () {
     nock.cleanAll();
+  });
+
+
+  describe('instance', function () {
+    var methods = ['getAll', 'get', 'create', 'update', 'delete'];
+
+    methods.forEach(function (method) {
+      it('should have a ' + method + ' method', function () {
+        expect(this.clients[method])
+          .to.exist
+          .to.be.an.instanceOf(Function);
+      })
+    });
   });
 
 
@@ -51,17 +65,10 @@ describe('ClientsManager', function () {
   describe('#getAll', function () {
 
     beforeEach(function () {
-      this.request = nock(BASE_API_URL)
+      this.request = nock(API_URL)
         .get('/clients')
         .reply(200);
     })
-
-    it('should be defined', function () {
-      expect(this.clients.getAll)
-        .to.exist
-        .to.be.an.instanceOf(Function);
-    });
-
 
     it('should accept a callback', function (done) {
       this.clients.getAll(function () {
@@ -82,7 +89,7 @@ describe('ClientsManager', function () {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(BASE_API_URL)
+      var request = nock(API_URL)
         .get('/clients')
         .reply(500);
 
@@ -100,7 +107,7 @@ describe('ClientsManager', function () {
       nock.cleanAll();
 
       var data = [{ test: true }];
-      var request = nock(BASE_API_URL)
+      var request = nock(API_URL)
         .get('/clients')
         .reply(200, data);
 
@@ -137,7 +144,7 @@ describe('ClientsManager', function () {
     it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(BASE_API_URL)
+      var request = nock(API_URL)
         .get('/clients')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
@@ -154,7 +161,7 @@ describe('ClientsManager', function () {
     it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var request = nock(BASE_API_URL)
+      var request = nock(API_URL)
         .get('/clients')
         .query({
           include_fields: true,
@@ -177,17 +184,10 @@ describe('ClientsManager', function () {
     var data = { name: 'Test client' };
 
     beforeEach(function () {
-      this.request = nock(BASE_API_URL)
+      this.request = nock(API_URL)
         .post('/clients')
         .reply(201, data)
     })
-
-    it('should be defined', function () {
-      expect(this.clients.create)
-        .to.exist
-        .to.be.an.instanceOf(Function);
-    });
-
 
     it('should accept a callback', function (done) {
       this
@@ -223,7 +223,7 @@ describe('ClientsManager', function () {
     it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(BASE_API_URL)
+      var request = nock(API_URL)
         .post('/clients')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(201, data)
@@ -243,7 +243,7 @@ describe('ClientsManager', function () {
     it('should include the new client data in the request body', function (done) {
       nock.cleanAll();
 
-      var request = nock(BASE_API_URL)
+      var request = nock(API_URL)
         .post('/clients', data)
         .reply(201, data)
 
@@ -268,17 +268,10 @@ describe('ClientsManager', function () {
         email: 'john@doe.com'
       };
 
-      this.request = nock(BASE_API_URL)
+      this.request = nock(API_URL)
         .get('/clients/' + this.data.id)
         .reply(201, this.data);
     })
-
-
-    it('should be defined', function () {
-      expect(this.clients.get)
-        .to.exist
-        .to.be.an.instanceOf(Function);
-    });
 
 
     it('should accept a callback', function (done) {
@@ -319,16 +312,18 @@ describe('ClientsManager', function () {
     beforeEach(function () {
       this.data = { id: 5 };
 
-      this.request = nock(BASE_API_URL)
+      this.request = nock(API_URL)
         .patch('/clients/' + this.data.id)
         .reply(200, this.data);
     });
+
 
     it('should accept a callback', function (done) {
       this
         .clients
         .update({ client_id: 5 }, {}, done.bind(null, null));
     });
+
 
     it('should return a promise if no callback is given', function (done) {
       this
@@ -338,12 +333,73 @@ describe('ClientsManager', function () {
         .catch(done.bind(null, null));
     });
 
+
     it('should perform a PATCH request to /api/v2/clients/5', function (done) {
       var request = this.request;
 
       this
         .clients
         .update({ client_id: 5 }, {})
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the new data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/clients/' + this.data.id, this.data)
+        .reply(200);
+
+      this
+        .clients
+        .update({ client_id: 5 }, this.data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
+  describe('#delete', function () {
+    var id = 5;
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .delete('/clients/' + id)
+        .reply(200);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .clients
+        .delete({ client_id: id }, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is given', function (done) {
+      this
+        .clients
+        .delete({ client_id: id })
+        .then(done.bind(null, null));
+    });
+
+
+    it('should perform a DELETE request to /clients/' + id, function (done) {
+      var request = this.request;
+
+      this
+        .clients
+        .delete({ client_id: id })
         .then(function () {
           expect(request.isDone())
             .to.be.true;

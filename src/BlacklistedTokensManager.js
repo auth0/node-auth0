@@ -23,6 +23,14 @@ var BlacklistedTokensManager = function (options) {
     throw new ArgumentError('Must provide client options');
   }
 
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
+
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
   /**
    * Options object for the Rest Client instace.
    *
@@ -39,7 +47,7 @@ var BlacklistedTokensManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/blacklists/tokens/', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/blacklists/tokens', clientOptions);
 };
 
 /**

@@ -24,7 +24,8 @@
   "dependencies": {
     "bluebird": "^2.10.2",
     "rest-facade": "^1.2.3",
-    "url-join": "0.0.1"
+    "url-join": "0.0.1",
+    "superagent": "^1.1.0"
   },
   "devDependencies": {
     "chai": "^2.2.0",
@@ -32,7 +33,6 @@
     "istanbul": "^0.4.0",
     "mocha": "^2.2.4",
     "nock": "^3.1.1",
-    "sinon": "^1.17.1",
-    "superagent": "^1.1.0"
+    "sinon": "^1.17.1"
   }
 }
