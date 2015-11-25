@@ -6,7 +6,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Installation
 
-	npm install auth0@2.0.0-beta.2
+	npm install auth0@2.0.0-beta.3
 
 ## Usage
 
