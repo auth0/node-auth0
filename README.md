@@ -6,7 +6,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Installation
 
-	npm install auth0@2.0.0-alpha.5
+	npm install auth0@2.0.0-beta.2
 
 ## Usage
 
@@ -56,7 +56,7 @@ auth0.getUsers(function (err, users) {
 auth0
   .getUsers()
   .then(function (users) {
-    console.log(users);	
+    console.log(users);
   })
   .catch(function (err) {
     // Handle error.
@@ -88,7 +88,7 @@ auth0.createClient(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Client created.
 });
 
@@ -98,7 +98,7 @@ auth0.clients.create(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Client created.
 });
 ~~~
@@ -111,7 +111,7 @@ auth0.getClient({ client_id: CLIENT_ID }, function (err, client) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(client);
 });
 
@@ -121,7 +121,7 @@ auth0.clients.get({ client_id: CLIENT_ID }, function (err, client) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(client);
 });
 ~~~
@@ -134,7 +134,7 @@ auth0.deleteClient({ client_id: CLIENT_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Client deleted.
 });
 
@@ -144,7 +144,7 @@ auth0.clients.delete({ client_id: CLIENT_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Client deleted.
 });
 ~~~
@@ -161,7 +161,7 @@ auth0.updateClient(params, data, function (err, client) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(client.name);  // 'newClientName'
 });
 
@@ -171,7 +171,7 @@ auth0.clients.update(params, data, function (err, client) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(client.name);  // 'newClientName'
 });
 ~~~
@@ -201,7 +201,7 @@ auth0.createConnection(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Conection created.
 });
 
@@ -211,7 +211,7 @@ auth0.connections.create(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Conection created.
 });
 ~~~
@@ -224,7 +224,7 @@ auth0.getConnection({ id: CONNECTION_ID }, function (err, connection) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(connection);
 });
 
@@ -234,7 +234,7 @@ auth0.connections.get({ id: CONNECTION_ID }, function (err, connection) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(connection);
 });
 ~~~
@@ -247,7 +247,7 @@ auth0.deleteConnection({ id: CONNECTION_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Conection deleted.
 });
 
@@ -257,7 +257,7 @@ auth0.connections.delete({ id: CONNECTION_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Conection deleted.
 });
 ~~~
@@ -274,7 +274,7 @@ auth0.updateConnection(params, data, function (err, connection) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(connection.name);  // 'newConnectionName'
 });
 
@@ -284,7 +284,7 @@ auth0.connections.update(params, data, function (err, connection) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(connection.name);  // 'newConnectionName'
 });
 ~~~
@@ -315,7 +315,7 @@ auth0.createConnection(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Credential created.
 });
 
@@ -325,7 +325,7 @@ auth0.deviceCredentials.create(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Credential created.
 });
 ~~~
@@ -340,7 +340,7 @@ auth0.deleteDeviceCredential(params, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Credential deleted.
 });
 
@@ -350,7 +350,7 @@ auth0.deviceCredentials.delete(params, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Credential deleted.
 });
 ~~~
@@ -381,7 +381,7 @@ auth0.createRule(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Rule created.
 });
 
@@ -391,7 +391,7 @@ auth0.rules.create(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Rule created.
 });
 ~~~
@@ -404,7 +404,7 @@ auth0.getRule({ id: RULE_ID }, function (err, rule) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(rule);
 });
 
@@ -414,7 +414,7 @@ auth0.rules.get({ id: RULE_ID }, function (err, rule) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(rule);
 });
 ~~~
@@ -427,7 +427,7 @@ auth0.deleteRule({ id: RULE_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Rule deleted.
 });
 
@@ -437,7 +437,7 @@ auth0.rules.delete({ id: RULE_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Rule deleted.
 });
 ~~~
@@ -454,7 +454,7 @@ auth0.updateRule(params, data, function (err, rule) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(rule.name);  // 'New name'
 });
 
@@ -464,7 +464,7 @@ auth0.rules.update(params, data, function (err, rule) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(rule.name);  // 'New name'
 });
 ~~~
@@ -476,7 +476,7 @@ Performing CRUD operations on the [Users](https://auth0.com/docs/api/v2#!/Users)
 This method takes an optional object as first argument that may be used to specify pagination settings and the search query.
 
 ~~~js
-// Pagination settings. 
+// Pagination settings.
 var params = {
   per_page: 10,
   page: 2
@@ -501,7 +501,7 @@ auth0.createUser(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // User created.
 });
 
@@ -511,7 +511,7 @@ auth0.users.create(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // User created.
 });
 ~~~
@@ -541,7 +541,7 @@ auth0.deleteAllUsers(function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Users deleted
 });
 
@@ -551,7 +551,7 @@ auth0.users.deleteAll(function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Users deleted
 });
 ~~~
@@ -564,7 +564,7 @@ auth0.deleteUser({ id: USER_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // User deleted.
 });
 
@@ -574,7 +574,7 @@ auth0.users.delete({ id: USER_ID }, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // User deleted.
 });
 ~~~
@@ -589,7 +589,7 @@ auth0.updateUser(params, data, function (err, user) {
   if (err) {
     // Handle error.
   }
-  
+
   // Updated user.
   console.log(user);
 });
@@ -600,7 +600,7 @@ auth0.users.update(params, data, function (err, user) {
   if (err) {
     // Handle error.
   }
-  
+
   // Updated user.
   console.log(user);
 });
@@ -624,7 +624,7 @@ auth0.updateUser(params, data, function (err, user) {
   if (err) {
     // Handle error.
   }
-  
+
   // Updated user.
   console.log(user);
 });
@@ -634,7 +634,7 @@ auth0.users.update(params, data, function (err, user) {
   if (err) {
     // Handle error.
   }
-  
+
   // Updated user.
   console.log(user);
 });
@@ -671,7 +671,7 @@ auth0.blacklistToken(token, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Token blacklisted.
 });
 
@@ -681,7 +681,7 @@ auth0.blacklistedTokens.add(token, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Token blacklisted.
 });
 ~~~
@@ -721,7 +721,7 @@ auth0.emailProvider.configure(data, function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Email provider configured.
 });
 ~~~
@@ -734,7 +734,7 @@ auth0.deleteEmailProvider(function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Email provider deleted.
 });
 
@@ -744,7 +744,7 @@ auth0.emailProvider.delete(function (err) {
   if (err) {
     // Handle error.
   }
-  
+
   // Email provider configured.
 });
 ~~~
@@ -757,7 +757,7 @@ auth0.updateEmailProvider(data, function (err, provider) {
   if (err) {
     // Handle error.
   }
-  
+
   // Updated email provider.
   console.log(provider);
 });
@@ -768,7 +768,7 @@ auth0.emailProvider.update(function (err, provider) {
   if (err) {
     // Handle error.
   }
-  
+
   // Updated email provider.
   console.log(provider);
 });
