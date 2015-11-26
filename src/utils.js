@@ -31,7 +31,6 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
   Object.defineProperty(Parent.prototype, name, {
     enumerable: false,
     get: function () {
-
       return this[property][method].bind(this[property]);
     }
   });
