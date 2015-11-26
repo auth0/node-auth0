@@ -4,7 +4,7 @@ var utils = require('./utils');
 
 /**
  * Simple facade for consuming a REST API endpoint.
- * @external Rest
+ * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
