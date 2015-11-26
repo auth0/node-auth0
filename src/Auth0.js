@@ -61,7 +61,7 @@ var Auth0 = function (options) {
    * Simple abstraction for performing CRUD operations on the
    * clients endpoint.
    *
-   * @type {ClientsManager}.
+   * @type {ClientsManager}
    */
   this.clients = new ClientsManager(managerOptions);
 
@@ -179,7 +179,7 @@ Auth0.prototype.getAuth0ClientInfo = function () {
 /**
  * Wrapper for auth0.connections.getAll()
  *
- * @method
+ * @method getConnections
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getConnections', 'connections.getAll');
@@ -188,7 +188,7 @@ utils.wrapPropertyMethod(Auth0, 'getConnections', 'connections.getAll');
 /**
  * Wrapper for auth0.connections.create()
  *
- * @method
+ * @method createConnection
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createConnection', 'connections.create');
@@ -197,7 +197,7 @@ utils.wrapPropertyMethod(Auth0, 'createConnection', 'connections.create');
 /**
  * Wrapper for auth0.connections.get()
  *
- * @method
+ * @method getConnection
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getConnection', 'connections.get');
@@ -206,7 +206,7 @@ utils.wrapPropertyMethod(Auth0, 'getConnection', 'connections.get');
 /**
  * Wrapper for auth0.connections.delete()
  *
- * @method
+ * @method deleteConnection
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteConnection', 'connections.delete');
@@ -215,7 +215,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteConnection', 'connections.delete');
 /**
  * Wrapper for auth0.connections.update()
  *
- * @method
+ * @method updateConnection
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateConnection', 'connections.update');
@@ -224,7 +224,7 @@ utils.wrapPropertyMethod(Auth0, 'updateConnection', 'connections.update');
 /**
  * Wrapper for auth0.clients.getAll()
  *
- * @method
+ * @method getClients
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getClients', 'clients.getAll');
@@ -233,7 +233,7 @@ utils.wrapPropertyMethod(Auth0, 'getClients', 'clients.getAll');
 /**
  * Wrapper for auth0.clients.get()
  *
- * @method
+ * @method getClient
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getClient', 'clients.get');
@@ -242,7 +242,7 @@ utils.wrapPropertyMethod(Auth0, 'getClient', 'clients.get');
 /**
  * Wrapper for auth0.clients.create()
  *
- * @method
+ * @method createClient
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createClient', 'clients.create');
@@ -251,7 +251,7 @@ utils.wrapPropertyMethod(Auth0, 'createClient', 'clients.create');
 /**
  * Wrapper for auth0.clients.update()
  *
- * @method
+ * @method updateClient
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateClient', 'clients.update');
@@ -260,7 +260,7 @@ utils.wrapPropertyMethod(Auth0, 'updateClient', 'clients.update');
 /**
  * Wrapper for auth0.clients.delete()
  *
- * @method
+ * @method deleteClient
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteClient', 'clients.delete');
@@ -269,7 +269,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteClient', 'clients.delete');
 /**
  * Wrapper for auth0.deviceCredentials.createPubicKey()
  *
- * @method
+ * @method createDevicePublicKey
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createDevicePublicKey', 'deviceCredentials.createPublicKey');
@@ -278,7 +278,7 @@ utils.wrapPropertyMethod(Auth0, 'createDevicePublicKey', 'deviceCredentials.crea
 /**
  * Wrapper for auth0.deviceCredentials.getAll()
  *
- * @method
+ * @method getDeviceCredentials
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getDeviceCredentials', 'deviceCredentials.getAll');
@@ -287,7 +287,7 @@ utils.wrapPropertyMethod(Auth0, 'getDeviceCredentials', 'deviceCredentials.getAl
 /**
  * Wrapper for auth0.deviceCredentials.delete()
  *
- * @method
+ * @method deleteDeviceCredential
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteDeviceCredential', 'deviceCredentials.delete');
@@ -296,7 +296,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteDeviceCredential', 'deviceCredentials.del
 /**
  * Wrapper for auth0.rules.getAll()
  *
- * @method
+ * @method getRules
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getRules', 'rules.getAll');
@@ -305,7 +305,7 @@ utils.wrapPropertyMethod(Auth0, 'getRules', 'rules.getAll');
 /**
  * Wrapper for auth0.rules.create()
  *
- * @method
+ * @method createRules
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createRule', 'rules.create');
@@ -314,7 +314,7 @@ utils.wrapPropertyMethod(Auth0, 'createRule', 'rules.create');
 /**
  * Wrapper for auth0.rules.get()
  *
- * @method
+ * @method getRule
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getRule', 'rules.get');
@@ -323,7 +323,7 @@ utils.wrapPropertyMethod(Auth0, 'getRule', 'rules.get');
 /**
  * Wrapper for auth0.rules.delete()
  *
- * @method
+ * @method deleteRule
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteRule', 'rules.delete');
@@ -332,7 +332,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteRule', 'rules.delete');
 /**
  * Wrapper for auth0.rules.update()
  *
- * @method
+ * @method updateRule
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateRule', 'rules.update');
@@ -341,7 +341,7 @@ utils.wrapPropertyMethod(Auth0, 'updateRule', 'rules.update');
 /**
  * Wrapper for auth0.users.getAll()
  *
- * @method
+ * @method getUsers
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getUsers', 'users.getAll');
@@ -350,7 +350,7 @@ utils.wrapPropertyMethod(Auth0, 'getUsers', 'users.getAll');
 /**
  * Wrapper for auth0.users.get()
  *
- * @method
+ * @method getUser
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getUser', 'users.get');
@@ -359,7 +359,7 @@ utils.wrapPropertyMethod(Auth0, 'getUser', 'users.get');
 /**
  * Wrapper for auth0.users.deleteAll()
  *
- * @method
+ * @method deleteAllUsers
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteAllUsers', 'users.deleteAll');
@@ -368,7 +368,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteAllUsers', 'users.deleteAll');
 /**
  * Wrapper for auth0.users.delete()
  *
- * @method
+ * @method deleteUser
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteUser', 'users.delete');
@@ -377,7 +377,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteUser', 'users.delete');
 /**
  * Wrapper for auth0.users.create()
  *
- * @method
+ * @method createUser
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createUser', 'users.create');
@@ -386,7 +386,7 @@ utils.wrapPropertyMethod(Auth0, 'createUser', 'users.create');
 /**
  * Wrapper for auth0.users.update()
  *
- * @method
+ * @method updateUser
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateUser', 'users.update');
@@ -395,7 +395,7 @@ utils.wrapPropertyMethod(Auth0, 'updateUser', 'users.update');
 /**
  * Wrapper for auth0.users.updateUserMetadata()
  *
- * @method
+ * @method updateUserMetadata
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateUserMetadata', 'users.updateUserMetadata');
@@ -404,7 +404,7 @@ utils.wrapPropertyMethod(Auth0, 'updateUserMetadata', 'users.updateUserMetadata'
 /**
  * Wrapper for auth0.users.updateAppMetadata()
  *
- * @method
+ * @method updateAppMetadata
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateAppMetadata', 'users.updateAppMetadata');
@@ -413,7 +413,7 @@ utils.wrapPropertyMethod(Auth0, 'updateAppMetadata', 'users.updateAppMetadata');
 /**
  * Wrapper for auth0.users.deleteMultifactorProvider()
  *
- * @method
+ * @method deleteUserMultifactor
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteUserMultifcator', 'users.deleteMultifactorProvider');
@@ -422,7 +422,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteUserMultifcator', 'users.deleteMultifacto
 /**
  * Wrapper for auth0.users.unlink()
  *
- * @method
+ * @method unlinkUsers
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'unlinkUsers', 'users.unlink');
@@ -431,7 +431,7 @@ utils.wrapPropertyMethod(Auth0, 'unlinkUsers', 'users.unlink');
 /**
  * Wrapper for auth0.users.link()
  *
- * @method
+ * @method linkUsers
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'linkUsers', 'users.link');
@@ -440,7 +440,7 @@ utils.wrapPropertyMethod(Auth0, 'linkUsers', 'users.link');
 /**
  * Wrapper for auth0.blacklistedTokens.getAll()
  *
- * @method
+ * @method getBlacklistedTokens
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
@@ -449,7 +449,7 @@ utils.wrapPropertyMethod(Auth0, 'getBlacklistedTokens', 'blacklistedTokens.getAl
 /**
  * Wrapper for auth0.blacklistedTokens.add()
  *
- * @method
+ * @method blacklistToken
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'blacklistToken', 'blacklistedTokens.add');
@@ -458,7 +458,7 @@ utils.wrapPropertyMethod(Auth0, 'blacklistToken', 'blacklistedTokens.add');
 /**
  * Wrapper for auth0.emailProvider.get()
  *
- * @method
+ * @method getEmailProvider
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getEmailProvider', 'emailProvider.get');
@@ -467,7 +467,7 @@ utils.wrapPropertyMethod(Auth0, 'getEmailProvider', 'emailProvider.get');
 /**
  * Wrapper for auth0.emailProvider.configure()
  *
- * @method
+ * @method configureEmailProvider
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'configureEmailProvider', 'emailProvider.configure');
@@ -476,7 +476,7 @@ utils.wrapPropertyMethod(Auth0, 'configureEmailProvider', 'emailProvider.configu
 /**
  * Wrapper for auth0.emailProvider.delete()
  *
- * @method
+ * @method deleteEmailProvider
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'deleteEmailProvider', 'emailProvider.delete');
@@ -485,7 +485,7 @@ utils.wrapPropertyMethod(Auth0, 'deleteEmailProvider', 'emailProvider.delete');
 /**
  * Wrapper for auth0.emailProvider.update()
  *
- * @method
+ * @method updateEmailProvider
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateEmailProvider', 'emailProvider.update');
@@ -494,7 +494,7 @@ utils.wrapPropertyMethod(Auth0, 'updateEmailProvider', 'emailProvider.update');
 /**
  * Wrapper for auth0.stats.getActiveUsersCount()
  *
- * @method
+ * @method getActiveUsersCount
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getActiveUsersCount', 'stats.getActiveUsersCount');
@@ -503,7 +503,7 @@ utils.wrapPropertyMethod(Auth0, 'getActiveUsersCount', 'stats.getActiveUsersCoun
 /**
  * Wrapper for auth0.stats.getDaily()
  *
- * @method
+ * @method getDailyStats
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getDailyStats', 'stats.getDaily');
@@ -512,7 +512,7 @@ utils.wrapPropertyMethod(Auth0, 'getDailyStats', 'stats.getDaily');
 /**
  * Wrapper for auth0.tenatn.getSettings()
  *
- * @method
+ * @method getTenantSettings
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getTenantSettings', 'tenant.getSettings');
@@ -521,7 +521,7 @@ utils.wrapPropertyMethod(Auth0, 'getTenantSettings', 'tenant.getSettings');
 /**
  * Wrapper for auth0.tenant.updateSettings()
  *
- * @method
+ * @method updateTenantSettings
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'updateTenantSettings', 'tenant.updateSettings');
@@ -530,7 +530,7 @@ utils.wrapPropertyMethod(Auth0, 'updateTenantSettings', 'tenant.updateSettings')
 /**
  * Wrapper for auth0.jobs.get()
  *
- * @method
+ * @method getJob
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'getJob', 'jobs.get');
@@ -539,7 +539,7 @@ utils.wrapPropertyMethod(Auth0, 'getJob', 'jobs.get');
 /**
  * Wrapper for auth0.jobs.importUsers()
  *
- * @method
+ * @method importUsers
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'importUsers', 'jobs.importUsers');
@@ -548,7 +548,7 @@ utils.wrapPropertyMethod(Auth0, 'importUsers', 'jobs.importUsers');
 /**
  * Wrapper for auth0.jobs.verifyEmail()
  *
- * @method
+ * @method sendEmailVerification
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'sendEmailVerification', 'jobs.verifyEmail');
@@ -557,7 +557,7 @@ utils.wrapPropertyMethod(Auth0, 'sendEmailVerification', 'jobs.verifyEmail');
 /**
  * Wrapper for auth0.tickets.changePassword()
  *
- * @method
+ * @method createPasswordChangeTicket
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createPasswordChangeTicket', 'tickets.changePassword');
@@ -566,7 +566,7 @@ utils.wrapPropertyMethod(Auth0, 'createPasswordChangeTicket', 'tickets.changePas
 /**
  * Wrapper for auth0.tickets.verifyEmail()
  *
- * @method
+ * @method createEmailVerificationTicket
  * @memberOf Auth0
  */
 utils.wrapPropertyMethod(Auth0, 'createEmailVerificationTicket', 'tickets.verifyEmail');
