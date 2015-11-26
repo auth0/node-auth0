@@ -37,8 +37,4 @@ node_modules
 .idea
 
 # Documentation
-docs/*.html
-docs/styles
-docs/assets
-docs/scripts
-docs/fonts
+docs/*
