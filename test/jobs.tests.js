@@ -396,7 +396,7 @@ describe('JobsManager', function () {
     });
 
 
-    it('should pass the token data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
