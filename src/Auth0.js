@@ -420,6 +420,24 @@ utils.wrapPropertyMethod(Auth0, 'deleteUserMultifcator', 'users.deleteMultifacto
 
 
 /**
+ * Wrapper for auth0.users.unlink()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'unlinkUsers', 'users.unlink');
+
+
+/**
+ * Wrapper for auth0.users.link()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'linkUsers', 'users.link');
+
+
+/**
  * Wrapper for auth0.blacklistedTokens.getAll()
  *
  * @method
