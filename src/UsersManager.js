@@ -89,6 +89,50 @@ UsersManager.prototype.update = function () {
 
 
 /**
+ * Update the user metadata.
+ *
+ * @method
+ * @param   {any}       params  The user id.
+ * @param   {Object}    data    New user metadata.
+ * @param   {Function}  [cb]    Callback function
+ * @return  {Promise}
+ */
+UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
+  var data = {
+    user_metadata: metadata
+  };
+
+  if (cb && cb instanceof Function) {
+    return this.users.patch(params, metadata, cb);
+  }
+
+  return this.users.patch(params, metadata);
+};
+
+
+/**
+ * Update the user metadata.
+ *
+ * @method
+ * @param   {any}       params  The user id.
+ * @param   {Object}    data    New user metadata.
+ * @param   {Function}  [cb]    Callback function
+ * @return  {Promise}
+ */
+UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
+  var data = {
+    app_metadata: metadata
+  };
+
+  if (cb && cb instanceof Function) {
+    return this.users.patch(params, data, cb);
+  }
+
+  return this.users.patch(params, data);
+};
+
+
+/**
  * Delete a user by its id.
  *
  * @method
