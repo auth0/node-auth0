@@ -393,6 +393,24 @@ utils.wrapPropertyMethod(Auth0, 'updateUser', 'users.update');
 
 
 /**
+ * Wrapper for auth0.users.updateUserMetadata()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateUserMetadata', 'users.updateUserMetadata');
+
+
+/**
+ * Wrapper for auth0.users.updateAppMetadata()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'updateAppMetadata', 'users.updateAppMetadata');
+
+
+/**
  * Wrapper for auth0.blacklistedTokens.getAll()
  *
  * @method
