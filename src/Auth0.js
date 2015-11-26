@@ -411,6 +411,15 @@ utils.wrapPropertyMethod(Auth0, 'updateAppMetadata', 'users.updateAppMetadata');
 
 
 /**
+ * Wrapper for auth0.users.deleteMultifactorProvider()
+ *
+ * @method
+ * @memberOf Auth0
+ */
+utils.wrapPropertyMethod(Auth0, 'deleteUserMultifcator', 'users.deleteMultifactorProvider');
+
+
+/**
  * Wrapper for auth0.blacklistedTokens.getAll()
  *
  * @method
