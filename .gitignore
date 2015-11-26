@@ -36,3 +36,9 @@ node_modules
 # InelliJ IDEA
 .idea
 
+# Documentation
+docs/*.html
+docs/styles
+docs/assets
+docs/scripts
+docs/fonts
