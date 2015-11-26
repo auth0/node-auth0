@@ -17,8 +17,6 @@ var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
-var clientInfo = null;
-var b65ClientInfo = null;
 
 
 /**
