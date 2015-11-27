@@ -8,6 +8,18 @@ var ArgumentError = require('./exceptions').ArgumentError;
  * @constructor
  */
 var UsersManager = function (options){
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide manager options');
+  }
+
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
+
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
   var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
@@ -28,7 +40,7 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.identities = new RestClient(options.baseUrl + '/users/:id/identities/:provider/:userId', clientOptions);
+  this.identities = new RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions);
 };
 
 
@@ -222,15 +234,15 @@ UsersManager.prototype.unlink = function (params, cb) {
   params = params || {};
 
   if (!params.id || typeof params.id !== 'string') {
-    throw new ArgumentError('The id cannot be null or undefined');
+    throw new ArgumentError('id field is required');
   }
 
-  if (!params.userId || typeof params.userId !== 'string') {
-    throw new ArgumentError('A userId is required');
+  if (!params.user_id || typeof params.user_id !== 'string') {
+    throw new ArgumentError('user_id field is required');
   }
 
   if (!params.provider || typeof params.provider !== 'string') {
-    throw new ArgumentError('You must specify a provider');
+    throw new ArgumentError('provider field is required');
   }
 
   if (cb && cb instanceof Function) {
