@@ -1,5 +1,6 @@
 var request = require('superagent');
 var extend = require('util')._extend;
+var Promise = require('bluebird');
 
 var RestClient = require('rest-facade').Client;
 var ArgumentError = require('./exceptions').ArgumentError;
