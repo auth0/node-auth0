@@ -1,5 +1,6 @@
 var request = require('superagent');
 var extend = require('util')._extend;
+var Promise = require('bluebird');
 
 var RestClient = require('rest-facade').Client;
 var ArgumentError = require('./exceptions').ArgumentError;
@@ -13,6 +14,18 @@ var ArgumentError = require('./exceptions').ArgumentError;
  * @param {Object}    options       Manager options.
  */
 var JobsManager = function (options){
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide client options');
+  }
+
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
+
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
   var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
@@ -72,7 +85,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
   var promise = new Promise(function (resolve, reject) {
     var req = request
       .post(options.baseUrl + '/jobs/users-imports')
-      .send('connection_id', data.connectionId)
+      .field('connection_id', data.connection_id)
       .attach('users', data.users)
 
     for (var name in headers) {
@@ -80,10 +93,10 @@ JobsManager.prototype.importUsers = function (data, cb) {
     }
 
     req.end(function (err, res) {
-        if (err) reject(err);
+      if (err) reject(err);
 
-        resolve(res);
-      });
+      resolve(res);
+    });
   });
 
   // Don't return a promise if a callback was given.
@@ -107,7 +120,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
  * @return  {Promise}
  */
 JobsManager.prototype.verifyEmail = function (data, cb) {
-  if (!data.user_id || typeof data.user_id === 'string') {
+  if (!data.user_id || typeof data.user_id !== 'string') {
     throw new ArgumentError('Must specify a user ID');
   }
 

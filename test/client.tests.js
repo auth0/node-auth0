@@ -68,7 +68,7 @@ describe('ClientsManager', function () {
       this.request = nock(API_URL)
         .get('/clients')
         .reply(200);
-    })
+    });
 
     it('should accept a callback', function (done) {
       this.clients.getAll(function () {

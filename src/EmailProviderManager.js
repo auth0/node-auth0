@@ -23,6 +23,14 @@ var EmailProviderManager = function (options) {
     throw new ArgumentError('Must provide client options');h
   }
 
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
+
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
   /**
    * Options object for the Rest Client instance.
    *
@@ -58,7 +66,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
  * @memberOf  EmailProviderManager
  * @return  {Promise}               Returns a promise if no callback is received.
  */
-utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.get');
+utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
 
 
 /**
