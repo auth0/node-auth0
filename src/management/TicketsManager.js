@@ -1,13 +1,13 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
+var ArgumentError = require('../exceptions').ArgumentError;
 
 
 /**
  * @class
- * Abstracts interaction with the tenant endpoint.
+ * Abstracts interaction with the tickets endpoint.
  * @constructor
  */
-var TenantManager = function (options){
+var TicketsManager = function (options){
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -27,44 +27,51 @@ var TenantManager = function (options){
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Stats endpoint]{@link https://auth0.com/docs/api/v2#!/Stats}.
+   * [Tickets endpoint]{@link https://auth0.com/docs/api/v2#!/Tickets}.
    *
    * @type {external:RestClient}
    */
-  this.tenant = new RestClient(options.baseUrl + '/tenants/settings', clientOptions);
+  this.ticket = new RestClient(options.baseUrl + '/tickets/:type', clientOptions);
 };
 
+
 /**
- * Update the tenant settings.
+ * Create a new password change ticket.
  *
  * @method
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-TenantManager.prototype.updateSettings = function (data, cb) {
+TicketsManager.prototype.changePassword = function (data, cb) {
+  var params = { type: 'password-change' };
+
   if (cb && cb instanceof Function) {
-    return this.tenant.patch({}, data, cb);
+    return this.ticket.create(params, data, cb);
   }
 
   // Return a promise.
-  return this.tenant.patch({}, data);
+  return this.ticket.create(params, data);
 };
 
+
 /**
- * Get the tenant settings..
+ * Create an email verification ticket.
  *
  * @method
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-TenantManager.prototype.getSettings = function (cb) {
+TicketsManager.prototype.verifyEmail = function (data, cb) {
+  var params = { type: 'email-verification' };
+
   if (cb && cb instanceof Function) {
-    return this.tenant.get({}, cb);
+    return this.ticket.create(params, data, cb);
   }
 
   // Return a promise.
-  return this.tenant.get({})
+  return this.ticket.create(params, data);
 };
 
 
-module.exports = TenantManager;
+module.exports = TicketsManager;
+

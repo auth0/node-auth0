@@ -4,17 +4,23 @@ var pkg = require('../package.json');
 var utils = require('./utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('./exceptions').ArgumentError;
-var ClientsManager = require('./ClientsManager');
-var UsersManager = require('./UsersManager');
-var ConnectionsManager = require('./ConnectionsManager');
-var BlacklistedTokensManager = require('./BlacklistedTokensManager');
-var RulesManager = require('./RulesManager');
-var DeviceCredentialsManager = require('./DeviceCredentialsManager');
-var EmailProviderManager = require('./EmailProviderManager');
-var StatsManager = require('./StatsManager');
-var TenantManager = require('./TenantManager');
-var JobsManager = require('./JobsManager');
-var TicketsManager = require('./TicketsManager');
+
+// Managers.
+var ClientsManager = require('./management/ClientsManager');
+var UsersManager = require('./management/UsersManager');
+var ConnectionsManager = require('./management/ConnectionsManager');
+var BlacklistedTokensManager = require('./management/BlacklistedTokensManager');
+var RulesManager = require('./management/RulesManager');
+var DeviceCredentialsManager = require('./management/DeviceCredentialsManager');
+var EmailProviderManager = require('./management/EmailProviderManager');
+var StatsManager = require('./management/StatsManager');
+var TenantManager = require('./management/TenantManager');
+var JobsManager = require('./management/JobsManager');
+var TicketsManager = require('./management/TicketsManager');
+
+// Authenticators.
+var OAuthAuthenticator = require('./auth/OAuthAuthenticator');
+var DatabaseAuthenticator = require('./auth/DatabaseAuthenticator');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 
@@ -42,6 +48,8 @@ var Auth0 = function (options) {
   }
 
   var managerOptions = {
+    clientId: options.clientId,
+    domain: options.domain,
     headers: {
       'Authorization': 'Bearer ' + options.token,
       'User-agent': 'node.js/' + process.version.replace('v', ''),
@@ -138,6 +146,20 @@ var Auth0 = function (options) {
    * @type {TicketsManager}
    */
   this.tickets = new TicketsManager(managerOptions);
+
+  /**
+   * OAuth authenticator.
+   *
+   * @type {OAuthAuthenticator}
+   */
+  this.oauth = new OAuthAuthenticator(managerOptions);
+
+  /**
+   * Database authenticator.
+   *
+   * @type {DatabaseAuthenticator}
+   */
+  this.database = new DatabaseAuthenticator(managerOptions, this.oauth);
 };
 
 

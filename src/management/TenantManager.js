@@ -1,13 +1,13 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
+var ArgumentError = require('../exceptions').ArgumentError;
 
 
 /**
  * @class
- * Abstracts interaction with the stats endpoint.
+ * Abstracts interaction with the tenant endpoint.
  * @constructor
  */
-var StatsManager = function (options){
+var TenantManager = function (options){
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -31,44 +31,40 @@ var StatsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.stats = new RestClient(options.baseUrl + '/stats/:type', clientOptions);
+  this.tenant = new RestClient(options.baseUrl + '/tenants/settings', clientOptions);
 };
 
 /**
- * Get the daily stats.
+ * Update the tenant settings.
  *
  * @method
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-StatsManager.prototype.getDaily = function (params, cb) {
-  params = params || {};
-  params.type = 'daily';
-
+TenantManager.prototype.updateSettings = function (data, cb) {
   if (cb && cb instanceof Function) {
-    return this.stats.get(params, cb);
-  }
-
-  return this.stats.get(params);
-};
-
-/**
- * Get a the active users count.
- *
- * @method
- * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}         User retrieval promise.
- */
-StatsManager.prototype.getActiveUsersCount = function (cb) {
-  var options = { type: 'active-users' };
-
-  if (cb && cb instanceof Function) {
-    return this.stats.get(options, cb);
+    return this.tenant.patch({}, data, cb);
   }
 
   // Return a promise.
-  return this.stats.get(options)
+  return this.tenant.patch({}, data);
+};
+
+/**
+ * Get the tenant settings..
+ *
+ * @method
+ * @param   {Function}  [cb]  Callback function.
+ * @return  {Promise}
+ */
+TenantManager.prototype.getSettings = function (cb) {
+  if (cb && cb instanceof Function) {
+    return this.tenant.get({}, cb);
+  }
+
+  // Return a promise.
+  return this.tenant.get({})
 };
 
 
-module.exports = StatsManager;
+module.exports = TenantManager;

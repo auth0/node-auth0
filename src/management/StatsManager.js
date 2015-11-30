@@ -1,13 +1,13 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
+var ArgumentError = require('../exceptions').ArgumentError;
 
 
 /**
  * @class
- * Abstracts interaction with the tickets endpoint.
+ * Abstracts interaction with the stats endpoint.
  * @constructor
  */
-var TicketsManager = function (options){
+var StatsManager = function (options){
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -27,51 +27,48 @@ var TicketsManager = function (options){
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Tickets endpoint]{@link https://auth0.com/docs/api/v2#!/Tickets}.
+   * [Stats endpoint]{@link https://auth0.com/docs/api/v2#!/Stats}.
    *
    * @type {external:RestClient}
    */
-  this.ticket = new RestClient(options.baseUrl + '/tickets/:type', clientOptions);
+  this.stats = new RestClient(options.baseUrl + '/stats/:type', clientOptions);
 };
 
-
 /**
- * Create a new password change ticket.
+ * Get the daily stats.
  *
  * @method
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-TicketsManager.prototype.changePassword = function (data, cb) {
-  var params = { type: 'password-change' };
+StatsManager.prototype.getDaily = function (params, cb) {
+  params = params || {};
+  params.type = 'daily';
 
   if (cb && cb instanceof Function) {
-    return this.ticket.create(params, data, cb);
+    return this.stats.get(params, cb);
   }
 
-  // Return a promise.
-  return this.ticket.create(params, data);
+  return this.stats.get(params);
 };
 
-
 /**
- * Create an email verification ticket.
+ * Get a the active users count.
  *
  * @method
  * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}
+ * @return  {Promise}         User retrieval promise.
  */
-TicketsManager.prototype.verifyEmail = function (data, cb) {
-  var params = { type: 'email-verification' };
+StatsManager.prototype.getActiveUsersCount = function (cb) {
+  var options = { type: 'active-users' };
 
   if (cb && cb instanceof Function) {
-    return this.ticket.create(params, data, cb);
+    return this.stats.get(options, cb);
   }
 
   // Return a promise.
-  return this.ticket.create(params, data);
+  return this.stats.get(options)
 };
 
 
-module.exports = TicketsManager;
-
+module.exports = StatsManager;

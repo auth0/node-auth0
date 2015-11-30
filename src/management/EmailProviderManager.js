@@ -1,6 +1,6 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
-var utils = require('./utils');
+var ArgumentError = require('../exceptions').ArgumentError;
+var utils = require('../utils');
 
 /**
  * Simple facade for consuming a REST API endpoint.
