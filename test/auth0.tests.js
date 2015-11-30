@@ -3,16 +3,16 @@ var expect = require('chai').expect;
 var auth0 = require('../src');
 var Auth0 = require('../src/Auth0');
 var ArgumentError = require('../src/exceptions').ArgumentError;
-var UsersManager = require('../src/UsersManager');
-var BlacklistedTokensManager = require('../src/BlacklistedTokensManager');
-var ClientsManager = require('../src/ClientsManager');
-var ConnectionsManager = require('../src/ConnectionsManager');
-var DeviceCredentialsManager = require('../src/DeviceCredentialsManager');
-var EmailProviderManager = require('../src/EmailProviderManager');
-var JobsManager = require('../src/JobsManager');
-var RulesManager = require('../src/RulesManager');
-var StatsManager = require('../src/StatsManager');
-var TenantManager = require('../src/TenantManager');
+var UsersManager = require('../src/management/UsersManager');
+var BlacklistedTokensManager = require('../src/management/BlacklistedTokensManager');
+var ClientsManager = require('../src/management/ClientsManager');
+var ConnectionsManager = require('../src/management/ConnectionsManager');
+var DeviceCredentialsManager = require('../src/management/DeviceCredentialsManager');
+var EmailProviderManager = require('../src/management/EmailProviderManager');
+var JobsManager = require('../src/management/JobsManager');
+var RulesManager = require('../src/management/RulesManager');
+var StatsManager = require('../src/management/StatsManager');
+var TenantManager = require('../src/management/TenantManager');
 
 
 describe('Auth0 module', function () {

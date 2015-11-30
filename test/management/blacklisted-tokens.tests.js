@@ -1,16 +1,17 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var TicketsManager = require('../src/TicketsManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
+var SRC_DIR = '../../src';
+var API_URL = 'https://tenant.auth0.com';
 
-var API_URL = 'https://tenants.auth0.com';
+var BlacklistedTokensManager = require(SRC_DIR + '/management/BlacklistedTokensManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
-describe('TicketsManager', function () {
+describe('BlacklistedTokensManager', function () {
   before(function () {
     this.token = 'TOKEN';
-    this.tickets = new TicketsManager({
+    this.blacklistedTokens = new BlacklistedTokensManager({
       headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
@@ -18,11 +19,11 @@ describe('TicketsManager', function () {
 
 
   describe('instance', function () {
-    var methods = ['changePassword', 'verifyEmail'];
+    var methods = ['add', 'getAll'];
 
     methods.forEach(function (method) {
       it('should have a ' + method + ' method', function () {
-        expect(this.tickets[method])
+        expect(this.blacklistedTokens[method])
           .to.exist
           .to.be.an.instanceOf(Function);
       })
@@ -32,45 +33,40 @@ describe('TicketsManager', function () {
 
   describe('#constructor', function () {
     it('should error when no options are provided', function () {
-      expect(TicketsManager)
-        .to.throw(ArgumentError, 'Must provide manager options');
+      expect(BlacklistedTokensManager)
+        .to.throw(ArgumentError, 'Must provide client options');
     });
 
 
     it('should throw an error when no base URL is provided', function () {
-      var manager = TicketsManager.bind(null, {});
+      var client = BlacklistedTokensManager.bind(null, {});
 
-      expect(manager)
+      expect(client)
         .to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
 
     it('should throw an error when the base URL is invalid', function () {
-      var manager = TicketsManager.bind(null, { baseUrl: '' });
+      var client = BlacklistedTokensManager.bind(null, { baseUrl: '' });
 
-      expect(manager)
+      expect(client)
         .to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
 
-  describe('#verifyEmail', function () {
-    var data = {
-      result_url: "http://myapp.com/callback",
-      user_id: ""
-    };
-
+  describe('#getAll', function () {
     beforeEach(function () {
       this.request = nock(API_URL)
-        .post('/tickets/email-verification')
+        .get('/blacklists/tokens')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .tickets
-        .verifyEmail(data, function () {
+        .blacklistedTokens
+        .getAll(function () {
         done();
       });
     });
@@ -78,8 +74,8 @@ describe('TicketsManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .tickets
-        .verifyEmail(data)
+        .blacklistedTokens
+        .getAll()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -89,12 +85,12 @@ describe('TicketsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('tickets/email-verification')
+        .get('/blacklists/tokens')
         .reply(500);
 
       this
-        .tickets
-        .verifyEmail(data)
+        .blacklistedTokens
+        .getAll()
         .catch(function (err) {
           expect(err).to.exist;
           done();
@@ -102,12 +98,38 @@ describe('TicketsManager', function () {
     });
 
 
-    it('should perform a POST request to /api/v2tickets/email-verification', function (done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
+      nock.cleanAll();
+
+      var data = [{ test: true }];
+      var request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .reply(200, data);
+
+      this
+        .blacklistedTokens
+        .getAll()
+        .then(function (blacklistedTokens) {
+          expect(blacklistedTokens)
+            .to.be.an.instanceOf(Array);
+
+          expect(blacklistedTokens.length)
+            .to.equal(data.length);
+
+          expect(blacklistedTokens[0].test)
+            .to.equal(data[0].test);
+
+          done();
+        });
+    });
+
+
+    it('should perform a GET request to /api/v2/blacklists/tokens', function (done) {
       var request = this.request;
 
       this
-        .tickets
-        .verifyEmail(data)
+        .blacklistedTokens
+        .getAll()
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -119,13 +141,13 @@ describe('TicketsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/tickets/email-verification')
+        .get('/blacklists/tokens')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .tickets
-        .verifyEmail({})
+        .blacklistedTokens
+        .getAll()
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -137,7 +159,7 @@ describe('TicketsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/tickets/email-verification')
+        .get('/blacklists/tokens')
         .query({
           include_fields: true,
           fields: 'test'
@@ -145,39 +167,33 @@ describe('TicketsManager', function () {
         .reply(200)
 
       this
-        .tickets
-        .verifyEmail({ includeFields: true, fields: 'test' })
+        .blacklistedTokens
+        .getAll({ includeFields: true, fields: 'test' })
         .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
+          expect(request.isDone()).to.be.true;
           done();
         });
     });
   });
 
 
-  describe('#changePassword', function () {
-    var data = {
-      result_url: "http://myapp.com/callback",
-      user_id: "",
-      new_password: "secret",
-      connection_id: "con_0000000000000001",
-      email: ""
+  describe('#add', function () {
+    var tokenData = {
+      aud: '',
+      jti: ''
     };
-
 
     beforeEach(function () {
       this.request = nock(API_URL)
-        .post('/tickets/password-change')
+        .post('/blacklists/tokens')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .tickets
-        .changePassword(data, function () {
+        .blacklistedTokens
+        .add(tokenData, function () {
           done();
         });
     });
@@ -185,8 +201,8 @@ describe('TicketsManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .tickets
-        .changePassword(data)
+        .blacklistedTokens
+        .add(tokenData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -196,12 +212,12 @@ describe('TicketsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/tickets/email-verification')
+        .post('/blacklists/tokens')
         .reply(500);
 
       this
-        .tickets
-        .changePassword(data)
+        .blacklistedTokens
+        .add(tokenData)
         .catch(function (err) {
           expect(err).to.exist;
           done();
@@ -209,12 +225,12 @@ describe('TicketsManager', function () {
     });
 
 
-    it('should perform a POST request to /api/v2tickets/email-verification', function (done) {
+    it('should perform a POST request to /api/v2/blacklists/tokens', function (done) {
       var request = this.request;
 
       this
-        .tickets
-        .changePassword(data)
+        .blacklistedTokens
+        .add(tokenData)
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -222,16 +238,16 @@ describe('TicketsManager', function () {
     });
 
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the token data in the body of the request', function (done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/tickets/password-change', data)
+        .post('/blacklists/tokens', tokenData)
         .reply(200);
 
       this
-        .tickets
-        .changePassword(data)
+        .blacklistedTokens
+        .add(tokenData)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -245,13 +261,13 @@ describe('TicketsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/tickets/password-change')
+        .post('/blacklists/tokens')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .tickets
-        .changePassword(data)
+        .blacklistedTokens
+        .add(tokenData)
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();

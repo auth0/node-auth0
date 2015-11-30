@@ -1,10 +1,11 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var DeviceCredentialsManager = require('../src/DeviceCredentialsManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
-
+var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
+
+var DeviceCredentialsManager = require(SRC_DIR + '/management/DeviceCredentialsManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
 describe('DeviceCredentialsManager', function () {

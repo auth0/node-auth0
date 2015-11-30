@@ -1,16 +1,17 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var UsersManager = require('../src/UsersManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
+var SRC_DIR = '../../src';
+var API_URL = 'https://tenant.auth0.com';
 
-var API_URL = 'https://tenant.auth0.com/api/v2';
+var RulesManager = require(SRC_DIR + '/management/RulesManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
-describe('UsersManager', function () {
+describe('RulesManager', function () {
   before(function () {
     this.token = 'TOKEN';
-    this.users = new UsersManager({
+    this.rules = new RulesManager({
       headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
@@ -18,21 +19,11 @@ describe('UsersManager', function () {
 
 
   describe('instance', function () {
-    var methods = [
-      'get',
-      'getAll',
-      'create',
-      'update',
-      'delete',
-      'deleteAll',
-      'unlink',
-      'link',
-      'deleteMultifactorProvider'
-    ];
+    var methods = ['get', 'getAll', 'create', 'update', 'delete'];
 
     methods.forEach(function (method) {
       it('should have a ' + method + ' method', function () {
-        expect(this.users[method])
+        expect(this.rules[method])
           .to.exist
           .to.be.an.instanceOf(Function);
       })
@@ -42,23 +33,23 @@ describe('UsersManager', function () {
 
   describe('#constructor', function () {
     it('should error when no options are provided', function () {
-      expect(UsersManager)
+      expect(RulesManager)
         .to.throw(ArgumentError, 'Must provide manager options');
     });
 
 
     it('should throw an error when no base URL is provided', function () {
-      var manager = UsersManager.bind(null, {});
+      var client = RulesManager.bind(null, {});
 
-      expect(manager)
+      expect(client)
         .to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
 
     it('should throw an error when the base URL is invalid', function () {
-      var manager = UsersManager.bind(null, { baseUrl: '' });
+      var client = RulesManager.bind(null, { baseUrl: '' });
 
-      expect(manager)
+      expect(client)
         .to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
@@ -67,14 +58,14 @@ describe('UsersManager', function () {
   describe('#getAll', function () {
     beforeEach(function () {
       this.request = nock(API_URL)
-        .get('/users')
+        .get('/rules')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .users
+        .rules
         .getAll(function () {
           done();
         });
@@ -83,7 +74,7 @@ describe('UsersManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .users
+        .rules
         .getAll()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
@@ -94,16 +85,14 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/users')
+        .get('/rules')
         .reply(500);
 
       this
-        .users
+        .rules
         .getAll()
         .catch(function (err) {
-          expect(err)
-            .to.exist;
-
+          expect(err).to.exist;
           done();
         });
     });
@@ -114,20 +103,20 @@ describe('UsersManager', function () {
 
       var data = [{ test: true }];
       var request = nock(API_URL)
-        .get('/users')
+        .get('/rules')
         .reply(200, data);
 
       this
-        .users
+        .rules
         .getAll()
-        .then(function (users) {
-          expect(users)
+        .then(function (credentials) {
+          expect(credentials)
             .to.be.an.instanceOf(Array);
 
-          expect(users.length)
+          expect(credentials.length)
             .to.equal(data.length);
 
-          expect(users[0].test)
+          expect(credentials[0].test)
             .to.equal(data[0].test);
 
           done();
@@ -135,16 +124,14 @@ describe('UsersManager', function () {
     });
 
 
-    it('should perform a GET request to /api/v2/users', function (done) {
+    it('should perform a GET request to /api/v2/rules', function (done) {
       var request = this.request;
 
       this
-        .users
+        .rules
         .getAll()
         .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
+          expect(request.isDone()).to.be.true;
           done();
         });
     });
@@ -154,17 +141,15 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/users')
+        .get('/rules')
         .matchHeader('Authorization', 'Bearer ' + this.token)
-        .reply(200);
+        .reply(200)
 
       this
-        .users
+        .rules
         .getAll()
         .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
+          expect(request.isDone()).to.be.true;
           done();
         });
     });
@@ -178,12 +163,12 @@ describe('UsersManager', function () {
         fields: 'test'
       };
       var request = nock(API_URL)
-        .get('/users')
+        .get('/rules')
         .query(params)
-        .reply(200);
+        .reply(200)
 
       this
-        .users
+        .rules
         .getAll(params)
         .then(function () {
           expect(request.isDone())
@@ -206,7 +191,7 @@ describe('UsersManager', function () {
       };
 
       this.request = nock(API_URL)
-        .get('/users/' + this.data.id)
+        .get('/rules/' + this.data.id)
         .reply(200, this.data);
     })
 
@@ -215,25 +200,25 @@ describe('UsersManager', function () {
       var params = { id: this.data.id };
 
       this
-        .users
+        .rules
         .get(params, done.bind(null, null));
     });
 
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .users
+        .rules
         .get({ id: this.data.id })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
 
-    it('should perform a POST request to /api/v2/users/5', function (done) {
+    it('should perform a POST request to /api/v2/rules/5', function (done) {
       var request = this.request;
 
       this
-        .users
+        .rules
         .get({ id: this.data.id })
         .then(function () {
           expect(request.isDone())
@@ -248,11 +233,11 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/users/' + this.data.id)
+        .get('/rules/' + this.data.id)
         .reply(500);
 
       this
-        .users
+        .rules
         .get({ id: this.data.id })
         .catch(function (err) {
           expect(err)
@@ -267,12 +252,12 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/users/' + this.data.id)
+        .get('/rules/' + this.data.id)
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
       this
-        .users
+        .rules
         .get({ id: this.data.id })
         .then(function () {
           expect(request.isDone())
@@ -295,14 +280,14 @@ describe('UsersManager', function () {
 
     beforeEach(function () {
       this.request = nock(API_URL)
-        .post('/users')
+        .post('/rules')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .users
+        .rules
         .create(data, function () {
           done();
         });
@@ -311,7 +296,7 @@ describe('UsersManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .users
+        .rules
         .create(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
@@ -322,11 +307,11 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/users')
+        .post('/rules')
         .reply(500);
 
       this
-        .users
+        .rules
         .create(data)
         .catch(function (err) {
           expect(err)
@@ -337,11 +322,11 @@ describe('UsersManager', function () {
     });
 
 
-    it('should perform a POST request to /api/v2/users', function (done) {
+    it('should perform a POST request to /api/v2/rules', function (done) {
       var request = this.request;
 
       this
-        .users
+        .rules
         .create(data)
         .then(function () {
           expect(request.isDone())
@@ -356,11 +341,11 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/users', data)
+        .post('/rules', data)
         .reply(200);
 
       this
-        .users
+        .rules
         .create(data)
         .then(function () {
           expect(request.isDone())
@@ -375,12 +360,12 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/users')
+        .post('/rules')
         .matchHeader('Authorization', 'Bearer ' + this.token)
-        .reply(200);
+        .reply(200)
 
       this
-        .users
+        .rules
         .create(data)
         .then(function () {
           expect(request.isDone())
@@ -397,32 +382,32 @@ describe('UsersManager', function () {
       this.data = { id: 5 };
 
       this.request = nock(API_URL)
-        .patch('/users/' + this.data.id)
+        .patch('/rules/' + this.data.id)
         .reply(200, this.data);
     });
 
 
     it('should accept a callback', function (done) {
       this
-        .users
+        .rules
         .update({ id: 5 }, {}, done.bind(null, null));
     });
 
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .users
+        .rules
         .update({ id: 5 }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
 
-    it('should perform a PATCH request to /api/v2/users/5', function (done) {
+    it('should perform a PATCH request to /api/v2/rules/5', function (done) {
       var request = this.request;
 
       this
-        .users
+        .rules
         .update({ id: 5 }, {})
         .then(function () {
           expect(request.isDone())
@@ -437,11 +422,11 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .patch('/users/' + this.data.id, this.data)
+        .patch('/rules/' + this.data.id, this.data)
         .reply(200);
 
       this
-        .users
+        .rules
         .update({ id: 5 }, this.data)
         .then(function () {
           expect(request.isDone())
@@ -456,11 +441,11 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .patch('/users/' + this.data.id)
+        .patch('/rules/' + this.data.id)
         .reply(500);
 
       this
-        .users
+        .rules
         .update({ id: this.data.id }, this.data)
         .catch(function (err) {
           expect(err)
@@ -477,31 +462,31 @@ describe('UsersManager', function () {
 
     beforeEach(function () {
       this.request = nock(API_URL)
-        .delete('/users/' + id)
+        .delete('/rules/' + id)
         .reply(200);
     });
 
 
     it('should accept a callback', function (done) {
       this
-        .users
+        .rules
         .delete({ id: id }, done.bind(null, null));
     });
 
 
     it('should return a promise when no callback is given', function (done) {
       this
-        .users
+        .rules
         .delete({ id: id })
         .then(done.bind(null, null));
     });
 
 
-    it('should perform a delete request to /users/' + id, function (done) {
+    it('should perform a delete request to /rules/' + id, function (done) {
       var request = this.request;
 
       this
-        .users
+        .rules
         .delete({ id: id })
         .then(function () {
           expect(request.isDone())
@@ -516,11 +501,11 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .delete('/users/' + id)
+        .delete('/rules/' + id)
         .reply(500);
 
       this
-        .users
+        .rules
         .delete({ id: id })
         .catch(function (err) {
           expect(err)
@@ -535,292 +520,13 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .delete('/users/' + id)
+        .delete('/rules/' + id)
         .matchHeader('authorization', 'Bearer ' + this.token)
-        .reply(200);
+        .reply(200)
 
       this
-        .users
+        .rules
         .delete({ id: id })
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-  });
-
-
-  describe('#link', function () {
-    var userId = 'USER_ID';
-    var data = {
-      provider: "twitter",
-      user_id: "191919191919191",
-    };
-
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .post('/users/' + userId + '/identities')
-        .reply(200);
-    })
-
-
-    it('should accept a callback', function (done) {
-      this
-        .users
-        .link(userId, data, function () {
-          done();
-        });
-    });
-
-
-    it('should return a promise if no callback is given', function (done) {
-      this
-        .users
-        .link(userId, data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-
-    it('should pass any errors to the promise catch handler', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post('/users/' + userId + '/identities')
-        .reply(500);
-
-      this
-        .users
-        .link(userId, data)
-        .catch(function (err) {
-          expect(err)
-            .to.exist;
-
-          done();
-        });
-    });
-
-
-    it('should perform a POST request to /api/v2/users', function (done) {
-      var request = this.request;
-
-      this
-        .users
-        .link(userId, data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should pass the data in the body of the request', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post('/users/' + userId + '/identities', data)
-        .reply(200);
-
-      this
-        .users
-        .link(userId, data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should include the token in the Authorization header', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post('/users/' + userId + '/identities')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
-        .reply(200);
-
-      this
-        .users
-        .link(userId, data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-  });
-
-
-  describe('#unlink', function () {
-    var data = {
-      id: 'u1',
-      user_id: 'u2',
-      provider: 'auth0'
-    };
-    var url = (
-      '/users/' + data.id + '/identities/' + data.provider + '/' + data.user_id
-    );
-
-
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .delete(url)
-        .reply(200);
-    });
-
-
-    it('should accept a callback', function (done) {
-      this
-        .users
-        .unlink(data, done.bind(null, null));
-    });
-
-
-    it('should return a promise when no callback is given', function (done) {
-      this
-        .users
-        .unlink(data)
-        .then(done.bind(null, null));
-    });
-
-
-    it('should perform a DELETE request to ' + url, function (done) {
-      var request = this.request;
-
-      this
-        .users
-        .unlink(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should pass any errors to the promise catch handler', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .delete(url)
-        .reply(500);
-
-      this
-        .users
-        .unlink(data)
-        .catch(function (err) {
-          expect(err)
-            .to.exist;
-
-          done();
-        });
-    });
-
-
-    it('should include the token in the authorization header', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .delete(url)
-        .matchHeader('authorization', 'Bearer ' + this.token)
-        .reply(200);
-
-      this
-        .users
-        .unlink(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-  });
-
-
-  describe('#deleteMultifactorProvider', function () {
-    var data = {
-      id: 'u1',
-      provider: 'auth0'
-    };
-    var url = '/users/' + data.id + '/multifactor/' + data.provider;
-
-
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .delete(url)
-        .reply(200);
-    });
-
-
-    it('should accept a callback', function (done) {
-      this
-        .users
-        .deleteMultifactorProvider(data, done.bind(null, null));
-    });
-
-
-    it('should return a promise when no callback is given', function (done) {
-      this
-        .users
-        .deleteMultifactorProvider(data)
-        .then(done.bind(null, null));
-    });
-
-
-    it('should perform a DELETE request to ' + url, function (done) {
-      var request = this.request;
-
-      this
-        .users
-        .deleteMultifactorProvider(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should pass any errors to the promise catch handler', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .delete(url)
-        .reply(500);
-
-      this
-        .users
-        .deleteMultifactorProvider(data)
-        .catch(function (err) {
-          expect(err)
-            .to.exist;
-
-          done();
-        });
-    });
-
-
-    it('should include the token in the authorization header', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .delete(url)
-        .matchHeader('authorization', 'Bearer ' + this.token)
-        .reply(200);
-
-      this
-        .users
-        .deleteMultifactorProvider(data)
         .then(function () {
           expect(request.isDone())
             .to.be.true;

@@ -1,16 +1,17 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var TenantManager = require('../src/TenantManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
+var SRC_DIR = '../../src';
+var API_URL = 'https://tenant.auth0.com';
 
-var API_URL = 'https://tenants.auth0.com';
+var StatsManager = require(SRC_DIR + '/management/StatsManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
-describe('TenantManager', function () {
+describe('StatsManager', function () {
   before(function () {
     this.token = 'TOKEN';
-    this.tenant = new TenantManager({
+    this.stats = new StatsManager({
       headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
@@ -18,11 +19,11 @@ describe('TenantManager', function () {
 
 
   describe('instance', function () {
-    var methods = ['updateSettings', 'getSettings'];
+    var methods = ['getActiveUsersCount', 'getDaily'];
 
     methods.forEach(function (method) {
       it('should have a ' + method + ' method', function () {
-        expect(this.tenant[method])
+        expect(this.stats[method])
           .to.exist
           .to.be.an.instanceOf(Function);
       })
@@ -32,40 +33,40 @@ describe('TenantManager', function () {
 
   describe('#constructor', function () {
     it('should error when no options are provided', function () {
-      expect(TenantManager)
+      expect(StatsManager)
         .to.throw(ArgumentError, 'Must provide manager options');
     });
 
 
     it('should throw an error when no base URL is provided', function () {
-      var manager = TenantManager.bind(null, {});
+      var client = StatsManager.bind(null, {});
 
-      expect(manager)
+      expect(client)
         .to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
 
     it('should throw an error when the base URL is invalid', function () {
-      var manager = TenantManager.bind(null, { baseUrl: '' });
+      var client = StatsManager.bind(null, { baseUrl: '' });
 
-      expect(manager)
+      expect(client)
         .to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
 
-  describe('#getSettings', function () {
+  describe('#getDaily', function () {
     beforeEach(function () {
       this.request = nock(API_URL)
-        .get('/tenants/settings')
+        .get('/stats/daily')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .tenant
-        .getSettings(function () {
+        .stats
+        .getDaily({}, function () {
         done();
       });
     });
@@ -73,8 +74,8 @@ describe('TenantManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .tenant
-        .getSettings()
+        .stats
+        .getDaily()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -84,12 +85,12 @@ describe('TenantManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/tenants/settings')
+        .get('/stats/daily')
         .reply(500);
 
       this
-        .tenant
-        .getSettings()
+        .stats
+        .getDaily()
         .catch(function (err) {
           expect(err).to.exist;
           done();
@@ -102,12 +103,12 @@ describe('TenantManager', function () {
 
       var data = [{ test: true }];
       var request = nock(API_URL)
-        .get('/tenants/settings')
+        .get('/stats/daily')
         .reply(200, data);
 
       this
-        .tenant
-        .getSettings()
+        .stats
+        .getDaily()
         .then(function (blacklistedTokens) {
           expect(blacklistedTokens)
             .to.be.an.instanceOf(Array);
@@ -123,12 +124,12 @@ describe('TenantManager', function () {
     });
 
 
-    it('should perform a GET request to /api/v2/tenants/settings', function (done) {
+    it('should perform a GET request to /api/v2/stats/daily', function (done) {
       var request = this.request;
 
       this
-        .tenant
-        .getSettings()
+        .stats
+        .getDaily()
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -140,13 +141,13 @@ describe('TenantManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/tenants/settings')
+        .get('/stats/daily')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .tenant
-        .getSettings()
+        .stats
+        .getDaily()
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -158,7 +159,7 @@ describe('TenantManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/tenants/settings')
+        .get('/stats/daily')
         .query({
           include_fields: true,
           fields: 'test'
@@ -166,8 +167,8 @@ describe('TenantManager', function () {
         .reply(200)
 
       this
-        .tenant
-        .getSettings({ includeFields: true, fields: 'test' })
+        .stats
+        .getDaily({ includeFields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -176,22 +177,18 @@ describe('TenantManager', function () {
   });
 
 
-  describe('#updateSettings', function () {
-    var data = {
-      friendly_name: 'Test name'
-    };
-
+  describe('#getActiveUsersCount', function () {
     beforeEach(function () {
       this.request = nock(API_URL)
-        .patch('/tenants/settings')
+        .get('/stats/active-users')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .tenant
-        .updateSettings(data, function () {
+        .stats
+        .getActiveUsersCount(function () {
           done();
         });
     });
@@ -199,8 +196,8 @@ describe('TenantManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .tenant
-        .updateSettings(data)
+        .stats
+        .getActiveUsersCount()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -210,12 +207,12 @@ describe('TenantManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .patch('/tenants/settings')
+        .get('/stats/active-users')
         .reply(500);
 
       this
-        .tenant
-        .updateSettings(data)
+        .stats
+        .getActiveUsersCount()
         .catch(function (err) {
           expect(err).to.exist;
           done();
@@ -223,12 +220,12 @@ describe('TenantManager', function () {
     });
 
 
-    it('should perform a PATCH request to /api/v2/tenants/settings', function (done) {
+    it('should perform a GET request to /api/v2/stats/active-users', function (done) {
       var request = this.request;
 
       this
-        .tenant
-        .updateSettings(data)
+        .stats
+        .getActiveUsersCount()
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -236,16 +233,16 @@ describe('TenantManager', function () {
     });
 
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the token data in the body of the request', function (done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .patch('/tenants/settings', data)
+        .get('/stats/active-users')
         .reply(200);
 
       this
-        .tenant
-        .updateSettings(data)
+        .stats
+        .getActiveUsersCount()
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -259,13 +256,13 @@ describe('TenantManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .patch('/tenants/settings')
+        .get('/stats/active-users')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .tenant
-        .updateSettings(data)
+        .stats
+        .getActiveUsersCount()
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
