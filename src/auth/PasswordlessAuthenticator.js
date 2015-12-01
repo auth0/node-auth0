@@ -4,6 +4,11 @@ var ArgumentError = require('../exceptions').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
 
+/**
+ * @class
+ * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
+ * @constructor
+ */
 var PasswordlessAuthenticator = function (options, oauth) {
   if (!options) {
     throw new ArgumentError('Missing authenticator options');
@@ -21,6 +26,12 @@ var PasswordlessAuthenticator = function (options, oauth) {
 };
 
 
+/**
+ * Sign in with the given user credentials.
+ *
+ * @method
+ * @memberOf PasswordlessAuthenticator
+ */
 PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   var defaultFields = {
     client_id: this.clientId
@@ -49,6 +60,12 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
 };
 
 
+/**
+ * Start passwordless flow sending an email.
+ *
+ * @method
+ * @memberOf PasswordlessAuthenticator
+ */
 PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
   var defaultFields = {
     client_id: this.clientId
@@ -80,6 +97,12 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
 };
 
 
+/**
+ * Start passwordless flow sending an SMS.
+ *
+ * @method
+ * @memberOf PasswordlessAuthenticator
+ */
 PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
   var defaultFields = {
     client_id: this.clientId
