@@ -622,6 +622,59 @@ auth0.users.update(params, data, function (err, user) {
 });
 ~~~
 
+### Link user accounts
+
+~~~js
+var params = { id: USER_ID };
+var data = {
+	user_id: 'OTHER_USER_ID',
+	connection_id: 'CONNECTION_ID'
+};
+
+// Using auth0 instance.
+auth0.linkUsers(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users linked.
+});
+
+// Using the users manager directly.
+auth0.users.link(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users linked.
+});
+~~~
+
+### Unlink user accounts
+
+~~~js
+var params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };
+
+// Using auth0 instance.
+auth0.unlinkUsers(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users accounts unlinked.
+});
+
+// Using the users manager directly.
+auth0.users.unlink(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users accounts unlinked.
+});
+~~~
+
+
 
 ## Blacklisted Tokens
 Managing [Blacklisted tokens](https://auth0.com/docs/api/v2#!/Blacklists) with the SDK.
