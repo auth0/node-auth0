@@ -11,7 +11,13 @@ var utils = module.exports = {};
  * @memberOf utils
  */
 utils.jsonToBase64 = function (json) {
-  return (new Buffer(JSON.stringify(json))).toString('base64');
+  var bytes = new Buffer(JSON.stringify(json));
+
+  return bytes
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
 };
 
 
