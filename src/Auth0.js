@@ -21,6 +21,7 @@ var TicketsManager = require('./management/TicketsManager');
 // Authenticators.
 var OAuthAuthenticator = require('./auth/OAuthAuthenticator');
 var DatabaseAuthenticator = require('./auth/DatabaseAuthenticator');
+var PasswordlessAuthenticator = require('./auth/PasswordlessAuthenticator');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 
@@ -160,6 +161,13 @@ var Auth0 = function (options) {
    * @type {DatabaseAuthenticator}
    */
   this.database = new DatabaseAuthenticator(managerOptions, this.oauth);
+
+  /**
+   * Passwordless authenticator.
+   *
+   * @type {PasswordlessAuthenticator}
+   */
+  this.passwordless = new PasswordlessAuthenticator(managerOptions, this.oauth);
 };
 
 
