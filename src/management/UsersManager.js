@@ -68,7 +68,11 @@ UsersManager.prototype.create = function (data, cb) {
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}         UsersManager retrieval promise.
  */
-UsersManager.prototype.getAll = function () {
+UsersManager.prototype.getAll = function (params) {
+  if (typeof params === 'object' && typeof params.q === 'string') {
+    params.q = encodeURIComponent(params.q);
+  }
+
   return this.users.getAll.apply(this.users, arguments);
 };
 
