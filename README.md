@@ -675,6 +675,31 @@ auth0.users.unlink(params, function (err, user) {
 ~~~
 
 
+### Delete user multifactor provider
+
+~~~js
+var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+
+// Using auth0 instance.
+auth0.deleteUserMultifcator(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users accounts unlinked.
+});
+
+// Using the users manager directly.
+auth0.users.deleteMultifactorProvider(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Users accounts unlinked.
+});
+~~~
+
+
 
 ## Blacklisted Tokens
 Managing [Blacklisted tokens](https://auth0.com/docs/api/v2#!/Blacklists) with the SDK.
