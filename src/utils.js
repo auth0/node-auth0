@@ -1,3 +1,7 @@
+var Promise = require('bluebird');
+var request = require('superagent');
+
+
 /**
  * @module utils
  */
@@ -41,4 +45,36 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
     }
   });
 }
+
+
+/**
+ * Perform a request with the given settings and return a promise that resolves
+ * when the request is successfull and rejects when there's an error.
+ *
+ * @method
+ * @memberOf utils
+ */
+utils.getRequestPromise = function (settings) {
+  return new Promise(function (resolve, reject) {
+    var method = settings.method.toLowerCase();
+    var req = request[method](settings.url);
+
+    for (var name in settings.headers) {
+      req = req.set(name, settings.headers[name]);
+    }
+
+    if (typeof settings.data === 'object') {
+      req = req.send(settings.data);
+    }
+
+    req.end(function (err, res) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(res.body);
+    });
+  });
+};
 
