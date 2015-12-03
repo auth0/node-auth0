@@ -10,6 +10,10 @@ var OAuthAuthenticator = require('./OAuthAuthenticator');
 var DatabaseAuthenticator = require('./DatabaseAuthenticator');
 var PasswordlessAuthenticator = require('./PasswordlessAuthenticator');
 
+// Managers
+var UsersManager = require('./UsersManager');
+var TokensManager = require('./TokensManager');
+
 var BASE_URL_FORMAT = 'https://%s';
 
 
@@ -67,6 +71,20 @@ var AuthenticationClient = function (options) {
    * @type {PasswordlessAuthenticator}
    */
   this.passwordless = new PasswordlessAuthenticator(managerOptions, this.oauth);
+
+  /**
+   * Users manager.
+   *
+   * @type {UsersManager}
+   */
+  this.users = new UsersManager(managerOptions);
+
+  /**
+   * Tokens manager.
+   *
+   * @type {TokensManager}
+   */
+  this.tokens = new TokensManager(managerOptions);
 };
 
 
