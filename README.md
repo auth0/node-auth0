@@ -14,8 +14,17 @@ Initialize your client class with an API v2 token (you can generate one [here](h
 
 ~~~js
 var token = '{YOUR_API_V2_TOKEN}';
-var auth0 = require('auth0')({
+var auth0 = require('auth0');
+
+// Client for consuming the management API.
+var managementClient = new auth0.ManagementClient({
   token: token,
+  domain: 'YOUR_ACCOUNT.auth0.com'
+});
+
+// Client for consuming the authentication API.
+var authClient = new auth0.AuthenticationClient({
+  clientId: CLIENT_ID,
   domain: 'YOUR_ACCOUNT.auth0.com'
 });
 ~~~
