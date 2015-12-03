@@ -29,10 +29,6 @@ var AuthenticationClient = function (options) {
     );
   }
 
-  if (!options.token || options.token.length === 0) {
-    throw new ArgumentError('An access token must be provided');
-  }
-
   if (!options.domain || options.domain.length === 0) {
     throw new ArgumentError('Must provide a domain');
   }
