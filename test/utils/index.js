@@ -1,3 +1,5 @@
 module.exports = {
-  extractParts: require('./extractParts')
+  extractParts: require('./extractParts'),
+  ensureProperty: require('./ensureProperty'),
+  ensureMethod: require('./ensureMethod')
 };
