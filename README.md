@@ -1,57 +1,25 @@
 
-
 # node-auth0 [![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
-## Installation
+# Installation
 
 	npm install auth0@2.0.0-alpha.5
+
+# Management API Client
+The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
 ## Usage
 
 Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain.
 
 ~~~js
-var token = '{YOUR_API_V2_TOKEN}';
-var auth0 = require('auth0');
-
-// Client for consuming the management API.
-var managementClient = new auth0.ManagementClient({
-  token: token,
-  domain: 'YOUR_ACCOUNT.auth0.com'
+var ManagementClient = require('auth0').ManagementClient;
+var auth0 = new ManagementClient({
+  token: '{YOUR_API_V2_TOKEN}',
+  domain: '{YOUR_ACCOUNT}.auth0.com'
 });
-
-// Client for consuming the authentication API.
-var authClient = new auth0.AuthenticationClient({
-  clientId: CLIENT_ID,
-  domain: 'YOUR_ACCOUNT.auth0.com'
-});
-~~~
-
-
-## Promises and Callbacks
-Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided, no Promise will be returned.
-
-~~~js
-// Using callbacks.
-auth0.getUsers(function (err, users) {
-  if (err) {
-    // Handle error.
-  }
-  console.log(users);
-});
-
-
-// Using promises.
-auth0
-  .getUsers()
-  .then(function (users) {
-    console.log(users);	
-  })
-  .catch(function (err) {
-    // Handle error.
-  });
 ~~~
 
 ## Clients
@@ -597,21 +565,16 @@ auth0.users.update(params, data, function (err, user) {
 });
 ~~~
 
-### Update user and app metadata
+### Update user metadata
 
 ~~~js
 var params = { id: USER_ID };
-var data = {
-  app_metadata: {
-    foo: 'bar'
-  },
-  user_metadata: {
-    address: '123th Node.js Street'
-  }
+var metadata = {
+  address: '123th Node.js Street'
 };
 
 // Using auth0 instance.
-auth0.updateUser(params, data, function (err, user) {
+auth0.updateUserMetadata(params, metadata, function (err, user) {
   if (err) {
     // Handle error.
   }
@@ -621,7 +584,37 @@ auth0.updateUser(params, data, function (err, user) {
 });
 
 // Using the users manager directly.
-auth0.users.update(params, data, function (err, user) {
+auth0.users.updateUserMetadata(params, metadata, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+~~~
+
+
+### Update app metadata
+
+~~~js
+var params = { id: USER_ID };
+var metadata = {
+  foo: 'bar'
+};
+
+// Using auth0 instance.
+auth0.updateAppMetadata(params, metadata, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Updated user.
+  console.log(user);
+});
+
+// Using the users manager directly.
+auth0.users.updateAppMetadata(params, metadata, function (err, user) {
   if (err) {
     // Handle error.
   }
@@ -843,9 +836,201 @@ auth0.emailProvider.update(function (err, provider) {
 });
 ~~~
 
-## Authentication
+# Authentication API Client
 
-This library can be used to access Auth0's [API v2](https://auth0.com/docs/apiv2). To authenticate users use the [passport strategy](https://github.com/auth0/passport-auth0).
+This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+
+## Usage
+
+Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain. The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
+
+~~~js
+var AuthenticationClient = require('auth0'). AuthenticationClient;
+var auth0 = new AuthenticationClient({
+  domain: '{YOUR_ACCOUNT}.auth0.com',
+  clientId: '{OPTIONAL_CLIENT_ID}'
+});
+~~~
+
+## OAuth
+This authenticator only works for database connections, passwordless connections, Active Directory/LDAP, Windows Azure AD and ADFS.
+
+### Sign in
+The OAuth `signIn` function takes an object with login data as first parameter and an optional callback as second argument. The data that is required to be included in the object passed as first argument depends on the identity provider: [Database & Active Directory/LDAP](https://auth0.com/docs/auth-api#!#post--oauth-ro), [Passwordless](https://auth0.com/docs/auth-api#!#post--ro_with_sms).
+
+~~~js
+auth0.oauth.signIn(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(userData);
+});
+~~~
+
+The user data object has the following structure.
+
+~~~js
+{
+  id_token: String,
+  access_token: String,
+  token_type: String
+}
+~~~
+
+## Database & Active Directory
+
+### Sign in
+Given the user credentials and the connection specified, it will do the authentication on the provider and return a JSON with the `access_token` and `id_token`. Find more information about the structure of the data object in the [API docs](https://auth0.com/docs/auth-api#!#post--oauth-ro).
+
+~~~js
+var data = {
+  username: '{USERNAME}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication' // Optional field.
+};
+
+auth0.database.signIn(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(userData);
+});
+~~~
+
+### Sign up
+Given the user credentials, the connection specified and (optionally) the client ID, it will create a new user. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-signup).
+
+~~~js
+var data = {
+  username: '{USERNAME}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication' // Optional field.
+};
+
+auth0.database.signUp(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(userData);
+});
+~~~
+
+### Change password
+Given the user email, the connection specified and the new password to use, Auth0 will send a forgot password email. Once the user clicks on the confirm password change link, the new password specified in this POST will be set to this user. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-change_password).
+
+~~~js
+var data = {
+  email: '{EMAIL}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication'
+};
+
+auth0.database.changePassword(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(userData);
+});
+~~~
+
+## Passwordless
+
+### Send email
+Given the user `email` address, it will send an email with:
+
+- A link (default, `send:"link"`). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using `authParams` object.
+- A verification code (`send:"code"`). You can then authenticate with this user using the `/oauth/ro` endpoint specifying `email` as `username` and `code` as `password`.
+
+Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--with_email).
+
+~~~js
+
+var data = {
+  email: '{EMAIL}',
+  send: 'link',
+  authParams: {} // Optional auth params.
+};
+
+auth0.passwordless.sendEmail(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+### Send SMS
+Given the user `phone_number`, it will send a SMS message with a verification code. You can then authenticate with this user using the `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as `password`:
+
+~~~js
+
+var data = {
+  phone_number: '{PHONE}'
+};
+
+auth0.passwordless.sendSMS(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+### Login
+Given the user credentials (`phone_number` and `code`), it will do the authentication on the provider and return a JSON with the `access_token` and `id_token`.
+
+~~~js
+
+var data = {
+  username: '{PHONE_NUMBER}',
+  password: '{VERIFICATION_CODE}'
+};
+
+auth0.passwordless.signIn(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+The user data object has the following structure.
+
+~~~js
+{
+  id_token: String,
+  access_token: String,
+  token_type: String
+}
+~~~
+
+
+# Promises and Callbacks
+
+Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided no Promise will be returned.
+
+~~~js
+// Using callbacks.
+auth0.getUsers(function (err, users) {
+  if (err) {
+    // Handle error.
+  }
+  console.log(users);
+});
+
+
+// Using promises.
+auth0
+  .getUsers()
+  .then(function (users) {
+    console.log(users);	
+  })
+  .catch(function (err) {
+    // Handle error.
+  });
+~~~
+
 
 ## Examples
 
