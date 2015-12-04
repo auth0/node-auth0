@@ -4,7 +4,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
+##Table of Contents
 
 - [Installation](#installation)
 - [Management API Client](#management-api-client)
