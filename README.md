@@ -982,7 +982,6 @@ auth0.passwordless.sendSMS(data, function (err) {
 Given the user credentials (`phone_number` and `code`), it will do the authentication on the provider and return a JSON with the `access_token` and `id_token`.
 
 ~~~js
-
 var data = {
   username: '{PHONE_NUMBER}',
   password: '{VERIFICATION_CODE}'
@@ -1005,6 +1004,74 @@ The user data object has the following structure.
 }
 ~~~
 
+## Users
+
+### User info
+Get the user information based on the Auth0 access token (obtained during login). Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#get--userinfo).
+
+~~~js
+auth0.users.getInfo(accessToken, function (err, userInfo) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(userInfo);
+});
+~~~
+
+### Impersonation
+Gets a link that can be used once to log in as a specific user. Useful for troubleshooting. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--users--user_id--impersonate).
+
+~~~js
+var settings = {
+  impersonator_id: '{IMPERSONATOR_ID}',
+  protocol: 'oauth2',
+  additionalParameters: {}  // Optional aditional params.
+};
+
+auth0.users.impersonate(userId, settings, function (err, link) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(link);
+});
+~~~
+
+## Tokens
+
+### Token info
+Validates a JSON Web Token (signature and expiration) and returns the user information associated with the user id (sub property) of the token. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--tokeninfo).
+
+~~~js
+auth0.tokens.getInfo(token, function (err, tokenInfo) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(tokenInfo);
+});
+~~~
+
+### Delegation Token
+Given an existing token, this endpoint will generate a new token signed with the target client secret. This is used to flow the identity of the user from the application to an API or across different APIs that are protected with different secrets. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--delegation).
+
+~~~js
+var data = {
+  id_token: '{ID_TOKEN}',
+  api_type: 'app',
+  target: '{TARGET}',
+  grant_type: 'password'
+};
+
+auth0.tokens.getDelegationToken(data, function (err, token) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(token);
+});
+~~~
 
 # Promises and Callbacks
 
