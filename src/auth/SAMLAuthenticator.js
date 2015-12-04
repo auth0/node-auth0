@@ -19,7 +19,7 @@ var SAMLAuthenticator = function (options) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var samlUrl = 'https://' + options.domain + '/samlp/:type/:client_id';
+  var samlUrl = options.baseUrl + '/samlp/:type/:client_id';
 
   this.saml = new RestClient(samlUrl);
   this.clientId = options.clientId;

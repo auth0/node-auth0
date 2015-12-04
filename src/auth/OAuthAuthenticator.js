@@ -19,7 +19,7 @@ var OAuthAuthenticator = function (options) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var oauthUrl = 'https://' + options.domain + '/oauth/ro';
+  var oauthUrl = options.baseUrl + '/oauth/ro';
 
   this.oauth = new RestClient(oauthUrl);
   this.clientId = options.clientId;

@@ -19,7 +19,7 @@ var DatabaseAuthenticator = function (options, oauth) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var dbConnectionsUrl = 'https://' + options.domain + '/dbconnections/:type';
+  var dbConnectionsUrl = options.baseUrl + '/dbconnections/:type';
 
   this.oauth = oauth;
   this.dbConnections = new RestClient(dbConnectionsUrl);
