@@ -1,7 +1,83 @@
-
-# node-auth0 [![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
+[![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installation](#installation)
+- [Management API Client](#management-api-client)
+  - [Usage](#usage)
+  - [Clients](#clients)
+    - [Get all clients](#get-all-clients)
+    - [Create a client](#create-a-client)
+    - [Get a client](#get-a-client)
+    - [Delete a client](#delete-a-client)
+    - [Update a client](#update-a-client)
+  - [Connections](#connections)
+    - [Get all connections](#get-all-connections)
+    - [Create a connection](#create-a-connection)
+    - [Get a connection](#get-a-connection)
+    - [Delete a connection](#delete-a-connection)
+    - [Update a connection](#update-a-connection)
+  - [Device Credentials](#device-credentials)
+    - [List device credentials](#list-device-credentials)
+    - [Create device public key](#create-device-public-key)
+    - [Delete a device credential](#delete-a-device-credential)
+  - [Rules](#rules)
+    - [Get all rules](#get-all-rules)
+    - [Create a rule](#create-a-rule)
+    - [Get a rule](#get-a-rule)
+    - [Delete a rule](#delete-a-rule)
+    - [Update a rule](#update-a-rule)
+  - [Users](#users)
+    - [List or search users](#list-or-search-users)
+    - [Create a user](#create-a-user)
+    - [Get a user](#get-a-user)
+    - [Delete all users](#delete-all-users)
+    - [Delete a user](#delete-a-user)
+    - [Update a user](#update-a-user)
+    - [Update user metadata](#update-user-metadata)
+    - [Update app metadata](#update-app-metadata)
+    - [Link user accounts](#link-user-accounts)
+    - [Unlink user accounts](#unlink-user-accounts)
+    - [Delete user multifactor provider](#delete-user-multifactor-provider)
+  - [Blacklisted Tokens](#blacklisted-tokens)
+    - [Get all blacklisted tokens](#get-all-blacklisted-tokens)
+    - [Blacklist a token](#blacklist-a-token)
+  - [Email Provider](#email-provider)
+    - [Get the email provider](#get-the-email-provider)
+    - [Configure the email provider](#configure-the-email-provider)
+    - [Delete the email provider](#delete-the-email-provider)
+    - [Update the email provider](#update-the-email-provider)
+- [Authentication API Client](#authentication-api-client)
+  - [Usage](#usage-1)
+  - [Database & Active Directory](#database-&-active-directory)
+    - [Sign in](#sign-in)
+    - [Sign up](#sign-up)
+    - [Change password](#change-password)
+  - [Passwordless](#passwordless)
+    - [Send email](#send-email)
+    - [Send SMS](#send-sms)
+    - [Login](#login)
+  - [Users](#users-1)
+    - [User info](#user-info)
+    - [Impersonation](#impersonation)
+  - [Tokens](#tokens)
+    - [Token info](#token-info)
+    - [Delegation Token](#delegation-token)
+- [General](#general)
+  - [Promises and Callbacks](#promises-and-callbacks)
+  - [Examples](#examples)
+  - [Documentation](#documentation)
+  - [What is Auth0?](#what-is-auth0)
+  - [Create a free Auth0 Account](#create-a-free-auth0-account)
+  - [Issue Reporting](#issue-reporting)
+  - [Author](#author)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Installation
 
@@ -1047,7 +1123,9 @@ auth0.tokens.getDelegationToken(data, function (err, token) {
 });
 ~~~
 
-# Promises and Callbacks
+# General
+
+## Promises and Callbacks
 
 Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided no Promise will be returned.
 
