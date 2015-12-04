@@ -852,32 +852,6 @@ var auth0 = new AuthenticationClient({
 });
 ~~~
 
-## OAuth
-This authenticator only works for database connections, passwordless connections, Active Directory/LDAP, Windows Azure AD and ADFS.
-
-### Sign in
-The OAuth `signIn` function takes an object with login data as first parameter and an optional callback as second argument. The data that is required to be included in the object passed as first argument depends on the identity provider: [Database & Active Directory/LDAP](https://auth0.com/docs/auth-api#!#post--oauth-ro), [Passwordless](https://auth0.com/docs/auth-api#!#post--ro_with_sms).
-
-~~~js
-auth0.oauth.signIn(data, function (err, userData) {
-  if (err) {
-    // Handle error.
-  }
-  
-  console.log(userData);
-});
-~~~
-
-The user data object has the following structure.
-
-~~~js
-{
-  id_token: String,
-  access_token: String,
-  token_type: String
-}
-~~~
-
 ## Database & Active Directory
 
 ### Sign in
@@ -928,12 +902,12 @@ var data = {
   connection: 'Username-Password-Authentication'
 };
 
-auth0.database.changePassword(data, function (err, userData) {
+auth0.database.changePassword(data, function (err, message) {
   if (err) {
     // Handle error.
   }
   
-  console.log(userData);
+  console.log(message);
 });
 ~~~
 
@@ -1061,7 +1035,7 @@ var data = {
   id_token: '{ID_TOKEN}',
   api_type: 'app',
   target: '{TARGET}',
-  grant_type: 'password'
+  grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
 };
 
 auth0.tokens.getDelegationToken(data, function (err, token) {
