@@ -20,17 +20,6 @@ var TokensManager = function (options) {
 
 
 /**
- * Refresh the token.
- *
- * @method
- * @memberOf TokensManager
- */
-TokensManager.prototype.refresh = function (accessToken, cb) {
-
-};
-
-
-/**
  * Get the token info.
  *
  * @method
