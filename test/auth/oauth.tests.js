@@ -12,7 +12,7 @@ var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/OAuthAuthenticator');
 
 var validOptions = {
-  domain: DOMAIN,
+  baseUrl: API_URL,
   clientId: CLIENT_ID
 };
 

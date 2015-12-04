@@ -13,7 +13,7 @@ var Authenticator = require(SRC_DIR + '/auth/PasswordlessAuthenticator');
 var OAuth = require(SRC_DIR + '/auth/OAuthAuthenticator');
 
 var validOptions = {
-  domain: DOMAIN,
+  baseUrl: API_URL,
   clientId: CLIENT_ID
 };
 
