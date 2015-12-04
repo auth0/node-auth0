@@ -10,7 +10,7 @@ var RestClient = require('rest-facade').Client;
  * auhtentication services.
  * @constructor
  */
-var SAMLAuthenticator = function (options, oauth) {
+var SAMLAuthenticator = function (options) {
   if (!options) {
     throw new ArgumentError('Missing authenticator options');
   }
@@ -21,31 +21,8 @@ var SAMLAuthenticator = function (options, oauth) {
 
   var samlUrl = 'https://' + options.domain + '/samlp/:type/:client_id';
 
-  this.oauth = oauth;
   this.saml = new RestClient(samlUrl);
   this.clientId = options.clientId;
-};
-
-
-/**
- * Initiate SAML login.
- *
- * @method signIn
- * @memberOf SAMLAuthenticator
- */
-SAMLAuthenticator.prototype.signIn = function (params, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
-
-  if (typeof params !== 'object'
-      || typeof data.connection !== 'string'
-      || data.connection.trim().length === 0) {
-    throw new ArgumentError('connection field is required');
-  }
-
-  return this.saml.get(data, cb);
 };
 
 

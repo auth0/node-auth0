@@ -57,4 +57,5 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
   return this.oauth.create(data);
 };
 
+
 module.exports = OAuthAuthenticator;
