@@ -918,7 +918,7 @@ This client can be used to access Auth0's [Authentication API](https://auth0.com
 
 ## Usage
 
-Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain. The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
+The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
 ~~~js
 var AuthenticationClient = require('auth0'). AuthenticationClient;
