@@ -22,9 +22,9 @@ var BASE_URL_FORMAT = 'https://%s';
  * Authentication Client SDK module.
  * @constructor
  *
- * @param   {Object}  options           Options for the Authentication Client SDK.
- * @param   {String}  options.clientId  Client ID.
- * @param   {String}  [options.domain]  AuthenticationClient server domain.
+ * @param   {Object}  options             Options for the Authentication Client SDK.
+ * @param   {String}  options.domain      AuthenticationClient server domain.
+ * @param   {String}  [options.clientId]  Default client ID.
  */
 var AuthenticationClient = function (options) {
   if (!options || typeof options !== 'object') {
@@ -126,6 +126,12 @@ AuthenticationClient.prototype.getClientInfo = function () {
  *
  * @method
  * @memberOf AuthenticationClient
+ *
+ * @param   {Object}  data              User data object.
+ * @param   {String}  data.email        User email address.
+ * @param   {Object}  [data.authParams] Authentication parameters.
+ *
+ * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
   data.send = 'link';
@@ -139,6 +145,12 @@ AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
  *
  * @method
  * @memberOf AuthenticationClient
+ *
+ * @param   {Object}  data              User data object.
+ * @param   {String}  data.email        User email address.
+ * @param   {Object}  [data.authParams] Authentication parameters.
+ *
+ * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
   data.send = 'code';
@@ -152,6 +164,11 @@ AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
  *
  * @method
  * @memberOf AuthenticationClient
+ *
+ * @param   {Object}  data                User data object.
+ * @param   {String}  data.phone_number   The user phone number.
+ *
+ * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
   var translatedData = {
@@ -167,6 +184,14 @@ AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
  *
  * @method
  * @memberOf AuthenticationClient
+ *
+ * @param   {Object}  data              Credentials object.
+ * @param   {String}  data.username     Phone number.
+ * @param   {String}  data.password     Verification code.
+ * @param   {String}  data.target       Target client ID.
+ * @param   {String}  data.grant_type   Grant type.
+ *
+ * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
   var translatedData = {
@@ -182,7 +207,15 @@ AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
  * Binding for auth0.tokens.getDelegationToken().
  *
  * @method
- * @memberOf AuthenticationClient
+ * @memberOf  AuthenticationClient
+ *
+ * @param   {Object}  data              Token data object.
+ * @param   {String}  data.id_token     The user ID token.
+ * @param   {String}  data.api_type     The API type (aws, firebase, etc).
+ * @param   {String}  data.target       The target client ID.
+ * @param   {String}  data.grant_type   The grant type.
+ *
+ * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
   var translatedData = {
@@ -201,6 +234,13 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
  *
  * @method
  * @memberOf AuthenticationClient
+ *
+ * @param   {Object}    data            User data object.
+ * @param   {String}    data.email      User email.
+ * @param   {String}    data.password   User password.
+ * @param   {String}    data.connection Identity provider for the user.
+ *
+ * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.changePassword = function (data, cb) {
   var translatedData = {
@@ -216,8 +256,12 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
 /**
  * Binding for auth0.users.getInfo().
  *
- * @method getProfile
- * @memberOf AuthenticationClient
+ * @method    getProfile
+ * @memberOf  AuthenticationClient
+ *
+ * @param     {String}  accessToken   The user access token.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
 
