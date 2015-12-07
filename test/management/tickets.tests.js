@@ -147,7 +147,7 @@ describe('TicketsManager', function () {
 
       this
         .tickets
-        .verifyEmail({ includeFields: true, fields: 'test' })
+        .verifyEmail({ include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone())
             .to.be.true;

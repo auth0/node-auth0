@@ -159,7 +159,7 @@ describe('DeviceCredentialsManager', function () {
       nock.cleanAll();
 
       var params = {
-        includeFields: true,
+        include_fields: true,
         fields: 'test'
       };
       var request = nock(API_URL)

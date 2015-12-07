@@ -173,7 +173,7 @@ describe('ConnectionsManager', function () {
 
       this
         .connections
-        .getAll({ includeFields: true, fields: 'test' })
+        .getAll({ include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -302,7 +302,7 @@ describe('ConnectionsManager', function () {
 
       this
         .connections
-        .getAll({ includeFields: true, fields: 'test' })
+        .getAll({ include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone())
             .to.be.true;

@@ -168,7 +168,7 @@ describe('StatsManager', function () {
 
       this
         .stats
-        .getDaily({ includeFields: true, fields: 'test' })
+        .getDaily({ include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();

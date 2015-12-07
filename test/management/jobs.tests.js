@@ -173,7 +173,7 @@ describe('JobsManager', function () {
 
       this
         .jobs
-        .get({ id: this.id, includeFields: true, fields: 'test' })
+        .get({ id: this.id, include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
