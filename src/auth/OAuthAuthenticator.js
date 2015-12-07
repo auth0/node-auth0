@@ -29,8 +29,15 @@ var OAuthAuthenticator = function (options) {
 /**
  * Sign in using a username and password.
  *
- * @method signIn
- * @memberOf OAuthAuthenticator
+ * @method    signIn
+ * @memberOf  OAuthAuthenticator
+ *
+ * @param   {Object}    userData              User credentials object.
+ * @param   {String}    userData.username     Username.
+ * @param   {String}    userData.password     User password.
+ * @param   {String}    userData.connection   The identity provider in use.
+ *
+ * @return  {Promise|undefined}
  */
 OAuthAuthenticator.prototype.signIn = function (userData, cb) {
   var params = {
@@ -64,8 +71,14 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
 /**
  * Sign in using a social provider access token.
  *
- * @method
- * @memberOf OAuthAuthenticator
+ * @method    socialSignIn
+ * @memberOf  OAuthAuthenticator
+ *
+ * @param   {Object}    data                User credentials object.
+ * @param   {String}    data.access_token   User access token.
+ * @param   {String}    data.connection     Identity provider.
+ *
+ * @return  {Promise|undefined}
  */
 OAuthAuthenticator.prototype.socialSignIn = function (data, cb) {
   var params = {
