@@ -19,7 +19,7 @@ var OAuthAuthenticator = function (options) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var oauthUrl = options.baseUrl + '/oauth/ro';
+  var oauthUrl = options.baseUrl + '/oauth/:type';
 
   this.oauth = new RestClient(oauthUrl);
   this.clientId = options.clientId;
@@ -27,12 +27,15 @@ var OAuthAuthenticator = function (options) {
 
 
 /**
- * Sign in using a database or active directory service.
+ * Sign in using a username and password.
  *
  * @method signIn
  * @memberOf OAuthAuthenticator
  */
 OAuthAuthenticator.prototype.signIn = function (userData, cb) {
+  var params = {
+    type: 'ro'
+  };
   var defaultFields = {
     client_id: this.clientId,
     grant_type: 'password',
@@ -51,10 +54,43 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
   }
 
   if (cb && cb instanceof Function) {
-    return this.oauth.create(data, cb);
+    return this.oauth.create(params, data, cb);
   }
 
-  return this.oauth.create(data);
+  return this.oauth.create(params, data);
+};
+
+
+/**
+ * Sign in using a social provider access token.
+ *
+ * @method
+ * @memberOf OAuthAuthenticator
+ */
+OAuthAuthenticator.prototype.socialSignIn = function (data, cb) {
+  var params = {
+    type: 'access_token'
+  };
+
+  if (typeof data !== 'object') {
+    throw new ArgumentError('Missing user credential objects');
+  }
+
+  if (typeof data.access_token !== 'string'
+      || data.access_token.trim().length === 0) {
+    throw new ArgumentError('access_token field is required');
+  }
+
+  if (typeof data.connection !== 'string'
+      || data.connection.trim().length === 0) {
+    throw new ArgumentError('connection field is required');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.oauth.create(params, data, cb);
+  }
+
+  return this.oauth.create(params, data);
 };
 
 

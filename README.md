@@ -928,6 +928,28 @@ var auth0 = new AuthenticationClient({
 });
 ~~~
 
+## Social
+
+### Sign in
+Given the social provider's access_token and the connection specified, it will do the authentication on the provider and return a JSON with the access_token and id_token. Currently, this endpoint only works for Facebook, Google, Twitter and Weibo. More information in the [API Docs](https://auth0.com/docs/auth-api#!#post--oauth-access_token).
+
+~~~js
+var data = {
+  client_id: '{CLIENT_ID}',  // Optional field.
+  access_token: '{USER_SOCIAL_ACCESS_TOKEN}',
+  connection: 'facebook',
+  scope: 'openid'  // Optional field.
+};
+
+auth0.oauth.socialSignIn(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(userData);
+});
+~~~
+
 ## Database & Active Directory
 
 ### Sign in

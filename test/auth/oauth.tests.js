@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var extend = require('util')._extend;
 var nock = require('nock');
+var Promise = require('bluebird');
 
 // Constants.
 var SRC_DIR = '../../src';
@@ -39,7 +40,7 @@ describe('OAuthAuthenticator', function () {
 
 
   describe('instance', function () {
-    var methods = ['signIn'];
+    var methods = ['signIn', 'socialSignIn'];
     var authenticator = new Authenticator(validOptions);
 
     methods.forEach(function (method) {
@@ -251,6 +252,216 @@ describe('OAuthAuthenticator', function () {
           done();
         })
         .catch(done);
+    });
+  });
+
+
+  describe('#socialSignIn', function () {
+    var path = '/oauth/access_token';
+    var userData = {
+      access_token: 'TEST_ACCESS_TOKEN',
+      connection: 'facebook'
+    };
+
+    beforeEach(function () {
+      this.authenticator = new Authenticator(validOptions);
+      this.request = nock(API_URL)
+        .post(path)
+        .reply(200);
+    });
+
+
+    it('should require an object as first argument', function () {
+      var auth = this.authenticator;
+      var socialSignIn = auth.socialSignIn.bind(auth);
+      var message = 'Missing user credential objects';
+
+      expect(socialSignIn)
+        .to.throw(ArgumentError, message);
+
+      expect(socialSignIn.bind(auth, userData))
+        .to.not.throw(ArgumentError, message);
+    });
+
+
+    it('should require an access token', function () {
+      var auth = this.authenticator;
+      var socialSignIn = auth.socialSignIn.bind(auth, {});
+      var message = 'access_token field is required';
+
+      expect(socialSignIn)
+        .to.throw(ArgumentError, message);
+    });
+
+
+    it('should require a connection', function () {
+      var auth = this.authenticator;
+      var data = {
+        access_token: userData.access_token
+      };
+      var socialSignIn = auth.socialSignIn.bind(auth, data);
+      var message = 'connection field is required';
+
+      expect(socialSignIn)
+        .to.throw(ArgumentError, message);
+    });
+
+
+    it('should require a connection', function () {
+      var auth = this.authenticator;
+      var data = {
+        access_token: userData.access_token
+      };
+      var socialSignIn = auth.socialSignIn.bind(auth, data);
+      var message = 'connection field is required';
+
+      expect(socialSignIn)
+        .to.throw(ArgumentError, message);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .authenticator
+        .socialSignIn(userData, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is given', function () {
+      var returnValue = this.authenticator.socialSignIn(userData);
+
+      expect(returnValue)
+        .to.be.an.instanceOf(Promise);
+    });
+
+
+    it('should not return a promise when a callback is given', function () {
+      var cb = function () {};
+      var returnValue = this.authenticator.socialSignIn(userData, cb);
+
+      expect(returnValue)
+        .to.be.undefined;
+    });
+
+
+    it('should perform a POST request to ' + path, function (done) {
+      var request = this.request;
+
+      this
+        .authenticator
+        .socialSignIn(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should use the default client ID if none specified', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path)
+        .query({ client_id: CLIENT_ID })
+        .reply(200);
+
+      this
+        .authenticator
+        .socialSignIn(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should allow the user to specify a custom client ID', function (done) {
+      nock.cleanAll();
+
+      var data = extend({}, userData);
+      var request = nock(API_URL)
+        .post(path)
+        .query({ client_id: 'OVERRIDEN_ID' })
+        .reply(200);
+
+      data.client_id = 'OVERRIDEN_ID';
+
+      this
+        .authenticator
+        .socialSignIn(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should use the openid scope by default', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path)
+        .query({ scope: 'openid' })
+        .reply(200);
+
+      this
+        .authenticator
+        .socialSignIn(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should allow the user to specify the scope', function (done) {
+      nock.cleanAll();
+
+      var data = extend({}, userData);
+      var request = nock(API_URL)
+        .post(path)
+        .query({ scope: 'openid name email' })
+        .reply(200);
+
+      data.scope = 'openid name email';
+
+      this
+        .authenticator
+        .socialSignIn(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should use application/json as Content-Type', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path)
+        .matchHeader('Content-Type', 'application/json')
+        .reply(200);
+
+      this
+        .authenticator
+        .socialSignIn(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
     });
   });
 
