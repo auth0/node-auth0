@@ -976,7 +976,7 @@ Given the user credentials, the connection specified and (optionally) the client
 
 ~~~js
 var data = {
-  username: '{USERNAME}',
+  email: '{EMAIL}',
   password: '{PASSWORD}',
   connection: 'Username-Password-Authentication' // Optional field.
 };

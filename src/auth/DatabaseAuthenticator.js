@@ -30,8 +30,15 @@ var DatabaseAuthenticator = function (options, oauth) {
 /**
  * Sign in using a database or active directory service.
  *
- * @method signIn
- * @memberOf DatabaseAuthenticator
+ * @method    signIn
+ * @memberOf  DatabaseAuthenticator
+ *
+ * @param   {Object}  data              User credentials object.
+ * @param   {String}  data.username     Username.
+ * @param   {String}  data.password     User password.
+ * @param   {Stinrg}  data.connection   Identity provider in use.
+ *
+ * @return  {Promise|undefined}
  */
 DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
   var defaultFields = {
@@ -60,8 +67,15 @@ DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
 /**
  * Sign up using a database or active directory service.
  *
- * @method signUp
- * @memberOf DatabaseAuthenticator
+ * @method    signUp
+ * @memberOf  DatabaseAuthenticator
+ *
+ * @param   {Object}  data              User credentials object.
+ * @param   {String}  data.email        User email address.
+ * @param   {String}  data.password     User password.
+ * @param   {Stinrg}  data.connection   Identity provider in use.
+ *
+ * @return  {Promise|undefined}
  */
 DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
   var params = {
@@ -104,6 +118,13 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
  *
  * @method changePassword
  * @memberOf DatabaseAuthenticator
+ *
+ * @param   {Object}  data              User credentials object.
+ * @param   {String}  data.email        User email address.
+ * @param   {String}  data.password     New password.
+ * @param   {Stinrg}  data.connection   Identity provider in use.
+ *
+ * @return  {Promise|undefined}
  */
 DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
   var params = {
