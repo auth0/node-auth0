@@ -1000,7 +1000,17 @@ var data = {
   connection: 'Username-Password-Authentication'
 };
 
+// Using the database authenticator.
 auth0.database.changePassword(data, function (err, message) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(message);
+});
+
+// Using the Authentication client.
+auth0.changePassword(data, function (err, message) {
   if (err) {
     // Handle error.
   }
@@ -1027,11 +1037,16 @@ var data = {
   authParams: {} // Optional auth params.
 };
 
+// Using the passwordless authenticator.
 auth0.passwordless.sendEmail(data, function (err) {
   if (err) {
     // Handle error.
   }
 });
+
+// Using the authentication client (the 'send' property will be ignored here).
+auth0.requestMagicLink(data, function (err) { ... };
+auth0.requestEmailCode(data, function (err) { ... };
 ~~~
 
 ### Send SMS
@@ -1043,11 +1058,15 @@ var data = {
   phone_number: '{PHONE}'
 };
 
+// Using the passwordless authenticator.
 auth0.passwordless.sendSMS(data, function (err) {
   if (err) {
     // Handle error.
   }
 });
+
+// Using the authentication client.
+auth0.requestSMSCode(data, function (err) { ... });
 ~~~
 
 ### Login
@@ -1059,11 +1078,15 @@ var data = {
   password: '{VERIFICATION_CODE}'
 };
 
+// Using the passwordless authenticator.
 auth0.passwordless.signIn(data, function (err) {
   if (err) {
     // Handle error.
   }
 });
+
+// Using the authentication client.
+auth0.verifySMSCode(data, function (err) { ... });
 ~~~
 
 The user data object has the following structure.
@@ -1082,6 +1105,7 @@ The user data object has the following structure.
 Get the user information based on the Auth0 access token (obtained during login). Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#get--userinfo).
 
 ~~~js
+// Using the users manager.
 auth0.users.getInfo(accessToken, function (err, userInfo) {
   if (err) {
     // Handle error.
@@ -1089,6 +1113,9 @@ auth0.users.getInfo(accessToken, function (err, userInfo) {
   
   console.log(userInfo);
 });
+
+// Using the authentication client.
+auth0.getProfile(data, function (err, userInfo) { ... });
 ~~~
 
 ### Impersonation
@@ -1136,6 +1163,7 @@ var data = {
   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
 };
 
+// Using the tokens manager.
 auth0.tokens.getDelegationToken(data, function (err, token) {
   if (err) {
     // Handle error.
@@ -1143,6 +1171,9 @@ auth0.tokens.getDelegationToken(data, function (err, token) {
   
   console.log(token);
 });
+
+// Using the authentication client.
+auth0.getDelegationToken(data, function (err, token) { ... });
 ~~~
 
 # General
