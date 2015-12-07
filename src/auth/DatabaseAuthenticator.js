@@ -9,6 +9,11 @@ var RestClient = require('rest-facade').Client;
  * Abstracts the sign-in, sign-up and change-password processes for Database &
  * Active Directory auhtentication services.
  * @constructor
+ *
+ * @param  {Object}              options            Authenticator options.
+ * @param  {String}              options.baseUrl    The auth0 account URL.
+ * @param  {String}              [options.clientId] Default client ID.
+ * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
  */
 var DatabaseAuthenticator = function (options, oauth) {
   if (!options) {
