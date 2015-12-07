@@ -8,6 +8,11 @@ var RestClient = require('rest-facade').Client;
  * @class
  * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
  * @constructor
+ *
+ * @param  {Object}              options            Authenticator options.
+ * @param  {String}              options.baseUrl    The auth0 account URL.
+ * @param  {String}              [options.clientId] Default client ID.
+ * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
  */
 var PasswordlessAuthenticator = function (options, oauth) {
   if (!options) {
@@ -31,6 +36,13 @@ var PasswordlessAuthenticator = function (options, oauth) {
  *
  * @method
  * @memberOf PasswordlessAuthenticator
+ *
+ * @param   {Object}    userData              User credentials object.
+ * @param   {String}    userData.username     Username.
+ * @param   {String}    userData.password     Password.
+ * @param   {String}    [userData.client_id]  Client ID.
+ *
+ * @return  {Promise|undefined}
  */
 PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   var defaultFields = {
@@ -65,6 +77,12 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
  *
  * @method
  * @memberOf PasswordlessAuthenticator
+ *
+ * @param   {Object}    userData                User account data.
+ * @param   {String}    userData.email          User email address.
+ * @param   {String}    userData.send           The type of email to be sent.
+ *
+ * @return  {Promise|undefined}
  */
 PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
   var defaultFields = {
@@ -102,6 +120,12 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
  *
  * @method
  * @memberOf PasswordlessAuthenticator
+ *
+ * @param   {Object}  userData                User account data.
+ * @param   {String}  userData.phone_number   User phone number.
+ * @param   {String}  [userData.client_id]    Client ID.
+ *
+ * @return  {Promise|undefined}
  */
 PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
   var defaultFields = {
