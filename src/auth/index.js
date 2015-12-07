@@ -121,4 +121,105 @@ AuthenticationClient.prototype.getClientInfo = function () {
 };
 
 
+/**
+ * Binding for auth0.passwordless.sendEmail().
+ *
+ * @method
+ * @memberOf AuthenticationClient
+ */
+AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
+  data.send = 'link';
+
+  return this.passwordless.sendEmail(data, cb);
+};
+
+
+/**
+ * Binding for auth0.passwordless.sendEmail().
+ *
+ * @method
+ * @memberOf AuthenticationClient
+ */
+AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
+  data.send = 'code';
+
+  return this.passwordless.sendEmail(data, cb);
+};
+
+
+/**
+ * Binding for auth0.passwordless.sendSMS().
+ *
+ * @method
+ * @memberOf AuthenticationClient
+ */
+AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
+  var translatedData = {
+    phone_number: data.phoneNumber || data.phone_number
+  };
+
+  return this.passwordless.sendSMS(translatedData, cb);
+};
+
+
+/**
+ * Binding for auth0.passwordless.login().
+ *
+ * @method
+ * @memberOf AuthenticationClient
+ */
+AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
+  var translatedData = {
+    username: data.phoneNumber || data.phone_number || data.username,
+    password: data.code || data.password
+  };
+
+  return this.passwordless.signIn(translatedData, cb);
+};
+
+
+/**
+ * Binding for auth0.tokens.getDelegationToken().
+ *
+ * @method
+ * @memberOf AuthenticationClient
+ */
+AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
+  var translatedData = {
+    id_token: data.id_token,
+    api_type: data.api || data.api_type,
+    scope: data.scope,
+    target: data.targetClientId || data.target
+  };
+
+  return this.tokens.getDelegationToken(translatedData, cb);
+};
+
+
+/**
+ * Binding for auth0.database.changePassword().
+ *
+ * @method
+ * @memberOf AuthenticationClient
+ */
+AuthenticationClient.prototype.changePassword = function (data, cb) {
+  var translatedData = {
+    connection: data.connection,
+    email: data.email || data.username,
+    password: data.password
+  };
+
+  return this.database.changePassword(data, cb);
+};
+
+
+/**
+ * Binding for auth0.users.getInfo().
+ *
+ * @method getProfile
+ * @memberOf AuthenticationClient
+ */
+utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
+
+
 module.exports = AuthenticationClient;
