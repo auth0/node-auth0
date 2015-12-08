@@ -912,6 +912,131 @@ auth0.emailProvider.update(function (err, provider) {
 });
 ~~~
 
+
+## Jobs
+
+### Get a job
+~~~js
+var params = {
+  id: '{JOB_ID}'
+};
+
+auth0.jobs.get(params, function (err, job) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Retrieved job.
+  console.log(job);
+});
+~~~
+
+### Import users
+~~~js
+var params = {
+  connection_id: '{CONNECTION_ID}',
+  users: '{PATH_TO_USERS_FILE}'
+};
+
+auth0.jobs.get(params, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+### Request email verification
+~~~js
+var params = {
+	user_id: '{USER_ID}'
+};
+
+auth0.jobs.verifyEmail(function (err) { 
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+## Stats
+
+### Get daily stats
+~~~js
+var params = {
+  from: '{YYYYMMDD}',  // First day included in the stats.
+  to: '{YYYYMMDD}'  // Last day included in the stats.
+};
+
+auth0.stats.getDaily(params, function (err, stats) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(stats);
+});
+~~~
+
+### Get active users count
+~~~js
+auth0.stats.getActiveUsersCount(function (err, usersCount) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(usersCount);
+});
+~~~
+
+## Tenant
+
+### Get tenant settings
+~~~js
+auth0.tenant.getSettings(function (err, settings) {
+  if (err) {
+    // Handle error.
+  } 
+  
+  console.log(settings);
+});
+~~~
+
+### Update tenant settings
+~~~js
+auth0.tenant.updateSettings(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+## Tickets
+
+### Create change password ticket
+More info in the [API Docs](https://auth0.com/docs/api/v2#!/Tickets/post_password_change).
+
+~~~js
+var params = {
+  result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+  user_id: '{USER_ID}',  // Optional.
+  email: '{USER_EMAIL}',  // Optional.
+  new_password: '{PASSWORD}'
+}; 
+~~~
+
+### Create email verification ticket.
+~~~js
+var data = {
+  user_id: '{USER_ID}',
+  result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
+};
+
+auth0.tickets.verifyEmail(data, function (err) {
+  if (err) {
+    // Handle error.
+  }	
+});
+~~~
+
 # Authentication API Client
 
 This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
