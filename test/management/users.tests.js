@@ -474,7 +474,7 @@ describe('UsersManager', function () {
 
 
   describe('#delete', function () {
-    var id = 5;
+    var id = 'USER_5';
 
     beforeEach(function () {
       this.request = nock(API_URL)
