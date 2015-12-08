@@ -37,7 +37,7 @@ var ClientsManager = function (options) {
    *
    * @type {Object}
    */
-  clientOptions = {
+  var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };
@@ -69,7 +69,7 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
 /**
  * Get all Auth0 clients.
  *
- * @method  getAll
+ * @method    getAll
  * @memberOf  ClientsManager
  *
  * @param   {Function}  [cb]    Callback function.
@@ -82,7 +82,7 @@ utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
 /**
  * Get an Auth0 client.
  *
- * @method  get
+ * @method    get
  * @memberOf  ClientsManager
  *
  * @param   {Object}    params            Client parameters.

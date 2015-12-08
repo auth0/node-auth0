@@ -3,9 +3,20 @@ var ArgumentError = require('../exceptions').ArgumentError;
 
 
 /**
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
+ */
+
+
+/**
  * @class
  * Abstracts interaction with the stats endpoint.
  * @constructor
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var StatsManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -34,12 +45,19 @@ var StatsManager = function (options){
   this.stats = new RestClient(options.baseUrl + '/stats/:type', clientOptions);
 };
 
+
 /**
  * Get the daily stats.
  *
- * @method
- * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}
+ * @method    getDaily
+ * @memberOf  StatsManager
+ *
+ * @param   {Object}    params        Stats parameters.
+ * @param   {String}    params.from   The first day in YYYYMMDD format.
+ * @param   {String}    params.to     The last day in YYYYMMDD format.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 StatsManager.prototype.getDaily = function (params, cb) {
   params = params || {};
@@ -52,12 +70,16 @@ StatsManager.prototype.getDaily = function (params, cb) {
   return this.stats.get(params);
 };
 
+
 /**
  * Get a the active users count.
  *
- * @method
+ * @method    getActiveUsersCount
+ * @memberOf  StatsManager
+ *
  * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}         User retrieval promise.
+ *
+ * @return  {Promise|undefined}
  */
 StatsManager.prototype.getActiveUsersCount = function (cb) {
   var options = { type: 'active-users' };

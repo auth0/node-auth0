@@ -2,11 +2,13 @@ var RestClient = require('rest-facade').Client;
 var ArgumentError = require('../exceptions').ArgumentError;
 var utils = require('../utils');
 
+
 /**
  * Simple facade for consuming a REST API endpoint.
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
+
 
 /**
  * @class RulesManager
@@ -14,7 +16,9 @@ var utils = require('../utils');
  * on Auth0 RulesManagers.
  * @constructor
  *
- * @param   {Object}   options
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var RulesManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -34,7 +38,7 @@ var RulesManager = function (options) {
    *
    * @type {Object}
    */
-  apiOptions = {
+  var apiOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };
@@ -48,48 +52,76 @@ var RulesManager = function (options) {
   this.resource = new RestClient(options.baseUrl + '/rules/:id ', apiOptions);
 };
 
+
 /**
  * Create a new rule.
  *
  * @method    create
  * @memberOf  RulesManager
- * @return    {Promise}
+ *
+ * @param   {Object}    data     Rule data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
+
 
 /**
  * Get all rules.
  *
  * @method  getAll
  * @memberOf  RulesManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
+
 
 /**
  * Get an Auth0 rule.
  *
  * @method  get
  * @memberOf  RulesManager
- * @return  {Promise}
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
+
 
 /**
  * Update an existing rule.
  *
  * @method    update
  * @memberOf  RulesManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Object}    data          Updated rule data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
+
 
 /**
  * Delete an existing rule.
  *
  * @method    delete
  * @memberOf  RulesManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'delete', 'resource.delete');
 

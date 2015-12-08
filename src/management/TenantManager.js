@@ -3,9 +3,20 @@ var ArgumentError = require('../exceptions').ArgumentError;
 
 
 /**
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
+ */
+
+
+/**
  * @class
  * Abstracts interaction with the tenant endpoint.
  * @constructor
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var TenantManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -37,9 +48,13 @@ var TenantManager = function (options){
 /**
  * Update the tenant settings.
  *
- * @method
+ * @method    updateSettings
+ * @memberOf  TenantManager
+ *
+ * @param   {Object}    data  The new tenant settings.
  * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}
+ *
+ * @return  {Promise|undefined}
  */
 TenantManager.prototype.updateSettings = function (data, cb) {
   if (cb && cb instanceof Function) {
@@ -53,9 +68,12 @@ TenantManager.prototype.updateSettings = function (data, cb) {
 /**
  * Get the tenant settings..
  *
- * @method
+ * @method    getSettings
+ * @memberOf  TenantManager
+ *
  * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}
+ *
+ * @return  {Promise|undefined}
  */
 TenantManager.prototype.getSettings = function (cb) {
   if (cb && cb instanceof Function) {
