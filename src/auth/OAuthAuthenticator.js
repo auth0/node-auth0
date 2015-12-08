@@ -40,6 +40,7 @@ var OAuthAuthenticator = function (options) {
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     User password.
  * @param   {String}    userData.connection   The identity provider in use.
+ * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -81,6 +82,7 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
  * @param   {Object}    data                User credentials object.
  * @param   {String}    data.access_token   User access token.
  * @param   {String}    data.connection     Identity provider.
+ * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
  */

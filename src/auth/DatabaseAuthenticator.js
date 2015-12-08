@@ -38,10 +38,11 @@ var DatabaseAuthenticator = function (options, oauth) {
  * @method    signIn
  * @memberOf  DatabaseAuthenticator
  *
- * @param   {Object}  data              User credentials object.
- * @param   {String}  data.username     Username.
- * @param   {String}  data.password     User password.
- * @param   {Stinrg}  data.connection   Identity provider in use.
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.username     Username.
+ * @param   {String}    data.password     User password.
+ * @param   {String}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -75,10 +76,11 @@ DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
  * @method    signUp
  * @memberOf  DatabaseAuthenticator
  *
- * @param   {Object}  data              User credentials object.
- * @param   {String}  data.email        User email address.
- * @param   {String}  data.password     User password.
- * @param   {Stinrg}  data.connection   Identity provider in use.
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.email        User email address.
+ * @param   {String}    data.password     User password.
+ * @param   {Stinrg}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -124,10 +126,11 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
  * @method changePassword
  * @memberOf DatabaseAuthenticator
  *
- * @param   {Object}  data              User credentials object.
- * @param   {String}  data.email        User email address.
- * @param   {String}  data.password     New password.
- * @param   {Stinrg}  data.connection   Identity provider in use.
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.email        User email address.
+ * @param   {String}    data.password     New password.
+ * @param   {String}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */

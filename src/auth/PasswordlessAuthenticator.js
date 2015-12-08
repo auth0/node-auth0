@@ -41,6 +41,7 @@ var PasswordlessAuthenticator = function (options, oauth) {
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
  * @param   {String}    [userData.client_id]  Client ID.
+ * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -81,6 +82,7 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.email          User email address.
  * @param   {String}    userData.send           The type of email to be sent.
+ * @param   {Function}  [cb]                    Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -121,9 +123,10 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
  * @method
  * @memberOf PasswordlessAuthenticator
  *
- * @param   {Object}  userData                User account data.
- * @param   {String}  userData.phone_number   User phone number.
- * @param   {String}  [userData.client_id]    Client ID.
+ * @param   {Object}    userData                User account data.
+ * @param   {String}    userData.phone_number   User phone number.
+ * @param   {String}    [userData.client_id]    Client ID.
+ * @param   {Function}  [cb]                    Method callback.
  *
  * @return  {Promise|undefined}
  */

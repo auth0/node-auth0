@@ -4,6 +4,16 @@ var getRequestPromise = require('../utils').getRequestPromise;
 var ArgumentError = require('../exceptions').ArgumentError;
 
 
+/**
+ * @class
+ * Provides methods for getting user information and impersonating users.
+ * @constructor
+ *
+ * @param  {Object}   options               Manager options.
+ * @param  {String}   options.baseUrl       The auth0 account URL.
+ * @param  {String}   [options.headers]     Default request headers.
+ * @param  {String}   [options.clientId]    Default client ID.
+ */
 var UsersManager = function (options) {
   if (typeof options !== 'object') {
     throw new ArgumentError('Missing users manager options');
@@ -20,10 +30,15 @@ var UsersManager = function (options) {
 
 
 /**
- * Get the user profile.
+ * Given an access token get the user profile linked to it.
  *
  * @method
  * @memberOf UsersManager
+ *
+ * @param   {String}    accessToken   User access token.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.getInfo = function (accessToken, cb) {
   var url = this.baseUrl + '/userinfo';
@@ -64,6 +79,14 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
  *
  * @method
  * @memberOf UsersManager
+ *
+ * @param   {String}    userId                    User ID token.
+ * @param   {Object}    settings                  Impersonation settings.
+ * @param   {String}    settings.impersonator_id  Impersonator user ID.
+ * @param   {String}    settings.protocol         The authentication protocol.
+ * @param   {Function}  [cb]]                     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.impersonate = function (userId, settings, cb) {
   var url = this.baseUrl + '/users/' + userId + '/impersonate';

@@ -4,6 +4,16 @@ var getRequestPromise = require('../utils').getRequestPromise;
 var ArgumentError = require('../exceptions').ArgumentError;
 
 
+/**
+ * @class
+ * Provides methods for getting token data and exchanging tokens.
+ * @constructor
+ *
+ * @param  {Object}   options               Manager options.
+ * @param  {String}   options.baseUrl       The auth0 account URL.
+ * @param  {String}   [options.headers]     Default request headers.
+ * @param  {String}   [options.clientId]    Default client ID.
+ */
 var TokensManager = function (options) {
   if (typeof options !== 'object') {
     throw new ArgumentError('Missing tokens manager options');
@@ -20,10 +30,15 @@ var TokensManager = function (options) {
 
 
 /**
- * Get the token info.
+ * Given an ID token get the user profile linked to it.
  *
  * @method
  * @memberOf TokensManager
+ *
+ * @param   {String}    idToken     User ID token.
+ * @param   {Function}  [cb]        Method callback.
+ *
+ * @return  {Promise|undefined}
  */
 TokensManager.prototype.getInfo = function (idToken, cb) {
   var headers = extend({}, this.headers);
@@ -62,6 +77,15 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  *
  * @method
  * @memberOf TokensManager
+ *
+ * @param   {Object}    data              Token data object.
+ * @param   {String}    data.id_token     User ID token.
+ * @param   {String}    data.target       Target client ID.
+ * @param   {String}    data.api_type     The API to be used (aws, auth0, etc).
+ * @param   {String}    data.grant_type   Grant type (password, jwt, etc).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 TokensManager.prototype.getDelegationToken = function (data, cb) {
   var body = extend({ client_id : this.clientId }, data);
@@ -71,19 +95,23 @@ TokensManager.prototype.getDelegationToken = function (data, cb) {
     throw new ArgumentError('Missing token data object');
   }
 
-  if (typeof data.id_token !== 'string' || data.id_token.trim().length === 0) {
+  if (typeof data.id_token !== 'string'
+      || data.id_token.trim().length === 0) {
     throw new ArgumentError('id_token field is required');
   }
 
-  if (typeof data.target !== 'string' || data.target.trim().length === 0) {
+  if (typeof data.target !== 'string'
+      || data.target.trim().length === 0) {
     throw new ArgumentError('target field is required');
   }
 
-  if (typeof data.api_type !== 'string' || data.api_type.trim().length === 0) {
+  if (typeof data.api_type !== 'string'
+      || data.api_type.trim().length === 0) {
     throw new ArgumentError('api_type field is required');
   }
 
-  if (typeof data.grant_type !== 'string' || data.grant_type.trim().length === 0) {
+  if (typeof data.grant_type !== 'string'
+      || data.grant_type.trim().length === 0) {
     throw new ArgumentError('grant_type field is required');
   }
 
