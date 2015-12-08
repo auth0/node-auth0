@@ -2,21 +2,22 @@ var RestClient = require('rest-facade').Client;
 var ArgumentError = require('../exceptions').ArgumentError;
 var utils = require('../utils');
 
+
 /**
  * Simple facade for consuming a REST API endpoint.
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
+
 /**
  * @class DeviceCredentialsManager
  * Manages Auth0 Device Credentials.
  * @constructor
  *
- * @param {Object} options            The credential options.
- * @param {String} options.token      The API access token.
- * @param {String} [options.region]   The code for the region in use.
- * @param {String} [options.domain]   The API domain for the region in use.
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var DeviceCredentialsManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -50,30 +51,45 @@ var DeviceCredentialsManager = function (options) {
   this.resource = new RestClient(options.baseUrl + '/device-credentials/:id', clientOptions);
 };
 
+
 /**
  * Create an Auth0 credential.
  *
  * @method    create
  * @memberOf  DeviceCredentialsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    data     The device credential data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.create');
+
 
 /**
  * Get all Auth0 credentials.
  *
  * @method  getAll
  * @memberOf  DeviceCredentialsManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
+
 
 /**
  * Delete an Auth0 device credential.
  *
  * @method    delete
  * @memberOf  DeviceCredentialsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params          Credential parameters.
+ * @param   {String}    params.id       Device credential ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'delete', 'resource.delete');
 
