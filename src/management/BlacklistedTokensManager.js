@@ -2,11 +2,13 @@ var RestClient = require('rest-facade').Client;
 var ArgumentError = require('../exceptions').ArgumentError;
 var utils = require('../utils');
 
+
 /**
  * Simple facade for consuming a REST API endpoint.
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
+
 
 /**
  * @class BlacklistedTokensManager
@@ -14,9 +16,8 @@ var utils = require('../utils');
  * @constructor
  *
  * @param {Object} options            The client options.
- * @param {String} options.token      The API access token.
- * @param {String} [options.region]   The code for the region in use.
- * @param {String} [options.domain]   The API domain for the region in use.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var BlacklistedTokensManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -50,21 +51,32 @@ var BlacklistedTokensManager = function (options) {
   this.resource = new RestClient(options.baseUrl + '/blacklists/tokens', clientOptions);
 };
 
+
 /**
  * Blacklist a new token.
  *
  * @method    create
  * @memberOf  BlacklistedTokensManager
- * @return    {Promise}
+ *
+ * @param   {Object}    token      Token data.
+ * @param   {String}    token.aud  Audience (your app client ID).
+ * @param   {String}    token.jti  The JWT ID claim.
+ * @param   {Function}  [cb]       Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
+
 
 /**
  * Get all blacklisted tokens.
  *
  * @method  getAll
  * @memberOf  BlacklistedTokensManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(BlacklistedTokensManager, 'getAll', 'resource.getAll');
 
