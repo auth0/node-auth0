@@ -37,7 +37,7 @@ var ConnectionsManager = function (options) {
    *
    * @type {Object}
    */
-  apiOptions = {
+  var apiOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };

@@ -89,7 +89,7 @@ StatsManager.prototype.getActiveUsersCount = function (cb) {
   }
 
   // Return a promise.
-  return this.stats.get(options)
+  return this.stats.get(options);
 };
 
 

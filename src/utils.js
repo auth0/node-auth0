@@ -44,7 +44,7 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
       return this[property][method].bind(this[property]);
     }
   });
-}
+};
 
 
 /**
@@ -77,4 +77,3 @@ utils.getRequestPromise = function (settings) {
     });
   });
 };
-

@@ -21,7 +21,7 @@ var utils = require('../utils');
  */
 var EmailProviderManager = function (options) {
   if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide client options');h
+    throw new ArgumentError('Must provide client options');
   }
 
   if (options.baseUrl === null || options.baseUrl === undefined) {
@@ -37,7 +37,7 @@ var EmailProviderManager = function (options) {
    *
    * @type {Object}
    */
-  clientOptions = {
+  var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };
