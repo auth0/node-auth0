@@ -151,10 +151,10 @@ UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
   };
 
   if (cb && cb instanceof Function) {
-    return this.users.patch(params, metadata, cb);
+    return this.users.patch(params, data, cb);
   }
 
-  return this.users.patch(params, metadata);
+  return this.users.patch(params, data);
 };
 
 
