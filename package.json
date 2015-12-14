@@ -6,7 +6,7 @@
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec $(find ./test -name *.tests.js) && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test-watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch",
-    "docs-build": "jsdoc src/*.js -d docs -t node_modules/latodoc"
+    "docs-build": "jsdoc src/**/*.js -d docs -t node_modules/latodoc"
   },
   "repository": {
     "type": "git",
