@@ -28,7 +28,9 @@ describe('UsersManager', function () {
       'deleteAll',
       'unlink',
       'link',
-      'deleteMultifactorProvider'
+      'deleteMultifactorProvider',
+      'updateUserMetadata',
+      'updateAppMetadata'
     ];
 
     methods.forEach(function (method) {
@@ -825,6 +827,93 @@ describe('UsersManager', function () {
         .then(function () {
           expect(request.isDone())
             .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
+  describe('#updateUserMetadata', function () {
+    beforeEach(function () {
+      this.data = {
+        id: 5,
+        foo: 'bar',
+        test: 'data'
+      };
+
+      this.request = nock(API_URL)
+        .patch('/users/' + this.data.id)
+        .reply(200, this.data);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .users
+        .updateUserMetadata({ id: 5 }, {}, done.bind(null, null));
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .users
+        .updateUserMetadata({ id: 5 }, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should perform a PATCH request to /api/v2/users/5', function (done) {
+      var request = this.request;
+
+      this
+        .users
+        .updateUserMetadata({ id: 5 }, {})
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the metadata in the body of the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/users/' + this.data.id, {
+          user_metadata: this.data
+        })
+        .reply(200);
+
+      this
+        .users
+        .updateUserMetadata({ id: 5 }, this.data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/users/' + this.data.id)
+        .reply(500);
+
+      this
+        .users
+        .updateUserMetadata({ id: this.data.id }, this.data)
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
 
           done();
         });
