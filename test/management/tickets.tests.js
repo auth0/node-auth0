@@ -1,16 +1,17 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var StatsManager = require('../src/StatsManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
+var SRC_DIR = '../../src';
+var API_URL = 'https://tenants.auth0.com';
 
-var API_URL = 'https://tenant.auth0.com';
+var TicketsManager = require(SRC_DIR + '/management/TicketsManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
-describe('StatsManager', function () {
+describe('TicketsManager', function () {
   before(function () {
     this.token = 'TOKEN';
-    this.stats = new StatsManager({
+    this.tickets = new TicketsManager({
       headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
@@ -18,11 +19,11 @@ describe('StatsManager', function () {
 
 
   describe('instance', function () {
-    var methods = ['getActiveUsersCount', 'getDaily'];
+    var methods = ['changePassword', 'verifyEmail'];
 
     methods.forEach(function (method) {
       it('should have a ' + method + ' method', function () {
-        expect(this.stats[method])
+        expect(this.tickets[method])
           .to.exist
           .to.be.an.instanceOf(Function);
       })
@@ -32,40 +33,45 @@ describe('StatsManager', function () {
 
   describe('#constructor', function () {
     it('should error when no options are provided', function () {
-      expect(StatsManager)
+      expect(TicketsManager)
         .to.throw(ArgumentError, 'Must provide manager options');
     });
 
 
     it('should throw an error when no base URL is provided', function () {
-      var client = StatsManager.bind(null, {});
+      var manager = TicketsManager.bind(null, {});
 
-      expect(client)
+      expect(manager)
         .to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
 
     it('should throw an error when the base URL is invalid', function () {
-      var client = StatsManager.bind(null, { baseUrl: '' });
+      var manager = TicketsManager.bind(null, { baseUrl: '' });
 
-      expect(client)
+      expect(manager)
         .to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
 
-  describe('#getDaily', function () {
+  describe('#verifyEmail', function () {
+    var data = {
+      result_url: "http://myapp.com/callback",
+      user_id: ""
+    };
+
     beforeEach(function () {
       this.request = nock(API_URL)
-        .get('/stats/daily')
+        .post('/tickets/email-verification')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .stats
-        .getDaily({}, function () {
+        .tickets
+        .verifyEmail(data, function () {
         done();
       });
     });
@@ -73,8 +79,8 @@ describe('StatsManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .stats
-        .getDaily()
+        .tickets
+        .verifyEmail(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -84,12 +90,12 @@ describe('StatsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/stats/daily')
+        .post('tickets/email-verification')
         .reply(500);
 
       this
-        .stats
-        .getDaily()
+        .tickets
+        .verifyEmail(data)
         .catch(function (err) {
           expect(err).to.exist;
           done();
@@ -97,38 +103,12 @@ describe('StatsManager', function () {
     });
 
 
-    it('should pass the body of the response to the "then" handler', function (done) {
-      nock.cleanAll();
-
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/stats/daily')
-        .reply(200, data);
-
-      this
-        .stats
-        .getDaily()
-        .then(function (blacklistedTokens) {
-          expect(blacklistedTokens)
-            .to.be.an.instanceOf(Array);
-
-          expect(blacklistedTokens.length)
-            .to.equal(data.length);
-
-          expect(blacklistedTokens[0].test)
-            .to.equal(data[0].test);
-
-          done();
-        });
-    });
-
-
-    it('should perform a GET request to /api/v2/stats/daily', function (done) {
+    it('should perform a POST request to /api/v2tickets/email-verification', function (done) {
       var request = this.request;
 
       this
-        .stats
-        .getDaily()
+        .tickets
+        .verifyEmail(data)
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -140,13 +120,13 @@ describe('StatsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/stats/daily')
+        .post('/tickets/email-verification')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .stats
-        .getDaily()
+        .tickets
+        .verifyEmail({})
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -158,7 +138,7 @@ describe('StatsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/stats/daily')
+        .post('/tickets/email-verification')
         .query({
           include_fields: true,
           fields: 'test'
@@ -166,28 +146,39 @@ describe('StatsManager', function () {
         .reply(200)
 
       this
-        .stats
-        .getDaily({ includeFields: true, fields: 'test' })
+        .tickets
+        .verifyEmail({ include_fields: true, fields: 'test' })
         .then(function () {
-          expect(request.isDone()).to.be.true;
+          expect(request.isDone())
+            .to.be.true;
+
           done();
         });
     });
   });
 
 
-  describe('#getActiveUsersCount', function () {
+  describe('#changePassword', function () {
+    var data = {
+      result_url: "http://myapp.com/callback",
+      user_id: "",
+      new_password: "secret",
+      connection_id: "con_0000000000000001",
+      email: ""
+    };
+
+
     beforeEach(function () {
       this.request = nock(API_URL)
-        .get('/stats/active-users')
+        .post('/tickets/password-change')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .stats
-        .getActiveUsersCount(function () {
+        .tickets
+        .changePassword(data, function () {
           done();
         });
     });
@@ -195,8 +186,8 @@ describe('StatsManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .stats
-        .getActiveUsersCount()
+        .tickets
+        .changePassword(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -206,12 +197,12 @@ describe('StatsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/stats/active-users')
+        .post('/tickets/email-verification')
         .reply(500);
 
       this
-        .stats
-        .getActiveUsersCount()
+        .tickets
+        .changePassword(data)
         .catch(function (err) {
           expect(err).to.exist;
           done();
@@ -219,12 +210,12 @@ describe('StatsManager', function () {
     });
 
 
-    it('should perform a GET request to /api/v2/stats/active-users', function (done) {
+    it('should perform a POST request to /api/v2tickets/email-verification', function (done) {
       var request = this.request;
 
       this
-        .stats
-        .getActiveUsersCount()
+        .tickets
+        .changePassword(data)
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();
@@ -232,16 +223,16 @@ describe('StatsManager', function () {
     });
 
 
-    it('should pass the token data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/stats/active-users')
+        .post('/tickets/password-change', data)
         .reply(200);
 
       this
-        .stats
-        .getActiveUsersCount()
+        .tickets
+        .changePassword(data)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -255,13 +246,13 @@ describe('StatsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/stats/active-users')
+        .post('/tickets/password-change')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .stats
-        .getActiveUsersCount()
+        .tickets
+        .changePassword(data)
         .then(function () {
           expect(request.isDone()).to.be.true;
           done();

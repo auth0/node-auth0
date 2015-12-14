@@ -1,11 +1,22 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
+var ArgumentError = require('../exceptions').ArgumentError;
+
+
+/**
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
+ */
 
 
 /**
  * @class
  * Abstracts interaction with the users endpoint.
  * @constructor
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var UsersManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -47,10 +58,13 @@ var UsersManager = function (options){
 /**
  * Create a new user.
  *
- * @method
+ * @method    create
+ * @memberOf  UsersManager
+ *
  * @param   {Object}    data    User data.
  * @param   {Function}  [cb]    Callback function.
- * @return  {Promise}           User creation promise.
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.create = function (data, cb) {
   if (cb && cb instanceof Function) {
@@ -64,11 +78,21 @@ UsersManager.prototype.create = function (data, cb) {
 /**
  * Get all users.
  *
- * @method
- * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}         UsersManager retrieval promise.
+ * @method    getAll
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    [params]          Users params.
+ * @param   {Number}    [params.per_page] Number of users per page.
+ * @param   {Number}    [params.page]     Page number.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
-UsersManager.prototype.getAll = function () {
+UsersManager.prototype.getAll = function (params) {
+  if (typeof params === 'object' && typeof params.q === 'string') {
+    params.q = encodeURIComponent(params.q);
+  }
+
   return this.users.getAll.apply(this.users, arguments);
 };
 
@@ -76,10 +100,14 @@ UsersManager.prototype.getAll = function () {
 /**
  * Get a user by its id.
  *
- * @method
- * @param   {any}       id    The user id.
- * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}         User retrieval promise.
+ * @method    get
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.get = function () {
   return this.users.get.apply(this.users, arguments);
@@ -89,11 +117,15 @@ UsersManager.prototype.get = function () {
 /**
  * Update a user by its id.
  *
- * @method
- * @param   {any}       params  The user id.
- * @param   {Object}    data    New user data.
- * @param   {Function}  [cb]    Callback function
- * @return  {Promise}           User update promise.
+ * @method    update
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    params      The user parameters.
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    data        New user data.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.update = function () {
   return this.users.patch.apply(this.users, arguments);
@@ -103,11 +135,15 @@ UsersManager.prototype.update = function () {
 /**
  * Update the user metadata.
  *
- * @method
- * @param   {any}       params  The user id.
- * @param   {Object}    data    New user metadata.
- * @param   {Function}  [cb]    Callback function
- * @return  {Promise}
+ * @method    updateUserMetadata
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    metadata    New user metadata.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
   var data = {
@@ -123,13 +159,17 @@ UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
 
 
 /**
- * Update the user metadata.
+ * Update the app metadata.
  *
- * @method
- * @param   {any}       params  The user id.
- * @param   {Object}    data    New user metadata.
- * @param   {Function}  [cb]    Callback function
- * @return  {Promise}
+ * @method    updateAppMetadata
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    metadata    New app metadata.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
   var data = {
@@ -147,11 +187,17 @@ UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
 /**
  * Delete a user by its id.
  *
- * @method
- * @return  {Promise}           User delete promise.
+ * @method    delete
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.delete = function (params) {
-  if (typeof params !== 'object' || Number.isNaN(params.id)) {
+  if (typeof params !== 'object' || typeof params.id !== 'string') {
     throw new ArgumentError('You must provide an id for the delete method');
   }
 
@@ -162,8 +208,12 @@ UsersManager.prototype.delete = function (params) {
 /**
  * Delete all users.
  *
- * @method
- * @return  {Promise}
+ * @method    deleteAll
+ * @memberOf  UsersManager
+ *
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.deleteAll = function (cb) {
   if (typeof cb !== 'function') {
@@ -179,8 +229,15 @@ UsersManager.prototype.deleteAll = function (cb) {
 /**
  * Delete a multifactor provider.
  *
- * @method
- * @return  {Promise}
+ * @method    deleteMultifactorProvider
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.id         The user id.
+ * @param   {String}    params.provider   Multifactor provider.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
   params = params || {};
@@ -204,8 +261,16 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
 /**
  * Link the user with another account.
  *
- * @method
- * @return  {Promise}
+ * @method    link
+ * @memberOf  UsersManager
+ *
+ * @param   {String}    userId                ID of the primary user.
+ * @param   {Object}    params                Secondary user data.
+ * @param   {String}    params.user_id        ID of the user to be linked.
+ * @param   {String}    params.connection_id  ID of the connection to be used.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 UsersManager.prototype.link = function (userId, params, cb) {
   var query = { id: userId };
@@ -227,8 +292,16 @@ UsersManager.prototype.link = function (userId, params, cb) {
 /**
  * Unlink the given accounts.
  *
- * @method
- * @return {Promise}
+ * @method    unlink
+ * @memberOf  UsersManager
+ *
+ * @param   {Object}    params            Linked users data.
+ * @param   {String}    params.id         Primary user ID.
+ * @param   {String}    params.provider   Identity provider in use.
+ * @param   {String}    params.user_id    Secondary user ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return {Promise|undefined}
  */
 UsersManager.prototype.unlink = function (params, cb) {
   params = params || {};

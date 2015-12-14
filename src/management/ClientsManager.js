@@ -1,6 +1,7 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
-var utils = require('./utils');
+var ArgumentError = require('../exceptions').ArgumentError;
+var utils = require('../utils');
+
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -8,15 +9,15 @@ var utils = require('./utils');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
+
 /**
  * @class ClientsManager
  * Auth0 Clients Manager.
  * @constructor
  *
  * @param {Object} options            The client options.
- * @param {String} options.token      The API access token.
- * @param {String} [options.region]   The code for the region in use.
- * @param {String} [options.domain]   The API domain for the region in use.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var ClientsManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -36,7 +37,7 @@ var ClientsManager = function (options) {
    *
    * @type {Object}
    */
-  clientOptions = {
+  var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };
@@ -50,48 +51,76 @@ var ClientsManager = function (options) {
   this.resource = new RestClient(options.baseUrl + '/clients/:client_id', clientOptions);
 };
 
+
 /**
  * Create an Auth0 client.
  *
  * @method    create
  * @memberOf  ClientsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    data     The client data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
+
 
 /**
  * Get all Auth0 clients.
  *
- * @method  getAll
+ * @method    getAll
  * @memberOf  ClientsManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
+
 
 /**
  * Get an Auth0 client.
  *
- * @method  get
+ * @method    get
  * @memberOf  ClientsManager
- * @return  {Promise}
+ *
+ * @param   {Object}    params            Client parameters.
+ * @param   {String}    params.client_id  Application client ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
+
 
 /**
  * Update an Auth0 client.
  *
  * @method    update
  * @memberOf  ClientsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params            Client parameters.
+ * @param   {String}    params.client_id  Application client ID.
+ * @param   {Object}    data              Updated client data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
+
 
 /**
  * Delete an Auth0 client.
  *
  * @method    delete
  * @memberOf  ClientsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params            Client parameters.
+ * @param   {String}    params.client_id  Application client ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'delete', 'resource.delete');
 

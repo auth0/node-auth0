@@ -1,19 +1,17 @@
-var path = require('path');
 var expect = require('chai').expect;
 var nock = require('nock');
-var extractParts = require('./utils').extractParts;
 
-var JobsManager = require('../src/JobsManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
-
+var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
+var EmailProviderManager = require(SRC_DIR + '/management/EmailProviderManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
-describe('JobsManager', function () {
+
+describe('EmailProviderManager', function () {
   before(function () {
     this.token = 'TOKEN';
-    this.id = 'testJob';
-    this.jobs = new JobsManager({
+    this.emailProvider = new EmailProviderManager({
       headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
@@ -21,11 +19,11 @@ describe('JobsManager', function () {
 
 
   describe('instance', function () {
-    var methods = ['verifyEmail', 'importUsers', 'get'];
+    var methods = ['configure', 'get', 'update', 'delete'];
 
     methods.forEach(function (method) {
       it('should have a ' + method + ' method', function () {
-        expect(this.jobs[method])
+        expect(this.emailProvider[method])
           .to.exist
           .to.be.an.instanceOf(Function);
       })
@@ -35,13 +33,13 @@ describe('JobsManager', function () {
 
   describe('#constructor', function () {
     it('should error when no options are provided', function () {
-      expect(JobsManager)
+      expect(EmailProviderManager)
         .to.throw(ArgumentError, 'Must provide client options');
     });
 
 
     it('should throw an error when no base URL is provided', function () {
-      var client = JobsManager.bind(null, {});
+      var client = EmailProviderManager.bind(null, {});
 
       expect(client)
         .to.throw(ArgumentError, 'Must provide a base URL for the API');
@@ -49,7 +47,7 @@ describe('JobsManager', function () {
 
 
     it('should throw an error when the base URL is invalid', function () {
-      var client = JobsManager.bind(null, { baseUrl: '' });
+      var client = EmailProviderManager.bind(null, { baseUrl: '' });
 
       expect(client)
         .to.throw(ArgumentError, 'The provided base URL is invalid');
@@ -58,146 +56,22 @@ describe('JobsManager', function () {
 
 
   describe('#get', function () {
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .reply(200);
-    })
-
-
-    it('should accept a callback', function (done) {
-      this
-        .jobs
-        .get({ id: this.id }, function () {
-          done();
-        });
-    });
-
-
-    it('should return a promise if no callback is given', function (done) {
-      this
-        .jobs
-        .get({ id: this.id })
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-
-    it('should pass any errors to the promise catch handler', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .reply(500);
-
-      this
-        .jobs
-        .get({ id: this.id })
-        .catch(function (err) {
-          expect(err).to.exist;
-          done();
-        });
-    });
-
-
-    it('should pass the body of the response to the "then" handler', function (done) {
-      nock.cleanAll();
-
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .reply(200, data);
-
-      this
-        .jobs
-        .get({ id: this.id })
-        .then(function (blacklistedTokens) {
-          expect(blacklistedTokens)
-            .to.be.an.instanceOf(Array);
-
-          expect(blacklistedTokens.length)
-            .to.equal(data.length);
-
-          expect(blacklistedTokens[0].test)
-            .to.equal(data[0].test);
-
-          done();
-        });
-    });
-
-
-    it('should perform a GET request to /api/v2/jobs', function (done) {
-      var request = this.request;
-
-      this
-        .jobs
-        .get({ id: this.id })
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should include the token in the Authorization header', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
-        .reply(200)
-
-      this
-        .jobs
-        .get({ id: this.id })
-        .then(function () {
-          expect(request.isDone()).to.be.true;
-          done();
-        });
-    });
-
-
-    it('should pass the parameters in the query-string', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .query({
-          include_fields: true,
-          fields: 'test'
-        })
-        .reply(200)
-
-      this
-        .jobs
-        .get({ id: this.id, includeFields: true, fields: 'test' })
-        .then(function () {
-          expect(request.isDone()).to.be.true;
-          done();
-        });
-    });
-  });
-
-
-  describe('#importUsers', function () {
     var data = {
-      users: path.join(__dirname, './data/users.json'),
-      connection_id: 'con_test'
+      name: 'Test provider',
+      options: {}
     };
 
     beforeEach(function () {
       this.request = nock(API_URL)
-        .post('/jobs/users-imports')
+        .get('/emails/provider')
         .reply(200);
     })
 
 
     it('should accept a callback', function (done) {
       this
-        .jobs
-        .importUsers(data, function () {
+        .emailProvider
+        .get(function () {
           done();
         });
     });
@@ -205,8 +79,8 @@ describe('JobsManager', function () {
 
     it('should return a promise if no callback is given', function (done) {
       this
-        .jobs
-        .importUsers(data)
+        .emailProvider
+        .get()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -216,162 +90,12 @@ describe('JobsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/jobs/users-imports')
+        .get('/emails/provider')
         .reply(500);
 
       this
-        .jobs
-        .importUsers(data)
-        .catch(function (err) {
-          expect(err).to.exist;
-          done();
-        });
-    });
-
-
-    it('should perform a POST request to /api/v2/jobs/users-imports', function (done) {
-      var request = this.request;
-
-      this
-        .jobs
-        .importUsers(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should be a multipart request', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .matchHeader('Content-Type', function (header) {
-          return header.indexOf('multipart/form-data') === 0;
-        })
-        .reply(200);
-
-      this
-        .jobs
-        .importUsers(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should have two parts: connection_id and users file', function (done) {
-      nock.cleanAll();
-      var boundary = null;
-
-      var request = nock(API_URL)
-        .matchHeader('Content-Type', function (header) {
-          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
-
-          return true;
-        })
-        .post('/jobs/users-imports', function (body) {
-          var parts = extractParts(body, boundary);
-
-          // Validate the connection id.
-          expect(parts.connection_id)
-            .to.exist
-            .to.be.a('string')
-            .to.equal(data.connection_id);
-
-          // Validate the content type of the users JSON.
-          expect(parts.users)
-            .to.exist
-            .to.be.a('string')
-            .to.contain('Content-Type: application/json');
-
-          // Validate the content of the users JSON.
-          expect(parts.users.slice(-2))
-            .to.equal('[]');
-
-          return true;
-        })
-        .reply(200);
-
-      this
-        .jobs
-        .importUsers(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-
-
-    it('should include the token in the Authorization header', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
-        .reply(200)
-
-      this
-        .jobs
-        .importUsers(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
-
-          done();
-        });
-    });
-  });
-
-
-  describe('#verifyEmail', function () {
-    var data = {
-      user_id: 'github|12345',
-    };
-
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .post('/jobs/verification-email')
-        .reply(200, data);
-    })
-
-
-    it('should accept a callback', function (done) {
-      this
-        .jobs
-        .verifyEmail(data, function () {
-          done();
-        });
-    });
-
-
-    it('should return a promise if no callback is given', function (done) {
-      this
-        .jobs
-        .verifyEmail(data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-
-    it('should pass any errors to the promise catch handler', function (done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post('/jobs/verification-email')
-        .reply(500);
-
-      this
-        .jobs
-        .verifyEmail(data)
+        .emailProvider
+        .get()
         .catch(function (err) {
           expect(err)
             .to.exist;
@@ -381,12 +105,142 @@ describe('JobsManager', function () {
     });
 
 
-    it('should perform a POST request to /api/v2/jobs/verification-email', function (done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/emails/provider')
+        .reply(200, data);
+
+      this
+        .emailProvider
+        .get()
+        .then(function (provider) {
+          expect(provider.id)
+            .to.equal(data.id);
+
+          done();
+        });
+    });
+
+
+    it('should perform a GET request to /api/v2/emails/provider', function (done) {
       var request = this.request;
 
       this
-        .jobs
-        .verifyEmail(data)
+        .emailProvider
+        .get()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/emails/provider')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200)
+
+      this
+        .emailProvider
+        .get()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should pass the parameters in the query-string', function (done) {
+      nock.cleanAll();
+
+      var params = {
+        include_fields: true,
+        fields: 'test'
+      };
+
+      var request = nock(API_URL)
+        .get('/emails/provider')
+        .query(params)
+        .reply(200)
+
+      this
+        .emailProvider
+        .get(params)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
+  describe('#configure', function () {
+    var data = {
+      name: 'Test provider',
+      credentials: {}
+    };
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .post('/emails/provider')
+        .reply(200, data);
+    })
+
+
+    it('should accept a callback', function (done) {
+      this
+        .emailProvider
+        .configure(data, function () {
+          done();
+        });
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .emailProvider
+        .configure(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/emails/provider')
+        .reply(500);
+
+      this
+        .emailProvider
+        .configure(data)
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
+
+          done();
+        });
+    });
+
+
+    it('should perform a POST request to /api/v2/emails/provider', function (done) {
+      var request = this.request;
+
+      this
+        .emailProvider
+        .configure(data)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -400,12 +254,12 @@ describe('JobsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/jobs/verification-email', data)
+        .post('/emails/provider', data)
         .reply(200);
 
       this
-        .jobs
-        .verifyEmail(data)
+        .emailProvider
+        .configure(data)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -419,13 +273,197 @@ describe('JobsManager', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/jobs/verification-email')
+        .post('/emails/provider')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200)
 
       this
-        .jobs
-        .verifyEmail(data)
+        .emailProvider
+        .configure(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
+  describe('#update', function () {
+    var data = {
+      name: 'Test provider',
+      credentials: {}
+    };
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .patch('/emails/provider')
+        .reply(200, data);
+    })
+
+
+    it('should accept a callback', function (done) {
+      this
+        .emailProvider
+        .update({}, data, function () {
+          done();
+        });
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .emailProvider
+        .update({}, data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/emails/provider/' + data.id)
+        .reply(500);
+
+      this
+        .emailProvider
+        .update({}, data)
+        .catch(function (err) {
+          expect(err)
+            .to.exist
+            .to.be.an.instanceOf(Error);
+
+          done();
+        });
+    });
+
+
+    it('should perform a PATCH request to /api/v2/emails/provider', function (done) {
+      var request = this.request;
+
+      this
+        .emailProvider
+        .update({}, data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should pass the data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/emails/provider', data)
+        .reply(200);
+
+      this
+        .emailProvider
+        .update({}, data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/emails/provider')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200)
+
+      this
+        .emailProvider
+        .update({}, data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
+  describe('#delete', function () {
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .delete('/emails/provider')
+        .reply(200);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .emailProvider
+        .delete({}, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is given', function (done) {
+      this
+        .emailProvider
+        .delete()
+        .then(done.bind(null, null));
+    });
+
+
+    it('should perform a DELETE request to /emails/provider', function (done) {
+      var request = this.request;
+
+      this
+        .emailProvider
+        .delete()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/emails/provider')
+        .reply(500);
+
+      this
+        .emailProvider
+        .delete()
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/emails/provider')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200)
+
+      this
+        .emailProvider
+        .delete()
         .then(function () {
           expect(request.isDone())
             .to.be.true;

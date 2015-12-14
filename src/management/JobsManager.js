@@ -3,7 +3,14 @@ var extend = require('util')._extend;
 var Promise = require('bluebird');
 
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
+var ArgumentError = require('../exceptions').ArgumentError;
+
+
+/**
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
+ */
 
 
 /**
@@ -11,7 +18,9 @@ var ArgumentError = require('./exceptions').ArgumentError;
  * Abstract the creation as well as the retrieval of async jobs.
  * @constructor
  *
- * @param {Object}    options       Manager options.
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var JobsManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -46,9 +55,14 @@ var JobsManager = function (options){
 /**
  * Get a job by its ID.
  *
- * @method
- * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}
+ * @method   get
+ * @memberOf JobsManager
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 JobsManager.prototype.get = function (params, cb) {
   if (!params.id || typeof params.id !== 'string') {
@@ -68,13 +82,15 @@ JobsManager.prototype.get = function (params, cb) {
  * Given a path to a file and a connection id, create a new job that imports the
  * users contained in the file and associate them with the given connection.
  *
- * @method
+ * @method   importUsers
+ * @memberOf JobsManager
+ *
  * @param   {Object}    data                Users import data.
- * @param   {String}    data.connectionId   The connection id of the connection
- *                                          to which users will be inserted.
- * @param   {String}    data.users          Path to file containing the users.
+ * @param   {String}    data.connectionId   Connection for the users insertion.
+ * @param   {String}    data.users          Path to the users data file.
  * @param   {Function}  [cb]                Callback function.
- * @return  {Promise}
+ *
+ * @return  {Promise|undefined}
  */
 JobsManager.prototype.importUsers = function (data, cb) {
   var options = this.options;
@@ -115,9 +131,14 @@ JobsManager.prototype.importUsers = function (data, cb) {
 /**
  * Send a verification email to a user.
  *
- * @method
- * @param   {Function}  [cb]  Callback function.
- * @return  {Promise}
+ * @method    verifyEmail
+ * @memberOf  JobsManager
+ *
+ * @param   {Object}    data          User data object.
+ * @param   {String}    data.user_id  ID of the user to be verified.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 JobsManager.prototype.verifyEmail = function (data, cb) {
   if (!data.user_id || typeof data.user_id !== 'string') {

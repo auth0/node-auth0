@@ -1,10 +1,11 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var UsersManager = require('../src/UsersManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
+var SRC_DIR = '../../src';
+var API_URL = 'https://tenants.auth0.com';
 
-var API_URL = 'https://tenant.auth0.com/api/v2';
+var UsersManager = require(SRC_DIR + '/management/UsersManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
 describe('UsersManager', function () {
@@ -174,7 +175,7 @@ describe('UsersManager', function () {
       nock.cleanAll();
 
       var params = {
-        includeFields: true,
+        include_fields: true,
         fields: 'test'
       };
       var request = nock(API_URL)
@@ -473,7 +474,7 @@ describe('UsersManager', function () {
 
 
   describe('#delete', function () {
-    var id = 5;
+    var id = 'USER_5';
 
     beforeEach(function () {
       this.request = nock(API_URL)

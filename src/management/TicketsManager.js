@@ -1,5 +1,5 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
+var ArgumentError = require('../exceptions').ArgumentError;
 
 
 /**

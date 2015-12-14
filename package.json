@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-alpha.5",
   "description": "node.js SDK for Auth0 API v2",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.10.2",
-    "rest-facade": "^1.2.3",
+    "rest-facade": "^1.2.7",
     "url-join": "0.0.1",
     "superagent": "^1.1.0"
   },

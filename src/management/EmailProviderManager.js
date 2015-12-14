@@ -1,6 +1,7 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
-var utils = require('./utils');
+var ArgumentError = require('../exceptions').ArgumentError;
+var utils = require('../utils');
+
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -8,15 +9,15 @@ var utils = require('./utils');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
+
 /**
  * @class EmailProviderManager
  * Auth0 Email Provider.
  * @constructor
  *
  * @param {Object} options            The client options.
- * @param {String} options.token      The API access token.
- * @param {String} [options.region]   The code for the region in use.
- * @param {String} [options.domain]   The API domain for the region in use.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var EmailProviderManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -50,21 +51,30 @@ var EmailProviderManager = function (options) {
   this.resource = new RestClient(options.baseUrl + '/emails/provider', clientOptions);
 };
 
+
 /**
  * Configure the email provider.
  *
  * @method  configure
  * @memberOf  EmailProviderManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Object}    data     The email provider data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
+
 
 /**
  * Get the email provider.
  *
  * @method  get
  * @memberOf  EmailProviderManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
 
@@ -74,16 +84,24 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  *
  * @method    update
  * @memberOf  EmailProviderManager
- * @return    {Promise}
+ *
+ * @param   {Object}    data              Updated email provider data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
+
 
 /**
  * Delete email provider.
  *
  * @method    delete
  * @memberOf  EmailProviderManager
- * @return    {Promise}
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'delete', 'resource.delete');
 

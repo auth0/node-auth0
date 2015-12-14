@@ -1,6 +1,7 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('./exceptions').ArgumentError;
-var utils = require('./utils');
+var ArgumentError = require('../exceptions').ArgumentError;
+var utils = require('../utils');
+
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -8,12 +9,15 @@ var utils = require('./utils');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
+
 /**
  * @class ConnectionsManager
  * Represents the relationship between Auth0 and an Iidentity provider.
  * @constructor
  *
- * @param   {Object}   options
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
  */
 var ConnectionsManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -47,48 +51,76 @@ var ConnectionsManager = function (options) {
   this.resource = new RestClient(options.baseUrl + '/connections/:id ', apiOptions);
 };
 
+
 /**
  * Create a new connection.
  *
  * @method    create
  * @memberOf  ConnectionsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    data     Connection data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
+
 
 /**
  * Get all connections.
  *
  * @method  getAll
  * @memberOf  ConnectionsManager
- * @return  {Promise}               Returns a promise if no callback is received.
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
+
 
 /**
  * Get an Auth0 connection.
  *
  * @method  get
  * @memberOf  ConnectionsManager
- * @return  {Promise}
+ *
+ * @param   {Object}    params          Connection parameters.
+ * @param   {String}    params.id       Connection ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
+
 
 /**
  * Update an existing connection.
  *
  * @method    update
  * @memberOf  ConnectionsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params        Conneciton parameters.
+ * @param   {String}    params.id     Connection ID.
+ * @param   {Object}    data          Updated connection data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
+
 
 /**
  * Delete an existing connection.
  *
  * @method    delete
  * @memberOf  ConnectionsManager
- * @return    {Promise}
+ *
+ * @param   {Object}    params          Connection parameters.
+ * @param   {String}    params.id       Connection ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
 

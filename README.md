@@ -1,48 +1,101 @@
-
-
-# node-auth0 [![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
+[![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
-## Installation
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+##Table of Contents
 
-	npm install auth0@2.0.0-beta.3
+- [Installation](#installation)
+- [Management API Client](#management-api-client)
+  - [Usage](#usage)
+  - [Clients](#clients)
+    - [Get all clients](#get-all-clients)
+    - [Create a client](#create-a-client)
+    - [Get a client](#get-a-client)
+    - [Delete a client](#delete-a-client)
+    - [Update a client](#update-a-client)
+  - [Connections](#connections)
+    - [Get all connections](#get-all-connections)
+    - [Create a connection](#create-a-connection)
+    - [Get a connection](#get-a-connection)
+    - [Delete a connection](#delete-a-connection)
+    - [Update a connection](#update-a-connection)
+  - [Device Credentials](#device-credentials)
+    - [List device credentials](#list-device-credentials)
+    - [Create device public key](#create-device-public-key)
+    - [Delete a device credential](#delete-a-device-credential)
+  - [Rules](#rules)
+    - [Get all rules](#get-all-rules)
+    - [Create a rule](#create-a-rule)
+    - [Get a rule](#get-a-rule)
+    - [Delete a rule](#delete-a-rule)
+    - [Update a rule](#update-a-rule)
+  - [Users](#users)
+    - [List or search users](#list-or-search-users)
+    - [Create a user](#create-a-user)
+    - [Get a user](#get-a-user)
+    - [Delete all users](#delete-all-users)
+    - [Delete a user](#delete-a-user)
+    - [Update a user](#update-a-user)
+    - [Update user metadata](#update-user-metadata)
+    - [Update app metadata](#update-app-metadata)
+    - [Link user accounts](#link-user-accounts)
+    - [Unlink user accounts](#unlink-user-accounts)
+    - [Delete user multifactor provider](#delete-user-multifactor-provider)
+  - [Blacklisted Tokens](#blacklisted-tokens)
+    - [Get all blacklisted tokens](#get-all-blacklisted-tokens)
+    - [Blacklist a token](#blacklist-a-token)
+  - [Email Provider](#email-provider)
+    - [Get the email provider](#get-the-email-provider)
+    - [Configure the email provider](#configure-the-email-provider)
+    - [Delete the email provider](#delete-the-email-provider)
+    - [Update the email provider](#update-the-email-provider)
+- [Authentication API Client](#authentication-api-client)
+  - [Usage](#usage-1)
+  - [Database & Active Directory](#database-&-active-directory)
+    - [Sign in](#sign-in)
+    - [Sign up](#sign-up)
+    - [Change password](#change-password)
+  - [Passwordless](#passwordless)
+    - [Send email](#send-email)
+    - [Send SMS](#send-sms)
+    - [Login](#login)
+  - [Users](#users-1)
+    - [User info](#user-info)
+    - [Impersonation](#impersonation)
+  - [Tokens](#tokens)
+    - [Token info](#token-info)
+    - [Delegation Token](#delegation-token)
+- [General](#general)
+  - [Promises and Callbacks](#promises-and-callbacks)
+  - [Examples](#examples)
+  - [Documentation](#documentation)
+  - [What is Auth0?](#what-is-auth0)
+  - [Create a free Auth0 Account](#create-a-free-auth0-account)
+  - [Issue Reporting](#issue-reporting)
+  - [Author](#author)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Installation
+
+	npm install auth0@2.0.0-alpha.5
+
+# Management API Client
+The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
 ## Usage
 
 Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain.
 
 ~~~js
-var token = '{YOUR_API_V2_TOKEN}';
-var auth0 = require('auth0')({
-  token: token,
-  domain: 'YOUR_ACCOUNT.auth0.com'
+var ManagementClient = require('auth0').ManagementClient;
+var auth0 = new ManagementClient({
+  token: '{YOUR_API_V2_TOKEN}',
+  domain: '{YOUR_ACCOUNT}.auth0.com'
 });
-~~~
-
-
-## Promises and Callbacks
-Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided, no Promise will be returned.
-
-~~~js
-// Using callbacks.
-auth0.getUsers(function (err, users) {
-  if (err) {
-    // Handle error.
-  }
-  console.log(users);
-});
-
-
-// Using promises.
-auth0
-  .getUsers()
-  .then(function (users) {
-    console.log(users);
-  })
-  .catch(function (err) {
-    // Handle error.
-  });
 ~~~
 
 ## Clients
@@ -588,21 +641,16 @@ auth0.users.update(params, data, function (err, user) {
 });
 ~~~
 
-### Update user and app metadata
+### Update user metadata
 
 ~~~js
 var params = { id: USER_ID };
-var data = {
-  app_metadata: {
-    foo: 'bar'
-  },
-  user_metadata: {
-    address: '123th Node.js Street'
-  }
+var metadata = {
+  address: '123th Node.js Street'
 };
 
 // Using auth0 instance.
-auth0.updateUser(params, data, function (err, user) {
+auth0.updateUserMetadata(params, metadata, function (err, user) {
   if (err) {
     // Handle error.
   }
@@ -612,7 +660,7 @@ auth0.updateUser(params, data, function (err, user) {
 });
 
 // Using the users manager directly.
-auth0.users.update(params, data, function (err, user) {
+auth0.users.updateUserMetadata(params, metadata, function (err, user) {
   if (err) {
     // Handle error.
   }
@@ -621,6 +669,114 @@ auth0.users.update(params, data, function (err, user) {
   console.log(user);
 });
 ~~~
+
+
+### Update app metadata
+
+~~~js
+var params = { id: USER_ID };
+var metadata = {
+  foo: 'bar'
+};
+
+// Using auth0 instance.
+auth0.updateAppMetadata(params, metadata, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Updated user.
+  console.log(user);
+});
+
+// Using the users manager directly.
+auth0.users.updateAppMetadata(params, metadata, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Updated user.
+  console.log(user);
+});
+~~~
+
+### Link user accounts
+
+~~~js
+var params = { id: USER_ID };
+var data = {
+	user_id: 'OTHER_USER_ID',
+	connection_id: 'CONNECTION_ID'
+};
+
+// Using auth0 instance.
+auth0.linkUsers(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Users linked.
+});
+
+// Using the users manager directly.
+auth0.users.link(params, data, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Users linked.
+});
+~~~
+
+### Unlink user accounts
+
+~~~js
+var params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };
+
+// Using auth0 instance.
+auth0.unlinkUsers(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Users accounts unlinked.
+});
+
+// Using the users manager directly.
+auth0.users.unlink(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Users accounts unlinked.
+});
+~~~
+
+
+### Delete user multifactor provider
+
+~~~js
+var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+
+// Using auth0 instance.
+auth0.deleteUserMultifcator(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Users accounts unlinked.
+});
+
+// Using the users manager directly.
+auth0.users.deleteMultifactorProvider(params, function (err, user) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Users accounts unlinked.
+});
+~~~
+
 
 
 ## Blacklisted Tokens
@@ -756,9 +912,422 @@ auth0.emailProvider.update(function (err, provider) {
 });
 ~~~
 
-## Authentication
 
-This library can be used to access Auth0's [API v2](https://auth0.com/docs/apiv2). To authenticate users use the [passport strategy](https://github.com/auth0/passport-auth0).
+## Jobs
+
+### Get a job
+~~~js
+var params = {
+  id: '{JOB_ID}'
+};
+
+auth0.jobs.get(params, function (err, job) {
+  if (err) {
+    // Handle error.
+  }
+  
+  // Retrieved job.
+  console.log(job);
+});
+~~~
+
+### Import users
+~~~js
+var params = {
+  connection_id: '{CONNECTION_ID}',
+  users: '{PATH_TO_USERS_FILE}'
+};
+
+auth0.jobs.get(params, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+### Request email verification
+~~~js
+var params = {
+	user_id: '{USER_ID}'
+};
+
+auth0.jobs.verifyEmail(function (err) { 
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+## Stats
+
+### Get daily stats
+~~~js
+var params = {
+  from: '{YYYYMMDD}',  // First day included in the stats.
+  to: '{YYYYMMDD}'  // Last day included in the stats.
+};
+
+auth0.stats.getDaily(params, function (err, stats) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(stats);
+});
+~~~
+
+### Get active users count
+~~~js
+auth0.stats.getActiveUsersCount(function (err, usersCount) {
+  if (err) {
+    // Handle error.
+  }
+  
+  console.log(usersCount);
+});
+~~~
+
+## Tenant
+
+### Get tenant settings
+~~~js
+auth0.tenant.getSettings(function (err, settings) {
+  if (err) {
+    // Handle error.
+  } 
+  
+  console.log(settings);
+});
+~~~
+
+### Update tenant settings
+~~~js
+auth0.tenant.updateSettings(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+~~~
+
+## Tickets
+
+### Create change password ticket
+More info in the [API Docs](https://auth0.com/docs/api/v2#!/Tickets/post_password_change).
+
+~~~js
+var params = {
+  result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+  user_id: '{USER_ID}',  // Optional.
+  email: '{USER_EMAIL}',  // Optional.
+  new_password: '{PASSWORD}'
+}; 
+~~~
+
+### Create email verification ticket.
+~~~js
+var data = {
+  user_id: '{USER_ID}',
+  result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
+};
+
+auth0.tickets.verifyEmail(data, function (err) {
+  if (err) {
+    // Handle error.
+  }	
+});
+~~~
+
+# Authentication API Client
+
+This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+
+## Usage
+
+The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
+
+~~~js
+var AuthenticationClient = require('auth0'). AuthenticationClient;
+var auth0 = new AuthenticationClient({
+  domain: '{YOUR_ACCOUNT}.auth0.com',
+  clientId: '{OPTIONAL_CLIENT_ID}'
+});
+~~~
+
+## Social
+
+### Sign in
+Given the social provider's access_token and the connection specified, it will do the authentication on the provider and return a JSON with the access_token and id_token. Currently, this endpoint only works for Facebook, Google, Twitter and Weibo. More information in the [API Docs](https://auth0.com/docs/auth-api#!#post--oauth-access_token).
+
+~~~js
+var data = {
+  client_id: '{CLIENT_ID}',  // Optional field.
+  access_token: '{USER_SOCIAL_ACCESS_TOKEN}',
+  connection: 'facebook',
+  scope: 'openid'  // Optional field.
+};
+
+auth0.oauth.socialSignIn(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(userData);
+});
+~~~
+
+## Database & Active Directory
+
+### Sign in
+Given the user credentials and the connection specified, it will do the authentication on the provider and return a JSON with the `access_token` and `id_token`. Find more information about the structure of the data object in the [API docs](https://auth0.com/docs/auth-api#!#post--oauth-ro).
+
+~~~js
+var data = {
+  username: '{USERNAME}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication' // Optional field.
+};
+
+auth0.database.signIn(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(userData);
+});
+~~~
+
+### Sign up
+Given the user credentials, the connection specified and (optionally) the client ID, it will create a new user. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-signup).
+
+~~~js
+var data = {
+  email: '{EMAIL}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication' // Optional field.
+};
+
+auth0.database.signUp(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(userData);
+});
+~~~
+
+### Change password
+Given the user email, the connection specified and the new password to use, Auth0 will send a forgot password email. Once the user clicks on the confirm password change link, the new password specified in this POST will be set to this user. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-change_password).
+
+~~~js
+var data = {
+  email: '{EMAIL}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication'
+};
+
+// Using the database authenticator.
+auth0.database.changePassword(data, function (err, message) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(message);
+});
+
+// Using the Authentication client.
+auth0.changePassword(data, function (err, message) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(message);
+});
+~~~
+
+## Passwordless
+
+### Send email
+Given the user `email` address, it will send an email with:
+
+- A link (default, `send:"link"`). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using `authParams` object.
+- A verification code (`send:"code"`). You can then authenticate with this user using the `/oauth/ro` endpoint specifying `email` as `username` and `code` as `password`.
+
+Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--with_email).
+
+~~~js
+
+var data = {
+  email: '{EMAIL}',
+  send: 'link',
+  authParams: {} // Optional auth params.
+};
+
+// Using the passwordless authenticator.
+auth0.passwordless.sendEmail(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+
+// Using the authentication client (the 'send' property will be ignored here).
+auth0.requestMagicLink(data, function (err) { ... };
+auth0.requestEmailCode(data, function (err) { ... };
+~~~
+
+### Send SMS
+Given the user `phone_number`, it will send a SMS message with a verification code. You can then authenticate with this user using the `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as `password`:
+
+~~~js
+
+var data = {
+  phone_number: '{PHONE}'
+};
+
+// Using the passwordless authenticator.
+auth0.passwordless.sendSMS(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+
+// Using the authentication client.
+auth0.requestSMSCode(data, function (err) { ... });
+~~~
+
+### Login
+Given the user credentials (`phone_number` and `code`), it will do the authentication on the provider and return a JSON with the `access_token` and `id_token`.
+
+~~~js
+var data = {
+  username: '{PHONE_NUMBER}',
+  password: '{VERIFICATION_CODE}'
+};
+
+// Using the passwordless authenticator.
+auth0.passwordless.signIn(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+});
+
+// Using the authentication client.
+auth0.verifySMSCode(data, function (err) { ... });
+~~~
+
+The user data object has the following structure.
+
+~~~js
+{
+  id_token: String,
+  access_token: String,
+  token_type: String
+}
+~~~
+
+## Users
+
+### User info
+Get the user information based on the Auth0 access token (obtained during login). Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#get--userinfo).
+
+~~~js
+// Using the users manager.
+auth0.users.getInfo(accessToken, function (err, userInfo) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(userInfo);
+});
+
+// Using the authentication client.
+auth0.getProfile(data, function (err, userInfo) { ... });
+~~~
+
+### Impersonation
+Gets a link that can be used once to log in as a specific user. Useful for troubleshooting. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--users--user_id--impersonate).
+
+~~~js
+var settings = {
+  impersonator_id: '{IMPERSONATOR_ID}',
+  protocol: 'oauth2',
+  additionalParameters: {}  // Optional aditional params.
+};
+
+auth0.users.impersonate(userId, settings, function (err, link) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(link);
+});
+~~~
+
+## Tokens
+
+### Token info
+Validates a JSON Web Token (signature and expiration) and returns the user information associated with the user id (sub property) of the token. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--tokeninfo).
+
+~~~js
+auth0.tokens.getInfo(token, function (err, tokenInfo) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(tokenInfo);
+});
+~~~
+
+### Delegation Token
+Given an existing token, this endpoint will generate a new token signed with the target client secret. This is used to flow the identity of the user from the application to an API or across different APIs that are protected with different secrets. Find more information in the [API Docs](https://auth0.com/docs/auth-api#!#post--delegation).
+
+~~~js
+var data = {
+  id_token: '{ID_TOKEN}',
+  api_type: 'app',
+  target: '{TARGET}',
+  grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+};
+
+// Using the tokens manager.
+auth0.tokens.getDelegationToken(data, function (err, token) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(token);
+});
+
+// Using the authentication client.
+auth0.getDelegationToken(data, function (err, token) { ... });
+~~~
+
+# General
+
+## Promises and Callbacks
+
+Be aware that all methods can be used with Promises or callbacks. However, when a callback is provided no Promise will be returned.
+
+~~~js
+// Using callbacks.
+auth0.getUsers(function (err, users) {
+  if (err) {
+    // Handle error.
+  }
+  console.log(users);
+});
+
+
+// Using promises.
+auth0
+  .getUsers()
+  .then(function (users) {
+    console.log(users);
+  })
+  .catch(function (err) {
+    // Handle error.
+  });
+~~~
+
 
 ## Examples
 

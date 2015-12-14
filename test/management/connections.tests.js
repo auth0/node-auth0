@@ -1,10 +1,11 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var ConnectionsManager = require('../src/ConnectionsManager');
-var ArgumentError = require('../src/exceptions').ArgumentError;
-
+var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
+
+var ConnectionsManager = require(SRC_DIR + '/management/ConnectionsManager');
+var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
 
 describe('ConnectionsManager', function () {
@@ -172,7 +173,7 @@ describe('ConnectionsManager', function () {
 
       this
         .connections
-        .getAll({ includeFields: true, fields: 'test' })
+        .getAll({ include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -301,7 +302,7 @@ describe('ConnectionsManager', function () {
 
       this
         .connections
-        .getAll({ includeFields: true, fields: 'test' })
+        .getAll({ include_fields: true, fields: 'test' })
         .then(function () {
           expect(request.isDone())
             .to.be.true;
