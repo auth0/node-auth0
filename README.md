@@ -81,7 +81,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 # Installation
 
-	npm install auth0@2.0.0-beta.3
+	npm install auth0@2.0.0-beta.4
 
 # Management API Client
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
@@ -925,7 +925,7 @@ auth0.jobs.get(params, function (err, job) {
   if (err) {
     // Handle error.
   }
-  
+
   // Retrieved job.
   console.log(job);
 });
@@ -951,7 +951,7 @@ var params = {
 	user_id: '{USER_ID}'
 };
 
-auth0.jobs.verifyEmail(function (err) { 
+auth0.jobs.verifyEmail(function (err) {
   if (err) {
     // Handle error.
   }
@@ -971,7 +971,7 @@ auth0.stats.getDaily(params, function (err, stats) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(stats);
 });
 ~~~
@@ -982,7 +982,7 @@ auth0.stats.getActiveUsersCount(function (err, usersCount) {
   if (err) {
     // Handle error.
   }
-  
+
   console.log(usersCount);
 });
 ~~~
@@ -994,8 +994,8 @@ auth0.stats.getActiveUsersCount(function (err, usersCount) {
 auth0.tenant.getSettings(function (err, settings) {
   if (err) {
     // Handle error.
-  } 
-  
+  }
+
   console.log(settings);
 });
 ~~~
@@ -1020,7 +1020,7 @@ var params = {
   user_id: '{USER_ID}',  // Optional.
   email: '{USER_EMAIL}',  // Optional.
   new_password: '{PASSWORD}'
-}; 
+};
 ~~~
 
 ### Create email verification ticket.
@@ -1033,7 +1033,7 @@ var data = {
 auth0.tickets.verifyEmail(data, function (err) {
   if (err) {
     // Handle error.
-  }	
+  }
 });
 ~~~
 
