@@ -81,7 +81,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 # Installation
 
-	npm install auth0@2.0.0-alpha.5
+	npm install auth0@2.0.0-beta.3
 
 # Management API Client
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
