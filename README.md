@@ -100,6 +100,28 @@ api.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResult
 });
 ~~~
 
+Moreover, you can create a recursive function in order to get all users:
+~~~js
+function getAllUsers(options, cb) {
+  var allUsers = [];
+  function _recursive(options, callback) {
+    api.getUsers(options, function (err, result) {
+      if (err) return callback(err);
+      allUsers = allUsers.concat(result);
+      if (result.nextPageLink) {
+        return _recursive({page: result.nextPageLink}, callback);
+      }
+      return callback(null, allUsers);
+    });
+  }
+  _recursive(options, cb);
+}
+
+//  invocation sample
+getAllUsers( { connection: 'a-waad-connection'}, function (err, allUsers) {
+  //.......
+});
+~~~
 
 ### api.getSocialUsers({[per_page: 10]}, callback)
 
