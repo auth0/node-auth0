@@ -102,9 +102,9 @@ api.getUsers({connection: 'a-waad-connection'}, function (err, firstPageOfResult
 
 Moreover, you can create a recursive function in order to get all users:
 ~~~js
-function getAllUsers(options, cb)
+function getAllUsers(options, cb) {
   var allUsers = [];
-  function _recursive(options, callback)
+  function _recursive(options, callback) {
     api.getUsers(options, function (err, result) {
       if (err) return callback(err);
       allUsers = allUsers.concat(result);
