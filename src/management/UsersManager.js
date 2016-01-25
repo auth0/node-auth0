@@ -128,10 +128,6 @@ UsersManager.prototype.create = function (data, cb) {
  * @return  {Promise|undefined}
  */
 UsersManager.prototype.getAll = function (params) {
-  if (typeof params === 'object' && typeof params.q === 'string') {
-    params.q = encodeURIComponent(params.q);
-  }
-
   return this.users.getAll.apply(this.users, arguments);
 };
 
