@@ -11,8 +11,8 @@ var utils = module.exports = {};
 /**
  * Given a JSON string, convert it to its base64 representation.
  *
- * @method
- * @memberOf utils
+ * @method    jsonToBase64
+ * @memberOf  module:utils
  */
 utils.jsonToBase64 = function (json) {
   var bytes = new Buffer(JSON.stringify(json));
@@ -30,8 +30,8 @@ utils.jsonToBase64 = function (json) {
  * creates a new method in the class that is a wrapper for the given
  * property method.
  *
- * @method
- * @memberOf utils
+ * @method    wrapPropertyMethod
+ * @memberOf  module:utils
  */
 utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
   var path = propertyMethod.split('.');
@@ -51,8 +51,8 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
  * Perform a request with the given settings and return a promise that resolves
  * when the request is successfull and rejects when there's an error.
  *
- * @method
- * @memberOf utils
+ * @method    getRequestPromise
+ * @memberOf  module:utils
  */
 utils.getRequestPromise = function (settings) {
   return new Promise(function (resolve, reject) {
