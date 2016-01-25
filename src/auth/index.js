@@ -1,3 +1,5 @@
+/** @module auth **/
+
 var util = require('util');
 
 var pkg = require('../../package.json');
@@ -19,10 +21,27 @@ var BASE_URL_FORMAT = 'https://%s';
 
 /**
  * @class
- * Authentication Client SDK module.
- * @constructor
+ * Authentication API SDK.
  *
- * @param   {Object}  options             Options for the Authentication Client SDK.
+ * This client must used to access Auth0's
+ * <a href="https://auth0.com/docs/auth-api">Authentication API</a>.
+ * @constructor
+ * @memberOf module:auth
+ *
+ * @example <caption>
+ *   The <b>AuthenticationClient</b> constructor takes an <i>optional</i> client
+ *   ID, if specified it will be used as default value for all endpoints that
+ *   accept a client ID.
+ * </caption>
+ *
+ * var AuthenticationClient = require('auth0'). AuthenticationClient;
+ * var auth0 = new AuthenticationClient({
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   clientId: '{OPTIONAL_CLIENT_ID}'
+ * });
+ *
+ * @param   {Object}  options             Options for the Authentication Client
+ *                                        SDK.
  * @param   {String}  options.domain      AuthenticationClient server domain.
  * @param   {String}  [options.clientId]  Default client ID.
  */
@@ -91,8 +110,8 @@ var AuthenticationClient = function (options) {
 /**
  * Return an object with information about the current client,
  *
- * @method
- * @memberOf AuthenticationClient
+ * @method    getClientInfo
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @return {Object}   Object containing client information.
  */
@@ -124,8 +143,8 @@ AuthenticationClient.prototype.getClientInfo = function () {
 /**
  * Binding for auth0.passwordless.sendEmail().
  *
- * @method
- * @memberOf AuthenticationClient
+ * @method    requestMagicLink
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param   {Object}  data              User data object.
  * @param   {String}  data.email        User email address.
@@ -143,8 +162,8 @@ AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
 /**
  * Binding for auth0.passwordless.sendEmail().
  *
- * @method
- * @memberOf AuthenticationClient
+ * @method    requestEmailCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param   {Object}  data              User data object.
  * @param   {String}  data.email        User email address.
@@ -162,8 +181,8 @@ AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
 /**
  * Binding for auth0.passwordless.sendSMS().
  *
- * @method
- * @memberOf AuthenticationClient
+ * @method    requestSMSCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param   {Object}  data                User data object.
  * @param   {String}  data.phone_number   The user phone number.
@@ -182,8 +201,8 @@ AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
 /**
  * Binding for auth0.passwordless.login().
  *
- * @method
- * @memberOf AuthenticationClient
+ * @method    verifySMSCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param   {Object}  data              Credentials object.
  * @param   {String}  data.username     Phone number.
@@ -206,8 +225,8 @@ AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
 /**
  * Binding for auth0.tokens.getDelegationToken().
  *
- * @method
- * @memberOf  AuthenticationClient
+ * @method    getDelegationToken
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param   {Object}  data              Token data object.
  * @param   {String}  data.id_token     The user ID token.
@@ -232,8 +251,8 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
 /**
  * Binding for auth0.database.changePassword().
  *
- * @method
- * @memberOf AuthenticationClient
+ * @method    changePassword
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param   {Object}    data            User data object.
  * @param   {String}    data.email      User email.
@@ -257,7 +276,7 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
  * Binding for auth0.users.getInfo().
  *
  * @method    getProfile
- * @memberOf  AuthenticationClient
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @param     {String}  accessToken   The user access token.
  *

@@ -1,3 +1,5 @@
+/** @module management */
+
 var util = require('util');
 
 var pkg = require('../../package.json');
@@ -22,9 +24,26 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
 
 
 /**
- * @class
+ * @class ManagementClient
  * Management API SDK.
+ *
+ * The Auth0 Management API is meant to be used by back-end servers or trusted
+ * parties performing administrative tasks. Generally speaking, anything that
+ * can be done through the Auth0 dashboard (and more) can also be done through
+ * this API.
  * @constructor
+ * @memberOf module:management
+ *
+ * @example <caption>
+ *   Initialize your client class with an API v2 token (you can generate one
+ *   <a href="https://auth0.com/docs/apiv2">here</a>) and a domain.
+ * </caption>
+ *
+ * var ManagementClient = require('auth0').ManagementClient;
+ * var auth0 = new ManagementClient({
+ *   token: '{YOUR_API_V2_TOKEN}',
+ *   domain: '{YOUR_ACCOUNT}.auth0.com'
+ * });
  *
  * @param   {Object}  options           Options for the ManagementClient SDK.
  * @param   {String}  options.token     API access token.
@@ -146,8 +165,8 @@ var ManagementClient = function (options) {
 /**
  * Return an object with information about the current client,
  *
- * @method
- * @memberOf ManagementClient
+ * @method    getClientInfo
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @return {Object}   Object containing client information.
  */
@@ -179,8 +198,8 @@ ManagementClient.prototype.getClientInfo = function () {
 /**
  * Binding for auth0.connections.getAll()
  *
- * @method getConnections
- * @memberOf ManagementClient
+ * @method    getConnections
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll');
 
@@ -188,8 +207,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll
 /**
  * Binding for auth0.connections.create()
  *
- * @method createConnection
- * @memberOf ManagementClient
+ * @method    createConnection
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createConnection', 'connections.create');
 
@@ -197,8 +216,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createConnection', 'connections.crea
 /**
  * Binding for auth0.connections.get()
  *
- * @method getConnection
- * @memberOf ManagementClient
+ * @method    getConnection
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
 
@@ -206,8 +225,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
 /**
  * Binding for auth0.connections.delete()
  *
- * @method deleteConnection
- * @memberOf ManagementClient
+ * @method    deleteConnection
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.delete');
 
@@ -215,8 +234,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.dele
 /**
  * Binding for auth0.connections.update()
  *
- * @method updateConnection
- * @memberOf ManagementClient
+ * @method    updateConnection
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.update');
 
@@ -224,8 +243,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.upda
 /**
  * Binding for auth0.clients.getAll()
  *
- * @method getClients
- * @memberOf ManagementClient
+ * @method    getClients
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getClients', 'clients.getAll');
 
@@ -233,8 +252,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getClients', 'clients.getAll');
 /**
  * Binding for auth0.clients.get()
  *
- * @method getClient
- * @memberOf ManagementClient
+ * @method    getClient
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getClient', 'clients.get');
 
@@ -242,8 +261,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getClient', 'clients.get');
 /**
  * Binding for auth0.clients.create()
  *
- * @method createClient
- * @memberOf ManagementClient
+ * @method    createClient
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
 
@@ -251,8 +270,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
 /**
  * Binding for auth0.clients.update()
  *
- * @method updateClient
- * @memberOf ManagementClient
+ * @method    updateClient
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateClient', 'clients.update');
 
@@ -260,8 +279,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateClient', 'clients.update');
 /**
  * Binding for auth0.clients.delete()
  *
- * @method deleteClient
- * @memberOf ManagementClient
+ * @method    deleteClient
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
 
@@ -269,8 +288,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
 /**
  * Binding for auth0.deviceCredentials.createPubicKey()
  *
- * @method createDevicePublicKey
- * @memberOf ManagementClient
+ * @method    createDevicePublicKey
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createDevicePublicKey', 'deviceCredentials.createPublicKey');
 
@@ -278,8 +297,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createDevicePublicKey', 'deviceCrede
 /**
  * Binding for auth0.deviceCredentials.getAll()
  *
- * @method getDeviceCredentials
- * @memberOf ManagementClient
+ * @method    getDeviceCredentials
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCredentials.getAll');
 
@@ -287,8 +306,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCreden
 /**
  * Binding for auth0.deviceCredentials.delete()
  *
- * @method deleteDeviceCredential
- * @memberOf ManagementClient
+ * @method    deleteDeviceCredential
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCredentials.delete');
 
@@ -296,8 +315,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCred
 /**
  * Binding for auth0.rules.getAll()
  *
- * @method getRules
- * @memberOf ManagementClient
+ * @method    getRules
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
 
@@ -305,8 +324,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
 /**
  * Binding for auth0.rules.create()
  *
- * @method createRules
- * @memberOf ManagementClient
+ * @method    createRules
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createRule', 'rules.create');
 
@@ -314,8 +333,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createRule', 'rules.create');
 /**
  * Binding for auth0.rules.get()
  *
- * @method getRule
- * @memberOf ManagementClient
+ * @method    getRule
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getRule', 'rules.get');
 
@@ -323,8 +342,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getRule', 'rules.get');
 /**
  * Binding for auth0.rules.delete()
  *
- * @method deleteRule
- * @memberOf ManagementClient
+ * @method    deleteRule
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 
@@ -332,8 +351,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 /**
  * Binding for auth0.rules.update()
  *
- * @method updateRule
- * @memberOf ManagementClient
+ * @method    updateRule
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
 
@@ -341,8 +360,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
 /**
  * Binding for auth0.users.getAll()
  *
- * @method getUsers
- * @memberOf ManagementClient
+ * @method    getUsers
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
 
@@ -350,8 +369,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
 /**
  * Binding for auth0.users.get()
  *
- * @method getUser
- * @memberOf ManagementClient
+ * @method    getUser
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
 
@@ -359,8 +378,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
 /**
  * Binding for auth0.users.deleteAll()
  *
- * @method deleteAllUsers
- * @memberOf ManagementClient
+ * @method    deleteAllUsers
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
 
@@ -368,8 +387,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
 /**
  * Binding for auth0.users.delete()
  *
- * @method deleteUser
- * @memberOf ManagementClient
+ * @method    deleteUser
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteUser', 'users.delete');
 
@@ -377,8 +396,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteUser', 'users.delete');
 /**
  * Binding for auth0.users.create()
  *
- * @method createUser
- * @memberOf ManagementClient
+ * @method    createUser
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
 
@@ -386,8 +405,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
 /**
  * Binding for auth0.users.update()
  *
- * @method updateUser
- * @memberOf ManagementClient
+ * @method    updateUser
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
 
@@ -395,8 +414,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
 /**
  * Binding for auth0.users.updateUserMetadata()
  *
- * @method updateUserMetadata
- * @memberOf ManagementClient
+ * @method    updateUserMetadata
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUserMetadata');
 
@@ -404,8 +423,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUs
 /**
  * Binding for auth0.users.updateAppMetadata()
  *
- * @method updateAppMetadata
- * @memberOf ManagementClient
+ * @method    updateAppMetadata
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateAppMetadata');
 
@@ -413,8 +432,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateApp
 /**
  * Binding for auth0.users.deleteMultifactorProvider()
  *
- * @method deleteUserMultifactor
- * @memberOf ManagementClient
+ * @method    deleteUserMultifactor
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteUserMultifcator', 'users.deleteMultifactorProvider');
 
@@ -422,8 +441,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteUserMultifcator', 'users.delet
 /**
  * Binding for auth0.users.unlink()
  *
- * @method unlinkUsers
- * @memberOf ManagementClient
+ * @method    unlinkUsers
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
 
@@ -431,8 +450,8 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
 /**
  * Binding for auth0.users.link()
  *
- * @method linkUsers
- * @memberOf ManagementClient
+ * @method    linkUsers
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 
@@ -440,8 +459,8 @@ utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 /**
  * Binding for auth0.blacklistedTokens.getAll()
  *
- * @method getBlacklistedTokens
- * @memberOf ManagementClient
+ * @method    getBlacklistedTokens
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
 
@@ -449,8 +468,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedT
 /**
  * Binding for auth0.blacklistedTokens.add()
  *
- * @method blacklistToken
- * @memberOf ManagementClient
+ * @method    blacklistToken
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.add');
 
@@ -458,8 +477,8 @@ utils.wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.
 /**
  * Binding for auth0.emailProvider.get()
  *
- * @method getEmailProvider
- * @memberOf ManagementClient
+ * @method    getEmailProvider
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getEmailProvider', 'emailProvider.get');
 
@@ -467,8 +486,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getEmailProvider', 'emailProvider.ge
 /**
  * Binding for auth0.emailProvider.configure()
  *
- * @method configureEmailProvider
- * @memberOf ManagementClient
+ * @method    configureEmailProvider
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'configureEmailProvider', 'emailProvider.configure');
 
@@ -476,8 +495,8 @@ utils.wrapPropertyMethod(ManagementClient, 'configureEmailProvider', 'emailProvi
 /**
  * Binding for auth0.emailProvider.delete()
  *
- * @method deleteEmailProvider
- * @memberOf ManagementClient
+ * @method    deleteEmailProvider
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider.delete');
 
@@ -485,8 +504,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
 /**
  * Binding for auth0.emailProvider.update()
  *
- * @method updateEmailProvider
- * @memberOf ManagementClient
+ * @method    updateEmailProvider
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateEmailProvider', 'emailProvider.update');
 
@@ -494,8 +513,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateEmailProvider', 'emailProvider
 /**
  * Binding for auth0.stats.getActiveUsersCount()
  *
- * @method getActiveUsersCount
- * @memberOf ManagementClient
+ * @method    getActiveUsersCount
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActiveUsersCount');
 
@@ -503,8 +522,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActi
 /**
  * Binding for auth0.stats.getDaily()
  *
- * @method getDailyStats
- * @memberOf ManagementClient
+ * @method    getDailyStats
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getDailyStats', 'stats.getDaily');
 
@@ -512,8 +531,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getDailyStats', 'stats.getDaily');
 /**
  * Binding for auth0.tenatn.getSettings()
  *
- * @method getTenantSettings
- * @memberOf ManagementClient
+ * @method    getTenantSettings
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getTenantSettings', 'tenant.getSettings');
 
@@ -521,8 +540,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getTenantSettings', 'tenant.getSetti
 /**
  * Binding for auth0.tenant.updateSettings()
  *
- * @method updateTenantSettings
- * @memberOf ManagementClient
+ * @method    updateTenantSettings
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updateSettings');
 
@@ -530,8 +549,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updat
 /**
  * Binding for auth0.jobs.get()
  *
- * @method getJob
- * @memberOf ManagementClient
+ * @method    getJob
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 
@@ -539,8 +558,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 /**
  * Binding for auth0.jobs.importUsers()
  *
- * @method importUsers
- * @memberOf ManagementClient
+ * @method    importUsers
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
@@ -548,8 +567,8 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 /**
  * Binding for auth0.jobs.verifyEmail()
  *
- * @method sendEmailVerification
- * @memberOf ManagementClient
+ * @method    sendEmailVerification
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verifyEmail');
 
@@ -557,8 +576,8 @@ utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verify
 /**
  * Binding for auth0.tickets.changePassword()
  *
- * @method createPasswordChangeTicket
- * @memberOf ManagementClient
+ * @method    createPasswordChangeTicket
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'tickets.changePassword');
 
@@ -566,8 +585,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'ticket
 /**
  * Binding for auth0.tickets.verifyEmail()
  *
- * @method createEmailVerificationTicket
- * @memberOf ManagementClient
+ * @method    createEmailVerificationTicket
+ * @memberOf  module:management.ManagementClient.prototype
  */
 utils.wrapPropertyMethod(ManagementClient, 'createEmailVerificationTicket', 'tickets.verifyEmail');
 
