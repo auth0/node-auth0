@@ -58,6 +58,20 @@ var JobsManager = function (options){
  * @method   get
  * @memberOf JobsManager
  *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * auth0.jobs.get(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
  * @param   {Object}    params        Job parameters.
  * @param   {String}    params.id     Job ID.
  * @param   {Function}  [cb]          Callback function.
@@ -84,6 +98,18 @@ JobsManager.prototype.get = function (params, cb) {
  *
  * @method   importUsers
  * @memberOf JobsManager
+ *
+ * @example
+ * var params = {
+ *   connection_id: '{CONNECTION_ID}',
+ *   users: '{PATH_TO_USERS_FILE}'
+ * };
+ *
+ * auth0.jobs.get(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
  *
  * @param   {Object}    data                Users import data.
  * @param   {String}    data.connectionId   Connection for the users insertion.
@@ -133,6 +159,17 @@ JobsManager.prototype.importUsers = function (data, cb) {
  *
  * @method    verifyEmail
  * @memberOf  JobsManager
+ *
+ * @example
+ * var params = {
+ * 	user_id: '{USER_ID}'
+ * };
+ *
+ * auth0.jobs.verifyEmail(function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
  *
  * @param   {Object}    data          User data object.
  * @param   {String}    data.user_id  ID of the user to be verified.

@@ -51,6 +51,13 @@ var TenantManager = function (options){
  * @method    updateSettings
  * @memberOf  TenantManager
  *
+ * @example
+ * auth0.tenant.updateSettings(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
  * @param   {Object}    data  The new tenant settings.
  * @param   {Function}  [cb]  Callback function.
  *
@@ -70,6 +77,15 @@ TenantManager.prototype.updateSettings = function (data, cb) {
  *
  * @method    getSettings
  * @memberOf  TenantManager
+ *
+ * @example
+ * auth0.tenant.getSettings(function (err, settings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(settings);
+ * });
  *
  * @param   {Function}  [cb]  Callback function.
  *

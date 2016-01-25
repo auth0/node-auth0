@@ -59,6 +59,25 @@ var RulesManager = function (options) {
  * @method    create
  * @memberOf  RulesManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.createRule(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule created.
+ * });
+ *
+ * // Using the rules manager directly.
+ * auth0.rules.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule created.
+ * });
+ *
  * @param   {Object}    data     Rule data object.
  * @param   {Function}  [cb]     Callback function.
  *
@@ -73,6 +92,17 @@ utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
  * @method  getAll
  * @memberOf  RulesManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getRules(function (err, rules) {
+ *   console.log(rules.length);
+ * });
+ *
+ * // Using the rules manager directly.
+ * auth0.rules.getAll(function (err, rules) {
+ *   console.log(rules.length);
+ * });
+ *
  * @param   {Function}  [cb]     Callback function.
  *
  * @return  {Promise|undefined}
@@ -85,6 +115,25 @@ utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
  *
  * @method  get
  * @memberOf  RulesManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getRule({ id: RULE_ID }, function (err, rule) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(rule);
+ * });
+ *
+ * // Using the rules manager directly.
+ * auth0.rules.get({ id: RULE_ID }, function (err, rule) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(rule);
+ * });
  *
  * @param   {Object}    params        Rule parameters.
  * @param   {String}    params.id     Rule ID.
@@ -101,6 +150,28 @@ utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
  * @method    update
  * @memberOf  RulesManager
  *
+ * @example
+ * var data = { name: 'New name' };
+ * var params = { id: RULE_ID };
+ *
+ * // Using auth0 instance.
+ * auth0.updateRule(params, data, function (err, rule) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(rule.name);  // 'New name'
+ * });
+ *
+ * // Using the rules manager directly.
+ * auth0.rules.update(params, data, function (err, rule) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(rule.name);  // 'New name'
+ * });
+ *
  * @param   {Object}    params        Rule parameters.
  * @param   {String}    params.id     Rule ID.
  * @param   {Object}    data          Updated rule data.
@@ -116,6 +187,25 @@ utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
  *
  * @method    delete
  * @memberOf  RulesManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.deleteRule({ id: RULE_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule deleted.
+ * });
+ *
+ * // Using the rules manager directly.
+ * auth0.rules.delete({ id: RULE_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule deleted.
+ * });
  *
  * @param   {Object}    params        Rule parameters.
  * @param   {String}    params.id     Rule ID.

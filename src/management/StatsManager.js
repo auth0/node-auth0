@@ -52,6 +52,20 @@ var StatsManager = function (options){
  * @method    getDaily
  * @memberOf  StatsManager
  *
+ * @example
+ * var params = {
+ *   from: '{YYYYMMDD}',  // First day included in the stats.
+ *   to: '{YYYYMMDD}'  // Last day included in the stats.
+ * };
+ *
+ * auth0.stats.getDaily(params, function (err, stats) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(stats);
+ * });
+ *
  * @param   {Object}    params        Stats parameters.
  * @param   {String}    params.from   The first day in YYYYMMDD format.
  * @param   {String}    params.to     The last day in YYYYMMDD format.
@@ -76,6 +90,15 @@ StatsManager.prototype.getDaily = function (params, cb) {
  *
  * @method    getActiveUsersCount
  * @memberOf  StatsManager
+ *
+ * @example
+ * auth0.stats.getActiveUsersCount(function (err, usersCount) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(usersCount);
+ * });
  *
  * @param   {Function}  [cb]  Callback function.
  *

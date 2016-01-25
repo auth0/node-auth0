@@ -58,6 +58,25 @@ var DeviceCredentialsManager = function (options) {
  * @method    create
  * @memberOf  DeviceCredentialsManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.createConnection(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Credential created.
+ * });
+ *
+ * // Using the device credentials manager directly.
+ * auth0.deviceCredentials.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Credential created.
+ * });
+ *
  * @param   {Object}    data     The device credential data object.
  * @param   {Function}  [cb]     Callback function.
  *
@@ -72,6 +91,17 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.
  * @method  getAll
  * @memberOf  DeviceCredentialsManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getDeviceCredentials(function (err, credentials) {
+ *   console.log(credentials.length);
+ * });
+ *
+ * // Using the device credentials manager directly.
+ * auth0.deviceCredentials.getAll(function (err, credentials) {
+ *   console.log(credentials.length);
+ * });
+ *
  * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}
@@ -84,6 +114,27 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  *
  * @method    delete
  * @memberOf  DeviceCredentialsManager
+ *
+ * @example
+ * var params = { id: CREDENTIAL_ID };
+ *
+ * // Using auth0 instance.
+ * auth0.deleteDeviceCredential(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Credential deleted.
+ * });
+ *
+ * // Using the credentials manager directly.
+ * auth0.deviceCredentials.delete(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Credential deleted.
+ * });
  *
  * @param   {Object}    params          Credential parameters.
  * @param   {String}    params.id       Device credential ID.

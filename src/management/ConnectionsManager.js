@@ -4,15 +4,8 @@ var utils = require('../utils');
 
 
 /**
- * Simple facade for consuming a REST API endpoint.
- * @external RestClient
- * @see https://github.com/ngonzalvez/rest-facade
- */
-
-
-/**
  * @class ConnectionsManager
- * Represents the relationship between Auth0 and an Iidentity provider.
+ * Represents the relationship between Auth0 and an Identity provider.
  * @constructor
  *
  * @param {Object} options            The client options.
@@ -58,6 +51,26 @@ var ConnectionsManager = function (options) {
  * @method    create
  * @memberOf  ConnectionsManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.createConnection(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Conection created.
+ * });
+ *
+ *
+ * // Using the connections manager directly.
+ * auth0.connections.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Conection created.
+ * });
+ *
  * @param   {Object}    data     Connection data object.
  * @param   {Function}  [cb]     Callback function.
  *
@@ -72,6 +85,18 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  * @method  getAll
  * @memberOf  ConnectionsManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getConnections(function (err, connections) {
+ *   console.log(connections.length);
+ * });
+ *
+ *
+ * // Using the connections manager directly.
+ * auth0.connections.getAll(function (err, connections) {
+ *   console.log(connections.length);
+ * });
+ *
  * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}
@@ -84,6 +109,26 @@ utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
  *
  * @method  get
  * @memberOf  ConnectionsManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getConnection({ id: CONNECTION_ID }, function (err, connection) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(connection);
+ * });
+ *
+ *
+ * // Using the connections manager directly.
+ * auth0.connections.get({ id: CONNECTION_ID }, function (err, connection) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(connection);
+ * });
  *
  * @param   {Object}    params          Connection parameters.
  * @param   {String}    params.id       Connection ID.
@@ -100,6 +145,30 @@ utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
  * @method    update
  * @memberOf  ConnectionsManager
  *
+ * @example
+ * var data = { name: 'newConnectionName' };
+ * var params = { id: CONNECTION_ID };
+ *
+ *
+ * // Using auth0 instance.
+ * auth0.updateConnection(params, data, function (err, connection) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(connection.name);  // 'newConnectionName'
+ * });
+ *
+ *
+ * // Using the connections manager directly.
+ * auth0.connections.update(params, data, function (err, connection) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(connection.name);  // 'newConnectionName'
+ * });
+ *
  * @param   {Object}    params        Conneciton parameters.
  * @param   {String}    params.id     Connection ID.
  * @param   {Object}    data          Updated connection data.
@@ -115,6 +184,26 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  *
  * @method    delete
  * @memberOf  ConnectionsManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.deleteConnection({ id: CONNECTION_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Conection deleted.
+ * });
+ *
+ *
+ * // Using the connections manager directly.
+ * auth0.connections.delete({ id: CONNECTION_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Conection deleted.
+ * });
  *
  * @param   {Object}    params          Connection parameters.
  * @param   {String}    params.id       Connection ID.

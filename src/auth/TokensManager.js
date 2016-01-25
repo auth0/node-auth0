@@ -1,3 +1,5 @@
+/** @module auth0.auth */
+
 var extend = require('util')._extend;
 var getRequestPromise = require('../utils').getRequestPromise;
 
@@ -34,6 +36,20 @@ var TokensManager = function (options) {
  *
  * @method
  * @memberOf TokensManager
+ * @example <caption>
+ *   Validates a JSON Web Token (signature and expiration) and returns the user
+ *   information associated with the user id (sub property) of the token. Find
+ *   more information in the
+ *   [API Docs](https://auth0.com/docs/auth-api#!#post--tokeninfo).
+ * </caption>
+ *
+ * auth0.tokens.getInfo(token, function (err, tokenInfo) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(tokenInfo);
+ * });
  *
  * @param   {String}    idToken     User ID token.
  * @param   {Function}  [cb]        Method callback.
@@ -77,6 +93,33 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  *
  * @method
  * @memberOf TokensManager
+ *
+ * @example <caption>
+ *   Given an existing token, this endpoint will generate a new token signed
+ *   with the target client secret. This is used to flow the identity of the
+ *   user from the application to an API or across different APIs that are
+ *   protected with different secrets. Find more information in the
+ *   [API Docs](https://auth0.com/docs/auth-api#!#post--delegation).
+ * </caption>
+ *
+ * var data = {
+ *   id_token: '{ID_TOKEN}',
+ *   api_type: 'app',
+ *   target: '{TARGET}',
+ *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+ * };
+ *
+ * // Using the tokens manager.
+ * auth0.tokens.getDelegationToken(data, function (err, token) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(token);
+ * });
+ *
+ * // Using the authentication client.
+ * auth0.getDelegationToken(data, function (err, token) { ... });
  *
  * @param   {Object}    data              Token data object.
  * @param   {String}    data.id_token     User ID token.

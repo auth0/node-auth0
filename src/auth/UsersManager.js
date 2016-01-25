@@ -1,3 +1,5 @@
+/** @module auth0.auth */
+
 var extend = require('util')._extend;
 var getRequestPromise = require('../utils').getRequestPromise;
 
@@ -34,6 +36,23 @@ var UsersManager = function (options) {
  *
  * @method
  * @memberOf UsersManager
+ * @example <caption>
+ *   Get the user information based on the Auth0 access token (obtained during
+ *   login). Find more information in the
+ *   [API Docs](https://auth0.com/docs/auth-api#!#get--userinfo).
+ * </caption>
+ *
+ * // Using the users manager.
+ * auth0.users.getInfo(accessToken, function (err, userInfo) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userInfo);
+ * });
+ *
+ * // Using the authentication client.
+ * auth0.getProfile(data, function (err, userInfo) { ... });
  *
  * @param   {String}    accessToken   User access token.
  * @param   {Function}  [cb]          Callback function.
@@ -79,6 +98,26 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
  *
  * @method
  * @memberOf UsersManager
+ *
+ * @example <caption>
+ *   Gets a link that can be used once to log in as a specific user. Useful for
+ *   troubleshooting. Find more information in the
+ *   [API Docs](https://auth0.com/docs/auth-api#!#post--users--user_id--impersonate).
+ * </caption>
+ *
+ * var settings = {
+ *   impersonator_id: '{IMPERSONATOR_ID}',
+ *   protocol: 'oauth2',
+ *   additionalParameters: {}  // Optional aditional params.
+ * };
+ *
+ * auth0.users.impersonate(userId, settings, function (err, link) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(link);
+ * });
  *
  * @param   {String}    userId                    User ID token.
  * @param   {Object}    settings                  Impersonation settings.

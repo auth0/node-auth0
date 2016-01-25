@@ -4,15 +4,13 @@ var utils = require('../utils');
 
 
 /**
- * Simple facade for consuming a REST API endpoint.
- * @external RestClient
- * @see https://github.com/ngonzalvez/rest-facade
- */
-
-
-/**
  * @class ClientsManager
  * Auth0 Clients Manager.
+ *
+ * [Clients](https://auth0.com/docs/api/v2#!/Clients) represent applications.
+ * You can learn more about this in the
+ * [Applications](https://auth0.com/docs/applications) section of the
+ * documentation.
  * @constructor
  *
  * @param {Object} options            The client options.
@@ -58,6 +56,26 @@ var ClientsManager = function (options) {
  * @method    create
  * @memberOf  ClientsManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.createClient(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client created.
+ * });
+ *
+ *
+ * // Using the clients manager directly.
+ * auth0.clients.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client created.
+ * });
+ *
  * @param   {Object}    data     The client data object.
  * @param   {Function}  [cb]     Callback function.
  *
@@ -72,6 +90,18 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * @method    getAll
  * @memberOf  ClientsManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getClients(function (err, clients) {
+ *   console.log(clients.length);
+ * });
+ *
+ *
+ * // Using the clients manager directly.
+ * auth0.clients.getAll(function (err, clients) {
+ *   console.log(clients.length);
+ * });
+ *
  * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}
@@ -84,6 +114,26 @@ utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
  *
  * @method    get
  * @memberOf  ClientsManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getClient({ client_id: CLIENT_ID }, function (err, client) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(client);
+ * });
+ *
+ *
+ * // Using the clients manager directly.
+ * auth0.clients.get({ client_id: CLIENT_ID }, function (err, client) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(client);
+ * });
  *
  * @param   {Object}    params            Client parameters.
  * @param   {String}    params.client_id  Application client ID.
@@ -100,6 +150,30 @@ utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
  * @method    update
  * @memberOf  ClientsManager
  *
+ * @example
+ * var data = { name: 'newClientName' };
+ * var params = { client_id: CLIENT_ID };
+ *
+ *
+ * // Using auth0 instance.
+ * auth0.updateClient(params, data, function (err, client) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(client.name);  // 'newClientName'
+ * });
+ *
+ *
+ * // Using the clients manager directly.
+ * auth0.clients.update(params, data, function (err, client) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(client.name);  // 'newClientName'
+ * });
+ *
  * @param   {Object}    params            Client parameters.
  * @param   {String}    params.client_id  Application client ID.
  * @param   {Object}    data              Updated client data.
@@ -115,6 +189,26 @@ utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
  *
  * @method    delete
  * @memberOf  ClientsManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.deleteClient({ client_id: CLIENT_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client deleted.
+ * });
+ *
+ *
+ * // Using the clients manager directly.
+ * auth0.clients.delete({ client_id: CLIENT_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client deleted.
+ * });
  *
  * @param   {Object}    params            Client parameters.
  * @param   {String}    params.client_id  Application client ID.

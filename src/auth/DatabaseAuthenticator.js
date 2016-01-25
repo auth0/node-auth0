@@ -1,3 +1,5 @@
+/** @module auth0.auth */
+
 var extend = require('util')._extend;
 
 var ArgumentError = require('../exceptions').ArgumentError;
@@ -38,6 +40,27 @@ var DatabaseAuthenticator = function (options, oauth) {
  * @method    signIn
  * @memberOf  DatabaseAuthenticator
  *
+ * @example <caption>
+ *   Given the user credentials and the connection specified, it will do the
+ *   authentication on the provider and return a JSON with the `access_token`
+ *   and `id_token`. Find more information about the structure of the data
+ *   object in the [API docs](https://auth0.com/docs/auth-api#!#post--oauth-ro).
+ * </caption>
+ *
+ * var data = {
+ *   username: '{USERNAME}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication' // Optional field.
+ * };
+ *
+ * auth0.database.signIn(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
  * @param   {Object}    data              User credentials object.
  * @param   {String}    data.username     Username.
  * @param   {String}    data.password     User password.
@@ -75,6 +98,25 @@ DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
  *
  * @method    signUp
  * @memberOf  DatabaseAuthenticator
+ * @example <caption>
+ *   Given the user credentials, the connection specified and (optionally) the
+ *   client ID, it will create a new user. Find more information in the
+ *   [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-signup).
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication' // Optional field.
+ * };
+ *
+ * auth0.database.signUp(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
  *
  * @param   {Object}    data              User credentials object.
  * @param   {String}    data.email        User email address.
@@ -125,6 +167,37 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
  *
  * @method changePassword
  * @memberOf DatabaseAuthenticator
+ * @example <caption>
+ *   Given the user email, the connection specified and the new password to
+ *   use, Auth0 will send a forgot password email. Once the user clicks on the
+ *   confirm password change link, the new password specified in this POST will
+ *   be set to this user. Find more information in the
+ *   [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-change_password).
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * // Using the database authenticator.
+ * auth0.database.changePassword(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * // Using the Authentication client.
+ * auth0.changePassword(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
  *
  * @param   {Object}    data              User credentials object.
  * @param   {String}    data.email        User email address.

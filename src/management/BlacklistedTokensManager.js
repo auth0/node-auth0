@@ -4,15 +4,9 @@ var utils = require('../utils');
 
 
 /**
- * Simple facade for consuming a REST API endpoint.
- * @external RestClient
- * @see https://github.com/ngonzalvez/rest-facade
- */
-
-
-/**
  * @class BlacklistedTokensManager
- * Blacklisted Tokens Manager.
+ * The BlacklistedTokensManager class provides methods to retrieve the list of
+ * blacklisted tokens and blacklist new ones..
  * @constructor
  *
  * @param {Object} options            The client options.
@@ -58,6 +52,31 @@ var BlacklistedTokensManager = function (options) {
  * @method    create
  * @memberOf  BlacklistedTokensManager
  *
+ * @example
+ * var token = {
+ *  aud: 'aud',
+ *  jti: 'jti'
+ * };
+ *
+ * // Using auth0 instance.
+ * auth0.blacklistToken(token, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Token blacklisted.
+ * });
+ *
+ *
+ * // Using the blacklisted tokens manager directly.
+ * auth0.blacklistedTokens.add(token, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Token blacklisted.
+ * });
+ *
  * @param   {Object}    token      Token data.
  * @param   {String}    token.aud  Audience (your app client ID).
  * @param   {String}    token.jti  The JWT ID claim.
@@ -73,6 +92,18 @@ utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
  *
  * @method  getAll
  * @memberOf  BlacklistedTokensManager
+ *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getBlacklistedTokens(function (err, tokens) {
+ *   console.log(tokens.length);
+ * });
+ *
+ *
+ * // Using the blacklisted tokens manager directly.
+ * auth0.blacklistedTokens.getAll(function (err, tokens) {
+ *   console.log(tokens.length);
+ * });
  *
  * @param   {Function}  [cb]    Callback function.
  *

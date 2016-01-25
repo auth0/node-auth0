@@ -39,6 +39,20 @@ var TicketsManager = function (options){
  * Create a new password change ticket.
  *
  * @method
+ * @example
+ * var params = {
+ *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+ *   user_id: '{USER_ID}',  // Optional.
+ *   email: '{USER_EMAIL}',  // Optional.
+ *   new_password: '{PASSWORD}'
+ * };
+ *
+ * auth0.tickets.changePassword(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
@@ -58,6 +72,18 @@ TicketsManager.prototype.changePassword = function (data, cb) {
  * Create an email verification ticket.
  *
  * @method
+ * @example
+ * var data = {
+ *   user_id: '{USER_ID}',
+ *   result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
+ * };
+ *
+ * auth0.tickets.verifyEmail(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */

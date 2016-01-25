@@ -61,6 +61,26 @@ var UsersManager = function (options){
  * @method    create
  * @memberOf  UsersManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.createUser(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User created.
+ * });
+ *
+ *
+ * // Using the users manager directly.
+ * auth0.users.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User created.
+ * });
+ *
  * @param   {Object}    data    User data.
  * @param   {Function}  [cb]    Callback function.
  *
@@ -80,6 +100,25 @@ UsersManager.prototype.create = function (data, cb) {
  *
  * @method    getAll
  * @memberOf  UsersManager
+ *
+ * @example <caption>This method takes an optional object as first argument
+ *                   that may be used to specify pagination settings and the
+ *                   search query.</caption>
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 2
+ * };
+ *
+ * // Using auth0 instance.
+ * auth0.getUsers(params, function (err, users) {
+ *   console.log(users.length);
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.getAll(function (err, users) {
+ *   console.log(users.length);
+ * });
  *
  * @param   {Object}    [params]          Users params.
  * @param   {Number}    [params.per_page] Number of users per page.
@@ -103,6 +142,17 @@ UsersManager.prototype.getAll = function (params) {
  * @method    get
  * @memberOf  UsersManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.getUser({ id: USER_ID }, function (err, user) {
+ *   console.log(user);
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.get({ id: USER_ID }, function (err, user) {
+ *   console.log(user);
+ * });
+ *
  * @param   {Object}    data      The user data object.
  * @param   {String}    data.id   The user id.
  * @param   {Function}  [cb]      Callback function.
@@ -119,6 +169,30 @@ UsersManager.prototype.get = function () {
  *
  * @method    update
  * @memberOf  UsersManager
+ *
+ * @example
+ * var params = { id: USER_ID };
+ *
+ * // Using auth0 instance.
+ * auth0.updateUser(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
+ *
+ * // Using the users manager directly.
+ * auth0.users.update(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
  *
  * @param   {Object}    params      The user parameters.
  * @param   {String}    params.id   The user id.
@@ -137,6 +211,32 @@ UsersManager.prototype.update = function () {
  *
  * @method    updateUserMetadata
  * @memberOf  UsersManager
+ *
+ * @example
+ * var params = { id: USER_ID };
+ * var metadata = {
+ *   address: '123th Node.js Street'
+ * };
+ *
+ * // Using auth0 instance.
+ * auth0.updateUserMetadata(params, metadata, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.updateUserMetadata(params, metadata, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
  *
  * @param   {Object}    params      The user data object..
  * @param   {String}    params.id   The user id.
@@ -164,6 +264,32 @@ UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
  * @method    updateAppMetadata
  * @memberOf  UsersManager
  *
+ * @example
+ * var params = { id: USER_ID };
+ * var metadata = {
+ *   foo: 'bar'
+ * };
+ *
+ * // Using auth0 instance.
+ * auth0.updateAppMetadata(params, metadata, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.updateAppMetadata(params, metadata, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
  * @param   {Object}    params      The user data object..
  * @param   {String}    params.id   The user id.
  * @param   {Object}    metadata    New app metadata.
@@ -190,6 +316,27 @@ UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
  * @method    delete
  * @memberOf  UsersManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.deleteUser({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User deleted.
+ * });
+ *
+ *
+ * // Using the users manager directly.
+ * auth0.users.delete({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User deleted.
+ * });
+ *
+ *
  * @param   {Object}    params      The user data object..
  * @param   {String}    params.id   The user id.
  * @param   {Function}  [cb]        Callback function
@@ -211,6 +358,26 @@ UsersManager.prototype.delete = function (params) {
  * @method    deleteAll
  * @memberOf  UsersManager
  *
+ * @example
+ * // Using auth0 instance.
+ * auth0.deleteAllUsers(function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users deleted
+ * });
+ *
+ *
+ * // Using the users manager directly.
+ * auth0.users.deleteAll(function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users deleted
+ * });
+ *
  * @param   {Function}  [cb]        Callback function
  *
  * @return  {Promise|undefined}
@@ -231,6 +398,27 @@ UsersManager.prototype.deleteAll = function (cb) {
  *
  * @method    deleteMultifactorProvider
  * @memberOf  UsersManager
+ *
+ * @example
+ * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+ *
+ * // Using auth0 instance.
+ * auth0.deleteUserMultifcator(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.deleteMultifactorProvider(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
  *
  * @param   {Object}    params            Data object.
  * @param   {String}    params.id         The user id.
@@ -264,6 +452,31 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
  * @method    link
  * @memberOf  UsersManager
  *
+ * @example
+ * var params = { id: USER_ID };
+ * var data = {
+ * 	user_id: 'OTHER_USER_ID',
+ * 	connection_id: 'CONNECTION_ID'
+ * };
+ *
+ * // Using auth0 instance.
+ * auth0.linkUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users linked.
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.link(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users linked.
+ * });
+ *
  * @param   {String}    userId                ID of the primary user.
  * @param   {Object}    params                Secondary user data.
  * @param   {String}    params.user_id        ID of the user to be linked.
@@ -294,6 +507,27 @@ UsersManager.prototype.link = function (userId, params, cb) {
  *
  * @method    unlink
  * @memberOf  UsersManager
+ *
+ * @example
+ * var params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };
+ *
+ * // Using auth0 instance.
+ * auth0.unlinkUsers(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
+ *
+ * // Using the users manager directly.
+ * auth0.users.unlink(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
  *
  * @param   {Object}    params            Linked users data.
  * @param   {String}    params.id         Primary user ID.
