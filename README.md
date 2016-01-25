@@ -83,36 +83,6 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 	npm install auth0@2.0.0-alpha.5
 
-# Management API Client
-The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
-
-## Usage
-
-Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain.
-
-~~~js
-var ManagementClient = require('auth0').ManagementClient;
-var auth0 = new ManagementClient({
-  token: '{YOUR_API_V2_TOKEN}',
-  domain: '{YOUR_ACCOUNT}.auth0.com'
-});
-~~~
-
-# Authentication API Client
-
-This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
-
-## Usage
-
-The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
-
-~~~js
-var AuthenticationClient = require('auth0'). AuthenticationClient;
-var auth0 = new AuthenticationClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{OPTIONAL_CLIENT_ID}'
-});
-~~~
 
 # General
 
