@@ -98,7 +98,7 @@ TenantManager.prototype.getSettings = function (cb) {
   }
 
   // Return a promise.
-  return this.tenant.get({})
+  return this.tenant.get({});
 };
 
 

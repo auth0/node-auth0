@@ -32,7 +32,7 @@ var BlacklistedTokensManager = function (options) {
    *
    * @type {Object}
    */
-  clientOptions = {
+  var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };

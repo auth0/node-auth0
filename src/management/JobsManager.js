@@ -129,14 +129,16 @@ JobsManager.prototype.importUsers = function (data, cb) {
     var req = request
       .post(options.baseUrl + '/jobs/users-imports')
       .field('connection_id', data.connection_id)
-      .attach('users', data.users)
+      .attach('users', data.users);
 
     for (var name in headers) {
       req.set(name, headers[name]);
     }
 
     req.end(function (err, res) {
-      if (err) reject(err);
+      if (err) {
+        reject(err);
+      }
 
       resolve(res);
     });
