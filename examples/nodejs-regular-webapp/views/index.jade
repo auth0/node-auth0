@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  script(src="https://cdn.auth0.com/js/lock-7.11.js")
+  
+  h1= title
+  p Welcome to #{title}
+  br
+  button(onclick="signin()") Login
+
+  script.
+    var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}');
+    function signin() {
+      lock.show({
+          callbackURL: '#{env.AUTH0_CALLBACK_URL}'
+        , responseType: 'code'
+        , authParams: {
+          scope: 'openid name email picture'
+        }
+      });
+    }
+
+  

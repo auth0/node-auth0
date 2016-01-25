@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Falcor - Auth0 Sample</title>
+  </head>
+  <body>
+      
+  </body>
+  <script src="node_modules/falcor/dist/falcor.browser.js"></script>
+  <script>
+
+    var token = localStorage.getItem('id_token');
+
+    var model = new falcor.Model({
+      source: new falcor.HttpDataSource('/api/model.json', {
+        // Send the token as an Authorization header
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+    });
+
+    model
+      .get(["frameworks", {from: 0, to: 2}, ["name", "language"]])
+      .then(function(response) {
+        console.log(JSON.stringify(response, null, 2));
+      });
+
+  </script>
+</html>
