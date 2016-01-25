@@ -1,32 +1,41 @@
 {
   "name": "auth0",
-  "version": "0.8.2",
-  "description": "Client library for the Auth0 platform",
-  "main": "lib/index.js",
+  "version": "2.0.0",
+  "description": "SDK for Auth0 API v2",
+  "main": "src/index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec $(find ./test -name *.tests.js) && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test-watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch",
+    "docs-build": "jsdoc src/**/*.js -d docs -t node_modules/latodoc -R README.md"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/auth0/node-auth0.git"
+    "url": "https://github.com/auth0/node-auth0"
   },
-  "author": "Auth0",
-  "contributors": [
-    {
-      "name": "Conrad Pankoff",
-      "email": "deoxxa@fknsrs.biz",
-      "url": "http://www.fknsrs.biz/"
-    }
+  "keywords": [
+    "auth0",
+    "api"
   ],
+  "author": "Auth0",
   "license": "MIT",
-  "devDependencies": {
-    "mocha": "~1.17.1",
-    "chai": "~1.9.0",
-    "nock": "~0.27.2"
+  "bugs": {
+    "url": "https://github.com/auth0/node-auth0/issues"
   },
+  "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
-    "xtend": "~1.0.3",
-    "request": "~2.42.0",
-    "parse-links": "0.0.1"
+    "bluebird": "^2.10.2",
+    "rest-facade": "^1.2.7",
+    "url-join": "0.0.1",
+    "superagent": "^1.1.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.4.0",
+    "jsdoc": "^3.4.0",
+    "latodoc": "smeijer/latodoc",
+    "mocha": "^2.2.4",
+    "nock": "^3.1.1",
+    "sinon": "^1.17.1"
   }
 }
