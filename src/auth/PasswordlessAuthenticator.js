@@ -48,16 +48,11 @@ var PasswordlessAuthenticator = function (options, oauth) {
  *   password: '{VERIFICATION_CODE}'
  * };
  *
- * // Using the passwordless authenticator.
  * auth0.passwordless.signIn(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
- *
- * // Using the authentication client.
- * auth0.verifySMSCode(data, function (err) { ... });
- *
  *
  * @example <caption>
  *   The user data object has the following structure.
@@ -137,16 +132,11 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
  *   authParams: {} // Optional auth params.
  * };
  *
- * // Using the passwordless authenticator.
  * auth0.passwordless.sendEmail(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
- *
- * // Using the authentication client (the 'send' property will be ignored here).
- * auth0.requestMagicLink(data, function (err) { ... };
- * auth0.requestEmailCode(data, function (err) { ... };
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.email          User email address.
@@ -203,15 +193,11 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
  *   phone_number: '{PHONE}'
  * };
  *
- * // Using the passwordless authenticator.
  * auth0.passwordless.sendSMS(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
- *
- * // Using the authentication client.
- * auth0.requestSMSCode(data, function (err) { ... });
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.phone_number   User phone number.

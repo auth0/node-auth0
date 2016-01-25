@@ -141,10 +141,32 @@ AuthenticationClient.prototype.getClientInfo = function () {
 
 
 /**
- * Binding for auth0.passwordless.sendEmail().
+ * Start passwordless flow sending an email.
  *
  * @method    requestMagicLink
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user `email` address, it will send an email with a link. You can
+ *   then authenticate with this user opening the link and he will be
+ *   automatically logged in to the application. Optionally, you can
+ *   append/override parameters to the link (like `scope`, `redirect_uri`,
+ *   `protocol`, `response_type`, etc.) using `authParams` object.
+ *
+ *   Find more information in the
+ *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   authParams: {} // Optional auth params.
+ * };
+ *
+ * auth0.requestMagicLink(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * };
  *
  * @param   {Object}  data              User data object.
  * @param   {String}  data.email        User email address.
@@ -160,10 +182,30 @@ AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
 
 
 /**
- * Binding for auth0.passwordless.sendEmail().
+ * Start passwordless flow sending an email.
  *
  * @method    requestEmailCode
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user `email` address, it will send an email with a verification
+ *   code. You can then authenticate with this user using the `/oauth/ro`
+ *   endpoint using the email as username and the code as password.
+ *
+ *   Find more information in the
+ *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   authParams: {} // Optional auth params.
+ * };
+ *
+ * auth0.requestEmailCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * };
  *
  * @param   {Object}  data              User data object.
  * @param   {String}  data.email        User email address.
@@ -179,10 +221,28 @@ AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
 
 
 /**
- * Binding for auth0.passwordless.sendSMS().
+ * Start passwordless flow sending an SMS.
  *
  * @method    requestSMSCode
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user `phone_number`, it will send a SMS message with a
+ *   verification code. You can then authenticate with this user using the
+ *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
+ *   `password`:
+ * </caption>
+ *
+ * var data = {
+ *   phone_number: '{PHONE}'
+ * };
+ *
+ * auth0.requestSMSCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * });
  *
  * @param   {Object}  data                User data object.
  * @param   {String}  data.phone_number   The user phone number.
@@ -199,10 +259,37 @@ AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
 
 
 /**
- * Binding for auth0.passwordless.login().
+ * Sign in with the given user credentials.
  *
  * @method    verifySMSCode
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user credentials (`phone_number` and `code`), it will do the
+ *   authentication on the provider and return a JSON with the `access_token`
+ *   and `id_token`.
+ * </caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}',
+ *   password: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.verifySMSCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ *   The user data object has the following structure.
+ * </caption>
+ *
+ * {
+ *   id_token: String,
+ *   access_token: String,
+ *   token_type: String
+ * }
  *
  * @param   {Object}  data              Credentials object.
  * @param   {String}  data.username     Phone number.
@@ -223,10 +310,34 @@ AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
 
 
 /**
- * Binding for auth0.tokens.getDelegationToken().
+ * Exchange the token of the logged in user with a token that is valid to call
+ * the API (signed with the API secret).
  *
  * @method    getDelegationToken
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given an existing token, this endpoint will generate a new token signed
+ *   with the target client secret. This is used to flow the identity of the
+ *   user from the application to an API or across different APIs that are
+ *   protected with different secrets. Find more information in the
+ *   <a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs</a>.
+ * </caption>
+ *
+ * var data = {
+ *   id_token: '{ID_TOKEN}',
+ *   api_type: 'app',
+ *   target: '{TARGET}',
+ *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+ * };
+ *
+ * auth0.getDelegationToken(data, function (err, token) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(token);
+ * });
  *
  * @param   {Object}  data              Token data object.
  * @param   {String}  data.id_token     The user ID token.
@@ -249,10 +360,33 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
 
 
 /**
- * Binding for auth0.database.changePassword().
+ * Change passwor using a database or active directory service.
  *
  * @method    changePassword
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user email, the connection specified and the new password to
+ *   use, Auth0 will send a forgot password email. Once the user clicks on the
+ *   confirm password change link, the new password specified in this POST will
+ *   be set to this user. Find more information in the
+ *   <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs</a>.
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.changePassword(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
  *
  * @param   {Object}    data            User data object.
  * @param   {String}    data.email      User email.
@@ -273,10 +407,24 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
 
 
 /**
- * Binding for auth0.users.getInfo().
+ * Given an access token get the user profile linked to it.
  *
  * @method    getProfile
  * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Get the user information based on the Auth0 access token (obtained during
+ *   login). Find more information in the
+ *   <a href="https://auth0.com/docs/auth-api#!#get--userinfo">API Docs</a>.
+ * </caption>
+ *
+ * auth0.getProfile(data, function (err, userInfo) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userInfo);
+ * });
  *
  * @param     {String}  accessToken   The user access token.
  *

@@ -109,7 +109,6 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
  * };
  *
- * // Using the tokens manager.
  * auth0.tokens.getDelegationToken(data, function (err, token) {
  *   if (err) {
  *     // Handle error.
@@ -117,9 +116,6 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  *
  *   console.log(token);
  * });
- *
- * // Using the authentication client.
- * auth0.getDelegationToken(data, function (err, token) { ... });
  *
  * @param   {Object}    data              Token data object.
  * @param   {String}    data.id_token     User ID token.

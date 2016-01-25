@@ -42,7 +42,6 @@ var UsersManager = function (options) {
  *   <a href="https://auth0.com/docs/auth-api#!#get--userinfo">API Docs</a>.
  * </caption>
  *
- * // Using the users manager.
  * auth0.users.getInfo(accessToken, function (err, userInfo) {
  *   if (err) {
  *     // Handle error.
@@ -50,9 +49,6 @@ var UsersManager = function (options) {
  *
  *   console.log(userInfo);
  * });
- *
- * // Using the authentication client.
- * auth0.getProfile(data, function (err, userInfo) { ... });
  *
  * @param   {String}    accessToken   User access token.
  * @param   {Function}  [cb]          Callback function.
