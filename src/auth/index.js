@@ -370,7 +370,7 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
  *   use, Auth0 will send a forgot password email. Once the user clicks on the
  *   confirm password change link, the new password specified in this POST will
  *   be set to this user. Find more information in the
- *   <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password">
  *   API Docs</a>.
  * </caption>
  *
