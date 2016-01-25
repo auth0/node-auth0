@@ -13,6 +13,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Abstracts interaction with the stats endpoint.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -50,7 +51,7 @@ var StatsManager = function (options){
  * Get the daily stats.
  *
  * @method    getDaily
- * @memberOf  StatsManager
+ * @memberOf  module:management.StatsManager.prototype
  *
  * @example
  * var params = {
@@ -89,7 +90,7 @@ StatsManager.prototype.getDaily = function (params, cb) {
  * Get a the active users count.
  *
  * @method    getActiveUsersCount
- * @memberOf  StatsManager
+ * @memberOf  module:management.StatsManager.prototype
  *
  * @example
  * auth0.stats.getActiveUsersCount(function (err, usersCount) {

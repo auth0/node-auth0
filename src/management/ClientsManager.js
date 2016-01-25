@@ -12,6 +12,7 @@ var utils = require('../utils');
  * [Applications](https://auth0.com/docs/applications) section of the
  * documentation.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -54,7 +55,7 @@ var ClientsManager = function (options) {
  * Create an Auth0 client.
  *
  * @method    create
- * @memberOf  ClientsManager
+ * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -88,7 +89,7 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * Get all Auth0 clients.
  *
  * @method    getAll
- * @memberOf  ClientsManager
+ * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -113,7 +114,7 @@ utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
  * Get an Auth0 client.
  *
  * @method    get
- * @memberOf  ClientsManager
+ * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -148,7 +149,7 @@ utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
  * Update an Auth0 client.
  *
  * @method    update
- * @memberOf  ClientsManager
+ * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
  * var data = { name: 'newClientName' };
@@ -188,7 +189,7 @@ utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
  * Delete an Auth0 client.
  *
  * @method    delete
- * @memberOf  ClientsManager
+ * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
  * // Using auth0 instance.

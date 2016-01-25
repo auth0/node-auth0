@@ -1,5 +1,3 @@
-/** @module auth0.auth */
-
 var extend = require('util')._extend;
 var getRequestPromise = require('../utils').getRequestPromise;
 
@@ -10,6 +8,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Provides methods for getting token data and exchanging tokens.
  * @constructor
+ * @memberOf module:auth
  *
  * @param  {Object}   options               Manager options.
  * @param  {String}   options.baseUrl       The auth0 account URL.
@@ -35,12 +34,13 @@ var TokensManager = function (options) {
  * Given an ID token get the user profile linked to it.
  *
  * @method
- * @memberOf TokensManager
+ * @memberOf module:auth.TokensManager.prototype
+ *
  * @example <caption>
  *   Validates a JSON Web Token (signature and expiration) and returns the user
  *   information associated with the user id (sub property) of the token. Find
  *   more information in the
- *   [API Docs](https://auth0.com/docs/auth-api#!#post--tokeninfo).
+ *   <a href="https://auth0.com/docs/auth-api#!#post--tokeninfo">API Docs</a>.
  * </caption>
  *
  * auth0.tokens.getInfo(token, function (err, tokenInfo) {
@@ -92,14 +92,14 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  * the API (signed with the API secret).
  *
  * @method
- * @memberOf TokensManager
+ * @memberOf module:auth.TokensManager.prototype
  *
  * @example <caption>
  *   Given an existing token, this endpoint will generate a new token signed
  *   with the target client secret. This is used to flow the identity of the
  *   user from the application to an API or across different APIs that are
  *   protected with different secrets. Find more information in the
- *   [API Docs](https://auth0.com/docs/auth-api#!#post--delegation).
+ *   <a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs</a>.
  * </caption>
  *
  * var data = {

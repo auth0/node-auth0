@@ -1,5 +1,3 @@
-/** @module auth0.auth */
-
 var extend = require('util')._extend;
 
 var ArgumentError = require('../exceptions').ArgumentError;
@@ -10,6 +8,7 @@ var RestClient = require('rest-facade').Client;
  * @class
  * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
  * @constructor
+ * @memberOf module:auth
  *
  * @param  {Object}              options            Authenticator options.
  * @param  {String}              options.baseUrl    The auth0 account URL.
@@ -36,8 +35,8 @@ var PasswordlessAuthenticator = function (options, oauth) {
 /**
  * Sign in with the given user credentials.
  *
- * @method
- * @memberOf PasswordlessAuthenticator
+ * @method    signIn
+ * @memberOf  module:auth.PasswordlessAuthenticator.prototype
  * @example <caption>
  *   Given the user credentials (`phone_number` and `code`), it will do the
  *   authentication on the provider and return a JSON with the `access_token`
@@ -60,7 +59,9 @@ var PasswordlessAuthenticator = function (options, oauth) {
  * auth0.verifySMSCode(data, function (err) { ... });
  *
  *
- * <caption>The user data object has the following structure.</caption>
+ * @example <caption>
+ *   The user data object has the following structure.
+ * </caption>
  *
  * {
  *   id_token: String,
@@ -107,22 +108,27 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
 /**
  * Start passwordless flow sending an email.
  *
- * @method
- * @memberOf PasswordlessAuthenticator
+ * @method    sendEmail
+ * @memberOf  module:auth.PasswordlessAuthenticator.prototype
  * @example <caption>
  *   Given the user `email` address, it will send an email with:
  *
- *   - A link (default, `send:"link"`). You can then authenticate with this
- *     user opening the link and he will be automatically logged in to the
- *     application. Optionally, you can append/override parameters to the link
- *     (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
- *     `authParams` object.
- *   - A verification code (`send:"code"`). You can then authenticate with this
- *     user using the `/oauth/ro` endpoint specifying `email` as `username` and
- *     `code` as `password`.
+ *   <ul>
+ *     <li>A link (default, `send:"link"`). You can then authenticate with this
+ *       user opening the link and he will be automatically logged in to the
+ *       application. Optionally, you can append/override parameters to the link
+ *       (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
+ *       `authParams` object.
+ *     </li>
+ *     <li>
+ *       A verification code (`send:"code"`). You can then authenticate with
+ *       this user using the `/oauth/ro` endpoint specifying `email` as
+ *       `username` and `code` as `password`.
+ *     </li>
+ *   </ul>
  *
  *   Find more information in the
- *   [API Docs](https://auth0.com/docs/auth-api#!#post--with_email).
+ *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
  * </caption>
  *
  * var data = {
@@ -183,13 +189,14 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
 /**
  * Start passwordless flow sending an SMS.
  *
- * @method
- * @memberOf PasswordlessAuthenticator
+ * @method    sendSMS
+ * @memberOf  module:auth.PasswordlessAuthenticator.prototype
+ *
  * @example <caption>
- * Given the user `phone_number`, it will send a SMS message with a
- * verification code. You can then authenticate with this user using the
- * `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
- * `password`:
+ *   Given the user `phone_number`, it will send a SMS message with a
+ *   verification code. You can then authenticate with this user using the
+ *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
+ *   `password`:
  * </caption>
  *
  * var data = {

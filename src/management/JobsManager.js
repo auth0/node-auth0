@@ -17,6 +17,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Abstract the creation as well as the retrieval of async jobs.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -56,7 +57,7 @@ var JobsManager = function (options){
  * Get a job by its ID.
  *
  * @method   get
- * @memberOf JobsManager
+ * @memberOf module:management.JobsManager.prototype
  *
  * @example
  * var params = {
@@ -97,7 +98,7 @@ JobsManager.prototype.get = function (params, cb) {
  * users contained in the file and associate them with the given connection.
  *
  * @method   importUsers
- * @memberOf JobsManager
+ * @memberOf module:management.JobsManager.prototype
  *
  * @example
  * var params = {
@@ -158,7 +159,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
  * Send a verification email to a user.
  *
  * @method    verifyEmail
- * @memberOf  JobsManager
+ * @memberOf module:management.JobsManager.prototype
  *
  * @example
  * var params = {

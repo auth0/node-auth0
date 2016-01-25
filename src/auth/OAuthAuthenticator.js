@@ -1,5 +1,3 @@
-/** @module auth0.auth */
-
 var extend = require('util')._extend;
 
 var ArgumentError = require('../exceptions').ArgumentError;
@@ -11,6 +9,7 @@ var RestClient = require('rest-facade').Client;
  * Abstracts the sign-in, sign-up and change-password processes for Database &
  * Active Directory auhtentication services.
  * @constructor
+ * @memberOf module:auth
  *
  * @param  {Object}              options            Authenticator options.
  * @param  {String}              options.baseUrl    The auth0 account URL.
@@ -36,14 +35,16 @@ var OAuthAuthenticator = function (options) {
  * Sign in using a username and password.
  *
  * @method    signIn
- * @memberOf  OAuthAuthenticator
+ * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
  * @example <caption>
  *   Given the social provider's access_token and the connection specified, it
  *   will do the authentication on the provider and return a JSON with the
  *   access_token and id_token. Currently, this endpoint only works for
  *   Facebook, Google, Twitter and Weibo. More information in the
- *   [API Docs](https://auth0.com/docs/auth-api#!#post--oauth-access_token).
+ *   <a href="https://auth0.com/docs/auth-api#!#post--oauth-access_token">
+ *     API Docs
+ *   </a>.
  * </caption>
  *
  * var data = {
@@ -101,7 +102,7 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
  * Sign in using a social provider access token.
  *
  * @method    socialSignIn
- * @memberOf  OAuthAuthenticator
+ * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
  * @param   {Object}    data                User credentials object.
  * @param   {String}    data.access_token   User access token.

@@ -13,6 +13,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Abstracts interaction with the tenant endpoint.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -49,7 +50,7 @@ var TenantManager = function (options){
  * Update the tenant settings.
  *
  * @method    updateSettings
- * @memberOf  TenantManager
+ * @memberOf  module:management.TenantManager.prototype
  *
  * @example
  * auth0.tenant.updateSettings(data, function (err) {
@@ -76,7 +77,7 @@ TenantManager.prototype.updateSettings = function (data, cb) {
  * Get the tenant settings..
  *
  * @method    getSettings
- * @memberOf  TenantManager
+ * @memberOf  module:management.TenantManager.prototype
  *
  * @example
  * auth0.tenant.getSettings(function (err, settings) {

@@ -1,5 +1,3 @@
-/** @module auth0.auth */
-
 var extend = require('util')._extend;
 var getRequestPromise = require('../utils').getRequestPromise;
 
@@ -10,6 +8,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Provides methods for getting user information and impersonating users.
  * @constructor
+ * @memberOf module:auth
  *
  * @param  {Object}   options               Manager options.
  * @param  {String}   options.baseUrl       The auth0 account URL.
@@ -34,12 +33,13 @@ var UsersManager = function (options) {
 /**
  * Given an access token get the user profile linked to it.
  *
- * @method
- * @memberOf UsersManager
+ * @method    getInfo
+ * @memberOf  module:auth.UsersManager.prototype
+ *
  * @example <caption>
  *   Get the user information based on the Auth0 access token (obtained during
  *   login). Find more information in the
- *   [API Docs](https://auth0.com/docs/auth-api#!#get--userinfo).
+ *   <a href="https://auth0.com/docs/auth-api#!#get--userinfo">API Docs</a>.
  * </caption>
  *
  * // Using the users manager.
@@ -96,8 +96,8 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
 /**
  * Impersonate the user with the given user ID.
  *
- * @method
- * @memberOf UsersManager
+ * @method    impersonate
+ * @memberOf  module:auth.UsersManager.prototype
  *
  * @example <caption>
  *   Gets a link that can be used once to log in as a specific user. Useful for

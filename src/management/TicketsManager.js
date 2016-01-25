@@ -6,6 +6,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Abstracts interaction with the tickets endpoint.
  * @constructor
+ * @memberOf module:management
  */
 var TicketsManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -38,7 +39,9 @@ var TicketsManager = function (options){
 /**
  * Create a new password change ticket.
  *
- * @method
+ * @method    changePassword
+ * @memberOf  module:management.TicketsManager.prototype
+ *
  * @example
  * var params = {
  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
@@ -71,7 +74,9 @@ TicketsManager.prototype.changePassword = function (data, cb) {
 /**
  * Create an email verification ticket.
  *
- * @method
+ * @method    verifyEmail
+ * @memberOf  module:management.TicketsManager.prototype
+ *
  * @example
  * var data = {
  *   user_id: '{USER_ID}',

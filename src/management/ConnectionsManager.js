@@ -7,6 +7,7 @@ var utils = require('../utils');
  * @class ConnectionsManager
  * Represents the relationship between Auth0 and an Identity provider.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -49,7 +50,7 @@ var ConnectionsManager = function (options) {
  * Create a new connection.
  *
  * @method    create
- * @memberOf  ConnectionsManager
+ * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -82,8 +83,8 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
 /**
  * Get all connections.
  *
- * @method  getAll
- * @memberOf  ConnectionsManager
+ * @method    getAll
+ * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -107,8 +108,8 @@ utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
 /**
  * Get an Auth0 connection.
  *
- * @method  get
- * @memberOf  ConnectionsManager
+ * @method    get
+ * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -143,7 +144,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
  * Update an existing connection.
  *
  * @method    update
- * @memberOf  ConnectionsManager
+ * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
  * var data = { name: 'newConnectionName' };
@@ -183,7 +184,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  * Delete an existing connection.
  *
  * @method    delete
- * @memberOf  ConnectionsManager
+ * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
  * // Using auth0 instance.

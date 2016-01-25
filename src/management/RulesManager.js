@@ -15,6 +15,7 @@ var utils = require('../utils');
  * The rule class provides a simple abstraction for performing CRUD operations
  * on Auth0 RulesManagers.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -57,7 +58,7 @@ var RulesManager = function (options) {
  * Create a new rule.
  *
  * @method    create
- * @memberOf  RulesManager
+ * @memberOf  module:management.RulesManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -89,8 +90,8 @@ utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
 /**
  * Get all rules.
  *
- * @method  getAll
- * @memberOf  RulesManager
+ * @method    getAll
+ * @memberOf  module:management.RulesManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -113,8 +114,8 @@ utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
 /**
  * Get an Auth0 rule.
  *
- * @method  get
- * @memberOf  RulesManager
+ * @method    get
+ * @memberOf  module:management.RulesManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -148,7 +149,7 @@ utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
  * Update an existing rule.
  *
  * @method    update
- * @memberOf  RulesManager
+ * @memberOf  module:management.RulesManager.prototype
  *
  * @example
  * var data = { name: 'New name' };
@@ -186,7 +187,7 @@ utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
  * Delete an existing rule.
  *
  * @method    delete
- * @memberOf  RulesManager
+ * @memberOf  module:management.RulesManager.prototype
  *
  * @example
  * // Using auth0 instance.

@@ -14,6 +14,7 @@ var utils = require('../utils');
  * @class EmailProviderManager
  * Auth0 Email Provider.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -55,8 +56,8 @@ var EmailProviderManager = function (options) {
 /**
  * Configure the email provider.
  *
- * @method  configure
- * @memberOf  EmailProviderManager
+ * @method    configure
+ * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -88,8 +89,8 @@ utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
 /**
  * Get the email provider.
  *
- * @method  get
- * @memberOf  EmailProviderManager
+ * @method    get
+ * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -114,7 +115,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  * Update the email provider.
  *
  * @method    update
- * @memberOf  EmailProviderManager
+ * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -150,7 +151,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
  * Delete email provider.
  *
  * @method    delete
- * @memberOf  EmailProviderManager
+ * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
  * // Using auth0 instance.

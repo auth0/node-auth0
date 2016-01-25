@@ -13,6 +13,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @class
  * Abstracts interaction with the users endpoint.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -59,7 +60,7 @@ var UsersManager = function (options){
  * Create a new user.
  *
  * @method    create
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -99,7 +100,7 @@ UsersManager.prototype.create = function (data, cb) {
  * Get all users.
  *
  * @method    getAll
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example <caption>This method takes an optional object as first argument
  *                   that may be used to specify pagination settings and the
@@ -136,7 +137,7 @@ UsersManager.prototype.getAll = function (params) {
  * Get a user by its id.
  *
  * @method    get
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -164,7 +165,7 @@ UsersManager.prototype.get = function () {
  * Update a user by its id.
  *
  * @method    update
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * var params = { id: USER_ID };
@@ -206,7 +207,7 @@ UsersManager.prototype.update = function () {
  * Update the user metadata.
  *
  * @method    updateUserMetadata
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * var params = { id: USER_ID };
@@ -258,7 +259,7 @@ UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
  * Update the app metadata.
  *
  * @method    updateAppMetadata
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * var params = { id: USER_ID };
@@ -310,7 +311,7 @@ UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
  * Delete a user by its id.
  *
  * @method    delete
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -352,7 +353,7 @@ UsersManager.prototype.delete = function (params) {
  * Delete all users.
  *
  * @method    deleteAll
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -393,7 +394,7 @@ UsersManager.prototype.deleteAll = function (cb) {
  * Delete a multifactor provider.
  *
  * @method    deleteMultifactorProvider
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
@@ -446,7 +447,7 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
  * Link the user with another account.
  *
  * @method    link
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * var params = { id: USER_ID };
@@ -502,7 +503,7 @@ UsersManager.prototype.link = function (userId, params, cb) {
  * Unlink the given accounts.
  *
  * @method    unlink
- * @memberOf  UsersManager
+ * @memberOf  module:management.UsersManager.prototype
  *
  * @example
  * var params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };

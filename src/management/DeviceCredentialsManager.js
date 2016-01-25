@@ -14,6 +14,7 @@ var utils = require('../utils');
  * @class DeviceCredentialsManager
  * Manages Auth0 Device Credentials.
  * @constructor
+ * @memberOf module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -56,7 +57,7 @@ var DeviceCredentialsManager = function (options) {
  * Create an Auth0 credential.
  *
  * @method    create
- * @memberOf  DeviceCredentialsManager
+ * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -89,7 +90,7 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.
  * Get all Auth0 credentials.
  *
  * @method  getAll
- * @memberOf  DeviceCredentialsManager
+ * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
  * // Using auth0 instance.
@@ -113,7 +114,7 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  * Delete an Auth0 device credential.
  *
  * @method    delete
- * @memberOf  DeviceCredentialsManager
+ * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
  * var params = { id: CREDENTIAL_ID };

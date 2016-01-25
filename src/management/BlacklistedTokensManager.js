@@ -8,6 +8,7 @@ var utils = require('../utils');
  * The BlacklistedTokensManager class provides methods to retrieve the list of
  * blacklisted tokens and blacklist new ones..
  * @constructor
+ * @memberOf  module:management
  *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
@@ -49,8 +50,8 @@ var BlacklistedTokensManager = function (options) {
 /**
  * Blacklist a new token.
  *
- * @method    create
- * @memberOf  BlacklistedTokensManager
+ * @method    add
+ * @memberOf  module:management.BlacklistedTokensManager.prototype
  *
  * @example
  * var token = {
@@ -90,8 +91,8 @@ utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
 /**
  * Get all blacklisted tokens.
  *
- * @method  getAll
- * @memberOf  BlacklistedTokensManager
+ * @method    getAll
+ * @memberOf  module:management.BlacklistedTokensManager.prototype
  *
  * @example
  * // Using auth0 instance.

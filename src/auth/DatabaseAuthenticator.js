@@ -1,5 +1,3 @@
-/** @module auth0.auth */
-
 var extend = require('util')._extend;
 
 var ArgumentError = require('../exceptions').ArgumentError;
@@ -11,6 +9,7 @@ var RestClient = require('rest-facade').Client;
  * Abstracts the sign-in, sign-up and change-password processes for Database &
  * Active Directory auhtentication services.
  * @constructor
+ * @memberOf module:auth
  *
  * @param  {Object}              options            Authenticator options.
  * @param  {String}              options.baseUrl    The auth0 account URL.
@@ -36,15 +35,15 @@ var DatabaseAuthenticator = function (options, oauth) {
 
 /**
  * Sign in using a database or active directory service.
- *
  * @method    signIn
- * @memberOf  DatabaseAuthenticator
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
  *
  * @example <caption>
  *   Given the user credentials and the connection specified, it will do the
  *   authentication on the provider and return a JSON with the `access_token`
  *   and `id_token`. Find more information about the structure of the data
- *   object in the [API docs](https://auth0.com/docs/auth-api#!#post--oauth-ro).
+ *   object in the <a href="https://auth0.com/docs/auth-api#!#post--oauth-ro">
+ *   API docs</a>.
  * </caption>
  *
  * var data = {
@@ -95,13 +94,14 @@ DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
 
 /**
  * Sign up using a database or active directory service.
- *
  * @method    signUp
- * @memberOf  DatabaseAuthenticator
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
  * @example <caption>
  *   Given the user credentials, the connection specified and (optionally) the
  *   client ID, it will create a new user. Find more information in the
- *   [API Docs](https://auth0.com/docs/auth-api#!#post--dbconnections-signup).
+ *   <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-signup">
+ *   API Docs</a>.
  * </caption>
  *
  * var data = {
@@ -165,8 +165,9 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
 /**
  * Change passwor using a database or active directory service.
  *
- * @method changePassword
- * @memberOf DatabaseAuthenticator
+ * @method    changePassword
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
  * @example <caption>
  *   Given the user email, the connection specified and the new password to
  *   use, Auth0 will send a forgot password email. Once the user clicks on the
