@@ -14,6 +14,7 @@ var authenticate = jwt({
 
 
 app.configure(function () {
+  app.use(cors());
 
  // Request body parsing middleware should be above methodOverride
   app.use(express.bodyParser());
@@ -21,7 +22,7 @@ app.configure(function () {
   app.use(express.json());
 
   app.use('/secured', authenticate);
-  app.use(cors());
+  
 
   app.use(app.router);
 });

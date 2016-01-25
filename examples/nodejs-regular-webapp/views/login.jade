@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  script(src="https://cdn.auth0.com/js/lock-7.5.js")
+  script(src="https://cdn.auth0.com/js/lock-7.11.js")
   
   div(id="root" style="width: 280px; margin: 40px auto; padding: 10px;")
 
@@ -12,7 +12,7 @@ block content
       , callbackURL: '#{env.AUTH0_CALLBACK_URL}'
       , responseType: 'code'
       , authParams: {
-        scope: 'openid profile'
+        scope: 'openid name email picture'
       }
     });
 
