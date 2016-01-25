@@ -46,7 +46,7 @@ var RulesManager = function (options) {
 
   /**
    * Provides an abstraction layer for performing CRUD operations on
-   * [Auth0 RulesManagers]{@link https://auth0.com/docs/api/v2#!/RulesManagers}.
+   * {@link https://auth0.com/docs/api/v2#!/RulesManagers Auth0 RulesManagers}.
    *
    * @type {external:RestClient}
    */
@@ -61,17 +61,7 @@ var RulesManager = function (options) {
  * @memberOf  module:management.RulesManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.createRule(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Rule created.
- * });
- *
- * // Using the rules manager directly.
- * auth0.rules.create(data, function (err) {
+ * management.rules.create(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -94,13 +84,7 @@ utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
  * @memberOf  module:management.RulesManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getRules(function (err, rules) {
- *   console.log(rules.length);
- * });
- *
- * // Using the rules manager directly.
- * auth0.rules.getAll(function (err, rules) {
+ * management.rules.getAll(function (err, rules) {
  *   console.log(rules.length);
  * });
  *
@@ -118,17 +102,7 @@ utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
  * @memberOf  module:management.RulesManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getRule({ id: RULE_ID }, function (err, rule) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(rule);
- * });
- *
- * // Using the rules manager directly.
- * auth0.rules.get({ id: RULE_ID }, function (err, rule) {
+ * management.rules.get({ id: RULE_ID }, function (err, rule) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -156,7 +130,7 @@ utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
  * var params = { id: RULE_ID };
  *
  * // Using auth0 instance.
- * auth0.updateRule(params, data, function (err, rule) {
+ * management.updateRule(params, data, function (err, rule) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -165,7 +139,7 @@ utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
  * });
  *
  * // Using the rules manager directly.
- * auth0.rules.update(params, data, function (err, rule) {
+ * management.rules.update(params, data, function (err, rule) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -190,17 +164,7 @@ utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
  * @memberOf  module:management.RulesManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.deleteRule({ id: RULE_ID }, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Rule deleted.
- * });
- *
- * // Using the rules manager directly.
- * auth0.rules.delete({ id: RULE_ID }, function (err) {
+ * management.rules.delete({ id: RULE_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

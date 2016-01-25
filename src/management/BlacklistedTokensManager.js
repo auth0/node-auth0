@@ -59,18 +59,7 @@ var BlacklistedTokensManager = function (options) {
  *  jti: 'jti'
  * };
  *
- * // Using auth0 instance.
- * auth0.blacklistToken(token, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Token blacklisted.
- * });
- *
- *
- * // Using the blacklisted tokens manager directly.
- * auth0.blacklistedTokens.add(token, function (err) {
+ * management.blacklistedTokens.add(token, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -95,14 +84,7 @@ utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
  * @memberOf  module:management.BlacklistedTokensManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getBlacklistedTokens(function (err, tokens) {
- *   console.log(tokens.length);
- * });
- *
- *
- * // Using the blacklisted tokens manager directly.
- * auth0.blacklistedTokens.getAll(function (err, tokens) {
+ * management.blacklistedTokens.getAll(function (err, tokens) {
  *   console.log(tokens.length);
  * });
  *

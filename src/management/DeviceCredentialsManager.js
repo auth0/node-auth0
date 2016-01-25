@@ -45,7 +45,8 @@ var DeviceCredentialsManager = function (options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Auth0 DeviceCredentialsManagers endpoint]{@link https://auth0.com/docs/api/v2#!/Device_Credentials}.
+   * {@link https://auth0.com/docs/api/v2#!/Device_Credentials
+   *  Auth0 DeviceCredentialsManagers endpoint}.
    *
    * @type {external:RestDeviceCredentialsManager}
    */
@@ -60,17 +61,7 @@ var DeviceCredentialsManager = function (options) {
  * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.createConnection(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Credential created.
- * });
- *
- * // Using the device credentials manager directly.
- * auth0.deviceCredentials.create(data, function (err) {
+ * management.deviceCredentials.create(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -93,13 +84,7 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.
  * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getDeviceCredentials(function (err, credentials) {
- *   console.log(credentials.length);
- * });
- *
- * // Using the device credentials manager directly.
- * auth0.deviceCredentials.getAll(function (err, credentials) {
+ * management.deviceCredentials.getAll(function (err, credentials) {
  *   console.log(credentials.length);
  * });
  *
@@ -119,17 +104,7 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  * @example
  * var params = { id: CREDENTIAL_ID };
  *
- * // Using auth0 instance.
- * auth0.deleteDeviceCredential(params, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Credential deleted.
- * });
- *
- * // Using the credentials manager directly.
- * auth0.deviceCredentials.delete(params, function (err) {
+ * management.deviceCredentials.delete(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

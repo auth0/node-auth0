@@ -60,18 +60,7 @@ var EmailProviderManager = function (options) {
  * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.configureEmailProvider(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Email provider configured.
- * });
- *
- *
- * // Using the email provider manager directly.
- * auth0.emailProvider.configure(data, function (err) {
+ * management.emailProvider.configure(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -93,14 +82,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
  * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getEmailProvider(function (err, provider) {
- *   console.log(provider.length);
- * });
- *
- *
- * // Using the email provider manager directly.
- * auth0.emailProvider.get(function (err, provider) {
+ * management.emailProvider.get(function (err, provider) {
  *   console.log(provider);
  * });
  *
@@ -118,19 +100,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.updateEmailProvider(data, function (err, provider) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Updated email provider.
- *   console.log(provider);
- * });
- *
- *
- * // Using the email provider manager directly.
- * auth0.emailProvider.update(function (err, provider) {
+ * management.emailProvider.update(function (err, provider) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -154,18 +124,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
  * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.deleteEmailProvider(function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Email provider deleted.
- * });
- *
- *
- * // Using the email provider manager directly.
- * auth0.emailProvider.delete(function (err) {
+ * management.emailProvider.delete(function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

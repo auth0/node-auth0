@@ -38,7 +38,8 @@ var ConnectionsManager = function (options) {
 
   /**
    * Provides an abstraction layer for performing CRUD operations on
-   * [Auth0 Connections]{@link https://auth0.com/docs/api/v2#!/ConnectionsManagers}.
+   * {@link https://auth0.com/docs/api/v2#!/ConnectionsManagers Auth0
+   *  Connections}.
    *
    * @type {external:RestClient}
    */
@@ -53,18 +54,7 @@ var ConnectionsManager = function (options) {
  * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.createConnection(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Conection created.
- * });
- *
- *
- * // Using the connections manager directly.
- * auth0.connections.create(data, function (err) {
+ * management.connections.create(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -87,14 +77,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getConnections(function (err, connections) {
- *   console.log(connections.length);
- * });
- *
- *
- * // Using the connections manager directly.
- * auth0.connections.getAll(function (err, connections) {
+ * management.connections.getAll(function (err, connections) {
  *   console.log(connections.length);
  * });
  *
@@ -112,18 +95,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
  * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getConnection({ id: CONNECTION_ID }, function (err, connection) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(connection);
- * });
- *
- *
- * // Using the connections manager directly.
- * auth0.connections.get({ id: CONNECTION_ID }, function (err, connection) {
+ * management.connections.get({ id: CONNECTION_ID }, function (err, connection) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -150,19 +122,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
  * var data = { name: 'newConnectionName' };
  * var params = { id: CONNECTION_ID };
  *
- *
- * // Using auth0 instance.
- * auth0.updateConnection(params, data, function (err, connection) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(connection.name);  // 'newConnectionName'
- * });
- *
- *
- * // Using the connections manager directly.
- * auth0.connections.update(params, data, function (err, connection) {
+ * management.connections.update(params, data, function (err, connection) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -187,18 +147,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  * @memberOf  module:management.ConnectionsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.deleteConnection({ id: CONNECTION_ID }, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Conection deleted.
- * });
- *
- *
- * // Using the connections manager directly.
- * auth0.connections.delete({ id: CONNECTION_ID }, function (err) {
+ * management.connections.delete({ id: CONNECTION_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

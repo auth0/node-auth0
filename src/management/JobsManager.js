@@ -45,7 +45,7 @@ var JobsManager = function (options){
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Jobs endpoint]{@link https://auth0.com/docs/api/v2#!/Jobs}.
+   * {@link https://auth0.com/docs/api/v2#!/Jobs Jobs endpoint}.
    *
    * @type {external:RestClient}
    */
@@ -64,7 +64,7 @@ var JobsManager = function (options){
  *   id: '{JOB_ID}'
  * };
  *
- * auth0.jobs.get(params, function (err, job) {
+ * management.jobs.get(params, function (err, job) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -106,7 +106,7 @@ JobsManager.prototype.get = function (params, cb) {
  *   users: '{PATH_TO_USERS_FILE}'
  * };
  *
- * auth0.jobs.get(params, function (err) {
+ * management.jobs.get(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -166,7 +166,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
  * 	user_id: '{USER_ID}'
  * };
  *
- * auth0.jobs.verifyEmail(function (err) {
+ * management.jobs.verifyEmail(function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

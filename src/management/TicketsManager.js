@@ -28,7 +28,7 @@ var TicketsManager = function (options){
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Tickets endpoint]{@link https://auth0.com/docs/api/v2#!/Tickets}.
+   * {@link https://auth0.com/docs/api/v2#!/Tickets Tickets endpoint}.
    *
    * @type {external:RestClient}
    */
@@ -50,7 +50,7 @@ var TicketsManager = function (options){
  *   new_password: '{PASSWORD}'
  * };
  *
- * auth0.tickets.changePassword(params, function (err) {
+ * management.tickets.changePassword(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -83,7 +83,7 @@ TicketsManager.prototype.changePassword = function (data, cb) {
  *   result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
  * };
  *
- * auth0.tickets.verifyEmail(data, function (err) {
+ * management.tickets.verifyEmail(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

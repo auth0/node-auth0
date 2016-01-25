@@ -39,7 +39,7 @@ var TenantManager = function (options){
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Stats endpoint]{@link https://auth0.com/docs/api/v2#!/Stats}.
+   * {@link https://auth0.com/docs/api/v2#!/Stats Stats endpoint}.
    *
    * @type {external:RestClient}
    */
@@ -53,7 +53,7 @@ var TenantManager = function (options){
  * @memberOf  module:management.TenantManager.prototype
  *
  * @example
- * auth0.tenant.updateSettings(data, function (err) {
+ * management.tenant.updateSettings(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -80,7 +80,7 @@ TenantManager.prototype.updateSettings = function (data, cb) {
  * @memberOf  module:management.TenantManager.prototype
  *
  * @example
- * auth0.tenant.getSettings(function (err, settings) {
+ * management.tenant.getSettings(function (err, settings) {
  *   if (err) {
  *     // Handle error.
  *   }

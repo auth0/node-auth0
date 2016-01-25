@@ -7,9 +7,10 @@ var utils = require('../utils');
  * @class ClientsManager
  * Auth0 Clients Manager.
  *
- * [Clients](https://auth0.com/docs/api/v2#!/Clients) represent applications.
+ * {@link https://auth0.com/docs/api/v2#!/Clients Clients} represent
+ * applications.
  * You can learn more about this in the
- * [Applications](https://auth0.com/docs/applications) section of the
+ * {@link https://auth0.com/docs/applications Applications} section of the
  * documentation.
  * @constructor
  * @memberOf module:management
@@ -43,7 +44,7 @@ var ClientsManager = function (options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Auth0 Clients endpoint]{@link https://auth0.com/docs/api/v2#!/Clients}.
+   * {@link https://auth0.com/docs/api/v2#!/Clients Auth0 Clients endpoint}.
    *
    * @type {external:RestClient}
    */
@@ -58,18 +59,7 @@ var ClientsManager = function (options) {
  * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.createClient(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Client created.
- * });
- *
- *
- * // Using the clients manager directly.
- * auth0.clients.create(data, function (err) {
+ * management.clients.create(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -92,14 +82,7 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getClients(function (err, clients) {
- *   console.log(clients.length);
- * });
- *
- *
- * // Using the clients manager directly.
- * auth0.clients.getAll(function (err, clients) {
+ * management.clients.getAll(function (err, clients) {
  *   console.log(clients.length);
  * });
  *
@@ -117,18 +100,7 @@ utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
  * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.getClient({ client_id: CLIENT_ID }, function (err, client) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(client);
- * });
- *
- *
- * // Using the clients manager directly.
- * auth0.clients.get({ client_id: CLIENT_ID }, function (err, client) {
+ * management.clients.get({ client_id: CLIENT_ID }, function (err, client) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -155,19 +127,7 @@ utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
  * var data = { name: 'newClientName' };
  * var params = { client_id: CLIENT_ID };
  *
- *
- * // Using auth0 instance.
- * auth0.updateClient(params, data, function (err, client) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(client.name);  // 'newClientName'
- * });
- *
- *
- * // Using the clients manager directly.
- * auth0.clients.update(params, data, function (err, client) {
+ * management.clients.update(params, data, function (err, client) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -192,18 +152,7 @@ utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
  * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
- * // Using auth0 instance.
- * auth0.deleteClient({ client_id: CLIENT_ID }, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Client deleted.
- * });
- *
- *
- * // Using the clients manager directly.
- * auth0.clients.delete({ client_id: CLIENT_ID }, function (err) {
+ * management.clients.delete({ client_id: CLIENT_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }

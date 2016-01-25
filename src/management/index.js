@@ -196,397 +196,1077 @@ ManagementClient.prototype.getClientInfo = function () {
 
 
 /**
- * Binding for auth0.connections.getAll()
+ * Get all connections.
  *
  * @method    getConnections
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getConnections(function (err, connections) {
+ *   console.log(connections.length);
+ * });
+ *
+ * @param   {Object}    data     Connection data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll');
 
 
 /**
- * Binding for auth0.connections.create()
+ * Create a new connection.
  *
  * @method    createConnection
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createConnection(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Conection created.
+ * });
+ *
+ * @param   {Object}    data     Connection data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createConnection', 'connections.create');
 
 
 /**
- * Binding for auth0.connections.get()
+ * Get an Auth0 connection.
  *
  * @method    getConnection
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getConnection({ id: CONNECTION_ID }, function (err, connection) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(connection);
+ * });
+ *
+ * @param   {Object}    params          Connection parameters.
+ * @param   {String}    params.id       Connection ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
 
 
 /**
- * Binding for auth0.connections.delete()
+ * Delete an existing connection.
  *
  * @method    deleteConnection
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteConnection({ id: CONNECTION_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Conection deleted.
+ * });
+ *
+ * @param   {Object}    params          Connection parameters.
+ * @param   {String}    params.id       Connection ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.delete');
 
 
 /**
- * Binding for auth0.connections.update()
+ * Update an existing connection.
  *
  * @method    updateConnection
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var data = { name: 'newConnectionName' };
+ * var params = { id: CONNECTION_ID };
+ *
+ * management.updateConnection(params, data, function (err, connection) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(connection.name);  // 'newConnectionName'
+ * });
+ *
+ * @param   {Object}    params        Conneciton parameters.
+ * @param   {String}    params.id     Connection ID.
+ * @param   {Object}    data          Updated connection data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.update');
 
 
 /**
- * Binding for auth0.clients.getAll()
+ * Get all Auth0 clients.
  *
  * @method    getClients
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getClients(function (err, clients) {
+ *   console.log(clients.length);
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getClients', 'clients.getAll');
 
 
 /**
- * Binding for auth0.clients.get()
+ * Get an Auth0 client.
  *
  * @method    getClient
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getClient({ client_id: CLIENT_ID }, function (err, client) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(client);
+ * });
+ *
+ * @param   {Object}    params            Client parameters.
+ * @param   {String}    params.client_id  Application client ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getClient', 'clients.get');
 
 
 /**
- * Binding for auth0.clients.create()
+ * Create an Auth0 client.
  *
  * @method    createClient
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createClient(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client created.
+ * });
+ *
+ * @param   {Object}    data     The client data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
 
 
 /**
- * Binding for auth0.clients.update()
+ * Update an Auth0 client.
  *
  * @method    updateClient
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var data = { name: 'newClientName' };
+ * var params = { client_id: CLIENT_ID };
+ *
+ * management.updateClient(params, data, function (err, client) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(client.name);  // 'newClientName'
+ * });
+ *
+ * @param   {Object}    params            Client parameters.
+ * @param   {String}    params.client_id  Application client ID.
+ * @param   {Object}    data              Updated client data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateClient', 'clients.update');
 
 
 /**
- * Binding for auth0.clients.delete()
+ * Delete an Auth0 client.
  *
  * @method    deleteClient
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteClient({ client_id: CLIENT_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client deleted.
+ * });
+ *
+ * @param   {Object}    params            Client parameters.
+ * @param   {String}    params.client_id  Application client ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
 
 
 /**
- * Binding for auth0.deviceCredentials.createPubicKey()
+ * Create an Auth0 credential.
  *
  * @method    createDevicePublicKey
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createConnection(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Credential created.
+ * });
+ *
+ * @param   {Object}    data     The device credential data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createDevicePublicKey', 'deviceCredentials.createPublicKey');
 
 
 /**
- * Binding for auth0.deviceCredentials.getAll()
+ * Get all Auth0 credentials.
  *
  * @method    getDeviceCredentials
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getDeviceCredentials(function (err, credentials) {
+ *   console.log(credentials.length);
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCredentials.getAll');
 
 
 /**
- * Binding for auth0.deviceCredentials.delete()
+ * Delete an Auth0 device credential.
  *
  * @method    deleteDeviceCredential
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: CREDENTIAL_ID };
+ *
+ * management.deleteDeviceCredential(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Credential deleted.
+ * });
+ *
+ * @param   {Object}    params          Credential parameters.
+ * @param   {String}    params.id       Device credential ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCredentials.delete');
 
 
 /**
- * Binding for auth0.rules.getAll()
+ * Get all rules.
  *
  * @method    getRules
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getRules(function (err, rules) {
+ *   console.log(rules.length);
+ * });
+ *
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
 
 
 /**
- * Binding for auth0.rules.create()
+ * Create a new rule.
  *
  * @method    createRules
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createRule(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule created.
+ * });
+ *
+ * @param   {Object}    data     Rule data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createRule', 'rules.create');
 
 
 /**
- * Binding for auth0.rules.get()
+ * Get an Auth0 rule.
  *
  * @method    getRule
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getRule({ id: RULE_ID }, function (err, rule) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(rule);
+ * });
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getRule', 'rules.get');
 
 
 /**
- * Binding for auth0.rules.delete()
+ * Delete an existing rule.
  *
  * @method    deleteRule
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * auth0.deleteRule({ id: RULE_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule deleted.
+ * });
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 
 
 /**
- * Binding for auth0.rules.update()
+ * Delete an existing rule.
  *
  * @method    updateRule
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteRule({ id: RULE_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule deleted.
+ * });
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
 
 
 /**
- * Binding for auth0.users.getAll()
+ * Get all users.
  *
  * @method    getUsers
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings and the search query.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 2
+ * };
+ *
+ * auth0.getUsers(params, function (err, users) {
+ *   console.log(users.length);
+ * });
+ *
+ * @param   {Object}    [params]          Users params.
+ * @param   {Number}    [params.per_page] Number of users per page.
+ * @param   {Number}    [params.page]     Page number.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
 
 
 /**
- * Binding for auth0.users.get()
+ * Get a user by its id.
  *
  * @method    getUser
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getUser({ id: USER_ID }, function (err, user) {
+ *   console.log(user);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
 
 
 /**
- * Binding for auth0.users.deleteAll()
+ * Delete all users.
  *
  * @method    deleteAllUsers
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteAllUsers(function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users deleted
+ * });
+ *
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
 
 
 /**
- * Binding for auth0.users.delete()
+ * Delete a user by its id.
  *
  * @method    deleteUser
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteUser({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User deleted.
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteUser', 'users.delete');
 
 
 /**
- * Binding for auth0.users.create()
+ * Create a new user.
  *
  * @method    createUser
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createUser(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User created.
+ * });
+ *
+ * @param   {Object}    data    User data.
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
 
 
 /**
- * Binding for auth0.users.update()
+ * Update a user by its id.
  *
  * @method    updateUser
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID };
+ *
+ * management.updateUser(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
+ * @param   {Object}    params      The user parameters.
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    data        New user data.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
 
 
 /**
- * Binding for auth0.users.updateUserMetadata()
+ * Update the user metadata for a user.
  *
  * @method    updateUserMetadata
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID };
+ * var metadata = {
+ *   address: '123th Node.js Street'
+ * };
+ *
+ * management.updateUserMetadata(params, metadata, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    metadata    New user metadata.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUserMetadata');
 
 
 /**
- * Binding for auth0.users.updateAppMetadata()
+ * Update the app metadata for a user.
  *
  * @method    updateAppMetadata
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID };
+ * var metadata = {
+ *   foo: 'bar'
+ * };
+ *
+ * management.updateAppMetadata(params, metadata, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated user.
+ *   console.log(user);
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    metadata    New app metadata.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateAppMetadata');
 
 
 /**
- * Binding for auth0.users.deleteMultifactorProvider()
+ * Delete a multifactor provider for a user.
  *
  * @method    deleteUserMultifactor
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+ *
+ * management.deleteUserMultifcator(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.id         The user id.
+ * @param   {String}    params.provider   Multifactor provider.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteUserMultifcator', 'users.deleteMultifactorProvider');
 
 
 /**
- * Binding for auth0.users.unlink()
+ * Unlink the given accounts.
  *
  * @method    unlinkUsers
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };
+ *
+ * management.unlinkUsers(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
+ *
+ * @param   {Object}    params            Linked users data.
+ * @param   {String}    params.id         Primary user ID.
+ * @param   {String}    params.provider   Identity provider in use.
+ * @param   {String}    params.user_id    Secondary user ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
 
 
 /**
- * Binding for auth0.users.link()
+ * Link the user with another account.
  *
  * @method    linkUsers
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID };
+ * var data = {
+ *   user_id: 'OTHER_USER_ID',
+ *   connection_id: 'CONNECTION_ID'
+ * };
+ *
+ * management.linkUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users linked.
+ * });
+ *
+ * @param   {String}    userId                ID of the primary user.
+ * @param   {Object}    params                Secondary user data.
+ * @param   {String}    params.user_id        ID of the user to be linked.
+ * @param   {String}    params.connection_id  ID of the connection to be used.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 
 
 /**
- * Binding for auth0.blacklistedTokens.getAll()
+ * Get all blacklisted tokens.
  *
  * @method    getBlacklistedTokens
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getBlacklistedTokens(function (err, tokens) {
+ *   console.log(tokens.length);
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
 
 
 /**
- * Binding for auth0.blacklistedTokens.add()
+ * Blacklist a new token.
  *
  * @method    blacklistToken
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var token = {
+ *  aud: 'aud',
+ *  jti: 'jti'
+ * };
+ *
+ * management.blacklistToken(token, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Token blacklisted.
+ * });
+ *
+ * @param   {Object}    token      Token data.
+ * @param   {String}    token.aud  Audience (your app client ID).
+ * @param   {String}    token.jti  The JWT ID claim.
+ * @param   {Function}  [cb]       Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.add');
 
 
 /**
- * Binding for auth0.emailProvider.get()
+ * Get the email provider.
  *
  * @method    getEmailProvider
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getEmailProvider(function (err, provider) {
+ *   console.log(provider.length);
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getEmailProvider', 'emailProvider.get');
 
 
 /**
- * Binding for auth0.emailProvider.configure()
+ * Configure the email provider.
  *
  * @method    configureEmailProvider
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.configureEmailProvider(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Email provider configured.
+ * });
+ *
+ * @param   {Object}    data     The email provider data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'configureEmailProvider', 'emailProvider.configure');
 
 
 /**
- * Binding for auth0.emailProvider.delete()
+ * Delete email provider.
  *
  * @method    deleteEmailProvider
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteEmailProvider(function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Email provider deleted.
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider.delete');
 
 
 /**
- * Binding for auth0.emailProvider.update()
+ * Update the email provider.
  *
  * @method    updateEmailProvider
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateEmailProvider(data, function (err, provider) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Updated email provider.
+ *   console.log(provider);
+ * });
+ *
+ * @param   {Object}    data              Updated email provider data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateEmailProvider', 'emailProvider.update');
 
 
 /**
- * Binding for auth0.stats.getActiveUsersCount()
+ * Get a the active users count.
  *
  * @method    getActiveUsersCount
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getActiveUsersCount(function (err, usersCount) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(usersCount);
+ * });
+ *
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActiveUsersCount');
 
 
 /**
- * Binding for auth0.stats.getDaily()
+ * Get the daily stats.
  *
  * @method    getDailyStats
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   from: '{YYYYMMDD}',  // First day included in the stats.
+ *   to: '{YYYYMMDD}'  // Last day included in the stats.
+ * };
+ *
+ * management.getDaily(params, function (err, stats) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(stats);
+ * });
+ *
+ * @param   {Object}    params        Stats parameters.
+ * @param   {String}    params.from   The first day in YYYYMMDD format.
+ * @param   {String}    params.to     The last day in YYYYMMDD format.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getDailyStats', 'stats.getDaily');
 
 
 /**
- * Binding for auth0.tenatn.getSettings()
+ * Get the tenant settings..
  *
  * @method    getTenantSettings
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getSettings(function (err, settings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getTenantSettings', 'tenant.getSettings');
 
 
 /**
- * Binding for auth0.tenant.updateSettings()
+ * Update the tenant settings.
  *
  * @method    updateTenantSettings
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateTenantSettings(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data  The new tenant settings.
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updateSettings');
 
 
 /**
- * Binding for auth0.jobs.get()
+ * Get a job by its ID.
  *
  * @method    getJob
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * management.getJob(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 
 
 /**
- * Binding for auth0.jobs.importUsers()
+ * Given a path to a file and a connection id, create a new job that imports the
+ * users contained in the file and associate them with the given connection.
  *
  * @method    importUsers
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   connection_id: '{CONNECTION_ID}',
+ *   users: '{PATH_TO_USERS_FILE}'
+ * };
+ *
+ * management.get(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data                Users import data.
+ * @param   {String}    data.connectionId   Connection for the users insertion.
+ * @param   {String}    data.users          Path to the users data file.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
 
 /**
- * Binding for auth0.jobs.verifyEmail()
+ * Send a verification email to a user.
  *
  * @method    sendEmailVerification
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ * 	user_id: '{USER_ID}'
+ * };
+ *
+ * management.sendEmailVerification(function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data          User data object.
+ * @param   {String}    data.user_id  ID of the user to be verified.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verifyEmail');
 
 
 /**
- * Binding for auth0.tickets.changePassword()
+ * Create a new password change ticket.
  *
  * @method    createPasswordChangeTicket
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+ *   user_id: '{USER_ID}',  // Optional.
+ *   email: '{USER_EMAIL}',  // Optional.
+ *   new_password: '{PASSWORD}'
+ * };
+ *
+ * auth0.createPasswordChangeTicket(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Function}  [cb]  Callback function.
+ * @return  {Promise}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'tickets.changePassword');
 
 
 /**
- * Binding for auth0.tickets.verifyEmail()
+ * Create an email verification ticket.
  *
  * @method    createEmailVerificationTicket
  * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var data = {
+ *   user_id: '{USER_ID}',
+ *   result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
+ * };
+ *
+ * auth0.createEmailVerificationTicket(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Function}  [cb]  Callback function.
+ * @return  {Promise}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createEmailVerificationTicket', 'tickets.verifyEmail');
 

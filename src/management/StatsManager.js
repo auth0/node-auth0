@@ -39,7 +39,7 @@ var StatsManager = function (options){
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Stats endpoint]{@link https://auth0.com/docs/api/v2#!/Stats}.
+   * {@link https://auth0.com/docs/api/v2#!/Stats Stats endpoint}.
    *
    * @type {external:RestClient}
    */
@@ -59,7 +59,7 @@ var StatsManager = function (options){
  *   to: '{YYYYMMDD}'  // Last day included in the stats.
  * };
  *
- * auth0.stats.getDaily(params, function (err, stats) {
+ * management.stats.getDaily(params, function (err, stats) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -93,7 +93,7 @@ StatsManager.prototype.getDaily = function (params, cb) {
  * @memberOf  module:management.StatsManager.prototype
  *
  * @example
- * auth0.stats.getActiveUsersCount(function (err, usersCount) {
+ * management.stats.getActiveUsersCount(function (err, usersCount) {
  *   if (err) {
  *     // Handle error.
  *   }
