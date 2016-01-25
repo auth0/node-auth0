@@ -1,8 +1,8 @@
 {
   "name": "auth0",
-  "version": "2.0.0-beta.4",
-  "description": "node.js SDK for Auth0 API v2",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "SDK for Auth0 API v2",
+  "main": "src/index.js",
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec $(find ./test -name *.tests.js) && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test-watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch",
