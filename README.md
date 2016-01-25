@@ -2,89 +2,40 @@
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-##Table of Contents
-
-- [Installation](#installation)
-- [Management API Client](#management-api-client)
-  - [Usage](#usage)
-  - [Clients](#clients)
-    - [Get all clients](#get-all-clients)
-    - [Create a client](#create-a-client)
-    - [Get a client](#get-a-client)
-    - [Delete a client](#delete-a-client)
-    - [Update a client](#update-a-client)
-  - [Connections](#connections)
-    - [Get all connections](#get-all-connections)
-    - [Create a connection](#create-a-connection)
-    - [Get a connection](#get-a-connection)
-    - [Delete a connection](#delete-a-connection)
-    - [Update a connection](#update-a-connection)
-  - [Device Credentials](#device-credentials)
-    - [List device credentials](#list-device-credentials)
-    - [Create device public key](#create-device-public-key)
-    - [Delete a device credential](#delete-a-device-credential)
-  - [Rules](#rules)
-    - [Get all rules](#get-all-rules)
-    - [Create a rule](#create-a-rule)
-    - [Get a rule](#get-a-rule)
-    - [Delete a rule](#delete-a-rule)
-    - [Update a rule](#update-a-rule)
-  - [Users](#users)
-    - [List or search users](#list-or-search-users)
-    - [Create a user](#create-a-user)
-    - [Get a user](#get-a-user)
-    - [Delete all users](#delete-all-users)
-    - [Delete a user](#delete-a-user)
-    - [Update a user](#update-a-user)
-    - [Update user metadata](#update-user-metadata)
-    - [Update app metadata](#update-app-metadata)
-    - [Link user accounts](#link-user-accounts)
-    - [Unlink user accounts](#unlink-user-accounts)
-    - [Delete user multifactor provider](#delete-user-multifactor-provider)
-  - [Blacklisted Tokens](#blacklisted-tokens)
-    - [Get all blacklisted tokens](#get-all-blacklisted-tokens)
-    - [Blacklist a token](#blacklist-a-token)
-  - [Email Provider](#email-provider)
-    - [Get the email provider](#get-the-email-provider)
-    - [Configure the email provider](#configure-the-email-provider)
-    - [Delete the email provider](#delete-the-email-provider)
-    - [Update the email provider](#update-the-email-provider)
-- [Authentication API Client](#authentication-api-client)
-  - [Usage](#usage-1)
-  - [Database & Active Directory](#database-&-active-directory)
-    - [Sign in](#sign-in)
-    - [Sign up](#sign-up)
-    - [Change password](#change-password)
-  - [Passwordless](#passwordless)
-    - [Send email](#send-email)
-    - [Send SMS](#send-sms)
-    - [Login](#login)
-  - [Users](#users-1)
-    - [User info](#user-info)
-    - [Impersonation](#impersonation)
-  - [Tokens](#tokens)
-    - [Token info](#token-info)
-    - [Delegation Token](#delegation-token)
-- [General](#general)
-  - [Promises and Callbacks](#promises-and-callbacks)
-  - [Examples](#examples)
-  - [Documentation](#documentation)
-  - [What is Auth0?](#what-is-auth0)
-  - [Create a free Auth0 Account](#create-a-free-auth0-account)
-  - [Issue Reporting](#issue-reporting)
-  - [Author](#author)
-  - [License](#license)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Installation
 
 	npm install auth0@2.0.0-alpha.5
 
+# SDK
 
-# General
+## Management API Client
+The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
+
+
+Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain.
+
+~~~js
+var ManagementClient = require('auth0').ManagementClient;
+
+var management = new ManagementClient({
+  token: '{YOUR_API_V2_TOKEN}',
+  domain: '{YOUR_ACCOUNT}.auth0.com'
+});
+~~~
+
+## Authentication API Client
+This client must used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+
+The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
+
+~~~js
+var AuthenticationClient = require('auth0').AuthenticationClient;
+
+var auth0 = new AuthenticationClient({
+  domain: '{YOUR_ACCOUNT}.auth0.com',
+  clientId: '{OPTIONAL_CLIENT_ID}'
+});
+~~~
 
 ## Promises and Callbacks
 
