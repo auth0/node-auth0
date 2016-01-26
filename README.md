@@ -5,6 +5,11 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 # Installation
 
 	npm install auth0@2.0.0-beta.4
+	
+## Documentation
+For more information on how to use this library you must build the docs. You can do so by running: `npm run docs-build`.
+
+The *docs-build* script will generate all the documentation in HTML format under the `docs` folder. Open `docs/index.html` in any web browser to see the documentation.
 
 ## Management API Client
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
