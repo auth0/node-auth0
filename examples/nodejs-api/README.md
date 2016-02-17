@@ -18,4 +18,4 @@ AUTH0_CLIENT_SECRET=myCoolSecret
 AUTH0_CLIENT_ID=myCoolClientId
 ````
 
-Once you've set those 2 enviroment variables, just run `node server.js` and try calling [http://localhost:3001/ping](http://localhost:3001/ping)
+Once you've set those 2 enviroment variables, just run `npm start` and try calling [http://localhost:3001/ping](http://localhost:3001/ping)
