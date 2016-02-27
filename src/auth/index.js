@@ -407,9 +407,9 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
 
 
 /**
- * Request a change password link using a database or active directory service.
+ * Request a change password email using a database or active directory service.
  *
- * @method    sendChangePasswordLink
+ * @method    requestChangePasswordEmail
  * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @example <caption>
@@ -425,7 +425,7 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
  *   connection: 'Username-Password-Authentication'
  * };
  *
- * auth0.sendChangePasswordLink(data, function (err, message) {
+ * auth0.requestChangePasswordEmail(data, function (err, message) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -439,13 +439,13 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.sendChangePasswordLink = function (data, cb) {
+AuthenticationClient.prototype.requestChangePasswordEmail = function (data, cb) {
   var translatedData = {
     connection: data.connection,
     email: data.email || data.username
   };
 
-  return this.database.sendChangePasswordLink(data, cb);
+  return this.database.requestChangePasswordEmail(data, cb);
 };
 
 

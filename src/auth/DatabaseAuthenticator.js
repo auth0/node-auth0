@@ -236,9 +236,9 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
 
 
 /**
- * Request a change password link using a database or active directory service.
+ * Request a change password email using a database or active directory service.
  *
- * @method    sendChangePasswordLink
+ * @method    requestChangePasswordEmail
  * @memberOf  module:auth.DatabaseAuthenticator.prototype
  *
  * @example <caption>
@@ -254,7 +254,7 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
  *   connection: 'Username-Password-Authentication'
  * };
  *
- * auth0.database.sendChangePasswordLink(data, function (err, message) {
+ * auth0.database.requestChangePasswordEmail(data, function (err, message) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -269,7 +269,7 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
  *
  * @return  {Promise|undefined}
  */
-DatabaseAuthenticator.prototype.sendChangePasswordLink = function (userData, cb) {
+DatabaseAuthenticator.prototype.requestChangePasswordEmail = function (userData, cb) {
   var params = {
     type: 'change_password'
   };
