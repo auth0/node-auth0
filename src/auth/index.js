@@ -360,7 +360,7 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
 
 
 /**
- * Change passwor using a database or active directory service.
+ * Change password using a database or active directory service.
  *
  * @method    changePassword
  * @memberOf  module:auth.AuthenticationClient.prototype
@@ -403,6 +403,49 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
   };
 
   return this.database.changePassword(data, cb);
+};
+
+
+/**
+ * Request a change password link using a database or active directory service.
+ *
+ * @method    sendChangePasswordLink
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user email, the connection specified, Auth0 will send a change
+ *   password email. once the user clicks on the confirm password change link,
+ *   the new password specified in this POST will be set to this user. Find more
+ *   information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs</a>.
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.sendChangePasswordLink(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data            User data object.
+ * @param   {String}    data.email      User email.
+ * @param   {String}    data.connection Identity provider for the user.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.sendChangePasswordLink = function (data, cb) {
+  var translatedData = {
+    connection: data.connection,
+    email: data.email || data.username
+  };
+
+  return this.database.sendChangePasswordLink(data, cb);
 };
 
 
