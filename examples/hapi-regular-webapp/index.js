@@ -21,18 +21,18 @@ server.register(Cookie, (err) => {
 });
 
 server.register(Bell, (err) => {
-   if (err) { throw err; }
-   server.auth.strategy('auth0', 'bell', {
-       provider: 'auth0',
-       config: {
-           domain: process.env.AUTH0_DOMAIN
-       },
-       ttl: process.env.SESSION_COOKIE_TTL,
-       password: process.env.SESSION_COOKIE_PASSWORD,
-       clientId: process.env.AUTH0_CLIENT_ID,
-       clientSecret: process.env.AUTH0_CLIENT_SECRET,
-       isSecure: process.env.NODE_ENV === 'production'
-   });
+    if (err) { throw err; }
+    server.auth.strategy('auth0', 'bell', {
+        provider: 'auth0',
+        config: {
+            domain: process.env.AUTH0_DOMAIN
+        },
+        ttl: process.env.SESSION_COOKIE_TTL,
+        password: process.env.SESSION_COOKIE_PASSWORD,
+        clientId: process.env.AUTH0_CLIENT_ID,
+        clientSecret: process.env.AUTH0_CLIENT_SECRET,
+        isSecure: process.env.NODE_ENV === 'production'
+    });
 });
 
 server.route({
@@ -62,7 +62,7 @@ server.route({
             mode: 'required'
         }
     },
-    handler: function(request, reply) {
+    handler: function (request, reply) {
         // Stores entire Auth0 profile to a cookie, might be slow or cause issues
         // Consider storing only user ID and mapping it to a server-side cache
         request.cookieAuth.set({ sid: request.auth.credentials.profile });
@@ -80,6 +80,6 @@ server.route({
 });
 
 server.start((err) => {
-   if (err) { throw err; }
-   console.log(`listening on port ${process.env.PORT}`);
+    if (err) { throw err; }
+    console.log(`listening on port ${process.env.PORT}`);
 });
