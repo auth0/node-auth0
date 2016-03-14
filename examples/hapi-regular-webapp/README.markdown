@@ -5,7 +5,7 @@ If you want to create a hapi.js API which uses JWT authentication instead, pleas
 
 # Running the example
 
-Edit the `.env` file and add all the environment varaibles to it.
+Edit the `.env` file and add all the environment variables to it.
 You can find your Auth0 domain, client ID and secret for your client in the [Auth0 dashboard](https://manage.auth0.com/#/applications).
 
 Make sure to add `http://localhost:3000/login` to the Allowed Callback URLs of your Auth0 client.
@@ -25,4 +25,4 @@ If the user profile is too large for a cookie, some browsers might not set it.
 To prevent this and to reduce the size of the cookie, consider using a server-side cache and only storing the ID of the user in the cookie.
 For more information about server-side caching, [please refer to the hapi.js documentation](http://hapijs.com/tutorials/caching#server-side-caching).
 
-This example is maintained by @rolodato.
+This example is maintained by [@rolodato](https://github.com/rolodato/).
