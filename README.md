@@ -31,7 +31,7 @@ var management = new ManagementClient({
 Note: When using at browser you should use `telemetry: false`.
 
 ## Authentication API Client
-This client must used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
 
 The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
