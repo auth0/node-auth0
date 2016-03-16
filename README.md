@@ -28,6 +28,8 @@ var management = new ManagementClient({
 });
 ~~~
 
+Note: When using at browser you should use `telemetry: false`.
+
 ## Authentication API Client
 This client must used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
 
