@@ -4,6 +4,7 @@ var Promise = require('bluebird');
 
 var BASE_URL = 'https://tenant.auth0.com';
 var CLIENT_ID = 'TEST_CLIENT_ID';
+var ACCESS_TOKEN = 'TEST_ACCESS_TOKEN'
 
 var ArgumentError = require('../../src/exceptions').ArgumentError;
 var UsersManager = require('../../src/auth/UsersManager');
@@ -15,7 +16,8 @@ describe('UsersManager', function () {
     clientId: CLIENT_ID,
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    accessToken: ACCESS_TOKEN,
   };
 
   afterEach(function () {
