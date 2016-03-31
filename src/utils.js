@@ -73,6 +73,10 @@ utils.getRequestPromise = function (settings) {
         return;
       }
 
+      if (res.header['content-type'].substr(0, 5) === 'text/') {
+        return resolve(res.text);
+      }
+
       resolve(res.body);
     });
   });
