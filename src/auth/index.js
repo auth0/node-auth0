@@ -31,19 +31,23 @@ var BASE_URL_FORMAT = 'https://%s';
  * @example <caption>
  *   The <b>AuthenticationClient</b> constructor takes an <i>optional</i> client
  *   ID, if specified it will be used as default value for all endpoints that
- *   accept a client ID.
+ *   accept a client ID. It takes another <i>optional</i> access token,
+ *   if specified it will be used as default value for the impersonation endpoint
+ *   that requires an access token with global client permissions.
  * </caption>
  *
  * var AuthenticationClient = require('auth0'). AuthenticationClient;
  * var auth0 = new AuthenticationClient({
  *   domain: '{YOUR_ACCOUNT}.auth0.com',
  *   clientId: '{OPTIONAL_CLIENT_ID}'
+ *   accessToken: '{OPTIONAL_ACCESS_TOKEN}'
  * });
  *
- * @param   {Object}  options             Options for the Authentication Client
- *                                        SDK.
- * @param   {String}  options.domain      AuthenticationClient server domain.
- * @param   {String}  [options.clientId]  Default client ID.
+ * @param   {Object}  options               Options for the Authentication Client
+ *                                          SDK.
+ * @param   {String}  options.domain        AuthenticationClient server domain.
+ * @param   {String}  [options.clientId]    Default client ID.
+ * @param   {String}  [options.accessToken] Default access token.
  */
 var AuthenticationClient = function (options) {
   if (!options || typeof options !== 'object') {
@@ -62,7 +66,8 @@ var AuthenticationClient = function (options) {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: util.format(BASE_URL_FORMAT, options.domain),
+    accessToken: options.accessToken
   };
 
   if (options.telemetry !== false) {

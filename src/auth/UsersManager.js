@@ -14,6 +14,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @param  {String}   options.baseUrl       The auth0 account URL.
  * @param  {String}   [options.headers]     Default request headers.
  * @param  {String}   [options.clientId]    Default client ID.
+ * @param  {String}   [options.accessToken] Default accessToken.
  */
 var UsersManager = function (options) {
   if (typeof options !== 'object') {
@@ -27,6 +28,7 @@ var UsersManager = function (options) {
   this.baseUrl = options.baseUrl;
   this.headers = options.headers;
   this.clientId = options.clientId;
+  this.accessToken = options.accessToken;
 };
 
 
