@@ -352,7 +352,8 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
     id_token: data.id_token,
     api_type: data.api || data.api_type,
     scope: data.scope,
-    target: data.targetClientId || data.target
+    target: data.targetClientId || data.target,
+    grant_type: data.grant_type
   };
 
   return this.tokens.getDelegationToken(translatedData, cb);
