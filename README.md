@@ -102,7 +102,7 @@ If you are using a client-side Javscript framework, see:
 * [auth0/angular-jwt](https://github.com/auth0/angular-jwt) for using JWTs with [AngularJS](https://angularjs.org/) framework
 * [auth0-angular2-jwt](https://github.com/auth0/angular2-jwt) for use with the [AngularJS](https://angularjs.org/) framework
 * [auth0/auth0-angular2](https://github.com/auth0/auth0-angular2) for use with the [Angular 2](https://angular.io/)
-* [auth0-ember-simple-auth](https://github.com/auth0/auth0-ember-simple-auth) for use with (Ember's Simple Auth)[https://github.com/simplabs/ember-simple-auth] library
+* [auth0-ember-simple-auth](https://github.com/auth0/auth0-ember-simple-auth) for use with [Ember's Simple Auth](https://github.com/simplabs/ember-simple-auth) library
 * [auth0/auth0-jquery](https://github.com/auth0/auth0-jquery) for examples using the [jQuery](https://jquery.com/) library
 * [auth0/meteor-auth0](https://github.com/auth0/meteor-auth0) for use with the [Meteor](https://www.meteor.com/) framework
 * [auth0/meteor-accounts-auth0](https://github.com/auth0/meteor-accounts-auth0) for use with Meteor Auth
