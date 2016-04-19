@@ -11,6 +11,11 @@ module.exports = {
     library: 'Auth0',
     libraryTarget: 'umd',
   },
+  node: {
+    Buffer: true,
+    process: true,
+    url: true
+  },
   module: {
     loaders: [
       {
@@ -46,6 +51,5 @@ module.exports = {
     modulesDirectories: ['node_modules'],
     root: __dirname,
     alias: {},
-  },
-  node: false
+  }
 };
