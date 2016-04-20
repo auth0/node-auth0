@@ -21,7 +21,7 @@ var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
 
-var BASE_URL_FORMAT = 'https://%s/api/v2';
+var BASE_URL_FORMAT = '%s://%s/api/v2';
 
 
 /**
@@ -43,12 +43,14 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
  * var ManagementClient = require('auth0').ManagementClient;
  * var auth0 = new ManagementClient({
  *   token: '{YOUR_API_V2_TOKEN}',
- *   domain: '{YOUR_ACCOUNT}.auth0.com'
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   protocol: '{http OR https}'
  * });
  *
  * @param   {Object}  options           Options for the ManagementClient SDK.
  * @param   {String}  options.token     API access token.
  * @param   {String}  [options.domain]  ManagementClient server domain.
+ * @param   {String}  [options.protocol]  ManagementClient server protocol, defaults to 'https'
  */
 var ManagementClient = function (options) {
   if (!options || typeof options !== 'object') {
@@ -69,7 +71,7 @@ var ManagementClient = function (options) {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: util.format(BASE_URL_FORMAT, options.protocol || 'https', options.domain)
   };
 
   if (options.telemetry !== false) {
