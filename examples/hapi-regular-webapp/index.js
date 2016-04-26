@@ -75,7 +75,7 @@ server.route({
     path: '/logout',
     handler: function (request, reply) {
         request.cookieAuth.clear();
-        reply('You are now logged out from this web application. If you also want to log out from Auth0, take a look at <a href="auth0.com/docs/logout">https://auth0.com/docs/logout</a>.');
+        reply('You are now logged out from this web application. If you also want to log out from Auth0, take a look at <a href="https://auth0.com/docs/logout">https://auth0.com/docs/logout</a>.');
     }
 });
 
