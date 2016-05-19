@@ -66,7 +66,7 @@ var AuthenticationClient = function (options) {
   };
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(this.getClientInfo());
+    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
 

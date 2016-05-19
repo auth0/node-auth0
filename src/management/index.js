@@ -73,7 +73,8 @@ var ManagementClient = function (options) {
   };
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(this.getClientInfo());
+    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
+
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
 
@@ -188,7 +189,6 @@ ManagementClient.prototype.getClientInfo = function () {
       version: process.version.replace('v', '')
     }]
   };
-
   // Add the dependencies to the client info object.
   Object
     .keys(pkg.dependencies)
