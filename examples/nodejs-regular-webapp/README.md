@@ -1,8 +1,6 @@
 # Auth0 + NodeJS Seed
 This is the seed project you need to use if you're going to create regular NodeJS web application. If you want to create a NodeJS API to use with your SPA or mobile app, please check [this other seed project](https://github.com/auth0/node-auth0/tree/master/examples/nodejs-api)
 
-This example is deployed at Heroku at http://auth0-nodejs-webapp-sample.herokuapp.com/
-
 #Running the example
 In order to run the example you need to have npm and NodeJS installed.
 
