@@ -168,7 +168,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .put('/api/users/' + reqUserData.userId + '/email', {
+        .put('/api/users/' + encodeURIComponent(reqUserData.userId) + '/email', {
           email: reqUserData.email,
           verify: reqUserData.verify
         })
@@ -193,7 +193,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .put('/api/users/' + reqUserData.userId + '/email', {
+        .put('/api/users/' + encodeURIComponent(reqUserData.userId) + '/email', {
           email: reqUserData.email,
           verify: reqUserData.verify
         })
@@ -224,7 +224,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .put('/api/users/' + reqUserData.userId + '/password', {
+        .put('/api/users/' + encodeURIComponent(reqUserData.userId) + '/password', {
           password: reqUserData.password,
           verify: reqUserData.verify
         })
@@ -249,7 +249,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .put('/api/users/' + reqUserData.userId + '/password', {
+        .put('/api/users/' + encodeURIComponent(reqUserData.userId) + '/password', {
           password: reqUserData.password,
           verify: reqUserData.verify
         })
@@ -280,7 +280,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .get('/api/users/' + reqUserData.userId + '/metadata')
+        .get('/api/users/' + encodeURIComponent(reqUserData.userId) + '/metadata')
         .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(200, resUserData);
       api.getUserMetadata(reqUserData.userId, function (err, userData) {
@@ -301,7 +301,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .get('/api/users/' + reqUserData.userId + '/metadata')
+        .get('/api/users/' + encodeURIComponent(reqUserData.userId) + '/metadata')
         .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(401, resError);
 
@@ -329,7 +329,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .patch('/api/users/' + reqUserData.userId + '/metadata', reqUserMetadata)
+        .patch('/api/users/' + encodeURIComponent(reqUserData.userId) + '/metadata', reqUserMetadata)
         .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(200, resUserData);
       api.patchUserMetadata(reqUserData.userId, reqUserMetadata, function (err) {
@@ -350,7 +350,7 @@ describe('API', function () {
           'access_token': accessToken,
           'token_type':   'bearer'
         })
-        .patch('/api/users/' + reqUserData.userId + '/metadata', reqUserMetadata)
+        .patch('/api/users/' + encodeURIComponent(reqUserData.userId) + '/metadata', reqUserMetadata)
         .matchHeader('Authorization', 'Bearer ' + accessToken)
         .reply(401, resError);
 
