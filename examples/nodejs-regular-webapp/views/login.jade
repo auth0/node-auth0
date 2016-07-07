@@ -1,19 +1,18 @@
 extends layout
 
 block content
-  script(src="https://cdn.auth0.com/js/lock-9.0.js")
+  script(src="http://cdn.auth0.com/js/lock/10.0.0-rc.1/lock.min.js")
   
   div(id="root" style="width: 280px; margin: 40px auto; padding: 10px;")
 
   script.
-    var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}');
-    lock.show({
-        container: 'root'
-      , callbackURL: '#{env.AUTH0_CALLBACK_URL}'
-      , responseType: 'code'
-      , authParams: {
-        scope: 'openid name email picture'
-      }
-    });
+    var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}',{ auth: {
+          redirectUrl: '#{env.AUTH0_CALLBACK_URL}'
+        , responseType: 'code'
+        , params: {
+          scope: 'openid name email picture'
+        }
+      }});
+    lock.show();
 
   

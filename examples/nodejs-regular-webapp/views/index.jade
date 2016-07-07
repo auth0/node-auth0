@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  script(src="https://cdn.auth0.com/js/lock-9.0.js")
+  script(src="http://cdn.auth0.com/js/lock/10.0.0-rc.1/lock.min.js")
   
   h1= title
   p Welcome to #{title}
@@ -9,15 +9,15 @@ block content
   button(onclick="signin()") Login
 
   script.
-    var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}');
-    function signin() {
-      lock.show({
-          callbackURL: '#{env.AUTH0_CALLBACK_URL}'
+    var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}', { auth: {
+          redirectUrl: '#{env.AUTH0_CALLBACK_URL}'
         , responseType: 'code'
-        , authParams: {
+        , params: {
           scope: 'openid name email picture'
         }
-      });
+      }});
+    function signin() {
+      lock.show();
     }
 
   
