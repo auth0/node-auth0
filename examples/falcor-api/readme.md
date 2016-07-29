@@ -16,6 +16,6 @@ AUTH0_CLIENT_SECRET=myCoolSecret
 AUTH0_CLIENT_ID=myCoolClientId
 ````
 
-Once you've set the two environment variables, just run `node server.js`. The application will run on `localhost:3000`. 
+Once you've set the two environment variables, just run `node server.js`. The application will run on `localhost:3001`. 
 
 You'll need to fetch a JWT and save it in local storage to authenticate a user, and how you implement that on the front end is at your discretion.
