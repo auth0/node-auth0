@@ -61,5 +61,5 @@ app.use('/api/model.json', authenticate, falcorExpress.dataSourceRoute(function(
   ]);
 }));
 
-app.listen(3000);
-console.log("Listening on http://localhost:3000");
+app.listen(3001);
+console.log("Listening on http://localhost:3001");
