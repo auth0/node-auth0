@@ -155,7 +155,7 @@ UsersManager.prototype.impersonate = function (userId, settings, cb) {
     headers: this.headers,
     data: data,
     url: url
-  });
+  }, true);
 
   // Use callback if given.
   if (cb instanceof Function) {
