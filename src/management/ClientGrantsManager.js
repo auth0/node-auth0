@@ -45,7 +45,7 @@ var ClientGrantsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/clients-grants/:id', clientOptions);
+  this.resource = new RestClient(options.baseUrl + '/client-grants/:id', clientOptions);
 };
 
 
