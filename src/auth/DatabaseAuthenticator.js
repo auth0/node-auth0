@@ -163,7 +163,7 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
 
 
 /**
- * Change passwor using a database or active directory service.
+ * Change password using a database or active directory service.
  *
  * @method    changePassword
  * @memberOf  module:auth.DatabaseAuthenticator.prototype
@@ -220,6 +220,71 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
   if (typeof data.password !== 'string'
       || data.password.trim().length === 0) {
     throw new ArgumentError('password field is required');
+  }
+
+  if (typeof data.connection !== 'string'
+      || data.connection.trim().length === 0) {
+    throw new ArgumentError('connection field is required');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.dbConnections.create(params, data, cb);
+  }
+
+  return this.dbConnections.create(params, data);
+};
+
+
+/**
+ * Request a change password email using a database or active directory service.
+ *
+ * @method    requestChangePasswordEmail
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
+ * @example <caption>
+ *   Given the user email, the connection specified, Auth0 will send a change
+ *   password email. once the user clicks on the confirm password change link,
+ *   the new password specified in this POST will be set to this user. Find more
+ *   information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs</a>.
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.database.requestChangePasswordEmail(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.email        User email address.
+ * @param   {String}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+DatabaseAuthenticator.prototype.requestChangePasswordEmail = function (userData, cb) {
+  var params = {
+    type: 'change_password'
+  };
+  var defaultFields = {
+    client_id: this.clientId
+  };
+  var data = extend(defaultFields, userData);
+
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+
+  if (typeof data.email !== 'string'
+      || data.email.trim().length === 0) {
+    throw new ArgumentError('email field is required');
   }
 
   if (typeof data.connection !== 'string'

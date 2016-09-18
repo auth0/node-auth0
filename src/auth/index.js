@@ -66,7 +66,7 @@ var AuthenticationClient = function (options) {
   };
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(this.getClientInfo());
+    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
 
@@ -352,7 +352,8 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
     id_token: data.id_token,
     api_type: data.api || data.api_type,
     scope: data.scope,
-    target: data.targetClientId || data.target
+    target: data.targetClientId || data.target,
+    grant_type: data.grant_type
   };
 
   return this.tokens.getDelegationToken(translatedData, cb);
@@ -360,7 +361,7 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
 
 
 /**
- * Change passwor using a database or active directory service.
+ * Change password using a database or active directory service.
  *
  * @method    changePassword
  * @memberOf  module:auth.AuthenticationClient.prototype
@@ -403,6 +404,49 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
   };
 
   return this.database.changePassword(data, cb);
+};
+
+
+/**
+ * Request a change password email using a database or active directory service.
+ *
+ * @method    requestChangePasswordEmail
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user email, the connection specified, Auth0 will send a change
+ *   password email. once the user clicks on the confirm password change link,
+ *   the new password specified in this POST will be set to this user. Find more
+ *   information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs</a>.
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.requestChangePasswordEmail(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data            User data object.
+ * @param   {String}    data.email      User email.
+ * @param   {String}    data.connection Identity provider for the user.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.requestChangePasswordEmail = function (data, cb) {
+  var translatedData = {
+    connection: data.connection,
+    email: data.email || data.username
+  };
+
+  return this.database.requestChangePasswordEmail(data, cb);
 };
 
 

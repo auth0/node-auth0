@@ -20,6 +20,7 @@ var StatsManager = require('./StatsManager');
 var TenantManager = require('./TenantManager');
 var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
+var LogsManager = require('./LogsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 
@@ -73,7 +74,8 @@ var ManagementClient = function (options) {
   };
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(this.getClientInfo());
+    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
+
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
 
@@ -168,6 +170,13 @@ var ManagementClient = function (options) {
    * @type {TicketsManager}
    */
   this.tickets = new TicketsManager(managerOptions);
+
+  /**
+   * Logs manager.
+   *
+   * @type {LogsManager}
+   */
+  this.logs = new LogsManager(managerOptions);
 };
 
 
@@ -189,7 +198,6 @@ ManagementClient.prototype.getClientInfo = function () {
       version: process.version.replace('v', '')
     }]
   };
-
   // Add the dependencies to the client info object.
   Object
     .keys(pkg.dependencies)
@@ -1278,6 +1286,47 @@ utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'ticket
  * @return  {Promise}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createEmailVerificationTicket', 'tickets.verifyEmail');
+
+/**
+ * Get an Auth0 log.
+ *
+ * @method    getLog
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getLog({ id: EVENT_ID }, function (err, log) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(log);
+ * });
+ *
+ * @param   {Object}    params          Log parameters.
+ * @param   {String}    params.id       Event ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
+
+/**
+ * Get all logs.
+ *
+ * @method    getLogs
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getLogs(function (err, logs) {
+ *   console.log(logs.length);
+ * });
+ *
+ * @param   {Object}    data     Log data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
 
 
 module.exports = ManagementClient;

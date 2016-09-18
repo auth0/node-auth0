@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/sophilabs/node-auth0/badge.svg?branch=v2&service=github)](https://coveralls.io/github/sophilabs/node-auth0?branch=v2) [![Build Status](https://travis-ci.org/sophilabs/node-auth0.svg?branch=v2)](https://travis-ci.org/sophilabs/node-auth0)
+[![Coverage Status](https://coveralls.io/repos/github/auth0/node-auth0/badge.svg?branch=master)](https://coveralls.io/github/auth0/node-auth0?branch=master) [![Build Status](https://travis-ci.org/auth0/node-auth0.svg)](https://travis-ci.org/auth0/node-auth0)
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
@@ -28,8 +28,10 @@ var management = new ManagementClient({
 });
 ~~~
 
+Note: When using at browser you should use `telemetry: false`.
+
 ## Authentication API Client
-This client must used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
 
 The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 

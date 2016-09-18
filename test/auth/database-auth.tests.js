@@ -40,7 +40,7 @@ describe('DatabaseAuthenticator', function () {
 
 
   describe('instance', function () {
-    var methods = ['signIn', 'signUp', 'changePassword'];
+    var methods = ['signIn', 'signUp', 'changePassword', 'requestChangePasswordEmail'];
     var oauth = new OAuth(validOptions);
     var authenticator = new Authenticator(validOptions, oauth);
 
@@ -550,6 +550,130 @@ describe('DatabaseAuthenticator', function () {
       this
         .authenticator
         .changePassword(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+
+  describe('#requestChangePasswordEmail', function () {
+    var path = '/dbconnections/change_password';
+    var userData = {
+      email: 'test@domain.com',
+      connection: 'TEST_CONNECTION'
+    };
+
+    beforeEach(function () {
+      this.authenticator = new Authenticator(validOptions);
+      this.request = nock(API_URL)
+        .post(path)
+        .reply(200);
+    });
+
+
+    it('should require an object as first argument', function () {
+      expect(this.authenticator.requestChangePasswordEmail)
+        .to.throw(ArgumentError, 'Missing user data object');
+    });
+
+
+    it('should require an email', function () {
+      var auth = this.authenticator;
+      var userData = {};
+      var requestChangePasswordEmail = auth.requestChangePasswordEmail.bind(auth, userData);
+
+      expect(requestChangePasswordEmail)
+        .to.throw(ArgumentError, 'email field is required');
+    });
+
+
+    it('should require a connection', function () {
+      var auth = this.authenticator;
+      var userData = { email: 'email@domain.com' };
+      var requestChangePasswordEmail = auth.requestChangePasswordEmail.bind(auth, userData);
+
+      expect(requestChangePasswordEmail)
+        .to.throw(ArgumentError, 'connection field is required');
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .authenticator
+        .requestChangePasswordEmail(userData, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is provided', function (done) {
+      this
+        .authenticator
+        .requestChangePasswordEmail(userData)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should perform a POST request to ' + path, function (done) {
+      var request = this.request;
+
+      this
+        .authenticator
+        .requestChangePasswordEmail(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should include the user data in the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          for (var property in userData) {
+            if (userData[property] !== body[property]) {
+              return false;
+            }
+          }
+
+          return true;
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .requestChangePasswordEmail(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should include the Auth0 client ID in the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.client_id === CLIENT_ID;
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .requestChangePasswordEmail(userData)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
