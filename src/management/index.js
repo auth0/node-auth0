@@ -9,6 +9,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
 
 // Managers.
 var ClientsManager = require('./ClientsManager');
+var ClientGrantsManager = require('./ClientGrantsManager');
 var UsersManager = require('./UsersManager');
 var ConnectionsManager = require('./ConnectionsManager');
 var BlacklistedTokensManager = require('./BlacklistedTokensManager');
@@ -83,6 +84,14 @@ var ManagementClient = function (options) {
    * @type {ClientsManager}
    */
   this.clients = new ClientsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the client grants
+   * endpoint.
+   *
+   * @type {ClientGrantsManager}
+   */
+  this.clientGrants = new ClientGrantsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
