@@ -8,12 +8,12 @@ module.exports = function (body, boundary) {
     .split(partRegexp)
     .forEach(function (part) {
       // Ignore empty strings in the array.
-      if (part.length === 0) return;
+      if (part.trim().length === 0) return;
 
       name = part.match(/name="([^"]*)"/)[1];
       value = part.split('"' + name + '"')[1];
 
-      parts[name] = value;
+      parts[name] = value.trim();
     });
 
   return parts;
