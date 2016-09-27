@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-var request = require('superagent');
+var request = require('request');
 
 
 /**
@@ -56,24 +56,21 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
  */
 utils.getRequestPromise = function (settings) {
   return new Promise(function (resolve, reject) {
-    var method = settings.method.toLowerCase();
-    var req = request[method](settings.url);
-
-    for (var name in settings.headers) {
-      req = req.set(name, settings.headers[name]);
-    }
-
-    if (typeof settings.data === 'object') {
-      req = req.send(settings.data);
-    }
-
-    req.end(function (err, res) {
-      if (err) {
+    request({
+      url: settings.url,
+      method: settings.method,
+      body: settings.data,
+      json: typeof settings.data === 'object',
+      headers: settings.headers
+    }, function (err, res, body) {
+       if (err) {
         reject(err);
         return;
       }
 
       resolve(res.body);
     });
+    
   });
-};
+  
+}

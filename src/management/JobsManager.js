@@ -1,6 +1,7 @@
-var request = require('superagent');
+var request = require('request');
 var extend = require('util')._extend;
 var Promise = require('bluebird');
+var fs = require('fs');
 
 var RestClient = require('rest-facade').Client;
 var ArgumentError = require('../exceptions').ArgumentError;
@@ -125,17 +126,38 @@ JobsManager.prototype.importUsers = function (data, cb) {
 
   headers['Content-Type'] = 'multipart/form-data';
 
+  var url = options.baseUrl + '/jobs/users-imports';
+  var method = 'POST';
+
   var promise = new Promise(function (resolve, reject) {
-    var req = request
-      .post(options.baseUrl + '/jobs/users-imports')
-      .field('connection_id', data.connection_id)
-      .attach('users', data.users);
+    request({
+      url: url,
+      method: method,
+      headers: headers,
+      formData: {
+        users: {
+          value: fs.createReadStream(data.users),
+          options: {
+            filename: data.users
+          }
+        },
+        connection_id: data.connection_id
+      }
+    }, function (err, res) {
+      
 
-    for (var name in headers) {
-      req.set(name, headers[name]);
-    }
+      // `superagent` uses the error parameter in callback on http errors.
+      // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+      var type = res.statusCode / 100 | 0;
+      var isErrorResponse = (4 === type || 5 === type);
+      if (isErrorResponse) {
+        var error = new Error('cannot ' + method  + url + ' (' + res.statusCode + ')');
+        error.status = res.statusCode;
+        error.method = method;
+        error.text = res.text;
+        reject(error);
+      }
 
-    req.end(function (err, res) {
       if (err) {
         reject(err);
       }
