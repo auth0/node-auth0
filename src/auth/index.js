@@ -16,7 +16,7 @@ var PasswordlessAuthenticator = require('./PasswordlessAuthenticator');
 var UsersManager = require('./UsersManager');
 var TokensManager = require('./TokensManager');
 
-var BASE_URL_FORMAT = 'https://%s';
+var BASE_URL_FORMAT = '%s://%s';
 
 
 /**
@@ -37,12 +37,14 @@ var BASE_URL_FORMAT = 'https://%s';
  * var AuthenticationClient = require('auth0'). AuthenticationClient;
  * var auth0 = new AuthenticationClient({
  *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   protocol: '{http OR https}',
  *   clientId: '{OPTIONAL_CLIENT_ID}'
  * });
  *
  * @param   {Object}  options             Options for the Authentication Client
  *                                        SDK.
  * @param   {String}  options.domain      AuthenticationClient server domain.
+ * @param   {String}  [options.protocol]  AuthenticationClient server protocol, defaults to 'https'
  * @param   {String}  [options.clientId]  Default client ID.
  */
 var AuthenticationClient = function (options) {
@@ -62,7 +64,7 @@ var AuthenticationClient = function (options) {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: util.format(BASE_URL_FORMAT, options.protocol || 'https', options.domain)
   };
 
   if (options.telemetry !== false) {
