@@ -25,8 +25,8 @@
     "nock": "~0.27.2"
   },
   "dependencies": {
-    "xtend": "~1.0.3",
-    "request": "~2.72.0",
-    "parse-links": "0.0.1"
+    "parse-links": "0.0.1",
+    "request": "2.75.0",
+    "xtend": "~1.0.3"
   }
 }
