@@ -14,6 +14,7 @@ var ArgumentError = require('../exceptions').ArgumentError;
  * @param  {String}   options.baseUrl       The auth0 account URL.
  * @param  {String}   [options.headers]     Default request headers.
  * @param  {String}   [options.clientId]    Default client ID.
+ * @param  {String}   [options.accessToken] Default accessToken.
  */
 var UsersManager = function (options) {
   if (typeof options !== 'object') {
@@ -27,6 +28,7 @@ var UsersManager = function (options) {
   this.baseUrl = options.baseUrl;
   this.headers = options.headers;
   this.clientId = options.clientId;
+  this.accessToken = options.accessToken;
 };
 
 
@@ -126,6 +128,15 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
 UsersManager.prototype.impersonate = function (userId, settings, cb) {
   var url = this.baseUrl + '/users/' + userId + '/impersonate';
   var data = extend({ client_id: this.clientId }, settings);
+  var headers = extend({}, this.headers);
+
+  if (this.accessToken === null || this.accessToken === undefined) {
+    throw new ArgumentError('An access token is required (none given to the constructor)');
+  }
+
+  if (typeof this.accessToken !== 'string' || this.accessToken.trim().length === 0) {
+    throw new ArgumentError('Invalid access token given to the constructor');
+  }
 
   if (userId === null || userId === undefined) {
     throw new ArgumentError('You must specify a user ID');
@@ -149,10 +160,12 @@ UsersManager.prototype.impersonate = function (userId, settings, cb) {
     throw new ArgumentError('protocol field is required');
   }
 
+  // Send the global client access token in the Authorization header.
+  headers['Authorization'] = 'Bearer ' + this.accessToken;
   // Perform the request.
   var promise = getRequestPromise({
     method: 'POST',
-    headers: this.headers,
+    headers: headers,
     data: data,
     url: url
   });

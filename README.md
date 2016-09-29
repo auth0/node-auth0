@@ -35,12 +35,15 @@ This client must be used to access Auth0's [Authentication API](https://auth0.co
 
 The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
+It takes another *optional* access token, if specified it will be used as default value for the [impersonation endpoint](https://auth0.com/docs/auth-api#!#post--users--user_id--impersonate) that requires an access token with global client permissions.
+
 ~~~js
 var AuthenticationClient = require('auth0').AuthenticationClient;
 
 var auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{OPTIONAL_CLIENT_ID}'
+  clientId: '{OPTIONAL_CLIENT_ID}',
+  accessToken: '{OPTIONAL_ACCESS_TOKEN}'
 });
 ~~~
 
