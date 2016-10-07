@@ -72,5 +72,4 @@ utils.getRequestPromise = function (settings) {
     });
     
   });
-  
 }

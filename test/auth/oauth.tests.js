@@ -8,13 +8,15 @@ var SRC_DIR = '../../src';
 var DOMAIN = 'tenant.auth0.com';
 var API_URL = 'https://' + DOMAIN;
 var CLIENT_ID = 'TEST_CLIENT_ID';
+var CLIENT_SECRET = 'TEST_CLIENT_SECRET';
 
 var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/OAuthAuthenticator');
 
 var validOptions = {
   baseUrl: API_URL,
-  clientId: CLIENT_ID
+  clientId: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
 };
 
 
@@ -463,6 +465,173 @@ describe('OAuthAuthenticator', function () {
           done();
         });
     });
+  });
+
+  describe('#clientCredentials', function () {
+    var path = '/oauth/token';
+    var options = {
+      audience: 'audience',
+      scope: 'scope'
+    };
+
+    beforeEach(function () {
+      this.authenticator = new Authenticator(validOptions);
+      this.request = nock(API_URL)
+        .post(path)
+        .reply(200);
+    });
+
+
+    it('should require an object as first argument', function () {
+      expect(this.authenticator.clientCredentialsGrant)
+        .to.throw(ArgumentError, 'Missing options object');
+    });
+
+    it('should require the client_id', function () {
+      var authenticator = new Authenticator({});
+      expect(function(){
+        authenticator.clientCredentialsGrant({})
+      }).to.throw(ArgumentError, 'client_id field is required');
+    });
+
+    it('should require the client_secret', function () {
+      var authenticator = new Authenticator({
+        clientId: CLIENT_ID
+      });
+      expect(function(){
+        authenticator.clientCredentialsGrant({})
+      }).to.throw(ArgumentError, 'client_secret field is required');
+    });
+
+    it('should accept a callback', function (done) {
+      this
+        .authenticator
+        .clientCredentialsGrant(options, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is provided', function () {
+      return this
+        .authenticator
+        .clientCredentialsGrant(options);
+    });
+
+
+    it('should perform a POST request to ' + path, function () {
+      var request = this.request;
+
+      return this
+        .authenticator
+        .clientCredentialsGrant(options)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+        });
+    });
+
+
+    it('should include the options in the request', function () {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          for (var property in options) {
+            if (options[property] !== body[property]) {
+              return false;
+            }
+          }
+
+          return true;
+        })
+        .reply(200);
+
+      return this
+        .authenticator
+        .clientCredentialsGrant(options)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+        });
+    });
+
+
+    it('should include the Auth0 client ID and secret in the request', function () {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.client_id === CLIENT_ID;
+          return body.client_secret === CLIENT_SECRET;
+        })
+        .reply(200);
+
+      return this
+        .authenticator
+        .clientCredentialsGrant(options)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+        });
+    });
+
+
+    it('should allow the user to specify the audience and scope', function () {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.audience === 'audience' && body.scope === 'scope';
+        })
+        .reply(200);
+
+      return this
+        .authenticator
+        .clientCredentialsGrant(options)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+        });
+    });
+
+
+    it('should use client_credentials as default grant type', function () {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.grant_type === 'client_credentials';
+        })
+        .reply(200);
+
+      return this
+        .authenticator
+        .clientCredentialsGrant(options)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+        });
+    });
+
+
+    it('should allow the user to specify the grant type', function () {
+      nock.cleanAll();
+
+      var data = extend({ grant_type: 'TEST_GRANT' }, options);
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.grant_type === 'TEST_GRANT';
+        })
+        .reply(200);
+
+      return this
+        .authenticator
+        .clientCredentialsGrant(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+        });
+    });
+
   });
 
 });

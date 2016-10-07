@@ -40,10 +40,11 @@ var BASE_URL_FORMAT = 'https://%s';
  *   clientId: '{OPTIONAL_CLIENT_ID}'
  * });
  *
- * @param   {Object}  options             Options for the Authentication Client
- *                                        SDK.
- * @param   {String}  options.domain      AuthenticationClient server domain.
- * @param   {String}  [options.clientId]  Default client ID.
+ * @param   {Object}  options                 Options for the Authentication Client
+ *                                            SDK.
+ * @param   {String}  options.domain          AuthenticationClient server domain.
+ * @param   {String}  [options.clientId]      Default client ID.
+ * @param   {String}  [options.clientSecret]  Default client Secret.
  */
 var AuthenticationClient = function (options) {
   if (!options || typeof options !== 'object') {
@@ -58,6 +59,8 @@ var AuthenticationClient = function (options) {
 
   var managerOptions = {
     clientId: options.clientId,
+    domain: options.domain,
+    clientSecret: options.clientSecret,
     headers: {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
@@ -475,6 +478,31 @@ AuthenticationClient.prototype.requestChangePasswordEmail = function (data, cb) 
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
+
+/**
+ * Gets an access token using the client credentials grant flow.
+ *
+ * @method    clientCredentialsGrant
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Gets an access token using the client credentials grant flow. Find more information in the
+ *   <a href="https://auth0.com/docs/api-auth/config/asking-for-access-tokens">API Docs</a>.
+ * </caption>
+ *
+ * auth0.clientCredentialsGrant(data, function (err, response) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(response);
+ * });
+ *
+ * @param     {String}  scope   
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(AuthenticationClient, 'clientCredentialsGrant', 'oauth.clientCredentialsGrant');
 
 
 module.exports = AuthenticationClient;
