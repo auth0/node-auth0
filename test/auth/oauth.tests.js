@@ -487,6 +487,22 @@ describe('OAuthAuthenticator', function () {
         .to.throw(ArgumentError, 'Missing options object');
     });
 
+    it('should require the client_id', function () {
+      var authenticator = new Authenticator({});
+      expect(function(){
+        authenticator.clientCredentialsGrant({})
+      }).to.throw(ArgumentError, 'client_id field is required');
+    });
+
+    it('should require the client_secret', function () {
+      var authenticator = new Authenticator({
+        clientId: CLIENT_ID
+      });
+      expect(function(){
+        authenticator.clientCredentialsGrant({})
+      }).to.throw(ArgumentError, 'client_secret field is required');
+    });
+
     it('should accept a callback', function (done) {
       this
         .authenticator
@@ -494,32 +510,27 @@ describe('OAuthAuthenticator', function () {
     });
 
 
-    it('should return a promise when no callback is provided', function (done) {
-      this
+    it('should return a promise when no callback is provided', function () {
+      return this
         .authenticator
-        .clientCredentialsGrant(options)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+        .clientCredentialsGrant(options);
     });
 
 
-    it('should perform a POST request to ' + path, function (done) {
+    it('should perform a POST request to ' + path, function () {
       var request = this.request;
 
-      this
+      return this
         .authenticator
         .clientCredentialsGrant(options)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
-
-          done();
-        })
-        .catch(done);
+        });
     });
 
 
-    it('should include the options in the request', function (done) {
+    it('should include the options in the request', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -534,20 +545,17 @@ describe('OAuthAuthenticator', function () {
         })
         .reply(200);
 
-      this
+      return this
         .authenticator
         .clientCredentialsGrant(options)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
-
-          done();
-        })
-        .catch(done);
+        });
     });
 
 
-    it('should include the Auth0 client ID and secret in the request', function (done) {
+    it('should include the Auth0 client ID and secret in the request', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -557,20 +565,17 @@ describe('OAuthAuthenticator', function () {
         })
         .reply(200);
 
-      this
+      return this
         .authenticator
         .clientCredentialsGrant(options)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
-
-          done();
-        })
-        .catch(done);
+        });
     });
 
 
-    it('should allow the user to specify the audience and scope', function (done) {
+    it('should allow the user to specify the audience and scope', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -579,20 +584,17 @@ describe('OAuthAuthenticator', function () {
         })
         .reply(200);
 
-      this
+      return this
         .authenticator
         .clientCredentialsGrant(options)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
-
-          done();
-        })
-        .catch(done);
+        });
     });
 
 
-    it('should use client_credentials as default grant type', function (done) {
+    it('should use client_credentials as default grant type', function () {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -601,20 +603,17 @@ describe('OAuthAuthenticator', function () {
         })
         .reply(200);
 
-      this
+      return this
         .authenticator
         .clientCredentialsGrant(options)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
-
-          done();
-        })
-        .catch(done);
+        });
     });
 
 
-    it('should allow the user to specify the grant type', function (done) {
+    it('should allow the user to specify the grant type', function () {
       nock.cleanAll();
 
       var data = extend({ grant_type: 'TEST_GRANT' }, options);
@@ -624,16 +623,13 @@ describe('OAuthAuthenticator', function () {
         })
         .reply(200);
 
-      this
+      return this
         .authenticator
         .clientCredentialsGrant(data)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
-
-          done();
-        })
-        .catch(done);
+        });
     });
 
   });
