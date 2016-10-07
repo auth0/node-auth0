@@ -11,9 +11,10 @@ var RestClient = require('rest-facade').Client;
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}              options            Authenticator options.
- * @param  {String}              options.baseUrl    The auth0 account URL.
- * @param  {String}              [options.clientId] Default client ID.
+ * @param  {Object}              options                Authenticator options.
+ * @param  {String}              options.baseUrl        The auth0 account URL.
+ * @param  {String}              [options.clientId]     Default client ID.
+ * @param  {String}              [options.clientSecret] Default client Secret.
  */
 var OAuthAuthenticator = function (options) {
   if (!options) {
@@ -28,6 +29,7 @@ var OAuthAuthenticator = function (options) {
 
   this.oauth = new RestClient(oauthUrl);
   this.clientId = options.clientId;
+  this.clientSecret = options.clientSecret;
 };
 
 
@@ -136,5 +138,37 @@ OAuthAuthenticator.prototype.socialSignIn = function (data, cb) {
   return this.oauth.create(params, data);
 };
 
+OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
+
+  var params = {
+    type: 'token'
+  };
+
+  var defaultFields = {
+    grant_type:     "client_credentials",
+    client_id:      this.clientId,
+    client_secret:  this.clientSecret
+  };
+
+  var data = extend(defaultFields, options);
+
+  if (!options || typeof options !== 'object') {
+    throw new ArgumentError('Missing options object');
+  }
+
+  if (!data.client_id || data.client_id.trim().length === 0) {
+    throw new ArgumentError('client_id field is required');
+  }
+
+  if (!data.client_secret || data.client_secret.trim().length === 0) {
+    throw new ArgumentError('client_secret field is required');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.oauth.create(params, data, cb);
+  }
+
+  return this.oauth.create(params, data);
+};
 
 module.exports = OAuthAuthenticator;
