@@ -448,6 +448,103 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
 
 
 /**
+ * Get all Auth0 Client Grants.
+ *
+ * @method    getAll
+ * @memberOf  module:management.ClientGrantsManager.prototype
+ *
+ * @example
+ * management.clientGrants.getAll(function (err, grants) {
+ *   console.log(grants.length);
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getClientGrants', 'clientGrants.getAll');
+
+
+/**
+ * Create an Auth0 client grant.
+ *
+ * @method    create
+ * @memberOf  module:management.ClientGrantsManager.prototype
+ *
+ * @example
+ * management.clientGrants.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Client grant created.
+ * });
+ *
+ * @param   {Object}    data     The client data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.create');
+
+
+/**
+ * Update an Auth0 client grant.
+ *
+ * @method    update
+ * @memberOf  module:management.ClientGrantsManager.prototype
+ *
+ * @example
+ * var data = {
+ *   client_id: CLIENT_ID,
+ *   audience: AUDIENCE,
+ *   scope: []
+ * };
+ * var params = { id: CLIENT_GRANT_ID };
+ *
+ * management.clientGrants.update(params, data, function (err, grant) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(grant.id);
+ * });
+ *
+ * @param   {Object}    params     Client parameters.
+ * @param   {String}    params.id  Client grant ID.
+ * @param   {Object}    data       Updated client data.
+ * @param   {Function}  [cb]       Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.patch');
+
+
+/**
+ * Delete an Auth0 client grant.
+ *
+ * @method    delete
+ * @memberOf  module:management.ClientGrantsManager.prototype
+ *
+ * @example
+ * management.clientGrants.delete({ id: GRANT_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Grant deleted.
+ * });
+ *
+ * @param   {Object}    params     Client parameters.
+ * @param   {String}    params.id  Client grant ID.
+ * @param   {Function}  [cb]       Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteClientGrant', 'clientGrants.delete');
+
+
+/**
  * Create an Auth0 credential.
  *
  * @method    createDevicePublicKey
