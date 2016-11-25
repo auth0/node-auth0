@@ -32,7 +32,7 @@ AUTH0_CLIENT_ID=AUTH0_CLIENT_SECRET
 AUTH0_CLIENT_SECRET=AUTH0_CLIENT_ID
 ```
 
-Finally, retrieve a JWT and send it to the `/graphql` endpoint as a header.
+Finally, retrieve a JWT (be sure to provide JWT by adding value of the `id_token` in localStorage using your browser) and send it to the `/graphql` endpoint as a header.
 
 ```js
 // App.js
@@ -47,6 +47,9 @@ Relay.injectNetworkLayer(
   })
 );
 ```
+
+After that you can run development server by using `npm run dev` command.
+
 ---
 
 A simple example of how to get started with
@@ -177,8 +180,8 @@ ReactDOM.render(
 `public/index.html`:
 ```html
 <!-- include React and Relay scripts (we don't bundle them) -->
-<script src=//fb.me/react-0.14.0-rc1.min.js></script>
-<script src=//fb.me/react-dom-0.14.0-rc1.min.js></script>
+<script src=//cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js></script>
+<script src=//cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js></script>
 <script src=/relay/relay.min.js></script>
 <div id=content />
 <!-- now request our browserified bundle which will run the React.render -->
