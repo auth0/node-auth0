@@ -13,7 +13,7 @@ server.register(require('hapi-auth-jwt'), function (err) {
   }
 
   server.auth.strategy('token', 'jwt', {
-    key: new Buffer(process.env.AUTH0_CLIENT_SECRET, 'base64'),
+    key: process.env.AUTH0_CLIENT_SECRET,
     verifyOptions: {
       algorithms: [ 'HS256' ],
       audience: process.env.AUTH0_CLIENT_ID
