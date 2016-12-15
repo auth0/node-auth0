@@ -59,6 +59,111 @@ describe('ResourceServersManager', function () {
     });
   });
 
+  describe('#getAll', function () {
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .get('/resource-servers')
+        .reply(200);
+    })
+
+
+    it('should accept a callback', function (done) {
+      this
+        .resourceServers
+        .getAll(function () {
+        done();
+      });
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .resourceServers
+        .getAll()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/resource-servers')
+        .reply(500);
+
+      this
+        .resourceServers
+        .getAll()
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
+
+          done();
+        });
+    });
+
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      nock.cleanAll();
+
+      var data = [{ test: true }];
+      var request = nock(API_URL)
+        .get('/resource-servers')
+        .reply(200, data);
+
+      this
+        .resourceServers
+        .getAll()
+        .then(function (resourceServers) {
+          expect(resourceServers)
+            .to.be.an.instanceOf(Array);
+
+          expect(resourceServers.length)
+            .to.equal(data.length);
+
+          expect(resourceServers[0].test)
+            .to.equal(data[0].test);
+
+          done();
+        });
+    });
+
+
+    it('should perform a GET request to /api/v2/resource-servers', function (done) {
+      var request = this.request;
+
+      this
+        .resourceServers
+        .getAll()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/resource-servers')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200)
+
+      this
+        .resourceServers
+        .getAll()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+          done();
+        });
+    });
+  });
+
 
   describe('#get', function () {
     var params = { id: 5 };

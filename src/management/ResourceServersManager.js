@@ -73,6 +73,23 @@ var ResourceServersManager = function (options) {
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
 
+/**
+ * Get all resource servers.
+ *
+ * @method    getAll
+ * @memberOf  module:management.ResourceServersManager.prototype
+ *
+ * @example
+ * management.resourceServers.getAll(function (err, resourceServers) {
+ *   console.log(resourceServers.length);
+ * });
+ *
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
+
 
 /**
  * Get a Resource Server.

@@ -1458,6 +1458,24 @@ utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
  */
 utils.wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServers.create');
 
+/**
+ * Get all resource servers.
+ *
+ * @method    getResourceServers
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getResourceServers(function (err, resourceServers) {
+ *   console.log(resourceServers.length);
+ * });
+ *
+ * @param   {Object}    data     Connection data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getResourceServers', 'resourceServers.getAll');
+
 
 /**
  * Get a Resource Server.
