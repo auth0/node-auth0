@@ -21,6 +21,7 @@ var TenantManager = require('./TenantManager');
 var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
+var ResourceServersManager = require('./ResourceServersManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 
@@ -177,6 +178,15 @@ var ManagementClient = function (options) {
    * @type {LogsManager}
    */
   this.logs = new LogsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * resource servers endpoint.
+   *
+   * @type {ResourceServersManager}
+   */
+  this.resourceServers = new ResourceServersManager(managerOptions);
+
 };
 
 
@@ -1426,4 +1436,101 @@ utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
 utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
 
 
+/**
+ * Create a new resource server.
+ *
+ * @method    createResourceServer
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createResourceServer(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Resource Server created.
+ * });
+ *
+ * @param   {Object}    data     Resource Server data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServers.create');
+
+
+/**
+ * Get a Resource Server.
+ *
+ * @method    getResourceServer
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getResourceServer({ id: RESOURCE_SERVER_ID }, function (err, resourceServer) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(resourceServer);
+ * });
+ *
+ * @param   {Object}    params          Resource Server parameters.
+ * @param   {String}    params.id       Resource Server ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getResourceServer', 'resourceServers.get');
+
+
+/**
+ * Delete an existing resource server.
+ *
+ * @method    deleteResourceServer
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteResourceServer({ id: RESOURCE_SERVER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Resource Server deleted.
+ * });
+ *
+ * @param   {Object}    params          Resource Server parameters.
+ * @param   {String}    params.id       Resource Server ID.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteResourceServer', 'resourceServers.delete');
+
+
+/**
+ * Update an existing resource server.
+ *
+ * @method    updateResourceServer
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var data = { name: 'newResourceServerName' };
+ * var params = { id: RESOURCE_SERVER_ID };
+ *
+ * management.updateResourceServer(params, data, function (err, resourceServer) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(resourceServer.name);  // 'newResourceServerName'
+ * });
+ *
+ * @param   {Object}    params          Resource Server parameters.
+ * @param   {String}    params.id       Resource Server ID.
+ * @param   {Object}    data            Updated Resource Server data.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateResourceServer', 'resourceServers.update');
 module.exports = ManagementClient;
