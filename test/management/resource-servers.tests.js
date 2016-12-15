@@ -8,7 +8,7 @@ var API_URL = 'https://tenant.auth0.com';
 var ResourceServersManager = require(SRC_DIR + '/management/ResourceServersManager');
 var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
 
-describe.only('ResourceServersManager', function () {
+describe('ResourceServersManager', function () {
 
   before(function () {
     this.token = 'TOKEN';
