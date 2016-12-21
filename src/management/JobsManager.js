@@ -141,10 +141,11 @@ JobsManager.prototype.importUsers = function (data, cb) {
             filename: data.users
           }
         },
-        connection_id: data.connection_id
+        connection_id: data.connection_id,
+        upsert: data.upsert
       }
     }, function (err, res) {
-      
+
 
       // `superagent` uses the error parameter in callback on http errors.
       // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
