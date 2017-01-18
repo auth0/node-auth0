@@ -117,12 +117,13 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  *   console.log(token);
  * });
  *
- * @param   {Object}    data              Token data object.
- * @param   {String}    data.id_token     User ID token.
- * @param   {String}    data.target       Target client ID.
- * @param   {String}    data.api_type     The API to be used (aws, auth0, etc).
- * @param   {String}    data.grant_type   Grant type (password, jwt, etc).
- * @param   {Function}  [cb]              Callback function.
+ * @param   {Object}    data                Token data object.
+ * @param   {String}    data.id_token       User ID token.
+ * @param   {String}    data.refresh_token  User refresh token.
+ * @param   {String}    data.target         Target client ID.
+ * @param   {String}    data.api_type       The API to be used (aws, auth0, etc).
+ * @param   {String}    data.grant_type     Grant type (password, jwt, etc).
+ * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -134,9 +135,18 @@ TokensManager.prototype.getDelegationToken = function (data, cb) {
     throw new ArgumentError('Missing token data object');
   }
 
-  if (typeof data.id_token !== 'string'
-      || data.id_token.trim().length === 0) {
-    throw new ArgumentError('id_token field is required');
+  var hasIdToken = typeof data.id_token !== 'string'
+      || data.id_token.trim().length === 0;
+
+  var hasRefreshToken = typeof data.refresh_token !== 'string'
+      || data.refresh_token.trim().length === 0;
+
+  if (hasIdToken && hasRefreshToken) {
+    throw new Error('id_token and refresh_token fields cannot be specified simulatenously');
+  }
+
+  if (!hasIdToken && !hasRefreshToken) {
+    throw new Error('one of id_token or refresh_token is required');
   }
 
   if (typeof data.target !== 'string'
