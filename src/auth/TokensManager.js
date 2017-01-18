@@ -135,18 +135,18 @@ TokensManager.prototype.getDelegationToken = function (data, cb) {
     throw new ArgumentError('Missing token data object');
   }
 
-  var hasIdToken = typeof data.id_token !== 'string'
-      || data.id_token.trim().length === 0;
+  var hasIdToken = typeof data.id_token === 'string'
+      && data.id_token.trim().length !== 0;
 
-  var hasRefreshToken = typeof data.refresh_token !== 'string'
-      || data.refresh_token.trim().length === 0;
-
-  if (hasIdToken && hasRefreshToken) {
-    throw new Error('id_token and refresh_token fields cannot be specified simulatenously');
-  }
+  var hasRefreshToken = typeof data.refresh_token === 'string'
+      && data.refresh_token.trim().length !== 0;
 
   if (!hasIdToken && !hasRefreshToken) {
-    throw new Error('one of id_token or refresh_token is required');
+    throw new ArgumentError('one of id_token or refresh_token is required');
+  }
+
+  if (hasIdToken && hasRefreshToken) {
+    throw new ArgumentError('id_token and refresh_token fields cannot be specified simulatenously');
   }
 
   if (typeof data.target !== 'string'
