@@ -77,7 +77,7 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   var data = extend(defaultFields, userData)
 
   // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) data.connection = 'sms'
+  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) { data.connection = 'sms' }
 
   data.grant_type = 'password'
 
