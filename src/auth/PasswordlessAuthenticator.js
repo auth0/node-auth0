@@ -65,6 +65,7 @@ var PasswordlessAuthenticator = function (options, oauth) {
  * @param   {Object}    userData              User credentials object.
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
+ * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
  * @param   {String}    [userData.client_id]  Client ID.
  * @param   {Function}  [cb]                  Method callback.
  *
