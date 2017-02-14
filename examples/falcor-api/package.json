@@ -13,11 +13,11 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.14.0",
-    "dotenv": "^1.2.0",
+    "dotenv": "^4.0.0",
     "express": "^4.13.3",
-    "express-jwt": "^3.1.0",
+    "express-jwt": "^5.1.0",
     "falcor": "^0.1.12",
     "falcor-express": "^0.1.2",
-    "falcor-router": "^0.2.9"
+    "falcor-router": "^0.8.0"
   }
 }
