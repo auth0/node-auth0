@@ -9,8 +9,8 @@
   "author": "Auth0",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^2.0.0",
-    "hapi": "^13.0.0",
+    "dotenv": "^4.0.0",
+    "hapi": "^16.1.0",
     "hapi-auth-jwt": "^4.0.0"
   }
 }
