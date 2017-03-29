@@ -89,6 +89,30 @@ Auth0 helps you to:
 * Analytics of how, when and where users are logging in.
 * Pull data from other sources and add it to the user profile, through [JavaScript rules](https://docs.auth0.com/rules).
 
+## When to use auth0/node-auth0
+
+auth0/node-auth0 is intended to be used from node.js typically running on a server application.
+
+If you need a client-side Javascript library, see:
+* [auth0/lock](https://github.com/auth0/lock) for quick and simple authentication
+* [auth0/auth0.js](https://github.com/auth0/auth0.js) for authentication and [JWT](http://openid.net/specs/draft-jones-json-web-token-07.html) handling
+* [auth0/jwt-decode](https://github.com/auth0/jwt-decode) for simple JWT decoding 
+
+If you are using a client-side Javscript framework, see:
+* [auth0/angular-jwt](https://github.com/auth0/angular-jwt) for using JWTs with [AngularJS](https://angularjs.org/) framework
+* [auth0-angular2-jwt](https://github.com/auth0/angular2-jwt) for use with the [AngularJS](https://angularjs.org/) framework
+* [auth0/auth0-angular2](https://github.com/auth0/auth0-angular2) for use with the [Angular 2](https://angular.io/)
+* [auth0-ember-simple-auth](https://github.com/auth0/auth0-ember-simple-auth) for use with [Ember's Simple Auth](https://github.com/simplabs/ember-simple-auth) library
+* [auth0/auth0-jquery](https://github.com/auth0/auth0-jquery) for examples using the [jQuery](https://jquery.com/) library
+* [auth0/meteor-auth0](https://github.com/auth0/meteor-auth0) for use with the [Meteor](https://www.meteor.com/) framework
+* [auth0/meteor-accounts-auth0](https://github.com/auth0/meteor-accounts-auth0) for use with Meteor Auth
+* [auth0/auth0-react](https://github.com/auth0/auth0-react) for use with the [React](https://facebook.github.io/react/) library
+
+For other server side libraries, see:
+* [auth0/passport-auth0](https://github.com/auth0/passport-auth0) for using Auth0 with the [Passport](http://passportjs.org/) middle ware for node.js
+* [auth0/socketio-jwt](https://github.com/auth0/socketio-jwt) for authenticating node.js socket.io connections with JWTs
+* Other langages such as [Java](auth0/auth0-java), [.NET](https://github.com/auth0/auth0.net), [PHP](https://github.com/auth0/auth0-PHP), [Ruby](https://github.com/auth0/ruby-auth0), [PHP](https://github.com/auth0/auth0-PHP)
+
 ## Create a free Auth0 Account
 
 1. Go to [Auth0](https://auth0.com) and click "Try Auth0 for Free".
