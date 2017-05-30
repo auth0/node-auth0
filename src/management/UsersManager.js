@@ -54,6 +54,13 @@ var UsersManager = function (options){
    * @type {external:RestClient}
    */
   this.identities = new RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions);
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian enrollments.
+   *
+   * @type {external:RestClient}
+   */
+  this.enrollments = new RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions);
 };
 
 
@@ -450,5 +457,26 @@ UsersManager.prototype.unlink = function (params, cb) {
   return this.identities.delete(params);
 };
 
+
+/**
+ * Get a list of Guardian enrollments.
+ *
+ * @method    getGuardianEnrollments
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.getGuardianEnrollments({ id: USER_ID }, function (err, enrollments) {
+ *   console.log(enrollments);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getGuardianEnrollments = function () {
+  return this.enrollments.get.apply(this.enrollments, arguments);
+};
 
 module.exports = UsersManager;

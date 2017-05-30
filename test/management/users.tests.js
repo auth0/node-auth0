@@ -30,7 +30,8 @@ describe('UsersManager', function () {
       'link',
       'deleteMultifactorProvider',
       'updateUserMetadata',
-      'updateAppMetadata'
+      'updateAppMetadata',
+      'getGuardianEnrollments'
     ];
 
     methods.forEach(function (method) {
@@ -920,4 +921,86 @@ describe('UsersManager', function () {
     });
   });
 
+
+  describe('#getGuardianEnrollments', function () {
+    var data = {
+      id: 5,
+    };
+
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .get('/users/' + data.id + '/enrollments')
+        .reply(200);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .users
+        .getGuardianEnrollments(data, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is given', function (done) {
+      this
+        .users
+        .getGuardianEnrollments(data)
+        .then(done.bind(null, null));
+    });
+
+
+    it('should perform a GET request to /api/v2/users/5/enrollments', function (done) {
+      var request = this.request;
+
+      this
+        .users
+        .getGuardianEnrollments(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + data.id + '/enrollments')
+        .reply(500);
+
+      this
+        .users
+        .getGuardianEnrollments(data)
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + data.id + '/enrollments')
+        .matchHeader('authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this
+        .users
+        .getGuardianEnrollments(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
 });
