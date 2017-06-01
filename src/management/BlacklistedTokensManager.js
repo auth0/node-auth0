@@ -1,7 +1,6 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
-
+var Auth0RestClient = require('../Auth0RestClient');
 
 /**
  * @class BlacklistedTokensManager
@@ -44,7 +43,7 @@ var BlacklistedTokensManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/blacklists/tokens', clientOptions);
+  this.resource = new Auth0RestClient(options.baseUrl + '/blacklists/tokens', clientOptions, options.tokenProvider);
 };
 
 

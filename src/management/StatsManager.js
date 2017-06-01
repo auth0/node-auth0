@@ -1,6 +1,5 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
-
+var Auth0RestClient = require('../Auth0RestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -44,7 +43,7 @@ var StatsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.stats = new RestClient(options.baseUrl + '/stats/:type', clientOptions);
+  this.stats = new Auth0RestClient(options.baseUrl + '/stats/:type', clientOptions, options.tokenProvider);
 };
 
 

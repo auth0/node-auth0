@@ -6,5 +6,6 @@
 
 module.exports = {
   ManagementClient: require('./management'),
-  AuthenticationClient: require('./auth')
+  AuthenticationClient: require('./auth'),
+  ManagementTokenProvider: require('./management/ManagementTokenProvider')
 };

@@ -22,6 +22,7 @@ var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
 var ResourceServersManager = require('./ResourceServersManager');
+var ManagementTokenProvider = require('./ManagementTokenProvider');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 
@@ -47,32 +48,61 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
  *   token: '{YOUR_API_V2_TOKEN}',
  *   domain: '{YOUR_ACCOUNT}.auth0.com'
  * });
+ * 
+ * 
+  * @example <caption>
+ *   Initialize your client class with the Management Token Provider. 
+ * </caption>
  *
- * @param   {Object}  options           Options for the ManagementClient SDK.
- * @param   {String}  options.token     API access token.
- * @param   {String}  [options.domain]  ManagementClient server domain.
+ * var ManagementClient = require('auth0').ManagementClient;
+ * var ManagementTokenProvider = require('auth0').ManagementTokenProvider;
+ * var auth0 = new ManagementClient({
+ *   tokenProvider: new ManagementTokenProvider({
+ *    clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
+ *    clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
+ *    domain: '{YOUR_ACCOUNT}.auth0.com'
+ *   })
+ * });
+ *
+ * @param   {Object}  options                 Options for the ManagementClient SDK. 
+ *          Required properties depend on the way initialization is performed as you can see in the examples.
+ * @param   {String}  [options.token]         API access token.
+ * @param   {String}  [options.domain]        ManagementClient server domain.
+ * @param   {String}  [options.tokenProvider] Token Provider.
+ * 
  */
 var ManagementClient = function (options) {
   if (!options || typeof options !== 'object') {
     throw new ArgumentError('Management API SDK options must be an object');
   }
 
-  if (!options.token || options.token.length === 0) {
-    throw new ArgumentError('An access token must be provided');
+  if (!options.domain || options.domain.length === 0) {
+      throw new ArgumentError('Must provide a Domain');
   }
 
-  if (!options.domain || options.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
+  if(!options.tokenProvider){
+    if (!options.token || options.token.length === 0) {
+      throw new ArgumentError('Must provide a Token');
+    }
+  }else{
+    if(!options.tokenProvider.getAccessToken ||  typeof options.tokenProvider.getAccessToken !== 'function'){
+      throw new ArgumentError('The tokenProvider does not have a function getAccessToken');
+    }    
+    this.tokenProvider = options.tokenProvider;
   }
 
   var managerOptions = {
     headers: {
-      'Authorization': 'Bearer ' + options.token,
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: util.format(BASE_URL_FORMAT, options.domain),
+    tokenProvider: this.tokenProvider
   };
+
+  if (options.token && options.token.length !== 0) {
+    managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
+  }
 
   if (options.telemetry !== false) {
     var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());

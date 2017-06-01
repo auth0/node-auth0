@@ -23,23 +23,51 @@ describe('ManagementClient', function () {
         .to.throw(ArgumentError, 'Management API SDK options must be an object');
     });
 
-
     it('should raise an error when the token is not valid', function () {
       var options = { token: '', domain: 'tenant.auth.com' };
       var client = ManagementClient.bind(null, options);
 
       expect(client)
-        .to.throw(ArgumentError, 'An access token must be provided');
+        .to.throw(ArgumentError, 'Must provide a Token');
     });
-
 
     it('should raise an error when the domain is not valid', function () {
-      var client = ManagementClient.bind(null, { token: 'token', domain: '' });
+      var client = ManagementClient.bind(null, { token: 'token' });
 
       expect(client)
-        .to.throw(ArgumentError, 'Must provide a domain');
+        .to.throw(ArgumentError, 'Must provide a Domain');
     });
 
+    it('should raise an error when the token provider does not have a function getAccessToken', function () {
+      var client = ManagementClient.bind(null, { tokenProvider : {} });
+
+      expect(client)
+        .to.throw(ArgumentError, 'Must provide a Domain');
+    });
+
+    it('should raise an error when the domain is not valid and a tokenProvider is specified', function () {
+      var client = ManagementClient.bind(null, { domain: 'domain', tokenProvider: {} });
+
+      expect(client)
+        .to.throw(ArgumentError, 'The tokenProvider does not have a function getAccessToken');
+    });
+
+    it('should raise an error when the token provider does have a property getAccessToken that is not a function', function () {
+      var client = ManagementClient.bind(null, { domain: 'domain', tokenProvider : { getAccessToken: [] } });
+
+      expect(client)
+        .to.throw(ArgumentError, 'The tokenProvider does not have a function getAccessToken');
+    });
+
+    it('should set the tokenProvider instance property if provider is passed', function () {
+      var fakeTokenProvider = { getAccessToken: function(){} };
+      var options = { domain: 'domain', tokenProvider : fakeTokenProvider };
+      var client = new ManagementClient(options);
+
+      expect(client.tokenProvider)
+        .to.exist
+        .to.be.equal(fakeTokenProvider);
+    });
 
     describe('instance properties', function () {
       var manager;
