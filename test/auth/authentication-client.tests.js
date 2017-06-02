@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var ArgumentError = require('../../src/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 var AuthenticationClient = require('../../src/auth');
 var OAuthAuthenticator = require('../../src/auth/OAuthAuthenticator');

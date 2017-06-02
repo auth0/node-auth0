@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 
 var ManagementClient = require('../../src/management');
 
-var ArgumentError = require('../../src/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var UsersManager = require('../../src/management/UsersManager');
 var BlacklistedTokensManager = require('../../src/management/BlacklistedTokensManager');
 var ClientsManager = require('../../src/management/ClientsManager');

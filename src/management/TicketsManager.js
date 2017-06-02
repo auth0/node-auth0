@@ -1,5 +1,5 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 /**
@@ -22,6 +22,7 @@ var TicketsManager = function (options){
   }
 
   var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
     query: { repeatParams: false }
   };

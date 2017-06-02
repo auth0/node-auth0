@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var fs = require('fs');
 
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 /**
@@ -38,6 +38,7 @@ var JobsManager = function (options){
   }
 
   var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
     query: { repeatParams: false }
   };
@@ -144,7 +145,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
         connection_id: data.connection_id
       }
     }, function (err, res) {
-      
+
 
       // `superagent` uses the error parameter in callback on http errors.
       // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)

@@ -4,7 +4,7 @@ var nock = require('nock');
 var BASE_URL = 'https://tenant.auth0.com';
 
 var Promise = require('bluebird');
-var ArgumentError = require('../../src/exceptions/').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var TokensManager = require('../../src/auth/TokensManager');
 
 
