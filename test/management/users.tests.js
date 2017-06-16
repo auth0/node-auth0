@@ -28,6 +28,7 @@ describe('UsersManager', function () {
       'deleteAll',
       'unlink',
       'link',
+      'logs',
       'deleteMultifactorProvider',
       'updateUserMetadata',
       'updateAppMetadata'
@@ -918,6 +919,143 @@ describe('UsersManager', function () {
           done();
         });
     });
+  });
+
+  describe('#logs', function () {
+    var data = {
+      id: 'user_id'
+    };
+    var url = (
+      '/users/' + data.id + '/logs'
+    );
+
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .get(url)
+        .reply(200);
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .users
+        .logs(data, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is given', function (done) {
+      this
+        .users
+        .logs(data)
+        .then(done.bind(null, null));
+    });
+
+
+    it('should perform a GET request to ' + url, function (done) {
+      var request = this.request;
+
+      this
+        .users
+        .logs(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get(url)
+        .reply(500);
+
+      this
+        .users
+        .logs(data)
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get(url)
+        .matchHeader('authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this
+        .users
+        .logs(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      nock.cleanAll();
+
+      var response = [{ test: true }];
+      var request = nock(API_URL)
+        .get(url)
+        .reply(200, response);
+
+      this
+        .users
+        .logs(data)
+        .then(function (logs) {
+          expect(logs)
+            .to.be.an.instanceOf(Array);
+
+          expect(logs.length)
+            .to.equal(response.length);
+
+          expect(logs[0].test)
+            .to.equal(response[0].test);
+
+          done();
+        });
+    });
+
+    it('should pass the parameters in the query-string', function (done) {
+      nock.cleanAll();
+
+      var params = {
+        page: 0,
+        per_page: 30
+      };
+      var request = nock(API_URL)
+        .get(url)
+        .query(params)
+        .reply(200);
+
+      data.page = params.page;
+      data.per_page = params.per_page;
+
+      this
+        .users
+        .logs(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
   });
 
 });

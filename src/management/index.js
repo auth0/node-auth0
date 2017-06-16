@@ -1030,6 +1030,34 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
  */
 utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 
+/**
+ * Get user's log events.
+ *
+ * @method    getUserLogs
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, page: 0, per_page: 50, sort: 'date:-1', include_totals: true };
+ *
+ * management.getUserLogs(params, function (err, logs) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logs);
+ * });
+ *
+ * @param   {Object}    params                Get logs data.
+ * @param   {String}    params.id             User id.
+ * @param   {Number}    params.per_page       Number of logs per page.
+ * @param   {Number}    params.page           Page number.
+ * @param   {String}    params.sort           The field to use for sorting. Use field:order where order is 1 for ascending and -1 for descending. For example date:-1.
+ * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
 
 /**
  * Get all blacklisted tokens.
