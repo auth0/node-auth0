@@ -182,12 +182,21 @@ describe('TokensManager', function () {
     });
 
 
-    it('should require an ID token' ,function () {
+    it('should require an ID token or refresh token' ,function () {
       var data = {};
       var getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken)
-        .to.throw(ArgumentError, 'id_token field is required');
+        .to.throw(ArgumentError, 'one of id_token or refresh_token is required');
+    });
+
+
+    it('should not accept an ID token and a refresh token simulatenously' ,function () {
+      var data = { id_token: 'foo', refresh_token: 'bar'};
+      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+
+      expect(getDelegationToken)
+        .to.throw(ArgumentError, 'id_token and refresh_token fields cannot be specified simulatenously');
     });
 
 
