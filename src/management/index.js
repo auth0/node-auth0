@@ -1060,6 +1060,26 @@ utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 utils.wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
 
 /**
+ * Get a list of a user's Guardian enrollments.
+ *
+ * @method    getGuardianEnrollments
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianEnrollments({ id: USER_ID }, function (err, enrollments) {
+ *   console.log(enrollments);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getGuardianEnrollments', 'users.getGuardianEnrollments');
+
+
+/**
  * Get all blacklisted tokens.
  *
  * @method    getBlacklistedTokens
