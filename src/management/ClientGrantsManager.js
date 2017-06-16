@@ -1,5 +1,5 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
 
 
@@ -35,6 +35,7 @@ var ClientGrantsManager = function (options) {
    * @type {Object}
    */
   var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
     query: { repeatParams: false }
   };

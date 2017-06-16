@@ -7,7 +7,7 @@ var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
 var JobsManager = require(SRC_DIR + '/management/JobsManager');
-var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 describe('JobsManager', function () {

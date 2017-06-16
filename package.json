@@ -25,8 +25,8 @@
   "dependencies": {
     "bluebird": "^2.10.2",
     "request": "^2.81.0",
-    "rest-facade": "^1.2.7",
-    "url-join": "0.0.1"
+    "rest-facade": "^1.5.0",
+    "url-join": "2.0.2"
   },
   "devDependencies": {
     "chai": "^2.2.0",

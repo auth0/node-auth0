@@ -1,7 +1,7 @@
 var extend = require('util')._extend;
 var getRequestPromise = require('../utils').getRequestPromise;
 
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 /**

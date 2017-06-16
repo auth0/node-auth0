@@ -5,7 +5,7 @@ var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
 var StatsManager = require(SRC_DIR + '/management/StatsManager');
-var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 describe('StatsManager', function () {

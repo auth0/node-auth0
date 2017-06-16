@@ -1,6 +1,6 @@
 var extend = require('util')._extend;
 
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
 
@@ -24,10 +24,17 @@ var PasswordlessAuthenticator = function (options, oauth) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var baseUrl = options.baseUrl + '/passwordless/start';
+  /**
+   * Options object for the Rest Client instace.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' }
+  };
 
   this.oauth = oauth;
-  this.passwordless = new RestClient(baseUrl);
+  this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
   this.clientId = options.clientId;
 };
 

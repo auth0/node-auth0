@@ -6,7 +6,7 @@ var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
 var ClientGrantsManager = require(SRC_DIR + '/management/ClientGrantsManager');
-var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 describe('ClientGrantsManager', function () {
