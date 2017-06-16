@@ -1,8 +1,0 @@
-node_modules
-npm-debug.log
-.tern-port
-v8.log
-
-schema/schema.json
-public/bundle.js
-.DS_Store
