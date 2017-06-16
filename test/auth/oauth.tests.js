@@ -10,7 +10,7 @@ var API_URL = 'https://' + DOMAIN;
 var CLIENT_ID = 'TEST_CLIENT_ID';
 var CLIENT_SECRET = 'TEST_CLIENT_SECRET';
 
-var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/OAuthAuthenticator');
 
 var validOptions = {
@@ -560,8 +560,7 @@ describe('OAuthAuthenticator', function () {
 
       var request = nock(API_URL)
         .post(path, function (body) {
-          return body.client_id === CLIENT_ID;
-          return body.client_secret === CLIENT_SECRET;
+          return body.client_id === CLIENT_ID && body.client_secret === CLIENT_SECRET;
         })
         .reply(200);
 

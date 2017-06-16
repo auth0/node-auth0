@@ -5,7 +5,7 @@ var Promise = require('bluebird');
 var BASE_URL = 'https://tenant.auth0.com';
 var CLIENT_ID = 'TEST_CLIENT_ID';
 
-var ArgumentError = require('../../src/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var UsersManager = require('../../src/auth/UsersManager');
 
 

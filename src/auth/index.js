@@ -5,7 +5,7 @@ var util = require('util');
 var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 // Authenticators.
 var OAuthAuthenticator = require('./OAuthAuthenticator');

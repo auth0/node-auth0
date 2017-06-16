@@ -1,6 +1,6 @@
 var extend = require('util')._extend;
 
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
 
@@ -25,9 +25,16 @@ var OAuthAuthenticator = function (options) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var oauthUrl = options.baseUrl + '/oauth/:type';
+  /**
+   * Options object for the Rest Client instace.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' }
+  };
 
-  this.oauth = new RestClient(oauthUrl);
+  this.oauth = new RestClient(options.baseUrl + '/oauth/:type', clientOptions);
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
 };

@@ -5,7 +5,7 @@ var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
 var BlacklistedTokensManager = require(SRC_DIR + '/management/BlacklistedTokensManager');
-var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 describe('BlacklistedTokensManager', function () {

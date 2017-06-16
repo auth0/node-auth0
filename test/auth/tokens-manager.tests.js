@@ -4,7 +4,7 @@ var nock = require('nock');
 var BASE_URL = 'https://tenant.auth0.com';
 
 var Promise = require('bluebird');
-var ArgumentError = require('../../src/exceptions/').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var TokensManager = require('../../src/auth/TokensManager');
 
 
@@ -182,12 +182,21 @@ describe('TokensManager', function () {
     });
 
 
-    it('should require an ID token' ,function () {
+    it('should require an ID token or refresh token' ,function () {
       var data = {};
       var getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken)
-        .to.throw(ArgumentError, 'id_token field is required');
+        .to.throw(ArgumentError, 'one of id_token or refresh_token is required');
+    });
+
+
+    it('should not accept an ID token and a refresh token simulatenously' ,function () {
+      var data = { id_token: 'foo', refresh_token: 'bar'};
+      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+
+      expect(getDelegationToken)
+        .to.throw(ArgumentError, 'id_token and refresh_token fields cannot be specified simulatenously');
     });
 
 

@@ -1,5 +1,5 @@
 var RestClient = require('rest-facade').Client;
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 
 /**
@@ -33,6 +33,7 @@ var UsersManager = function (options){
   }
 
   var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
     query: { repeatParams: false }
   };
@@ -54,6 +55,20 @@ var UsersManager = function (options){
    * @type {external:RestClient}
    */
   this.identities = new RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions);
+
+  /**
+   * Provides a simple abstraction layer for user logs
+   *
+   * @type {external:RestClient}
+   */
+  this.userLogs = new RestClient(options.baseUrl + '/users/:id/logs', clientOptions);
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian enrollments.
+   *
+   * @type {external:RestClient}
+   */
+  this.enrollments = new RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions);
 };
 
 
@@ -450,5 +465,62 @@ UsersManager.prototype.unlink = function (params, cb) {
   return this.identities.delete(params);
 };
 
+/**
+ * Get user's log events.
+ *
+ * @method    logs
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, page: 0, per_page: 50, sort: 'date:-1', include_totals: true };
+ *
+ * management.users.logs(params, function (err, logs) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logs);
+ * });
+ *
+ * @param   {Object}    params                Get logs data.
+ * @param   {String}    params.id             User id.
+ * @param   {Number}    params.per_page       Number of logs per page.
+ * @param   {Number}    params.page           Page number.
+ * @param   {String}    params.sort           The field to use for sorting. Use field:order where order is 1 for ascending and -1 for descending. For example date:-1.
+ * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return {Promise|undefined}
+ */
+UsersManager.prototype.logs = function (params, cb) {
+  params = params || {};
+
+  if (!params.id || typeof params.id !== 'string') {
+    throw new ArgumentError('id field is required');
+  }
+
+  return this.userLogs.get(params, cb);
+};
+
+/**
+ * Get a list of Guardian enrollments.
+ *
+ * @method    getGuardianEnrollments
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.getGuardianEnrollments({ id: USER_ID }, function (err, enrollments) {
+ *   console.log(enrollments);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getGuardianEnrollments = function () {
+  return this.enrollments.get.apply(this.enrollments, arguments);
+};
 
 module.exports = UsersManager;
