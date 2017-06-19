@@ -1,17 +1,18 @@
-[![Coverage Status](https://coveralls.io/repos/github/auth0/node-auth0/badge.svg?branch=master)](https://coveralls.io/github/auth0/node-auth0?branch=master) [![Build Status](https://travis-ci.org/auth0/node-auth0.svg)](https://travis-ci.org/auth0/node-auth0)
+# node-auth0
+
+[![Build Status][circleci-image]][circleci-url]
+[![NPM version][npm-image]][npm-url]
+[![Coverage][codecov-image]][codecov-url]
+[![License][license-image]][license-url]
+[![Downloads][downloads-image]][downloads-url]
 
 Node.js client library for the [Auth0](https://auth0.com) platform.
 
-# Installation
+## Installation
 
 ~~~
   npm install auth0
 ~~~
-
-## Documentation
-For more information on how to use this library you must build the docs. You can do so by running: `npm run docs-build`.
-
-The *docs-build* script will generate all the documentation in HTML format under the `docs` folder. Open `docs/index.html` in any web browser to see the documentation.
 
 ## Management API Client
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
@@ -69,11 +70,6 @@ auth0
   });
 ~~~
 
-
-## Examples
-
-Check out the [examples](examples/) folder.
-
 ## Documentation
 
 For more information about [auth0](http://auth0.com) contact our [documentation page](http://docs.auth0.com/).
@@ -105,3 +101,16 @@ If you have found a bug or if you have a feature request, please report them at 
 ## License
 
 This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
+
+<!-- Vaaaaarrrrsss -->
+
+[npm-image]: https://img.shields.io/npm/v/auth0.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/auth0
+[circleci-image]: http://img.shields.io/circleci/project/github/auth0/node-auth0.svg?branch=master&style=flat-square
+[circleci-url]: https://circleci.com/gh/auth0/node-auth0
+[codecov-image]: https://img.shields.io/codecov/c/github/auth0/node-auth0.svg?style=flat-square
+[codecov-url]: https://codecov.io/github/auth0/node-auth0?branch=master
+[license-image]: http://img.shields.io/npm/l/auth0.svg?style=flat-square
+[license-url]: #license
+[downloads-image]: http://img.shields.io/npm/dm/auth0.svg?style=flat-square
+[downloads-url]: https://npmjs.org/package/idtoken-verifier
