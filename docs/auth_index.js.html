@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>auth/index.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-auth.AuthenticationClient.html">AuthenticationClient</a><ul class='methods'><li data-type='method'><a href="module-auth.AuthenticationClient.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#clientCredentialsGrant">clientCredentialsGrant</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getClientInfo">getClientInfo</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getDelegationToken">getDelegationToken</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getProfile">getProfile</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestChangePasswordEmail">requestChangePasswordEmail</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestEmailCode">requestEmailCode</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestMagicLink">requestMagicLink</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestSMSCode">requestSMSCode</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#verifySMSCode">verifySMSCode</a></li></ul></li><li><a href="module-auth.DatabaseAuthenticator.html">DatabaseAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#requestChangePasswordEmail">requestChangePasswordEmail</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#signIn">signIn</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#signUp">signUp</a></li></ul></li><li><a href="module-auth.OAuthAuthenticator.html">OAuthAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.OAuthAuthenticator.html#signIn">signIn</a></li><li data-type='method'><a href="module-auth.OAuthAuthenticator.html#socialSignIn">socialSignIn</a></li></ul></li><li><a href="module-auth.PasswordlessAuthenticator.html">PasswordlessAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#sendEmail">sendEmail</a></li><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#sendSMS">sendSMS</a></li><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#signIn">signIn</a></li></ul></li><li><a href="module-auth.TokensManager.html">TokensManager</a></li><li><a href="module-auth.UsersManager.html">UsersManager</a><ul class='methods'><li data-type='method'><a href="module-auth.UsersManager.html#getInfo">getInfo</a></li><li data-type='method'><a href="module-auth.UsersManager.html#impersonate">impersonate</a></li></ul></li><li><a href="module-management.BlacklistedTokensManager.html">BlacklistedTokensManager</a><ul class='methods'><li data-type='method'><a href="module-management.BlacklistedTokensManager.html#add">add</a></li><li data-type='method'><a href="module-management.BlacklistedTokensManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.ClientGrantsManager.html">ClientGrantsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ClientGrantsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#update">update</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#update">update</a></li></ul></li><li><a href="module-management.ClientsManager.html">ClientsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ClientsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientsManager.html#get">get</a></li><li data-type='method'><a href="module-management.ClientsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientsManager.html#update">update</a></li></ul></li><li><a href="module-management.ConnectionsManager.html">ConnectionsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ConnectionsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#get">get</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#update">update</a></li></ul></li><li><a href="module-management.DeviceCredentialsManager.html">DeviceCredentialsManager</a><ul class='methods'><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#create">create</a></li><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.EmailProviderManager.html">EmailProviderManager</a><ul class='methods'><li data-type='method'><a href="module-management.EmailProviderManager.html#configure">configure</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#get">get</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#update">update</a></li></ul></li><li><a href="module-management.JobsManager.html">JobsManager</a><ul class='methods'><li data-type='method'><a href="module-management.JobsManager.html#get">get</a></li><li data-type='method'><a href="module-management.JobsManager.html#importUsers">importUsers</a></li><li data-type='method'><a href="module-management.JobsManager.html#verifyEmail">verifyEmail</a></li></ul></li><li><a href="module-management.LogsManager.html">LogsManager</a><ul class='methods'><li data-type='method'><a href="module-management.LogsManager.html#get">get</a></li><li data-type='method'><a href="module-management.LogsManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.ManagementClient.html">ManagementClient</a><ul class='methods'><li data-type='method'><a href="module-management.ManagementClient.html#blacklistToken">blacklistToken</a></li><li data-type='method'><a href="module-management.ManagementClient.html#configureEmailProvider">configureEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createClient">createClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createConnection">createConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createDevicePublicKey">createDevicePublicKey</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createEmailVerificationTicket">createEmailVerificationTicket</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createPasswordChangeTicket">createPasswordChangeTicket</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createResourceServer">createResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createRules">createRules</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createUser">createUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteAllUsers">deleteAllUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteClient">deleteClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteConnection">deleteConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteDeviceCredential">deleteDeviceCredential</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteEmailProvider">deleteEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteResourceServer">deleteResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteRule">deleteRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteUser">deleteUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteUserMultifactor">deleteUserMultifactor</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getActiveUsersCount">getActiveUsersCount</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getBlacklistedTokens">getBlacklistedTokens</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClient">getClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClientInfo">getClientInfo</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClients">getClients</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getConnection">getConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getConnections">getConnections</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getDailyStats">getDailyStats</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getDeviceCredentials">getDeviceCredentials</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getEmailProvider">getEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getGuardianEnrollments">getGuardianEnrollments</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getJob">getJob</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getLog">getLog</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getLogs">getLogs</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getResourceServer">getResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getResourceServers">getResourceServers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getRule">getRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getRules">getRules</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getTenantSettings">getTenantSettings</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUser">getUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUserLogs">getUserLogs</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUsers">getUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#importUsers">importUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#linkUsers">linkUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#sendEmailVerification">sendEmailVerification</a></li><li data-type='method'><a href="module-management.ManagementClient.html#unlinkUsers">unlinkUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateAppMetadata">updateAppMetadata</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateClient">updateClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateConnection">updateConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateEmailProvider">updateEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateResourceServer">updateResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateRule">updateRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateTenantSettings">updateTenantSettings</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateUser">updateUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateUserMetadata">updateUserMetadata</a></li></ul></li><li><a href="module-management.ResourceServersManager.html">ResourceServersManager</a><ul class='methods'><li data-type='method'><a href="module-management.ResourceServersManager.html#create">create</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#get">get</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#update">update</a></li></ul></li><li><a href="module-management.RulesManager.html">RulesManager</a><ul class='methods'><li data-type='method'><a href="module-management.RulesManager.html#create">create</a></li><li data-type='method'><a href="module-management.RulesManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.RulesManager.html#get">get</a></li><li data-type='method'><a href="module-management.RulesManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.RulesManager.html#update">update</a></li></ul></li><li><a href="module-management.StatsManager.html">StatsManager</a><ul class='methods'><li data-type='method'><a href="module-management.StatsManager.html#getActiveUsersCount">getActiveUsersCount</a></li><li data-type='method'><a href="module-management.StatsManager.html#getDaily">getDaily</a></li></ul></li><li><a href="module-management.TenantManager.html">TenantManager</a><ul class='methods'><li data-type='method'><a href="module-management.TenantManager.html#getSettings">getSettings</a></li><li data-type='method'><a href="module-management.TenantManager.html#updateSettings">updateSettings</a></li></ul></li><li><a href="module-management.TicketsManager.html">TicketsManager</a><ul class='methods'><li data-type='method'><a href="module-management.TicketsManager.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-management.TicketsManager.html#verifyEmail">verifyEmail</a></li></ul></li><li><a href="module-management.UsersManager.html">UsersManager</a><ul class='methods'><li data-type='method'><a href="module-management.UsersManager.html#create">create</a></li><li data-type='method'><a href="module-management.UsersManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.UsersManager.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="module-management.UsersManager.html#deleteMultifactorProvider">deleteMultifactorProvider</a></li><li data-type='method'><a href="module-management.UsersManager.html#get">get</a></li><li data-type='method'><a href="module-management.UsersManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.UsersManager.html#getGuardianEnrollments">getGuardianEnrollments</a></li><li data-type='method'><a href="module-management.UsersManager.html#link">link</a></li><li data-type='method'><a href="module-management.UsersManager.html#logs">logs</a></li><li data-type='method'><a href="module-management.UsersManager.html#unlink">unlink</a></li><li data-type='method'><a href="module-management.UsersManager.html#update">update</a></li><li data-type='method'><a href="module-management.UsersManager.html#updateAppMetadata">updateAppMetadata</a></li><li data-type='method'><a href="module-management.UsersManager.html#updateUserMetadata">updateUserMetadata</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-management.html">management</a></li></ul><h3>Externals</h3><ul><li><a href="external-RestClient.html">RestClient</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">auth/index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module auth **/
+
+var util = require('util');
+
+var pkg = require('../../package.json');
+var utils = require('../utils');
+var jsonToBase64 = utils.jsonToBase64;
+var ArgumentError = require('rest-facade').ArgumentError;
+
+// Authenticators.
+var OAuthAuthenticator = require('./OAuthAuthenticator');
+var DatabaseAuthenticator = require('./DatabaseAuthenticator');
+var PasswordlessAuthenticator = require('./PasswordlessAuthenticator');
+
+// Managers
+var UsersManager = require('./UsersManager');
+var TokensManager = require('./TokensManager');
+
+var BASE_URL_FORMAT = 'https://%s';
+
+
+/**
+ * @class
+ * Authentication API SDK.
+ *
+ * This client must used to access Auth0's
+ * &lt;a href="https://auth0.com/docs/auth-api">Authentication API&lt;/a>.
+ * @constructor
+ * @memberOf module:auth
+ *
+ * @example &lt;caption>
+ *   The &lt;b>AuthenticationClient&lt;/b> constructor takes an &lt;i>optional&lt;/i> client
+ *   ID, if specified it will be used as default value for all endpoints that
+ *   accept a client ID.
+ * &lt;/caption>
+ *
+ * var AuthenticationClient = require('auth0'). AuthenticationClient;
+ * var auth0 = new AuthenticationClient({
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   clientId: '{OPTIONAL_CLIENT_ID}'
+ * });
+ *
+ * @param   {Object}  options                 Options for the Authentication Client
+ *                                            SDK.
+ * @param   {String}  options.domain          AuthenticationClient server domain.
+ * @param   {String}  [options.clientId]      Default client ID.
+ * @param   {String}  [options.clientSecret]  Default client Secret.
+ */
+var AuthenticationClient = function (options) {
+  if (!options || typeof options !== 'object') {
+    throw new ArgumentError(
+      'Authentication Client SDK options must be an object'
+    );
+  }
+
+  if (!options.domain || options.domain.length === 0) {
+    throw new ArgumentError('Must provide a domain');
+  }
+
+  var managerOptions = {
+    clientId: options.clientId,
+    domain: options.domain,
+    clientSecret: options.clientSecret,
+    headers: {
+      'User-agent': 'node.js/' + process.version.replace('v', ''),
+      'Content-Type': 'application/json'
+    },
+    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+  };
+
+  if (options.telemetry !== false) {
+    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
+    managerOptions.headers['Auth0-Client'] = telemetry;
+  }
+
+  /**
+   * OAuth authenticator.
+   *
+   * @type {OAuthAuthenticator}
+   */
+  this.oauth = new OAuthAuthenticator(managerOptions);
+
+  /**
+   * Database authenticator.
+   *
+   * @type {DatabaseAuthenticator}
+   */
+  this.database = new DatabaseAuthenticator(managerOptions, this.oauth);
+
+  /**
+   * Passwordless authenticator.
+   *
+   * @type {PasswordlessAuthenticator}
+   */
+  this.passwordless = new PasswordlessAuthenticator(managerOptions, this.oauth);
+
+  /**
+   * Users manager.
+   *
+   * @type {UsersManager}
+   */
+  this.users = new UsersManager(managerOptions);
+
+  /**
+   * Tokens manager.
+   *
+   * @type {TokensManager}
+   */
+  this.tokens = new TokensManager(managerOptions);
+};
+
+
+/**
+ * Return an object with information about the current client,
+ *
+ * @method    getClientInfo
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @return {Object}   Object containing client information.
+ */
+AuthenticationClient.prototype.getClientInfo = function () {
+  var clientInfo = {
+    name: 'node-auth0',
+    version: pkg.version,
+    dependencies: [],
+    environment: [{
+      name: 'node.js',
+      version: process.version.replace('v', '')
+    }]
+  };
+
+  // Add the dependencies to the client info object.
+  Object
+    .keys(pkg.dependencies)
+    .forEach(function (name) {
+      clientInfo.dependencies.push({
+        name: name,
+        version: pkg.dependencies[name]
+      });
+    });
+
+  return clientInfo;
+};
+
+
+/**
+ * Start passwordless flow sending an email.
+ *
+ * @method    requestMagicLink
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user `email` address, it will send an email with a link. You can
+ *   then authenticate with this user opening the link and he will be
+ *   automatically logged in to the application. Optionally, you can
+ *   append/override parameters to the link (like `scope`, `redirect_uri`,
+ *   `protocol`, `response_type`, etc.) using `authParams` object.
+ *
+ *   Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs&lt;/a>
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   authParams: {} // Optional auth params.
+ * };
+ *
+ * auth0.requestMagicLink(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * };
+ *
+ * @param   {Object}  data              User data object.
+ * @param   {String}  data.email        User email address.
+ * @param   {Object}  [data.authParams] Authentication parameters.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
+  data.send = 'link';
+
+  return this.passwordless.sendEmail(data, cb);
+};
+
+
+/**
+ * Start passwordless flow sending an email.
+ *
+ * @method    requestEmailCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user `email` address, it will send an email with a verification
+ *   code. You can then authenticate with this user using the `/oauth/ro`
+ *   endpoint using the email as username and the code as password.
+ *
+ *   Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs&lt;/a>
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   authParams: {} // Optional auth params.
+ * };
+ *
+ * auth0.requestEmailCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * };
+ *
+ * @param   {Object}  data              User data object.
+ * @param   {String}  data.email        User email address.
+ * @param   {Object}  [data.authParams] Authentication parameters.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
+  data.send = 'code';
+
+  return this.passwordless.sendEmail(data, cb);
+};
+
+
+/**
+ * Start passwordless flow sending an SMS.
+ *
+ * @method    requestSMSCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user `phone_number`, it will send a SMS message with a
+ *   verification code. You can then authenticate with this user using the
+ *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
+ *   `password`:
+ * &lt;/caption>
+ *
+ * var data = {
+ *   phone_number: '{PHONE}'
+ * };
+ *
+ * auth0.requestSMSCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * });
+ *
+ * @param   {Object}  data                User data object.
+ * @param   {String}  data.phone_number   The user phone number.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
+  var translatedData = {
+    phone_number: data.phoneNumber || data.phone_number
+  };
+
+  return this.passwordless.sendSMS(translatedData, cb);
+};
+
+
+/**
+ * Sign in with the given user credentials.
+ *
+ * @method    verifySMSCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user credentials (`phone_number` and `code`), it will do the
+ *   authentication on the provider and return a JSON with the `access_token`
+ *   and `id_token`.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}',
+ *   password: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.verifySMSCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example &lt;caption>
+ *   The user data object has the following structure.
+ * &lt;/caption>
+ *
+ * {
+ *   id_token: String,
+ *   access_token: String,
+ *   token_type: String
+ * }
+ *
+ * @param   {Object}  data              Credentials object.
+ * @param   {String}  data.username     Phone number.
+ * @param   {String}  data.password     Verification code.
+ * @param   {String}  data.target       Target client ID.
+ * @param   {String}  data.grant_type   Grant type.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
+  var translatedData = {
+    username: data.phoneNumber || data.phone_number || data.username,
+    password: data.code || data.password
+  };
+
+  return this.passwordless.signIn(translatedData, cb);
+};
+
+
+/**
+ * Exchange the token of the logged in user with a token that is valid to call
+ * the API (signed with the API secret).
+ *
+ * @method    getDelegationToken
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given an existing token, this endpoint will generate a new token signed
+ *   with the target client secret. This is used to flow the identity of the
+ *   user from the application to an API or across different APIs that are
+ *   protected with different secrets. Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   id_token: '{ID_TOKEN}',
+ *   api_type: 'app',
+ *   target: '{TARGET}',
+ *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+ * };
+ *
+ * auth0.getDelegationToken(data, function (err, token) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(token);
+ * });
+ *
+ * @param   {Object}  data              Token data object.
+ * @param   {String}  data.id_token     The user ID token.
+ * @param   {String}  data.api_type     The API type (aws, firebase, etc).
+ * @param   {String}  data.target       The target client ID.
+ * @param   {String}  data.grant_type   The grant type.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
+  var translatedData = {
+    id_token: data.id_token,
+    api_type: data.api || data.api_type,
+    scope: data.scope,
+    target: data.targetClientId || data.target,
+    grant_type: data.grant_type
+  };
+
+  return this.tokens.getDelegationToken(translatedData, cb);
+};
+
+
+/**
+ * Change password using a database or active directory service.
+ *
+ * @method    changePassword
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user email, the connection specified and the new password to
+ *   use, Auth0 will send a forgot password email. Once the user clicks on the
+ *   confirm password change link, the new password specified in this POST will
+ *   be set to this user. Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password">
+ *   API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.changePassword(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data            User data object.
+ * @param   {String}    data.email      User email.
+ * @param   {String}    data.password   User password.
+ * @param   {String}    data.connection Identity provider for the user.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.changePassword = function (data, cb) {
+  var translatedData = {
+    connection: data.connection,
+    email: data.email || data.username,
+    password: data.password
+  };
+
+  return this.database.changePassword(data, cb);
+};
+
+
+/**
+ * Request a change password email using a database or active directory service.
+ *
+ * @method    requestChangePasswordEmail
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user email, the connection specified, Auth0 will send a change
+ *   password email. once the user clicks on the confirm password change link,
+ *   the new password specified in this POST will be set to this user. Find more
+ *   information in the &lt;a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.requestChangePasswordEmail(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data            User data object.
+ * @param   {String}    data.email      User email.
+ * @param   {String}    data.connection Identity provider for the user.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.requestChangePasswordEmail = function (data, cb) {
+  var translatedData = {
+    connection: data.connection,
+    email: data.email || data.username
+  };
+
+  return this.database.requestChangePasswordEmail(data, cb);
+};
+
+
+/**
+ * Given an access token get the user profile linked to it.
+ *
+ * @method    getProfile
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Get the user information based on the Auth0 access token (obtained during
+ *   login). Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#get--userinfo">API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * auth0.getProfile(data, function (err, userInfo) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userInfo);
+ * });
+ *
+ * @param     {String}  accessToken   The user access token.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
+
+/**
+ * Gets an access token using the client credentials grant flow.
+ *
+ * @method    clientCredentialsGrant
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example &lt;caption>
+ *   Gets an access token using the client credentials grant flow. Find more information in the
+ *   &lt;a href="https://auth0.com/docs/api-auth/config/asking-for-access-tokens">API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * auth0.clientCredentialsGrant(data, function (err, response) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(response);
+ * });
+ *
+ * @param     {String}  scope   
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(AuthenticationClient, 'clientCredentialsGrant', 'oauth.clientCredentialsGrant');
+
+
+module.exports = AuthenticationClient;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated at Fri Jun 16 2017 00:33:46 GMT-0300 (-03)
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

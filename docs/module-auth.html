@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>auth - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-auth.AuthenticationClient.html">AuthenticationClient</a><ul class='methods'><li data-type='method'><a href="module-auth.AuthenticationClient.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#clientCredentialsGrant">clientCredentialsGrant</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getClientInfo">getClientInfo</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getDelegationToken">getDelegationToken</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getProfile">getProfile</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestChangePasswordEmail">requestChangePasswordEmail</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestEmailCode">requestEmailCode</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestMagicLink">requestMagicLink</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestSMSCode">requestSMSCode</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#verifySMSCode">verifySMSCode</a></li></ul></li><li><a href="module-auth.DatabaseAuthenticator.html">DatabaseAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#requestChangePasswordEmail">requestChangePasswordEmail</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#signIn">signIn</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#signUp">signUp</a></li></ul></li><li><a href="module-auth.OAuthAuthenticator.html">OAuthAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.OAuthAuthenticator.html#signIn">signIn</a></li><li data-type='method'><a href="module-auth.OAuthAuthenticator.html#socialSignIn">socialSignIn</a></li></ul></li><li><a href="module-auth.PasswordlessAuthenticator.html">PasswordlessAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#sendEmail">sendEmail</a></li><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#sendSMS">sendSMS</a></li><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#signIn">signIn</a></li></ul></li><li><a href="module-auth.TokensManager.html">TokensManager</a></li><li><a href="module-auth.UsersManager.html">UsersManager</a><ul class='methods'><li data-type='method'><a href="module-auth.UsersManager.html#getInfo">getInfo</a></li><li data-type='method'><a href="module-auth.UsersManager.html#impersonate">impersonate</a></li></ul></li><li><a href="module-management.BlacklistedTokensManager.html">BlacklistedTokensManager</a><ul class='methods'><li data-type='method'><a href="module-management.BlacklistedTokensManager.html#add">add</a></li><li data-type='method'><a href="module-management.BlacklistedTokensManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.ClientGrantsManager.html">ClientGrantsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ClientGrantsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#update">update</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#update">update</a></li></ul></li><li><a href="module-management.ClientsManager.html">ClientsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ClientsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientsManager.html#get">get</a></li><li data-type='method'><a href="module-management.ClientsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientsManager.html#update">update</a></li></ul></li><li><a href="module-management.ConnectionsManager.html">ConnectionsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ConnectionsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#get">get</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#update">update</a></li></ul></li><li><a href="module-management.DeviceCredentialsManager.html">DeviceCredentialsManager</a><ul class='methods'><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#create">create</a></li><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.EmailProviderManager.html">EmailProviderManager</a><ul class='methods'><li data-type='method'><a href="module-management.EmailProviderManager.html#configure">configure</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#get">get</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#update">update</a></li></ul></li><li><a href="module-management.JobsManager.html">JobsManager</a><ul class='methods'><li data-type='method'><a href="module-management.JobsManager.html#get">get</a></li><li data-type='method'><a href="module-management.JobsManager.html#importUsers">importUsers</a></li><li data-type='method'><a href="module-management.JobsManager.html#verifyEmail">verifyEmail</a></li></ul></li><li><a href="module-management.LogsManager.html">LogsManager</a><ul class='methods'><li data-type='method'><a href="module-management.LogsManager.html#get">get</a></li><li data-type='method'><a href="module-management.LogsManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.ManagementClient.html">ManagementClient</a><ul class='methods'><li data-type='method'><a href="module-management.ManagementClient.html#blacklistToken">blacklistToken</a></li><li data-type='method'><a href="module-management.ManagementClient.html#configureEmailProvider">configureEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createClient">createClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createConnection">createConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createDevicePublicKey">createDevicePublicKey</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createEmailVerificationTicket">createEmailVerificationTicket</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createPasswordChangeTicket">createPasswordChangeTicket</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createResourceServer">createResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createRules">createRules</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createUser">createUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteAllUsers">deleteAllUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteClient">deleteClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteConnection">deleteConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteDeviceCredential">deleteDeviceCredential</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteEmailProvider">deleteEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteResourceServer">deleteResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteRule">deleteRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteUser">deleteUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteUserMultifactor">deleteUserMultifactor</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getActiveUsersCount">getActiveUsersCount</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getBlacklistedTokens">getBlacklistedTokens</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClient">getClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClientInfo">getClientInfo</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClients">getClients</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getConnection">getConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getConnections">getConnections</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getDailyStats">getDailyStats</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getDeviceCredentials">getDeviceCredentials</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getEmailProvider">getEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getGuardianEnrollments">getGuardianEnrollments</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getJob">getJob</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getLog">getLog</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getLogs">getLogs</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getResourceServer">getResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getResourceServers">getResourceServers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getRule">getRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getRules">getRules</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getTenantSettings">getTenantSettings</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUser">getUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUserLogs">getUserLogs</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUsers">getUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#importUsers">importUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#linkUsers">linkUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#sendEmailVerification">sendEmailVerification</a></li><li data-type='method'><a href="module-management.ManagementClient.html#unlinkUsers">unlinkUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateAppMetadata">updateAppMetadata</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateClient">updateClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateConnection">updateConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateEmailProvider">updateEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateResourceServer">updateResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateRule">updateRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateTenantSettings">updateTenantSettings</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateUser">updateUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateUserMetadata">updateUserMetadata</a></li></ul></li><li><a href="module-management.ResourceServersManager.html">ResourceServersManager</a><ul class='methods'><li data-type='method'><a href="module-management.ResourceServersManager.html#create">create</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#get">get</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#update">update</a></li></ul></li><li><a href="module-management.RulesManager.html">RulesManager</a><ul class='methods'><li data-type='method'><a href="module-management.RulesManager.html#create">create</a></li><li data-type='method'><a href="module-management.RulesManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.RulesManager.html#get">get</a></li><li data-type='method'><a href="module-management.RulesManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.RulesManager.html#update">update</a></li></ul></li><li><a href="module-management.StatsManager.html">StatsManager</a><ul class='methods'><li data-type='method'><a href="module-management.StatsManager.html#getActiveUsersCount">getActiveUsersCount</a></li><li data-type='method'><a href="module-management.StatsManager.html#getDaily">getDaily</a></li></ul></li><li><a href="module-management.TenantManager.html">TenantManager</a><ul class='methods'><li data-type='method'><a href="module-management.TenantManager.html#getSettings">getSettings</a></li><li data-type='method'><a href="module-management.TenantManager.html#updateSettings">updateSettings</a></li></ul></li><li><a href="module-management.TicketsManager.html">TicketsManager</a><ul class='methods'><li data-type='method'><a href="module-management.TicketsManager.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-management.TicketsManager.html#verifyEmail">verifyEmail</a></li></ul></li><li><a href="module-management.UsersManager.html">UsersManager</a><ul class='methods'><li data-type='method'><a href="module-management.UsersManager.html#create">create</a></li><li data-type='method'><a href="module-management.UsersManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.UsersManager.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="module-management.UsersManager.html#deleteMultifactorProvider">deleteMultifactorProvider</a></li><li data-type='method'><a href="module-management.UsersManager.html#get">get</a></li><li data-type='method'><a href="module-management.UsersManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.UsersManager.html#getGuardianEnrollments">getGuardianEnrollments</a></li><li data-type='method'><a href="module-management.UsersManager.html#link">link</a></li><li data-type='method'><a href="module-management.UsersManager.html#logs">logs</a></li><li data-type='method'><a href="module-management.UsersManager.html#unlink">unlink</a></li><li data-type='method'><a href="module-management.UsersManager.html#update">update</a></li><li data-type='method'><a href="module-management.UsersManager.html#updateAppMetadata">updateAppMetadata</a></li><li data-type='method'><a href="module-management.UsersManager.html#updateUserMetadata">updateUserMetadata</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-management.html">management</a></li></ul><h3>Externals</h3><ul><li><a href="external-RestClient.html">RestClient</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">auth</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-auth.AuthenticationClient.html">AuthenticationClient</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-auth.DatabaseAuthenticator.html">DatabaseAuthenticator</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-auth.OAuthAuthenticator.html">OAuthAuthenticator</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-auth.PasswordlessAuthenticator.html">PasswordlessAuthenticator</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-auth.TokensManager.html">TokensManager</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-auth.UsersManager.html">UsersManager</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated at Fri Jun 16 2017 00:33:46 GMT-0300 (-03)
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
