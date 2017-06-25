@@ -115,7 +115,8 @@ UsersManager.prototype.create = function (data, cb) {
  * // Pagination settings.
  * var params = {
  *   per_page: 10,
- *   page: 2
+ *   page: 2,
+ *   q: <Optional - Query String in Lucene query string syntax>
  * };
  *
  * management.users.getAll(function (err, users) {
@@ -125,6 +126,7 @@ UsersManager.prototype.create = function (data, cb) {
  * @param   {Object}    [params]          Users params.
  * @param   {Number}    [params.per_page] Number of users per page.
  * @param   {Number}    [params.page]     Page number.
+ * @param   {String}    [params.q]        Query string.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
