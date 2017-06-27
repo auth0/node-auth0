@@ -119,13 +119,14 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
  * @param   {Object}    settings                  Impersonation settings.
  * @param   {String}    settings.impersonator_id  Impersonator user ID.
  * @param   {String}    settings.protocol         The authentication protocol.
+ * @param   {String}    settings.token            API v1 token obtained for impersonation
+ * @param   {String}    [settings.clientId]       Client id used for impersonation. Uses the one supplied in the constructor by default.
  * @param   {Function}  [cb]]                     Callback function.
  *
  * @return  {Promise|undefined}
  */
 UsersManager.prototype.impersonate = function (userId, settings, cb) {
   var url = this.baseUrl + '/users/' + userId + '/impersonate';
-  var data = extend({ client_id: this.clientId }, settings);
 
   if (userId === null || userId === undefined) {
     throw new ArgumentError('You must specify a user ID');
@@ -149,10 +150,17 @@ UsersManager.prototype.impersonate = function (userId, settings, cb) {
     throw new ArgumentError('protocol field is required');
   }
 
+  if (typeof settings.token !== 'string'
+      || settings.token.trim().length === 0) {
+    throw new ArgumentError('token field is required');
+  }
+
+  var data = extend({ client_id: settings.clientId || this.clientId }, settings);
+  var headers = extend({'Authorization': `Bearer ${settings.token}`}, this.headers);
   // Perform the request.
   var promise = getRequestPromise({
     method: 'POST',
-    headers: this.headers,
+    headers: headers,
     data: data,
     url: url
   });
