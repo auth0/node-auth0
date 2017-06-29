@@ -490,7 +490,10 @@ utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
  *   <a href="https://auth0.com/docs/api-auth/config/asking-for-access-tokens">API Docs</a>.
  * </caption>
  *
- * auth0.clientCredentialsGrant(data, function (err, response) {
+ * auth0.clientCredentialsGrant({
+ *   audience: 'https://tenant.auth0.com/api/v2/',
+ *   scope: 'read:users update:users'
+ * }, function (err, response) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -498,7 +501,9 @@ utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
  *   console.log(response);
  * });
  *
- * @param     {String}  scope
+ * @param     {Object}  options
+ * @param     {String}  [options.scope] scopes to request to be added to the returned access token
+ * @param     {String}  [options.audience] audience or identifier of the API where the access token will be used, e.g. Auth0 Management API
  *
  * @return    {Promise|undefined}
  */
