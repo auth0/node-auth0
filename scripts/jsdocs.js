@@ -11,5 +11,5 @@ execSync('npm run jsdoc:generate', {stdio: 'inherit'});
 if (fs.existsSync('docs')) {
   execSync('rm -r docs', {stdio: 'inherit'});
 }
-execSync(`mv out/node-auth0/${library.version}/ docs`, {stdio: 'inherit'});
+execSync(`mv out/${library.name}/${library.version}/ docs`, {stdio: 'inherit'});
 execSync('git add docs');
