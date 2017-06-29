@@ -508,7 +508,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'clientCredentialsGrant', 'oauth.
  * Sign in using a username and password
  *
  * @method    passwordGrant
- * @memberOf  module:auth.OAuthAuthenticator.prototype
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @example <caption>
  *   Given the user's credentials perform the OAuth password grant
