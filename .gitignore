@@ -36,8 +36,11 @@ node_modules
 # InelliJ IDEA
 .idea
 
-# Documentation
-docs/*
-
 build
 **/.env
+out/
+test-results.xml
+
+# Release process
+.release
+.release-tmp-*/

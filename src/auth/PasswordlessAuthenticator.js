@@ -23,7 +23,19 @@ var PasswordlessAuthenticator = function (options, oauth) {
     throw new ArgumentError('The authenticator options must be an object')
   }
 
-  var baseUrl = options.baseUrl + '/passwordless/start'
+  /**
+   * Options object for the Rest Client instace.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' }
+  };
+
+  this.oauth = oauth;
+  this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
+  this.clientId = options.clientId;
+};
 
   this.oauth = oauth
   this.passwordless = new RestClient(baseUrl)

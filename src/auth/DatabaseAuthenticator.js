@@ -1,13 +1,13 @@
 var extend = require('util')._extend;
 
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
 
 /**
  * @class
  * Abstracts the sign-in, sign-up and change-password processes for Database &
- * Active Directory auhtentication services.
+ * Active Directory authentication services.
  * @constructor
  * @memberOf module:auth
  *
@@ -25,10 +25,17 @@ var DatabaseAuthenticator = function (options, oauth) {
     throw new ArgumentError('The authenticator options must be an object');
   }
 
-  var dbConnectionsUrl = options.baseUrl + '/dbconnections/:type';
+  /**
+   * Options object for the Rest Client instace.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' }
+  };
 
   this.oauth = oauth;
-  this.dbConnections = new RestClient(dbConnectionsUrl);
+  this.dbConnections = new RestClient(options.baseUrl + '/dbconnections/:type', clientOptions);
   this.clientId = options.clientId;
 };
 

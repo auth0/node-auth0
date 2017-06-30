@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>auth/DatabaseAuthenticator.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html">AuthenticationClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#changePassword">changePassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#clientCredentialsGrant">clientCredentialsGrant</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#getClientInfo">getClientInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#getDelegationToken">getDelegationToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#getProfile">getProfile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#passwordGrant">passwordGrant</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestChangePasswordEmail">requestChangePasswordEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestEmailCode">requestEmailCode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestMagicLink">requestMagicLink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestSMSCode">requestSMSCode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#verifySMSCode">verifySMSCode</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html">DatabaseAuthenticator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#changePassword">changePassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#requestChangePasswordEmail">requestChangePasswordEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#signIn">signIn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#signUp">signUp</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html">OAuthAuthenticator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html#passwordGrant">passwordGrant</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html#signIn">signIn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html#socialSignIn">socialSignIn</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html">PasswordlessAuthenticator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html#sendEmail">sendEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html#sendSMS">sendSMS</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html#signIn">signIn</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.TokensManager.html">TokensManager</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.UsersManager.html">UsersManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.UsersManager.html#getInfo">getInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.UsersManager.html#impersonate">impersonate</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.BlacklistedTokensManager.html">BlacklistedTokensManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.BlacklistedTokensManager.html#add">add</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.BlacklistedTokensManager.html#getAll">getAll</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html">ClientGrantsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#update">update</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ClientsManager.html">ClientsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html">ConnectionsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html">DeviceCredentialsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html#getAll">getAll</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html">EmailProviderManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#configure">configure</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.JobsManager.html">JobsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.JobsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.JobsManager.html#importUsers">importUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.JobsManager.html#verifyEmail">verifyEmail</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.LogsManager.html">LogsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.LogsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.LogsManager.html#getAll">getAll</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ManagementClient.html">ManagementClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#blacklistToken">blacklistToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#configureEmailProvider">configureEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createClient">createClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createConnection">createConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createDevicePublicKey">createDevicePublicKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createEmailVerificationTicket">createEmailVerificationTicket</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createPasswordChangeTicket">createPasswordChangeTicket</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createResourceServer">createResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createRules">createRules</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createUser">createUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteAllUsers">deleteAllUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteClient">deleteClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteConnection">deleteConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteDeviceCredential">deleteDeviceCredential</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteEmailProvider">deleteEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteResourceServer">deleteResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteRule">deleteRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteUser">deleteUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteUserMultifactor">deleteUserMultifactor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getActiveUsersCount">getActiveUsersCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getBlacklistedTokens">getBlacklistedTokens</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getClient">getClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getClientInfo">getClientInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getClients">getClients</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getConnection">getConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getConnections">getConnections</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getDailyStats">getDailyStats</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getDeviceCredentials">getDeviceCredentials</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getEmailProvider">getEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getGuardianEnrollments">getGuardianEnrollments</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getJob">getJob</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getLog">getLog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getLogs">getLogs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getResourceServer">getResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getResourceServers">getResourceServers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getRule">getRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getRules">getRules</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getTenantSettings">getTenantSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getUser">getUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getUserLogs">getUserLogs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getUsers">getUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#importUsers">importUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#linkUsers">linkUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#sendEmailVerification">sendEmailVerification</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#unlinkUsers">unlinkUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateAppMetadata">updateAppMetadata</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateClient">updateClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateConnection">updateConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateEmailProvider">updateEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateResourceServer">updateResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateRule">updateRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateTenantSettings">updateTenantSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateUser">updateUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateUserMetadata">updateUserMetadata</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html">ResourceServersManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.RulesManager.html">RulesManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.StatsManager.html">StatsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.StatsManager.html#getActiveUsersCount">getActiveUsersCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.StatsManager.html#getDaily">getDaily</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.TenantManager.html">TenantManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TenantManager.html#getSettings">getSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TenantManager.html#updateSettings">updateSettings</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.TicketsManager.html">TicketsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TicketsManager.html#changePassword">changePassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TicketsManager.html#verifyEmail">verifyEmail</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.UsersManager.html">UsersManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#deleteAll">deleteAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#deleteMultifactorProvider">deleteMultifactorProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#getGuardianEnrollments">getGuardianEnrollments</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#link">link</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#logs">logs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#unlink">unlink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#update">update</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#updateAppMetadata">updateAppMetadata</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#updateUserMetadata">updateUserMetadata</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-auth.html">auth</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-management.html">management</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-utils.html">utils</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils.html#.getRequestPromise">getRequestPromise</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils.html#.jsonToBase64">jsonToBase64</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils.html#.wrapPropertyMethod">wrapPropertyMethod</a></span></li><li class="nav-heading">Externals</li><li class="nav-heading"><span class="nav-item-type type-external">E</span><span class="nav-item-name"><a href="external-RestClient.html">RestClient</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">auth/DatabaseAuthenticator.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var extend = require('util')._extend;
+
+var ArgumentError = require('rest-facade').ArgumentError;
+var RestClient = require('rest-facade').Client;
+
+
+/**
+ * @class
+ * Abstracts the sign-in, sign-up and change-password processes for Database &amp;
+ * Active Directory authentication services.
+ * @constructor
+ * @memberOf module:auth
+ *
+ * @param  {Object}              options            Authenticator options.
+ * @param  {String}              options.baseUrl    The auth0 account URL.
+ * @param  {String}              [options.clientId] Default client ID.
+ * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
+ */
+var DatabaseAuthenticator = function (options, oauth) {
+  if (!options) {
+    throw new ArgumentError('Missing authenticator options');
+  }
+
+  if (typeof options !== 'object') {
+    throw new ArgumentError('The authenticator options must be an object');
+  }
+
+  /**
+   * Options object for the Rest Client instace.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' }
+  };
+
+  this.oauth = oauth;
+  this.dbConnections = new RestClient(options.baseUrl + '/dbconnections/:type', clientOptions);
+  this.clientId = options.clientId;
+};
+
+
+/**
+ * Sign in using a database or active directory service.
+ * @method    signIn
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user credentials and the connection specified, it will do the
+ *   authentication on the provider and return a JSON with the `access_token`
+ *   and `id_token`. Find more information about the structure of the data
+ *   object in the &lt;a href="https://auth0.com/docs/auth-api#!#post--oauth-ro">
+ *   API docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   username: '{USERNAME}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication' // Optional field.
+ * };
+ *
+ * auth0.database.signIn(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.username     Username.
+ * @param   {String}    data.password     User password.
+ * @param   {String}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
+  var defaultFields = {
+    connection: 'Username-Password-Authentication'
+  };
+  var data = extend(defaultFields, userData);
+
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+
+  if (typeof data.username !== 'string'
+      || data.username.trim().length === 0) {
+    throw new ArgumentError('username field is required');
+  }
+
+  if (typeof data.password !== 'string'
+      || data.password.trim().length === 0) {
+    throw new ArgumentError('password field is required');
+  }
+
+  return this.oauth.signIn(data, cb);
+};
+
+
+/**
+ * Sign up using a database or active directory service.
+ * @method    signUp
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user credentials, the connection specified and (optionally) the
+ *   client ID, it will create a new user. Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#post--dbconnections-signup">
+ *   API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication' // Optional field.
+ * };
+ *
+ * auth0.database.signUp(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.email        User email address.
+ * @param   {String}    data.password     User password.
+ * @param   {Stinrg}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
+  var params = {
+    type: 'signup'
+  };
+  var defaultFields = {
+    client_id: this.clientId
+  };
+  var data = extend(defaultFields, userData);
+
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+
+  if (typeof data.email !== 'string'
+      || data.email.trim().length === 0) {
+    throw new ArgumentError('email field is required');
+  }
+
+  if (typeof data.password !== 'string'
+      || data.password.trim().length === 0) {
+    throw new ArgumentError('password field is required');
+  }
+
+  if (typeof data.connection !== 'string'
+      || data.connection.trim().length === 0) {
+    throw new ArgumentError('connection field is required');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.dbConnections.create(params, data, cb);
+  }
+
+  return this.dbConnections.create(params, data);
+};
+
+
+/**
+ * Change password using a database or active directory service.
+ *
+ * @method    changePassword
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user email, the connection specified and the new password to
+ *   use, Auth0 will send a forgot password email. Once the user clicks on the
+ *   confirm password change link, the new password specified in this POST will
+ *   be set to this user. Find more information in the
+ *   &lt;a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   password: '{PASSWORD}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.database.changePassword(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.email        User email address.
+ * @param   {String}    data.password     New password.
+ * @param   {String}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
+  var params = {
+    type: 'change_password'
+  };
+  var defaultFields = {
+    client_id: this.clientId
+  };
+  var data = extend(defaultFields, userData);
+
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+
+  if (typeof data.email !== 'string'
+      || data.email.trim().length === 0) {
+    throw new ArgumentError('email field is required');
+  }
+
+  if (typeof data.password !== 'string'
+      || data.password.trim().length === 0) {
+    throw new ArgumentError('password field is required');
+  }
+
+  if (typeof data.connection !== 'string'
+      || data.connection.trim().length === 0) {
+    throw new ArgumentError('connection field is required');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.dbConnections.create(params, data, cb);
+  }
+
+  return this.dbConnections.create(params, data);
+};
+
+
+/**
+ * Request a change password email using a database or active directory service.
+ *
+ * @method    requestChangePasswordEmail
+ * @memberOf  module:auth.DatabaseAuthenticator.prototype
+ *
+ * @example &lt;caption>
+ *   Given the user email, the connection specified, Auth0 will send a change
+ *   password email. once the user clicks on the confirm password change link,
+ *   the new password specified in this POST will be set to this user. Find more
+ *   information in the &lt;a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+ *   API Docs&lt;/a>.
+ * &lt;/caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   connection: 'Username-Password-Authentication'
+ * };
+ *
+ * auth0.database.requestChangePasswordEmail(data, function (err, message) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(message);
+ * });
+ *
+ * @param   {Object}    data              User credentials object.
+ * @param   {String}    data.email        User email address.
+ * @param   {String}    data.connection   Identity provider in use.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+DatabaseAuthenticator.prototype.requestChangePasswordEmail = function (userData, cb) {
+  var params = {
+    type: 'change_password'
+  };
+  var defaultFields = {
+    client_id: this.clientId
+  };
+  var data = extend(defaultFields, userData);
+
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+
+  if (typeof data.email !== 'string'
+      || data.email.trim().length === 0) {
+    throw new ArgumentError('email field is required');
+  }
+
+  if (typeof data.connection !== 'string'
+      || data.connection.trim().length === 0) {
+    throw new ArgumentError('connection field is required');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.dbConnections.create(params, data, cb);
+  }
+
+  return this.dbConnections.create(params, data);
+};
+
+
+module.exports = DatabaseAuthenticator;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jun 28 2017 23:12:43 GMT-0300 (-03) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

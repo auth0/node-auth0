@@ -5,7 +5,7 @@ var util = require('util');
 var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 
 // Authenticators.
 var OAuthAuthenticator = require('./OAuthAuthenticator');
@@ -490,7 +490,10 @@ utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
  *   <a href="https://auth0.com/docs/api-auth/config/asking-for-access-tokens">API Docs</a>.
  * </caption>
  *
- * auth0.clientCredentialsGrant(data, function (err, response) {
+ * auth0.clientCredentialsGrant({
+ *   audience: 'https://tenant.auth0.com/api/v2/',
+ *   scope: 'read:users update:users'
+ * }, function (err, response) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -498,11 +501,53 @@ utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
  *   console.log(response);
  * });
  *
- * @param     {String}  scope   
+ * @param     {Object}  options
+ * @param     {String}  [options.scope] scopes to request to be added to the returned access token
+ * @param     {String}  [options.audience] audience or identifier of the API where the access token will be used, e.g. Auth0 Management API
  *
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(AuthenticationClient, 'clientCredentialsGrant', 'oauth.clientCredentialsGrant');
 
+/**
+ * Sign in using a username and password
+ *
+ * @method    passwordGrant
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user's credentials perform the OAuth password grant
+ *   or Password Realm grant if a realm is provided,
+ *   it will return a JSON with the access_token and id_token.
+ *   More information in the
+ *   <a href="https://auth0.com/docs/api/authentication#resource-owner-password">
+ *     API Docs
+ *   </a>.
+ * </caption>
+ *
+ * var data = {
+ *   client_id: '{CLIENT_ID}',  // Optional field.
+ *   username: '{USERNAME}',
+ *   password: '{PASSWORD}'
+ *   realm: '{CONNECTION_NAME}', // Optional field.
+ *   scope: 'openid'  // Optional field.
+ * };
+ *
+ * auth0.oauth.token(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    userData              User credentials object.
+ * @param   {String}    userData.username     Username.
+ * @param   {String}    userData.password     User password.
+ * @param   {String}    [userData.realm]      Name of the realm to use to authenticate or the connection name
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordGrant');
 
 module.exports = AuthenticationClient;

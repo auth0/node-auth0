@@ -5,7 +5,7 @@ var Promise = require('bluebird');
 var BASE_URL = 'https://tenant.auth0.com';
 var CLIENT_ID = 'TEST_CLIENT_ID';
 
-var ArgumentError = require('../../src/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var UsersManager = require('../../src/auth/UsersManager');
 
 
@@ -166,6 +166,7 @@ describe('UsersManager', function () {
 
   describe('#impersonate', function () {
     var USER_ID = encodeURIComponent('github|12345');
+    var token = 'API V1 TOKEN';
     var manager = new UsersManager(options);
     var path = '/users/' + USER_ID + '/impersonate';
 
@@ -207,6 +208,16 @@ describe('UsersManager', function () {
         .to.throw(ArgumentError, 'impersonator_id field is required');
     });
 
+    it('should require a token', function () {
+      var settings = {
+        impersonator_id: 'auth0|12345',
+        protocol: 'oauth2'
+      };
+      var impersonate = manager.impersonate.bind(manager, USER_ID, settings);
+
+      expect(impersonate)
+        .to.throw(ArgumentError, 'token field is required');
+    });
 
     it('should require a protocol', function () {
       var settings = {
@@ -222,7 +233,8 @@ describe('UsersManager', function () {
     it('should accept a callback', function (done) {
       var settings = {
         impersonator_id: 'auth0|12345',
-        protocol: 'oauth2'
+        protocol: 'oauth2',
+        token: token
       };
 
       manager.impersonate(USER_ID, settings, done.bind(null, null));
@@ -232,7 +244,8 @@ describe('UsersManager', function () {
     it('should not return a promise when a callback is provided', function () {
       var settings = {
         impersonator_id: 'auth0|12345',
-        protocol: 'oauth2'
+        protocol: 'oauth2',
+        token: token
       };
       var returnValue = manager.impersonate(
         USER_ID,
@@ -248,7 +261,8 @@ describe('UsersManager', function () {
     it('should return a promise when no callback is provided', function () {
       var settings = {
         impersonator_id: 'auth0|12345',
-        protocol: 'oauth2'
+        protocol: 'oauth2',
+        token: token
       };
       var returnValue = manager.impersonate(USER_ID, settings);
 
@@ -261,7 +275,8 @@ describe('UsersManager', function () {
       var request = this.request;
       var settings = {
         impersonator_id: 'auth0|12345',
-        protocol: 'oauth2'
+        protocol: 'oauth2',
+        token: token
       };
 
       manager
@@ -281,7 +296,8 @@ describe('UsersManager', function () {
 
       var settings = {
         impersonator_id: 'auth0|12345',
-        protocol: 'oauth2'
+        protocol: 'oauth2',
+        token: token
       };
       var request = nock(BASE_URL)
         .post(path, function (body) {
@@ -306,7 +322,8 @@ describe('UsersManager', function () {
       var settings = {
         impersonator_id: 'auth0|12345',
         protocol: 'oauth2',
-        client_id: 'OVERRIDEN_CLIENT_ID'
+        clientId: 'OVERRIDEN_CLIENT_ID',
+        token: token
       };
       var request = nock(BASE_URL)
         .post(path, function (body) {
@@ -331,6 +348,7 @@ describe('UsersManager', function () {
       var settings = {
         impersonator_id: 'auth0|12345',
         protocol: 'oauth2',
+        token: token
       };
       var request = nock(BASE_URL)
         .post(path)
@@ -347,6 +365,28 @@ describe('UsersManager', function () {
         });
     });
 
+    it('should use the authorization header', function (done) {
+      nock.cleanAll();
+
+      var settings = {
+        impersonator_id: 'auth0|12345',
+        protocol: 'oauth2',
+        token: token
+      };
+      var request = nock(BASE_URL)
+        .post(path)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200);
+
+      manager
+        .impersonate(USER_ID, settings)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
 
     it('should allow the user to add additional parameters', function (done) {
       nock.cleanAll();
@@ -356,7 +396,8 @@ describe('UsersManager', function () {
         protocol: 'oauth2',
         additionalParameters: {
           response_type: 'code'
-        }
+        },
+        token: token
       };
       var request = nock(BASE_URL)
         .post(path, function (body) {

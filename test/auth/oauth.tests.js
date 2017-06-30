@@ -10,7 +10,7 @@ var API_URL = 'https://' + DOMAIN;
 var CLIENT_ID = 'TEST_CLIENT_ID';
 var CLIENT_SECRET = 'TEST_CLIENT_SECRET';
 
-var ArgumentError = require(SRC_DIR + '/exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/OAuthAuthenticator');
 
 var validOptions = {
@@ -42,7 +42,7 @@ describe('OAuthAuthenticator', function () {
 
 
   describe('instance', function () {
-    var methods = ['signIn', 'socialSignIn'];
+    var methods = ['signIn', 'socialSignIn', 'passwordGrant'];
     var authenticator = new Authenticator(validOptions);
 
     methods.forEach(function (method) {
@@ -247,6 +247,170 @@ describe('OAuthAuthenticator', function () {
       this
         .authenticator
         .signIn(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('#passwordGrant', function () {
+    var path = '/oauth/token';
+    var userData = {
+      username: 'username',
+      password: 'pwd'
+    };
+
+    beforeEach(function () {
+      this.authenticator = new Authenticator(validOptions);
+      this.request = nock(API_URL)
+        .post(path)
+        .reply(200);
+    });
+
+
+    it('should require an object as first argument', function () {
+      expect(this.authenticator.passwordGrant)
+        .to.throw(ArgumentError, 'Missing user data object');
+    });
+
+    it('should require a username', function () {
+      var auth = this.authenticator;
+      var signIn = auth.passwordGrant.bind(auth, {password: 'pwd'});
+
+      expect(signIn)
+        .to.throw(ArgumentError, 'username field is required');
+    });
+
+    it('should require a password', function () {
+      var auth = this.authenticator;
+      var signIn = auth.passwordGrant.bind(auth, {username: 'samples@auth0.com'});
+
+      expect(signIn)
+        .to.throw(ArgumentError, 'password field is required');
+    });
+
+
+    it('should accept a callback', function (done) {
+      this
+        .authenticator
+        .passwordGrant(userData, done.bind(null, null));
+    });
+
+
+    it('should return a promise when no callback is provided', function (done) {
+      this
+        .authenticator
+        .passwordGrant(userData)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should perform a POST request to ' + path, function (done) {
+      var request = this.request;
+
+      this
+        .authenticator
+        .passwordGrant(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should include the user data in the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          for (var property in userData) {
+            if (userData[property] !== body[property]) {
+              return false;
+            }
+          }
+
+          return true;
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .passwordGrant(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should include the Auth0 client ID in the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.client_id === CLIENT_ID;
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .passwordGrant(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should allow the user to specify the realm', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.realm === 'Username-Password-Authentication'
+          && body.grant_type === 'http://auth0.com/oauth/grant-type/password-realm';
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .passwordGrant(Object.assign({realm: 'Username-Password-Authentication'}, userData))
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should use password as default grant type', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.grant_type === 'password';
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .passwordGrant(userData)
         .then(function () {
           expect(request.isDone())
             .to.be.true;
@@ -560,8 +724,7 @@ describe('OAuthAuthenticator', function () {
 
       var request = nock(API_URL)
         .post(path, function (body) {
-          return body.client_id === CLIENT_ID;
-          return body.client_secret === CLIENT_SECRET;
+          return body.client_id === CLIENT_ID && body.client_secret === CLIENT_SECRET;
         })
         .reply(200);
 

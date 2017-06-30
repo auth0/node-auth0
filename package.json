@@ -1,12 +1,18 @@
 {
   "name": "auth0",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec $(find ./test -name *.tests.js) && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "test-watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch",
-    "docs-build": "jsdoc src/**/*.js -d docs -t node_modules/latodoc -R README.md"
+    "test": "mocha -R spec $(find ./test -name *.tests.js)",
+    "test:ci": "istanbul cover _mocha --report lcovonly -R $(find ./test -name *.tests.js) -- -R mocha-multi --reporter-options spec=-,mocha-junit-reporter=-",
+    "test:coverage": "codecov",
+    "test:watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch",
+    "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
+    "release:clean": "node scripts/cleanup.js",
+    "preversion": "node scripts/prepare.js",
+    "version": "node scripts/changelog.js && node scripts/jsdocs.js",
+    "postversion": "npm run release:clean"
   },
   "repository": {
     "type": "git",
@@ -24,18 +30,20 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.10.2",
-    "request": "^2.75.0",
-    "rest-facade": "^1.2.7",
-    "url-join": "0.0.1"
+    "request": "^2.81.0",
+    "rest-facade": "^1.5.0"
   },
   "devDependencies": {
     "chai": "^2.2.0",
-    "coveralls": "^2.11.4",
+    "codecov": "^2.2.0",
     "istanbul": "^0.4.0",
     "jsdoc": "^3.4.0",
     "json-loader": "^0.5.4",
-    "latodoc": "smeijer/latodoc",
+    "minami": "^1.2.3",
     "mocha": "^2.2.4",
+    "mocha-junit-reporter": "^1.13.0",
+    "mocha-multi": "^0.11.0",
+    "moment": "^2.18.1",
     "nock": "^3.1.1",
     "sinon": "^1.17.1",
     "string-replace-webpack-plugin": "0.0.3",
