@@ -1,7 +1,7 @@
-var extend = require('util')._extend
+var extend = require('util')._extend;
 
-var ArgumentError = require('../exceptions').ArgumentError
-var RestClient = require('rest-facade').Client
+var ArgumentError = require('../exceptions').ArgumentError;
+var RestClient = require('rest-facade').Client;
 
 /**
  * @class
@@ -16,11 +16,11 @@ var RestClient = require('rest-facade').Client
  */
 var PasswordlessAuthenticator = function (options, oauth) {
   if (!options) {
-    throw new ArgumentError('Missing authenticator options')
+    throw new ArgumentError('Missing authenticator options');
   }
 
   if (typeof options !== 'object') {
-    throw new ArgumentError('The authenticator options must be an object')
+    throw new ArgumentError('The authenticator options must be an object');
   }
 
   /**
@@ -37,11 +37,6 @@ var PasswordlessAuthenticator = function (options, oauth) {
   this.clientId = options.clientId;
 };
 
-  this.oauth = oauth
-  this.passwordless = new RestClient(baseUrl)
-  this.clientId = options.clientId
-}
-
 /**
  * Sign in with the given user credentials.
  *
@@ -56,13 +51,13 @@ var PasswordlessAuthenticator = function (options, oauth) {
  * var data = {
  *   username: '{PHONE_NUMBER}',
  *   password: '{VERIFICATION_CODE}'
- * };
+ * }
  *
  * auth0.passwordless.signIn(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
- * });
+ * })
  *
  * @example <caption>
  *   The user data object has the following structure.
@@ -86,30 +81,30 @@ var PasswordlessAuthenticator = function (options, oauth) {
 PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   var defaultFields = {
     client_id: this.clientId
-  }
-  var data = extend(defaultFields, userData)
+  };
+  var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) { data.connection = 'sms' }
+  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) { data.connection = 'sms'; }
 
-  data.grant_type = 'password'
+  data.grant_type = 'password';
 
   if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object')
+    throw new ArgumentError('Missing user data object');
   }
 
   if (typeof data.username !== 'string'
     || data.username.trim().length === 0) {
-    throw new ArgumentError('username field (phone number) is required')
+    throw new ArgumentError('username field (phone number) is required');
   }
 
   if (typeof data.password !== 'string'
     || data.password.trim().length === 0) {
-    throw new ArgumentError('password field (verification code) is required')
+    throw new ArgumentError('password field (verification code) is required');
   }
 
-  return this.oauth.signIn(data, cb)
-}
+  return this.oauth.signIn(data, cb);
+};
 
 /**
  * Start passwordless flow sending an email.
@@ -141,13 +136,13 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
  *   email: '{EMAIL}',
  *   send: 'link',
  *   authParams: {} // Optional auth params.
- * };
+ * }
  *
  * auth0.passwordless.sendEmail(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
- * });
+ * })
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.email          User email address.
@@ -159,32 +154,32 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
 PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
   var defaultFields = {
     client_id: this.clientId
-  }
-  var data = extend(defaultFields, userData)
+  };
+  var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
-  data.connection = 'email'
+  data.connection = 'email';
 
   if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object')
+    throw new ArgumentError('Missing user data object');
   }
 
   if (typeof data.email !== 'string'
     || data.email.trim().length === 0) {
-    throw new ArgumentError('email field is required')
+    throw new ArgumentError('email field is required');
   }
 
   if (typeof data.send !== 'string'
     || data.send.trim().length === 0) {
-    throw new ArgumentError('send field is required')
+    throw new ArgumentError('send field is required');
   }
 
   if (cb && cb instanceof Function) {
-    return this.passwordless.create(data, cb)
+    return this.passwordless.create(data, cb);
   }
 
-  return this.passwordless.create(data)
-}
+  return this.passwordless.create(data);
+};
 
 /**
  * Start passwordless flow sending an SMS.
@@ -201,13 +196,13 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
  *
  * var data = {
  *   phone_number: '{PHONE}'
- * };
+ * }
  *
  * auth0.passwordless.sendSMS(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
- * });
+ * })
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.phone_number   User phone number.
@@ -219,26 +214,26 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
 PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
   var defaultFields = {
     client_id: this.clientId
-  }
-  var data = extend(defaultFields, userData)
+  };
+  var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
-  data.connection = 'sms'
+  data.connection = 'sms';
 
   if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object')
+    throw new ArgumentError('Missing user data object');
   }
 
   if (typeof data.phone_number !== 'string'
     || data.phone_number.trim().length === 0) {
-    throw new ArgumentError('phone_number field is required')
+    throw new ArgumentError('phone_number field is required');
   }
 
   if (cb && cb instanceof Function) {
-    return this.passwordless.create(data, cb)
+    return this.passwordless.create(data, cb);
   }
 
-  return this.passwordless.create(data)
-}
+  return this.passwordless.create(data);
+};
 
-module.exports = PasswordlessAuthenticator
+module.exports = PasswordlessAuthenticator;
