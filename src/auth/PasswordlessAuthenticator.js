@@ -1,6 +1,6 @@
 var extend = require('util')._extend;
 
-var ArgumentError = require('../exceptions').ArgumentError;
+var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
 /**
