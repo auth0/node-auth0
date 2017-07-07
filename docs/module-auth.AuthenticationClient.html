@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>AuthenticationClient - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
@@ -23,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-auth.AuthenticationClient.html">AuthenticationClient</a><ul class='methods'><li data-type='method'><a href="module-auth.AuthenticationClient.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#clientCredentialsGrant">clientCredentialsGrant</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getClientInfo">getClientInfo</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getDelegationToken">getDelegationToken</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#getProfile">getProfile</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestChangePasswordEmail">requestChangePasswordEmail</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestEmailCode">requestEmailCode</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestMagicLink">requestMagicLink</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#requestSMSCode">requestSMSCode</a></li><li data-type='method'><a href="module-auth.AuthenticationClient.html#verifySMSCode">verifySMSCode</a></li></ul></li><li><a href="module-auth.DatabaseAuthenticator.html">DatabaseAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#requestChangePasswordEmail">requestChangePasswordEmail</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#signIn">signIn</a></li><li data-type='method'><a href="module-auth.DatabaseAuthenticator.html#signUp">signUp</a></li></ul></li><li><a href="module-auth.OAuthAuthenticator.html">OAuthAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.OAuthAuthenticator.html#signIn">signIn</a></li><li data-type='method'><a href="module-auth.OAuthAuthenticator.html#socialSignIn">socialSignIn</a></li></ul></li><li><a href="module-auth.PasswordlessAuthenticator.html">PasswordlessAuthenticator</a><ul class='methods'><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#sendEmail">sendEmail</a></li><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#sendSMS">sendSMS</a></li><li data-type='method'><a href="module-auth.PasswordlessAuthenticator.html#signIn">signIn</a></li></ul></li><li><a href="module-auth.TokensManager.html">TokensManager</a></li><li><a href="module-auth.UsersManager.html">UsersManager</a><ul class='methods'><li data-type='method'><a href="module-auth.UsersManager.html#getInfo">getInfo</a></li><li data-type='method'><a href="module-auth.UsersManager.html#impersonate">impersonate</a></li></ul></li><li><a href="module-management.BlacklistedTokensManager.html">BlacklistedTokensManager</a><ul class='methods'><li data-type='method'><a href="module-management.BlacklistedTokensManager.html#add">add</a></li><li data-type='method'><a href="module-management.BlacklistedTokensManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.ClientGrantsManager.html">ClientGrantsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ClientGrantsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#update">update</a></li><li data-type='method'><a href="module-management.ClientGrantsManager.html#update">update</a></li></ul></li><li><a href="module-management.ClientsManager.html">ClientsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ClientsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ClientsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ClientsManager.html#get">get</a></li><li data-type='method'><a href="module-management.ClientsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ClientsManager.html#update">update</a></li></ul></li><li><a href="module-management.ConnectionsManager.html">ConnectionsManager</a><ul class='methods'><li data-type='method'><a href="module-management.ConnectionsManager.html#create">create</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#get">get</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ConnectionsManager.html#update">update</a></li></ul></li><li><a href="module-management.DeviceCredentialsManager.html">DeviceCredentialsManager</a><ul class='methods'><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#create">create</a></li><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.DeviceCredentialsManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.EmailProviderManager.html">EmailProviderManager</a><ul class='methods'><li data-type='method'><a href="module-management.EmailProviderManager.html#configure">configure</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#get">get</a></li><li data-type='method'><a href="module-management.EmailProviderManager.html#update">update</a></li></ul></li><li><a href="module-management.JobsManager.html">JobsManager</a><ul class='methods'><li data-type='method'><a href="module-management.JobsManager.html#get">get</a></li><li data-type='method'><a href="module-management.JobsManager.html#importUsers">importUsers</a></li><li data-type='method'><a href="module-management.JobsManager.html#verifyEmail">verifyEmail</a></li></ul></li><li><a href="module-management.LogsManager.html">LogsManager</a><ul class='methods'><li data-type='method'><a href="module-management.LogsManager.html#get">get</a></li><li data-type='method'><a href="module-management.LogsManager.html#getAll">getAll</a></li></ul></li><li><a href="module-management.ManagementClient.html">ManagementClient</a><ul class='methods'><li data-type='method'><a href="module-management.ManagementClient.html#blacklistToken">blacklistToken</a></li><li data-type='method'><a href="module-management.ManagementClient.html#configureEmailProvider">configureEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createClient">createClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createConnection">createConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createDevicePublicKey">createDevicePublicKey</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createEmailVerificationTicket">createEmailVerificationTicket</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createPasswordChangeTicket">createPasswordChangeTicket</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createResourceServer">createResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createRules">createRules</a></li><li data-type='method'><a href="module-management.ManagementClient.html#createUser">createUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteAllUsers">deleteAllUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteClient">deleteClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteConnection">deleteConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteDeviceCredential">deleteDeviceCredential</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteEmailProvider">deleteEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteResourceServer">deleteResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteRule">deleteRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteUser">deleteUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#deleteUserMultifactor">deleteUserMultifactor</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getActiveUsersCount">getActiveUsersCount</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getBlacklistedTokens">getBlacklistedTokens</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClient">getClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClientInfo">getClientInfo</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getClients">getClients</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getConnection">getConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getConnections">getConnections</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getDailyStats">getDailyStats</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getDeviceCredentials">getDeviceCredentials</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getEmailProvider">getEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getGuardianEnrollments">getGuardianEnrollments</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getJob">getJob</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getLog">getLog</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getLogs">getLogs</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getResourceServer">getResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getResourceServers">getResourceServers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getRule">getRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getRules">getRules</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getTenantSettings">getTenantSettings</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUser">getUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUserLogs">getUserLogs</a></li><li data-type='method'><a href="module-management.ManagementClient.html#getUsers">getUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#importUsers">importUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#linkUsers">linkUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#sendEmailVerification">sendEmailVerification</a></li><li data-type='method'><a href="module-management.ManagementClient.html#unlinkUsers">unlinkUsers</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateAppMetadata">updateAppMetadata</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateClient">updateClient</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateConnection">updateConnection</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateEmailProvider">updateEmailProvider</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateResourceServer">updateResourceServer</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateRule">updateRule</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateTenantSettings">updateTenantSettings</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateUser">updateUser</a></li><li data-type='method'><a href="module-management.ManagementClient.html#updateUserMetadata">updateUserMetadata</a></li></ul></li><li><a href="module-management.ResourceServersManager.html">ResourceServersManager</a><ul class='methods'><li data-type='method'><a href="module-management.ResourceServersManager.html#create">create</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#get">get</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.ResourceServersManager.html#update">update</a></li></ul></li><li><a href="module-management.RulesManager.html">RulesManager</a><ul class='methods'><li data-type='method'><a href="module-management.RulesManager.html#create">create</a></li><li data-type='method'><a href="module-management.RulesManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.RulesManager.html#get">get</a></li><li data-type='method'><a href="module-management.RulesManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.RulesManager.html#update">update</a></li></ul></li><li><a href="module-management.StatsManager.html">StatsManager</a><ul class='methods'><li data-type='method'><a href="module-management.StatsManager.html#getActiveUsersCount">getActiveUsersCount</a></li><li data-type='method'><a href="module-management.StatsManager.html#getDaily">getDaily</a></li></ul></li><li><a href="module-management.TenantManager.html">TenantManager</a><ul class='methods'><li data-type='method'><a href="module-management.TenantManager.html#getSettings">getSettings</a></li><li data-type='method'><a href="module-management.TenantManager.html#updateSettings">updateSettings</a></li></ul></li><li><a href="module-management.TicketsManager.html">TicketsManager</a><ul class='methods'><li data-type='method'><a href="module-management.TicketsManager.html#changePassword">changePassword</a></li><li data-type='method'><a href="module-management.TicketsManager.html#verifyEmail">verifyEmail</a></li></ul></li><li><a href="module-management.UsersManager.html">UsersManager</a><ul class='methods'><li data-type='method'><a href="module-management.UsersManager.html#create">create</a></li><li data-type='method'><a href="module-management.UsersManager.html#delete">delete</a></li><li data-type='method'><a href="module-management.UsersManager.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="module-management.UsersManager.html#deleteMultifactorProvider">deleteMultifactorProvider</a></li><li data-type='method'><a href="module-management.UsersManager.html#get">get</a></li><li data-type='method'><a href="module-management.UsersManager.html#getAll">getAll</a></li><li data-type='method'><a href="module-management.UsersManager.html#getGuardianEnrollments">getGuardianEnrollments</a></li><li data-type='method'><a href="module-management.UsersManager.html#link">link</a></li><li data-type='method'><a href="module-management.UsersManager.html#logs">logs</a></li><li data-type='method'><a href="module-management.UsersManager.html#unlink">unlink</a></li><li data-type='method'><a href="module-management.UsersManager.html#update">update</a></li><li data-type='method'><a href="module-management.UsersManager.html#updateAppMetadata">updateAppMetadata</a></li><li data-type='method'><a href="module-management.UsersManager.html#updateUserMetadata">updateUserMetadata</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-management.html">management</a></li></ul><h3>Externals</h3><ul><li><a href="external-RestClient.html">RestClient</a></li></ul>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html">AuthenticationClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#changePassword">changePassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#clientCredentialsGrant">clientCredentialsGrant</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#getClientInfo">getClientInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#getDelegationToken">getDelegationToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#getProfile">getProfile</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#passwordGrant">passwordGrant</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestChangePasswordEmail">requestChangePasswordEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestEmailCode">requestEmailCode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestMagicLink">requestMagicLink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#requestSMSCode">requestSMSCode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.AuthenticationClient.html#verifySMSCode">verifySMSCode</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html">DatabaseAuthenticator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#changePassword">changePassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#requestChangePasswordEmail">requestChangePasswordEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#signIn">signIn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.DatabaseAuthenticator.html#signUp">signUp</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html">OAuthAuthenticator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html#passwordGrant">passwordGrant</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html#signIn">signIn</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.OAuthAuthenticator.html#socialSignIn">socialSignIn</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html">PasswordlessAuthenticator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html#sendEmail">sendEmail</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html#sendSMS">sendSMS</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.PasswordlessAuthenticator.html#signIn">signIn</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.TokensManager.html">TokensManager</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-auth.UsersManager.html">UsersManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.UsersManager.html#getInfo">getInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-auth.UsersManager.html#impersonate">impersonate</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.BlacklistedTokensManager.html">BlacklistedTokensManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.BlacklistedTokensManager.html#add">add</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.BlacklistedTokensManager.html#getAll">getAll</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html">ClientGrantsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#update">update</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientGrantsManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ClientsManager.html">ClientsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ClientsManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html">ConnectionsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ConnectionsManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html">DeviceCredentialsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.DeviceCredentialsManager.html#getAll">getAll</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html">EmailProviderManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#configure">configure</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.EmailProviderManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.JobsManager.html">JobsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.JobsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.JobsManager.html#importUsers">importUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.JobsManager.html#verifyEmail">verifyEmail</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.LogsManager.html">LogsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.LogsManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.LogsManager.html#getAll">getAll</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ManagementClient.html">ManagementClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#blacklistToken">blacklistToken</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#configureEmailProvider">configureEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createClient">createClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createConnection">createConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createDevicePublicKey">createDevicePublicKey</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createEmailVerificationTicket">createEmailVerificationTicket</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createPasswordChangeTicket">createPasswordChangeTicket</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createResourceServer">createResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createRules">createRules</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#createUser">createUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteAllUsers">deleteAllUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteClient">deleteClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteConnection">deleteConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteDeviceCredential">deleteDeviceCredential</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteEmailProvider">deleteEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteResourceServer">deleteResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteRule">deleteRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteUser">deleteUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#deleteUserMultifactor">deleteUserMultifactor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getActiveUsersCount">getActiveUsersCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getBlacklistedTokens">getBlacklistedTokens</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getClient">getClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getClientInfo">getClientInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getClients">getClients</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getConnection">getConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getConnections">getConnections</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getDailyStats">getDailyStats</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getDeviceCredentials">getDeviceCredentials</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getEmailProvider">getEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getGuardianEnrollments">getGuardianEnrollments</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getJob">getJob</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getLog">getLog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getLogs">getLogs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getResourceServer">getResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getResourceServers">getResourceServers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getRule">getRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getRules">getRules</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getTenantSettings">getTenantSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getUser">getUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getUserLogs">getUserLogs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#getUsers">getUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#importUsers">importUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#linkUsers">linkUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#sendEmailVerification">sendEmailVerification</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#unlinkUsers">unlinkUsers</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateAppMetadata">updateAppMetadata</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateClient">updateClient</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateConnection">updateConnection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateEmailProvider">updateEmailProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateResourceServer">updateResourceServer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateRule">updateRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateTenantSettings">updateTenantSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateUser">updateUser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ManagementClient.html#updateUserMetadata">updateUserMetadata</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html">ResourceServersManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.ResourceServersManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.RulesManager.html">RulesManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.RulesManager.html#update">update</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.StatsManager.html">StatsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.StatsManager.html#getActiveUsersCount">getActiveUsersCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.StatsManager.html#getDaily">getDaily</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.TenantManager.html">TenantManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TenantManager.html#getSettings">getSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TenantManager.html#updateSettings">updateSettings</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.TicketsManager.html">TicketsManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TicketsManager.html#changePassword">changePassword</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.TicketsManager.html#verifyEmail">verifyEmail</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="module-management.UsersManager.html">UsersManager</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#create">create</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#deleteAll">deleteAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#deleteMultifactorProvider">deleteMultifactorProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#getAll">getAll</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#getGuardianEnrollments">getGuardianEnrollments</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#link">link</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#logs">logs</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#unlink">unlink</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#update">update</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#updateAppMetadata">updateAppMetadata</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-management.UsersManager.html#updateUserMetadata">updateUserMetadata</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-auth.html">auth</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-management.html">management</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-utils.html">utils</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils.html#.getRequestPromise">getRequestPromise</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils.html#.jsonToBase64">jsonToBase64</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils.html#.wrapPropertyMethod">wrapPropertyMethod</a></span></li><li class="nav-heading">Externals</li><li class="nav-heading"><span class="nav-item-type type-external">E</span><span class="nav-item-name"><a href="external-RestClient.html">RestClient</a></span></li>
 </nav>
 
 <div id="main">
@@ -46,10 +47,9 @@
         AuthenticationClient
         </h2>
         
-            <div class="class-description">Authentication API SDK.
-
-This client must used to access Auth0's
-<a href="https://auth0.com/docs/auth-api">Authentication API</a>.</div>
+            <div class="class-description"><p>Authentication API SDK.</p>
+<p>This client must used to access Auth0's
+<a href="https://auth0.com/docs/auth-api">Authentication API</a>.</p></div>
         
     
 </header>
@@ -58,6 +58,7 @@ This client must used to access Auth0's
     <div class="container-overview">
     
         
+<div class="section-method">
 
     
     <h2>Constructor</h2>
@@ -67,189 +68,6 @@ This client must used to access Auth0's
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Options for the Authentication Client
-                                           SDK.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>domain</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">AuthenticationClient server domain.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>clientId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Default client ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>clientSecret</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Default client Secret.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -304,14 +122,209 @@ This client must used to access Auth0's
 
 
 
-
-
-
-
-
-
-    <h5>Example</h5>
+    <h5>Parameters:</h5>
     
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Options for the Authentication Client
+                                           SDK.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>domain</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>AuthenticationClient server domain.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>clientId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Default client ID.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>clientSecret</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Default client Secret.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
         <p class="code-caption">
   The <b>AuthenticationClient</b> constructor takes an <i>optional</i> client
   ID, if specified it will be used as default value for all endpoints that
@@ -324,8 +337,9 @@ var auth0 = new AuthenticationClient({
   clientId: '{OPTIONAL_CLIENT_ID}'
 });</code></pre>
 
+</div>
 
-
+</div>
     
     </div>
 
@@ -344,26 +358,15 @@ var auth0 = new AuthenticationClient({
 
         
             
+<div class="section-members">
 <h4 class="name" id="database"><span class="type-signature"></span>database<span class="type-signature"> :DatabaseAuthenticator</span></h4>
 
 
 
 
 <div class="description">
-    Database authenticator.
+    <p>Database authenticator.</p>
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">DatabaseAuthenticator</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -411,31 +414,33 @@ var auth0 = new AuthenticationClient({
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>DatabaseAuthenticator</code></span>
 
 
+        </li>
+    </ul>
+
+
+
+
+
+</div>
 
         
             
+<div class="section-members">
 <h4 class="name" id="oauth"><span class="type-signature"></span>oauth<span class="type-signature"> :OAuthAuthenticator</span></h4>
 
 
 
 
 <div class="description">
-    OAuth authenticator.
+    <p>OAuth authenticator.</p>
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">OAuthAuthenticator</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -483,31 +488,33 @@ var auth0 = new AuthenticationClient({
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>OAuthAuthenticator</code></span>
 
 
+        </li>
+    </ul>
+
+
+
+
+
+</div>
 
         
             
+<div class="section-members">
 <h4 class="name" id="passwordless"><span class="type-signature"></span>passwordless<span class="type-signature"> :PasswordlessAuthenticator</span></h4>
 
 
 
 
 <div class="description">
-    Passwordless authenticator.
+    <p>Passwordless authenticator.</p>
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">PasswordlessAuthenticator</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -555,31 +562,33 @@ var auth0 = new AuthenticationClient({
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>PasswordlessAuthenticator</code></span>
 
 
+        </li>
+    </ul>
+
+
+
+
+
+</div>
 
         
             
+<div class="section-members">
 <h4 class="name" id="tokens"><span class="type-signature"></span>tokens<span class="type-signature"> :TokensManager</span></h4>
 
 
 
 
 <div class="description">
-    Tokens manager.
+    <p>Tokens manager.</p>
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">TokensManager</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -627,31 +636,33 @@ var auth0 = new AuthenticationClient({
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>TokensManager</code></span>
 
 
+        </li>
+    </ul>
+
+
+
+
+
+</div>
 
         
             
+<div class="section-members">
 <h4 class="name" id="users"><span class="type-signature"></span>users<span class="type-signature"> :UsersManager</span></h4>
 
 
 
 
 <div class="description">
-    Users manager.
+    <p>Users manager.</p>
 </div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">UsersManager</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -699,8 +710,21 @@ var auth0 = new AuthenticationClient({
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>UsersManager</code></span>
 
 
+        </li>
+    </ul>
+
+
+
+
+
+</div>
 
         
     
@@ -710,6 +734,7 @@ var auth0 = new AuthenticationClient({
 
         
             
+<div class="section-method">
 
     
 
@@ -720,160 +745,8 @@ var auth0 = new AuthenticationClient({
 
 
 <div class="description">
-    Change password using a database or active directory service.
+    <p>Change password using a database or active directory service.</p>
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User data object.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User password.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Identity provider for the user.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -927,83 +800,6 @@ var auth0 = new AuthenticationClient({
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption">
-  Given the user email, the connection specified and the new password to
-  use, Auth0 will send a forgot password email. Once the user clicks on the
-  confirm password change link, the new password specified in this POST will
-  be set to this user. Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password">
-  API Docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  password: '{PASSWORD}',
-  connection: 'Username-Password-Authentication'
-};
-
-auth0.changePassword(data, function (err, message) {
-  if (err) {
-    // Handle error.
-  }
-
-  console.log(message);
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="clientCredentialsGrant"><span class="type-signature"></span>clientCredentialsGrant<span class="signature">(scope)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Gets an access token using the client credentials grant flow.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -1029,13 +825,13 @@ auth0.changePassword(data, function (err, message) {
 
         <tr>
             
-                <td class="name"><code>scope</code></td>
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -1045,13 +841,202 @@ auth0.changePassword(data, function (err, message) {
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                <p>User data object.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>User email.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>User password.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>connection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Identity provider for the user.</p>
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given the user email, the connection specified and the new password to
+  use, Auth0 will send a forgot password email. Once the user clicks on the
+  confirm password change link, the new password specified in this POST will
+  be set to this user. Find more information in the
+  <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password">
+  API Docs</a>.
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  email: '{EMAIL}',
+  password: '{PASSWORD}',
+  connection: 'Username-Password-Authentication'
+};
+
+auth0.changePassword(data, function (err, message) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(message);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="clientCredentialsGrant"><span class="type-signature"></span>clientCredentialsGrant<span class="signature">(options)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Gets an access token using the client credentials grant flow.</p>
+</div>
 
 
 
@@ -1105,41 +1090,207 @@ auth0.changePassword(data, function (err, message) {
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>scope</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>scopes to request to be added to the returned access token</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>audience</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>audience or identifier of the API where the access token will be used, e.g. Auth0 Management API</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
 <dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type"><code>Promise</code></span>
 |
 
-<span class="param-type">undefined</span>
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
-    <h5>Example</h5>
-    
+
+<div class="section-examples">
+<h5>Example</h5>
+
         <p class="code-caption">
   Gets an access token using the client credentials grant flow. Find more information in the
   <a href="https://auth0.com/docs/api-auth/config/asking-for-access-tokens">API Docs</a>.
 </p>
     
-    <pre class="prettyprint"><code>auth0.clientCredentialsGrant(data, function (err, response) {
+    <pre class="prettyprint"><code>auth0.clientCredentialsGrant({
+  audience: 'https://tenant.auth0.com/api/v2/',
+  scope: 'read:users update:users'
+}, function (err, response) {
   if (err) {
     // Handle error.
   }
@@ -1147,10 +1298,12 @@ auth0.changePassword(data, function (err, message) {
   console.log(response);
 });</code></pre>
 
+</div>
 
-
+</div>
         
             
+<div class="section-method">
 
     
 
@@ -1161,16 +1314,8 @@ auth0.changePassword(data, function (err, message) {
 
 
 <div class="description">
-    Return an object with information about the current client,
+    <p>Return an object with information about the current client,</p>
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -1228,33 +1373,45 @@ auth0.changePassword(data, function (err, message) {
 
 
 
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    Object containing client information.
-</div>
-
-
 
 <dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
     </dd>
 </dl>
 
+
+<div class="param-desc">
+    <p>Object containing client information.</p>
+</div>
+
     
+</div>
 
 
 
+</div>
         
             
+<div class="section-method">
 
     
 
@@ -1265,184 +1422,9 @@ auth0.changePassword(data, function (err, message) {
 
 
 <div class="description">
-    Exchange the token of the logged in user with a token that is valid to call
-the API (signed with the API secret).
+    <p>Exchange the token of the logged in user with a token that is valid to call
+the API (signed with the API secret).</p>
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Token data object.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id_token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user ID token.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>api_type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The API type (aws, firebase, etc).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The target client ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>grant_type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The grant type.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
 
 
 
@@ -1496,83 +1478,6 @@ the API (signed with the API secret).
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption">
-  Given an existing token, this endpoint will generate a new token signed
-  with the target client secret. This is used to flow the identity of the
-  user from the application to an API or across different APIs that are
-  protected with different secrets. Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  id_token: '{ID_TOKEN}',
-  api_type: 'app',
-  target: '{TARGET}',
-  grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
-};
-
-auth0.getDelegationToken(data, function (err, token) {
-  if (err) {
-    // Handle error.
-  }
-
-  console.log(token);
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getProfile"><span class="type-signature"></span>getProfile<span class="signature">(accessToken)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Given an access token get the user profile linked to it.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -1598,13 +1503,13 @@ auth0.getDelegationToken(data, function (err, token) {
 
         <tr>
             
-                <td class="name"><code>accessToken</code></td>
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -1614,13 +1519,228 @@ auth0.getDelegationToken(data, function (err, token) {
 
             
 
-            <td class="description last">The user access token.</td>
+            <td class="description last">
+                <p>Token data object.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id_token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user ID token.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>api_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The API type (aws, firebase, etc).</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The target client ID.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>grant_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The grant type.</p>
+                
+            </td>
         </tr>
 
     
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given an existing token, this endpoint will generate a new token signed
+  with the target client secret. This is used to flow the identity of the
+  user from the application to an API or across different APIs that are
+  protected with different secrets. Find more information in the
+  <a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs</a>.
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  id_token: '{ID_TOKEN}',
+  api_type: 'app',
+  target: '{TARGET}',
+  grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+};
+
+auth0.getDelegationToken(data, function (err, token) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(token);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getProfile"><span class="type-signature"></span>getProfile<span class="signature">(accessToken)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Given an access token get the user profile linked to it.</p>
+</div>
 
 
 
@@ -1674,35 +1794,99 @@ auth0.getDelegationToken(data, function (err, token) {
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>accessToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user access token.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
 <dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type"><code>Promise</code></span>
 |
 
-<span class="param-type">undefined</span>
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
-    <h5>Example</h5>
-    
+
+<div class="section-examples">
+<h5>Example</h5>
+
         <p class="code-caption">
   Get the user information based on the Auth0 access token (obtained during
   login). Find more information in the
@@ -1717,22 +1901,68 @@ auth0.getDelegationToken(data, function (err, token) {
   console.log(userInfo);
 });</code></pre>
 
+</div>
 
-
+</div>
         
             
+<div class="section-method">
 
     
 
-    <h4 class="name" id="requestChangePasswordEmail"><span class="type-signature"></span>requestChangePasswordEmail<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="passwordGrant"><span class="type-signature"></span>passwordGrant<span class="signature">(userData)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    Request a change password email using a database or active directory service.
+    <p>Sign in using a username and password</p>
 </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="auth_index.js.html">auth/index.js</a>, <a href="auth_index.js.html#line512">line 512</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -1767,13 +1997,13 @@ auth0.getDelegationToken(data, function (err, token) {
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>userData</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -1783,9 +2013,10 @@ auth0.getDelegationToken(data, function (err, token) {
 
             
 
-            <td class="description last">User data object.
-                <h6>Properties</h6>
+            <td class="description last">
+                <p>User credentials object.</p>
                 
+                    
 
 <table class="params">
     <thead>
@@ -1796,6 +2027,8 @@ auth0.getDelegationToken(data, function (err, token) {
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -1809,52 +2042,103 @@ auth0.getDelegationToken(data, function (err, token) {
 
         <tr>
             
-                <td class="name"><code>email</code></td>
+                <td class="name"><code>username</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">User email.</td>
+            <td class="description last">
+                <p>Username.</p>
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>connection</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Identity provider for the user.</td>
+            <td class="description last">
+                <p>User password.</p>
+                
+            </td>
         </tr>
 
     
-    </tbody>
-</table>
 
+        <tr>
+            
+                <td class="name"><code>realm</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Name of the realm to use to authenticate or the connection name</p>
+                
             </td>
         </tr>
 
@@ -1862,6 +2146,100 @@ auth0.getDelegationToken(data, function (err, token) {
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given the user's credentials perform the OAuth password grant
+  or Password Realm grant if a realm is provided,
+  it will return a JSON with the access_token and id_token.
+  More information in the
+  <a href="https://auth0.com/docs/api/authentication#resource-owner-password">
+    API Docs
+  </a>.
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  client_id: '{CLIENT_ID}',  // Optional field.
+  username: '{USERNAME}',
+  password: '{PASSWORD}'
+  realm: '{CONNECTION_NAME}', // Optional field.
+  scope: 'openid'  // Optional field.
+};
+
+auth0.oauth.token(data, function (err, userData) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(userData);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="requestChangePasswordEmail"><span class="type-signature"></span>requestChangePasswordEmail<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Request a change password email using a database or active directory service.</p>
+</div>
 
 
 
@@ -1915,81 +2293,6 @@ auth0.getDelegationToken(data, function (err, token) {
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption">
-  Given the user email, the connection specified, Auth0 will send a change
-  password email. once the user clicks on the confirm password change link,
-  the new password specified in this POST will be set to this user. Find more
-  information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
-  API Docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  connection: 'Username-Password-Authentication'
-};
-
-auth0.requestChangePasswordEmail(data, function (err, message) {
-  if (err) {
-    // Handle error.
-  }
-
-  console.log(message);
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="requestEmailCode"><span class="type-signature"></span>requestEmailCode<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Start passwordless flow sending an email.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2021,7 +2324,7 @@ auth0.requestChangePasswordEmail(data, function (err, message) {
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -2031,9 +2334,10 @@ auth0.requestChangePasswordEmail(data, function (err, message) {
 
             
 
-            <td class="description last">User data object.
-                <h6>Properties</h6>
+            <td class="description last">
+                <p>User data object.</p>
                 
+                    
 
 <table class="params">
     <thead>
@@ -2044,8 +2348,6 @@ auth0.requestChangePasswordEmail(data, function (err, message) {
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -2065,64 +2367,45 @@ auth0.requestChangePasswordEmail(data, function (err, message) {
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">User email address.</td>
+            <td class="description last">
+                <p>User email.</p>
+                
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>authParams</code></td>
+                <td class="name"><code>connection</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>String</code></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">Authentication parameters.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+            <td class="description last">
+                <p>Identity provider for the user.</p>
+                
             </td>
         </tr>
 
@@ -2130,6 +2413,95 @@ auth0.requestChangePasswordEmail(data, function (err, message) {
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given the user email, the connection specified, Auth0 will send a change
+  password email. once the user clicks on the confirm password change link,
+  the new password specified in this POST will be set to this user. Find more
+  information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+  API Docs</a>.
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  email: '{EMAIL}',
+  connection: 'Username-Password-Authentication'
+};
+
+auth0.requestChangePasswordEmail(data, function (err, message) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(message);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="requestEmailCode"><span class="type-signature"></span>requestEmailCode<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Start passwordless flow sending an email.</p>
+</div>
 
 
 
@@ -2183,80 +2555,6 @@ auth0.requestChangePasswordEmail(data, function (err, message) {
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption">
-  Given the user `email` address, it will send an email with a verification
-  code. You can then authenticate with this user using the `/oauth/ro`
-  endpoint using the email as username and the code as password.
-
-  Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  authParams: {} // Optional auth params.
-};
-
-auth0.requestEmailCode(data, function (err) {
-  if (err) {
-    // Handle error.
-  }
-};</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="requestMagicLink"><span class="type-signature"></span>requestMagicLink<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Start passwordless flow sending an email.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2288,7 +2586,7 @@ auth0.requestEmailCode(data, function (err) {
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -2298,9 +2596,10 @@ auth0.requestEmailCode(data, function (err) {
 
             
 
-            <td class="description last">User data object.
-                <h6>Properties</h6>
+            <td class="description last">
+                <p>User data object.</p>
                 
+                    
 
 <table class="params">
     <thead>
@@ -2332,7 +2631,7 @@ auth0.requestEmailCode(data, function (err) {
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -2350,7 +2649,10 @@ auth0.requestEmailCode(data, function (err) {
 
             
 
-            <td class="description last">User email address.</td>
+            <td class="description last">
+                <p>User email address.</p>
+                
+            </td>
         </tr>
 
     
@@ -2363,7 +2665,7 @@ auth0.requestEmailCode(data, function (err) {
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -2383,13 +2685,9 @@ auth0.requestEmailCode(data, function (err) {
 
             
 
-            <td class="description last">Authentication parameters.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+            <td class="description last">
+                <p>Authentication parameters.</p>
+                
             </td>
         </tr>
 
@@ -2397,6 +2695,94 @@ auth0.requestEmailCode(data, function (err) {
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given the user `email` address, it will send an email with a verification
+  code. You can then authenticate with this user using the `/oauth/ro`
+  endpoint using the email as username and the code as password.
+
+  Find more information in the
+  <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  email: '{EMAIL}',
+  authParams: {} // Optional auth params.
+};
+
+auth0.requestEmailCode(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+};</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="requestMagicLink"><span class="type-signature"></span>requestMagicLink<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Start passwordless flow sending an email.</p>
+</div>
 
 
 
@@ -2450,82 +2836,6 @@ auth0.requestEmailCode(data, function (err) {
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption">
-  Given the user `email` address, it will send an email with a link. You can
-  then authenticate with this user opening the link and he will be
-  automatically logged in to the application. Optionally, you can
-  append/override parameters to the link (like `scope`, `redirect_uri`,
-  `protocol`, `response_type`, etc.) using `authParams` object.
-
-  Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  authParams: {} // Optional auth params.
-};
-
-auth0.requestMagicLink(data, function (err) {
-  if (err) {
-    // Handle error.
-  }
-};</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="requestSMSCode"><span class="type-signature"></span>requestSMSCode<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Start passwordless flow sending an SMS.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2557,7 +2867,7 @@ auth0.requestMagicLink(data, function (err) {
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -2567,9 +2877,10 @@ auth0.requestMagicLink(data, function (err) {
 
             
 
-            <td class="description last">User data object.
-                <h6>Properties</h6>
+            <td class="description last">
+                <p>User data object.</p>
                 
+                    
 
 <table class="params">
     <thead>
@@ -2580,6 +2891,8 @@ auth0.requestMagicLink(data, function (err) {
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -2593,29 +2906,69 @@ auth0.requestMagicLink(data, function (err) {
 
         <tr>
             
-                <td class="name"><code>phone_number</code></td>
+                <td class="name"><code>email</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">The user phone number.</td>
+            <td class="description last">
+                <p>User email address.</p>
+                
+            </td>
         </tr>
 
     
-    </tbody>
-</table>
 
+        <tr>
+            
+                <td class="name"><code>authParams</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Authentication parameters.</p>
+                
             </td>
         </tr>
 
@@ -2623,6 +2976,96 @@ auth0.requestMagicLink(data, function (err) {
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given the user `email` address, it will send an email with a link. You can
+  then authenticate with this user opening the link and he will be
+  automatically logged in to the application. Optionally, you can
+  append/override parameters to the link (like `scope`, `redirect_uri`,
+  `protocol`, `response_type`, etc.) using `authParams` object.
+
+  Find more information in the
+  <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  email: '{EMAIL}',
+  authParams: {} // Optional auth params.
+};
+
+auth0.requestMagicLink(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+};</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="requestSMSCode"><span class="type-signature"></span>requestSMSCode<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Start passwordless flow sending an SMS.</p>
+</div>
 
 
 
@@ -2676,78 +3119,6 @@ auth0.requestMagicLink(data, function (err) {
 
 
 
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-|
-
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-    <h5>Example</h5>
-    
-        <p class="code-caption">
-  Given the user `phone_number`, it will send a SMS message with a
-  verification code. You can then authenticate with this user using the
-  `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
-  `password`:
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  phone_number: '{PHONE}'
-};
-
-auth0.requestSMSCode(data, function (err) {
-  if (err) {
-    // Handle error.
-  }
-
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="verifySMSCode"><span class="type-signature"></span>verifySMSCode<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Sign in with the given user credentials.
-</div>
-
-
-
-
-
-
-
-
-
     <h5>Parameters:</h5>
     
 
@@ -2779,7 +3150,7 @@ auth0.requestSMSCode(data, function (err) {
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -2789,9 +3160,10 @@ auth0.requestSMSCode(data, function (err) {
 
             
 
-            <td class="description last">Credentials object.
-                <h6>Properties</h6>
+            <td class="description last">
+                <p>User data object.</p>
                 
+                    
 
 <table class="params">
     <thead>
@@ -2815,13 +3187,13 @@ auth0.requestSMSCode(data, function (err) {
 
         <tr>
             
-                <td class="name"><code>username</code></td>
+                <td class="name"><code>phone_number</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><code>String</code></span>
 
 
             
@@ -2831,82 +3203,9 @@ auth0.requestSMSCode(data, function (err) {
 
             
 
-            <td class="description last">Phone number.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
+            <td class="description last">
+                <p>The user phone number.</p>
                 
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Verification code.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Target client ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>grant_type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Grant type.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
             </td>
         </tr>
 
@@ -2914,6 +3213,92 @@ auth0.requestSMSCode(data, function (err) {
     </tbody>
 </table>
 
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  Given the user `phone_number`, it will send a SMS message with a
+  verification code. You can then authenticate with this user using the
+  `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
+  `password`:
+</p>
+    
+    <pre class="prettyprint"><code>var data = {
+  phone_number: '{PHONE}'
+};
+
+auth0.requestSMSCode(data, function (err) {
+  if (err) {
+    // Handle error.
+  }
+
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="verifySMSCode"><span class="type-signature"></span>verifySMSCode<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Sign in with the given user credentials.</p>
+</div>
 
 
 
@@ -2967,35 +3352,228 @@ auth0.requestSMSCode(data, function (err) {
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Credentials object.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Phone number.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Verification code.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Target client ID.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>grant_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Grant type.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
 <h5>Returns:</h5>
 
         
 
-
 <dl class="param-type">
     <dt>
-        Type
+        Type:
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type"><code>Promise</code></span>
 |
 
-<span class="param-type">undefined</span>
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
 </dl>
 
+
     
+</div>
 
 
-    <h5>Examples</h5>
-    
+
+<div class="section-examples">
+<h5>Examples</h5>
+
         <p class="code-caption">
   Given the user credentials (`phone_number` and `code`), it will do the
   authentication on the provider and return a JSON with the `access_token`
@@ -3023,8 +3601,9 @@ auth0.verifySMSCode(data, function (err) {
   token_type: String
 }</code></pre>
 
+</div>
 
-
+</div>
         
     
 
@@ -3043,7 +3622,7 @@ auth0.verifySMSCode(data, function (err) {
 <br class="clear">
 
 <footer>
-    Documentation generated at Fri Jun 16 2017 00:33:46 GMT-0300 (-03)
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jun 28 2017 23:12:43 GMT-0300 (-03) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

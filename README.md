@@ -10,46 +10,72 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Installation
 
-~~~
+```bash
   npm install auth0
-~~~
-
-## Management API Client
-The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
-
-
-Initialize your client class with an API v2 token (you can generate one [here](https://auth0.com/docs/apiv2)) and a domain.
-
-~~~js
-var ManagementClient = require('auth0').ManagementClient;
-
-var management = new ManagementClient({
-  token: '{YOUR_API_V2_TOKEN}',
-  domain: '{YOUR_ACCOUNT}.auth0.com'
-});
-~~~
-
-Note: When using at browser you should use `telemetry: false`.
+```
 
 ## Authentication API Client
 This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
 
 The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
-~~~js
+```js
 var AuthenticationClient = require('auth0').AuthenticationClient;
 
 var auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{OPTIONAL_CLIENT_ID}'
 });
-~~~
+```
+
+## Management API Client
+The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
+
+
+Initialize your client class with an API v2 token and a domain.
+
+```js
+var ManagementClient = require('auth0').ManagementClient;
+
+var management = new ManagementClient({
+  token: '{YOUR_API_V2_TOKEN}',
+  domain: '{YOUR_ACCOUNT}.auth0.com'
+});
+```
+
+> When using at browser you should use `telemetry: false`.
+
+To obtain a Management API token from your node backend, you can use Client Credentials Grant using your registered Auth0 Non Interactive Clients
+
+```js
+var AuthenticationClient = require('auth0').AuthenticationClient;
+
+var auth0 = new AuthenticationClient({
+  domain: '{YOUR_ACCOUNT}.auth0.com',
+  clientId: '{CLIENT_ID}',
+  clientSecret: '{CLIENT_SECRET}'
+});
+
+auth0.clientCredentialsGrant({
+  audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
+  scope: '{MANAGEMENT_API_SCOPES}'
+}, function (err, response) {
+  if (err) {
+    // Handle error.
+  }
+  console.log(response.access_token);
+});
+```
+
+> Make sure your ClientId is allowed to request tokens from Management API in [Auth0 Dashboard](https://manage.auth0.com/#/apis)
+
+Also you can request a token when the user authenticates using any of our client side SDKs, e.g. [auth0.js](https://github.com/auth0/auth0.js).
 
 ## Promises and callbacks
 
 Be aware that all methods can be used with promises or callbacks. However, when a callback is provided no promise will be returned.
 
-~~~js
+```js
 // Using callbacks.
 auth0.getUsers(function (err, users) {
   if (err) {
@@ -68,11 +94,13 @@ auth0
   .catch(function (err) {
     // Handle error.
   });
-~~~
+```
 
 ## Documentation
 
-For more information about [auth0](http://auth0.com) contact our [documentation page](http://docs.auth0.com/).
+You can find this library documentation in this [page](http://auth0.github.io/node-auth0/).
+
+For more information about [auth0](http://auth0.com) check our [documentation page](http://docs.auth0.com/).
 
 ## What is Auth0?
 
@@ -113,4 +141,4 @@ This project is licensed under the MIT license. See the [LICENSE](LICENSE) file 
 [license-image]: http://img.shields.io/npm/l/auth0.svg?style=flat-square
 [license-url]: #license
 [downloads-image]: http://img.shields.io/npm/dm/auth0.svg?style=flat-square
-[downloads-url]: https://npmjs.org/package/idtoken-verifier
+[downloads-url]: https://npmjs.org/package/auth0

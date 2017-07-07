@@ -47,23 +47,23 @@ var OAuthAuthenticator = function (options) {
  * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
  * @example <caption>
- *   Given the social provider's access_token and the connection specified, it
- *   will do the authentication on the provider and return a JSON with the
- *   access_token and id_token. Currently, this endpoint only works for
- *   Facebook, Google, Twitter and Weibo. More information in the
- *   <a href="https://auth0.com/docs/auth-api#!#post--oauth-access_token">
+ *   Given the user's credentials and the connection specified, it
+ *   will return a JSON with the access_token and id_token.
+ *   More information in the
+ *   <a href="https://auth0.com/docs/api/authentication#database-ad-ldap-active-">
  *     API Docs
  *   </a>.
  * </caption>
  *
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
- *   access_token: '{USER_SOCIAL_ACCESS_TOKEN}',
- *   connection: 'facebook',
+ *   username: '{USERNAME}',
+ *   password: '{PASSWORD}
+ *   connection: '{CONNECTION_NAME}',
  *   scope: 'openid'  // Optional field.
  * };
  *
- * auth0.oauth.socialSignIn(data, function (err, userData) {
+ * auth0.oauth.signIn(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -106,6 +106,80 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
   return this.oauth.create(params, data);
 };
 
+/**
+ * Sign in using a username and password
+ *
+ * @method    passwordGrant
+ * @memberOf  module:auth.OAuthAuthenticator.prototype
+ *
+ * @example <caption>
+ *   Given the user's credentials perform the OAuth password grant
+ *   or Password Realm grant if a realm is provided,
+ *   it will return a JSON with the access_token and id_token.
+ *   More information in the
+ *   <a href="https://auth0.com/docs/api/authentication#resource-owner-password">
+ *     API Docs
+ *   </a>.
+ * </caption>
+ *
+ * var data = {
+ *   client_id: '{CLIENT_ID}',  // Optional field.
+ *   username: '{USERNAME}',
+ *   password: '{PASSWORD}'
+ *   realm: '{CONNECTION_NAME}', // Optional field.
+ *   scope: 'openid'  // Optional field.
+ * };
+ *
+ * auth0.oauth.token(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    userData              User credentials object.
+ * @param   {String}    userData.username     Username.
+ * @param   {String}    userData.password     User password.
+ * @param   {String}    [userData.realm]      Name of the realm to use to authenticate or the connection name
+ *
+ * @return  {Promise|undefined}
+ */
+OAuthAuthenticator.prototype.passwordGrant = function (userData, cb) {
+  var params = {
+    type: 'token'
+  };
+  var defaultFields = {
+    client_id: this.clientId,
+    grant_type: 'password'
+  };
+  var data = extend(defaultFields, userData);
+
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+
+  if (typeof data.username !== 'string'
+      || data.username.split().length === 0) {
+    throw new ArgumentError('username field is required');
+  }
+
+  if (typeof data.password !== 'string'
+      || data.password.split().length === 0) {
+    throw new ArgumentError('password field is required');
+  }
+
+  if (typeof data.realm === 'string'
+      && data.realm.split().length !== 0) {
+    data.grant_type = 'http://auth0.com/oauth/grant-type/password-realm';
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.oauth.create(params, data, cb);
+  }
+
+  return this.oauth.create(params, data);
+};
 
 /**
  * Sign in using a social provider access token.
