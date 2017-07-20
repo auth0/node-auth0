@@ -74,7 +74,8 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
   var promise = getRequestPromise({
     method: 'GET',
     url: url,
-    headers: headers
+    headers: headers,
+    data: {}
   });
 
   // Use callback if given.
