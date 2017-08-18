@@ -527,7 +527,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.cr
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.patch');
+utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.update');
 
 
 /**
