@@ -6,6 +6,7 @@ var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('rest-facade').ArgumentError;
+var assign = Object.assign || require('object.assign');
 
 // Managers.
 var ClientsManager = require('./ClientsManager');
@@ -45,30 +46,40 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
  *
  * var ManagementClient = require('auth0').ManagementClient;
  * var auth0 = new ManagementClient({
- *   token: '{YOUR_API_V2_TOKEN}',
- *   domain: '{YOUR_ACCOUNT}.auth0.com'
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   token: '{YOUR_API_V2_TOKEN}'
  * });
  * 
  * 
   * @example <caption>
- *   Initialize your client class with the Management Token Provider. 
+ *   Initialize your client class, by using a Non Interactive Client to fetch an access_token
+ *   via the Client Credentials Grant.
  * </caption>
  *
  * var ManagementClient = require('auth0').ManagementClient;
- * var ManagementTokenProvider = require('auth0').ManagementTokenProvider;
  * var auth0 = new ManagementClient({
- *   tokenProvider: new ManagementTokenProvider({
- *    clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
- *    clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
- *    domain: '{YOUR_ACCOUNT}.auth0.com'
- *   })
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
+ *   clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
+ *   scope: "read:users write:users",
+ *   audience: 'https://{YOUR_TENANT_NAME}.auth0.com/api/v2/',
+ *   tokenProvider: {
+ *    enableCache: true,
+ *    cacheTTLInSeconds: 10
+ *  }
  * });
  *
- * @param   {Object}  options                 Options for the ManagementClient SDK. 
- *          Required properties depend on the way initialization is performed as you can see in the examples.
- * @param   {String}  [options.token]         API access token.
- * @param   {String}  [options.domain]        ManagementClient server domain.
- * @param   {String}  [options.tokenProvider] Token Provider.
+ * @param   {Object}  options                                   Options for the ManagementClient SDK. 
+ *          If a token is provided only the domain is required, other parameters are ignored.
+ *          If no token is provided domain, clientId, clientSecret and audience are required
+ * @param   {String}  options.domain                            ManagementClient server domain.
+ * @param   {String}  [options.token]                           API access token. 
+ * @param   {String}  [options.clientId]                        Management API Non Interactive Client Id.
+ * @param   {String}  [options.clientSecret]                    Management API Non Interactive Client Secret.
+ * @param   {String}  [options.audience]                        Management API Audience.
+ * @param   {String}  [options.scope]                           Management API Scopes. 
+ * @param   {String}  [options.tokenProvider.enableCache=true]  Enabled or Disable Cache.
+ * @param   {Number}  [options.cacheTTLInSeconds]               By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
  * 
  */
 var ManagementClient = function (options) {
@@ -77,18 +88,7 @@ var ManagementClient = function (options) {
   }
 
   if (!options.domain || options.domain.length === 0) {
-      throw new ArgumentError('Must provide a Domain');
-  }
-
-  if(!options.tokenProvider){
-    if (!options.token || options.token.length === 0) {
-      throw new ArgumentError('Must provide a Token');
-    }
-  }else{
-    if(!options.tokenProvider.getAccessToken ||  typeof options.tokenProvider.getAccessToken !== 'function'){
-      throw new ArgumentError('The tokenProvider does not have a function getAccessToken');
-    }    
-    this.tokenProvider = options.tokenProvider;
+      throw new ArgumentError('Must provide a domain');
   }
 
   var managerOptions = {
@@ -96,17 +96,28 @@ var ManagementClient = function (options) {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain),
-    tokenProvider: this.tokenProvider
+    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
   };
 
-  if (options.token && options.token.length !== 0) {
+  if(options.token === undefined){
+    var config = assign({}, options);
+    
+    if(options.tokenProvider){
+      config.enableCache = options.tokenProvider.enableCache;
+      config.cacheTTLInSeconds = options.tokenProvider.cacheTTLInSeconds;
+      delete config.tokenProvider;  
+    }
+
+    this.tokenProvider = new ManagementTokenProvider(config);
+    managerOptions.tokenProvider = this.tokenProvider;
+  }else if(typeof options.token !== 'string' || options.token.length === 0){
+    throw new ArgumentError('Must provide a token');
+  }else{
     managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
   }
 
   if (options.telemetry !== false) {
     var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
 

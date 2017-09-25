@@ -18,10 +18,4 @@ describe('Auth0 module', function () {
       expect(auth0.ManagementClient)
         .to.equal(ManagementClient);
     });
-
-
-    it('should expose the ManagementTokenProvider', function () {
-      expect(auth0.ManagementTokenProvider)
-        .to.equal(ManagementTokenProvider);
-    });
 });

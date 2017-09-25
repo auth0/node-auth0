@@ -68,25 +68,26 @@ auth0.clientCredentialsGrant({
 
 > Make sure your ClientId is allowed to request tokens from Management API in [Auth0 Dashboard](https://manage.auth0.com/#/apis)
 
-Also you can request a token when the user authenticates using any of our client side SDKs, e.g. [auth0.js](https://github.com/auth0/auth0.js).
-
-Or initialize your client class with the ManagementTokenProvider.
+To obtain **automatically** a Management API token via the ManagementClient, you can specify the parameters `clientId`, `clientSecret` (use a Non Interactive Client), `audience` (identifier of the Auth0 Management API) and optionally `scope`.
+Behind the scenes the Client Credentials Grant is used to obtain the `access_token` and is by default cached for the duration of the returned `expires_in` value.
 ~~~js
 var ManagementClient = require('auth0').ManagementClient;
-var ManagementTokenProvider = require('auth0').ManagementTokenProvider;
 var auth0 = new ManagementClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
-  tokenProvider: new ManagementTokenProvider({
-    clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
-    clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
-    domain: '{YOUR_ACCOUNT}.auth0.com',
-    scope: '{MANAGEMENT_API_SCOPES}',
-    useCache: true //default
-  })
- });
+  clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
+  clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
+  scope: "read:users write:users",
+  audience: 'https://{YOUR_TENANT_NAME}.auth0.com/api/v2/',
+  tokenProvider: {
+   enableCache: true, // default value
+   cacheTTLInSeconds: 10 // By default the `expires_in` value will be used to determine the cached time of the token
+  }
+});
 ~~~
 
 > Note: When using at browser you should use `telemetry: false`.
+
+Also you can request a token when the user authenticates using any of our client side SDKs, e.g. [auth0.js](https://github.com/auth0/auth0.js).
 
 ## Promises and callbacks
 
