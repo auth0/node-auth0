@@ -30,7 +30,7 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.10.2",
-    "request": "^2.81.0",
+    "request": "^2.83.0",
     "rest-facade": "^1.5.0"
   },
   "devDependencies": {
