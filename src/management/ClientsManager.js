@@ -1,7 +1,6 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
-
+var Auth0RestClient = require('../Auth0RestClient');
 
 /**
  * @class ClientsManager
@@ -49,7 +48,7 @@ var ClientsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/clients/:client_id', clientOptions);
+  this.resource = new Auth0RestClient(options.baseUrl + '/clients/:client_id', clientOptions, options.tokenProvider);
 };
 
 

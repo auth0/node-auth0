@@ -1,6 +1,5 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
-
+var Auth0RestClient = require('../Auth0RestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -37,8 +36,8 @@ var UsersManager = function (options){
     headers: options.headers,
     query: { repeatParams: false }
   };
-
-  this.users = new RestClient(options.baseUrl + '/users/:id', clientOptions);
+  
+  this.users = new Auth0RestClient(options.baseUrl + '/users/:id', clientOptions, options.tokenProvider);
 
   /**
    * Provides an abstraction layer for consuming the
@@ -47,28 +46,28 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.multifactor = new RestClient(options.baseUrl + '/users/:id/multifactor/:provider', clientOptions);
+  this.multifactor = new Auth0RestClient(options.baseUrl + '/users/:id/multifactor/:provider', clientOptions, options.tokenProvider);
 
   /**
    * Provides a simple abstraction layer for linking user accounts.
    *
    * @type {external:RestClient}
    */
-  this.identities = new RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions);
+  this.identities = new Auth0RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions, options.tokenProvider);
 
   /**
    * Provides a simple abstraction layer for user logs
    *
    * @type {external:RestClient}
    */
-  this.userLogs = new RestClient(options.baseUrl + '/users/:id/logs', clientOptions);
+  this.userLogs = new Auth0RestClient(options.baseUrl + '/users/:id/logs', clientOptions, options.tokenProvider);
 
   /**
    * Provides an abstraction layer for retrieving Guardian enrollments.
    *
    * @type {external:RestClient}
    */
-  this.enrollments = new RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions);
+  this.enrollments = new Auth0RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions, options.tokenProvider);
 };
 
 

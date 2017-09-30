@@ -1,7 +1,6 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
-
+var Auth0RestClient = require('../Auth0RestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -49,9 +48,9 @@ var DeviceCredentialsManager = function (options) {
    * {@link https://auth0.com/docs/api/v2#!/Device_Credentials
    *  Auth0 DeviceCredentialsManagers endpoint}.
    *
-   * @type {external:RestDeviceCredentialsManager}
+   * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/device-credentials/:id', clientOptions);
+  this.resource = new Auth0RestClient(options.baseUrl + '/device-credentials/:id', clientOptions, options.tokenProvider);
 };
 
 

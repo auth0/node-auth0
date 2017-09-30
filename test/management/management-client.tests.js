@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var assign = Object.assign || require('object.assign');
 
 var ManagementClient = require('../../src/management');
 
@@ -13,33 +14,89 @@ var EmailProviderManager = require('../../src/management/EmailProviderManager');
 var JobsManager = require('../../src/management/JobsManager');
 var RulesManager = require('../../src/management/RulesManager');
 var StatsManager = require('../../src/management/StatsManager');
+
 var TenantManager = require('../../src/management/TenantManager');
 
-
 describe('ManagementClient', function () {
+    var withTokenProviderConfig = {
+      clientId: 'clientId',
+      clientSecret: 'clientSecret',
+      domain: 'auth0-node-sdk.auth0.com'
+    };
+
+    var withTokenConfig = {
+      domain: 'auth0-node-sdk.auth0.com',
+      token: 'fake-token'
+    };
+
+    it('should expose an instance of ManagementClient when withTokenConfig is passed', function () {
+      expect(new ManagementClient(withTokenConfig))
+      .to.exist
+      .to.be.an.instanceOf(ManagementClient);
+    });
+
+    it('should expose an instance of ManagementClient when withTokenProviderConfig is passed', function () {
+      expect(new ManagementClient(withTokenProviderConfig))
+      .to.exist
+      .to.be.an.instanceOf(ManagementClient);
+    });
+
+    it('should expose an instance of ManagementClient when withTokenProviderConfig and audience is passed', function () {
+      var config = assign({audience: 'https://auth0-node-sdk.auth0.com/api/v2/'}, withTokenConfig);
+      expect(new ManagementClient(config))
+      .to.exist
+      .to.be.an.instanceOf(ManagementClient);
+    });
 
     it('should raise an error when no options object is provided', function () {
       expect(ManagementClient)
         .to.throw(ArgumentError, 'Management API SDK options must be an object');
     });
 
-
-    it('should raise an error when the token is not valid', function () {
-      var options = { token: '', domain: 'tenant.auth.com' };
-      var client = ManagementClient.bind(null, options);
-
-      expect(client)
-        .to.throw(ArgumentError, 'An access token must be provided');
-    });
-
-
-    it('should raise an error when the domain is not valid', function () {
-      var client = ManagementClient.bind(null, { token: 'token', domain: '' });
+    it('should raise an error when the domain is not set', function () {
+      var config = assign({}, withTokenConfig);
+      delete config.domain;
+      var client = ManagementClient.bind(null, config);
 
       expect(client)
         .to.throw(ArgumentError, 'Must provide a domain');
     });
 
+    it('should raise an error when the domain is not valid', function () {
+      var config = assign({}, withTokenConfig);
+      config.domain = '';
+      var client = ManagementClient.bind(null, config);
+
+      expect(client)
+        .to.throw(ArgumentError, 'Must provide a domain');
+    });
+
+    it('should raise an error when the token is not valid', function () {
+      var config = assign({}, withTokenConfig);
+      config.token = '';
+      var client = ManagementClient.bind(null, config);
+
+      expect(client)
+        .to.throw(ArgumentError, 'Must provide a token');
+    });
+
+    it('should raise an error when the token and clientId are not set', function () {
+      var config = assign({}, withTokenProviderConfig);
+      delete config.clientId;
+      var client = ManagementClient.bind(null, config);
+
+      expect(client)
+        .to.throw(ArgumentError, 'Must provide a clientId');
+    });
+
+    it('should raise an error when the token and clientSecret are not set', function () {
+      var config = assign({}, withTokenProviderConfig);
+      delete config.clientSecret;
+      var client = ManagementClient.bind(null, config);
+
+      expect(client)
+        .to.throw(ArgumentError, 'Must provide a clientSecret');
+    });
 
     describe('instance properties', function () {
       var manager;
@@ -91,7 +148,8 @@ describe('ManagementClient', function () {
       };
 
       before(function () {
-        this.client = new ManagementClient({ token: 'token', domain: 'tenant.auth0.com' });
+        var config = assign({}, withTokenConfig);
+        this.client = new ManagementClient(config);
       });
 
       // Tests common to all managers.
@@ -151,7 +209,8 @@ describe('ManagementClient', function () {
       ];
 
       before(function () {
-        this.client = new ManagementClient({ token: 'token', domain: 'auth0.com' });
+        var config = assign({}, withTokenConfig);
+        this.client = new ManagementClient(config);
       });
 
       for (var i = 0, l = methods.length; i < l; i++) {

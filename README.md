@@ -31,7 +31,6 @@ var auth0 = new AuthenticationClient({
 ## Management API Client
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
-
 Initialize your client class with an API v2 token and a domain.
 
 ```js
@@ -43,7 +42,22 @@ var management = new ManagementClient({
 });
 ```
 
-> When using at browser you should use `telemetry: false`.
+> Note: When using at browser you should use `telemetry: false`.
+
+To obtain **automatically** a Management API token via the ManagementClient, you can specify the parameters `clientId`, `clientSecret` (use a Non Interactive Client) and optionally `scope`.
+Behind the scenes the Client Credentials Grant is used to obtain the `access_token` and is by default cached for the duration of the returned `expires_in` value.
+
+```js
+var ManagementClient = require('auth0').ManagementClient;
+var auth0 = new ManagementClient({
+  domain: '{YOUR_ACCOUNT}.auth0.com',
+  clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
+  clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
+  scope: "read:users write:users",
+});
+```
+
+> Make sure your ClientId is allowed to request tokens from Management API in [Auth0 Dashboard](https://manage.auth0.com/#/apis)
 
 To obtain a Management API token from your node backend, you can use Client Credentials Grant using your registered Auth0 Non Interactive Clients
 
@@ -66,8 +80,6 @@ auth0.clientCredentialsGrant({
   console.log(response.access_token);
 });
 ```
-
-> Make sure your ClientId is allowed to request tokens from Management API in [Auth0 Dashboard](https://manage.auth0.com/#/apis)
 
 Also you can request a token when the user authenticates using any of our client side SDKs, e.g. [auth0.js](https://github.com/auth0/auth0.js).
 
