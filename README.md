@@ -77,16 +77,15 @@ Be aware that all methods can be used with promises or callbacks. However, when 
 
 ```js
 // Using callbacks.
-auth0.getUsers(function (err, users) {
+management.getUsers(function (err, users) {
   if (err) {
     // handle error.
   }
   console.log(users);
 });
 
-
 // Using promises.
-auth0
+management
   .getUsers()
   .then(function (users) {
     console.log(users);
