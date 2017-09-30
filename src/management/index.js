@@ -26,7 +26,7 @@ var ResourceServersManager = require('./ResourceServersManager');
 var ManagementTokenProvider = require('./ManagementTokenProvider');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
-
+var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
 
 /**
  * @class ManagementClient
@@ -49,8 +49,8 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
  *   domain: '{YOUR_ACCOUNT}.auth0.com',
  *   token: '{YOUR_API_V2_TOKEN}'
  * });
- * 
- * 
+ *
+ *
   * @example <caption>
  *   Initialize your client class, by using a Non Interactive Client to fetch an access_token
  *   via the Client Credentials Grant.
@@ -69,18 +69,18 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
  *  }
  * });
  *
- * @param   {Object}  options                                   Options for the ManagementClient SDK. 
+ * @param   {Object}  options                                   Options for the ManagementClient SDK.
  *          If a token is provided only the domain is required, other parameters are ignored.
- *          If no token is provided domain, clientId, clientSecret and audience are required
- * @param   {String}  options.domain                            ManagementClient server domain.
- * @param   {String}  [options.token]                           API access token. 
- * @param   {String}  [options.clientId]                        Management API Non Interactive Client Id.
- * @param   {String}  [options.clientSecret]                    Management API Non Interactive Client Secret.
- * @param   {String}  [options.audience]                        Management API Audience.
- * @param   {String}  [options.scope]                           Management API Scopes. 
- * @param   {String}  [options.tokenProvider.enableCache=true]  Enabled or Disable Cache.
- * @param   {Number}  [options.cacheTTLInSeconds]               By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
- * 
+ *          If no token is provided domain, clientId, clientSecret and scopes are required
+ * @param   {String}  options.domain                              ManagementClient server domain.
+ * @param   {String}  [options.token]                             API access token.
+ * @param   {String}  [options.clientId]                          Management API Non Interactive Client Id.
+ * @param   {String}  [options.clientSecret]                      Management API Non Interactive Client Secret.
+ * @param   {String}  [options.audience]                          Management API Audience. By default is your domain's, e.g. the domain is `tenant.auth0.com` and the audience is `http://tenant.auth0.com/api/v2/`
+ * @param   {String}  [options.scope]                             Management API Scopes.
+ * @param   {String}  [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
+ * @param   {Number}  [options.tokenProvider.cacheTTLInSeconds]   By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ *
  */
 var ManagementClient = function (options) {
   if (!options || typeof options !== 'object') {
@@ -91,28 +91,29 @@ var ManagementClient = function (options) {
       throw new ArgumentError('Must provide a domain');
   }
 
+  var baseUrl = util.format(BASE_URL_FORMAT, options.domain);
   var managerOptions = {
     headers: {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: baseUrl
   };
 
-  if(options.token === undefined){
-    var config = assign({}, options);
-    
-    if(options.tokenProvider){
+  if (options.token === undefined) {
+    var config = assign({ audience: util.format(MANAGEMENT_API_AUD_FORMAT, options.domain) }, options);
+
+    if (options.tokenProvider) {
       config.enableCache = options.tokenProvider.enableCache;
       config.cacheTTLInSeconds = options.tokenProvider.cacheTTLInSeconds;
-      delete config.tokenProvider;  
+      delete config.tokenProvider;
     }
 
     this.tokenProvider = new ManagementTokenProvider(config);
     managerOptions.tokenProvider = this.tokenProvider;
-  }else if(typeof options.token !== 'string' || options.token.length === 0){
+  } else if (typeof options.token !== 'string' || options.token.length === 0) {
     throw new ArgumentError('Must provide a token');
-  }else{
+  } else {
     managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
   }
 

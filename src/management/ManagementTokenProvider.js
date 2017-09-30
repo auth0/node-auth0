@@ -16,8 +16,8 @@ var DEFAULT_OPTIONS = { enableCache: true };
  * @param {String}  options.domain                  ManagementClient server domain.
  * @param {String}  options.clientId                Non Interactive Client Id.
  * @param {String}  options.clientSecret            Non Interactive Client Secret.
- * @param {String}  options.audience                Audience of the Management API.
  * @param {String}  options.scope                   Non Interactive Client Scope.
+ * @param {String}  options.audience                Audience of the Management API.
  * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
  * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
  */
@@ -27,7 +27,7 @@ var ManagementTokenProvider = function (options) {
   }
 
   var params = assign({}, DEFAULT_OPTIONS, options);
-  
+
   if (!params.domain || params.domain.length === 0) {
     throw new ArgumentError('Must provide a domain');
   }
@@ -44,24 +44,24 @@ var ManagementTokenProvider = function (options) {
     throw new ArgumentError('Must provide a audience');
   }
 
-  if(typeof params.enableCache !== 'boolean'){
-    throw new ArgumentError('enableCache must be a boolean');   
+  if (typeof params.enableCache !== 'boolean'){
+    throw new ArgumentError('enableCache must be a boolean');
   }
-  
-  if(params.enableCache && params.cacheTTLInSeconds){
-    if(typeof params.cacheTTLInSeconds !== 'number'){
+
+  if (params.enableCache && params.cacheTTLInSeconds) {
+    if (typeof params.cacheTTLInSeconds !== 'number') {
       throw new ArgumentError('cacheTTLInSeconds must be a number');
     }
-    
-    if(params.cacheTTLInSeconds <= 0) {
+
+    if (params.cacheTTLInSeconds <= 0) {
       throw new ArgumentError('cacheTTLInSeconds must be a greater than 0');
     }
   }
 
-  if(params.scope && typeof params.scope !== 'string'){
+  if (params.scope && typeof params.scope !== 'string'){
     throw new ArgumentError('scope must be a string');
   }
-  
+
   this.options = params;
   var authenticationClientOptions = {
     domain: this.options.domain,
@@ -69,7 +69,6 @@ var ManagementTokenProvider = function (options) {
     clientSecret: this.options.clientSecret,
     telemetry: this.options.telemetry
   };
-  //console.log('authenticationClientOptions', authenticationClientOptions);
   this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 }
 

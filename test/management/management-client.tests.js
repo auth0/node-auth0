@@ -18,14 +18,13 @@ var StatsManager = require('../../src/management/StatsManager');
 var TenantManager = require('../../src/management/TenantManager');
 
 describe('ManagementClient', function () {
-    var withTokenProviderConfig = { 
-      clientId: 'clientId', 
-      clientSecret: 'clientSecret', 
-      domain: 'auth0-node-sdk.auth0.com',
-      audience: 'https://auth0-node-sdk.auth0.com/api/v2/' 
+    var withTokenProviderConfig = {
+      clientId: 'clientId',
+      clientSecret: 'clientSecret',
+      domain: 'auth0-node-sdk.auth0.com'
     };
 
-    var withTokenConfig = { 
+    var withTokenConfig = {
       domain: 'auth0-node-sdk.auth0.com',
       token: 'fake-token'
     };
@@ -38,6 +37,13 @@ describe('ManagementClient', function () {
 
     it('should expose an instance of ManagementClient when withTokenProviderConfig is passed', function () {
       expect(new ManagementClient(withTokenProviderConfig))
+      .to.exist
+      .to.be.an.instanceOf(ManagementClient);
+    });
+
+    it('should expose an instance of ManagementClient when withTokenProviderConfig and audience is passed', function () {
+      var config = assign({audience: 'https://auth0-node-sdk.auth0.com/api/v2/'}, withTokenConfig);
+      expect(new ManagementClient(config))
       .to.exist
       .to.be.an.instanceOf(ManagementClient);
     });
@@ -90,15 +96,6 @@ describe('ManagementClient', function () {
 
       expect(client)
         .to.throw(ArgumentError, 'Must provide a clientSecret');
-    });
-
-    it('should raise an error when the token and audience are not set', function () {
-      var config = assign({}, withTokenProviderConfig);
-      delete config.audience;
-      var client = ManagementClient.bind(null, config);
-
-      expect(client)
-        .to.throw(ArgumentError, 'Must provide a audience');
     });
 
     describe('instance properties', function () {
