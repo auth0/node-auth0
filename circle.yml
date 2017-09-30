@@ -10,7 +10,7 @@ dependencies:
     - ~/.cache/yarn
 test:
   override:
-      yarn check
+    - yarn check
     - yarn test:ci
   post:
     - yarn test:coverage
