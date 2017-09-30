@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.7.1",
+  "version": "2.8.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "scripts": {
@@ -30,9 +30,9 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "bluebird": "^2.10.2",
-    "request": "^2.83.0",
     "lru-memoizer": "^1.11.1",
     "object.assign": "^4.0.4",
+    "request": "^2.83.0",
     "rest-facade": "^1.5.0"
   },
   "devDependencies": {

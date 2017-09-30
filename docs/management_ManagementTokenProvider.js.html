@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>EmailProviderManager - Documentation</title>
+    <title>management/ManagementTokenProvider.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,1243 +29,155 @@
 
 <div id="main">
     
-    <h1 class="page-title">EmailProviderManager</h1>
+    <h1 class="page-title">management/ManagementTokenProvider.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
-    
-        <h2>
-            <span class="ancestors"><a href="module-management.html">management</a>.</span>
-        
-        EmailProviderManager
-        </h2>
-        
-            <div class="class-description"><p>EmailProviderManager
-Auth0 Email Provider.</p></div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-<div class="section-method">
-
-    
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="EmailProviderManager"><span class="type-signature"></span>new EmailProviderManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line22">line 22</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>The client options.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>baseUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>The URL of the API.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>headers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Headers to be included in all requests.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id="resource"><span class="type-signature"></span>resource<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>Provides an abstraction layer for consuming the
-<a href="https://auth0.com/docs/api/v2#!/Clients">Auth0 Clients endpoint</a>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line52">line 52</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id="~clientOptions"><span class="type-signature">(inner) </span>clientOptions<span class="type-signature"> :Object</span></h4>
-
-
-
-
-<div class="description">
-    <p>Options object for the Rest Client instance.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line40">line 40</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>Object</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="configure"><span class="type-signature"></span>configure<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Configure the email provider.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line56">line 56</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>The email provider data object.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
     
-</div>
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
+var assign = Object.assign || require('object.assign');
+var AuthenticationClient = require('../auth');
+var memoizer = require('lru-memoizer');
+var Promise = require('bluebird');
 
-<div class="section-examples">
-<h5>Example</h5>
+var DEFAULT_OPTIONS = { enableCache: true };
 
-    <pre class="prettyprint"><code>management.emailProvider.configure(data, function (err) {
-  if (err) {
-    // Handle error.
+/**
+ * @class ManagementTokenProvider
+ * Auth0 Management API Token Provider.
+ * @constructor
+ * @memberOf module:management
+ *
+ * @param {Object}  options                         Options for the ManagementTokenProvider.
+ * @param {String}  options.domain                  ManagementClient server domain.
+ * @param {String}  options.clientId                Non Interactive Client Id.
+ * @param {String}  options.clientSecret            Non Interactive Client Secret.
+ * @param {String}  options.scope                   Non Interactive Client Scope.
+ * @param {String}  options.audience                Audience of the Management API.
+ * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
+ * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ */
+var ManagementTokenProvider = function (options) {
+  if (!options || typeof options !== 'object') {
+    throw new ArgumentError('Options must be an object');
   }
 
-  // Email provider configured.
-});</code></pre>
+  var params = assign({}, DEFAULT_OPTIONS, options);
 
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Delete email provider.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line120">line 120</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>management.emailProvider.delete(function (err) {
-  if (err) {
-    // Handle error.
+  if (!params.domain || params.domain.length === 0) {
+    throw new ArgumentError('Must provide a domain');
   }
 
-  // Email provider configured.
-});</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Get the email provider.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line78">line 78</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>management.emailProvider.get(function (err, provider) {
-  console.log(provider);
-});</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Update the email provider.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_EmailProviderManager.js.html">management/EmailProviderManager.js</a>, <a href="management_EmailProviderManager.js.html#line96">line 96</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Updated email provider data.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>management.emailProvider.update(function (err, provider) {
-  if (err) {
-    // Handle error.
+  if (!params.clientId || params.clientId.length === 0) {
+    throw new ArgumentError('Must provide a clientId');
   }
 
-  // Updated email provider.
-  console.log(provider);
-});</code></pre>
+  if (!params.clientSecret || params.clientSecret.length === 0) {
+    throw new ArgumentError('Must provide a clientSecret');
+  }
 
-</div>
+  if (!params.audience || params.audience.length === 0) {
+    throw new ArgumentError('Must provide a audience');
+  }
 
-</div>
-        
-    
+  if (typeof params.enableCache !== 'boolean'){
+    throw new ArgumentError('enableCache must be a boolean');
+  }
 
-    
+  if (params.enableCache &amp;&amp; params.cacheTTLInSeconds) {
+    if (typeof params.cacheTTLInSeconds !== 'number') {
+      throw new ArgumentError('cacheTTLInSeconds must be a number');
+    }
 
-    
-</article>
+    if (params.cacheTTLInSeconds &lt;= 0) {
+      throw new ArgumentError('cacheTTLInSeconds must be a greater than 0');
+    }
+  }
 
-</section>
+  if (params.scope &amp;&amp; typeof params.scope !== 'string'){
+    throw new ArgumentError('scope must be a string');
+  }
+
+  this.options = params;
+  var authenticationClientOptions = {
+    domain: this.options.domain,
+    clientId: this.options.clientId,
+    clientSecret: this.options.clientSecret,
+    telemetry: this.options.telemetry
+  };
+  this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
+}
+
+/**
+ * Returns the access_token.
+ *
+ * @method    getAccessToken
+ * @memberOf  module:management.ManagementTokenProvider.prototype
+ *
+ * @return {Promise}   Promise returning an access_token.
+ */
+ManagementTokenProvider.prototype.getAccessToken = function () {
+  if(this.options.enableCache){
+     return this.getCachedAccessToken(this.options)
+      .then(function (data) {
+        return data.access_token
+      });
+  }else{
+    return this.clientCredentialsGrant(this.options.domain, this.options.scope, this.options.audience)
+      .then(function (data) {
+        return data.access_token
+      });
+  }
+}
+
+ManagementTokenProvider.prototype.getCachedAccessToken = Promise.promisify(
+  memoizer({
+    load: function (options, callback) {
+      this.clientCredentialsGrant(options.domain, options.scope, options.audience)
+        .then(function (data) {
+          callback(null, data);
+        })
+        .catch(function (err) {
+          callback(err);
+        });
+    },
+    hash: function (options) {
+      return options.domain + '-' + options.clientId + '-' + options.scope;
+    },
+    itemMaxAge: function (options, data) {
+      if(options.cacheTTLInSeconds){
+        return options.cacheTTLInSeconds * 1000;
+      }
+
+      // if the expires_in is lower than 10 seconds, do not subtract 10 additional seconds.
+      if (data.expires_in &amp;&amp; data.expires_in &lt; 10 /* seconds */){
+        return data.expires_in * 1000;
+      }else if(data.expires_in){
+        // Subtract 10 seconds from expires_in to fetch a new one, before it expires.
+        return data.expires_in * 1000 - 10000 /* milliseconds */;
+      }
+      return 60 * 60 * 1000; //1h
+    },
+    max: 100
+  })
+);
+
+ManagementTokenProvider.prototype.clientCredentialsGrant = function (domain, scope, audience) {
+  return this.authenticationClient.clientCredentialsGrant({
+    audience: audience,
+    scope: scope
+  });
+};
+
+module.exports = ManagementTokenProvider;
+</code></pre>
+        </article>
+    </section>
 
 
 
