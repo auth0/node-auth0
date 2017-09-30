@@ -5,11 +5,12 @@ machine:
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
 dependencies:
   override:
-    - yarn
+    - yarn install --pure-lockfile
   cache_directories:
     - ~/.cache/yarn
 test:
   override:
+      yarn check
     - yarn test:ci
   post:
     - yarn test:coverage
