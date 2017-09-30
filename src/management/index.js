@@ -6,6 +6,7 @@ var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('rest-facade').ArgumentError;
+var assign = Object.assign || require('object.assign');
 
 // Managers.
 var ClientsManager = require('./ClientsManager');
@@ -22,9 +23,10 @@ var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
 var ResourceServersManager = require('./ResourceServersManager');
+var ManagementTokenProvider = require('./ManagementTokenProvider');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
-
+var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
 
 /**
  * @class ManagementClient
@@ -44,39 +46,79 @@ var BASE_URL_FORMAT = 'https://%s/api/v2';
  *
  * var ManagementClient = require('auth0').ManagementClient;
  * var auth0 = new ManagementClient({
- *   token: '{YOUR_API_V2_TOKEN}',
- *   domain: '{YOUR_ACCOUNT}.auth0.com'
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   token: '{YOUR_API_V2_TOKEN}'
  * });
  *
- * @param   {Object}  options           Options for the ManagementClient SDK.
- * @param   {String}  options.token     API access token.
- * @param   {String}  [options.domain]  ManagementClient server domain.
+ *
+  * @example <caption>
+ *   Initialize your client class, by using a Non Interactive Client to fetch an access_token
+ *   via the Client Credentials Grant.
+ * </caption>
+ *
+ * var ManagementClient = require('auth0').ManagementClient;
+ * var auth0 = new ManagementClient({
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
+ *   clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
+ *   scope: "read:users write:users",
+ *   audience: 'https://{YOUR_TENANT_NAME}.auth0.com/api/v2/',
+ *   tokenProvider: {
+ *    enableCache: true,
+ *    cacheTTLInSeconds: 10
+ *  }
+ * });
+ *
+ * @param   {Object}  options                                   Options for the ManagementClient SDK.
+ *          If a token is provided only the domain is required, other parameters are ignored.
+ *          If no token is provided domain, clientId, clientSecret and scopes are required
+ * @param   {String}  options.domain                              ManagementClient server domain.
+ * @param   {String}  [options.token]                             API access token.
+ * @param   {String}  [options.clientId]                          Management API Non Interactive Client Id.
+ * @param   {String}  [options.clientSecret]                      Management API Non Interactive Client Secret.
+ * @param   {String}  [options.audience]                          Management API Audience. By default is your domain's, e.g. the domain is `tenant.auth0.com` and the audience is `http://tenant.auth0.com/api/v2/`
+ * @param   {String}  [options.scope]                             Management API Scopes.
+ * @param   {String}  [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
+ * @param   {Number}  [options.tokenProvider.cacheTTLInSeconds]   By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ *
  */
 var ManagementClient = function (options) {
   if (!options || typeof options !== 'object') {
     throw new ArgumentError('Management API SDK options must be an object');
   }
 
-  if (!options.token || options.token.length === 0) {
-    throw new ArgumentError('An access token must be provided');
-  }
-
   if (!options.domain || options.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
+      throw new ArgumentError('Must provide a domain');
   }
 
+  var baseUrl = util.format(BASE_URL_FORMAT, options.domain);
   var managerOptions = {
     headers: {
-      'Authorization': 'Bearer ' + options.token,
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: baseUrl
   };
+
+  if (options.token === undefined) {
+    var config = assign({ audience: util.format(MANAGEMENT_API_AUD_FORMAT, options.domain) }, options);
+
+    if (options.tokenProvider) {
+      config.enableCache = options.tokenProvider.enableCache;
+      config.cacheTTLInSeconds = options.tokenProvider.cacheTTLInSeconds;
+      delete config.tokenProvider;
+    }
+
+    this.tokenProvider = new ManagementTokenProvider(config);
+    managerOptions.tokenProvider = this.tokenProvider;
+  } else if (typeof options.token !== 'string' || options.token.length === 0) {
+    throw new ArgumentError('Must provide a token');
+  } else {
+    managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
+  }
 
   if (options.telemetry !== false) {
     var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
 

@@ -1,5 +1,5 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
+var Auth0RestClient = require('../Auth0RestClient');
 
 
 /**
@@ -44,7 +44,7 @@ var TenantManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.tenant = new RestClient(options.baseUrl + '/tenants/settings', clientOptions);
+  this.tenant = new Auth0RestClient(options.baseUrl + '/tenants/settings', clientOptions,  options.tokenProvider);
 };
 
 /**

@@ -1,5 +1,5 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
+var Auth0RestClient = require('../Auth0RestClient');
 
 
 /**
@@ -33,7 +33,7 @@ var TicketsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.ticket = new RestClient(options.baseUrl + '/tickets/:type', clientOptions);
+  this.ticket = new Auth0RestClient(options.baseUrl + '/tickets/:type', clientOptions, options.tokenProvider);
 };
 
 
