@@ -25,7 +25,7 @@ var PasswordlessAuthenticator = function (options, oauth) {
   }
 
   /**
-   * Options object for the Rest Client instace.
+   * Options object for the Rest Client instance.
    *
    * @type {Object}
    */
@@ -71,22 +71,27 @@ var PasswordlessAuthenticator = function (options, oauth) {
  *   token_type: String
  * }
  *
- * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.client_id]  Client ID.
- * @param   {Function}  [cb]                  Method callback.
+ * @param   {Object}    userData                  User credentials object.
+ * @param   {String}    userData.username         Username.
+ * @param   {String}    userData.password         Password.
+ * @param   {String}    [userData.client_id]      Client ID.
+ * @param   {String}    [userData.connection=sms] Connection type (email|sms).
+ * @param   {Function}  [cb]                      Method callback.
  *
  * @return  {Promise|undefined}
  */
 PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   var defaultFields = {
-    client_id: this.clientId
+    client_id: this.clientId,
+    connection: 'sms'
   };
   var data = extend(defaultFields, userData);
+  
+  if(['sms', 'email'].indexOf(data.connection) === -1){
+    throw new ArgumentError('connection field must be sms or email');
+  }
 
-  // Don't let the user override the connection nor the grant type.
-  data.connection = 'sms';
+  // Don't let the user override the grant type.
   data.grant_type = 'password';
 
   if (!userData || typeof userData !== 'object') {
@@ -158,7 +163,7 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
   };
   var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
+  // Don't let the user override the connection.
   data.connection = 'email';
 
   if (!userData || typeof userData !== 'object') {
@@ -219,8 +224,8 @@ PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
   };
   var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
-  data.connection = 'sms';
+  // Don't let the user override the connection.
+  data.connection = 'sms'; // for backwards compatibility
 
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');

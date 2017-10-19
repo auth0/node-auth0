@@ -96,13 +96,25 @@ describe('PasswordlessAuthenticator', function () {
     });
 
 
+    it('should require valid connection', function () {
+      var auth = this.authenticator;
+      var userData = { 
+        username: 'username',
+        connection: 'invalid-connection'
+      };
+      var signIn = auth.signIn.bind(auth, userData);
+
+      expect(signIn)
+        .to.throw(ArgumentError, 'connection field must be sms or email');
+    });
+
     it('should accept a callback', function (done) {
       this
         .authenticator
         .signIn(userData, done.bind(null, null));
     });
 
-
+   
     it('should return a promise when no callback is provided', function (done) {
       this
         .authenticator
@@ -178,7 +190,7 @@ describe('PasswordlessAuthenticator', function () {
     });
 
 
-    it('should use SMS connection', function (done) {
+    it('should use SMS connection by default', function (done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -199,17 +211,16 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
-
-    it('shouldn\'t allow the user to specify the connection', function (done) {
+    it('should use SMS connection when specified', function (done) {
       nock.cleanAll();
 
-      var data = extend({ connection: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
         .post(path, function (body) {
           return body.connection === 'sms';
         })
         .reply(200);
 
+      var data = extend({ connection: 'sms' }, userData);
       this
         .authenticator
         .signIn(data)
@@ -222,6 +233,27 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+    it('should use EMAIL connection when specified', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.connection === 'email';
+        })
+        .reply(200);
+
+      var data = extend({ connection: 'email' }, userData);
+      this
+        .authenticator
+        .signIn(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
 
     it('should use password as grant type', function (done) {
       nock.cleanAll();
