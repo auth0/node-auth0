@@ -78,8 +78,10 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  * @param   {String}  [options.clientSecret]                      Management API Non Interactive Client Secret.
  * @param   {String}  [options.audience]                          Management API Audience. By default is your domain's, e.g. the domain is `tenant.auth0.com` and the audience is `http://tenant.auth0.com/api/v2/`
  * @param   {String}  [options.scope]                             Management API Scopes.
- * @param   {String}  [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
+ * @param   {Boolean} [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
  * @param   {Number}  [options.tokenProvider.cacheTTLInSeconds]   By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ * @param   {Boolean} [options.retry.enabled=true]                Enabled or Disable Retry Policy functionality.
+ * @param   {Number}  [options.retry.maxRetries=10]               Retry failed requests X times.
  *
  */
 var ManagementClient = function (options) {
@@ -121,7 +123,9 @@ var ManagementClient = function (options) {
     var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
-
+  
+  managerOptions.retry = options.retry;
+  
   /**
    * Simple abstraction for performing CRUD operations on the
    * clients endpoint.
