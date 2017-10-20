@@ -684,7 +684,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
 /**
  * Create a new rule.
  *
- * @method    createRules
+ * @method    createRule
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
