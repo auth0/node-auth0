@@ -36,25 +36,6 @@ var RetryRestClient = function(restClient, options){
   this.enabled = params.enabled;
 }
 
-RetryRestClient.prototype.invoke = function(method, args){
-  var cb;
-  if(args && args[args.length -1] instanceof Function){
-    cb = args[args.length -1];
-    delete args[args.length -1];
-  }
-
-  var promise = this.handleRetry(method, args);
-
-  if (cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
-    return;
-  }
-
-  return promise;
-}
-
 RetryRestClient.prototype.getAll = function ( /* [params], [callback] */ ) {
   return this.invoke('getAll', arguments);  
 };
@@ -77,6 +58,25 @@ RetryRestClient.prototype.update = function ( /* [params], [callback] */ ) {
 
 RetryRestClient.prototype.delete = function ( /* [params], [callback] */ ) {
   return this.invoke('delete', arguments); 
+}
+
+RetryRestClient.prototype.invoke = function(method, args){
+  var cb;
+  if(args && args[args.length -1] instanceof Function){
+    cb = args[args.length -1];
+    delete args[args.length -1];
+  }
+
+  var promise = this.handleRetry(method, args);
+
+  if (cb instanceof Function) {
+    promise
+      .then(cb.bind(null, null))
+      .catch(cb);
+    return;
+  }
+
+  return promise;
 }
 
 RetryRestClient.prototype.handleRetry = function(method, args){
@@ -103,7 +103,7 @@ RetryRestClient.prototype.handleRetry = function(method, args){
         .catch(function(err) {
           self.invokeRetry(err, operation, reject);
         });
-    });    
+    });
   });
 
   return promise;
