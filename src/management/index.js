@@ -806,6 +806,29 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
 
+/**
+ * Get users for a given email address
+ *
+ * @method    getUsersByEmail
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example <caption>
+ *   This method takes an email address as the first argument,
+ *   and returns all users with that email address
+ * </caption>
+ *
+ * auth0.getUsersByEmail(email, function (err, users) {
+ *   console.log(users);
+ * });
+ *
+ * @param   {String}    [email]           Email Address of users to locate
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUsersByEmail', 'users.getByEmail');
+
+
 
 /**
  * Get a user by its id.
