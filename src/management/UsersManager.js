@@ -75,6 +75,14 @@ var UsersManager = function (options){
    */
   var enrollmentsAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions, options.tokenProvider);
   this.enrollments = new RetryRestClient(enrollmentsAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for the new "users-by-email" API
+   *
+   * @type {external:RestClient}
+   */
+  var usersByEmailClient = new Auth0RestClient(options.baseUrl + '/users-by-email', clientOptions, options.tokenProvider);
+  this.usersByEmail = new RetryRestClient(usersByEmailClient, options.retry);
 };
 
 
@@ -137,6 +145,30 @@ UsersManager.prototype.create = function (data, cb) {
  */
 UsersManager.prototype.getAll = function (params) {
   return this.users.getAll.apply(this.users, arguments);
+};
+
+/**
+ * Get Users by an Email Address
+ *
+ * @method    getByEmail
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example <caption>
+ *   This method takes a first argument as the Email address to look for
+ *   users, and uses the /users-by-email API, not the search API
+ * </caption>
+ *
+ * management.users.getByEmail('email@address', function (err, users) {
+ *   console.log(users);
+ * });
+ *
+ * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getByEmail = function (email, callback) {
+  return this.usersByEmail.getAll({ email }, callback);
 };
 
 
