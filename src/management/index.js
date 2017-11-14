@@ -757,22 +757,25 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 
 
 /**
- * Delete an existing rule.
+ * Update an existing rule.
  *
  * @method    updateRule
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.deleteRule({ id: RULE_ID }, function (err) {
+ * var params = { id: RULE_ID };
+ * var data = { name: 'my-rule'};
+ * management.updateRule(params, data, function (err, rule) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   // Rule deleted.
+ *   console.log(rule.name); // 'my-rule'.
  * });
  *
  * @param   {Object}    params        Rule parameters.
  * @param   {String}    params.id     Rule ID.
+ * @param   {Object}    data          Updated rule data.
  * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
@@ -1266,7 +1269,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.updateEmailProvider(data, function (err, provider) {
+ * management.updateEmailProvider(params, data, function (err, provider) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -1275,6 +1278,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  *   console.log(provider);
  * });
  *
+ * @param   {Object}    params            Email provider parameters.
  * @param   {Object}    data              Updated email provider data.
  * @param   {Function}  [cb]              Callback function.
  *
