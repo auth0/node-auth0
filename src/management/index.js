@@ -763,16 +763,19 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.deleteRule({ id: RULE_ID }, function (err) {
+ * var params = { id: RULE_ID };
+ * var data = { name: 'my-rule'};
+ * management.updateRule(params, data, function (err, rule) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   // Rule deleted.
+ *   console.log(rule.name); // 'my-rule'.
  * });
  *
  * @param   {Object}    params        Rule parameters.
  * @param   {String}    params.id     Rule ID.
+ * @param   {Object}    data          Updated rule data.
  * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
