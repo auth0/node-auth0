@@ -757,7 +757,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 
 
 /**
- * Delete an existing rule.
+ * Update an existing rule.
  *
  * @method    updateRule
  * @memberOf  module:management.ManagementClient.prototype
@@ -1266,7 +1266,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.updateEmailProvider(data, function (err, provider) {
+ * management.updateEmailProvider(params, data, function (err, provider) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -1275,6 +1275,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  *   console.log(provider);
  * });
  *
+ * @param   {Object}    params            Email provider parameters.
  * @param   {Object}    data              Updated email provider data.
  * @param   {Function}  [cb]              Callback function.
  *
