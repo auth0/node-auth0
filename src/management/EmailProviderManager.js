@@ -103,7 +103,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  * @memberOf  module:management.EmailProviderManager.prototype
  *
  * @example
- * management.emailProvider.update(function (err, provider) {
+ * management.emailProvider.update(params, data, function (err, provider) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -112,6 +112,7 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  *   console.log(provider);
  * });
  *
+ * @param   {Object}    params            Email provider parameters.
  * @param   {Object}    data              Updated email provider data.
  * @param   {Function}  [cb]              Callback function.
  *
