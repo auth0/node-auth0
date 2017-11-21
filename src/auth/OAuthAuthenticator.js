@@ -130,7 +130,7 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
  *   scope: 'openid'  // Optional field.
  * };
  *
- * auth0.oauth.token(data, function (err, userData) {
+ * auth0.passwordGrant(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -151,6 +151,7 @@ OAuthAuthenticator.prototype.passwordGrant = function (userData, cb) {
   };
   var defaultFields = {
     client_id: this.clientId,
+    client_secret:  this.clientSecret
     grant_type: 'password'
   };
   var data = extend(defaultFields, userData);
