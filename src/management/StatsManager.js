@@ -1,6 +1,6 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
-
+var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -18,6 +18,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 var StatsManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -44,7 +45,8 @@ var StatsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.stats = new RestClient(options.baseUrl + '/stats/:type', clientOptions);
+  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/stats/:type', clientOptions, options.tokenProvider);
+  this.stats = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 

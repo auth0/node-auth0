@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var auth0 = require('../src');
 var AuthenticationClient = require('../src/auth');
 var ManagementClient = require('../src/management');
+var ManagementTokenProvider = require('../src/management/ManagementTokenProvider')
 
 
 describe('Auth0 module', function () {
@@ -17,5 +18,4 @@ describe('Auth0 module', function () {
       expect(auth0.ManagementClient)
         .to.equal(ManagementClient);
     });
-
 });

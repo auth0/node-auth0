@@ -1,6 +1,7 @@
-var RestClient = require('rest-facade').Client;
 var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
+var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ResourceServersManager
@@ -17,6 +18,7 @@ var utils = require('../utils');
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 
 var ResourceServersManager = function (options) {
@@ -37,7 +39,7 @@ var ResourceServersManager = function (options) {
    *
    * @type {Object}
    */
-  var apiOptions = {
+  var clientOptions = {
     headers: options.headers,
     query: { repeatParams: false }
   };
@@ -48,7 +50,8 @@ var ResourceServersManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new RestClient(options.baseUrl + '/resource-servers/:id', apiOptions);
+  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/resource-servers/:id', clientOptions, options.tokenProvider);
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 /**

@@ -1,5 +1,23 @@
 # Change Log
 
+## [v2.8.0](https://github.com/auth0/node-auth0/tree/v2.8.0) (2017-09-30)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.7.1...v2.8.0)
+
+**Added**
+- Added tokenProvider functionality [\#196](https://github.com/auth0/node-auth0/pull/196) ([dctoon](https://github.com/dctoon))
+
+**Fixed**
+- Fix wrapPropertyMethod mistake for updateClientGrant [\#202](https://github.com/auth0/node-auth0/pull/202) ([danedmunds](https://github.com/danedmunds))
+
+## [v2.7.1](https://github.com/auth0/node-auth0/tree/v2.7.1) (2017-09-30)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.7.0...v2.7.1)
+
+**Fixed**
+- Fix auth/users.getInfo to return JSON (fixes #158) [\#192](https://github.com/auth0/node-auth0/pull/192) ([pilwon](https://github.com/pilwon))
+
+**Security**
+- Update request to address ReDoS vulnerability [\#206](https://github.com/auth0/node-auth0/pull/206) ([dancrumb](https://github.com/dancrumb))
+
 ## [v2.7.0](https://github.com/auth0/node-auth0/tree/v2.7.0) (2017-06-28)
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.6.0...v2.7.0)
 
