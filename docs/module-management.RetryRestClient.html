@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>management/ResourceServersManager.js - Documentation</title>
+    <title>RetryRestClient - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,188 +29,345 @@
 
 <div id="main">
     
-    <h1 class="page-title">management/ResourceServersManager.js</h1>
+    <h1 class="page-title">RetryRestClient</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+        <h2>
+            <span class="ancestors"><a href="module-management.html">management</a>.</span>
+        
+        RetryRestClient
+        </h2>
+        
+            <div class="class-description"><p>RetryRestClient
+Wrapper Rest Client that adds Retry functionality when requests are failing due to rate limiting (status code 429).</p></div>
+        
+    
+</header>
 
-/**
- * @class ResourceServersManager
- * Auth0 Resource Servers Manager.
- *
- * {@link https://auth0.com/docs/api/management/v2#!/Resource_Servers Resource Servers} represents
- * your APIs.
- * You can learn more about this in the
- * {@link https://auth0.com/docs/api-auth API Authorization} section of the
- * documentation.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
- */
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
 
-var ResourceServersManager = function (options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide resource server options');
-  }
+    
+    <h2>Constructor</h2>
+    
 
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
+    <h4 class="name" id="RetryRestClient"><span class="type-signature"></span>new RetryRestClient<span class="signature">(restClient, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
-  }
-
-  /**
-   * Options object for the Rest Client instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
-
-  /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/ResourceServers Auth0 Resource Servers endpoint}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/resource-servers/:id', clientOptions, options.tokenProvider);
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
-
-/**
- * Create an API (Resource Server).
- *
- * @method    create
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.create(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Resource Server created.
- * });
- *
- * @param   {Object}    data     Resource Server data object.
- * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
-
-/**
- * Get all resource servers.
- *
- * @method    getAll
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.getAll(function (err, resourceServers) {
- *   console.log(resourceServers.length);
- * });
- *
- * @param   {Function}  [cb]    Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
+    
 
 
-/**
- * Get a Resource Server.
- *
- * @method    get
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.get({ id: RESOURCE_SERVER_ID }, function (err, resourceServer) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(resourceServer);
- * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
 
-/**
- * Update an existing resource server.
- *
- * @method    update
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * var data = { name: 'newResourceServerName' };
- * var params = { id: RESOURCE_SERVER_ID };
- *
- * management.resourceServers.update(params, data, function (err, resourceServer) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(resourceServer.name);  // 'newResourceServernName'
- * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Object}    data              Updated Resource Server data.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
 
-/**
- * Delete an existing Resource Server.
- *
- * @method    delete
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.delete({ id: RESOURCE_SERVER_ID }, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Resource Server deleted.
- * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'delete', 'resource.delete');
 
-module.exports = ResourceServersManager;</code></pre>
-        </article>
-    </section>
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RetryRestClient.js.html">RetryRestClient.js</a>, <a href="RetryRestClient.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>restClient</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>RestClient.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Options for the RetryRestClient.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>enabled:true</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Enabled or Disable Retry Policy functionality.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxRetries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    10
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>The maximum amount of times to retry the operation. Default is 10.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

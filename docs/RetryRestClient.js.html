@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>management/ResourceServersManager.js - Documentation</title>
+    <title>RetryRestClient.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">management/ResourceServersManager.js</h1>
+    <h1 class="page-title">RetryRestClient.js</h1>
     
 
     
@@ -39,176 +39,166 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+            <pre class="prettyprint source linenums"><code>
+var Promise = require('bluebird');
+var retry = require('retry');
+var ArgumentError = require('rest-facade').ArgumentError;
+var assign = Object.assign || require('object.assign');
+
+var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
 
 /**
- * @class ResourceServersManager
- * Auth0 Resource Servers Manager.
- *
- * {@link https://auth0.com/docs/api/management/v2#!/Resource_Servers Resource Servers} represents
- * your APIs.
- * You can learn more about this in the
- * {@link https://auth0.com/docs/api-auth API Authorization} section of the
- * documentation.
+ * @class RetryRestClient
+ * Wrapper Rest Client that adds Retry functionality when requests are failing due to rate limiting (status code 429).
  * @constructor
  * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @param {Object}  restClient                   RestClient.
+ * @param {Object}  [options]                    Options for the RetryRestClient.
+ * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.    
+ * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10. 
  */
-
-var ResourceServersManager = function (options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide resource server options');
+var RetryRestClient = function(restClient, options){
+  if (restClient === null || typeof restClient !== 'object') {
+    throw new ArgumentError('Must provide RestClient');
   }
 
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
+  var params = assign({}, DEFAULT_OPTIONS, options);
+
+  if (typeof params.enabled !== 'boolean') {
+    throw new ArgumentError('Must provide enabled boolean value');
   }
 
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
+  if (typeof params.maxRetries !== 'number' || params.maxRetries &lt;= 0) {
+    throw new ArgumentError('Must provide maxRetries as a positive number');
   }
 
-  /**
-   * Options object for the Rest Client instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
+  this.restClient = restClient;
+  this.maxRetries = params.maxRetries;
+  this.enabled = params.enabled;
+}
 
-  /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/ResourceServers Auth0 Resource Servers endpoint}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/resource-servers/:id', clientOptions, options.tokenProvider);
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
+RetryRestClient.prototype.getAll = function ( /* [params], [callback] */ ) {
+  return this.invoke('getAll', arguments);  
 };
 
-/**
- * Create an API (Resource Server).
- *
- * @method    create
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.create(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Resource Server created.
- * });
- *
- * @param   {Object}    data     Resource Server data object.
- * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
+RetryRestClient.prototype.get = function ( /* [params], [callback] */ ) {
+  return this.invoke('get', arguments); 
+}
 
-/**
- * Get all resource servers.
- *
- * @method    getAll
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.getAll(function (err, resourceServers) {
- *   console.log(resourceServers.length);
- * });
- *
- * @param   {Function}  [cb]    Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
+RetryRestClient.prototype.create = function ( /* [params], [callback] */ ) {
+  return this.invoke('create', arguments); 
+}
+
+RetryRestClient.prototype.patch = function ( /* [params], [callback] */ ) {
+  return this.invoke('patch', arguments); 
+}
+
+RetryRestClient.prototype.update = function ( /* [params], [callback] */ ) {
+  return this.invoke('update', arguments); 
+}
+
+RetryRestClient.prototype.delete = function ( /* [params], [callback] */ ) {
+  return this.invoke('delete', arguments); 
+}
+
+RetryRestClient.prototype.invoke = function(method, args){
+  var cb;
+  if(args &amp;&amp; args[args.length -1] instanceof Function){
+    cb = args[args.length -1];
+    delete args[args.length -1];
+  }
+
+  var promise = this.handleRetry(method, args);
+
+  if (cb instanceof Function) {
+    promise
+      .then(cb.bind(null, null))
+      .catch(cb);
+    return;
+  }
+
+  return promise;
+}
+
+RetryRestClient.prototype.handleRetry = function(method, args){
+  if(!this.enabled){
+    return this.restClient[method].apply(this.restClient, args);
+  }
+
+  var retryOptions = {
+    retries: this.maxRetries,
+    factor: 1,
+    minTimeout: 1, // retry immediate, use custom logic to control this.
+    randomize: false
+  };
+
+  var self = this;
+  var promise = new Promise(function (resolve, reject) {
+    var operation = retry.operation(retryOptions);
+
+    operation.attempt(function(){
+      self.restClient[method].apply(self.restClient, args)
+        .then(function(body) { 
+          resolve(body);
+        })
+        .catch(function(err) {
+          self.invokeRetry(err, operation, reject);
+        });
+    });
+  });
+
+  return promise;
+};
+
+RetryRestClient.prototype.invokeRetry = function(err, operation , reject){
+  var ratelimits = this.extractRatelimits(err);
+  if(ratelimits){
+    var delay = ratelimits.reset * 1000 - new Date().getTime();
+    if(delay > 0){
+      this.retryWithDelay(delay, operation, err, reject);
+    }else{
+      this.retryWithImmediate(operation, err, reject);
+    }   
+  }else{
+    reject(err);
+  }  
+}
+
+RetryRestClient.prototype.extractRatelimits = function(err){
+  if(err &amp;&amp; err.statusCode === 429 &amp;&amp; err.originalError &amp;&amp; err.originalError.response){
+    var headers = err.originalError.response.header;
+    if(headers &amp;&amp; headers['x-ratelimit-limit']){     
+      return {
+        limit: headers['x-ratelimit-limit'],
+        remaining: headers['x-ratelimit-remaining'],
+        reset: headers['x-ratelimit-reset']
+      }
+    }
+  }
+
+  return;
+}
+
+RetryRestClient.prototype.retryWithImmediate = function(operation, err, reject){
+  if(operation.retry(err)){
+    return;
+  }  
+  reject(err);
+}
+
+RetryRestClient.prototype.retryWithDelay = function(delay, operation, err, reject){
+  setTimeout(() => {
+    if(operation.retry(err)){
+      return;
+    }
+    reject(err);
+  }, delay);
+}
 
 
-/**
- * Get a Resource Server.
- *
- * @method    get
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.get({ id: RESOURCE_SERVER_ID }, function (err, resourceServer) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(resourceServer);
- * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
 
-/**
- * Update an existing resource server.
- *
- * @method    update
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * var data = { name: 'newResourceServerName' };
- * var params = { id: RESOURCE_SERVER_ID };
- *
- * management.resourceServers.update(params, data, function (err, resourceServer) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(resourceServer.name);  // 'newResourceServernName'
- * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Object}    data              Updated Resource Server data.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
-
-/**
- * Delete an existing Resource Server.
- *
- * @method    delete
- * @memberOf  module:management.ResourceServersManager.prototype
- *
- * @example
- * management.resourceServers.delete({ id: RESOURCE_SERVER_ID }, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Resource Server deleted.
- * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ResourceServersManager, 'delete', 'resource.delete');
-
-module.exports = ResourceServersManager;</code></pre>
+module.exports = RetryRestClient;
+</code></pre>
         </article>
     </section>
 
