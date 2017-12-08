@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.9.1](https://github.com/auth0/node-auth0/tree/v2.9.1) (2017-12-08)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.9.0...v2.9.1)
+
+**Fixed**
+- fixed missing data object error [\#224](https://github.com/auth0/node-auth0/pull/224) ([dctoon](https://github.com/dctoon))
+
 ## [v2.9.0](https://github.com/auth0/node-auth0/tree/v2.9.0) (2017-12-07)
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.8.0...v2.9.0)
 
