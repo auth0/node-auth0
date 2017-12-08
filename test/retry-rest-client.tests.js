@@ -59,7 +59,7 @@ describe('RetryRestClient', function () {
     });
   });
 
-  it('should return promise when no callback is provided', function(done){
+  it('should return promise for successful request when no callback is provided', function(done){
     nock(API_URL)
       .get('/')
       .reply(200, { success: true });
@@ -85,7 +85,7 @@ describe('RetryRestClient', function () {
     });
   });
 
-  it('should return promise when no callback is provided', function(done){
+  it('should return promise for failed request when no callback is provided', function(done){
     nock(API_URL)
       .get('/')
       .reply(500);
@@ -293,5 +293,66 @@ describe('RetryRestClient', function () {
         expect(timesCalled).to.be.equal(1);
         done();
       });
+  });
+
+  it('should remove callback from arguments object if data is passed', function (done) {
+    var self = this;
+    var restClientSpy = {
+      create: function(){
+        expect(arguments.length).to.be.equal(1);
+        done();
+        return Promise.resolve();
+      }
+    }
+
+    var client = new RetryRestClient(restClientSpy, { enabled: false });
+    client.create({data: 'foobar'}, function() { });
+  });
+
+  it('should remove callback from arguments object if urlParams and data is passed', function (done) {
+    var self = this;
+    var restClientSpy = {
+      create: function(){
+        expect(arguments.length).to.be.equal(2);
+        done();
+        return Promise.resolve();
+      }
+    }
+
+    var client = new RetryRestClient(restClientSpy, { enabled: false });
+    var urlParams = { id: '123' };
+    var data =  {data: 'foobar'};
+    client.create('/:id', data, function() { });
+  });
+
+  it('should not remove data object when no callback is passed', function (done) {
+    var self = this;
+    var restClientSpy = {
+      create: function(){
+        expect(arguments.length).to.be.equal(1);
+        done();
+        return Promise.resolve();
+      }
+    }
+
+    var client = new RetryRestClient(restClientSpy, { enabled: false });
+    var data =  {data: 'foobar'};
+    client.create(data);
+  });
+
+  it('should not remove data object when urlParams is passed and no callback is passed', function (done) {
+    var self = this;
+    var restClientSpy = {
+      create: function(){
+        expect(arguments.length).to.be.equal(2);
+        done();
+        return Promise.resolve();
+      }
+    }
+
+    var client = new RetryRestClient(restClientSpy, { enabled: false });
+    var urlParams = { id: '123' };
+    var data =  {data: 'foobar'};
+    client.create('/:id', data);
   });
 });
