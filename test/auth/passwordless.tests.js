@@ -17,10 +17,13 @@ var validOptions = {
   clientId: CLIENT_ID
 };
 
+
 describe('PasswordlessAuthenticator', function () {
+
   afterEach(function () {
     nock.cleanAll();
   });
+
 
   describe('#constructor', function () {
     it('should require an options object', function () {
@@ -35,6 +38,7 @@ describe('PasswordlessAuthenticator', function () {
     });
   });
 
+
   describe('instance', function () {
     var methods = ['signIn', 'sendEmail', 'sendSMS'];
     var oauth = new OAuth(validOptions);
@@ -48,6 +52,7 @@ describe('PasswordlessAuthenticator', function () {
       });
     });
   });
+
 
   describe('#signIn', function () {
     var path = '/oauth/ro';
@@ -64,10 +69,12 @@ describe('PasswordlessAuthenticator', function () {
         .reply(200);
     });
 
+
     it('should require an object as first argument', function () {
       expect(this.authenticator.signIn)
         .to.throw(ArgumentError, 'Missing user data object');
     });
+
 
     it('should require a phone number', function () {
       var auth = this.authenticator;
@@ -78,6 +85,7 @@ describe('PasswordlessAuthenticator', function () {
         .to.throw(ArgumentError, 'username field (phone number) is required');
     });
 
+
     it('should require a verification code', function () {
       var auth = this.authenticator;
       var userData = { username: 'username' };
@@ -87,11 +95,13 @@ describe('PasswordlessAuthenticator', function () {
         .to.throw(ArgumentError, 'password field (verification code) is required');
     });
 
+
     it('should accept a callback', function (done) {
       this
         .authenticator
         .signIn(userData, done.bind(null, null));
     });
+
 
     it('should return a promise when no callback is provided', function (done) {
       this
@@ -100,6 +110,7 @@ describe('PasswordlessAuthenticator', function () {
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
+
 
     it('should perform a POST request to ' + path, function (done) {
       var request = this.request;
@@ -115,6 +126,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should include the user data in the request', function (done) {
       nock.cleanAll();
@@ -143,6 +155,7 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+
     it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
@@ -163,6 +176,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should use SMS connection', function (done) {
       nock.cleanAll();
@@ -185,6 +199,7 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+
     it('should use email connection', function (done) {
       nock.cleanAll();
       var data = extend({ connection: 'email' }, userData);
@@ -205,6 +220,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should allow the user to specify the connection as sms or email', function (done) {
       nock.cleanAll();
@@ -228,6 +244,7 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+
     it('should use password as grant type', function (done) {
       nock.cleanAll();
 
@@ -248,6 +265,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should use the openid scope', function (done) {
       nock.cleanAll();
@@ -271,6 +289,7 @@ describe('PasswordlessAuthenticator', function () {
     });
   });
 
+
   describe('#sendEmail', function () {
     var path = '/passwordless/start';
     var userData = {
@@ -286,10 +305,12 @@ describe('PasswordlessAuthenticator', function () {
         .reply(200);
     });
 
+
     it('should require an object as first argument', function () {
       expect(this.authenticator.sendEmail)
         .to.throw(ArgumentError, 'Missing user data object');
     });
+
 
     it('should require an email', function () {
       var auth = this.authenticator;
@@ -300,6 +321,7 @@ describe('PasswordlessAuthenticator', function () {
         .to.throw(ArgumentError, 'email field is required');
     });
 
+
     it('should require the send field', function () {
       var auth = this.authenticator;
       var userData = { email: 'email@domain.com' };
@@ -309,11 +331,13 @@ describe('PasswordlessAuthenticator', function () {
         .to.throw(ArgumentError, 'send field is required');
     });
 
+
     it('should accept a callback', function (done) {
       this
         .authenticator
         .sendEmail(userData, done.bind(null, null));
     });
+
 
     it('should return a promise when no callback is provided', function (done) {
       this
@@ -322,6 +346,7 @@ describe('PasswordlessAuthenticator', function () {
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
+
 
     it('should perform a POST request to ' + path, function (done) {
       var request = this.request;
@@ -337,6 +362,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should include the user data in the request', function (done) {
       nock.cleanAll();
@@ -365,6 +391,7 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+
     it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
@@ -386,6 +413,7 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+
     it('should use the email connection', function (done) {
       nock.cleanAll();
 
@@ -406,6 +434,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should use the specified send type', function (done) {
       nock.cleanAll();
@@ -431,7 +460,8 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
-    it("shouldn't allow the user to specify the connection", function (done) {
+
+    it('shouldn\'t allow the user to specify the connection', function (done) {
       nock.cleanAll();
 
       var data = extend({ connection: 'TEST_CONNECTION' }, userData);
@@ -454,6 +484,7 @@ describe('PasswordlessAuthenticator', function () {
     });
   });
 
+
   describe('#sendSMS', function () {
     var path = '/passwordless/start';
     var userData = {
@@ -468,10 +499,12 @@ describe('PasswordlessAuthenticator', function () {
         .reply(200);
     });
 
+
     it('should require an object as first argument', function () {
       expect(this.authenticator.sendSMS)
         .to.throw(ArgumentError, 'Missing user data object');
     });
+
 
     it('should require a phone number', function () {
       var auth = this.authenticator;
@@ -488,6 +521,7 @@ describe('PasswordlessAuthenticator', function () {
         .sendSMS(userData, done.bind(null, null));
     });
 
+
     it('should return a promise when no callback is provided', function (done) {
       this
         .authenticator
@@ -495,6 +529,7 @@ describe('PasswordlessAuthenticator', function () {
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
+
 
     it('should perform a POST request to ' + path, function (done) {
       var request = this.request;
@@ -510,6 +545,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should include the user data in the request', function (done) {
       nock.cleanAll();
@@ -538,6 +574,7 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
+
     it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
@@ -558,6 +595,7 @@ describe('PasswordlessAuthenticator', function () {
         })
         .catch(done);
     });
+
 
     it('should use the sms connection', function (done) {
       nock.cleanAll();
@@ -580,7 +618,8 @@ describe('PasswordlessAuthenticator', function () {
         .catch(done);
     });
 
-    it("shouldn't allow the user to specify the connection", function (done) {
+
+    it('shouldn\'t allow the user to specify the connection', function (done) {
       nock.cleanAll();
 
       var data = extend({ connection: 'TEST_CONNECTION' }, userData);

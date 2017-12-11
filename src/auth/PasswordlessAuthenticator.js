@@ -3,6 +3,7 @@ var extend = require('util')._extend;
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
+
 /**
  * @class
  * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
@@ -37,6 +38,7 @@ var PasswordlessAuthenticator = function (options, oauth) {
   this.clientId = options.clientId;
 };
 
+
 /**
  * Sign in with the given user credentials.
  *
@@ -51,13 +53,13 @@ var PasswordlessAuthenticator = function (options, oauth) {
  * var data = {
  *   username: '{PHONE_NUMBER}',
  *   password: '{VERIFICATION_CODE}'
- * }
+ * };
  *
  * auth0.passwordless.signIn(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
- * })
+ * });
  *
  * @example <caption>
  *   The user data object has the following structure.
@@ -86,7 +88,6 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
 
   // Don't let the user override the connection nor the grant type.
   if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) { data.connection = 'sms'; }
-
   data.grant_type = 'password';
 
   if (!userData || typeof userData !== 'object') {
@@ -94,17 +95,18 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   }
 
   if (typeof data.username !== 'string'
-    || data.username.trim().length === 0) {
+      || data.username.trim().length === 0) {
     throw new ArgumentError('username field (phone number) is required');
   }
 
   if (typeof data.password !== 'string'
-    || data.password.trim().length === 0) {
+      || data.password.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
 
   return this.oauth.signIn(data, cb);
 };
+
 
 /**
  * Start passwordless flow sending an email.
@@ -136,13 +138,13 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
  *   email: '{EMAIL}',
  *   send: 'link',
  *   authParams: {} // Optional auth params.
- * }
+ * };
  *
  * auth0.passwordless.sendEmail(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
- * })
+ * });
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.email          User email address.
@@ -165,12 +167,12 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
   }
 
   if (typeof data.email !== 'string'
-    || data.email.trim().length === 0) {
+      || data.email.trim().length === 0) {
     throw new ArgumentError('email field is required');
   }
 
   if (typeof data.send !== 'string'
-    || data.send.trim().length === 0) {
+      || data.send.trim().length === 0) {
     throw new ArgumentError('send field is required');
   }
 
@@ -180,6 +182,7 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
 
   return this.passwordless.create(data);
 };
+
 
 /**
  * Start passwordless flow sending an SMS.
@@ -196,13 +199,13 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
  *
  * var data = {
  *   phone_number: '{PHONE}'
- * }
+ * };
  *
  * auth0.passwordless.sendSMS(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
- * })
+ * });
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.phone_number   User phone number.
@@ -225,7 +228,7 @@ PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
   }
 
   if (typeof data.phone_number !== 'string'
-    || data.phone_number.trim().length === 0) {
+      || data.phone_number.trim().length === 0) {
     throw new ArgumentError('phone_number field is required');
   }
 
@@ -235,5 +238,6 @@ PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
 
   return this.passwordless.create(data);
 };
+
 
 module.exports = PasswordlessAuthenticator;
