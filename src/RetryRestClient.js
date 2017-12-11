@@ -62,9 +62,10 @@ RetryRestClient.prototype.delete = function ( /* [params], [callback] */ ) {
 
 RetryRestClient.prototype.invoke = function(method, args){
   var cb;
+  args = Array.prototype.slice.call(args); // convert array-like object to array.
   if(args && args[args.length -1] instanceof Function){
     cb = args[args.length -1];
-    delete args[args.length -1];
+    args.pop(); // Remove the callback
   }
 
   var promise = this.handleRetry(method, args);
