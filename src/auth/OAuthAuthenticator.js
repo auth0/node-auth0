@@ -130,7 +130,7 @@ OAuthAuthenticator.prototype.signIn = function (userData, cb) {
  *   scope: 'openid'  // Optional field.
  * };
  *
- * auth0.oauth.token(data, function (err, userData) {
+ * auth0.oauth.passwordGrant(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
