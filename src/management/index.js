@@ -24,6 +24,7 @@ var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
 var ResourceServersManager = require('./ResourceServersManager');
 var ManagementTokenProvider = require('./ManagementTokenProvider');
+var RulesConfigsManager = require('./RulesConfigsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -233,6 +234,12 @@ var ManagementClient = function (options) {
    */
   this.resourceServers = new ResourceServersManager(managerOptions);
 
+    /**
+   * Logs manager.
+   *
+   * @type {RulesConfigsManager}
+   */
+  this.rulesConfigs = new RulesConfigsManager(managerOptions);
 };
 
 
@@ -1672,4 +1679,78 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteResourceServer', 'resourceServ
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateResourceServer', 'resourceServers.update');
+
+/**
+ * Set a new rules config.
+ *
+ * @method    setRulesConfig
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { key: RULE_CONFIG_KEY };
+ * var data =   { value: RULES_CONFIG_VALUE };
+ * 
+ * management.setRulesConfig(params, data, function (err, rulesConfig) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rules Config set.
+ * });
+ *
+ * @param   {Object}    params        Rule Config parameters.
+ * @param   {String}    params.key    Rule Config key.
+ * @param   {Object}    data          Rule Config Data parameters.
+ * @param   {String}    data.value    Rule Config Data value.
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'setRulesConfig', 'rulesConfigs.set');
+
+/**
+ * Get rules config.
+ *
+ * @method    getRulesConfigs
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * 
+ * management.getRulesConfigs(function (err, rulesConfigs) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Get Rules Configs.
+ * });
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getRulesConfigs', 'rulesConfigs.getAll');
+
+/**
+ * Delete rules config.
+ *
+ * @method    deleteRulesConfig
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * 
+ * management.deleteRulesConfig({ key: RULE_CONFIG_KEY }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rules Config deleted.
+ * });
+ *
+ * @param   {Object}    params        Rule Configs parameters.
+ * @param   {String}    params.key    Rule Configs key.
+ * @param   {Function}  [cb]          Callback function.
+ * 
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.delete');
+
+
 module.exports = ManagementClient;
