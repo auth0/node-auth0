@@ -33,7 +33,7 @@
     "lru-memoizer": "^1.11.1",
     "object.assign": "^4.0.4",
     "request": "^2.83.0",
-    "rest-facade": "^1.10.0",
+    "rest-facade": "^1.10.1",
     "retry": "^0.10.1"
   },
   "devDependencies": {
