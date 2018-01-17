@@ -1,4 +1,6 @@
 examples
 test
+docs
+scripts
 .*
 *.md
