@@ -129,7 +129,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
     var req = request
       .post(options.baseUrl + '/jobs/users-imports')
         .field('connection_id', data.connection_id)
-        .attach('send_completion_email', (data.send_completion_email ? !!data.send_completion_email : true))
+        .attach('send_completion_email', (data.send_completion_email ? "false" : "true"))
         .attach('users', data.users);
 
     for (var name in headers) {
