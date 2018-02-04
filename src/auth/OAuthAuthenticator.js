@@ -160,17 +160,17 @@ OAuthAuthenticator.prototype.passwordGrant = function (userData, cb) {
   }
 
   if (typeof data.username !== 'string'
-    || data.username.split().length === 0) {
+      || data.username.split().length === 0) {
     throw new ArgumentError('username field is required');
   }
 
   if (typeof data.password !== 'string'
-    || data.password.split().length === 0) {
+      || data.password.split().length === 0) {
     throw new ArgumentError('password field is required');
   }
 
   if (typeof data.realm === 'string'
-    && data.realm.split().length !== 0) {
+      && data.realm.split().length !== 0) {
     data.grant_type = 'http://auth0.com/oauth/grant-type/password-realm';
   }
 
