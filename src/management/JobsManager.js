@@ -147,21 +147,20 @@ JobsManager.prototype.importUsers = function (data, cb) {
         connection_id: data.connection_id
       }
     }, function (err, res) {
-
       if (err) {
         reject(err);
-      }
-      
-      // `superagent` uses the error parameter in callback on http errors.
-      // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-      var type = res.statusCode / 100 | 0;
-      var isErrorResponse = (4 === type || 5 === type);
-      if (isErrorResponse) {
-        var error = new Error('cannot ' + method  + url + ' (' + res.statusCode + ')');
-        error.status = res.statusCode;
-        error.method = method;
-        error.text = res.text;
-        reject(error);
+      } else {
+        // `superagent` uses the error parameter in callback on http errors.
+        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+        var type = res.statusCode / 100 | 0;
+        var isErrorResponse = (4 === type || 5 === type);
+        if (isErrorResponse) {
+          var error = new Error('cannot ' + method  + url + ' (' + res.statusCode + ')');
+          error.status = res.statusCode;
+          error.method = method;
+          error.text = res.text;
+          reject(error);
+        }
       }
 
       resolve(res);
