@@ -1,7 +1,7 @@
 var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
 var Auth0RestClient = require('../Auth0RestClient');
-
+var RetryRestClient = require('../RetryRestClient');
 /**
  * @class ClientGrantsManager
  * Auth0 Client Grants Manager.
@@ -14,6 +14,7 @@ var Auth0RestClient = require('../Auth0RestClient');
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 var ClientGrantsManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -41,11 +42,12 @@ var ClientGrantsManager = function (options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Client_Grants Auth0 Client Grantss endpoint}.
+   * {@link https://auth0.com/docs/api/v2#!/Client_Grants Auth0 Client Grants endpoint}.
    *
    * @type {external:RestClient}
    */
-  this.resource = new Auth0RestClient(options.baseUrl + '/client-grants/:id', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/client-grants/:id', clientOptions, options.tokenProvider);
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 

@@ -1,12 +1,17 @@
 var ArgumentError = require('rest-facade').ArgumentError;
 var Auth0RestClient = require('../Auth0RestClient');
-
+var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class
  * Abstracts interaction with the tickets endpoint.
  * @constructor
  * @memberOf module:management
+ * 
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 var TicketsManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -33,7 +38,8 @@ var TicketsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.ticket = new Auth0RestClient(options.baseUrl + '/tickets/:type', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/tickets/:type', clientOptions, options.tokenProvider);
+  this.ticket = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 

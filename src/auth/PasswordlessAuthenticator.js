@@ -74,6 +74,7 @@ var PasswordlessAuthenticator = function (options, oauth) {
  * @param   {Object}    userData              User credentials object.
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
+ * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
  * @param   {String}    [userData.client_id]  Client ID.
  * @param   {Function}  [cb]                  Method callback.
  *
@@ -86,7 +87,7 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
   var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
-  data.connection = 'sms';
+  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) { data.connection = 'sms'; }
   data.grant_type = 'password';
 
   if (!userData || typeof userData !== 'object') {

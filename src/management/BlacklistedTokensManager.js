@@ -1,6 +1,7 @@
 var ArgumentError = require('rest-facade').ArgumentError;
 var utils = require('../utils');
 var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class BlacklistedTokensManager
@@ -12,6 +13,7 @@ var Auth0RestClient = require('../Auth0RestClient');
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 var BlacklistedTokensManager = function (options) {
   if (options === null || typeof options !== 'object') {
@@ -43,7 +45,8 @@ var BlacklistedTokensManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  this.resource = new Auth0RestClient(options.baseUrl + '/blacklists/tokens', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/blacklists/tokens', clientOptions, options.tokenProvider);
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 

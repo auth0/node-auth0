@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>management/ManagementTokenProvider.js - Documentation</title>
+    <title>RetryRestClient.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">management/ManagementTokenProvider.js</h1>
+    <h1 class="page-title">RetryRestClient.js</h1>
     
 
     
@@ -39,142 +39,166 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
-var AuthenticationClient = require('../auth');
-var memoizer = require('lru-memoizer');
+            <pre class="prettyprint source linenums"><code>
 var Promise = require('bluebird');
+var retry = require('retry');
+var ArgumentError = require('rest-facade').ArgumentError;
+var assign = Object.assign || require('object.assign');
 
-var DEFAULT_OPTIONS = { enableCache: true };
+var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
 
 /**
- * @class ManagementTokenProvider
- * Auth0 Management API Token Provider.
+ * @class RetryRestClient
+ * Wrapper Rest Client that adds Retry functionality when requests are failing due to rate limiting (status code 429).
  * @constructor
  * @memberOf module:management
- *
- * @param {Object}  options                         Options for the ManagementTokenProvider.
- * @param {String}  options.domain                  ManagementClient server domain.
- * @param {String}  options.clientId                Non Interactive Client Id.
- * @param {String}  options.clientSecret            Non Interactive Client Secret.
- * @param {String}  options.scope                   Non Interactive Client Scope.
- * @param {String}  options.audience                Audience of the Management API.
- * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
- * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ * @param {Object}  restClient                   RestClient.
+ * @param {Object}  [options]                    Options for the RetryRestClient.
+ * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.    
+ * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10. 
  */
-var ManagementTokenProvider = function (options) {
-  if (!options || typeof options !== 'object') {
-    throw new ArgumentError('Options must be an object');
+var RetryRestClient = function(restClient, options){
+  if (restClient === null || typeof restClient !== 'object') {
+    throw new ArgumentError('Must provide RestClient');
   }
 
   var params = assign({}, DEFAULT_OPTIONS, options);
 
-  if (!params.domain || params.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
+  if (typeof params.enabled !== 'boolean') {
+    throw new ArgumentError('Must provide enabled boolean value');
   }
 
-  if (!params.clientId || params.clientId.length === 0) {
-    throw new ArgumentError('Must provide a clientId');
+  if (typeof params.maxRetries !== 'number' || params.maxRetries &lt;= 0) {
+    throw new ArgumentError('Must provide maxRetries as a positive number');
   }
 
-  if (!params.clientSecret || params.clientSecret.length === 0) {
-    throw new ArgumentError('Must provide a clientSecret');
-  }
-
-  if (!params.audience || params.audience.length === 0) {
-    throw new ArgumentError('Must provide a audience');
-  }
-
-  if (typeof params.enableCache !== 'boolean'){
-    throw new ArgumentError('enableCache must be a boolean');
-  }
-
-  if (params.enableCache &amp;&amp; params.cacheTTLInSeconds) {
-    if (typeof params.cacheTTLInSeconds !== 'number') {
-      throw new ArgumentError('cacheTTLInSeconds must be a number');
-    }
-
-    if (params.cacheTTLInSeconds &lt;= 0) {
-      throw new ArgumentError('cacheTTLInSeconds must be a greater than 0');
-    }
-  }
-
-  if (params.scope &amp;&amp; typeof params.scope !== 'string'){
-    throw new ArgumentError('scope must be a string');
-  }
-
-  this.options = params;
-  var authenticationClientOptions = {
-    domain: this.options.domain,
-    clientId: this.options.clientId,
-    clientSecret: this.options.clientSecret,
-    telemetry: this.options.telemetry
-  };
-  this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
+  this.restClient = restClient;
+  this.maxRetries = params.maxRetries;
+  this.enabled = params.enabled;
 }
 
-/**
- * Returns the access_token.
- *
- * @method    getAccessToken
- * @memberOf  module:management.ManagementTokenProvider.prototype
- *
- * @return {Promise}   Promise returning an access_token.
- */
-ManagementTokenProvider.prototype.getAccessToken = function () {
-  if(this.options.enableCache){
-     return this.getCachedAccessToken(this.options)
-      .then(function (data) {
-        return data.access_token
-      });
-  }else{
-    return this.clientCredentialsGrant(this.options.domain, this.options.scope, this.options.audience)
-      .then(function (data) {
-        return data.access_token
-      });
-  }
-}
-
-ManagementTokenProvider.prototype.getCachedAccessToken = Promise.promisify(
-  memoizer({
-    load: function (options, callback) {
-      this.clientCredentialsGrant(options.domain, options.scope, options.audience)
-        .then(function (data) {
-          callback(null, data);
-        })
-        .catch(function (err) {
-          callback(err);
-        });
-    },
-    hash: function (options) {
-      return options.domain + '-' + options.clientId + '-' + options.scope;
-    },
-    itemMaxAge: function (options, data) {
-      if(options.cacheTTLInSeconds){
-        return options.cacheTTLInSeconds * 1000;
-      }
-
-      // if the expires_in is lower than 10 seconds, do not subtract 10 additional seconds.
-      if (data.expires_in &amp;&amp; data.expires_in &lt; 10 /* seconds */){
-        return data.expires_in * 1000;
-      }else if(data.expires_in){
-        // Subtract 10 seconds from expires_in to fetch a new one, before it expires.
-        return data.expires_in * 1000 - 10000 /* milliseconds */;
-      }
-      return 60 * 60 * 1000; //1h
-    },
-    max: 100
-  })
-);
-
-ManagementTokenProvider.prototype.clientCredentialsGrant = function (domain, scope, audience) {
-  return this.authenticationClient.clientCredentialsGrant({
-    audience: audience,
-    scope: scope
-  });
+RetryRestClient.prototype.getAll = function ( /* [params], [callback] */ ) {
+  return this.invoke('getAll', arguments);  
 };
 
-module.exports = ManagementTokenProvider;
+RetryRestClient.prototype.get = function ( /* [params], [callback] */ ) {
+  return this.invoke('get', arguments); 
+}
+
+RetryRestClient.prototype.create = function ( /* [params], [callback] */ ) {
+  return this.invoke('create', arguments); 
+}
+
+RetryRestClient.prototype.patch = function ( /* [params], [callback] */ ) {
+  return this.invoke('patch', arguments); 
+}
+
+RetryRestClient.prototype.update = function ( /* [params], [callback] */ ) {
+  return this.invoke('update', arguments); 
+}
+
+RetryRestClient.prototype.delete = function ( /* [params], [callback] */ ) {
+  return this.invoke('delete', arguments); 
+}
+
+RetryRestClient.prototype.invoke = function(method, args){
+  var cb;
+  args = Array.prototype.slice.call(args); // convert array-like object to array.
+  if(args &amp;&amp; args[args.length -1] instanceof Function){
+    cb = args[args.length -1];
+    args.pop(); // Remove the callback
+  }
+
+  var promise = this.handleRetry(method, args);
+
+  if (cb instanceof Function) {
+    promise
+      .then(cb.bind(null, null))
+      .catch(cb);
+    return;
+  }
+
+  return promise;
+}
+
+RetryRestClient.prototype.handleRetry = function(method, args){
+  if(!this.enabled){
+    return this.restClient[method].apply(this.restClient, args);
+  }
+
+  var retryOptions = {
+    retries: this.maxRetries,
+    factor: 1,
+    minTimeout: 1, // retry immediate, use custom logic to control this.
+    randomize: false
+  };
+
+  var self = this;
+  var promise = new Promise(function (resolve, reject) {
+    var operation = retry.operation(retryOptions);
+
+    operation.attempt(function(){
+      self.restClient[method].apply(self.restClient, args)
+        .then(function(body) { 
+          resolve(body);
+        })
+        .catch(function(err) {
+          self.invokeRetry(err, operation, reject);
+        });
+    });
+  });
+
+  return promise;
+};
+
+RetryRestClient.prototype.invokeRetry = function(err, operation , reject){
+  var ratelimits = this.extractRatelimits(err);
+  if(ratelimits){
+    var delay = ratelimits.reset * 1000 - new Date().getTime();
+    if(delay > 0){
+      this.retryWithDelay(delay, operation, err, reject);
+    }else{
+      this.retryWithImmediate(operation, err, reject);
+    }   
+  }else{
+    reject(err);
+  }  
+}
+
+RetryRestClient.prototype.extractRatelimits = function(err){
+  if(err &amp;&amp; err.statusCode === 429 &amp;&amp; err.originalError &amp;&amp; err.originalError.response){
+    var headers = err.originalError.response.header;
+    if(headers &amp;&amp; headers['x-ratelimit-limit']){     
+      return {
+        limit: headers['x-ratelimit-limit'],
+        remaining: headers['x-ratelimit-remaining'],
+        reset: headers['x-ratelimit-reset']
+      }
+    }
+  }
+
+  return;
+}
+
+RetryRestClient.prototype.retryWithImmediate = function(operation, err, reject){
+  if(operation.retry(err)){
+    return;
+  }  
+  reject(err);
+}
+
+RetryRestClient.prototype.retryWithDelay = function(delay, operation, err, reject){
+  setTimeout(() => {
+    if(operation.retry(err)){
+      return;
+    }
+    reject(err);
+  }, delay);
+}
+
+
+
+module.exports = RetryRestClient;
 </code></pre>
         </article>
     </section>

@@ -78,8 +78,10 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  * @param   {String}  [options.clientSecret]                      Management API Non Interactive Client Secret.
  * @param   {String}  [options.audience]                          Management API Audience. By default is your domain's, e.g. the domain is `tenant.auth0.com` and the audience is `http://tenant.auth0.com/api/v2/`
  * @param   {String}  [options.scope]                             Management API Scopes.
- * @param   {String}  [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
+ * @param   {Boolean} [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
  * @param   {Number}  [options.tokenProvider.cacheTTLInSeconds]   By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ * @param   {Boolean} [options.retry.enabled=true]                Enabled or Disable Retry Policy functionality.
+ * @param   {Number}  [options.retry.maxRetries=10]               Retry failed requests X times.
  *
  */
 var ManagementClient = function (options) {
@@ -121,7 +123,9 @@ var ManagementClient = function (options) {
     var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
-
+  
+  managerOptions.retry = options.retry;
+  
   /**
    * Simple abstraction for performing CRUD operations on the
    * clients endpoint.
@@ -753,22 +757,25 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 
 
 /**
- * Delete an existing rule.
+ * Update an existing rule.
  *
  * @method    updateRule
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.deleteRule({ id: RULE_ID }, function (err) {
+ * var params = { id: RULE_ID };
+ * var data = { name: 'my-rule'};
+ * management.updateRule(params, data, function (err, rule) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   // Rule deleted.
+ *   console.log(rule.name); // 'my-rule'.
  * });
  *
  * @param   {Object}    params        Rule parameters.
  * @param   {String}    params.id     Rule ID.
+ * @param   {Object}    data          Updated rule data.
  * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
@@ -805,6 +812,29 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
+
+/**
+ * Get users for a given email address
+ *
+ * @method    getUsersByEmail
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example <caption>
+ *   This method takes an email address as the first argument,
+ *   and returns all users with that email address
+ * </caption>
+ *
+ * auth0.getUsersByEmail(email, function (err, users) {
+ *   console.log(users);
+ * });
+ *
+ * @param   {String}    [email]           Email Address of users to locate
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUsersByEmail', 'users.getByEmail');
+
 
 
 /**
@@ -1239,7 +1269,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.updateEmailProvider(data, function (err, provider) {
+ * management.updateEmailProvider(params, data, function (err, provider) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -1248,6 +1278,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  *   console.log(provider);
  * });
  *
+ * @param   {Object}    params            Email provider parameters.
  * @param   {Object}    data              Updated email provider data.
  * @param   {Function}  [cb]              Callback function.
  *

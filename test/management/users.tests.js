@@ -199,6 +199,136 @@ describe('UsersManager', function () {
     });
   });
 
+  describe('#getByEmail', function () {
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .get('/users-by-email')
+        .reply(200);
+    })
+
+
+    it('should accept a callback', function (done) {
+      this
+        .users
+        .getByEmail('someone@example.com', function () {
+          done();
+        });
+    });
+
+
+    it('should return a promise if no callback is given', function (done) {
+      this
+        .users
+        .getByEmail()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users-by-email')
+        .reply(500);
+
+      this
+        .users
+        .getByEmail()
+        .catch(function (err) {
+          expect(err)
+            .to.exist;
+
+          done();
+        });
+    });
+
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      nock.cleanAll();
+
+      var data = [{ test: true }];
+      var request = nock(API_URL)
+        .get('/users-by-email')
+        .reply(200, data);
+
+      this
+        .users
+        .getByEmail()
+        .then(function (users) {
+          expect(users)
+            .to.be.an.instanceOf(Array);
+
+          expect(users.length)
+            .to.equal(data.length);
+
+          expect(users[0].test)
+            .to.equal(data[0].test);
+
+          done();
+        });
+    });
+
+
+    it('should perform a GET request to /api/v2/users-by-email', function (done) {
+      var request = this.request;
+
+      this
+        .users
+        .getByEmail()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users-by-email')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this
+        .users
+        .getByEmail()
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+
+
+    it('should pass an email in as a query string', function (done) {
+      nock.cleanAll();
+
+      var params = {
+        email: 'email@example.com'
+      };
+      var request = nock(API_URL)
+        .get('/users-by-email')
+        .query(params)
+        .reply(200);
+
+      this
+        .users
+        .getByEmail(params.email)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });
+  });
+
+
 
   describe('#get', function () {
     beforeEach(function () {
