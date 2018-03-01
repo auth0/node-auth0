@@ -3,6 +3,10 @@
 ## [v2.9.3](https://github.com/auth0/node-auth0/tree/v2.9.3) (2018-03-01)
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.9.2...v2.9.3)
 
+**Fixed**
+- Add client secret to passwordGrant [\#217](https://github.com/auth0/node-auth0/pull/217) ([luisrudge](https://github.com/luisrudge))
+
+
 ## [v2.9.2](https://github.com/auth0/node-auth0/tree/v2.9.2) (2018-01-16)
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.9.1...v2.9.2)
 
