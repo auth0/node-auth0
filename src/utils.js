@@ -54,7 +54,7 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
  * @method    getRequestPromise
  * @memberOf  module:utils
  */
-utils.getRequestPromise = function (settings) {
+utils.getRequestPromise = function (settings, wholeResponse) {
   return new Promise(function (resolve, reject) {
     request({
       url: settings.url,
@@ -68,7 +68,7 @@ utils.getRequestPromise = function (settings) {
         return;
       }
 
-      resolve(res.body);
+      resolve(wholeResponse ? res : res.body );
     });
     
   });
