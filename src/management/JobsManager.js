@@ -100,7 +100,8 @@ JobsManager.prototype.get = function(params, cb) {
 
 /**
  * Given a path to a file and a connection id, create a new job that imports the
- * users contained in the file and associate them with the given connection.
+ * users contained in the file or JSON string and associate them with the given 
+ * connection.
  *
  * @method   importUsers
  * @memberOf module:management.JobsManager.prototype
@@ -120,6 +121,7 @@ JobsManager.prototype.get = function(params, cb) {
  * @param   {Object}    data                Users import data.
  * @param   {String}    data.connectionId   Connection for the users insertion.
  * @param   {String}    data.users          Path to the users data file.
+ * @param   {String}    data.users_json     JSON data for the users.
  * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
@@ -141,9 +143,9 @@ JobsManager.prototype.importUsers = function(data, cb) {
         headers: headers,
         formData: {
           users: {
-            value: fs.createReadStream(data.users),
+            value: data.users_json ? Buffer.from(data.users_json) : fs.createReadStream(data.users),
             options: {
-              filename: data.users
+              filename: data.users_json ? 'users.json' : data.users,
             }
           },
           connection_id: data.connection_id
