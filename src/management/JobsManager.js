@@ -107,7 +107,9 @@ JobsManager.prototype.get = function (params, cb) {
  * @example
  * var params = {
  *   connection_id: '{CONNECTION_ID}',
- *   users: '{PATH_TO_USERS_FILE}'
+ *   users: '{PATH_TO_USERS_FILE}',
+ *   upsert: true, //optional
+ *   send_completion_email: false //optional
  * };
  *
  * management.jobs.get(params, function (err) {
@@ -116,10 +118,12 @@ JobsManager.prototype.get = function (params, cb) {
  *   }
  * });
  *
- * @param   {Object}    data                Users import data.
- * @param   {String}    data.connectionId   Connection for the users insertion.
- * @param   {String}    data.users          Path to the users data file.
- * @param   {Function}  [cb]                Callback function.
+ * @param   {Object}    data                        Users import data.
+ * @param   {String}    data.connectionId           Connection for the users insertion.
+ * @param   {String}    data.users                  Path to the users data file.
+ * @param   {String}    data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
+ * @param   {String}    data.send_completion_email  OPTIONAL: defaults to true
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -131,6 +135,8 @@ JobsManager.prototype.importUsers = function (data, cb) {
 
   var url = options.baseUrl + '/jobs/users-imports';
   var method = 'POST';
+  var upsert = (data.upsert === true) ? 'true' : 'false';
+  var send_completion_email = (data.send_completion_email === false) ? 'false' : 'true';
 
   var promise = new Promise(function (resolve, reject) {
     request({
@@ -144,25 +150,25 @@ JobsManager.prototype.importUsers = function (data, cb) {
             filename: data.users
           }
         },
-        connection_id: data.connection_id
+        connection_id: data.connection_id,
+        upsert: upsert,
+        send_completion_email: send_completion_email
       }
     }, function (err, res) {
-
-
-      // `superagent` uses the error parameter in callback on http errors.
-      // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-      var type = res.statusCode / 100 | 0;
-      var isErrorResponse = (4 === type || 5 === type);
-      if (isErrorResponse) {
-        var error = new Error('cannot ' + method  + url + ' (' + res.statusCode + ')');
-        error.status = res.statusCode;
-        error.method = method;
-        error.text = res.text;
-        reject(error);
-      }
-
       if (err) {
         reject(err);
+      } else {
+        // `superagent` uses the error parameter in callback on http errors.
+        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+        var type = res.statusCode / 100 | 0;
+        var isErrorResponse = (4 === type || 5 === type);
+        if (isErrorResponse) {
+          var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
+          error.status = res.statusCode;
+          error.method = method;
+          error.text = res.text;
+          reject(error);
+        }
       }
 
       resolve(res);
