@@ -123,9 +123,9 @@ var ManagementClient = function (options) {
     var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
     managerOptions.headers['Auth0-Client'] = telemetry;
   }
-  
+
   managerOptions.retry = options.retry;
-  
+
   /**
    * Simple abstraction for performing CRUD operations on the
    * clients endpoint.
@@ -1078,13 +1078,13 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID };
- * var data = {
+ * var userId = 'USER_ID';
+ * var params = {
  *   user_id: 'OTHER_USER_ID',
  *   connection_id: 'CONNECTION_ID'
  * };
  *
- * management.linkUsers(params, data, function (err, user) {
+ * management.linkUsers(userId, params, function (err, user) {
  *   if (err) {
  *     // Handle error.
  *   }
