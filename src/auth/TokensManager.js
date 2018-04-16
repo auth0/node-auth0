@@ -3,7 +3,6 @@ var getRequestPromise = require('../utils').getRequestPromise;
 
 var ArgumentError = require('rest-facade').ArgumentError;
 
-
 /**
  * @class
  * Provides methods for getting token data and exchanging tokens.
@@ -15,7 +14,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
  * @param  {String}   [options.headers]     Default request headers.
  * @param  {String}   [options.clientId]    Default client ID.
  */
-var TokensManager = function (options) {
+var TokensManager = function(options) {
   if (typeof options !== 'object') {
     throw new ArgumentError('Missing tokens manager options');
   }
@@ -28,7 +27,6 @@ var TokensManager = function (options) {
   this.headers = options.headers || {};
   this.clientId = options.clientId || '';
 };
-
 
 /**
  * Given an ID token get the user profile linked to it.
@@ -56,7 +54,7 @@ var TokensManager = function (options) {
  *
  * @return  {Promise|undefined}
  */
-TokensManager.prototype.getInfo = function (idToken, cb) {
+TokensManager.prototype.getInfo = function(idToken, cb) {
   var headers = extend({}, this.headers);
 
   if (idToken === null || idToken === undefined) {
@@ -77,15 +75,12 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
 
   // Use callback if given.
   if (cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
+    promise.then(cb.bind(null, null)).catch(cb);
     return;
   }
 
   return promise;
 };
-
 
 /**
  * Exchange the token of the logged in user with a token that is valid to call
@@ -127,19 +122,18 @@ TokensManager.prototype.getInfo = function (idToken, cb) {
  *
  * @return  {Promise|undefined}
  */
-TokensManager.prototype.getDelegationToken = function (data, cb) {
-  var body = extend({ client_id : this.clientId }, data);
+TokensManager.prototype.getDelegationToken = function(data, cb) {
+  var body = extend({ client_id: this.clientId }, data);
   var headers = this.headers;
 
   if (!data) {
     throw new ArgumentError('Missing token data object');
   }
 
-  var hasIdToken = typeof data.id_token === 'string'
-      && data.id_token.trim().length !== 0;
+  var hasIdToken = typeof data.id_token === 'string' && data.id_token.trim().length !== 0;
 
-  var hasRefreshToken = typeof data.refresh_token === 'string'
-      && data.refresh_token.trim().length !== 0;
+  var hasRefreshToken =
+    typeof data.refresh_token === 'string' && data.refresh_token.trim().length !== 0;
 
   if (!hasIdToken && !hasRefreshToken) {
     throw new ArgumentError('one of id_token or refresh_token is required');
@@ -149,18 +143,15 @@ TokensManager.prototype.getDelegationToken = function (data, cb) {
     throw new ArgumentError('id_token and refresh_token fields cannot be specified simulatenously');
   }
 
-  if (typeof data.target !== 'string'
-      || data.target.trim().length === 0) {
+  if (typeof data.target !== 'string' || data.target.trim().length === 0) {
     throw new ArgumentError('target field is required');
   }
 
-  if (typeof data.api_type !== 'string'
-      || data.api_type.trim().length === 0) {
+  if (typeof data.api_type !== 'string' || data.api_type.trim().length === 0) {
     throw new ArgumentError('api_type field is required');
   }
 
-  if (typeof data.grant_type !== 'string'
-      || data.grant_type.trim().length === 0) {
+  if (typeof data.grant_type !== 'string' || data.grant_type.trim().length === 0) {
     throw new ArgumentError('grant_type field is required');
   }
 
@@ -174,14 +165,11 @@ TokensManager.prototype.getDelegationToken = function (data, cb) {
 
   // Use callback if given.
   if (cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
+    promise.then(cb.bind(null, null)).catch(cb);
     return;
   }
 
   return promise;
 };
-
 
 module.exports = TokensManager;

@@ -9,7 +9,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class DeviceCredentialsManager
  * Manages Auth0 Device Credentials.
@@ -21,7 +20,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var DeviceCredentialsManager = function (options) {
+var DeviceCredentialsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -52,10 +51,13 @@ var DeviceCredentialsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/device-credentials/:id', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/device-credentials/:id',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Create an Auth0 credential.
@@ -79,7 +81,6 @@ var DeviceCredentialsManager = function (options) {
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.create');
 
-
 /**
  * Get all Auth0 credentials.
  *
@@ -96,7 +97,6 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Delete an Auth0 device credential.
@@ -122,6 +122,5 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'delete', 'resource.delete');
-
 
 module.exports = DeviceCredentialsManager;

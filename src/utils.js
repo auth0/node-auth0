@@ -1,12 +1,10 @@
 var Promise = require('bluebird');
 var request = require('request');
 
-
 /**
  * @module utils
  */
-var utils = module.exports = {};
-
+var utils = (module.exports = {});
 
 /**
  * Given a JSON string, convert it to its base64 representation.
@@ -14,7 +12,7 @@ var utils = module.exports = {};
  * @method    jsonToBase64
  * @memberOf  module:utils
  */
-utils.jsonToBase64 = function (json) {
+utils.jsonToBase64 = function(json) {
   var bytes = new Buffer(JSON.stringify(json));
 
   return bytes
@@ -24,7 +22,6 @@ utils.jsonToBase64 = function (json) {
     .replace(/=+$/, '');
 };
 
-
 /**
  * Simple wrapper that, given a class, a property name and a method name,
  * creates a new method in the class that is a wrapper for the given
@@ -33,19 +30,18 @@ utils.jsonToBase64 = function (json) {
  * @method    wrapPropertyMethod
  * @memberOf  module:utils
  */
-utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
+utils.wrapPropertyMethod = function(Parent, name, propertyMethod) {
   var path = propertyMethod.split('.');
   var property = path.shift();
   var method = path.pop();
 
   Object.defineProperty(Parent.prototype, name, {
     enumerable: false,
-    get: function () {
+    get: function() {
       return this[property][method].bind(this[property]);
     }
   });
 };
-
 
 /**
  * Perform a request with the given settings and return a promise that resolves
@@ -54,22 +50,24 @@ utils.wrapPropertyMethod = function (Parent, name, propertyMethod) {
  * @method    getRequestPromise
  * @memberOf  module:utils
  */
-utils.getRequestPromise = function (settings) {
-  return new Promise(function (resolve, reject) {
-    request({
-      url: settings.url,
-      method: settings.method,
-      body: settings.data,
-      json: typeof settings.data === 'object',
-      headers: settings.headers
-    }, function (err, res, body) {
-       if (err) {
-        reject(err);
-        return;
-      }
+utils.getRequestPromise = function(settings) {
+  return new Promise(function(resolve, reject) {
+    request(
+      {
+        url: settings.url,
+        method: settings.method,
+        body: settings.data,
+        json: typeof settings.data === 'object',
+        headers: settings.headers
+      },
+      function(err, res, body) {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-      resolve(res.body);
-    });
-    
+        resolve(res.body);
+      }
+    );
   });
-}
+};

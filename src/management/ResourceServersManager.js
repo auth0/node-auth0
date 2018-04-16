@@ -21,7 +21,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.retry]    Retry Policy Config
  */
 
-var ResourceServersManager = function (options) {
+var ResourceServersManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide resource server options');
   }
@@ -50,7 +50,11 @@ var ResourceServersManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/resource-servers/:id', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/resource-servers/:id',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
@@ -92,7 +96,6 @@ utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Get a Resource Server.

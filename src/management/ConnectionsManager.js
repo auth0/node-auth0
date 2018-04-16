@@ -14,7 +14,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var ConnectionsManager = function (options) {
+var ConnectionsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -44,10 +44,13 @@ var ConnectionsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/connections/:id ', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/connections/:id ',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Create a new connection.
@@ -71,7 +74,6 @@ var ConnectionsManager = function (options) {
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
 
-
 /**
  * Get all connections.
  *
@@ -88,7 +90,6 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Get an Auth0 connection.
@@ -112,7 +113,6 @@ utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
-
 
 /**
  * Update an existing connection.
@@ -141,7 +141,6 @@ utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
 
-
 /**
  * Delete an existing connection.
  *
@@ -164,6 +163,5 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
-
 
 module.exports = ConnectionsManager;
