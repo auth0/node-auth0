@@ -1,4 +1,3 @@
-
 var Promise = require('bluebird');
 var retry = require('retry');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -13,10 +12,10 @@ var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
  * @memberOf module:management
  * @param {Object}  restClient                   RestClient.
  * @param {Object}  [options]                    Options for the RetryRestClient.
- * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.    
- * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10. 
+ * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.
+ * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10.
  */
-var RetryRestClient = function(restClient, options){
+var RetryRestClient = function(restClient, options) {
   if (restClient === null || typeof restClient !== 'object') {
     throw new ArgumentError('Must provide RestClient');
   }
@@ -34,54 +33,52 @@ var RetryRestClient = function(restClient, options){
   this.restClient = restClient;
   this.maxRetries = params.maxRetries;
   this.enabled = params.enabled;
-}
-
-RetryRestClient.prototype.getAll = function ( /* [params], [callback] */ ) {
-  return this.invoke('getAll', arguments);  
 };
 
-RetryRestClient.prototype.get = function ( /* [params], [callback] */ ) {
-  return this.invoke('get', arguments); 
-}
+RetryRestClient.prototype.getAll = function(/* [params], [callback] */) {
+  return this.invoke('getAll', arguments);
+};
 
-RetryRestClient.prototype.create = function ( /* [params], [callback] */ ) {
-  return this.invoke('create', arguments); 
-}
+RetryRestClient.prototype.get = function(/* [params], [callback] */) {
+  return this.invoke('get', arguments);
+};
 
-RetryRestClient.prototype.patch = function ( /* [params], [callback] */ ) {
-  return this.invoke('patch', arguments); 
-}
+RetryRestClient.prototype.create = function(/* [params], [callback] */) {
+  return this.invoke('create', arguments);
+};
 
-RetryRestClient.prototype.update = function ( /* [params], [callback] */ ) {
-  return this.invoke('update', arguments); 
-}
+RetryRestClient.prototype.patch = function(/* [params], [callback] */) {
+  return this.invoke('patch', arguments);
+};
 
-RetryRestClient.prototype.delete = function ( /* [params], [callback] */ ) {
-  return this.invoke('delete', arguments); 
-}
+RetryRestClient.prototype.update = function(/* [params], [callback] */) {
+  return this.invoke('update', arguments);
+};
 
-RetryRestClient.prototype.invoke = function(method, args){
+RetryRestClient.prototype.delete = function(/* [params], [callback] */) {
+  return this.invoke('delete', arguments);
+};
+
+RetryRestClient.prototype.invoke = function(method, args) {
   var cb;
   args = Array.prototype.slice.call(args); // convert array-like object to array.
-  if(args && args[args.length -1] instanceof Function){
-    cb = args[args.length -1];
+  if (args && args[args.length - 1] instanceof Function) {
+    cb = args[args.length - 1];
     args.pop(); // Remove the callback
   }
 
   var promise = this.handleRetry(method, args);
 
   if (cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
+    promise.then(cb.bind(null, null)).catch(cb);
     return;
   }
 
   return promise;
-}
+};
 
-RetryRestClient.prototype.handleRetry = function(method, args){
-  if(!this.enabled){
+RetryRestClient.prototype.handleRetry = function(method, args) {
+  if (!this.enabled) {
     return this.restClient[method].apply(this.restClient, args);
   }
 
@@ -93,12 +90,13 @@ RetryRestClient.prototype.handleRetry = function(method, args){
   };
 
   var self = this;
-  var promise = new Promise(function (resolve, reject) {
+  var promise = new Promise(function(resolve, reject) {
     var operation = retry.operation(retryOptions);
 
-    operation.attempt(function(){
-      self.restClient[method].apply(self.restClient, args)
-        .then(function(body) { 
+    operation.attempt(function() {
+      self.restClient[method]
+        .apply(self.restClient, args)
+        .then(function(body) {
           resolve(body);
         })
         .catch(function(err) {
@@ -110,51 +108,49 @@ RetryRestClient.prototype.handleRetry = function(method, args){
   return promise;
 };
 
-RetryRestClient.prototype.invokeRetry = function(err, operation , reject){
+RetryRestClient.prototype.invokeRetry = function(err, operation, reject) {
   var ratelimits = this.extractRatelimits(err);
-  if(ratelimits){
+  if (ratelimits) {
     var delay = ratelimits.reset * 1000 - new Date().getTime();
-    if(delay > 0){
+    if (delay > 0) {
       this.retryWithDelay(delay, operation, err, reject);
-    }else{
+    } else {
       this.retryWithImmediate(operation, err, reject);
-    }   
-  }else{
+    }
+  } else {
     reject(err);
-  }  
-}
+  }
+};
 
-RetryRestClient.prototype.extractRatelimits = function(err){
-  if(err && err.statusCode === 429 && err.originalError && err.originalError.response){
+RetryRestClient.prototype.extractRatelimits = function(err) {
+  if (err && err.statusCode === 429 && err.originalError && err.originalError.response) {
     var headers = err.originalError.response.header;
-    if(headers && headers['x-ratelimit-limit']){     
+    if (headers && headers['x-ratelimit-limit']) {
       return {
         limit: headers['x-ratelimit-limit'],
         remaining: headers['x-ratelimit-remaining'],
         reset: headers['x-ratelimit-reset']
-      }
+      };
     }
   }
 
   return;
-}
+};
 
-RetryRestClient.prototype.retryWithImmediate = function(operation, err, reject){
-  if(operation.retry(err)){
+RetryRestClient.prototype.retryWithImmediate = function(operation, err, reject) {
+  if (operation.retry(err)) {
     return;
-  }  
+  }
   reject(err);
-}
+};
 
-RetryRestClient.prototype.retryWithDelay = function(delay, operation, err, reject){
+RetryRestClient.prototype.retryWithDelay = function(delay, operation, err, reject) {
   setTimeout(() => {
-    if(operation.retry(err)){
+    if (operation.retry(err)) {
       return;
     }
     reject(err);
   }, delay);
-}
-
-
+};
 
 module.exports = RetryRestClient;

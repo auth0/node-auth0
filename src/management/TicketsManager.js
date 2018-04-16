@@ -7,13 +7,13 @@ var RetryRestClient = require('../RetryRestClient');
  * Abstracts interaction with the tickets endpoint.
  * @constructor
  * @memberOf module:management
- * 
+ *
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var TicketsManager = function (options){
+var TicketsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -38,10 +38,13 @@ var TicketsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/tickets/:type', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/tickets/:type',
+    clientOptions,
+    options.tokenProvider
+  );
   this.ticket = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Create a new password change ticket.
@@ -66,7 +69,7 @@ var TicketsManager = function (options){
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-TicketsManager.prototype.changePassword = function (data, cb) {
+TicketsManager.prototype.changePassword = function(data, cb) {
   var params = { type: 'password-change' };
 
   if (cb && cb instanceof Function) {
@@ -76,7 +79,6 @@ TicketsManager.prototype.changePassword = function (data, cb) {
   // Return a promise.
   return this.ticket.create(params, data);
 };
-
 
 /**
  * Create an email verification ticket.
@@ -99,7 +101,7 @@ TicketsManager.prototype.changePassword = function (data, cb) {
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-TicketsManager.prototype.verifyEmail = function (data, cb) {
+TicketsManager.prototype.verifyEmail = function(data, cb) {
   var params = { type: 'email-verification' };
 
   if (cb && cb instanceof Function) {
@@ -110,6 +112,4 @@ TicketsManager.prototype.verifyEmail = function (data, cb) {
   return this.ticket.create(params, data);
 };
 
-
 module.exports = TicketsManager;
-

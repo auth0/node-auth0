@@ -8,7 +8,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class
  * Abstracts interaction with the users endpoint.
@@ -20,7 +19,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var UsersManager = function (options){
+var UsersManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -39,7 +38,11 @@ var UsersManager = function (options){
     query: { repeatParams: false }
   };
 
-  var usersAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id', clientOptions, options.tokenProvider);
+  var usersAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id',
+    clientOptions,
+    options.tokenProvider
+  );
   this.users = new RetryRestClient(usersAuth0RestClient, options.retry);
 
   /**
@@ -49,7 +52,11 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var multifactorAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/multifactor/:provider', clientOptions, options.tokenProvider);
+  var multifactorAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/multifactor/:provider',
+    clientOptions,
+    options.tokenProvider
+  );
   this.multifactor = new RetryRestClient(multifactorAuth0RestClient, options.retry);
 
   /**
@@ -57,7 +64,11 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var identitiesAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions, options.tokenProvider);
+  var identitiesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/identities/:provider/:user_id',
+    clientOptions,
+    options.tokenProvider
+  );
   this.identities = new RetryRestClient(identitiesAuth0RestClient, options.retry);
 
   /**
@@ -65,7 +76,11 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var userLogsAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/logs', clientOptions, options.tokenProvider);
+  var userLogsAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/logs',
+    clientOptions,
+    options.tokenProvider
+  );
   this.userLogs = new RetryRestClient(userLogsAuth0RestClient, options.retry);
 
   /**
@@ -73,7 +88,11 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var enrollmentsAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions, options.tokenProvider);
+  var enrollmentsAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/enrollments',
+    clientOptions,
+    options.tokenProvider
+  );
   this.enrollments = new RetryRestClient(enrollmentsAuth0RestClient, options.retry);
 
   /**
@@ -81,10 +100,13 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var usersByEmailClient = new Auth0RestClient(options.baseUrl + '/users-by-email', clientOptions, options.tokenProvider);
+  var usersByEmailClient = new Auth0RestClient(
+    options.baseUrl + '/users-by-email',
+    clientOptions,
+    options.tokenProvider
+  );
   this.usersByEmail = new RetryRestClient(usersByEmailClient, options.retry);
 };
-
 
 /**
  * Create a new user.
@@ -106,14 +128,13 @@ var UsersManager = function (options){
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.create = function (data, cb) {
+UsersManager.prototype.create = function(data, cb) {
   if (cb && cb instanceof Function) {
     return this.users.create(data, cb);
   }
 
   return this.users.create(data);
 };
-
 
 /**
  * Get all users.
@@ -143,7 +164,7 @@ UsersManager.prototype.create = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.getAll = function (params) {
+UsersManager.prototype.getAll = function(params) {
   return this.users.getAll.apply(this.users, arguments);
 };
 
@@ -167,10 +188,9 @@ UsersManager.prototype.getAll = function (params) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.getByEmail = function (email, callback) {
+UsersManager.prototype.getByEmail = function(email, callback) {
   return this.usersByEmail.getAll({ email }, callback);
 };
-
 
 /**
  * Get a user by its id.
@@ -189,10 +209,9 @@ UsersManager.prototype.getByEmail = function (email, callback) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.get = function () {
+UsersManager.prototype.get = function() {
   return this.users.get.apply(this.users, arguments);
 };
-
 
 /**
  * Update a user by its id.
@@ -219,10 +238,9 @@ UsersManager.prototype.get = function () {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.update = function () {
+UsersManager.prototype.update = function() {
   return this.users.patch.apply(this.users, arguments);
 };
-
 
 /**
  * Update the user metadata.
@@ -252,7 +270,7 @@ UsersManager.prototype.update = function () {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
+UsersManager.prototype.updateUserMetadata = function(params, metadata, cb) {
   var data = {
     user_metadata: metadata
   };
@@ -263,7 +281,6 @@ UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
 
   return this.users.patch(params, data);
 };
-
 
 /**
  * Update the app metadata.
@@ -293,7 +310,7 @@ UsersManager.prototype.updateUserMetadata = function (params, metadata, cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
+UsersManager.prototype.updateAppMetadata = function(params, metadata, cb) {
   var data = {
     app_metadata: metadata
   };
@@ -304,7 +321,6 @@ UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
 
   return this.users.patch(params, data);
 };
-
 
 /**
  * Delete a user by its id.
@@ -328,14 +344,13 @@ UsersManager.prototype.updateAppMetadata = function (params, metadata, cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.delete = function (params) {
+UsersManager.prototype.delete = function(params) {
   if (typeof params !== 'object' || typeof params.id !== 'string') {
     throw new ArgumentError('You must provide an id for the delete method');
   }
 
   return this.users.delete.apply(this.users, arguments);
 };
-
 
 /**
  * Delete all users.
@@ -356,7 +371,7 @@ UsersManager.prototype.delete = function (params) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.deleteAll = function (cb) {
+UsersManager.prototype.deleteAll = function(cb) {
   if (typeof cb !== 'function') {
     var errorMsg = 'The deleteAll method only accepts a callback as argument';
 
@@ -365,7 +380,6 @@ UsersManager.prototype.deleteAll = function (cb) {
 
   return this.users.delete.apply(this.users, arguments);
 };
-
 
 /**
  * Delete a multifactor provider.
@@ -391,7 +405,7 @@ UsersManager.prototype.deleteAll = function (cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
+UsersManager.prototype.deleteMultifactorProvider = function(params, cb) {
   params = params || {};
 
   if (!params.id || typeof params.id !== 'string') {
@@ -408,7 +422,6 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
 
   return this.multifactor.delete(params);
 };
-
 
 /**
  * Link the user with another account.
@@ -439,7 +452,7 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.link = function (userId, params, cb) {
+UsersManager.prototype.link = function(userId, params, cb) {
   var query = { id: userId };
   params = params || {};
 
@@ -457,7 +470,6 @@ UsersManager.prototype.link = function (userId, params, cb) {
 
   return this.identities.create(query, params);
 };
-
 
 /**
  * Unlink the given accounts.
@@ -484,7 +496,7 @@ UsersManager.prototype.link = function (userId, params, cb) {
  *
  * @return {Promise|undefined}
  */
-UsersManager.prototype.unlink = function (params, cb) {
+UsersManager.prototype.unlink = function(params, cb) {
   params = params || {};
 
   if (!params.id || typeof params.id !== 'string') {
@@ -533,7 +545,7 @@ UsersManager.prototype.unlink = function (params, cb) {
  *
  * @return {Promise|undefined}
  */
-UsersManager.prototype.logs = function (params, cb) {
+UsersManager.prototype.logs = function(params, cb) {
   params = params || {};
 
   if (!params.id || typeof params.id !== 'string') {
@@ -560,7 +572,7 @@ UsersManager.prototype.logs = function (params, cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.getGuardianEnrollments = function () {
+UsersManager.prototype.getGuardianEnrollments = function() {
   return this.enrollments.get.apply(this.enrollments, arguments);
 };
 

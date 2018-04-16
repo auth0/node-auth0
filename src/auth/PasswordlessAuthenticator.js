@@ -3,7 +3,6 @@ var extend = require('util')._extend;
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
-
 /**
  * @class
  * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
@@ -15,7 +14,7 @@ var RestClient = require('rest-facade').Client;
  * @param  {String}              [options.clientId] Default client ID.
  * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
  */
-var PasswordlessAuthenticator = function (options, oauth) {
+var PasswordlessAuthenticator = function(options, oauth) {
   if (!options) {
     throw new ArgumentError('Missing authenticator options');
   }
@@ -37,7 +36,6 @@ var PasswordlessAuthenticator = function (options, oauth) {
   this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
   this.clientId = options.clientId;
 };
-
 
 /**
  * Sign in with the given user credentials.
@@ -80,33 +78,32 @@ var PasswordlessAuthenticator = function (options, oauth) {
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
+PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   var defaultFields = {
     client_id: this.clientId
   };
   var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) { data.connection = 'sms'; }
+  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
+    data.connection = 'sms';
+  }
   data.grant_type = 'password';
 
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.username !== 'string'
-      || data.username.trim().length === 0) {
+  if (typeof data.username !== 'string' || data.username.trim().length === 0) {
     throw new ArgumentError('username field (phone number) is required');
   }
 
-  if (typeof data.password !== 'string'
-      || data.password.trim().length === 0) {
+  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
 
   return this.oauth.signIn(data, cb);
 };
-
 
 /**
  * Start passwordless flow sending an email.
@@ -153,7 +150,7 @@ PasswordlessAuthenticator.prototype.signIn = function (userData, cb) {
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
+PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
   var defaultFields = {
     client_id: this.clientId
   };
@@ -166,13 +163,11 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.email !== 'string'
-      || data.email.trim().length === 0) {
+  if (typeof data.email !== 'string' || data.email.trim().length === 0) {
     throw new ArgumentError('email field is required');
   }
 
-  if (typeof data.send !== 'string'
-      || data.send.trim().length === 0) {
+  if (typeof data.send !== 'string' || data.send.trim().length === 0) {
     throw new ArgumentError('send field is required');
   }
 
@@ -182,7 +177,6 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
 
   return this.passwordless.create(data);
 };
-
 
 /**
  * Start passwordless flow sending an SMS.
@@ -214,7 +208,7 @@ PasswordlessAuthenticator.prototype.sendEmail = function (userData, cb) {
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
+PasswordlessAuthenticator.prototype.sendSMS = function(userData, cb) {
   var defaultFields = {
     client_id: this.clientId
   };
@@ -227,8 +221,7 @@ PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.phone_number !== 'string'
-      || data.phone_number.trim().length === 0) {
+  if (typeof data.phone_number !== 'string' || data.phone_number.trim().length === 0) {
     throw new ArgumentError('phone_number field is required');
   }
 
@@ -238,6 +231,5 @@ PasswordlessAuthenticator.prototype.sendSMS = function (userData, cb) {
 
   return this.passwordless.create(data);
 };
-
 
 module.exports = PasswordlessAuthenticator;

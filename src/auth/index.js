@@ -18,7 +18,6 @@ var TokensManager = require('./TokensManager');
 
 var BASE_URL_FORMAT = 'https://%s';
 
-
 /**
  * @class
  * Authentication API SDK.
@@ -46,11 +45,9 @@ var BASE_URL_FORMAT = 'https://%s';
  * @param   {String}  [options.clientId]      Default client ID.
  * @param   {String}  [options.clientSecret]  Default client Secret.
  */
-var AuthenticationClient = function (options) {
+var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {
-    throw new ArgumentError(
-      'Authentication Client SDK options must be an object'
-    );
+    throw new ArgumentError('Authentication Client SDK options must be an object');
   }
 
   if (!options.domain || options.domain.length === 0) {
@@ -109,7 +106,6 @@ var AuthenticationClient = function (options) {
   this.tokens = new TokensManager(managerOptions);
 };
 
-
 /**
  * Return an object with information about the current client,
  *
@@ -118,30 +114,29 @@ var AuthenticationClient = function (options) {
  *
  * @return {Object}   Object containing client information.
  */
-AuthenticationClient.prototype.getClientInfo = function () {
+AuthenticationClient.prototype.getClientInfo = function() {
   var clientInfo = {
     name: 'node-auth0',
     version: pkg.version,
     dependencies: [],
-    environment: [{
-      name: 'node.js',
-      version: process.version.replace('v', '')
-    }]
+    environment: [
+      {
+        name: 'node.js',
+        version: process.version.replace('v', '')
+      }
+    ]
   };
 
   // Add the dependencies to the client info object.
-  Object
-    .keys(pkg.dependencies)
-    .forEach(function (name) {
-      clientInfo.dependencies.push({
-        name: name,
-        version: pkg.dependencies[name]
-      });
+  Object.keys(pkg.dependencies).forEach(function(name) {
+    clientInfo.dependencies.push({
+      name: name,
+      version: pkg.dependencies[name]
     });
+  });
 
   return clientInfo;
 };
-
 
 /**
  * Start passwordless flow sending an email.
@@ -177,12 +172,11 @@ AuthenticationClient.prototype.getClientInfo = function () {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
+AuthenticationClient.prototype.requestMagicLink = function(data, cb) {
   data.send = 'link';
 
   return this.passwordless.sendEmail(data, cb);
 };
-
 
 /**
  * Start passwordless flow sending an email.
@@ -216,12 +210,11 @@ AuthenticationClient.prototype.requestMagicLink = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
+AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
   data.send = 'code';
 
   return this.passwordless.sendEmail(data, cb);
 };
-
 
 /**
  * Start passwordless flow sending an SMS.
@@ -252,14 +245,13 @@ AuthenticationClient.prototype.requestEmailCode = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
+AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
   var translatedData = {
     phone_number: data.phoneNumber || data.phone_number
   };
 
   return this.passwordless.sendSMS(translatedData, cb);
 };
-
 
 /**
  * Sign in with the given user credentials.
@@ -302,7 +294,7 @@ AuthenticationClient.prototype.requestSMSCode = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
+AuthenticationClient.prototype.verifySMSCode = function(data, cb) {
   var translatedData = {
     username: data.phoneNumber || data.phone_number || data.username,
     password: data.code || data.password
@@ -310,7 +302,6 @@ AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
 
   return this.passwordless.signIn(translatedData, cb);
 };
-
 
 /**
  * Exchange the token of the logged in user with a token that is valid to call
@@ -350,7 +341,7 @@ AuthenticationClient.prototype.verifySMSCode = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
+AuthenticationClient.prototype.getDelegationToken = function(data, cb) {
   var translatedData = {
     id_token: data.id_token,
     api_type: data.api || data.api_type,
@@ -361,7 +352,6 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
 
   return this.tokens.getDelegationToken(translatedData, cb);
 };
-
 
 /**
  * Change password using a database or active directory service.
@@ -399,7 +389,7 @@ AuthenticationClient.prototype.getDelegationToken = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.changePassword = function (data, cb) {
+AuthenticationClient.prototype.changePassword = function(data, cb) {
   var translatedData = {
     connection: data.connection,
     email: data.email || data.username,
@@ -408,7 +398,6 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
 
   return this.database.changePassword(data, cb);
 };
-
 
 /**
  * Request a change password email using a database or active directory service.
@@ -443,7 +432,7 @@ AuthenticationClient.prototype.changePassword = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-AuthenticationClient.prototype.requestChangePasswordEmail = function (data, cb) {
+AuthenticationClient.prototype.requestChangePasswordEmail = function(data, cb) {
   var translatedData = {
     connection: data.connection,
     email: data.email || data.username
@@ -451,7 +440,6 @@ AuthenticationClient.prototype.requestChangePasswordEmail = function (data, cb) 
 
   return this.database.requestChangePasswordEmail(data, cb);
 };
-
 
 /**
  * Given an access token get the user profile linked to it.
@@ -507,7 +495,11 @@ utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(AuthenticationClient, 'clientCredentialsGrant', 'oauth.clientCredentialsGrant');
+utils.wrapPropertyMethod(
+  AuthenticationClient,
+  'clientCredentialsGrant',
+  'oauth.clientCredentialsGrant'
+);
 
 /**
  * Sign in using a username and password
