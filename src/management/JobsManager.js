@@ -144,7 +144,8 @@ JobsManager.prototype.importUsers = function (data, cb) {
             filename: data.users
           }
         },
-        connection_id: data.connection_id
+        connection_id: data.connection_id,
+        upsert: data.upsert
       }
     }, function (err, res) {
 
