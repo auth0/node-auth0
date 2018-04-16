@@ -3,7 +3,6 @@ var getRequestPromise = require('../utils').getRequestPromise;
 
 var ArgumentError = require('rest-facade').ArgumentError;
 
-
 /**
  * @class
  * Provides methods for getting user information and impersonating users.
@@ -15,7 +14,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
  * @param  {String}   [options.headers]     Default request headers.
  * @param  {String}   [options.clientId]    Default client ID.
  */
-var UsersManager = function (options) {
+var UsersManager = function(options) {
   if (typeof options !== 'object') {
     throw new ArgumentError('Missing users manager options');
   }
@@ -28,7 +27,6 @@ var UsersManager = function (options) {
   this.headers = options.headers;
   this.clientId = options.clientId;
 };
-
 
 /**
  * Given an access token get the user profile linked to it.
@@ -55,7 +53,7 @@ var UsersManager = function (options) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.getInfo = function (accessToken, cb) {
+UsersManager.prototype.getInfo = function(accessToken, cb) {
   var url = this.baseUrl + '/userinfo';
   var headers = extend({}, this.headers);
 
@@ -80,15 +78,12 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
 
   // Use callback if given.
   if (cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
+    promise.then(cb.bind(null, null)).catch(cb);
     return;
   }
 
   return promise;
 };
-
 
 /**
  * Impersonate the user with the given user ID.
@@ -126,7 +121,7 @@ UsersManager.prototype.getInfo = function (accessToken, cb) {
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.impersonate = function (userId, settings, cb) {
+UsersManager.prototype.impersonate = function(userId, settings, cb) {
   var url = this.baseUrl + '/users/' + userId + '/impersonate';
 
   if (userId === null || userId === undefined) {
@@ -141,23 +136,23 @@ UsersManager.prototype.impersonate = function (userId, settings, cb) {
     throw new ArgumentError('Missing impersonation settings object');
   }
 
-  if (typeof settings.impersonator_id !== 'string'
-      || settings.impersonator_id.trim().length === 0) {
+  if (
+    typeof settings.impersonator_id !== 'string' ||
+    settings.impersonator_id.trim().length === 0
+  ) {
     throw new ArgumentError('impersonator_id field is required');
   }
 
-  if (typeof settings.protocol !== 'string'
-      || settings.protocol.trim().length === 0) {
+  if (typeof settings.protocol !== 'string' || settings.protocol.trim().length === 0) {
     throw new ArgumentError('protocol field is required');
   }
 
-  if (typeof settings.token !== 'string'
-      || settings.token.trim().length === 0) {
+  if (typeof settings.token !== 'string' || settings.token.trim().length === 0) {
     throw new ArgumentError('token field is required');
   }
 
   var data = extend({ client_id: settings.clientId || this.clientId }, settings);
-  var headers = extend({'Authorization': `Bearer ${settings.token}`}, this.headers);
+  var headers = extend({ Authorization: `Bearer ${settings.token}` }, this.headers);
   // Perform the request.
   var promise = getRequestPromise({
     method: 'POST',
@@ -168,14 +163,11 @@ UsersManager.prototype.impersonate = function (userId, settings, cb) {
 
   // Use callback if given.
   if (cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
+    promise.then(cb.bind(null, null)).catch(cb);
     return;
   }
 
   return promise;
 };
-
 
 module.exports = UsersManager;

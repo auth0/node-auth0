@@ -8,7 +8,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class
  * Abstracts interaction with the stats endpoint.
@@ -20,7 +19,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var StatsManager = function (options){
+var StatsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -45,10 +44,13 @@ var StatsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/stats/:type', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/stats/:type',
+    clientOptions,
+    options.tokenProvider
+  );
   this.stats = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Get the daily stats.
@@ -77,7 +79,7 @@ var StatsManager = function (options){
  *
  * @return  {Promise|undefined}
  */
-StatsManager.prototype.getDaily = function (params, cb) {
+StatsManager.prototype.getDaily = function(params, cb) {
   params = params || {};
   params.type = 'daily';
 
@@ -87,7 +89,6 @@ StatsManager.prototype.getDaily = function (params, cb) {
 
   return this.stats.get(params);
 };
-
 
 /**
  * Get a the active users count.
@@ -108,7 +109,7 @@ StatsManager.prototype.getDaily = function (params, cb) {
  *
  * @return  {Promise|undefined}
  */
-StatsManager.prototype.getActiveUsersCount = function (cb) {
+StatsManager.prototype.getActiveUsersCount = function(cb) {
   var options = { type: 'active-users' };
 
   if (cb && cb instanceof Function) {
@@ -118,6 +119,5 @@ StatsManager.prototype.getActiveUsersCount = function (cb) {
   // Return a promise.
   return this.stats.get(options);
 };
-
 
 module.exports = StatsManager;

@@ -21,7 +21,7 @@ var DEFAULT_OPTIONS = { enableCache: true };
  * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
  * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
  */
-var ManagementTokenProvider = function (options) {
+var ManagementTokenProvider = function(options) {
   if (!options || typeof options !== 'object') {
     throw new ArgumentError('Options must be an object');
   }
@@ -44,7 +44,7 @@ var ManagementTokenProvider = function (options) {
     throw new ArgumentError('Must provide a audience');
   }
 
-  if (typeof params.enableCache !== 'boolean'){
+  if (typeof params.enableCache !== 'boolean') {
     throw new ArgumentError('enableCache must be a boolean');
   }
 
@@ -58,7 +58,7 @@ var ManagementTokenProvider = function (options) {
     }
   }
 
-  if (params.scope && typeof params.scope !== 'string'){
+  if (params.scope && typeof params.scope !== 'string') {
     throw new ArgumentError('scope must be a string');
   }
 
@@ -70,7 +70,7 @@ var ManagementTokenProvider = function (options) {
     telemetry: this.options.telemetry
   };
   this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
-}
+};
 
 /**
  * Returns the access_token.
@@ -80,43 +80,45 @@ var ManagementTokenProvider = function (options) {
  *
  * @return {Promise}   Promise returning an access_token.
  */
-ManagementTokenProvider.prototype.getAccessToken = function () {
-  if(this.options.enableCache){
-     return this.getCachedAccessToken(this.options)
-      .then(function (data) {
-        return data.access_token
-      });
-  }else{
-    return this.clientCredentialsGrant(this.options.domain, this.options.scope, this.options.audience)
-      .then(function (data) {
-        return data.access_token
-      });
+ManagementTokenProvider.prototype.getAccessToken = function() {
+  if (this.options.enableCache) {
+    return this.getCachedAccessToken(this.options).then(function(data) {
+      return data.access_token;
+    });
+  } else {
+    return this.clientCredentialsGrant(
+      this.options.domain,
+      this.options.scope,
+      this.options.audience
+    ).then(function(data) {
+      return data.access_token;
+    });
   }
-}
+};
 
 ManagementTokenProvider.prototype.getCachedAccessToken = Promise.promisify(
   memoizer({
-    load: function (options, callback) {
+    load: function(options, callback) {
       this.clientCredentialsGrant(options.domain, options.scope, options.audience)
-        .then(function (data) {
+        .then(function(data) {
           callback(null, data);
         })
-        .catch(function (err) {
+        .catch(function(err) {
           callback(err);
         });
     },
-    hash: function (options) {
+    hash: function(options) {
       return options.domain + '-' + options.clientId + '-' + options.scope;
     },
-    itemMaxAge: function (options, data) {
-      if(options.cacheTTLInSeconds){
+    itemMaxAge: function(options, data) {
+      if (options.cacheTTLInSeconds) {
         return options.cacheTTLInSeconds * 1000;
       }
 
       // if the expires_in is lower than 10 seconds, do not subtract 10 additional seconds.
-      if (data.expires_in && data.expires_in < 10 /* seconds */){
+      if (data.expires_in && data.expires_in < 10 /* seconds */) {
         return data.expires_in * 1000;
-      }else if(data.expires_in){
+      } else if (data.expires_in) {
         // Subtract 10 seconds from expires_in to fetch a new one, before it expires.
         return data.expires_in * 1000 - 10000 /* milliseconds */;
       }
@@ -126,7 +128,7 @@ ManagementTokenProvider.prototype.getCachedAccessToken = Promise.promisify(
   })
 );
 
-ManagementTokenProvider.prototype.clientCredentialsGrant = function (domain, scope, audience) {
+ManagementTokenProvider.prototype.clientCredentialsGrant = function(domain, scope, audience) {
   return this.authenticationClient.clientCredentialsGrant({
     audience: audience,
     scope: scope

@@ -9,7 +9,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class EmailProviderManager
  * Auth0 Email Provider.
@@ -21,7 +20,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var EmailProviderManager = function (options) {
+var EmailProviderManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -51,10 +50,13 @@ var EmailProviderManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/emails/provider', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/emails/provider',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Configure the email provider.
@@ -77,7 +79,6 @@ var EmailProviderManager = function (options) {
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
 
-
 /**
  * Get the email provider.
  *
@@ -94,7 +95,6 @@ utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
-
 
 /**
  * Update the email provider.
@@ -120,7 +120,6 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
 
-
 /**
  * Delete email provider.
  *
@@ -141,6 +140,5 @@ utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'delete', 'resource.delete');
-
 
 module.exports = EmailProviderManager;

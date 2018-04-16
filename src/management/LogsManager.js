@@ -14,7 +14,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var LogsManager = function (options) {
+var LogsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -44,7 +44,11 @@ var LogsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/logs/:id ', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/logs/:id ',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
@@ -64,7 +68,6 @@ var LogsManager = function (options) {
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(LogsManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Get an Auth0 log.

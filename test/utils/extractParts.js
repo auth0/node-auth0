@@ -1,21 +1,18 @@
-module.exports = function (body, boundary) {
+module.exports = function(body, boundary) {
   var partRegexp = new RegExp(boundary + '[-]{2}|' + boundary, 'g');
   var parts = {};
   var name;
   var value;
 
-  body
-    .split(partRegexp)
-    .forEach(function (part) {
-      // Ignore empty strings in the array.
-      if (part.trim().length === 0) return;
+  body.split(partRegexp).forEach(function(part) {
+    // Ignore empty strings in the array.
+    if (part.trim().length === 0) return;
 
-      name = part.match(/name="([^"]*)"/)[1];
-      value = part.split('"' + name + '"')[1];
+    name = part.match(/name="([^"]*)"/)[1];
+    value = part.split('"' + name + '"')[1];
 
-      parts[name] = value.trim();
-    });
+    parts[name] = value.trim();
+  });
 
   return parts;
 };
-
