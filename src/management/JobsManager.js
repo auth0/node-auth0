@@ -5,6 +5,7 @@ var fs = require('fs');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -22,6 +23,7 @@ var Auth0RestClient = require('../Auth0RestClient');
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 var JobsManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -50,7 +52,8 @@ var JobsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.jobs = new Auth0RestClient(options.baseUrl + '/jobs/:id', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/jobs/:id', clientOptions, options.tokenProvider);
+  this.jobs = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 

@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.8.0",
+  "version": "2.9.2",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "scripts": {
@@ -33,7 +33,8 @@
     "lru-memoizer": "^1.11.1",
     "object.assign": "^4.0.4",
     "request": "^2.83.0",
-    "rest-facade": "^1.5.0"
+    "rest-facade": "^1.10.1",
+    "retry": "^0.10.1"
   },
   "devDependencies": {
     "chai": "^2.2.0",
