@@ -17,51 +17,44 @@ var validOptions = {
   clientId: CLIENT_ID
 };
 
-
-describe('PasswordlessAuthenticator', function () {
-
-  afterEach(function () {
+describe('PasswordlessAuthenticator', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
+  describe('#constructor', function() {
+    it('should require an options object', function() {
+      expect(Authenticator).to.throw(ArgumentError, 'Missing authenticator options');
 
-  describe('#constructor', function () {
-    it('should require an options object', function () {
-      expect(Authenticator)
-        .to.throw(ArgumentError, 'Missing authenticator options');
+      expect(Authenticator.bind(null, 1)).to.throw(
+        ArgumentError,
+        'The authenticator options must be an object'
+      );
 
-      expect(Authenticator.bind(null, 1))
-        .to.throw(ArgumentError, 'The authenticator options must be an object');
-
-      expect(Authenticator.bind(null, validOptions))
-        .to.not.throw(ArgumentError);
+      expect(Authenticator.bind(null, validOptions)).to.not.throw(ArgumentError);
     });
   });
 
-
-  describe('instance', function () {
+  describe('instance', function() {
     var methods = ['signIn', 'sendEmail', 'sendSMS'];
     var oauth = new OAuth(validOptions);
     var authenticator = new Authenticator(validOptions, oauth);
 
-    methods.forEach(function (method) {
-      it('should have a ' + method + ' method', function () {
-        expect(authenticator[method])
-          .to.exist
-          .to.be.an.instanceOf(Function);
+    methods.forEach(function(method) {
+      it('should have a ' + method + ' method', function() {
+        expect(authenticator[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-
-  describe('#signIn', function () {
+  describe('#signIn', function() {
     var path = '/oauth/ro';
     var userData = {
       username: 'username',
       password: 'pwd'
     };
 
-    beforeEach(function () {
+    beforeEach(function() {
       var oauth = new OAuth(validOptions);
       this.authenticator = new Authenticator(validOptions, oauth);
       this.request = nock(API_URL)
@@ -69,70 +62,55 @@ describe('PasswordlessAuthenticator', function () {
         .reply(200);
     });
 
-
-    it('should require an object as first argument', function () {
-      expect(this.authenticator.signIn)
-        .to.throw(ArgumentError, 'Missing user data object');
+    it('should require an object as first argument', function() {
+      expect(this.authenticator.signIn).to.throw(ArgumentError, 'Missing user data object');
     });
 
-
-    it('should require a phone number', function () {
+    it('should require a phone number', function() {
       var auth = this.authenticator;
       var userData = { password: 'password' };
       var signIn = auth.signIn.bind(auth, userData);
 
-      expect(signIn)
-        .to.throw(ArgumentError, 'username field (phone number) is required');
+      expect(signIn).to.throw(ArgumentError, 'username field (phone number) is required');
     });
 
-
-    it('should require a verification code', function () {
+    it('should require a verification code', function() {
       var auth = this.authenticator;
       var userData = { username: 'username' };
       var signIn = auth.signIn.bind(auth, userData);
 
-      expect(signIn)
-        .to.throw(ArgumentError, 'password field (verification code) is required');
+      expect(signIn).to.throw(ArgumentError, 'password field (verification code) is required');
     });
 
-
-    it('should accept a callback', function (done) {
-      this
-        .authenticator
-        .signIn(userData, done.bind(null, null));
+    it('should accept a callback', function(done) {
+      this.authenticator.signIn(userData, done.bind(null, null));
     });
 
-
-    it('should return a promise when no callback is provided', function (done) {
-      this
-        .authenticator
+    it('should return a promise when no callback is provided', function(done) {
+      this.authenticator
         .signIn(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-
-    it('should perform a POST request to ' + path, function (done) {
+    it('should perform a POST request to ' + path, function(done) {
       var request = this.request;
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           for (var property in userData) {
             if (userData[property] !== body[property]) {
               return false;
@@ -143,145 +121,125 @@ describe('PasswordlessAuthenticator', function () {
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.client_id === CLIENT_ID;
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use SMS connection', function (done) {
+    it('should use SMS connection', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'sms';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use email connection', function (done) {
+    it('should use email connection', function(done) {
       nock.cleanAll();
       var data = extend({ connection: 'email' }, userData);
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'email';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should allow the user to specify the connection as sms or email', function (done) {
+    it('should allow the user to specify the connection as sms or email', function(done) {
       nock.cleanAll();
 
       var data = extend({ connection: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'sms' || body.connection === 'email';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use password as grant type', function (done) {
+    it('should use password as grant type', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.grant_type === 'password';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use the openid scope', function (done) {
+    it('should use the openid scope', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.scope === 'openid';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .signIn(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
@@ -289,15 +247,14 @@ describe('PasswordlessAuthenticator', function () {
     });
   });
 
-
-  describe('#sendEmail', function () {
+  describe('#sendEmail', function() {
     var path = '/passwordless/start';
     var userData = {
       email: 'email@domain.com',
       send: 'link'
     };
 
-    beforeEach(function () {
+    beforeEach(function() {
       var oauth = new OAuth(validOptions);
       this.authenticator = new Authenticator(validOptions, oauth);
       this.request = nock(API_URL)
@@ -305,70 +262,55 @@ describe('PasswordlessAuthenticator', function () {
         .reply(200);
     });
 
-
-    it('should require an object as first argument', function () {
-      expect(this.authenticator.sendEmail)
-        .to.throw(ArgumentError, 'Missing user data object');
+    it('should require an object as first argument', function() {
+      expect(this.authenticator.sendEmail).to.throw(ArgumentError, 'Missing user data object');
     });
 
-
-    it('should require an email', function () {
+    it('should require an email', function() {
       var auth = this.authenticator;
       var userData = {};
       var sendEmail = auth.sendEmail.bind(auth, userData);
 
-      expect(sendEmail)
-        .to.throw(ArgumentError, 'email field is required');
+      expect(sendEmail).to.throw(ArgumentError, 'email field is required');
     });
 
-
-    it('should require the send field', function () {
+    it('should require the send field', function() {
       var auth = this.authenticator;
       var userData = { email: 'email@domain.com' };
       var sendEmail = auth.sendEmail.bind(auth, userData);
 
-      expect(sendEmail)
-        .to.throw(ArgumentError, 'send field is required');
+      expect(sendEmail).to.throw(ArgumentError, 'send field is required');
     });
 
-
-    it('should accept a callback', function (done) {
-      this
-        .authenticator
-        .sendEmail(userData, done.bind(null, null));
+    it('should accept a callback', function(done) {
+      this.authenticator.sendEmail(userData, done.bind(null, null));
     });
 
-
-    it('should return a promise when no callback is provided', function (done) {
-      this
-        .authenticator
+    it('should return a promise when no callback is provided', function(done) {
+      this.authenticator
         .sendEmail(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-
-    it('should perform a POST request to ' + path, function (done) {
+    it('should perform a POST request to ' + path, function(done) {
       var request = this.request;
 
-      this
-        .authenticator
+      this.authenticator
         .sendEmail(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           for (var property in userData) {
             if (userData[property] !== body[property]) {
               return false;
@@ -379,104 +321,90 @@ describe('PasswordlessAuthenticator', function () {
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendEmail(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.client_id === CLIENT_ID;
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendEmail(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use the email connection', function (done) {
+    it('should use the email connection', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'email';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendEmail(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use the specified send type', function (done) {
+    it('should use the specified send type', function(done) {
       nock.cleanAll();
 
       var data = extend({}, userData);
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.send === 'code';
         })
         .reply(200);
 
       data.send = 'code';
 
-      this
-        .authenticator
+      this.authenticator
         .sendEmail(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('shouldn\'t allow the user to specify the connection', function (done) {
+    it("shouldn't allow the user to specify the connection", function(done) {
       nock.cleanAll();
 
       var data = extend({ connection: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'email';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendEmail(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
@@ -484,14 +412,13 @@ describe('PasswordlessAuthenticator', function () {
     });
   });
 
-
-  describe('#sendSMS', function () {
+  describe('#sendSMS', function() {
     var path = '/passwordless/start';
     var userData = {
       phone_number: '12345678'
     };
 
-    beforeEach(function () {
+    beforeEach(function() {
       var oauth = new OAuth(validOptions);
       this.authenticator = new Authenticator(validOptions, oauth);
       this.request = nock(API_URL)
@@ -499,59 +426,47 @@ describe('PasswordlessAuthenticator', function () {
         .reply(200);
     });
 
-
-    it('should require an object as first argument', function () {
-      expect(this.authenticator.sendSMS)
-        .to.throw(ArgumentError, 'Missing user data object');
+    it('should require an object as first argument', function() {
+      expect(this.authenticator.sendSMS).to.throw(ArgumentError, 'Missing user data object');
     });
 
-
-    it('should require a phone number', function () {
+    it('should require a phone number', function() {
       var auth = this.authenticator;
       var userData = {};
       var sendSMS = auth.sendSMS.bind(auth, userData);
 
-      expect(sendSMS)
-        .to.throw(ArgumentError, 'phone_number field is required');
+      expect(sendSMS).to.throw(ArgumentError, 'phone_number field is required');
     });
 
-    it('should accept a callback', function (done) {
-      this
-        .authenticator
-        .sendSMS(userData, done.bind(null, null));
+    it('should accept a callback', function(done) {
+      this.authenticator.sendSMS(userData, done.bind(null, null));
     });
 
-
-    it('should return a promise when no callback is provided', function (done) {
-      this
-        .authenticator
+    it('should return a promise when no callback is provided', function(done) {
+      this.authenticator
         .sendSMS(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-
-    it('should perform a POST request to ' + path, function (done) {
+    it('should perform a POST request to ' + path, function(done) {
       var request = this.request;
 
-      this
-        .authenticator
+      this.authenticator
         .sendSMS(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           for (var property in userData) {
             if (userData[property] !== body[property]) {
               return false;
@@ -562,79 +477,68 @@ describe('PasswordlessAuthenticator', function () {
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendSMS(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.client_id === CLIENT_ID;
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendSMS(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('should use the sms connection', function (done) {
+    it('should use the sms connection', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'sms';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendSMS(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })
         .catch(done);
     });
 
-
-    it('shouldn\'t allow the user to specify the connection', function (done) {
+    it("shouldn't allow the user to specify the connection", function(done) {
       nock.cleanAll();
 
       var data = extend({ connection: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.connection === 'sms';
         })
         .reply(200);
 
-      this
-        .authenticator
+      this.authenticator
         .sendSMS(data)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
 
           done();
         })

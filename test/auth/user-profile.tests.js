@@ -16,7 +16,4 @@ var validOptions = {
   clientId: CLIENT_ID
 };
 
-
-describe('UserProfile', function () {
-
-});
+describe('UserProfile', function() {});

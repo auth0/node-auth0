@@ -9,7 +9,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class RulesManager
  * The rule class provides a simple abstraction for performing CRUD operations
@@ -22,7 +21,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var RulesManager = function (options) {
+var RulesManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -51,10 +50,13 @@ var RulesManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/rules/:id', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/rules/:id',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Create a new rule.
@@ -78,7 +80,6 @@ var RulesManager = function (options) {
  */
 utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
 
-
 /**
  * Get all rules.
  *
@@ -95,7 +96,6 @@ utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Get an Auth0 rule.
@@ -119,7 +119,6 @@ utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
-
 
 /**
  * Update an existing rule.
@@ -158,7 +157,6 @@ utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
  */
 utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
 
-
 /**
  * Delete an existing rule.
  *
@@ -181,6 +179,5 @@ utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'delete', 'resource.delete');
-
 
 module.exports = RulesManager;

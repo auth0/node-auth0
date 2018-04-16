@@ -3,7 +3,6 @@ var extend = require('util')._extend;
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
-
 /**
  * @class
  * Abstracts the sign-in, sign-up and change-password processes for Database &
@@ -16,7 +15,7 @@ var RestClient = require('rest-facade').Client;
  * @param  {String}              [options.clientId] Default client ID.
  * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
  */
-var DatabaseAuthenticator = function (options, oauth) {
+var DatabaseAuthenticator = function(options, oauth) {
   if (!options) {
     throw new ArgumentError('Missing authenticator options');
   }
@@ -38,7 +37,6 @@ var DatabaseAuthenticator = function (options, oauth) {
   this.dbConnections = new RestClient(options.baseUrl + '/dbconnections/:type', clientOptions);
   this.clientId = options.clientId;
 };
-
 
 /**
  * Sign in using a database or active directory service.
@@ -75,7 +73,7 @@ var DatabaseAuthenticator = function (options, oauth) {
  *
  * @return  {Promise|undefined}
  */
-DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
+DatabaseAuthenticator.prototype.signIn = function(userData, cb) {
   var defaultFields = {
     connection: 'Username-Password-Authentication'
   };
@@ -85,19 +83,16 @@ DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.username !== 'string'
-      || data.username.trim().length === 0) {
+  if (typeof data.username !== 'string' || data.username.trim().length === 0) {
     throw new ArgumentError('username field is required');
   }
 
-  if (typeof data.password !== 'string'
-      || data.password.trim().length === 0) {
+  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field is required');
   }
 
   return this.oauth.signIn(data, cb);
 };
-
 
 /**
  * Sign up using a database or active directory service.
@@ -133,7 +128,7 @@ DatabaseAuthenticator.prototype.signIn = function (userData, cb) {
  *
  * @return  {Promise|undefined}
  */
-DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
+DatabaseAuthenticator.prototype.signUp = function(userData, cb) {
   var params = {
     type: 'signup'
   };
@@ -146,18 +141,15 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.email !== 'string'
-      || data.email.trim().length === 0) {
+  if (typeof data.email !== 'string' || data.email.trim().length === 0) {
     throw new ArgumentError('email field is required');
   }
 
-  if (typeof data.password !== 'string'
-      || data.password.trim().length === 0) {
+  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field is required');
   }
 
-  if (typeof data.connection !== 'string'
-      || data.connection.trim().length === 0) {
+  if (typeof data.connection !== 'string' || data.connection.trim().length === 0) {
     throw new ArgumentError('connection field is required');
   }
 
@@ -167,7 +159,6 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
 
   return this.dbConnections.create(params, data);
 };
-
 
 /**
  * Change password using a database or active directory service.
@@ -206,7 +197,7 @@ DatabaseAuthenticator.prototype.signUp = function (userData, cb) {
  *
  * @return  {Promise|undefined}
  */
-DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
+DatabaseAuthenticator.prototype.changePassword = function(userData, cb) {
   var params = {
     type: 'change_password'
   };
@@ -219,18 +210,15 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.email !== 'string'
-      || data.email.trim().length === 0) {
+  if (typeof data.email !== 'string' || data.email.trim().length === 0) {
     throw new ArgumentError('email field is required');
   }
 
-  if (typeof data.password !== 'string'
-      || data.password.trim().length === 0) {
+  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field is required');
   }
 
-  if (typeof data.connection !== 'string'
-      || data.connection.trim().length === 0) {
+  if (typeof data.connection !== 'string' || data.connection.trim().length === 0) {
     throw new ArgumentError('connection field is required');
   }
 
@@ -240,7 +228,6 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
 
   return this.dbConnections.create(params, data);
 };
-
 
 /**
  * Request a change password email using a database or active directory service.
@@ -276,7 +263,7 @@ DatabaseAuthenticator.prototype.changePassword = function (userData, cb) {
  *
  * @return  {Promise|undefined}
  */
-DatabaseAuthenticator.prototype.requestChangePasswordEmail = function (userData, cb) {
+DatabaseAuthenticator.prototype.requestChangePasswordEmail = function(userData, cb) {
   var params = {
     type: 'change_password'
   };
@@ -289,13 +276,11 @@ DatabaseAuthenticator.prototype.requestChangePasswordEmail = function (userData,
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.email !== 'string'
-      || data.email.trim().length === 0) {
+  if (typeof data.email !== 'string' || data.email.trim().length === 0) {
     throw new ArgumentError('email field is required');
   }
 
-  if (typeof data.connection !== 'string'
-      || data.connection.trim().length === 0) {
+  if (typeof data.connection !== 'string' || data.connection.trim().length === 0) {
     throw new ArgumentError('connection field is required');
   }
 
@@ -305,6 +290,5 @@ DatabaseAuthenticator.prototype.requestChangePasswordEmail = function (userData,
 
   return this.dbConnections.create(params, data);
 };
-
 
 module.exports = DatabaseAuthenticator;
