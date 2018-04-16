@@ -200,13 +200,35 @@ describe('PasswordlessAuthenticator', function () {
     });
 
 
-    it('shouldn\'t allow the user to specify the connection', function (done) {
+    it('should use email connection', function (done) {
+      nock.cleanAll();
+      var data = extend({ connection: 'email' }, userData);
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.connection === 'email';
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .signIn(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+
+    it('should allow the user to specify the connection as sms or email', function (done) {
       nock.cleanAll();
 
       var data = extend({ connection: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
         .post(path, function (body) {
-          return body.connection === 'sms';
+          return body.connection === 'sms' || body.connection === 'email';
         })
         .reply(200);
 

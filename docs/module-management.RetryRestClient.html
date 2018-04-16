@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>management/ManagementTokenProvider.js - Documentation</title>
+    <title>RetryRestClient - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,155 +29,345 @@
 
 <div id="main">
     
-    <h1 class="page-title">management/ManagementTokenProvider.js</h1>
+    <h1 class="page-title">RetryRestClient</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
-var AuthenticationClient = require('../auth');
-var memoizer = require('lru-memoizer');
-var Promise = require('bluebird');
+        <h2>
+            <span class="ancestors"><a href="module-management.html">management</a>.</span>
+        
+        RetryRestClient
+        </h2>
+        
+            <div class="class-description"><p>RetryRestClient
+Wrapper Rest Client that adds Retry functionality when requests are failing due to rate limiting (status code 429).</p></div>
+        
+    
+</header>
 
-var DEFAULT_OPTIONS = { enableCache: true };
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
 
-/**
- * @class ManagementTokenProvider
- * Auth0 Management API Token Provider.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object}  options                         Options for the ManagementTokenProvider.
- * @param {String}  options.domain                  ManagementClient server domain.
- * @param {String}  options.clientId                Non Interactive Client Id.
- * @param {String}  options.clientSecret            Non Interactive Client Secret.
- * @param {String}  options.scope                   Non Interactive Client Scope.
- * @param {String}  options.audience                Audience of the Management API.
- * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
- * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
- */
-var ManagementTokenProvider = function (options) {
-  if (!options || typeof options !== 'object') {
-    throw new ArgumentError('Options must be an object');
-  }
+    
+    <h2>Constructor</h2>
+    
 
-  var params = assign({}, DEFAULT_OPTIONS, options);
+    <h4 class="name" id="RetryRestClient"><span class="type-signature"></span>new RetryRestClient<span class="signature">(restClient, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
-  if (!params.domain || params.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
-  }
+    
 
-  if (!params.clientId || params.clientId.length === 0) {
-    throw new ArgumentError('Must provide a clientId');
-  }
 
-  if (!params.clientSecret || params.clientSecret.length === 0) {
-    throw new ArgumentError('Must provide a clientSecret');
-  }
 
-  if (!params.audience || params.audience.length === 0) {
-    throw new ArgumentError('Must provide a audience');
-  }
 
-  if (typeof params.enableCache !== 'boolean'){
-    throw new ArgumentError('enableCache must be a boolean');
-  }
 
-  if (params.enableCache &amp;&amp; params.cacheTTLInSeconds) {
-    if (typeof params.cacheTTLInSeconds !== 'number') {
-      throw new ArgumentError('cacheTTLInSeconds must be a number');
-    }
 
-    if (params.cacheTTLInSeconds &lt;= 0) {
-      throw new ArgumentError('cacheTTLInSeconds must be a greater than 0');
-    }
-  }
 
-  if (params.scope &amp;&amp; typeof params.scope !== 'string'){
-    throw new ArgumentError('scope must be a string');
-  }
+<dl class="details">
 
-  this.options = params;
-  var authenticationClientOptions = {
-    domain: this.options.domain,
-    clientId: this.options.clientId,
-    clientSecret: this.options.clientSecret,
-    telemetry: this.options.telemetry
-  };
-  this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
-}
+    
 
-/**
- * Returns the access_token.
- *
- * @method    getAccessToken
- * @memberOf  module:management.ManagementTokenProvider.prototype
- *
- * @return {Promise}   Promise returning an access_token.
- */
-ManagementTokenProvider.prototype.getAccessToken = function () {
-  if(this.options.enableCache){
-     return this.getCachedAccessToken(this.options)
-      .then(function (data) {
-        return data.access_token
-      });
-  }else{
-    return this.clientCredentialsGrant(this.options.domain, this.options.scope, this.options.audience)
-      .then(function (data) {
-        return data.access_token
-      });
-  }
-}
+    
 
-ManagementTokenProvider.prototype.getCachedAccessToken = Promise.promisify(
-  memoizer({
-    load: function (options, callback) {
-      this.clientCredentialsGrant(options.domain, options.scope, options.audience)
-        .then(function (data) {
-          callback(null, data);
-        })
-        .catch(function (err) {
-          callback(err);
-        });
-    },
-    hash: function (options) {
-      return options.domain + '-' + options.clientId + '-' + options.scope;
-    },
-    itemMaxAge: function (options, data) {
-      if(options.cacheTTLInSeconds){
-        return options.cacheTTLInSeconds * 1000;
-      }
+    
 
-      // if the expires_in is lower than 10 seconds, do not subtract 10 additional seconds.
-      if (data.expires_in &amp;&amp; data.expires_in &lt; 10 /* seconds */){
-        return data.expires_in * 1000;
-      }else if(data.expires_in){
-        // Subtract 10 seconds from expires_in to fetch a new one, before it expires.
-        return data.expires_in * 1000 - 10000 /* milliseconds */;
-      }
-      return 60 * 60 * 1000; //1h
-    },
-    max: 100
-  })
-);
+    
 
-ManagementTokenProvider.prototype.clientCredentialsGrant = function (domain, scope, audience) {
-  return this.authenticationClient.clientCredentialsGrant({
-    audience: audience,
-    scope: scope
-  });
-};
+    
 
-module.exports = ManagementTokenProvider;
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RetryRestClient.js.html">RetryRestClient.js</a>, <a href="RetryRestClient.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>restClient</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>RestClient.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Options for the RetryRestClient.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>enabled:true</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Enabled or Disable Retry Policy functionality.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxRetries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    10
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>The maximum amount of times to retry the operation. Default is 10.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

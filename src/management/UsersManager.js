@@ -1,5 +1,6 @@
 var ArgumentError = require('rest-facade').ArgumentError;
 var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -17,6 +18,7 @@ var Auth0RestClient = require('../Auth0RestClient');
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
  */
 var UsersManager = function (options){
   if (options === null || typeof options !== 'object') {
@@ -36,8 +38,9 @@ var UsersManager = function (options){
     headers: options.headers,
     query: { repeatParams: false }
   };
-  
-  this.users = new Auth0RestClient(options.baseUrl + '/users/:id', clientOptions, options.tokenProvider);
+
+  var usersAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id', clientOptions, options.tokenProvider);
+  this.users = new RetryRestClient(usersAuth0RestClient, options.retry);
 
   /**
    * Provides an abstraction layer for consuming the
@@ -46,28 +49,40 @@ var UsersManager = function (options){
    *
    * @type {external:RestClient}
    */
-  this.multifactor = new Auth0RestClient(options.baseUrl + '/users/:id/multifactor/:provider', clientOptions, options.tokenProvider);
+  var multifactorAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/multifactor/:provider', clientOptions, options.tokenProvider);
+  this.multifactor = new RetryRestClient(multifactorAuth0RestClient, options.retry);
 
   /**
    * Provides a simple abstraction layer for linking user accounts.
    *
    * @type {external:RestClient}
    */
-  this.identities = new Auth0RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions, options.tokenProvider);
+  var identitiesAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/identities/:provider/:user_id', clientOptions, options.tokenProvider);
+  this.identities = new RetryRestClient(identitiesAuth0RestClient, options.retry);
 
   /**
    * Provides a simple abstraction layer for user logs
    *
    * @type {external:RestClient}
    */
-  this.userLogs = new Auth0RestClient(options.baseUrl + '/users/:id/logs', clientOptions, options.tokenProvider);
+  var userLogsAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/logs', clientOptions, options.tokenProvider);
+  this.userLogs = new RetryRestClient(userLogsAuth0RestClient, options.retry);
 
   /**
    * Provides an abstraction layer for retrieving Guardian enrollments.
    *
    * @type {external:RestClient}
    */
-  this.enrollments = new Auth0RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions, options.tokenProvider);
+  var enrollmentsAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id/enrollments', clientOptions, options.tokenProvider);
+  this.enrollments = new RetryRestClient(enrollmentsAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for the new "users-by-email" API
+   *
+   * @type {external:RestClient}
+   */
+  var usersByEmailClient = new Auth0RestClient(options.baseUrl + '/users-by-email', clientOptions, options.tokenProvider);
+  this.usersByEmail = new RetryRestClient(usersByEmailClient, options.retry);
 };
 
 
@@ -130,6 +145,30 @@ UsersManager.prototype.create = function (data, cb) {
  */
 UsersManager.prototype.getAll = function (params) {
   return this.users.getAll.apply(this.users, arguments);
+};
+
+/**
+ * Get Users by an Email Address
+ *
+ * @method    getByEmail
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example <caption>
+ *   This method takes a first argument as the Email address to look for
+ *   users, and uses the /users-by-email API, not the search API
+ * </caption>
+ *
+ * management.users.getByEmail('email@address', function (err, users) {
+ *   console.log(users);
+ * });
+ *
+ * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getByEmail = function (email, callback) {
+  return this.usersByEmail.getAll({ email }, callback);
 };
 
 
@@ -378,13 +417,13 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
  * @memberOf  module:management.UsersManager.prototype
  *
  * @example
- * var params = { id: USER_ID };
- * var data = {
- * 	user_id: 'OTHER_USER_ID',
- * 	connection_id: 'CONNECTION_ID'
+ * var userId = 'USER_ID';
+ * var params = {
+ *   user_id: 'OTHER_USER_ID',
+ *   connection_id: 'CONNECTION_ID'
  * };
  *
- * management.users.link(params, data, function (err, user) {
+ * management.users.link(userId, params, function (err, user) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -405,8 +444,11 @@ UsersManager.prototype.link = function (userId, params, cb) {
   params = params || {};
 
   // Require a user ID.
-  if (!userId || typeof userId !== 'string') {
+  if (!userId) {
     throw new ArgumentError('The userId cannot be null or undefined');
+  }
+  if (typeof userId !== 'string') {
+    throw new ArgumentError('The userId has to be a string');
   }
 
   if (cb && cb instanceof Function) {
