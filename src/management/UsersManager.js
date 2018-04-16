@@ -38,7 +38,7 @@ var UsersManager = function (options){
     headers: options.headers,
     query: { repeatParams: false }
   };
-  
+
   var usersAuth0RestClient = new Auth0RestClient(options.baseUrl + '/users/:id', clientOptions, options.tokenProvider);
   this.users = new RetryRestClient(usersAuth0RestClient, options.retry);
 
@@ -417,13 +417,13 @@ UsersManager.prototype.deleteMultifactorProvider = function (params, cb) {
  * @memberOf  module:management.UsersManager.prototype
  *
  * @example
- * var params = { id: USER_ID };
- * var data = {
- * 	user_id: 'OTHER_USER_ID',
- * 	connection_id: 'CONNECTION_ID'
+ * var userId = 'USER_ID';
+ * var params = {
+ *   user_id: 'OTHER_USER_ID',
+ *   connection_id: 'CONNECTION_ID'
  * };
  *
- * management.users.link(params, data, function (err, user) {
+ * management.users.link(userId, params, function (err, user) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -444,8 +444,11 @@ UsersManager.prototype.link = function (userId, params, cb) {
   params = params || {};
 
   // Require a user ID.
-  if (!userId || typeof userId !== 'string') {
+  if (!userId) {
     throw new ArgumentError('The userId cannot be null or undefined');
+  }
+  if (typeof userId !== 'string') {
+    throw new ArgumentError('The userId has to be a string');
   }
 
   if (cb && cb instanceof Function) {
