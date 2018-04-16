@@ -375,6 +375,26 @@ describe('OAuthAuthenticator', function () {
         .catch(done);
     });
 
+    it('should include the Auth0 client secret in the request', function (done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function (body) {
+          return body.client_secret === CLIENT_SECRET;
+        })
+        .reply(200);
+
+      this
+        .authenticator
+        .passwordGrant(userData)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
 
     it('should allow the user to specify the realm', function (done) {
       nock.cleanAll();

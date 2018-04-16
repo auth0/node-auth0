@@ -698,8 +698,21 @@ describe('UsersManager', function () {
       this.request = nock(API_URL)
         .post('/users/' + userId + '/identities')
         .reply(200);
-    })
+    });
 
+    it('should validate empty userId', function () {
+      var _this = this;
+      expect(function() {
+        _this.users.link(null, data, function () {});
+      }).to.throw('The userId cannot be null or undefined');
+    });
+
+    it('should validate non-string userId', function () {
+      var _this = this;
+      expect(function() {
+        _this.users.link(123, data, function () {});
+      }).to.throw('The userId has to be a string');
+    });
 
     it('should accept a callback', function (done) {
       this

@@ -151,6 +151,7 @@ OAuthAuthenticator.prototype.passwordGrant = function (userData, cb) {
   };
   var defaultFields = {
     client_id: this.clientId,
+    client_secret: this.clientSecret,
     grant_type: 'password'
   };
   var data = extend(defaultFields, userData);
