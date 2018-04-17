@@ -998,6 +998,36 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateApp
  * @example
  * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
  *
+ * management.deleteUserMultifactor(params, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Users accounts unlinked.
+ * });
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.id         The user id.
+ * @param   {String}    params.provider   Multifactor provider.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'deleteUserMultifactor',
+  'users.deleteMultifactorProvider'
+);
+
+/**
+ * Delete a multifactor provider for a user.
+ *
+ * @method    deleteUserMultifcator
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+ *
  * management.deleteUserMultifcator(params, function (err, user) {
  *   if (err) {
  *     // Handle error.
@@ -1012,6 +1042,10 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateApp
  * @param   {Function}  [cb]              Callback function
  *
  * @return  {Promise|undefined}
+ *
+ * @deprecated The function name has a typo.
+ * We're shipping this so it doesn't break compatibility.
+ * Use {@link deleteUserMultifactor} instead.
  */
 utils.wrapPropertyMethod(
   ManagementClient,
