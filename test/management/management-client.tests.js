@@ -195,7 +195,9 @@ describe('ManagementClient', function() {
       'getActiveUsersCount',
       'getDailyStats',
       'getTenantSettings',
-      'updateTenantSettings'
+      'updateTenantSettings',
+      'deleteUserMultifactor',
+      'deleteUserMultifcator'
     ];
 
     before(function() {
