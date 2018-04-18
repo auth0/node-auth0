@@ -24,6 +24,7 @@ var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
 var ResourceServersManager = require('./ResourceServersManager');
 var ManagementTokenProvider = require('./ManagementTokenProvider');
+var EmailTemplatesManager = require('./EmailTemplatesManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -235,6 +236,14 @@ var ManagementClient = function(options) {
    * @type {ResourceServersManager}
    */
   this.resourceServers = new ResourceServersManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on
+   * Auth0's Email Templates
+   *
+   * @type {EmailTemplatesManager}
+   */
+  this.emailTemplates = new EmailTemplatesManager(managerOptions);
 };
 
 /**
