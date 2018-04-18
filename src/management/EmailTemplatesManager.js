@@ -22,16 +22,12 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.retry]    Retry Policy Config
  */
 var EmailTemplatesManager = function(options) {
-  if (options === null || typeof options !== 'object') {
+  if (!options || 'object' !== typeof options) {
     throw new ArgumentError('Must provide manager options');
   }
 
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
-
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
+  if (!options.baseUrl || 'string' !== typeof options.baseUrl) {
+    throw new ArgumentError('Must provide a valid string as base URL for the API');
   }
 
   /**

@@ -43,13 +43,13 @@ describe('EmailTemplatesManager', function() {
     it('should throw an error when no base URL is provided', function() {
       var client = EmailTemplatesManager.bind(null, {});
 
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(client).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', function() {
       var client = EmailTemplatesManager.bind(null, { baseUrl: '' });
 
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(client).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
     });
   });
 
