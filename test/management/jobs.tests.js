@@ -259,7 +259,58 @@ describe('JobsManager', function() {
     });
   });
 
-  describe('#verifyEmail', function() {
+  describe('#importUsers with JSON data', function () {
+    var data = {
+      users_json: '[]',
+      connection_id: 'con_test'
+    };
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply(200);
+    })
+
+    it('should correctly include user JSON', function (done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function (header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+        
+          return true;
+        })
+        .post('/jobs/users-imports', function (body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the content type of the users JSON.
+          expect(parts.users)
+            .to.exist
+            .to.be.a('string')
+            .to.contain('Content-Type: application/json');
+
+          // Validate the content of the users JSON.
+          expect(parts.users.slice(-2))
+            .to.equal('[]');
+
+          return true;
+        })
+        .reply(200);
+
+      this
+        .jobs
+        .importUsers(data)
+        .then(function () {
+          expect(request.isDone())
+            .to.be.true;
+
+          done();
+        });
+    });  
+  });
+
+  describe('#verifyEmail', function () {
     var data = {
       user_id: 'github|12345'
     };
