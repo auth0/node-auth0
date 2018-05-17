@@ -2,6 +2,7 @@ var path = require('path');
 var expect = require('chai').expect;
 var nock = require('nock');
 var extractParts = require('../utils').extractParts;
+var fs = require('fs');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
@@ -141,9 +142,11 @@ describe('JobsManager', function() {
     });
   });
 
+  const usersFilePath = path.join(__dirname, '../data/users.json');
+
   describe('#importUsers', function() {
     var data = {
-      users: path.join(__dirname, '../data/users.json'),
+      users: usersFilePath,
       connection_id: 'con_test'
     };
 
@@ -261,7 +264,7 @@ describe('JobsManager', function() {
 
   describe('#importUsers with JSON data', function () {
     var data = {
-      users_json: '[]',
+      users_json: fs.readFileSync(usersFilePath, 'utf8'),
       connection_id: 'con_test'
     };
 
