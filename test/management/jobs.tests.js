@@ -233,7 +233,7 @@ describe('JobsManager', function() {
             .to.contain('Content-Type: application/json');
 
           // Validate the content of the users JSON.
-          const users = JSON.parse(parts.users);
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
           expect(users.length.to.equal(2));
           expect(users[0].email.to.equal('jane.doe@contoso.com'));
 
@@ -295,7 +295,7 @@ describe('JobsManager', function() {
             .to.contain('Content-Type: application/json');
 
           // Validate the content of the users JSON.
-          const users = JSON.parse(parts.users);
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
           expect(users.length.to.equal(2));
           expect(users[0].email.to.equal('jane.doe@contoso.com'));
 
