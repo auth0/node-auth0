@@ -234,8 +234,8 @@ describe('JobsManager', function() {
 
           // Validate the content of the users JSON.
           const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
-          expect(users.length.to.equal(2));
-          expect(users[0].email.to.equal('jane.doe@contoso.com'));
+          expect(users.length).to.equal(2);
+          expect(users[0].email).to.equal('jane.doe@contoso.com');
 
           return true;
         })
@@ -296,8 +296,8 @@ describe('JobsManager', function() {
 
           // Validate the content of the users JSON.
           const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
-          expect(users.length.to.equal(2));
-          expect(users[0].email.to.equal('jane.doe@contoso.com'));
+          expect(users.length).to.equal(2);
+          expect(users[0].email).to.equal('jane.doe@contoso.com');
 
           return true;
         })
