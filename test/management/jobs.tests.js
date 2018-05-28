@@ -12,10 +12,8 @@ var ArgumentError = require('rest-facade').ArgumentError;
 
 describe('JobsManager', function() {
   before(function() {
-    this.token = 'TOKEN';
     this.id = 'testJob';
     this.jobs = new JobsManager({
-      headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
   });
