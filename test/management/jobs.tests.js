@@ -16,7 +16,7 @@ describe('JobsManager', function() {
     this.jobs = new JobsManager({
       tokenProvider: {
         getAccessToken: function() {
-          return Promise.resolve('TOKEN');
+          return Promise.resolve('VALID_TOKEN');
         }
       },
       headers: {},
@@ -119,7 +119,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .get('/jobs/' + this.id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer VALID_TOKEN')
         .reply(200);
 
       this.jobs.get({ id: this.id }).then(function() {
@@ -257,7 +257,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer VALID_TOKEN')
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
@@ -382,7 +382,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/verification-email')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer VALID_TOKEN')
         .reply(200);
 
       this.jobs.verifyEmail(data).then(function() {
