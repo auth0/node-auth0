@@ -10,13 +10,15 @@ var API_URL = 'https://tenant.auth0.com';
 var JobsManager = require(SRC_DIR + '/management/JobsManager');
 var ArgumentError = require('rest-facade').ArgumentError;
 
+var token = 'TOKEN';
+
 describe('JobsManager', function() {
   before(function() {
     this.id = 'testJob';
     this.jobs = new JobsManager({
       tokenProvider: {
         getAccessToken: function() {
-          return Promise.resolve('VALID_TOKEN');
+          return Promise.resolve(token);
         }
       },
       headers: {},
@@ -119,7 +121,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .get('/jobs/' + this.id)
-        .matchHeader('Authorization', 'Bearer VALID_TOKEN')
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.get({ id: this.id }).then(function() {
@@ -257,7 +259,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Authorization', 'Bearer VALID_TOKEN')
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
@@ -382,7 +384,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/verification-email')
-        .matchHeader('Authorization', 'Bearer VALID_TOKEN')
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.verifyEmail(data).then(function() {
