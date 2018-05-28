@@ -14,6 +14,12 @@ describe('JobsManager', function() {
   before(function() {
     this.id = 'testJob';
     this.jobs = new JobsManager({
+      tokenProvider: {
+        getAccessToken: function() {
+          return Promise.resolve('TOKEN');
+        }
+      },
+      headers: {},
       baseUrl: API_URL
     });
   });
