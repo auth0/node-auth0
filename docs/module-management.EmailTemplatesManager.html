@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>TicketsManager - Documentation</title>
+    <title>EmailTemplatesManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">TicketsManager</h1>
+    <h1 class="page-title">EmailTemplatesManager</h1>
     
 
     
@@ -44,10 +44,12 @@
         <h2>
             <span class="ancestors"><a href="module-management.html">management</a>.</span>
         
-        TicketsManager
+        EmailTemplatesManager
         </h2>
         
-            <div class="class-description"><p>Abstracts interaction with the tickets endpoint.</p></div>
+            <div class="class-description"><p>EmailTemplatesManager
+This class provides a simple abstraction for performing CRUD operations
+on Auth0's Email Templates. {@see https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName}</p></div>
         
     
 </header>
@@ -62,7 +64,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="TicketsManager"><span class="type-signature"></span>new TicketsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="EmailTemplatesManager"><span class="type-signature"></span>new EmailTemplatesManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -101,7 +103,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line16">line 16</a>
+        <a href="management_EmailTemplatesManager.js.html">management/EmailTemplatesManager.js</a>, <a href="management_EmailTemplatesManager.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -345,8 +347,8 @@
 
 
 <div class="description">
-    <p>Provides an abstraction layer for consuming the
-<a href="https://auth0.com/docs/api/v2#!/Tickets">Tickets endpoint</a>.</p>
+    <p>Provides an abstraction layer for performing CRUD operations on
+<a href="https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName">Auth0's Email Templates</a>.</p>
 </div>
 
 
@@ -382,7 +384,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line41">line 41</a>
+        <a href="management_EmailTemplatesManager.js.html">management/EmailTemplatesManager.js</a>, <a href="management_EmailTemplatesManager.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -412,6 +414,80 @@
 </div>
 
         
+            
+<div class="section-members">
+<h4 class="name" id="~clientOptions"><span class="type-signature">(inner) </span>clientOptions<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Options object for the Rest Client instance.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_EmailTemplatesManager.js.html">management/EmailTemplatesManager.js</a>, <a href="management_EmailTemplatesManager.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
     
 
     
@@ -423,14 +499,14 @@
 
     
 
-    <h4 class="name" id="changePassword"><span class="type-signature"></span>changePassword<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create a new password change ticket.</p>
+    <p>Create a new Email Template.</p>
 </div>
 
 
@@ -466,7 +542,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line49">line 49</a>
+        <a href="management_EmailTemplatesManager.js.html">management/EmailTemplatesManager.js</a>, <a href="management_EmailTemplatesManager.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -508,6 +584,40 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Email Template data object.</p>
+                
+            </td>
+        </tr>
+
     
 
         <tr>
@@ -573,6 +683,9 @@
     <dd>
         
 <span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
@@ -587,17 +700,12 @@
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = {
-  result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
-  user_id: '{USER_ID}',  // Optional.
-  email: '{USER_EMAIL}',  // Optional.
-  new_password: '{PASSWORD}'
-};
-
-management.tickets.changePassword(params, function (err) {
+    <pre class="prettyprint"><code>management.emailTemplates.create(data, function (err) {
   if (err) {
     // Handle error.
   }
+
+  // Email Template created.
 });</code></pre>
 
 </div>
@@ -609,14 +717,14 @@ management.tickets.changePassword(params, function (err) {
 
     
 
-    <h4 class="name" id="verifyEmail"><span class="type-signature"></span>verifyEmail<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create an email verification ticket.</p>
+    <p>Get an Auth0 Email Template.</p>
 </div>
 
 
@@ -652,7 +760,7 @@ management.tickets.changePassword(params, function (err) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line83">line 83</a>
+        <a href="management_EmailTemplatesManager.js.html">management/EmailTemplatesManager.js</a>, <a href="management_EmailTemplatesManager.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -694,6 +802,91 @@ management.tickets.changePassword(params, function (err) {
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Email Template parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Template Name</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
     
 
         <tr>
@@ -759,6 +952,9 @@ management.tickets.changePassword(params, function (err) {
     <dd>
         
 <span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
@@ -773,15 +969,318 @@ management.tickets.changePassword(params, function (err) {
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var data = {
-  user_id: '{USER_ID}',
-  result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
-};
-
-management.tickets.verifyEmail(data, function (err) {
+    <pre class="prettyprint"><code>management.emailTemplates.get({ name: EMAIL_TEMPLATE_NAME }, function (err, emailTemplate) {
   if (err) {
     // Handle error.
   }
+
+  console.log(emailTemplate);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Update an existing Email Template.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_EmailTemplatesManager.js.html">management/EmailTemplatesManager.js</a>, <a href="management_EmailTemplatesManager.js.html#line102">line 102</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Email Template parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Template Name</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Updated Email Template data.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var data = { from: 'new@email.com' };
+var params = { name: EMAIL_TEMPLATE_NAME };
+
+management.emailTemplates.update(params, data, function (err, emailTemplate) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(emailTemplate.from);  // 'new@email.com'
 });</code></pre>
 
 </div>
