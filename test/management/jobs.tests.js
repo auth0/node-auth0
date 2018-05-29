@@ -2,6 +2,7 @@ var path = require('path');
 var expect = require('chai').expect;
 var nock = require('nock');
 var extractParts = require('../utils').extractParts;
+var fs = require('fs');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
@@ -141,9 +142,11 @@ describe('JobsManager', function() {
     });
   });
 
+  const usersFilePath = path.join(__dirname, '../data/users.json');
+
   describe('#importUsers', function() {
     var data = {
-      users: path.join(__dirname, '../data/users.json'),
+      users: usersFilePath,
       connection_id: 'con_test'
     };
 
@@ -230,7 +233,9 @@ describe('JobsManager', function() {
             .to.contain('Content-Type: application/json');
 
           // Validate the content of the users JSON.
-          expect(parts.users.slice(-2)).to.equal('[]');
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
+          expect(users.length).to.equal(2);
+          expect(users[0].email).to.equal('jane.doe@contoso.com');
 
           return true;
         })
@@ -249,6 +254,53 @@ describe('JobsManager', function() {
       var request = nock(API_URL)
         .post('/jobs/users-imports')
         .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.jobs.importUsers(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#importUsers with JSON data', function() {
+    var data = {
+      users_json: fs.readFileSync(usersFilePath, 'utf8'),
+      connection_id: 'con_test'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply(200);
+    });
+
+    it('should correctly include user JSON', function(done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function(header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+
+          return true;
+        })
+        .post('/jobs/users-imports', function(body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the content type of the users JSON.
+          expect(parts.users)
+            .to.exist.to.be.a('string')
+            .to.contain('Content-Type: application/json');
+
+          // Validate the content of the users JSON.
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
+          expect(users.length).to.equal(2);
+          expect(users[0].email).to.equal('jane.doe@contoso.com');
+
+          return true;
+        })
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
