@@ -95,7 +95,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  *   console.log(connections.length);
  * });
  *
- * @param   {Object}    [params]          Users params.
+ * @param   {Object}    [params]          Connections params.
  * @param   {Number}    [params.per_page] Number of users per page.
  * @param   {Number}    [params.page]     Page number.
  * @param   {Function}  [cb]              Callback function.

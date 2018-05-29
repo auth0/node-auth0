@@ -101,7 +101,7 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  *   console.log(clients.length);
  * });
  *
- * @param   {Object}    [params]          Users params.
+ * @param   {Object}    [params]          Clients params.
  * @param   {Number}    [params.per_page] Number of users per page.
  * @param   {Number}    [params.page]     Page number.
  * @param   {Function}  [cb]              Callback function.
