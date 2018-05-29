@@ -97,7 +97,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  * });
  *
  * @param   {Object}    [params]          Connections params.
- * @param   {Number}    [params.per_page] Number of users per page.
+ * @param   {Number}    [params.per_page] Number of connections per page.
  * @param   {Number}    [params.page]     Page number.
  * @param   {Function}  [cb]              Callback function.
  *
