@@ -86,12 +86,25 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * @method    getAll
  * @memberOf  module:management.ClientsManager.prototype
  *
- * @example
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings and the search query.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 2
+ * };
+ *
  * management.clients.getAll(function (err, clients) {
  *   console.log(clients.length);
  * });
  *
- * @param   {Function}  [cb]    Callback function.
+ * @param   {Object}    [params]          Users params.
+ * @param   {Number}    [params.per_page] Number of users per page.
+ * @param   {Number}    [params.page]     Page number.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
