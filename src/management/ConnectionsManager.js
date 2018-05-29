@@ -82,7 +82,8 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  *
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
- *   specify pagination settings.
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
  * </caption>
  *
  * // Pagination settings.
