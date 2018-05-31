@@ -175,6 +175,19 @@ describe('JobsManager', function() {
         .catch(done.bind(null, null));
     });
 
+    it('should pass request errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .replyWithError('printer on fire');
+
+      this.jobs.importUsers(data).catch(function(err) {
+        expect(err.message).to.equal('printer on fire');
+        done();
+      });
+    });
+
     it('should pass HTTP errors to the promise catch handler', function(done) {
       nock.cleanAll();
 
