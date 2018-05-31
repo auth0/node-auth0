@@ -258,6 +258,64 @@ describe('JobsManager', function() {
       });
     });
 
+    it('should set upsert parameter correctly', function(done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function(header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+
+          return true;
+        })
+        .post('/jobs/users-imports', function(body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the upsert param
+          expect(parts.upsert)
+            .to.exist.to.be.a('string')
+            .to.equal('true');
+
+          return true;
+        })
+        .reply(200);
+
+      this.jobs.importUsers(Object.assign({ upsert: true }, data)).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should set send_completion_email parameter correctly', function(done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function(header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+
+          return true;
+        })
+        .post('/jobs/users-imports', function(body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the upsert param
+          expect(parts.send_completion_email)
+            .to.exist.to.be.a('string')
+            .to.equal('false');
+
+          return true;
+        })
+        .reply(200);
+
+      this.jobs.importUsers(Object.assign({ send_completion_email: false }, data)).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
     it('should include the token in the Authorization header', function(done) {
       nock.cleanAll();
 
