@@ -175,7 +175,7 @@ describe('JobsManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass HTTP errors to the promise catch handler', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -183,7 +183,9 @@ describe('JobsManager', function() {
         .reply(500);
 
       this.jobs.importUsers(data).catch(function(err) {
-        expect(err).to.exist;
+        expect(err.message).to.equal(
+          'cannot POST https://tenant.auth0.com/jobs/users-imports (500)'
+        );
         done();
       });
     });

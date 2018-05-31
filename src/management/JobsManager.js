@@ -164,7 +164,7 @@ JobsManager.prototype.importUsers = function(data, cb) {
           var type = (res.statusCode / 100) | 0;
           var isErrorResponse = 4 === type || 5 === type;
           if (isErrorResponse) {
-            var error = new Error('cannot ' + method + url + ' (' + res.statusCode + ')');
+            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
             error.status = res.statusCode;
             error.method = method;
             error.text = res.text;
