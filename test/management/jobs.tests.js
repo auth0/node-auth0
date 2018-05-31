@@ -209,7 +209,7 @@ describe('JobsManager', function() {
       });
     });
 
-    it('should have two parts: connection_id and users file', function(done) {
+    it('should have four parts: connection_id, users file, upsert and send_completion_email', function(done) {
       nock.cleanAll();
       var boundary = null;
 
@@ -226,6 +226,16 @@ describe('JobsManager', function() {
           expect(parts.connection_id)
             .to.exist.to.be.a('string')
             .to.equal(data.connection_id);
+
+          // Validate the upsert param - default is false
+          expect(parts.upsert)
+            .to.exist.to.be.a('string')
+            .to.equal('false');
+
+          // Validate the send_completion_email param - default is true
+          expect(parts.send_completion_email)
+            .to.exist.to.be.a('string')
+            .to.equal('true');
 
           // Validate the content type of the users JSON.
           expect(parts.users)
