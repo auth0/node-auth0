@@ -155,6 +155,10 @@ JobsManager.prototype.importUsers = function(data, cb) {
           }
         },
         function(err, res) {
+          if (err) {
+            reject(err);
+            return;
+          }
           // `superagent` uses the error parameter in callback on http errors.
           // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
           var type = (res.statusCode / 100) | 0;
@@ -166,11 +170,6 @@ JobsManager.prototype.importUsers = function(data, cb) {
             error.text = res.text;
             reject(error);
           }
-
-          if (err) {
-            reject(err);
-          }
-
           resolve(res);
         }
       );
