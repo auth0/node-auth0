@@ -144,7 +144,8 @@ UsersManager.prototype.create = function(data, cb) {
  *
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
- *   specify pagination settings and the search query.
+ *   specify pagination settings and the search query. If pagination options are
+ *   not present, the first page of a limited number of results will be returned.
  * </caption>
  *
  * // Pagination settings.
