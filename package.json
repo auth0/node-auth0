@@ -3,6 +3,9 @@
   "version": "2.10.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
     "test": "mocha -R spec $(find ./test -name *.tests.js)",
     "test:ci":
