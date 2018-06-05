@@ -10,12 +10,18 @@ var API_URL = 'https://tenant.auth0.com';
 var JobsManager = require(SRC_DIR + '/management/JobsManager');
 var ArgumentError = require('rest-facade').ArgumentError;
 
+var token = 'TOKEN';
+
 describe('JobsManager', function() {
   before(function() {
-    this.token = 'TOKEN';
     this.id = 'testJob';
     this.jobs = new JobsManager({
-      headers: { authorization: 'Bearer ' + this.token },
+      tokenProvider: {
+        getAccessToken: function() {
+          return Promise.resolve(token);
+        }
+      },
+      headers: {},
       baseUrl: API_URL
     });
   });
@@ -115,7 +121,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .get('/jobs/' + this.id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.get({ id: this.id }).then(function() {
@@ -169,7 +175,20 @@ describe('JobsManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass request errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .replyWithError('printer on fire');
+
+      this.jobs.importUsers(data).catch(function(err) {
+        expect(err.message).to.equal('printer on fire');
+        done();
+      });
+    });
+
+    it('should pass HTTP errors to the promise catch handler', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -177,7 +196,9 @@ describe('JobsManager', function() {
         .reply(500);
 
       this.jobs.importUsers(data).catch(function(err) {
-        expect(err).to.exist;
+        expect(err.message).to.equal(
+          'cannot POST https://tenant.auth0.com/jobs/users-imports (500)'
+        );
         done();
       });
     });
@@ -321,7 +342,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
@@ -446,7 +467,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/verification-email')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.verifyEmail(data).then(function() {

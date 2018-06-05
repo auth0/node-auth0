@@ -141,44 +141,47 @@ JobsManager.prototype.importUsers = function(data, cb) {
   var upsert = data.upsert === true ? 'true' : 'false';
   var send_completion_email = data.send_completion_email === false ? 'false' : 'true';
 
-  var promise = new Promise(function(resolve, reject) {
-    request(
-      {
-        url: url,
-        method: method,
-        headers: headers,
-        formData: {
-          users: {
-            value: data.users_json ? Buffer.from(data.users_json) : fs.createReadStream(data.users),
-            options: {
-              filename: data.users_json ? 'users.json' : data.users
-            }
-          },
-          connection_id: data.connection_id,
-          upsert: upsert,
-          send_completion_email: send_completion_email
+  var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
+    return new Promise(function(resolve, reject) {
+      request(
+        {
+          url: url,
+          method: method,
+          headers: extend({ Authorization: `Bearer ${access_token}` }, headers),
+          formData: {
+            users: {
+              value: data.users_json
+                ? Buffer.from(data.users_json)
+                : fs.createReadStream(data.users),
+              options: {
+                filename: data.users_json ? 'users.json' : data.users
+              }
+            },
+            connection_id: data.connection_id,
+            upsert: upsert,
+            send_completion_email: send_completion_email
+          }
+        },
+        function(err, res) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          // `superagent` uses the error parameter in callback on http errors.
+          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+          var type = (res.statusCode / 100) | 0;
+          var isErrorResponse = 4 === type || 5 === type;
+          if (isErrorResponse) {
+            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
+            error.status = res.statusCode;
+            error.method = method;
+            error.text = res.text;
+            reject(error);
+          }
+          resolve(res);
         }
-      },
-      function(err, res) {
-        // `superagent` uses the error parameter in callback on http errors.
-        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-        var type = (res.statusCode / 100) | 0;
-        var isErrorResponse = 4 === type || 5 === type;
-        if (isErrorResponse) {
-          var error = new Error('cannot ' + method + url + ' (' + res.statusCode + ')');
-          error.status = res.statusCode;
-          error.method = method;
-          error.text = res.text;
-          reject(error);
-        }
-
-        if (err) {
-          reject(err);
-        }
-
-        resolve(res);
-      }
-    );
+      );
+    });
   });
 
   // Don't return a promise if a callback was given.
