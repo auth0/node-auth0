@@ -26,6 +26,7 @@ var ResourceServersManager = require('./ResourceServersManager');
 var ManagementTokenProvider = require('./ManagementTokenProvider');
 var RulesConfigsManager = require('./RulesConfigsManager');
 var EmailTemplatesManager = require('./EmailTemplatesManager');
+var GuardianManager = require('./GuardianManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -154,6 +155,14 @@ var ManagementClient = function(options) {
    * @type {UsersManager}
    */
   this.users = new UsersManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * guardian endpoint.
+   *
+   * @type {GuardianManager}
+   */
+  this.guardian = new GuardianManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -1234,6 +1243,56 @@ utils.wrapPropertyMethod(
   ManagementClient,
   'getGuardianEnrollments',
   'users.getGuardianEnrollments'
+);
+
+/**
+ * Get a single Guardian enrollment.
+ *
+ * @method    getGuardianEnrollment
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollment) {
+ *   console.log(enrollment);
+ * });
+ *
+ * @param   {Object}    data      The Guardian enrollment data object.
+ * @param   {String}    data.id   The Guardian enrollment id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianEnrollment',
+  'guardian.getGuardianEnrollment'
+);
+
+/**
+ * Delete a user's Guardian enrollment.
+ *
+ * @method    deleteGuardianEnrollment
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteGuardianEnrollment({ id: ENROLLMENT_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Email provider deleted.
+ * });
+ *
+ * @param   {Object}    data      The Guardian enrollment data object.
+ * @param   {String}    data.id   The Guardian enrollment id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'deleteGuardianEnrollment',
+  'guardian.deleteGuardianEnrollment'
 );
 
 /**
