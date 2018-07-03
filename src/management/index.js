@@ -1246,6 +1246,29 @@ utils.wrapPropertyMethod(
 );
 
 /**
+ * Generate new Guardian recovery code.
+ *
+ * @method    regenerateRecoveryCode
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.regenerateRecoveryCode({ id: USER_ID }, function (err, newRecoveryCode) {
+ *   console.log(newRecoveryCode);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'regenerateRecoveryCode',
+  'users.regenerateRecoveryCode'
+);
+
+/**
  * Get a single Guardian enrollment.
  *
  * @method    getGuardianEnrollment

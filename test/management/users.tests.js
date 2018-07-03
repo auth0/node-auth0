@@ -30,7 +30,8 @@ describe('UsersManager', function() {
       'deleteMultifactorProvider',
       'updateUserMetadata',
       'updateAppMetadata',
-      'getGuardianEnrollments'
+      'getGuardianEnrollments',
+      'regenerateRecoveryCode'
     ];
 
     methods.forEach(function(method) {
@@ -957,6 +958,77 @@ describe('UsersManager', function() {
         .reply(200);
 
       this.users.getGuardianEnrollments(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#regenerateRecoveryCode', function() {
+    var data = {
+      id: 'USER_ID'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/users/' + data.id + '/recovery-code-regeneration')
+        .reply(200);
+    });
+
+    it('should validate empty userId', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.regenerateRecoveryCode(null, function() {});
+      }).to.throw('The userId cannot be null or undefined');
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.regenerateRecoveryCode(data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .regenerateRecoveryCode(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + data.id + '/recovery-code-regeneration')
+        .reply(500);
+
+      this.users.regenerateRecoveryCode(data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/users/:id/recovery-code-regeneration', function(done) {
+      var request = this.request;
+
+      this.users.regenerateRecoveryCode(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + data.id + '/recovery-code-regeneration')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.regenerateRecoveryCode(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
