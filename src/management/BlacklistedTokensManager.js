@@ -15,7 +15,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var BlacklistedTokensManager = function (options) {
+var BlacklistedTokensManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -45,10 +45,13 @@ var BlacklistedTokensManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/blacklists/tokens', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/blacklists/tokens',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Blacklist a new token.
@@ -79,7 +82,6 @@ var BlacklistedTokensManager = function (options) {
  */
 utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
 
-
 /**
  * Get all blacklisted tokens.
  *
@@ -96,6 +98,5 @@ utils.wrapPropertyMethod(BlacklistedTokensManager, 'add', 'resource.create');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(BlacklistedTokensManager, 'getAll', 'resource.getAll');
-
 
 module.exports = BlacklistedTokensManager;

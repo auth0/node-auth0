@@ -13,7 +13,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class
  * Abstract the creation as well as the retrieval of async jobs.
@@ -25,7 +24,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var JobsManager = function (options){
+var JobsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -52,10 +51,13 @@ var JobsManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/jobs/:id', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/jobs/:id',
+    clientOptions,
+    options.tokenProvider
+  );
   this.jobs = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Get a job by its ID.
@@ -83,7 +85,7 @@ var JobsManager = function (options){
  *
  * @return  {Promise|undefined}
  */
-JobsManager.prototype.get = function (params, cb) {
+JobsManager.prototype.get = function(params, cb) {
   if (!params.id || typeof params.id !== 'string') {
     throw new ArgumentError('The id parameter must be a valid job id');
   }
@@ -96,10 +98,10 @@ JobsManager.prototype.get = function (params, cb) {
   return this.jobs.get(params);
 };
 
-
 /**
  * Given a path to a file and a connection id, create a new job that imports the
- * users contained in the file and associate them with the given connection.
+ * users contained in the file or JSON string and associate them with the given
+ * connection.
  *
  * @method   importUsers
  * @memberOf module:management.JobsManager.prototype
@@ -119,11 +121,12 @@ JobsManager.prototype.get = function (params, cb) {
  * @param   {Object}    data                Users import data.
  * @param   {String}    data.connectionId   Connection for the users insertion.
  * @param   {String}    data.users          Path to the users data file.
+ * @param   {String}    data.users_json     JSON data for the users.
  * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
  */
-JobsManager.prototype.importUsers = function (data, cb) {
+JobsManager.prototype.importUsers = function(data, cb) {
   var options = this.options;
   var headers = extend({}, options.headers);
 
@@ -132,55 +135,56 @@ JobsManager.prototype.importUsers = function (data, cb) {
   var url = options.baseUrl + '/jobs/users-imports';
   var method = 'POST';
 
-  var promise = new Promise(function (resolve, reject) {
-    request({
-      url: url,
-      method: method,
-      headers: headers,
-      formData: {
-        users: {
-          value: fs.createReadStream(data.users),
-          options: {
-            filename: data.users
+  var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
+    return new Promise(function(resolve, reject) {
+      request(
+        {
+          url: url,
+          method: method,
+          headers: extend({ Authorization: `Bearer ${access_token}` }, headers),
+          formData: {
+            users: {
+              value: data.users_json
+                ? Buffer.from(data.users_json)
+                : fs.createReadStream(data.users),
+              options: {
+                filename: data.users_json ? 'users.json' : data.users
+              }
+            },
+            connection_id: data.connection_id
           }
         },
-        connection_id: data.connection_id
-      }
-    }, function (err, res) {
-
-
-      // `superagent` uses the error parameter in callback on http errors.
-      // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-      var type = res.statusCode / 100 | 0;
-      var isErrorResponse = (4 === type || 5 === type);
-      if (isErrorResponse) {
-        var error = new Error('cannot ' + method  + url + ' (' + res.statusCode + ')');
-        error.status = res.statusCode;
-        error.method = method;
-        error.text = res.text;
-        reject(error);
-      }
-
-      if (err) {
-        reject(err);
-      }
-
-      resolve(res);
+        function(err, res) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          // `superagent` uses the error parameter in callback on http errors.
+          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+          var type = (res.statusCode / 100) | 0;
+          var isErrorResponse = 4 === type || 5 === type;
+          if (isErrorResponse) {
+            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
+            error.status = res.statusCode;
+            error.method = method;
+            error.text = res.text;
+            reject(error);
+          }
+          resolve(res);
+        }
+      );
     });
   });
 
   // Don't return a promise if a callback was given.
   if (cb && cb instanceof Function) {
-    promise
-      .then(cb.bind(null, null))
-      .catch(cb);
+    promise.then(cb.bind(null, null)).catch(cb);
 
     return;
   }
 
   return promise;
 };
-
 
 /**
  * Send a verification email to a user.
@@ -205,7 +209,7 @@ JobsManager.prototype.importUsers = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-JobsManager.prototype.verifyEmail = function (data, cb) {
+JobsManager.prototype.verifyEmail = function(data, cb) {
   if (!data.user_id || typeof data.user_id !== 'string') {
     throw new ArgumentError('Must specify a user ID');
   }
@@ -217,6 +221,5 @@ JobsManager.prototype.verifyEmail = function (data, cb) {
   // Return a promise.
   return this.jobs.create({ id: 'verification-email' }, data);
 };
-
 
 module.exports = JobsManager;

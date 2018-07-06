@@ -8,7 +8,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class
  * Abstracts interaction with the tenant endpoint.
@@ -20,7 +19,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var TenantManager = function (options){
+var TenantManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -45,7 +44,11 @@ var TenantManager = function (options){
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/tenants/settings', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/tenants/settings',
+    clientOptions,
+    options.tokenProvider
+  );
   this.tenant = new RetryRestClient(auth0RestClient, options.retry);
 };
 
@@ -67,7 +70,7 @@ var TenantManager = function (options){
  *
  * @return  {Promise|undefined}
  */
-TenantManager.prototype.updateSettings = function (data, cb) {
+TenantManager.prototype.updateSettings = function(data, cb) {
   if (cb && cb instanceof Function) {
     return this.tenant.patch({}, data, cb);
   }
@@ -95,7 +98,7 @@ TenantManager.prototype.updateSettings = function (data, cb) {
  *
  * @return  {Promise|undefined}
  */
-TenantManager.prototype.getSettings = function (cb) {
+TenantManager.prototype.getSettings = function(cb) {
   if (cb && cb instanceof Function) {
     return this.tenant.get({}, cb);
   }
@@ -103,6 +106,5 @@ TenantManager.prototype.getSettings = function (cb) {
   // Return a promise.
   return this.tenant.get({});
 };
-
 
 module.exports = TenantManager;

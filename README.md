@@ -14,10 +14,17 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
   npm install auth0
 ```
 
+## Documentation
+
+You can find this library documentation in this [page](http://auth0.github.io/node-auth0/).
+
+For more information about [auth0](http://auth0.com) check our [documentation page](http://docs.auth0.com/).
+
 ## Authentication API Client
+
 This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
 
-The **AuthenticationClient** constructor takes an *optional* client ID, if specified it will be used as default value for all endpoints that accept a client ID.
+The **AuthenticationClient** constructor takes an _optional_ client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
 ```js
 var AuthenticationClient = require('auth0').AuthenticationClient;
@@ -29,6 +36,7 @@ var auth0 = new AuthenticationClient({
 ```
 
 ## Management API Client
+
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
 Initialize your client class with an API v2 token and a domain.
@@ -53,7 +61,7 @@ var auth0 = new ManagementClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
   clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
-  scope: "read:users write:users",
+  scope: 'read:users update:users'
 });
 ```
 
@@ -70,15 +78,18 @@ var auth0 = new AuthenticationClient({
   clientSecret: '{CLIENT_SECRET}'
 });
 
-auth0.clientCredentialsGrant({
-  audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
-  scope: '{MANAGEMENT_API_SCOPES}'
-}, function (err, response) {
-  if (err) {
-    // Handle error.
+auth0.clientCredentialsGrant(
+  {
+    audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
+    scope: '{MANAGEMENT_API_SCOPES}'
+  },
+  function(err, response) {
+    if (err) {
+      // Handle error.
+    }
+    console.log(response.access_token);
   }
-  console.log(response.access_token);
-});
+);
 ```
 
 Also you can request a token when the user authenticates using any of our client side SDKs, e.g. [auth0.js](https://github.com/auth0/auth0.js).
@@ -89,7 +100,7 @@ Be aware that all methods can be used with promises or callbacks. However, when 
 
 ```js
 // Using callbacks.
-management.getUsers(function (err, users) {
+management.getUsers(function(err, users) {
   if (err) {
     // handle error.
   }
@@ -99,19 +110,13 @@ management.getUsers(function (err, users) {
 // Using promises.
 management
   .getUsers()
-  .then(function (users) {
+  .then(function(users) {
     console.log(users);
   })
-  .catch(function (err) {
+  .catch(function(err) {
     // Handle error.
   });
 ```
-
-## Documentation
-
-You can find this library documentation in this [page](http://auth0.github.io/node-auth0/).
-
-For more information about [auth0](http://auth0.com) check our [documentation page](http://docs.auth0.com/).
 
 ## What is Auth0?
 
@@ -126,8 +131,8 @@ Auth0 helps you to:
 
 ## Create a free Auth0 Account
 
-1. Go to [Auth0](https://auth0.com) and click "Try Auth0 for Free".
-2. Use Google, GitHub or Microsoft Account to login.
+1.  Go to [Auth0](https://auth0.com) and click "Try Auth0 for Free".
+2.  Use Google, GitHub or Microsoft Account to login.
 
 ## Issue Reporting
 

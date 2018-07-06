@@ -14,7 +14,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var LogsManager = function (options) {
+var LogsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -44,7 +44,11 @@ var LogsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/logs/:id ', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/logs/:id ',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
@@ -54,17 +58,35 @@ var LogsManager = function (options) {
  * @method    getAll
  * @memberOf  module:management.LogsManager.prototype
  *
- * @example
- * management.logs.getAll(function (err, logs) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings and the search query. If pagination options are
+ *   not present, the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 2
+ * };
+ *
+ * management.logs.getAll(params, function (err, logs) {
  *   console.log(logs.length);
  * });
  *
- * @param   {Function}  [cb]    Callback function.
+ * @param   {Object}    [params]                Logs params.
+ * @param   {String}    [params.q]              Search Criteria using Query String Syntax
+ * @param   {Number}    [params.page]           Page number. Zero based
+ * @param   {Number}    [params.per_page]       The amount of entries per page
+ * @param   {String}    [params.sort]           The field to use for sorting.
+ * @param   {String}    [params.fields]         A comma separated list of fields to include or exclude
+ * @param   {Boolean}   [params.include_fields] true if the fields specified are to be included in the result, false otherwise.
+ * @param   {Boolean}   [params.include_totals] true if a query summary must be included in the result, false otherwise. Default false
+ * @param   {Function}  [cb]                    Callback function.
  *
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(LogsManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Get an Auth0 log.
