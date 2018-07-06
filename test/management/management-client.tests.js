@@ -14,6 +14,7 @@ var EmailProviderManager = require('../../src/management/EmailProviderManager');
 var JobsManager = require('../../src/management/JobsManager');
 var RulesManager = require('../../src/management/RulesManager');
 var StatsManager = require('../../src/management/StatsManager');
+var RulesConfigsManager = require('../../src/management/RulesConfigsManager');
 
 var TenantManager = require('../../src/management/TenantManager');
 
@@ -137,7 +138,11 @@ describe('ManagementClient', function() {
       TenantManager: {
         property: 'tenant',
         cls: TenantManager
-      }
+      },
+      'RulesConfigsManager': {
+        property: 'rulesConfigs',
+        cls: RulesConfigsManager
+      },
     };
 
     before(function() {
@@ -197,7 +202,10 @@ describe('ManagementClient', function() {
       'getTenantSettings',
       'updateTenantSettings',
       'deleteUserMultifactor',
-      'deleteUserMultifcator'
+      'deleteUserMultifcator',
+      'setRulesConfig',
+      'getRulesConfigs',
+      'deleteRulesConfig'
     ];
 
     before(function() {
