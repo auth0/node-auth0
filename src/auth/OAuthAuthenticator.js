@@ -56,7 +56,7 @@ var OAuthAuthenticator = function(options) {
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
  *   username: '{USERNAME}',
- *   password: '{PASSWORD}
+ *   password: '{PASSWORD}',
  *   connection: '{CONNECTION_NAME}',
  *   scope: 'openid'  // Optional field.
  * };
@@ -121,7 +121,7 @@ OAuthAuthenticator.prototype.signIn = function(userData, cb) {
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
  *   username: '{USERNAME}',
- *   password: '{PASSWORD}'
+ *   password: '{PASSWORD}',
  *   realm: '{CONNECTION_NAME}', // Optional field.
  *   scope: 'openid'  // Optional field.
  * };
