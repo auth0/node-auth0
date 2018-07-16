@@ -291,13 +291,26 @@ ManagementClient.prototype.getClientInfo = function() {
  * @method    getConnections
  * @memberOf  module:management.ManagementClient.prototype
  *
- * @example
- * management.getConnections(function (err, connections) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getConnections(params, function (err, connections) {
  *   console.log(connections.length);
  * });
  *
- * @param   {Object}    data     Connection data object.
- * @param   {Function}  [cb]     Callback function.
+ * @param   {Object}    [params]          Connections params.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -389,7 +402,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.dele
  *   console.log(connection.name);  // 'newConnectionName'
  * });
  *
- * @param   {Object}    params        Conneciton parameters.
+ * @param   {Object}    params        Connection parameters.
  * @param   {String}    params.id     Connection ID.
  * @param   {Object}    data          Updated connection data.
  * @param   {Function}  [cb]          Callback function.
@@ -404,12 +417,26 @@ utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.upda
  * @method    getClients
  * @memberOf  module:management.ManagementClient.prototype
  *
- * @example
- * management.getClients(function (err, clients) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getClients(params, function (err, clients) {
  *   console.log(clients.length);
  * });
  *
- * @param   {Function}  [cb]    Callback function.
+ * @param   {Object}    [params]          Clients parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -516,12 +543,26 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
  * @method    getAll
  * @memberOf  module:management.ClientGrantsManager.prototype
  *
- * @example
- * management.clientGrants.getAll(function (err, grants) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getClientGrants(params, function (err, grants) {
  *   console.log(grants.length);
  * });
  *
- * @param   {Function}  [cb]    Callback function.
+ * @param   {Object}    [params]          Client Grants parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -677,12 +718,26 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCred
  * @method    getRules
  * @memberOf  module:management.ManagementClient.prototype
  *
- * @example
- * management.getRules(function (err, rules) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getRules(params, function (err, rules) {
  *   console.log(rules.length);
  * });
  *
- * @param   {Function}  [cb]     Callback function.
+ * @param   {Object}    [params]          Rules parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -790,13 +845,14 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  *
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
- *   specify pagination settings and the search query.
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
  * </caption>
  *
  * // Pagination settings.
  * var params = {
  *   per_page: 10,
- *   page: 2
+ *   page: 0
  * };
  *
  * auth0.getUsers(params, function (err, users) {
@@ -804,8 +860,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  * });
  *
  * @param   {Object}    [params]          Users params.
- * @param   {Number}    [params.per_page] Number of users per page.
- * @param   {Number}    [params.page]     Page number.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
@@ -1147,8 +1203,8 @@ utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
  *
  * @param   {Object}    params                Get logs data.
  * @param   {String}    params.id             User id.
- * @param   {Number}    params.per_page       Number of logs per page.
- * @param   {Number}    params.page           Page number.
+ * @param   {Number}    params.per_page       Number of results per page.
+ * @param   {Number}    params.page           Page number, zero indexed.
  * @param   {String}    params.sort           The field to use for sorting. Use field:order where order is 1 for ascending and -1 for descending. For example date:-1.
  * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
  * @param   {Function}  [cb]                  Callback function.
@@ -1617,13 +1673,26 @@ utils.wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServ
  * @method    getResourceServers
  * @memberOf  module:management.ManagementClient.prototype
  *
- * @example
- * management.getResourceServers(function (err, resourceServers) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getResourceServers(params, function (err, resourceServers) {
  *   console.log(resourceServers.length);
  * });
  *
- * @param   {Object}    data     Connection data object.
- * @param   {Function}  [cb]     Callback function.
+ * @param   {Object}    [params]          Resource Servers parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
