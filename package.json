@@ -1,11 +1,9 @@
 {
   "name": "auth0",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
-  "files": [
-    "src"
-  ],
+  "files": ["src"],
   "scripts": {
     "test": "mocha -R spec $(find ./test -name *.tests.js)",
     "test:ci":
@@ -43,7 +41,7 @@
     "codecov": "^2.2.0",
     "husky": "^0.14.3",
     "istanbul": "^0.4.0",
-    "jsdoc": "^3.4.0",
+    "jsdoc": "^3.5.5",
     "json-loader": "^0.5.4",
     "minami": "^1.2.3",
     "mocha": "^2.2.4",
