@@ -243,4 +243,73 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
   return this.oauth.create(params, data);
 };
 
+/**
+ * Sign in using an authorization code
+ *
+ * @method    authorizeCodeGrant
+ * @memberOf  module:auth.OAuthAuthenticator.prototype
+ *
+ * @example <caption>
+ *   Given the code returned in the URL params after the redirect
+ *   from successful authentication, exchange the code for auth0
+ *   credentials. It will return JSON with the access_token and id_token.
+ *   More information in the
+ *   <a href="https://auth0.com/docs/api/authentication#authorization-code-grant">
+ *     API Docs
+ *   </a>.
+ * </caption>
+ *
+ * var data = {
+ *   code: '{CODE}',
+ *   redirect_uri: '{REDIRECT_URI}',
+ *   client_id: '{CLIENT_ID}',  // Optional field.
+ *   client_secret: '{CLIENT_SECRET}',  // Optional field.
+ * };
+ *
+ * auth0.oauth.authorizeCodeGrant(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    data                  Authorization code payload
+ * @param   {String}    userData.code         Code in URL returned after authentication
+ * @param   {String}    userData.redirect_uri The URL to which Auth0 will redirect the browser after authorization has been granted by the user.
+ *
+ * @return  {Promise|undefined}
+ */
+OAuthAuthenticator.prototype.authorizeCodeGrant = function(options, cb) {
+  var params = {
+    type: 'token'
+  };
+
+  var defaultFields = {
+    grant_type: 'authorization_code',
+    client_id: this.clientId,
+    client_secret: this.clientSecret
+  };
+
+  var data = extend(defaultFields, options);
+
+  if (!options || typeof options !== 'object') {
+    throw new ArgumentError('Missing options object');
+  }
+
+  if (!data.code || data.code.trim().length === 0) {
+    throw new ArgumentError('code field is required');
+  }
+
+  if (!data.redirect_uri || data.redirect_uri.trim().length === 0) {
+    throw new ArgumentError('redirect_uri field is required');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.oauth.create(params, data, cb);
+  }
+
+  return this.oauth.create(params, data);
+};
+
 module.exports = OAuthAuthenticator;
