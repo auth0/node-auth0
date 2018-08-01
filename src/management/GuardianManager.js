@@ -58,7 +58,7 @@ var GuardianManager = function(options) {
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.users.getGuardianEnrollment({ id: USER_ID }, function (err, enrollment) {
+ * management.users.getGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollment) {
  *   console.log(enrollment);
  * });
  *
@@ -79,7 +79,7 @@ GuardianManager.prototype.getGuardianEnrollment = function(params, cb) {
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.users.deleteGuardianEnrollment({ id: USER_ID }, function (err, enrollments) {
+ * management.users.deleteGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollments) {
  *   console.log(enrollments);
  * });
  *
