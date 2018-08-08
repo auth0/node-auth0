@@ -106,6 +106,21 @@ var UsersManager = function(options) {
     options.tokenProvider
   );
   this.usersByEmail = new RetryRestClient(usersByEmailClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for regenerating Guardian recovery codes.
+   *
+   * @type {external:RestClient}
+   */
+  var recoveryCodeRegenerationAuth0RestClients = new Auth0RestClient(
+    options.baseUrl + '/users/:id/recovery-code-regeneration',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.recoveryCodeRegenerations = new RetryRestClient(
+    recoveryCodeRegenerationAuth0RestClients,
+    options.retry
+  );
 };
 
 /**
@@ -575,6 +590,35 @@ UsersManager.prototype.logs = function(params, cb) {
  */
 UsersManager.prototype.getGuardianEnrollments = function() {
   return this.enrollments.get.apply(this.enrollments, arguments);
+};
+
+/**
+ * Generate new Guardian recovery code.
+ *
+ * @method    regenerateRecoveryCode
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.regenerateRecoveryCode("USER_ID", function (err, result) {
+ *   console.log(result.recovery_code);
+ * });
+ *
+ * @param   {Object}    params                Get logs data.
+ * @param   {String}    params.id             User id.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.regenerateRecoveryCode = function(params, cb) {
+  if (!params || !params.id) {
+    throw new ArgumentError('The userId cannot be null or undefined');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.recoveryCodeRegenerations.create(params, {}, cb);
+  }
+
+  return this.recoveryCodeRegenerations.create(params, {});
 };
 
 module.exports = UsersManager;
