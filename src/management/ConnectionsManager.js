@@ -89,16 +89,16 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  * // Pagination settings.
  * var params = {
  *   per_page: 10,
- *   page: 2
+ *   page: 0
  * };
  *
- * management.connections.getAll(function (err, connections) {
+ * management.connections.getAll(params, function (err, connections) {
  *   console.log(connections.length);
  * });
  *
  * @param   {Object}    [params]          Connections params.
- * @param   {Number}    [params.per_page] Number of connections per page.
- * @param   {Number}    [params.page]     Page number.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}

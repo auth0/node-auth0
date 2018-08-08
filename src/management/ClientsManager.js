@@ -95,16 +95,16 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * // Pagination settings.
  * var params = {
  *   per_page: 10,
- *   page: 2
+ *   page: 0
  * };
  *
- * management.clients.getAll(function (err, clients) {
+ * management.clients.getAll(params, function (err, clients) {
  *   console.log(clients.length);
  * });
  *
- * @param   {Object}    [params]          Clients params.
- * @param   {Number}    [params.per_page] Number of clients per page.
- * @param   {Number}    [params.page]     Page number.
+ * @param   {Object}    [params]          Clients parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
