@@ -38,7 +38,7 @@ describe('OAuthAuthenticator', function() {
   });
 
   describe('instance', function() {
-    var methods = ['signIn', 'socialSignIn', 'passwordGrant', 'authorizeCodeGrant'];
+    var methods = ['signIn', 'socialSignIn', 'passwordGrant', 'authorizationCodeGrant'];
     var authenticator = new Authenticator(validOptions);
 
     methods.forEach(function(method) {
@@ -675,7 +675,7 @@ describe('OAuthAuthenticator', function() {
     });
   });
 
-  describe('#authorizeCodeGrant', function() {
+  describe('#authorizationCodeGrant', function() {
     var path = '/oauth/token';
     var data = {
       code: 'auth_code',
@@ -690,7 +690,7 @@ describe('OAuthAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.authorizeCodeGrant).to.throw(
+      expect(this.authenticator.authorizationCodeGrant).to.throw(
         ArgumentError,
         'Missing options object'
       );
@@ -698,25 +698,25 @@ describe('OAuthAuthenticator', function() {
 
     it('should require a code', function() {
       var auth = this.authenticator;
-      var signIn = auth.authorizeCodeGrant.bind(auth, { redirect: API_URL });
+      var signIn = auth.authorizationCodeGrant.bind(auth, { redirect: API_URL });
 
       expect(signIn).to.throw(ArgumentError, 'code field is required');
     });
 
     it('should require a redirect_uri', function() {
       var auth = this.authenticator;
-      var signIn = auth.authorizeCodeGrant.bind(auth, { code: 'auth_code' });
+      var signIn = auth.authorizationCodeGrant.bind(auth, { code: 'auth_code' });
 
       expect(signIn).to.throw(ArgumentError, 'redirect_uri field is required');
     });
 
     it('should accept a callback', function(done) {
-      this.authenticator.authorizeCodeGrant(data, done.bind(null, null));
+      this.authenticator.authorizationCodeGrant(data, done.bind(null, null));
     });
 
     it('should return a promise when no callback is provided', function(done) {
       this.authenticator
-        .authorizeCodeGrant(data)
+        .authorizationCodeGrant(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -725,7 +725,7 @@ describe('OAuthAuthenticator', function() {
       var request = this.request;
 
       this.authenticator
-        .authorizeCodeGrant(data)
+        .authorizationCodeGrant(data)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -750,7 +750,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizeCodeGrant(data)
+        .authorizationCodeGrant(data)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -769,7 +769,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizeCodeGrant(data)
+        .authorizationCodeGrant(data)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -788,7 +788,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizeCodeGrant(data)
+        .authorizationCodeGrant(data)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -807,7 +807,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizeCodeGrant(data)
+        .authorizationCodeGrant(data)
         .then(function() {
           expect(request.isDone()).to.be.true;
 

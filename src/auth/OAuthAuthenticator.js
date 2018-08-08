@@ -246,7 +246,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
 /**
  * Sign in using an authorization code
  *
- * @method    authorizeCodeGrant
+ * @method    authorizationCodeGrant
  * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
  * @example <caption>
@@ -266,7 +266,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *   client_secret: '{CLIENT_SECRET}',  // Optional field.
  * };
  *
- * auth0.oauth.authorizeCodeGrant(data, function (err, userData) {
+ * auth0.oauth.authorizationCodeGrant(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -280,7 +280,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.authorizeCodeGrant = function(options, cb) {
+OAuthAuthenticator.prototype.authorizationCodeGrant = function(options, cb) {
   var params = {
     type: 'token'
   };
