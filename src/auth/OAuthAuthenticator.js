@@ -6,7 +6,7 @@ var RestClient = require('rest-facade').Client;
 /**
  * @class
  * Abstracts the sign-in, sign-up and change-password processes for Database &
- * Active Directory auhtentication services.
+ * Active Directory authentication services.
  * @constructor
  * @memberOf module:auth
  *
