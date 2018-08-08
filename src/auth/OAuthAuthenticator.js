@@ -6,7 +6,7 @@ var RestClient = require('rest-facade').Client;
 /**
  * @class
  * Abstracts the sign-in, sign-up and change-password processes for Database &
- * Active Directory auhtentication services.
+ * Active Directory authentication services.
  * @constructor
  * @memberOf module:auth
  *
@@ -56,7 +56,7 @@ var OAuthAuthenticator = function(options) {
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
  *   username: '{USERNAME}',
- *   password: '{PASSWORD}
+ *   password: '{PASSWORD}',
  *   connection: '{CONNECTION_NAME}',
  *   scope: 'openid'  // Optional field.
  * };
@@ -121,7 +121,7 @@ OAuthAuthenticator.prototype.signIn = function(userData, cb) {
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
  *   username: '{USERNAME}',
- *   password: '{PASSWORD}'
+ *   password: '{PASSWORD}',
  *   realm: '{CONNECTION_NAME}', // Optional field.
  *   scope: 'openid'  // Optional field.
  * };
