@@ -38,7 +38,7 @@ describe('OAuthAuthenticator', function() {
   });
 
   describe('instance', function() {
-    var methods = ['signIn', 'socialSignIn', 'passwordGrant'];
+    var methods = ['signIn', 'socialSignIn', 'passwordGrant', 'authorizationCodeGrant'];
     var authenticator = new Authenticator(validOptions);
 
     methods.forEach(function(method) {
@@ -672,6 +672,148 @@ describe('OAuthAuthenticator', function() {
       return this.authenticator.clientCredentialsGrant(data).then(function() {
         expect(request.isDone()).to.be.true;
       });
+    });
+  });
+
+  describe('#authorizationCodeGrant', function() {
+    var path = '/oauth/token';
+    var data = {
+      code: 'auth_code',
+      redirect_uri: API_URL
+    };
+
+    beforeEach(function() {
+      this.authenticator = new Authenticator(validOptions);
+      this.request = nock(API_URL)
+        .post(path)
+        .reply(200);
+    });
+
+    it('should require an object as first argument', function() {
+      expect(this.authenticator.authorizationCodeGrant).to.throw(
+        ArgumentError,
+        'Missing options object'
+      );
+    });
+
+    it('should require a code', function() {
+      var auth = this.authenticator;
+      var signIn = auth.authorizationCodeGrant.bind(auth, { redirect: API_URL });
+
+      expect(signIn).to.throw(ArgumentError, 'code field is required');
+    });
+
+    it('should require a redirect_uri', function() {
+      var auth = this.authenticator;
+      var signIn = auth.authorizationCodeGrant.bind(auth, { code: 'auth_code' });
+
+      expect(signIn).to.throw(ArgumentError, 'redirect_uri field is required');
+    });
+
+    it('should accept a callback', function(done) {
+      this.authenticator.authorizationCodeGrant(data, done.bind(null, null));
+    });
+
+    it('should return a promise when no callback is provided', function(done) {
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a POST request to ' + path, function(done) {
+      var request = this.request;
+
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the data in the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function(body) {
+          for (var property in data) {
+            if (data[property] !== body[property]) {
+              return false;
+            }
+          }
+
+          return true;
+        })
+        .reply(200);
+
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the Auth0 client ID in the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function(body) {
+          return body.client_id === CLIENT_ID;
+        })
+        .reply(200);
+
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the Auth0 client secret in the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function(body) {
+          return body.client_secret === CLIENT_SECRET;
+        })
+        .reply(200);
+
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should use authorization_code as default grant type', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function(body) {
+          return body.grant_type === 'authorization_code';
+        })
+        .reply(200);
+
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
     });
   });
 });
