@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.11.0](https://github.com/auth0/node-auth0/tree/v2.11.0) (2018-07-25)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.10.0...v2.11.0)
+
+**Added**
+
+* Added Pagination Docs for a Client Grants, Resouce Servers and Rules [\#282](https://github.com/auth0/node-auth0/pull/282) ([cocojoe](https://github.com/cocojoe))
+* Added rules config methods [\#227](https://github.com/auth0/node-auth0/pull/227) ([dctoon](https://github.com/dctoon))
+
+**Fixed**
+
+* Get access token before importing users [\#267](https://github.com/auth0/node-auth0/pull/267) ([Floppy](https://github.com/Floppy))
+
 ## [v2.10.0](https://github.com/auth0/node-auth0/tree/v2.10.0) (2018-05-29)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.9.3...v2.10.0)

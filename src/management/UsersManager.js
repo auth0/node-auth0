@@ -106,6 +106,21 @@ var UsersManager = function(options) {
     options.tokenProvider
   );
   this.usersByEmail = new RetryRestClient(usersByEmailClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for regenerating Guardian recovery codes.
+   *
+   * @type {external:RestClient}
+   */
+  var recoveryCodeRegenerationAuth0RestClients = new Auth0RestClient(
+    options.baseUrl + '/users/:id/recovery-code-regeneration',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.recoveryCodeRegenerations = new RetryRestClient(
+    recoveryCodeRegenerationAuth0RestClients,
+    options.retry
+  );
 };
 
 /**
@@ -151,16 +166,16 @@ UsersManager.prototype.create = function(data, cb) {
  * // Pagination settings.
  * var params = {
  *   per_page: 10,
- *   page: 2
+ *   page: 0
  * };
  *
- * management.users.getAll(function (err, users) {
+ * management.users.getAll(params, function (err, users) {
  *   console.log(users.length);
  * });
  *
  * @param   {Object}    [params]          Users params.
- * @param   {Number}    [params.per_page] Number of users per page.
- * @param   {Number}    [params.page]     Page number.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
@@ -538,8 +553,8 @@ UsersManager.prototype.unlink = function(params, cb) {
  *
  * @param   {Object}    params                Get logs data.
  * @param   {String}    params.id             User id.
- * @param   {Number}    params.per_page       Number of logs per page.
- * @param   {Number}    params.page           Page number.
+ * @param   {Number}    params.per_page       Number of results per page.
+ * @param   {Number}    params.page           Page number, zero indexed.
  * @param   {String}    params.sort           The field to use for sorting. Use field:order where order is 1 for ascending and -1 for descending. For example date:-1.
  * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
  * @param   {Function}  [cb]                  Callback function.
@@ -575,6 +590,35 @@ UsersManager.prototype.logs = function(params, cb) {
  */
 UsersManager.prototype.getGuardianEnrollments = function() {
   return this.enrollments.get.apply(this.enrollments, arguments);
+};
+
+/**
+ * Generate new Guardian recovery code.
+ *
+ * @method    regenerateRecoveryCode
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.regenerateRecoveryCode("USER_ID", function (err, result) {
+ *   console.log(result.recovery_code);
+ * });
+ *
+ * @param   {Object}    params                Get logs data.
+ * @param   {String}    params.id             User id.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.regenerateRecoveryCode = function(params, cb) {
+  if (!params || !params.id) {
+    throw new ArgumentError('The userId cannot be null or undefined');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.recoveryCodeRegenerations.create(params, {}, cb);
+  }
+
+  return this.recoveryCodeRegenerations.create(params, {});
 };
 
 module.exports = UsersManager;

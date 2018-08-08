@@ -86,12 +86,26 @@ utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
  * @method    getAll
  * @memberOf  module:management.RulesManager.prototype
  *
- * @example
- * management.rules.getAll(function (err, rules) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.rules.getAll(params, function (err, rules) {
  *   console.log(rules.length);
  * });
  *
- * @param   {Function}  [cb]     Callback function.
+ * @param   {Object}    [params]          Rules parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
