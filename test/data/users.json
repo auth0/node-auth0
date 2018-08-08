@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "email": "jane.doe@contoso.com",
+    "email_verified": true,
+    "app_metadata": {
+      "roles": [
+        "admin"
+      ],
+      "plan": "premium"
+    },
+    "user_metadata": {
+      "theme": "light"
+    }
+  },
+  {
+    "email": "john.doe@contoso.com",
+    "email_verified": false,
+    "app_metadata": {
+      "roles": [],
+      "plan": "basic"
+    },
+    "user_metadata": {
+      "theme": "dark"
+    }
+  }
+]

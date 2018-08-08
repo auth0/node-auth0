@@ -2,6 +2,7 @@ var path = require('path');
 var expect = require('chai').expect;
 var nock = require('nock');
 var extractParts = require('../utils').extractParts;
+var fs = require('fs');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
@@ -9,12 +10,18 @@ var API_URL = 'https://tenant.auth0.com';
 var JobsManager = require(SRC_DIR + '/management/JobsManager');
 var ArgumentError = require('rest-facade').ArgumentError;
 
+var token = 'TOKEN';
+
 describe('JobsManager', function() {
   before(function() {
-    this.token = 'TOKEN';
     this.id = 'testJob';
     this.jobs = new JobsManager({
-      headers: { authorization: 'Bearer ' + this.token },
+      tokenProvider: {
+        getAccessToken: function() {
+          return Promise.resolve(token);
+        }
+      },
+      headers: {},
       baseUrl: API_URL
     });
   });
@@ -114,7 +121,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .get('/jobs/' + this.id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.get({ id: this.id }).then(function() {
@@ -141,9 +148,11 @@ describe('JobsManager', function() {
     });
   });
 
+  const usersFilePath = path.join(__dirname, '../data/users.json');
+
   describe('#importUsers', function() {
     var data = {
-      users: path.join(__dirname, '../data/users.json'),
+      users: usersFilePath,
       connection_id: 'con_test'
     };
 
@@ -166,7 +175,20 @@ describe('JobsManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass request errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .replyWithError('printer on fire');
+
+      this.jobs.importUsers(data).catch(function(err) {
+        expect(err.message).to.equal('printer on fire');
+        done();
+      });
+    });
+
+    it('should pass HTTP errors to the promise catch handler', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
@@ -174,7 +196,9 @@ describe('JobsManager', function() {
         .reply(500);
 
       this.jobs.importUsers(data).catch(function(err) {
-        expect(err).to.exist;
+        expect(err.message).to.equal(
+          'cannot POST https://tenant.auth0.com/jobs/users-imports (500)'
+        );
         done();
       });
     });
@@ -230,7 +254,9 @@ describe('JobsManager', function() {
             .to.contain('Content-Type: application/json');
 
           // Validate the content of the users JSON.
-          expect(parts.users.slice(-2)).to.equal('[]');
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
+          expect(users.length).to.equal(2);
+          expect(users[0].email).to.equal('jane.doe@contoso.com');
 
           return true;
         })
@@ -248,7 +274,54 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer ' + token)
+        .reply(200);
+
+      this.jobs.importUsers(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#importUsers with JSON data', function() {
+    var data = {
+      users_json: fs.readFileSync(usersFilePath, 'utf8'),
+      connection_id: 'con_test'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply(200);
+    });
+
+    it('should correctly include user JSON', function(done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function(header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+
+          return true;
+        })
+        .post('/jobs/users-imports', function(body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the content type of the users JSON.
+          expect(parts.users)
+            .to.exist.to.be.a('string')
+            .to.contain('Content-Type: application/json');
+
+          // Validate the content of the users JSON.
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
+          expect(users.length).to.equal(2);
+          expect(users[0].email).to.equal('jane.doe@contoso.com');
+
+          return true;
+        })
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
@@ -326,7 +399,7 @@ describe('JobsManager', function() {
 
       var request = nock(API_URL)
         .post('/jobs/verification-email')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', 'Bearer ' + token)
         .reply(200);
 
       this.jobs.verifyEmail(data).then(function() {
