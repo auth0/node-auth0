@@ -82,12 +82,27 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
  * @method    getAll
  * @memberOf  module:management.ClientGrantsManager.prototype
  *
- * @example
- * management.clientGrants.getAll(function (err, grants) {
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ *
+ * management.clientGrants.getAll(params, function (err, grants) {
  *   console.log(grants.length);
  * });
  *
- * @param   {Function}  [cb]    Callback function.
+ * @param   {Object}    [params]          Client Grants parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
