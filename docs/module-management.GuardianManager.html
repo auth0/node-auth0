@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>TicketsManager - Documentation</title>
+    <title>GuardianManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">TicketsManager</h1>
+    <h1 class="page-title">GuardianManager</h1>
     
 
     
@@ -44,10 +44,10 @@
         <h2>
             <span class="ancestors"><a href="module-management.html">management</a>.</span>
         
-        TicketsManager
+        GuardianManager
         </h2>
         
-            <div class="class-description"><p>Abstracts interaction with the tickets endpoint.</p></div>
+            <div class="class-description"><p>Abstracts interaction with the Guardian endpoint.</p></div>
         
     
 </header>
@@ -62,7 +62,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="TicketsManager"><span class="type-signature"></span>new TicketsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="GuardianManager"><span class="type-signature"></span>new GuardianManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -101,7 +101,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line16">line 16</a>
+        <a href="management_GuardianManager.js.html">management/GuardianManager.js</a>, <a href="management_GuardianManager.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -339,14 +339,13 @@
         
             
 <div class="section-members">
-<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
+<h4 class="name" id="~guardianEnrollmentsAuth0RestClient"><span class="type-signature">(inner) </span>guardianEnrollmentsAuth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
 
 
 
 
 <div class="description">
-    <p>Provides an abstraction layer for consuming the
-<a href="https://auth0.com/docs/api/v2#!/Tickets">Tickets endpoint</a>.</p>
+    <p>Provides an abstraction layer for retrieving Guardian enrollments.</p>
 </div>
 
 
@@ -382,7 +381,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line41">line 41</a>
+        <a href="management_GuardianManager.js.html">management/GuardianManager.js</a>, <a href="management_GuardianManager.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -423,14 +422,14 @@
 
     
 
-    <h4 class="name" id="changePassword"><span class="type-signature"></span>changePassword<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="deleteGuardianEnrollment"><span class="type-signature"></span>deleteGuardianEnrollment<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create a new password change ticket.</p>
+    <p>Delete a Guardian enrollment.</p>
 </div>
 
 
@@ -466,7 +465,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line49">line 49</a>
+        <a href="management_GuardianManager.js.html">management/GuardianManager.js</a>, <a href="management_GuardianManager.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -508,6 +507,91 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>The user data object.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user id.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
     
 
         <tr>
@@ -573,6 +657,9 @@
     <dd>
         
 <span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
@@ -587,17 +674,8 @@
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = {
-  result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
-  user_id: '{USER_ID}',  // Optional.
-  email: '{USER_EMAIL}',  // Optional.
-  new_password: '{PASSWORD}'
-};
-
-management.tickets.changePassword(params, function (err) {
-  if (err) {
-    // Handle error.
-  }
+    <pre class="prettyprint"><code>management.users.deleteGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollments) {
+  console.log(enrollments);
 });</code></pre>
 
 </div>
@@ -609,14 +687,14 @@ management.tickets.changePassword(params, function (err) {
 
     
 
-    <h4 class="name" id="verifyEmail"><span class="type-signature"></span>verifyEmail<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="getGuardianEnrollment"><span class="type-signature"></span>getGuardianEnrollment<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create an email verification ticket.</p>
+    <p>Get a single Guardian enrollment.</p>
 </div>
 
 
@@ -652,7 +730,7 @@ management.tickets.changePassword(params, function (err) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line83">line 83</a>
+        <a href="management_GuardianManager.js.html">management/GuardianManager.js</a>, <a href="management_GuardianManager.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -694,6 +772,91 @@ management.tickets.changePassword(params, function (err) {
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>The user data object.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user id.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
     
 
         <tr>
@@ -759,6 +922,9 @@ management.tickets.changePassword(params, function (err) {
     <dd>
         
 <span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
 
 
     </dd>
@@ -773,15 +939,8 @@ management.tickets.changePassword(params, function (err) {
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var data = {
-  user_id: '{USER_ID}',
-  result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
-};
-
-management.tickets.verifyEmail(data, function (err) {
-  if (err) {
-    // Handle error.
-  }
+    <pre class="prettyprint"><code>management.users.getGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollment) {
+  console.log(enrollment);
 });</code></pre>
 
 </div>

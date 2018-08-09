@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>TicketsManager - Documentation</title>
+    <title>management/GuardianManager.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,773 +29,115 @@
 
 <div id="main">
     
-    <h1 class="page-title">TicketsManager</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-            <span class="ancestors"><a href="module-management.html">management</a>.</span>
-        
-        TicketsManager
-        </h2>
-        
-            <div class="class-description"><p>Abstracts interaction with the tickets endpoint.</p></div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-<div class="section-method">
-
-    
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="TicketsManager"><span class="type-signature"></span>new TicketsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>The client options.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>baseUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>The URL of the API.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>headers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Headers to be included in all requests.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>retry</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Retry Policy Config</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>Provides an abstraction layer for consuming the
-<a href="https://auth0.com/docs/api/v2#!/Tickets">Tickets endpoint</a>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line41">line 41</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="changePassword"><span class="type-signature"></span>changePassword<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Create a new password change ticket.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line49">line 49</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>var params = {
-  result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
-  user_id: '{USER_ID}',  // Optional.
-  email: '{USER_EMAIL}',  // Optional.
-  new_password: '{PASSWORD}'
+    <h1 class="page-title">management/GuardianManager.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
+var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
+
+/**
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
+ */
+
+/**
+ * @class
+ * Abstracts interaction with the Guardian endpoint.
+ * @constructor
+ * @memberOf module:management
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
+ */
+var GuardianManager = function(options) {
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide manager options');
+  }
+
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
+
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
+    headers: options.headers,
+    query: { repeatParams: false }
+  };
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian enrollments.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianEnrollmentsAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/enrollments/:id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.enrollments = new RetryRestClient(guardianEnrollmentsAuth0RestClient, options.retry);
 };
 
-management.tickets.changePassword(params, function (err) {
-  if (err) {
-    // Handle error.
-  }
-});</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="verifyEmail"><span class="type-signature"></span>verifyEmail<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Create an email verification ticket.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_TicketsManager.js.html">management/TicketsManager.js</a>, <a href="management_TicketsManager.js.html#line83">line 83</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>var data = {
-  user_id: '{USER_ID}',
-  result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
+/**
+ * Get a single Guardian enrollment.
+ *
+ * @method    getGuardianEnrollment
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.users.getGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollment) {
+ *   console.log(enrollment);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+GuardianManager.prototype.getGuardianEnrollment = function(params, cb) {
+  return this.enrollments.get(params, cb);
 };
 
-management.tickets.verifyEmail(data, function (err) {
-  if (err) {
-    // Handle error.
-  }
-});</code></pre>
+/**
+ * Delete a Guardian enrollment.
+ *
+ * @method    deleteGuardianEnrollment
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.users.deleteGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollments) {
+ *   console.log(enrollments);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+GuardianManager.prototype.deleteGuardianEnrollment = function(params, cb) {
+  return this.enrollments.delete(params, cb);
+};
 
-</div>
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+module.exports = GuardianManager;
+</code></pre>
+        </article>
+    </section>
 
 
 
