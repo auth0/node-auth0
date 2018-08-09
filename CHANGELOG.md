@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.12.0](https://github.com/auth0/node-auth0/tree/v2.12.0) (2018-08-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.11.0...v2.12.0)
+
+**Added**
+
+* Added authorizationCodeGrant method to OAuthAuthenticator [\#290](https://github.com/auth0/node-auth0/pull/290) ([cwurtz](https://github.com/cwurtz))
+* Add Guardian Enrollments endpoints [\#278](https://github.com/auth0/node-auth0/pull/278) ([fmedinac](https://github.com/fmedinac))
+
 ## [v2.11.0](https://github.com/auth0/node-auth0/tree/v2.11.0) (2018-07-25)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.10.0...v2.11.0)
