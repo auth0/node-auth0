@@ -46,20 +46,22 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
  *
  * @return  {Promise|undefined}
  */
-OAUthWithIDTokenValidation.prototype.create = function(params, data, callback) {
+OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
   const createAndValidate = this.oauth.create(params, data).then(r => {
     var _this = this;
     if (r.id_token) {
-      var client = jwksClient({
-        jwksUri: 'https://' + this.domain + '/.well-known/jwks.json'
-      });
       function getKey(header, callback) {
         if (header.alg === 'HS256') {
           return callback(null, Buffer.from(_this.clientSecret, 'base64'));
         }
-        client.getSigningKey(header.kid, function(err, key) {
+        jwksClient({
+          jwksUri: 'https://' + _this.domain + '/.well-known/jwks.json'
+        }).getSigningKey(header.kid, function(err, key) {
+          if (err) {
+            return callback(err);
+          }
           var signingKey = key.publicKey || key.rsaPublicKey;
-          callback(err, signingKey);
+          callback(null, signingKey);
         });
       }
 
@@ -81,10 +83,10 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, callback) {
     }
     return r;
   });
-  if (!callback) {
+  if (!cb) {
     return createAndValidate;
   }
-  createAndValidate.then(r => callback(null, r)).catch(e => callback(e));
+  createAndValidate.then(r => cb(null, r)).catch(e => cb(e));
 };
 
 module.exports = OAUthWithIDTokenValidation;
