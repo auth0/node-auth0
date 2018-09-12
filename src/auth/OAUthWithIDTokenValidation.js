@@ -6,19 +6,18 @@ var ArgumentError = require('rest-facade').ArgumentError;
 
 /**
  * @class
- * Abstracts the `oauth.create` method with additional id_token validation\
+ * Abstracts the `oauth.create` method with additional id_token validation
  * @constructor
  * @memberOf module:auth
  *
  * @param  {Object}              options                Authenticator options.
- * @param  {String}              options.baseUrl        The auth0 account URL.
- * @param  {String}              options.domain       AuthenticationClient server domain
+ * @param  {String}              options.domain         AuthenticationClient server domain
  * @param  {String}              [options.clientId]     Default client ID.
  * @param  {String}              [options.clientSecret] Default client Secret.
  */
 var OAUthWithIDTokenValidation = function(oauth, options) {
   if (!oauth) {
-    throw new ArgumentError('Missing authenticator options');
+    throw new ArgumentError('Missing OAuthAuthenticator param');
   }
 
   if (!options) {
@@ -36,13 +35,14 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
 };
 
 /**
- * Creates an oauth request
+ * Creates an oauth request and validates the id_token (if any)
  *
  * @method    create
  * @memberOf  module:auth.OAuthWithIDTokenValidation.prototype
  *
- * @param   {Object}    options               Options are passed through
- * @param   {Function}  [callbabck]           Callback function
+ * @param   {Object}    params            OAuth parameters that are passed through
+ * @param   {Object}    data              Custom parameters sent to the OAuth endpoint
+ * @param   {Function}  [callback]        Callback function
  *
  * @return  {Promise|undefined}
  */
@@ -61,7 +61,7 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
             return callback(err);
           }
           var signingKey = key.publicKey || key.rsaPublicKey;
-          callback(null, signingKey);
+          return callback(null, signingKey);
         });
       }
 
