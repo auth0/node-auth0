@@ -15,7 +15,7 @@ var OAUthWithIDTokenValidation = require('../../src/auth/OAUthWithIDTokenValidat
 var PARAMS = { params: true };
 var DATA = { data: true };
 
-describe('OAUthWithIDTokenValidation2', function() {
+describe('OAUthWithIDTokenValidation', function() {
   describe('#create', function() {
     this.afterEach(function() {
       if (jwt.verify.restore) {
@@ -54,11 +54,16 @@ describe('OAUthWithIDTokenValidation2', function() {
       sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
         expect(idtoken).to.be.equal('foobar');
         expect(options).to.be.eql({
-          algorithms: ['HS256', 'RS256']
+          audience: CLIENT_ID,
+          algorithms: ['HS256', 'RS256'],
+          issuer: 'https://' + DOMAIN + '/'
         });
         done();
       });
-      var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
+      var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        clientId: CLIENT_ID,
+        domain: DOMAIN
+      });
       oauthWithValidation.create(PARAMS, DATA);
     });
     it('Returns auth result when verify response is successful', function(done) {
@@ -258,6 +263,113 @@ describe('OAUthWithIDTokenValidation2', function() {
           clientSecret: CLIENT_SECRET
         });
         oauthWithValidation.create(PARAMS, DATA);
+      });
+    });
+    describe('#integration', function() {
+      it('with a HS256 id_token and `options.supportedAlgorithms===RS256`', done => {
+        var oauth = {
+          create: function() {
+            return new Promise(res =>
+              res({
+                id_token:
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMDo1MjoxMS4zMDZaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmJydWNrZS5jbHViLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg1NTMxLCJleHAiOjE1MzY4MjE1MzF9.mZGsJyJYyp_mkINcnV0JRJ6QPsTXUE8FrpRTruAIqhE'
+              })
+            );
+          }
+        };
+        var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          clientSecret: CLIENT_SECRET,
+          supportedAlgorithms: ['RS256']
+        });
+        oauthWithValidation.create(PARAMS, DATA, function(e) {
+          expect(e.message).to.eq('invalid algorithm');
+          done();
+        });
+      });
+      it('when `token.header.alg===RS256` and `options.supportedAlgorithms===HS256`', done => {
+        var oauth = {
+          create: function() {
+            return new Promise(res =>
+              res({
+                id_token:
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5FVkJOVU5CT1RneFJrRTVOa1F6UXpjNE9UQkVNRUZGUkRRNU4wUTJRamswUmtRMU1qRkdNUSJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMDo1NTozMi4xMTlaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmJydWNrZS5jbHViLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg1NzMyLCJleHAiOjE1MzY4MjE3MzJ9.i8iBJntBiSPRLIJdLmgTwnT_FXamc4ug8al8Ws1X-P7UAxbEaaa3irjqfBnDf50tDAQkHFcwIKiMDIrEHHBEPPEc7MH8dlxDAr80Pr8-T-M_ls8U6KccBGfrsurlJaU6qMVSfUP25kmZm5torI0D81c9rZRWcdpb64EnZCvqpUPWZjap__PoC-G88NRH_28jT_hV-bGYgbjJ3FqL_xTZ2u866bQljt1oJlOf3vvLIL4tW9MYdYxOvh7VZXWji9TirrjCb6cuq-CZ5ZWTSpV_NRC24BMdGx_Mu-4EBUMb8uWiaLBrjJgb_NtOZXY6p6PeJQuX5S2MeD2z_SCXOcwukQ'
+              })
+            );
+          }
+        };
+        var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          clientSecret: CLIENT_SECRET,
+          domain: 'brucke.auth0.com',
+          supportedAlgorithms: ['HS256']
+        });
+        oauthWithValidation.create(PARAMS, DATA, function(e) {
+          expect(e.message).to.eq('invalid algorithm');
+          done();
+        });
+      });
+      it('when `token.aud` is invalid', done => {
+        var oauth = {
+          create: function() {
+            return new Promise(res =>
+              res({
+                id_token:
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5FVkJOVU5CT1RneFJrRTVOa1F6UXpjNE9UQkVNRUZGUkRRNU4wUTJRamswUmtRMU1qRkdNUSJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMDo1NTozMi4xMTlaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmJydWNrZS5jbHViLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg1NzMyLCJleHAiOjE1MzY4MjE3MzJ9.i8iBJntBiSPRLIJdLmgTwnT_FXamc4ug8al8Ws1X-P7UAxbEaaa3irjqfBnDf50tDAQkHFcwIKiMDIrEHHBEPPEc7MH8dlxDAr80Pr8-T-M_ls8U6KccBGfrsurlJaU6qMVSfUP25kmZm5torI0D81c9rZRWcdpb64EnZCvqpUPWZjap__PoC-G88NRH_28jT_hV-bGYgbjJ3FqL_xTZ2u866bQljt1oJlOf3vvLIL4tW9MYdYxOvh7VZXWji9TirrjCb6cuq-CZ5ZWTSpV_NRC24BMdGx_Mu-4EBUMb8uWiaLBrjJgb_NtOZXY6p6PeJQuX5S2MeD2z_SCXOcwukQ'
+              })
+            );
+          }
+        };
+        var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          clientId: 'foobar',
+          clientSecret: CLIENT_SECRET,
+          domain: 'brucke.auth0.com',
+          supportedAlgorithms: ['RS256']
+        });
+        oauthWithValidation.create(PARAMS, DATA, function(e) {
+          expect(e.message).to.eq('jwt audience invalid. expected: foobar');
+          done();
+        });
+      });
+      it('when `token.iss` is invalid', done => {
+        var oauth = {
+          create: function() {
+            return new Promise(res =>
+              res({
+                id_token:
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5FVkJOVU5CT1RneFJrRTVOa1F6UXpjNE9UQkVNRUZGUkRRNU4wUTJRamswUmtRMU1qRkdNUSJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMToxMzo1OS42OTNaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9icnVja2UuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg2ODM5LCJleHAiOjE1MzY4MjI4Mzl9.BkWn4lTu-_GWBC9QfjN1fux4yNe7TfjoyVwsd6tWc7GpuIsAb6GtZbiijfVBkiCchp7V28U2APMTi5Wt1luKkdD0OgI28GOFKKp6qM1qbpt1kexr3So5TgfTb9xbQF-B2HCrqE-fGughAOD4qc4N4UPS_6vRz24fyb4Y8O1wPtdfg9h49ioDa-c3-gyYsaWtUqRJfFoVU9AXBZaIJnKoefz5Oz-_cRWxOI5ci_zWWE2BoxkIMqWVN3Xzzr2njdFKM22HrIIzCz23neNW7bzyMotGjG0B4dbKaY4oIGiK7nI4OopDKbK1AD8KZpTjw97SpL8MbnIhN8-1c1fIVOxKEA'
+              })
+            );
+          }
+        };
+        var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          clientSecret: CLIENT_SECRET,
+          domain: 'auth.brucke.club',
+          supportedAlgorithms: ['RS256']
+        });
+        oauthWithValidation.create(PARAMS, DATA, function(e, d) {
+          expect(e.message).to.eq('jwt issuer invalid. expected: https://auth.brucke.club/');
+          done();
+        });
+      });
+      it('when `token.exp` is expired', done => {
+        var oauth = {
+          create: function() {
+            return new Promise(res =>
+              res({
+                id_token:
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5FVkJOVU5CT1RneFJrRTVOa1F6UXpjNE9UQkVNRUZGUkRRNU4wUTJRamswUmtRMU1qRkdNUSJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMToxNzoyNy41NjVaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9icnVja2UuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg3MDQ3LCJleHAiOjE1MzY3ODcwNTJ9.Wn6ie7sXQ7jG94MDumSa2vciKkt5qrDN8LGWw1U9cz8Oh15JxFZOxtPJxWST5t6i8biJ4l7fvjez7KkoibRf9TPXpe0VxE2SsQCy-H2TRlUSnodBg25WRPPKmXvA6tB_CeaZjDplaTV21fnvcRq7kCwl_O91meWS7Qs3rEWvrD_M63LvDPvAReKcNFRg42p_nZS5fnq2CLC6OHUBznkZfMforNJ8YC0GufcrBd2lRaNljF57Z6fHSupfwY9vLIxfp-nx7yYl7H1vjp75f-08h8mOLRgZdpCjG3z8QKCBwsY_5t8dnQfZiUsGhRFx6hsTb6BC35JHkNHSyOw75tfl9A'
+              })
+            );
+          }
+        };
+        var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          clientSecret: CLIENT_SECRET,
+          domain: 'auth.brucke.club',
+          supportedAlgorithms: ['RS256']
+        });
+        oauthWithValidation.create(PARAMS, DATA, function(e, d) {
+          expect(e.message).to.eq('jwt expired');
+          done();
+        });
       });
     });
   });

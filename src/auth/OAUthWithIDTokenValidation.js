@@ -10,10 +10,11 @@ var ArgumentError = require('rest-facade').ArgumentError;
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}              options                Authenticator options.
- * @param  {String}              options.domain         AuthenticationClient server domain
- * @param  {String}              [options.clientId]     Default client ID.
- * @param  {String}              [options.clientSecret] Default client Secret.
+ * @param  {Object}              options                         Authenticator options.
+ * @param  {String}              options.domain                  AuthenticationClient server domain
+ * @param  {String}              [options.clientId]              Default client ID.
+ * @param  {String}              [options.clientSecret]          Default client Secret.
+ * @param  {String}              [options.supportedAlgorithms]   Algorithms that your application expects to receive
  */
 var OAUthWithIDTokenValidation = function(oauth, options) {
   if (!oauth) {
@@ -32,6 +33,7 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
   this.domain = options.domain;
+  this.supportedAlgorithms = options.supportedAlgorithms || ['HS256', 'RS256'];
 };
 
 /**
@@ -64,13 +66,14 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
           return callback(null, signingKey);
         });
       }
-
       return new Promise((res, rej) => {
         jwt.verify(
           r.id_token,
           getKey,
           {
-            algorithms: ['HS256', 'RS256']
+            algorithms: this.supportedAlgorithms,
+            audience: this.clientId,
+            issuer: 'https://' + this.domain + '/'
           },
           function(err, payload) {
             if (err) {
