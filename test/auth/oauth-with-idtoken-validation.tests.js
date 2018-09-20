@@ -15,7 +15,7 @@ var OAUthWithIDTokenValidation = require('../../src/auth/OAUthWithIDTokenValidat
 var PARAMS = { params: true };
 var DATA = { data: true };
 
-describe('OAUthWithIDTokenValidation', function() {
+describe.only('OAUthWithIDTokenValidation', function() {
   describe('#create', function() {
     this.afterEach(function() {
       if (jwt.verify.restore) {
@@ -266,7 +266,7 @@ describe('OAUthWithIDTokenValidation', function() {
       });
     });
     describe('#integration', function() {
-      it('with a HS256 id_token and `options.supportedAlgorithms===RS256`', done => {
+      it('fails with a HS256 id_token and `options.supportedAlgorithms===RS256`', done => {
         var oauth = {
           create: function() {
             return new Promise(res =>
@@ -286,7 +286,7 @@ describe('OAUthWithIDTokenValidation', function() {
           done();
         });
       });
-      it('when `token.header.alg===RS256` and `options.supportedAlgorithms===HS256`', done => {
+      it('fails with a RS256 id_token and `options.supportedAlgorithms===HS256`', done => {
         var oauth = {
           create: function() {
             return new Promise(res =>
@@ -307,7 +307,7 @@ describe('OAUthWithIDTokenValidation', function() {
           done();
         });
       });
-      it('when `token.aud` is invalid', done => {
+      it('fails when `token.aud` is invalid', done => {
         var oauth = {
           create: function() {
             return new Promise(res =>
@@ -329,7 +329,7 @@ describe('OAUthWithIDTokenValidation', function() {
           done();
         });
       });
-      it('when `token.iss` is invalid', done => {
+      it('fails when `token.iss` is invalid', done => {
         var oauth = {
           create: function() {
             return new Promise(res =>
@@ -350,7 +350,7 @@ describe('OAUthWithIDTokenValidation', function() {
           done();
         });
       });
-      it('when `token.exp` is expired', done => {
+      it('fails when `token.exp` is expired', done => {
         var oauth = {
           create: function() {
             return new Promise(res =>

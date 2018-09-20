@@ -10,6 +10,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
  * @constructor
  * @memberOf module:auth
  *
+ * @param  {Object}              oauth                           An instance of @type {OAuthAuthenticator}
  * @param  {Object}              options                         Authenticator options.
  * @param  {String}              options.domain                  AuthenticationClient server domain
  * @param  {String}              [options.clientId]              Default client ID.

@@ -13,8 +13,8 @@ var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
  * @memberOf module:auth
  *
  * @param  {Object}              options                Authenticator options.
- * @param  {String}              options.baseUrl        The auth0 account URL.
- * @param  {String}              options.domain       AuthenticationClient server domain
+ * @param  {String}              options.baseUrl        The Auth0 account URL.
+ * @param  {String}              options.domain         AuthenticationClient server domain
  * @param  {String}              [options.clientId]     Default client ID.
  * @param  {String}              [options.clientSecret] Default client Secret.
  */
