@@ -30,7 +30,7 @@ var createCertificate = function(cb) {
   });
 };
 
-describe.only('OAUthWithIDTokenValidation', function() {
+describe('OAUthWithIDTokenValidation', function() {
   describe('#create', function() {
     this.afterEach(function() {
       if (jwt.verify.restore) {
