@@ -343,7 +343,7 @@ describe('OAUthWithIDTokenValidation', function() {
           done();
         });
       });
-      describe('when using a valid token', function() {
+      describe('when using a valid certificate to generate an invalid id_token', function() {
         it('fails when `token.aud` is invalid', done => {
           createCertificate(function(c) {
             var idtoken = jwt.sign({ foo: 'bar' }, c.serviceKey, {
@@ -386,11 +386,12 @@ describe('OAUthWithIDTokenValidation', function() {
           });
         });
         it('fails when `token.iss` is invalid', done => {
+          const TEST_AUDIENCE = 'foobar';
           createCertificate(function(c) {
             var idtoken = jwt.sign({ foo: 'bar' }, c.serviceKey, {
               algorithm: 'RS256',
               issuer: 'wrong_issuer',
-              audience: 'foobar',
+              audience: TEST_AUDIENCE,
               expiresIn: '1h'
             });
             var oauth = {
