@@ -31,6 +31,23 @@ var createCertificate = function(cb) {
 };
 
 describe('OAUthWithIDTokenValidation', function() {
+  describe('constructor', function() {
+    it('validates `oauth` is required', function() {
+      expect(function() {
+        new OAUthWithIDTokenValidation();
+      }).to.throw('Missing OAuthAuthenticator param');
+    });
+    it('validates `options` is required', function() {
+      expect(function() {
+        new OAUthWithIDTokenValidation({});
+      }).to.throw('Missing authenticator options');
+    });
+    it('validates `oauth` is required', function() {
+      expect(function() {
+        new OAUthWithIDTokenValidation({}, 'asd');
+      }).to.throw('The authenticator options must be an object');
+    });
+  });
   describe('#create', function() {
     this.afterEach(function() {
       if (jwt.verify.restore) {
