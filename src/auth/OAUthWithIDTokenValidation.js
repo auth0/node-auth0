@@ -35,6 +35,9 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
   this.clientSecret = options.clientSecret;
   this.domain = options.domain;
   this.supportedAlgorithms = options.supportedAlgorithms || ['HS256', 'RS256'];
+  this._jwksClient = jwksClient({
+    jwksUri: 'https://' + options.domain + '/.well-known/jwks.json'
+  });
 };
 
 /**
@@ -57,9 +60,7 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
         if (header.alg === 'HS256') {
           return callback(null, Buffer.from(_this.clientSecret, 'base64'));
         }
-        jwksClient({
-          jwksUri: 'https://' + _this.domain + '/.well-known/jwks.json'
-        }).getSigningKey(header.kid, function(err, key) {
+        _this._jwksClient.getSigningKey(header.kid, function(err, key) {
           if (err) {
             return callback(err);
           }
