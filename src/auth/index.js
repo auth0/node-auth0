@@ -39,11 +39,11 @@ var BASE_URL_FORMAT = 'https://%s';
  *   clientId: '{OPTIONAL_CLIENT_ID}'
  * });
  *
- * @param   {Object}  options                 Options for the Authentication Client
- *                                            SDK.
- * @param   {String}  options.domain          AuthenticationClient server domain.
- * @param   {String}  [options.clientId]      Default client ID.
- * @param   {String}  [options.clientSecret]  Default client Secret.
+ * @param   {Object}  options                         Options for the Authentication Client SDK.
+ * @param   {String}  options.domain                  AuthenticationClient server domain.
+ * @param   {String}  [options.clientId]              Default client ID.
+ * @param   {String}  [options.clientSecret]          Default client Secret.
+ * @param   {String}  [options.supportedAlgorithms]   Algorithms that your application expects to receive
  */
 var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {
@@ -62,7 +62,8 @@ var AuthenticationClient = function(options) {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain)
+    baseUrl: util.format(BASE_URL_FORMAT, options.domain),
+    supportedAlgorithms: options.supportedAlgorithms
   };
 
   if (options.telemetry !== false) {

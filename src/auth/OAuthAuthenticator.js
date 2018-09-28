@@ -3,6 +3,8 @@ var extend = require('util')._extend;
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
+var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
+
 /**
  * @class
  * Abstracts the sign-in, sign-up and change-password processes for Database &
@@ -11,7 +13,8 @@ var RestClient = require('rest-facade').Client;
  * @memberOf module:auth
  *
  * @param  {Object}              options                Authenticator options.
- * @param  {String}              options.baseUrl        The auth0 account URL.
+ * @param  {String}              options.baseUrl        The Auth0 account URL.
+ * @param  {String}              options.domain         AuthenticationClient server domain
  * @param  {String}              [options.clientId]     Default client ID.
  * @param  {String}              [options.clientSecret] Default client Secret.
  */
@@ -34,6 +37,7 @@ var OAuthAuthenticator = function(options) {
   };
 
   this.oauth = new RestClient(options.baseUrl + '/oauth/:type', clientOptions);
+  this.oauthWithIDTokenValidation = new OAUthWithIDTokenValidation(this.oauth, options);
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
 };
@@ -96,10 +100,10 @@ OAuthAuthenticator.prototype.signIn = function(userData, cb) {
   }
 
   if (cb && cb instanceof Function) {
-    return this.oauth.create(params, data, cb);
+    return this.oauthWithIDTokenValidation.create(params, data, cb);
   }
 
-  return this.oauth.create(params, data);
+  return this.oauthWithIDTokenValidation.create(params, data);
 };
 
 /**
@@ -169,10 +173,10 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
   }
 
   if (cb && cb instanceof Function) {
-    return this.oauth.create(params, data, cb);
+    return this.oauthWithIDTokenValidation.create(params, data, cb);
   }
 
-  return this.oauth.create(params, data);
+  return this.oauthWithIDTokenValidation.create(params, data);
 };
 
 /**
@@ -306,10 +310,10 @@ OAuthAuthenticator.prototype.authorizationCodeGrant = function(options, cb) {
   }
 
   if (cb && cb instanceof Function) {
-    return this.oauth.create(params, data, cb);
+    return this.oauthWithIDTokenValidation.create(params, data, cb);
   }
 
-  return this.oauth.create(params, data);
+  return this.oauthWithIDTokenValidation.create(params, data);
 };
 
 module.exports = OAuthAuthenticator;
