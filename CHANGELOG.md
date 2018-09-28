@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.13.0](https://github.com/auth0/node-auth0/tree/v2.13.0) (2018-09-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.12.0...v2.13.0)
+
+**Added**
+
+* Add id_token validation (HS256 and RS256) [\#295](https://github.com/auth0/node-auth0/pull/295) ([luisrudge](https://github.com/luisrudge))
+
 ## [v2.12.0](https://github.com/auth0/node-auth0/tree/v2.12.0) (2018-08-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.11.0...v2.12.0)
