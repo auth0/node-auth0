@@ -860,6 +860,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  *
  * // Pagination settings.
  * var params = {
+ *   search_engine: 'v3',
  *   per_page: 10,
  *   page: 0
  * };
@@ -868,10 +869,11 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  *   console.log(users.length);
  * });
  *
- * @param   {Object}    [params]          Users params.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
- * @param   {Function}  [cb]              Callback function.
+ * @param   {Object}    [params]               Users params.
+ * @param   {Number}    [params.search_engine] The version of the search engine to use.
+ * @param   {Number}    [params.per_page]      Number of results per page.
+ * @param   {Number}    [params.page]          Page number, zero indexed.
+ * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -1924,6 +1926,5 @@ utils.wrapPropertyMethod(ManagementClient, 'getRulesConfigs', 'rulesConfigs.getA
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.delete');
-
 
 module.exports = ManagementClient;
