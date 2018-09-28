@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 var extend = require('util')._extend;
 var nock = require('nock');
 var Promise = require('bluebird');
+var sinon = require('sinon');
 
 // Constants.
 var SRC_DIR = '../../src';
@@ -12,6 +13,7 @@ var CLIENT_SECRET = 'TEST_CLIENT_SECRET';
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/OAuthAuthenticator');
+var OAUthWithIDTokenValidation = require('../../src/auth/OAUthWithIDTokenValidation');
 
 var validOptions = {
   baseUrl: API_URL,
@@ -20,7 +22,11 @@ var validOptions = {
 };
 
 describe('OAuthAuthenticator', function() {
+  beforeEach(function() {
+    sinon.spy(OAUthWithIDTokenValidation.prototype, 'create');
+  });
   afterEach(function() {
+    OAUthWithIDTokenValidation.prototype.create.restore();
     nock.cleanAll();
   });
 
@@ -218,6 +224,15 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+    it('should use OAUthWithIDTokenValidation', function(done) {
+      this.authenticator
+        .signIn(userData)
+        .then(function() {
+          expect(OAUthWithIDTokenValidation.prototype.create.calledOnce).to.be.true;
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('#passwordGrant', function() {
@@ -375,6 +390,15 @@ describe('OAuthAuthenticator', function() {
         .then(function() {
           expect(request.isDone()).to.be.true;
 
+          done();
+        })
+        .catch(done);
+    });
+    it('should use OAUthWithIDTokenValidation', function(done) {
+      this.authenticator
+        .passwordGrant(userData)
+        .then(function() {
+          expect(OAUthWithIDTokenValidation.prototype.create.calledOnce).to.be.true;
           done();
         })
         .catch(done);
@@ -811,6 +835,15 @@ describe('OAuthAuthenticator', function() {
         .then(function() {
           expect(request.isDone()).to.be.true;
 
+          done();
+        })
+        .catch(done);
+    });
+    it('should use OAUthWithIDTokenValidation', function(done) {
+      this.authenticator
+        .authorizationCodeGrant(data)
+        .then(function() {
+          expect(OAUthWithIDTokenValidation.prototype.create.calledOnce).to.be.true;
           done();
         })
         .catch(done);
