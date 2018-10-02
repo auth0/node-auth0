@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const { ArgumentError, Client: RestClient } = require('rest-facade');
 
 class Auth0RestClient {

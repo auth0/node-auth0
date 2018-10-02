@@ -1,4 +1,4 @@
-const Promise = require('bluebird');
+const { promisify } = require('util');
 const { ArgumentError } = require('rest-facade');
 const memoizer = require('lru-memoizer');
 const AuthenticationClient = require('../auth');
@@ -97,7 +97,7 @@ class ManagementTokenProvider {
   }
 }
 
-ManagementTokenProvider.prototype._getCachedAccessToken = Promise.promisify(
+ManagementTokenProvider.prototype._getCachedAccessToken = promisify(
   memoizer({
     load(options, callback) {
       const { domain, scope, audience } = options;

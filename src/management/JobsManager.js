@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const request = require('request');
 const { createReadStream } = require('fs');
 

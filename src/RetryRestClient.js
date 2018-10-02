@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const retry = require('retry');
 const { ArgumentError } = require('rest-facade');
 const { assign } = Object;

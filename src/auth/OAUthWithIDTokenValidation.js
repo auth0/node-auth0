@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
