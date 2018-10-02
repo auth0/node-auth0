@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const { wrapPropertyMethod } = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -21,39 +21,42 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var EmailTemplatesManager = function(options) {
-  if (!options || 'object' !== typeof options) {
-    throw new ArgumentError('Must provide manager options');
+class EmailTemplatesManager {
+  constructor(options) {
+    if (!options || 'object' !== typeof options) {
+      throw new ArgumentError('Must provide manager options');
+    }
+
+    if (!options.baseUrl || 'string' !== typeof options.baseUrl) {
+      throw new ArgumentError('Must provide a valid string as base URL for the API');
+    }
+
+    const { headers, baseUrl, tokenProvider, retry } = options;
+
+    /**
+     * Options object for the Rest Client instance.
+     *
+     * @type {Object}
+     */
+    const clientOptions = {
+      headers,
+      query: { repeatParams: false }
+    };
+
+    /**
+     * Provides an abstraction layer for performing CRUD operations on
+     * {@link https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName Auth0's Email Templates}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${baseUrl}/email-templates/:name`,
+      clientOptions,
+      tokenProvider
+    );
+    this.resource = new RetryRestClient(auth0RestClient, retry);
   }
-
-  if (!options.baseUrl || 'string' !== typeof options.baseUrl) {
-    throw new ArgumentError('Must provide a valid string as base URL for the API');
-  }
-
-  /**
-   * Options object for the Rest Client instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
-
-  /**
-   * Provides an abstraction layer for performing CRUD operations on
-   * {@link https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName Auth0's Email Templates}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/email-templates/:name',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
-
+}
 /**
  * Create a new Email Template.
  *
@@ -74,7 +77,7 @@ var EmailTemplatesManager = function(options) {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(EmailTemplatesManager, 'create', 'resource.create');
+wrapPropertyMethod(EmailTemplatesManager, 'create', 'resource.create');
 
 /**
  * Get an Auth0 Email Template.
@@ -97,7 +100,7 @@ utils.wrapPropertyMethod(EmailTemplatesManager, 'create', 'resource.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(EmailTemplatesManager, 'get', 'resource.get');
+wrapPropertyMethod(EmailTemplatesManager, 'get', 'resource.get');
 
 /**
  * Update an existing Email Template.
@@ -106,8 +109,8 @@ utils.wrapPropertyMethod(EmailTemplatesManager, 'get', 'resource.get');
  * @memberOf  module:management.EmailTemplatesManager.prototype
  *
  * @example
- * var data = { from: 'new@email.com' };
- * var params = { name: EMAIL_TEMPLATE_NAME };
+ * const data = { from: 'new@email.com' };
+ * const params = { name: EMAIL_TEMPLATE_NAME };
  *
  * management.emailTemplates.update(params, data, function (err, emailTemplate) {
  *   if (err) {
@@ -124,6 +127,6 @@ utils.wrapPropertyMethod(EmailTemplatesManager, 'get', 'resource.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(EmailTemplatesManager, 'update', 'resource.patch');
+wrapPropertyMethod(EmailTemplatesManager, 'update', 'resource.patch');
 
 module.exports = EmailTemplatesManager;
