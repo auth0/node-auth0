@@ -65,7 +65,8 @@ describe('DatabaseAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.signIn).to.throw(ArgumentError, 'Missing user data object');
+      const signIn = this.authenticator.signIn.bind(this.authenticator);
+      expect(signIn).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require a username', function() {
@@ -266,7 +267,8 @@ describe('DatabaseAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.signUp).to.throw(ArgumentError, 'Missing user data object');
+      const signup = this.authenticator.signUp.bind(this.authenticator);
+      expect(signup).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require an email', function() {
@@ -378,7 +380,8 @@ describe('DatabaseAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.changePassword).to.throw(ArgumentError, 'Missing user data object');
+      const changePass = this.authenticator.changePassword.bind(this.authenticator);
+      expect(changePass).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require an email', function() {
@@ -489,10 +492,10 @@ describe('DatabaseAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.requestChangePasswordEmail).to.throw(
-        ArgumentError,
-        'Missing user data object'
+      const requestChangePasswordEmail = this.authenticator.requestChangePasswordEmail.bind(
+        this.authenticator
       );
+      expect(requestChangePasswordEmail).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require an email', function() {

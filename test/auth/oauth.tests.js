@@ -72,7 +72,8 @@ describe('OAuthAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.signIn).to.throw(ArgumentError, 'Missing user data object');
+      const signIn = this.authenticator.signIn.bind(this.authenticator);
+      expect(signIn).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require a connection', function() {
@@ -252,7 +253,8 @@ describe('OAuthAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.passwordGrant).to.throw(ArgumentError, 'Missing user data object');
+      const passwordGrant = this.authenticator.passwordGrant.bind(this.authenticator);
+      expect(passwordGrant).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require a username', function() {
@@ -585,10 +587,10 @@ describe('OAuthAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.clientCredentialsGrant).to.throw(
-        ArgumentError,
-        'Missing options object'
+      const clientCredentialsGrant = this.authenticator.clientCredentialsGrant.bind(
+        this.authenticator
       );
+      expect(clientCredentialsGrant).to.throw(ArgumentError, 'Missing options object');
     });
 
     it('should require the client_id', function() {
@@ -716,10 +718,10 @@ describe('OAuthAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.authorizationCodeGrant).to.throw(
-        ArgumentError,
-        'Missing options object'
+      const authorizationCodeGrant = this.authenticator.authorizationCodeGrant.bind(
+        this.authenticator
       );
+      expect(authorizationCodeGrant).to.throw(ArgumentError, 'Missing options object');
     });
 
     it('should require a code', function() {

@@ -65,7 +65,8 @@ describe('PasswordlessAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.signIn).to.throw(ArgumentError, 'Missing user data object');
+      const signIn = this.authenticator.signIn.bind(this.authenticator);
+      expect(signIn).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require a phone number', function() {
@@ -265,7 +266,8 @@ describe('PasswordlessAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.sendEmail).to.throw(ArgumentError, 'Missing user data object');
+      const sendEmail = this.authenticator.sendEmail.bind(this.authenticator);
+      expect(sendEmail).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require an email', function() {
@@ -429,7 +431,8 @@ describe('PasswordlessAuthenticator', function() {
     });
 
     it('should require an object as first argument', function() {
-      expect(this.authenticator.sendSMS).to.throw(ArgumentError, 'Missing user data object');
+      const sendSMS = this.authenticator.sendSMS.bind(this.authenticator);
+      expect(sendSMS).to.throw(ArgumentError, 'Missing user data object');
     });
 
     it('should require a phone number', function() {
