@@ -128,9 +128,9 @@ class JobsManager {
    * @return  {Promise|undefined}
    */
   importUsers(data, cb) {
-    const { headers, baseUrl, tokenProvider } = this.options;
+    const { baseUrl, tokenProvider } = this.options;
     const { users_json, users, connection_id } = data;
-    const headers = Object.assign({}, headers);
+    const headers = Object.assign({}, this.options.headers);
 
     headers['Content-Type'] = 'multipart/form-data';
 
