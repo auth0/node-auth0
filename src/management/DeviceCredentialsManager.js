@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const { wrapPropertyMethod } = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -20,44 +20,48 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var DeviceCredentialsManager = function(options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide manager options');
+class DeviceCredentialsManager {
+  constructor(options) {
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide manager options');
+    }
+
+    if (options.baseUrl === null || options.baseUrl === undefined) {
+      throw new ArgumentError('Must provide a base URL for the API');
+    }
+
+    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+      throw new ArgumentError('The provided base URL is invalid');
+    }
+
+    const { headers, baseUrl, tokenProvider, retry } = options;
+
+    /**
+     * Options object for the RestClient instance.
+     *
+     * @type {Object}
+     */
+    const clientOptions = {
+      errorFormatter: { message: 'message', name: 'error' },
+      headers,
+      query: { repeatParams: false }
+    };
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/v2#!/Device_Credentials
+     *  Auth0 DeviceCredentialsManagers endpoint}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${baseUrl}/device-credentials/:id`,
+      clientOptions,
+      tokenProvider
+    );
+    this.resource = new RetryRestClient(auth0RestClient, retry);
   }
-
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
-
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
-  }
-
-  /**
-   * Options object for the RestClient instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' },
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
-
-  /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Device_Credentials
-   *  Auth0 DeviceCredentialsManagers endpoint}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/device-credentials/:id',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
+}
 
 /**
  * Create an Auth0 credential.
@@ -79,7 +83,7 @@ var DeviceCredentialsManager = function(options) {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.create');
+wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.create');
 
 /**
  * Get all Auth0 credentials.
@@ -96,7 +100,7 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
+wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
 
 /**
  * Delete an Auth0 device credential.
@@ -105,7 +109,7 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
- * var params = { id: CREDENTIAL_ID };
+ * const params = { id: CREDENTIAL_ID };
  *
  * management.deviceCredentials.delete(params, function (err) {
  *   if (err) {
@@ -121,6 +125,6 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(DeviceCredentialsManager, 'delete', 'resource.delete');
+wrapPropertyMethod(DeviceCredentialsManager, 'delete', 'resource.delete');
 
 module.exports = DeviceCredentialsManager;
