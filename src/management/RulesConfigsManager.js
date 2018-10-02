@@ -1,14 +1,13 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const { wrapPropertyMethod } = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
-
 
 /**
  * @class RulesConfigsManager
@@ -22,39 +21,46 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var RulesConfigsManager = function (options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide manager options');
+class RulesConfigsManager {
+  constructor(options) {
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide manager options');
+    }
+
+    if (options.baseUrl === null || options.baseUrl === undefined) {
+      throw new ArgumentError('Must provide a base URL for the API');
+    }
+
+    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+      throw new ArgumentError('The provided base URL is invalid');
+    }
+
+    const { headers, tokenProvider, retry, baseUrl } = options;
+
+    /**
+     * Options object for the Rest Client instance.
+     *
+     * @type {Object}
+     */
+    const clientOptions = {
+      headers,
+      query: { repeatParams: false }
+    };
+
+    /**
+     * Provides an abstraction layer for performing CRUD operations on
+     * {@link https://auth0.com/docs/api/v2#!/RulesConfigsManager Auth0 RulesConfigsManager}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${baseUrl}/rules-configs/:key`,
+      clientOptions,
+      tokenProvider
+    );
+    this.resource = new RetryRestClient(auth0RestClient, retry);
   }
-
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
-
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
-  }
-
-  /**
-   * Options object for the Rest Client instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
-
-  /**
-   * Provides an abstraction layer for performing CRUD operations on
-   * {@link https://auth0.com/docs/api/v2#!/RulesConfigsManager Auth0 RulesConfigsManager}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/rules-configs/:key', clientOptions, options.tokenProvider);
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
-
+}
 
 /**
  * Set a new rules config.
@@ -63,9 +69,9 @@ var RulesConfigsManager = function (options) {
  * @memberOf  module:management.RulesConfigsManager.prototype
  *
  * @example
- * var params = { key: RULE_CONFIG_KEY };
- * var data =   { value: RULES_CONFIG_VALUE };
- *  
+ * const params = { key: RULE_CONFIG_KEY };
+ * const data =   { value: RULES_CONFIG_VALUE };
+ *
  * management.rulesConfigs.set(params, data, function (err, rulesConfig) {
  *   if (err) {
  *     // Handle error.
@@ -82,8 +88,7 @@ var RulesConfigsManager = function (options) {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(RulesConfigsManager, 'set', 'resource.update');
-
+wrapPropertyMethod(RulesConfigsManager, 'set', 'resource.update');
 
 /**
  * Get all rules configs.
@@ -100,8 +105,7 @@ utils.wrapPropertyMethod(RulesConfigsManager, 'set', 'resource.update');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(RulesConfigsManager, 'getAll', 'resource.getAll');
-
+wrapPropertyMethod(RulesConfigsManager, 'getAll', 'resource.getAll');
 
 /**
  * Delete an existing rules config.
@@ -124,6 +128,6 @@ utils.wrapPropertyMethod(RulesConfigsManager, 'getAll', 'resource.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(RulesConfigsManager, 'delete', 'resource.delete');
+wrapPropertyMethod(RulesConfigsManager, 'delete', 'resource.delete');
 
 module.exports = RulesConfigsManager;
