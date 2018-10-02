@@ -1,6 +1,5 @@
 const retry = require('retry');
 const { ArgumentError } = require('rest-facade');
-const { assign } = Object;
 
 const DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
 
@@ -20,7 +19,7 @@ class RetryRestClient {
       throw new ArgumentError('Must provide RestClient');
     }
 
-    const params = assign({}, DEFAULT_OPTIONS, options);
+    const params = Object.assign({}, DEFAULT_OPTIONS, options);
 
     if (typeof params.enabled !== 'boolean') {
       throw new ArgumentError('Must provide enabled boolean value');
