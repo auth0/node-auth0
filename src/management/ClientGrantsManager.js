@@ -1,5 +1,5 @@
 const ArgumentError = require('rest-facade').ArgumentError;
-const utils = require('../utils');
+const { wrapPropertyMethod } = require('../utils');
 const Auth0RestClient = require('../Auth0RestClient');
 const RetryRestClient = require('../RetryRestClient');
 /**
@@ -78,7 +78,7 @@ class ClientGrantsManager {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
+wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
 
 /**
  * Get all Auth0 Client Grants.
@@ -110,7 +110,7 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientGrantsManager, 'getAll', 'resource.getAll');
+wrapPropertyMethod(ClientGrantsManager, 'getAll', 'resource.getAll');
 
 /**
  * Update an Auth0 client grant.
@@ -141,7 +141,7 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'getAll', 'resource.getAll');
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientGrantsManager, 'update', 'resource.patch');
+wrapPropertyMethod(ClientGrantsManager, 'update', 'resource.patch');
 
 /**
  * Delete an Auth0 client grant.
@@ -164,6 +164,6 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'update', 'resource.patch');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientGrantsManager, 'delete', 'resource.delete');
+wrapPropertyMethod(ClientGrantsManager, 'delete', 'resource.delete');
 
 module.exports = ClientGrantsManager;
