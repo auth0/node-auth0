@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const { wrapPropertyMethod } = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ResourceServersManager
@@ -21,42 +21,46 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.retry]    Retry Policy Config
  */
 
-var ResourceServersManager = function(options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide resource server options');
+class ResourceServersManager {
+  constructor(options) {
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide resource server options');
+    }
+
+    if (options.baseUrl === null || options.baseUrl === undefined) {
+      throw new ArgumentError('Must provide a base URL for the API');
+    }
+
+    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+      throw new ArgumentError('The provided base URL is invalid');
+    }
+
+    const { headers, baseUrl, tokenProvider, retry } = options;
+
+    /**
+     * Options object for the Rest Client instance.
+     *
+     * @type {Object}
+     */
+    const clientOptions = {
+      headers,
+      query: { repeatParams: false }
+    };
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/v2#!/ResourceServers Auth0 Resource Servers endpoint}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${baseUrl}/resource-servers/:id`,
+      clientOptions,
+      tokenProvider
+    );
+    this.resource = new RetryRestClient(auth0RestClient, retry);
   }
-
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
-
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
-  }
-
-  /**
-   * Options object for the Rest Client instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
-
-  /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/ResourceServers Auth0 Resource Servers endpoint}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/resource-servers/:id',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
+}
 
 /**
  * Create an API (Resource Server).
@@ -78,7 +82,7 @@ var ResourceServersManager = function(options) {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
+wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
 
 /**
  * Get all resource servers.
@@ -93,7 +97,7 @@ utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -109,7 +113,7 @@ utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
+wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
 
 /**
  * Get a Resource Server.
@@ -132,7 +136,7 @@ utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
+wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
 
 /**
  * Update an existing resource server.
@@ -141,8 +145,8 @@ utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
  * @memberOf  module:management.ResourceServersManager.prototype
  *
  * @example
- * var data = { name: 'newResourceServerName' };
- * var params = { id: RESOURCE_SERVER_ID };
+ * const data = { name: 'newResourceServerName' };
+ * const params = { id: RESOURCE_SERVER_ID };
  *
  * management.resourceServers.update(params, data, function (err, resourceServer) {
  *   if (err) {
@@ -159,7 +163,7 @@ utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
+wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
 
 /**
  * Delete an existing Resource Server.
@@ -182,6 +186,6 @@ utils.wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ResourceServersManager, 'delete', 'resource.delete');
+wrapPropertyMethod(ResourceServersManager, 'delete', 'resource.delete');
 
 module.exports = ResourceServersManager;
