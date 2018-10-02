@@ -1,6 +1,6 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -19,92 +19,96 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var TenantManager = function(options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide manager options');
-  }
+class TenantManager {
+  constructor(options) {
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide manager options');
+    }
 
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
+    if (options.baseUrl === null || options.baseUrl === undefined) {
+      throw new ArgumentError('Must provide a base URL for the API');
+    }
 
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
-  }
+    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+      throw new ArgumentError('The provided base URL is invalid');
+    }
 
-  var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' },
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
+    const { headers, baseUrl, tokenProvider, retry } = options;
+
+    const clientOptions = {
+      errorFormatter: { message: 'message', name: 'error' },
+      headers,
+      query: { repeatParams: false }
+    };
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/v2#!/Stats Stats endpoint}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${baseUrl}/tenants/settings`,
+      clientOptions,
+      tokenProvider
+    );
+    this.tenant = new RetryRestClient(auth0RestClient, retry);
+  }
 
   /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Stats Stats endpoint}.
+   * Update the tenant settings.
    *
-   * @type {external:RestClient}
+   * @method    updateSettings
+   * @memberOf  module:management.TenantManager.prototype
+   *
+   * @example
+   * management.tenant.updateSettings(data, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   * });
+   *
+   * @param   {Object}    data  The new tenant settings.
+   * @param   {Function}  [cb]  Callback function.
+   *
+   * @return  {Promise|undefined}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/tenants/settings',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.tenant = new RetryRestClient(auth0RestClient, options.retry);
-};
+  updateSettings(data, cb) {
+    if (cb && cb instanceof Function) {
+      return this.tenant.patch({}, data, cb);
+    }
 
-/**
- * Update the tenant settings.
- *
- * @method    updateSettings
- * @memberOf  module:management.TenantManager.prototype
- *
- * @example
- * management.tenant.updateSettings(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @param   {Object}    data  The new tenant settings.
- * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
- */
-TenantManager.prototype.updateSettings = function(data, cb) {
-  if (cb && cb instanceof Function) {
-    return this.tenant.patch({}, data, cb);
+    // Return a promise.
+    return this.tenant.patch({}, data);
   }
 
-  // Return a promise.
-  return this.tenant.patch({}, data);
-};
+  /**
+   * Get the tenant settings..
+   *
+   * @method    getSettings
+   * @memberOf  module:management.TenantManager.prototype
+   *
+   * @example
+   * management.tenant.getSettings(function (err, settings) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   console.log(settings);
+   * });
+   *
+   * @param   {Function}  [cb]  Callback function.
+   *
+   * @return  {Promise|undefined}
+   */
+  getSettings(cb) {
+    if (cb && cb instanceof Function) {
+      return this.tenant.get({}, cb);
+    }
 
-/**
- * Get the tenant settings..
- *
- * @method    getSettings
- * @memberOf  module:management.TenantManager.prototype
- *
- * @example
- * management.tenant.getSettings(function (err, settings) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(settings);
- * });
- *
- * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
- */
-TenantManager.prototype.getSettings = function(cb) {
-  if (cb && cb instanceof Function) {
-    return this.tenant.get({}, cb);
+    // Return a promise.
+    return this.tenant.get({});
   }
-
-  // Return a promise.
-  return this.tenant.get({});
-};
+}
 
 module.exports = TenantManager;
