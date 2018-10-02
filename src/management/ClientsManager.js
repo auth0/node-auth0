@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const { wrapPropertyMethod } = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ClientsManager
@@ -20,43 +20,47 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var ClientsManager = function(options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide client options');
+class ClientsManager {
+  constructor(options) {
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide client options');
+    }
+
+    if (options.baseUrl === null || options.baseUrl === undefined) {
+      throw new ArgumentError('Must provide a base URL for the API');
+    }
+
+    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+      throw new ArgumentError('The provided base URL is invalid');
+    }
+
+    const { headers, baseUrl, tokenProvider, retry } = options;
+
+    /**
+     * Options object for the Rest Client instance.
+     *
+     * @type {Object}
+     */
+    const clientOptions = {
+      errorFormatter: { message: 'message', name: 'error' },
+      headers,
+      query: { repeatParams: false }
+    };
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/v2#!/Clients Auth0 Clients endpoint}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${baseUrl}/clients/:client_id`,
+      clientOptions,
+      tokenProvider
+    );
+    this.resource = new RetryRestClient(auth0RestClient, retry);
   }
-
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
-
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
-  }
-
-  /**
-   * Options object for the Rest Client instance.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' },
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
-
-  /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Clients Auth0 Clients endpoint}.
-   *
-   * @type {external:RestClient}
-   */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/clients/:client_id',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
+}
 
 /**
  * Create an Auth0 client.
@@ -78,7 +82,7 @@ var ClientsManager = function(options) {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
+wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
 
 /**
  * Get all Auth0 clients.
@@ -93,7 +97,7 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -109,7 +113,7 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
+wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 client.
@@ -132,7 +136,7 @@ utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
+wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
 
 /**
  * Update an Auth0 client.
@@ -141,8 +145,8 @@ utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
  * @memberOf  module:management.ClientsManager.prototype
  *
  * @example
- * var data = { name: 'newClientName' };
- * var params = { client_id: CLIENT_ID };
+ * const data = { name: 'newClientName' };
+ * const params = { client_id: CLIENT_ID };
  *
  * management.clients.update(params, data, function (err, client) {
  *   if (err) {
@@ -159,7 +163,7 @@ utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
+wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
 
 /**
  * Delete an Auth0 client.
@@ -182,6 +186,6 @@ utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ClientsManager, 'delete', 'resource.delete');
+wrapPropertyMethod(ClientsManager, 'delete', 'resource.delete');
 
 module.exports = ClientsManager;
