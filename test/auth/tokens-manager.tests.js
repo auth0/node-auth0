@@ -5,7 +5,6 @@ const proxy = require('../util-constructor-proxy');
 
 var BASE_URL = 'https://tenant.auth0.com';
 
-var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 var TokensManager = require('../../src/auth/TokensManager');
 
@@ -81,7 +80,7 @@ describe('TokensManager', function() {
     it('should return a promise when no callback is provided', function() {
       var returnValue = manager.getInfo('VALID_TOKEN');
 
-      expect(returnValue).to.be.a('promise');
+      expect(returnValue.then).to.be.a('function');
     });
 
     it('should not return a promise when a callback is provided', function() {
@@ -216,7 +215,7 @@ describe('TokensManager', function() {
       };
       var returnValue = manager.getDelegationToken(data);
 
-      expect(returnValue).to.be.an.instanceOf(Promise);
+      expect(returnValue.then).to.be.a('function');
     });
 
     it('should not return a promise when a callback is given', function() {

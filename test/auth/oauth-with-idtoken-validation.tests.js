@@ -1,5 +1,4 @@
 var expect = require('chai').expect;
-var Promise = require('bluebird');
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
 

@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var extend = require('util')._extend;
 var nock = require('nock');
-var Promise = require('bluebird');
 var sinon = require('sinon');
 
 const proxy = require('../util-constructor-proxy');
@@ -27,6 +26,7 @@ describe('OAuthAuthenticator', function() {
   beforeEach(function() {
     sinon.spy(OAUthWithIDTokenValidation.prototype, 'create');
   });
+
   afterEach(function() {
     OAUthWithIDTokenValidation.prototype.create.restore();
     nock.cleanAll();
@@ -470,7 +470,7 @@ describe('OAuthAuthenticator', function() {
     it('should return a promise when no callback is given', function() {
       var returnValue = this.authenticator.socialSignIn(userData);
 
-      expect(returnValue).to.be.an.instanceOf(Promise);
+      expect(returnValue.then).to.be.a('function');
     });
 
     it('should not return a promise when a callback is given', function() {
