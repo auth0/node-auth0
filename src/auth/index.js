@@ -1,22 +1,21 @@
 /** @module auth **/
 
-var util = require('util');
+const util = require('util');
 
-var pkg = require('../../package.json');
-var utils = require('../utils');
-var jsonToBase64 = utils.jsonToBase64;
-var ArgumentError = require('rest-facade').ArgumentError;
+const { version, dependencies } = require('../../package.json');
+const { jsonToBase64, wrapPropertyMethod } = require('../utils');
+const { ArgumentError } = require('rest-facade');
 
 // Authenticators.
-var OAuthAuthenticator = require('./OAuthAuthenticator');
-var DatabaseAuthenticator = require('./DatabaseAuthenticator');
-var PasswordlessAuthenticator = require('./PasswordlessAuthenticator');
+const OAuthAuthenticator = require('./OAuthAuthenticator');
+const DatabaseAuthenticator = require('./DatabaseAuthenticator');
+const PasswordlessAuthenticator = require('./PasswordlessAuthenticator');
 
 // Managers
-var UsersManager = require('./UsersManager');
-var TokensManager = require('./TokensManager');
+const UsersManager = require('./UsersManager');
+const TokensManager = require('./TokensManager');
 
-var BASE_URL_FORMAT = 'https://%s';
+const BASE_URL_FORMAT = 'https://%s';
 
 /**
  * @class
@@ -33,8 +32,8 @@ var BASE_URL_FORMAT = 'https://%s';
  *   accept a client ID.
  * </caption>
  *
- * var AuthenticationClient = require('auth0').AuthenticationClient;
- * var auth0 = new AuthenticationClient({
+ * const AuthenticationClient = require('auth0').AuthenticationClient;
+ * const auth0 = new AuthenticationClient({
  *   domain: '{YOUR_ACCOUNT}.auth0.com',
  *   clientId: '{OPTIONAL_CLIENT_ID}'
  * });
@@ -45,402 +44,415 @@ var BASE_URL_FORMAT = 'https://%s';
  * @param   {String}  [options.clientSecret]          Default client Secret.
  * @param   {String}  [options.supportedAlgorithms]   Algorithms that your application expects to receive
  */
-var AuthenticationClient = function(options) {
-  if (!options || typeof options !== 'object') {
-    throw new ArgumentError('Authentication Client SDK options must be an object');
+class AuthenticationClient {
+  constructor(options) {
+    if (!options || typeof options !== 'object') {
+      throw new ArgumentError('Authentication Client SDK options must be an object');
+    }
+
+    if (!options.domain || options.domain.length === 0) {
+      throw new ArgumentError('Must provide a domain');
+    }
+
+    const {
+      clientId,
+      domain,
+      clientSecret,
+      supportedAlgorithms,
+      clientInfo = this.getClientInfo()
+    } = options;
+
+    const managerOptions = {
+      clientId,
+      domain,
+      clientSecret,
+      headers: {
+        'User-agent': `node.js/${process.version.replace('v', '')}`,
+        'Content-Type': 'application/json'
+      },
+      baseUrl: util.format(BASE_URL_FORMAT, domain),
+      supportedAlgorithms
+    };
+
+    if (options.telemetry !== false) {
+      const telemetry = jsonToBase64(clientInfo);
+      managerOptions.headers['Auth0-Client'] = telemetry;
+    }
+
+    /**
+     * OAuth authenticator.
+     *
+     * @type {OAuthAuthenticator}
+     */
+    this.oauth = new OAuthAuthenticator(managerOptions);
+
+    /**
+     * Database authenticator.
+     *
+     * @type {DatabaseAuthenticator}
+     */
+    this.database = new DatabaseAuthenticator(managerOptions, this.oauth);
+
+    /**
+     * Passwordless authenticator.
+     *
+     * @type {PasswordlessAuthenticator}
+     */
+    this.passwordless = new PasswordlessAuthenticator(managerOptions, this.oauth);
+
+    /**
+     * Users manager.
+     *
+     * @type {UsersManager}
+     */
+    this.users = new UsersManager(managerOptions);
+
+    /**
+     * Tokens manager.
+     *
+     * @type {TokensManager}
+     */
+    this.tokens = new TokensManager(managerOptions);
   }
 
-  if (!options.domain || options.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
-  }
-
-  var managerOptions = {
-    clientId: options.clientId,
-    domain: options.domain,
-    clientSecret: options.clientSecret,
-    headers: {
-      'User-agent': 'node.js/' + process.version.replace('v', ''),
-      'Content-Type': 'application/json'
-    },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain),
-    supportedAlgorithms: options.supportedAlgorithms
-  };
-
-  if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-    managerOptions.headers['Auth0-Client'] = telemetry;
-  }
-
   /**
-   * OAuth authenticator.
+   * Return an object with information about the current client,
    *
-   * @type {OAuthAuthenticator}
-   */
-  this.oauth = new OAuthAuthenticator(managerOptions);
-
-  /**
-   * Database authenticator.
+   * @method    getClientInfo
+   * @memberOf  module:auth.AuthenticationClient.prototype
    *
-   * @type {DatabaseAuthenticator}
+   * @return {Object}   Object containing client information.
    */
-  this.database = new DatabaseAuthenticator(managerOptions, this.oauth);
+  getClientInfo() {
+    const clientInfo = {
+      name: 'node-auth0',
+      version,
+      dependencies: [],
+      environment: [
+        {
+          name: 'node.js',
+          version: process.version.replace('v', '')
+        }
+      ]
+    };
 
-  /**
-   * Passwordless authenticator.
-   *
-   * @type {PasswordlessAuthenticator}
-   */
-  this.passwordless = new PasswordlessAuthenticator(managerOptions, this.oauth);
-
-  /**
-   * Users manager.
-   *
-   * @type {UsersManager}
-   */
-  this.users = new UsersManager(managerOptions);
-
-  /**
-   * Tokens manager.
-   *
-   * @type {TokensManager}
-   */
-  this.tokens = new TokensManager(managerOptions);
-};
-
-/**
- * Return an object with information about the current client,
- *
- * @method    getClientInfo
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @return {Object}   Object containing client information.
- */
-AuthenticationClient.prototype.getClientInfo = function() {
-  var clientInfo = {
-    name: 'node-auth0',
-    version: pkg.version,
-    dependencies: [],
-    environment: [
-      {
-        name: 'node.js',
-        version: process.version.replace('v', '')
-      }
-    ]
-  };
-
-  // Add the dependencies to the client info object.
-  Object.keys(pkg.dependencies).forEach(function(name) {
-    clientInfo.dependencies.push({
-      name: name,
-      version: pkg.dependencies[name]
+    // Add the dependencies to the client info object.
+    Object.keys(dependencies).forEach(name => {
+      clientInfo.dependencies.push({
+        name,
+        version: dependencies[name]
+      });
     });
-  });
 
-  return clientInfo;
-};
+    return clientInfo;
+  }
 
-/**
- * Start passwordless flow sending an email.
- *
- * @method    requestMagicLink
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given the user `email` address, it will send an email with a link. You can
- *   then authenticate with this user opening the link and he will be
- *   automatically logged in to the application. Optionally, you can
- *   append/override parameters to the link (like `scope`, `redirect_uri`,
- *   `protocol`, `response_type`, etc.) using `authParams` object.
- *
- *   Find more information in the
- *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
- * </caption>
- *
- * var data = {
- *   email: '{EMAIL}',
- *   authParams: {} // Optional auth params.
- * };
- *
- * auth0.requestMagicLink(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * };
- *
- * @param   {Object}  data              User data object.
- * @param   {String}  data.email        User email address.
- * @param   {Object}  [data.authParams] Authentication parameters.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.requestMagicLink = function(data, cb) {
-  data.send = 'link';
+  /**
+   * Start passwordless flow sending an email.
+   *
+   * @method    requestMagicLink
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given the user `email` address, it will send an email with a link. You can
+   *   then authenticate with this user opening the link and he will be
+   *   automatically logged in to the application. Optionally, you can
+   *   append/override parameters to the link (like `scope`, `redirect_uri`,
+   *   `protocol`, `response_type`, etc.) using `authParams` object.
+   *
+   *   Find more information in the
+   *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
+   * </caption>
+   *
+   * const data = {
+   *   email: '{EMAIL}',
+   *   authParams: {} // Optional auth params.
+   * };
+   *
+   * auth0.requestMagicLink(data, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   * };
+   *
+   * @param   {Object}  data              User data object.
+   * @param   {String}  data.email        User email address.
+   * @param   {Object}  [data.authParams] Authentication parameters.
+   *
+   * @return  {Promise|undefined}
+   */
+  requestMagicLink(data, cb) {
+    data.send = 'link';
 
-  return this.passwordless.sendEmail(data, cb);
-};
+    return this.passwordless.sendEmail(data, cb);
+  }
 
-/**
- * Start passwordless flow sending an email.
- *
- * @method    requestEmailCode
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given the user `email` address, it will send an email with a verification
- *   code. You can then authenticate with this user using the `/oauth/ro`
- *   endpoint using the email as username and the code as password.
- *
- *   Find more information in the
- *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
- * </caption>
- *
- * var data = {
- *   email: '{EMAIL}',
- *   authParams: {} // Optional auth params.
- * };
- *
- * auth0.requestEmailCode(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * };
- *
- * @param   {Object}  data              User data object.
- * @param   {String}  data.email        User email address.
- * @param   {Object}  [data.authParams] Authentication parameters.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
-  data.send = 'code';
+  /**
+   * Start passwordless flow sending an email.
+   *
+   * @method    requestEmailCode
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given the user `email` address, it will send an email with a verification
+   *   code. You can then authenticate with this user using the `/oauth/ro`
+   *   endpoint using the email as username and the code as password.
+   *
+   *   Find more information in the
+   *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
+   * </caption>
+   *
+   * const data = {
+   *   email: '{EMAIL}',
+   *   authParams: {} // Optional auth params.
+   * };
+   *
+   * auth0.requestEmailCode(data, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   * };
+   *
+   * @param   {Object}  data              User data object.
+   * @param   {String}  data.email        User email address.
+   * @param   {Object}  [data.authParams] Authentication parameters.
+   *
+   * @return  {Promise|undefined}
+   */
+  requestEmailCode(data, cb) {
+    data.send = 'code';
 
-  return this.passwordless.sendEmail(data, cb);
-};
+    return this.passwordless.sendEmail(data, cb);
+  }
 
-/**
- * Start passwordless flow sending an SMS.
- *
- * @method    requestSMSCode
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given the user `phone_number`, it will send a SMS message with a
- *   verification code. You can then authenticate with this user using the
- *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
- *   `password`:
- * </caption>
- *
- * var data = {
- *   phone_number: '{PHONE}'
- * };
- *
- * auth0.requestSMSCode(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- * });
- *
- * @param   {Object}  data                User data object.
- * @param   {String}  data.phone_number   The user phone number.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
-  var translatedData = {
-    phone_number: data.phoneNumber || data.phone_number
-  };
+  /**
+   * Start passwordless flow sending an SMS.
+   *
+   * @method    requestSMSCode
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given the user `phone_number`, it will send a SMS message with a
+   *   verification code. You can then authenticate with this user using the
+   *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
+   *   `password`:
+   * </caption>
+   *
+   * const data = {
+   *   phone_number: '{PHONE}'
+   * };
+   *
+   * auth0.requestSMSCode(data, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   * });
+   *
+   * @param   {Object}  data                User data object.
+   * @param   {String}  data.phone_number   The user phone number.
+   *
+   * @return  {Promise|undefined}
+   */
+  requestSMSCode(data, cb) {
+    const { phoneNumber = data.phone_number } = data;
+    const translatedData = { phone_number: phoneNumber };
 
-  return this.passwordless.sendSMS(translatedData, cb);
-};
+    return this.passwordless.sendSMS(translatedData, cb);
+  }
 
-/**
- * Sign in with the given user credentials.
- *
- * @method    verifySMSCode
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given the user credentials (`phone_number` and `code`), it will do the
- *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
- * </caption>
- *
- * var data = {
- *   username: '{PHONE_NUMBER}',
- *   password: '{VERIFICATION_CODE}'
- * };
- *
- * auth0.verifySMSCode(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @example <caption>
- *   The user data object has the following structure.
- * </caption>
- *
- * {
- *   id_token: String,
- *   access_token: String,
- *   token_type: String
- * }
- *
- * @param   {Object}  data              Credentials object.
- * @param   {String}  data.username     Phone number.
- * @param   {String}  data.password     Verification code.
- * @param   {String}  data.target       Target client ID.
- * @param   {String}  data.grant_type   Grant type.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.verifySMSCode = function(data, cb) {
-  var translatedData = {
-    username: data.phoneNumber || data.phone_number || data.username,
-    password: data.code || data.password
-  };
+  /**
+   * Sign in with the given user credentials.
+   *
+   * @method    verifySMSCode
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given the user credentials (`phone_number` and `code`), it will do the
+   *   authentication on the provider and return a JSON with the `access_token`
+   *   and `id_token`.
+   * </caption>
+   *
+   * const data = {
+   *   username: '{PHONE_NUMBER}',
+   *   password: '{VERIFICATION_CODE}'
+   * };
+   *
+   * auth0.verifySMSCode(data, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   * });
+   *
+   * @example <caption>
+   *   The user data object has the following structure.
+   * </caption>
+   *
+   * {
+   *   id_token: String,
+   *   access_token: String,
+   *   token_type: String
+   * }
+   *
+   * @param   {Object}  data              Credentials object.
+   * @param   {String}  data.username     Phone number.
+   * @param   {String}  data.password     Verification code.
+   * @param   {String}  data.target       Target client ID.
+   * @param   {String}  data.grant_type   Grant type.
+   *
+   * @return  {Promise|undefined}
+   */
+  verifySMSCode(data, cb) {
+    const { phone_number, phoneNumber, username, code = data.password } = data;
 
-  return this.passwordless.signIn(translatedData, cb);
-};
+    const translatedData = {
+      username: phoneNumber || phone_number || username,
+      password: code
+    };
 
-/**
- * Exchange the token of the logged in user with a token that is valid to call
- * the API (signed with the API secret).
- *
- * @method    getDelegationToken
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given an existing token, this endpoint will generate a new token signed
- *   with the target client secret. This is used to flow the identity of the
- *   user from the application to an API or across different APIs that are
- *   protected with different secrets. Find more information in the
- *   <a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs</a>.
- * </caption>
- *
- * var data = {
- *   id_token: '{ID_TOKEN}',
- *   api_type: 'app',
- *   target: '{TARGET}',
- *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
- * };
- *
- * auth0.getDelegationToken(data, function (err, token) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(token);
- * });
- *
- * @param   {Object}  data              Token data object.
- * @param   {String}  data.id_token     The user ID token.
- * @param   {String}  data.api_type     The API type (aws, firebase, etc).
- * @param   {String}  data.target       The target client ID.
- * @param   {String}  data.grant_type   The grant type.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.getDelegationToken = function(data, cb) {
-  var translatedData = {
-    id_token: data.id_token,
-    api_type: data.api || data.api_type,
-    scope: data.scope,
-    target: data.targetClientId || data.target,
-    grant_type: data.grant_type
-  };
+    return this.passwordless.signIn(translatedData, cb);
+  }
 
-  return this.tokens.getDelegationToken(translatedData, cb);
-};
+  /**
+   * Exchange the token of the logged in user with a token that is valid to call
+   * the API (signed with the API secret).
+   *
+   * @method    getDelegationToken
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given an existing token, this endpoint will generate a new token signed
+   *   with the target client secret. This is used to flow the identity of the
+   *   user from the application to an API or across different APIs that are
+   *   protected with different secrets. Find more information in the
+   *   <a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs</a>.
+   * </caption>
+   *
+   * const data = {
+   *   id_token: '{ID_TOKEN}',
+   *   api_type: 'app',
+   *   target: '{TARGET}',
+   *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+   * };
+   *
+   * auth0.getDelegationToken(data, function (err, token) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   console.log(token);
+   * });
+   *
+   * @param   {Object}  data              Token data object.
+   * @param   {String}  data.id_token     The user ID token.
+   * @param   {String}  data.api_type     The API type (aws, firebase, etc).
+   * @param   {String}  data.target       The target client ID.
+   * @param   {String}  data.grant_type   The grant type.
+   *
+   * @return  {Promise|undefined}
+   */
+  getDelegationToken(data, cb) {
+    const { id_token, api = data.api_type, scope, targetClientId = data.target, grant_type } = data;
 
-/**
- * Change password using a database or active directory service.
- *
- * @method    changePassword
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given the user email, the connection specified and the new password to
- *   use, Auth0 will send a forgot password email. Once the user clicks on the
- *   confirm password change link, the new password specified in this POST will
- *   be set to this user. Find more information in the
- *   <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password">
- *   API Docs</a>.
- * </caption>
- *
- * var data = {
- *   email: '{EMAIL}',
- *   password: '{PASSWORD}',
- *   connection: 'Username-Password-Authentication'
- * };
- *
- * auth0.changePassword(data, function (err, message) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(message);
- * });
- *
- * @param   {Object}    data            User data object.
- * @param   {String}    data.email      User email.
- * @param   {String}    data.password   User password.
- * @param   {String}    data.connection Identity provider for the user.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.changePassword = function(data, cb) {
-  var translatedData = {
-    connection: data.connection,
-    email: data.email || data.username,
-    password: data.password
-  };
+    const translatedData = {
+      id_token,
+      api_type: api,
+      scope,
+      target: targetClientId,
+      grant_type
+    };
 
-  return this.database.changePassword(data, cb);
-};
+    return this.tokens.getDelegationToken(translatedData, cb);
+  }
 
-/**
- * Request a change password email using a database or active directory service.
- *
- * @method    requestChangePasswordEmail
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @example <caption>
- *   Given the user email, the connection specified, Auth0 will send a change
- *   password email. once the user clicks on the confirm password change link,
- *   the new password specified in this POST will be set to this user. Find more
- *   information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
- *   API Docs</a>.
- * </caption>
- *
- * var data = {
- *   email: '{EMAIL}',
- *   connection: 'Username-Password-Authentication'
- * };
- *
- * auth0.requestChangePasswordEmail(data, function (err, message) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(message);
- * });
- *
- * @param   {Object}    data            User data object.
- * @param   {String}    data.email      User email.
- * @param   {String}    data.connection Identity provider for the user.
- *
- * @return  {Promise|undefined}
- */
-AuthenticationClient.prototype.requestChangePasswordEmail = function(data, cb) {
-  var translatedData = {
-    connection: data.connection,
-    email: data.email || data.username
-  };
+  /**
+   * Change password using a database or active directory service.
+   *
+   * @method    changePassword
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given the user email, the connection specified and the new password to
+   *   use, Auth0 will send a forgot password email. Once the user clicks on the
+   *   confirm password change link, the new password specified in this POST will
+   *   be set to this user. Find more information in the
+   *   <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password">
+   *   API Docs</a>.
+   * </caption>
+   *
+   * const data = {
+   *   email: '{EMAIL}',
+   *   password: '{PASSWORD}',
+   *   connection: 'Username-Password-Authentication'
+   * };
+   *
+   * auth0.changePassword(data, function (err, message) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   console.log(message);
+   * });
+   *
+   * @param   {Object}    data            User data object.
+   * @param   {String}    data.email      User email.
+   * @param   {String}    data.password   User password.
+   * @param   {String}    data.connection Identity provider for the user.
+   *
+   * @return  {Promise|undefined}
+   */
+  changePassword(data, cb) {
+    var translatedData = {
+      connection: data.connection,
+      email: data.email || data.username,
+      password: data.password
+    };
 
-  return this.database.requestChangePasswordEmail(data, cb);
-};
+    return this.database.changePassword(data, cb);
+  }
+
+  /**
+   * Request a change password email using a database or active directory service.
+   *
+   * @method    requestChangePasswordEmail
+   * @memberOf  module:auth.AuthenticationClient.prototype
+   *
+   * @example <caption>
+   *   Given the user email, the connection specified, Auth0 will send a change
+   *   password email. once the user clicks on the confirm password change link,
+   *   the new password specified in this POST will be set to this user. Find more
+   *   information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
+   *   API Docs</a>.
+   * </caption>
+   *
+   * const data = {
+   *   email: '{EMAIL}',
+   *   connection: 'Username-Password-Authentication'
+   * };
+   *
+   * auth0.requestChangePasswordEmail(data, function (err, message) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   console.log(message);
+   * });
+   *
+   * @param   {Object}    data            User data object.
+   * @param   {String}    data.email      User email.
+   * @param   {String}    data.connection Identity provider for the user.
+   *
+   * @return  {Promise|undefined}
+   */
+  requestChangePasswordEmail(data, cb) {
+    var translatedData = {
+      connection: data.connection,
+      email: data.email || data.username
+    };
+
+    return this.database.requestChangePasswordEmail(data, cb);
+  }
+}
 
 /**
  * Given an access token get the user profile linked to it.
@@ -466,7 +478,7 @@ AuthenticationClient.prototype.requestChangePasswordEmail = function(data, cb) {
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
+wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
 
 /**
  * Gets an access token using the client credentials grant flow.
@@ -496,11 +508,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'getProfile', 'users.getInfo');
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  AuthenticationClient,
-  'clientCredentialsGrant',
-  'oauth.clientCredentialsGrant'
-);
+wrapPropertyMethod(AuthenticationClient, 'clientCredentialsGrant', 'oauth.clientCredentialsGrant');
 
 /**
  * Sign in using a username and password
@@ -518,7 +526,7 @@ utils.wrapPropertyMethod(
  *   </a>.
  * </caption>
  *
- * var data = {
+ * const data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
  *   username: '{USERNAME}',
  *   password: '{PASSWORD}'
@@ -541,6 +549,6 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordGrant');
+wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordGrant');
 
 module.exports = AuthenticationClient;
