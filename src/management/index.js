@@ -1,35 +1,33 @@
 /** @module management */
 
-var util = require('util');
+const { format } = require('util');
 
-var pkg = require('../../package.json');
-var utils = require('../utils');
-var jsonToBase64 = utils.jsonToBase64;
-var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
+const { ArgumentError } = require('rest-facade');
+const { dependencies, version } = require('../../package.json');
+const { wrapPropertyMethod, jsonToBase64 } = require('../utils');
 
 // Managers.
-var ClientsManager = require('./ClientsManager');
-var ClientGrantsManager = require('./ClientGrantsManager');
-var UsersManager = require('./UsersManager');
-var ConnectionsManager = require('./ConnectionsManager');
-var BlacklistedTokensManager = require('./BlacklistedTokensManager');
-var RulesManager = require('./RulesManager');
-var DeviceCredentialsManager = require('./DeviceCredentialsManager');
-var EmailProviderManager = require('./EmailProviderManager');
-var StatsManager = require('./StatsManager');
-var TenantManager = require('./TenantManager');
-var JobsManager = require('./JobsManager');
-var TicketsManager = require('./TicketsManager');
-var LogsManager = require('./LogsManager');
-var ResourceServersManager = require('./ResourceServersManager');
-var ManagementTokenProvider = require('./ManagementTokenProvider');
-var RulesConfigsManager = require('./RulesConfigsManager');
-var EmailTemplatesManager = require('./EmailTemplatesManager');
-var GuardianManager = require('./GuardianManager');
+const ClientsManager = require('./ClientsManager');
+const ClientGrantsManager = require('./ClientGrantsManager');
+const UsersManager = require('./UsersManager');
+const ConnectionsManager = require('./ConnectionsManager');
+const BlacklistedTokensManager = require('./BlacklistedTokensManager');
+const RulesManager = require('./RulesManager');
+const DeviceCredentialsManager = require('./DeviceCredentialsManager');
+const EmailProviderManager = require('./EmailProviderManager');
+const StatsManager = require('./StatsManager');
+const TenantManager = require('./TenantManager');
+const JobsManager = require('./JobsManager');
+const TicketsManager = require('./TicketsManager');
+const LogsManager = require('./LogsManager');
+const ResourceServersManager = require('./ResourceServersManager');
+const ManagementTokenProvider = require('./ManagementTokenProvider');
+const RulesConfigsManager = require('./RulesConfigsManager');
+const EmailTemplatesManager = require('./EmailTemplatesManager');
+const GuardianManager = require('./GuardianManager');
 
-var BASE_URL_FORMAT = 'https://%s/api/v2';
-var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
+const BASE_URL_FORMAT = 'https://%s/api/v2';
+const MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
 
 /**
  * @class ManagementClient
@@ -47,8 +45,8 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  *   <a href="https://auth0.com/docs/apiv2">here</a>) and a domain.
  * </caption>
  *
- * var ManagementClient = require('auth0').ManagementClient;
- * var auth0 = new ManagementClient({
+ * const ManagementClient = require('auth0').ManagementClient;
+ * const auth0 = new ManagementClient({
  *   domain: '{YOUR_ACCOUNT}.auth0.com',
  *   token: '{YOUR_API_V2_TOKEN}'
  * });
@@ -59,8 +57,8 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  *   via the Client Credentials Grant.
  * </caption>
  *
- * var ManagementClient = require('auth0').ManagementClient;
- * var auth0 = new ManagementClient({
+ * const ManagementClient = require('auth0').ManagementClient;
+ * const auth0 = new ManagementClient({
  *   domain: '{YOUR_ACCOUNT}.auth0.com',
  *   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
  *   clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
@@ -87,212 +85,225 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  * @param   {Number}  [options.retry.maxRetries=10]               Retry failed requests X times.
  *
  */
-var ManagementClient = function(options) {
-  if (!options || typeof options !== 'object') {
-    throw new ArgumentError('Management API SDK options must be an object');
-  }
-
-  if (!options.domain || options.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
-  }
-
-  var baseUrl = util.format(BASE_URL_FORMAT, options.domain);
-  var managerOptions = {
-    headers: {
-      'User-agent': 'node.js/' + process.version.replace('v', ''),
-      'Content-Type': 'application/json'
-    },
-    baseUrl: baseUrl
-  };
-
-  if (options.token === undefined) {
-    var config = assign(
-      { audience: util.format(MANAGEMENT_API_AUD_FORMAT, options.domain) },
-      options
-    );
-
-    if (options.tokenProvider) {
-      config.enableCache = options.tokenProvider.enableCache;
-      config.cacheTTLInSeconds = options.tokenProvider.cacheTTLInSeconds;
-      delete config.tokenProvider;
+class ManagementClient {
+  constructor(options) {
+    if (!options || typeof options !== 'object') {
+      throw new ArgumentError('Management API SDK options must be an object');
     }
 
-    this.tokenProvider = new ManagementTokenProvider(config);
-    managerOptions.tokenProvider = this.tokenProvider;
-  } else if (typeof options.token !== 'string' || options.token.length === 0) {
-    throw new ArgumentError('Must provide a token');
-  } else {
-    managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
-  }
+    if (!options.domain || options.domain.length === 0) {
+      throw new ArgumentError('Must provide a domain');
+    }
 
-  if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-    managerOptions.headers['Auth0-Client'] = telemetry;
-  }
+    const {
+      domain,
+      token,
+      tokenProvider,
+      retry,
+      telemetry,
+      clientInfo = this.getClientInfo()
+    } = options;
 
-  managerOptions.retry = options.retry;
+    const baseUrl = format(BASE_URL_FORMAT, domain);
+    const managerOptions = {
+      headers: {
+        'User-agent': `node.js/${process.version.replace('v', '')}`,
+        'Content-Type': 'application/json'
+      },
+      baseUrl
+    };
 
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * clients endpoint.
-   *
-   * @type {ClientsManager}
-   */
-  this.clients = new ClientsManager(managerOptions);
+    if (token === undefined) {
+      const config = Object.assign(
+        {
+          audience: format(MANAGEMENT_API_AUD_FORMAT, domain)
+        },
+        options
+      );
 
-  /**
-   * Simple abstraction for performing CRUD operations on the client grants
-   * endpoint.
-   *
-   * @type {ClientGrantsManager}
-   */
-  this.clientGrants = new ClientGrantsManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * users endpoint.
-   *
-   * @type {UsersManager}
-   */
-  this.users = new UsersManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * guardian endpoint.
-   *
-   * @type {GuardianManager}
-   */
-  this.guardian = new GuardianManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * connections endpoint.
-   *
-   * @type {ConnectionsManager}
-   */
-  this.connections = new ConnectionsManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * device credentials endpoint.
-   *
-   * @type {DeviceCredentialsManager}
-   */
-  this.deviceCredentials = new DeviceCredentialsManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * rules endpoint.
-   *
-   * @type {RulesManager}
-   */
-  this.rules = new RulesManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * blacklisted tokens endpoint.
-   *
-   * @type {BlacklistedtokensManager}
-   */
-  this.blacklistedTokens = new BlacklistedTokensManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * email provider endpoint.
-   *
-   * @type {EmailProviderManager}
-   */
-  this.emailProvider = new EmailProviderManager(managerOptions);
-
-  /**
-   * ManagementClient account statistics manager.
-   *
-   * @type {StatsManager}
-   */
-  this.stats = new StatsManager(managerOptions);
-
-  /**
-   * ManagementClient tenant settings manager.
-   *
-   * @type {TenantManager}
-   */
-  this.tenant = new TenantManager(managerOptions);
-
-  /**
-   * Jobs manager.
-   *
-   * @type {JobsManager}
-   */
-  this.jobs = new JobsManager(managerOptions);
-
-  /**
-   * Tickets manager.
-   *
-   * @type {TicketsManager}
-   */
-  this.tickets = new TicketsManager(managerOptions);
-
-  /**
-   * Logs manager.
-   *
-   * @type {LogsManager}
-   */
-  this.logs = new LogsManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * resource servers endpoint.
-   *
-   * @type {ResourceServersManager}
-   */
-  this.resourceServers = new ResourceServersManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on
-   * Auth0's Email Templates
-   *
-   * @type {EmailTemplatesManager}
-   */
-  this.emailTemplates = new EmailTemplatesManager(managerOptions);
-
-  /**
-   * RulesConfigs manager.
-   *
-   * @type {RulesConfigsManager}
-   */
-  this.rulesConfigs = new RulesConfigsManager(managerOptions);
-};
-
-/**
- * Return an object with information about the current client,
- *
- * @method    getClientInfo
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @return {Object}   Object containing client information.
- */
-ManagementClient.prototype.getClientInfo = function() {
-  var clientInfo = {
-    name: 'node-auth0',
-    version: pkg.version,
-    dependencies: [],
-    environment: [
-      {
-        name: 'node.js',
-        version: process.version.replace('v', '')
+      if (tokenProvider) {
+        config.enableCache = tokenProvider.enableCache;
+        config.cacheTTLInSeconds = tokenProvider.cacheTTLInSeconds;
+        delete config.tokenProvider;
       }
-    ]
-  };
-  // Add the dependencies to the client info object.
-  Object.keys(pkg.dependencies).forEach(function(name) {
-    clientInfo.dependencies.push({
-      name: name,
-      version: pkg.dependencies[name]
-    });
-  });
 
-  return clientInfo;
-};
+      this.tokenProvider = new ManagementTokenProvider(config);
+      managerOptions.tokenProvider = this.tokenProvider;
+    } else if (typeof token !== 'string' || token.length === 0) {
+      throw new ArgumentError('Must provide a token');
+    } else {
+      managerOptions.headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (telemetry !== false) {
+      const telemetry = jsonToBase64(clientInfo);
+      managerOptions.headers['Auth0-Client'] = telemetry;
+    }
+
+    managerOptions.retry = retry;
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * clients endpoint.
+     *
+     * @type {ClientsManager}
+     */
+    this.clients = new ClientsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the client grants
+     * endpoint.
+     *
+     * @type {ClientGrantsManager}
+     */
+    this.clientGrants = new ClientGrantsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * users endpoint.
+     *
+     * @type {UsersManager}
+     */
+    this.users = new UsersManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * guardian endpoint.
+     *
+     * @type {GuardianManager}
+     */
+    this.guardian = new GuardianManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * connections endpoint.
+     *
+     * @type {ConnectionsManager}
+     */
+    this.connections = new ConnectionsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * device credentials endpoint.
+     *
+     * @type {DeviceCredentialsManager}
+     */
+    this.deviceCredentials = new DeviceCredentialsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * rules endpoint.
+     *
+     * @type {RulesManager}
+     */
+    this.rules = new RulesManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * blacklisted tokens endpoint.
+     *
+     * @type {BlacklistedTokensManager}
+     */
+    this.blacklistedTokens = new BlacklistedTokensManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * email provider endpoint.
+     *
+     * @type {EmailProviderManager}
+     */
+    this.emailProvider = new EmailProviderManager(managerOptions);
+
+    /**
+     * ManagementClient account statistics manager.
+     *
+     * @type {StatsManager}
+     */
+    this.stats = new StatsManager(managerOptions);
+
+    /**
+     * ManagementClient tenant settings manager.
+     *
+     * @type {TenantManager}
+     */
+    this.tenant = new TenantManager(managerOptions);
+
+    /**
+     * Jobs manager.
+     *
+     * @type {JobsManager}
+     */
+    this.jobs = new JobsManager(managerOptions);
+
+    /**
+     * Tickets manager.
+     *
+     * @type {TicketsManager}
+     */
+    this.tickets = new TicketsManager(managerOptions);
+
+    /**
+     * Logs manager.
+     *
+     * @type {LogsManager}
+     */
+    this.logs = new LogsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * resource servers endpoint.
+     *
+     * @type {ResourceServersManager}
+     */
+    this.resourceServers = new ResourceServersManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on
+     * Auth0's Email Templates
+     *
+     * @type {EmailTemplatesManager}
+     */
+    this.emailTemplates = new EmailTemplatesManager(managerOptions);
+
+    /**
+     * RulesConfigs manager.
+     *
+     * @type {RulesConfigsManager}
+     */
+    this.rulesConfigs = new RulesConfigsManager(managerOptions);
+  }
+
+  /**
+   * Return an object with information about the current client,
+   *
+   * @method    getClientInfo
+   * @memberOf  module:management.ManagementClient.prototype
+   *
+   * @return {Object}   Object containing client information.
+   */
+  getClientInfo() {
+    const clientInfo = {
+      name: 'node-auth0',
+      version,
+      dependencies: [],
+      environment: [
+        {
+          name: 'node.js',
+          version: process.version.replace('v', '')
+        }
+      ]
+    };
+    // Add the dependencies to the client info object.
+    Object.keys(dependencies).forEach(name => {
+      clientInfo.dependencies.push({
+        name,
+        version: dependencies[name]
+      });
+    });
+
+    return clientInfo;
+  }
+}
 
 /**
  * Get all connections.
@@ -307,7 +318,7 @@ ManagementClient.prototype.getClientInfo = function() {
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -323,7 +334,7 @@ ManagementClient.prototype.getClientInfo = function() {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll');
+wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll');
 
 /**
  * Create a new connection.
@@ -337,7 +348,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll
  *     // Handle error.
  *   }
  *
- *   // Conection created.
+ *   // Connection created.
  * });
  *
  * @param   {Object}    data     Connection data object.
@@ -345,7 +356,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createConnection', 'connections.create');
+wrapPropertyMethod(ManagementClient, 'createConnection', 'connections.create');
 
 /**
  * Get an Auth0 connection.
@@ -368,7 +379,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createConnection', 'connections.crea
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
+wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
 
 /**
  * Delete an existing connection.
@@ -382,7 +393,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
  *     // Handle error.
  *   }
  *
- *   // Conection deleted.
+ *   // Connection deleted.
  * });
  *
  * @param   {Object}    params          Connection parameters.
@@ -391,7 +402,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.delete');
+wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.delete');
 
 /**
  * Update an existing connection.
@@ -400,8 +411,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.dele
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var data = { name: 'newConnectionName' };
- * var params = { id: CONNECTION_ID };
+ * const data = { name: 'newConnectionName' };
+ * const params = { id: CONNECTION_ID };
  *
  * management.updateConnection(params, data, function (err, connection) {
  *   if (err) {
@@ -418,7 +429,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteConnection', 'connections.dele
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.update');
+wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.update');
 
 /**
  * Get all Auth0 clients.
@@ -433,7 +444,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.upda
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -449,7 +460,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateConnection', 'connections.upda
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getClients', 'clients.getAll');
+wrapPropertyMethod(ManagementClient, 'getClients', 'clients.getAll');
 
 /**
  * Get an Auth0 client.
@@ -472,7 +483,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getClients', 'clients.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getClient', 'clients.get');
+wrapPropertyMethod(ManagementClient, 'getClient', 'clients.get');
 
 /**
  * Create an Auth0 client.
@@ -494,7 +505,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getClient', 'clients.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
+wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
 
 /**
  * Update an Auth0 client.
@@ -503,8 +514,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var data = { name: 'newClientName' };
- * var params = { client_id: CLIENT_ID };
+ * const data = { name: 'newClientName' };
+ * const params = { client_id: CLIENT_ID };
  *
  * management.updateClient(params, data, function (err, client) {
  *   if (err) {
@@ -521,7 +532,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createClient', 'clients.create');
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateClient', 'clients.update');
+wrapPropertyMethod(ManagementClient, 'updateClient', 'clients.update');
 
 /**
  * Delete an Auth0 client.
@@ -544,7 +555,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateClient', 'clients.update');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
+wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
 
 /**
  * Get all Auth0 Client Grants.
@@ -559,7 +570,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -575,7 +586,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getClientGrants', 'clientGrants.getAll');
+wrapPropertyMethod(ManagementClient, 'getClientGrants', 'clientGrants.getAll');
 
 /**
  * Create an Auth0 client grant.
@@ -597,7 +608,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getClientGrants', 'clientGrants.getA
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.create');
+wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.create');
 
 /**
  * Update an Auth0 client grant.
@@ -606,12 +617,12 @@ utils.wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.cr
  * @memberOf  module:management.ClientGrantsManager.prototype
  *
  * @example
- * var data = {
+ * const data = {
  *   client_id: CLIENT_ID,
  *   audience: AUDIENCE,
  *   scope: []
  * };
- * var params = { id: CLIENT_GRANT_ID };
+ * const params = { id: CLIENT_GRANT_ID };
  *
  * management.clientGrants.update(params, data, function (err, grant) {
  *   if (err) {
@@ -628,7 +639,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.cr
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.update');
+wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.update');
 
 /**
  * Delete an Auth0 client grant.
@@ -651,7 +662,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.up
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteClientGrant', 'clientGrants.delete');
+wrapPropertyMethod(ManagementClient, 'deleteClientGrant', 'clientGrants.delete');
 
 /**
  * Create an Auth0 credential.
@@ -673,11 +684,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClientGrant', 'clientGrants.de
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'createDevicePublicKey',
-  'deviceCredentials.createPublicKey'
-);
+wrapPropertyMethod(ManagementClient, 'createDevicePublicKey', 'deviceCredentials.createPublicKey');
 
 /**
  * Get all Auth0 credentials.
@@ -694,7 +701,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCredentials.getAll');
+wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCredentials.getAll');
 
 /**
  * Delete an Auth0 device credential.
@@ -703,7 +710,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCreden
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: CREDENTIAL_ID };
+ * const params = { id: CREDENTIAL_ID };
  *
  * management.deleteDeviceCredential(params, function (err) {
  *   if (err) {
@@ -719,7 +726,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getDeviceCredentials', 'deviceCreden
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCredentials.delete');
+wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCredentials.delete');
 
 /**
  * Get all rules.
@@ -734,7 +741,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCred
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -750,7 +757,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteDeviceCredential', 'deviceCred
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
+wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
 
 /**
  * Create a new rule.
@@ -772,7 +779,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getRules', 'rules.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createRule', 'rules.create');
+wrapPropertyMethod(ManagementClient, 'createRule', 'rules.create');
 
 /**
  * Get an Auth0 rule.
@@ -795,7 +802,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createRule', 'rules.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getRule', 'rules.get');
+wrapPropertyMethod(ManagementClient, 'getRule', 'rules.get');
 
 /**
  * Delete an existing rule.
@@ -818,7 +825,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getRule', 'rules.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
+wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
 
 /**
  * Update an existing rule.
@@ -827,8 +834,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: RULE_ID };
- * var data = { name: 'my-rule'};
+ * const params = { id: RULE_ID };
+ * const data = { name: 'my-rule'};
  * management.updateRule(params, data, function (err, rule) {
  *   if (err) {
  *     // Handle error.
@@ -844,7 +851,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRule', 'rules.delete');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
+wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
 
 /**
  * Get all users.
@@ -859,7 +866,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   search_engine: 'v3',
  *   per_page: 10,
  *   page: 0
@@ -877,7 +884,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
+wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
 
 /**
  * Get users for a given email address
@@ -899,7 +906,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getUsersByEmail', 'users.getByEmail');
+wrapPropertyMethod(ManagementClient, 'getUsersByEmail', 'users.getByEmail');
 
 /**
  * Get a user by its id.
@@ -918,7 +925,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUsersByEmail', 'users.getByEmail'
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
+wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
 
 /**
  * Delete all users.
@@ -939,7 +946,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
+wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
 
 /**
  * Delete a user by its id.
@@ -962,7 +969,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteUser', 'users.delete');
+wrapPropertyMethod(ManagementClient, 'deleteUser', 'users.delete');
 
 /**
  * Create a new user.
@@ -984,7 +991,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteUser', 'users.delete');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
+wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
 
 /**
  * Update a user by its id.
@@ -993,7 +1000,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID };
+ * const params = { id: USER_ID };
  *
  * management.updateUser(params, data, function (err, user) {
  *   if (err) {
@@ -1011,7 +1018,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createUser', 'users.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
+wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
 
 /**
  * Update the user metadata for a user.
@@ -1020,8 +1027,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID };
- * var metadata = {
+ * const params = { id: USER_ID };
+ * const metadata = {
  *   address: '123th Node.js Street'
  * };
  *
@@ -1041,7 +1048,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateUser', 'users.update');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUserMetadata');
+wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUserMetadata');
 
 /**
  * Update the app metadata for a user.
@@ -1050,8 +1057,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUs
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID };
- * var metadata = {
+ * const params = { id: USER_ID };
+ * const metadata = {
  *   foo: 'bar'
  * };
  *
@@ -1071,7 +1078,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateUserMetadata', 'users.updateUs
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateAppMetadata');
+wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateAppMetadata');
 
 /**
  * Delete a multifactor provider for a user.
@@ -1080,7 +1087,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateApp
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+ * const params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
  *
  * management.deleteUserMultifactor(params, function (err, user) {
  *   if (err) {
@@ -1097,11 +1104,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAppMetadata', 'users.updateApp
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'deleteUserMultifactor',
-  'users.deleteMultifactorProvider'
-);
+wrapPropertyMethod(ManagementClient, 'deleteUserMultifactor', 'users.deleteMultifactorProvider');
 
 /**
  * Delete a multifactor provider for a user.
@@ -1110,7 +1113,7 @@ utils.wrapPropertyMethod(
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
+ * const params = { id: USER_ID, provider: MULTIFACTOR_PROVIDER };
  *
  * management.deleteUserMultifcator(params, function (err, user) {
  *   if (err) {
@@ -1131,11 +1134,7 @@ utils.wrapPropertyMethod(
  * We're shipping this so it doesn't break compatibility.
  * Use {@link deleteUserMultifactor} instead.
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'deleteUserMultifcator',
-  'users.deleteMultifactorProvider'
-);
+wrapPropertyMethod(ManagementClient, 'deleteUserMultifcator', 'users.deleteMultifactorProvider');
 
 /**
  * Unlink the given accounts.
@@ -1144,7 +1143,7 @@ utils.wrapPropertyMethod(
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };
+ * const params = { id: USER_ID, provider: 'auth0', user_id: OTHER_USER_ID };
  *
  * management.unlinkUsers(params, function (err, user) {
  *   if (err) {
@@ -1162,7 +1161,7 @@ utils.wrapPropertyMethod(
  *
  * @return {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
+wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
 
 /**
  * Link the user with another account.
@@ -1171,8 +1170,8 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var userId = 'USER_ID';
- * var params = {
+ * const userId = 'USER_ID';
+ * const params = {
  *   user_id: 'OTHER_USER_ID',
  *   connection_id: 'CONNECTION_ID'
  * };
@@ -1193,7 +1192,7 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
+wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 
 /**
  * Get user's log events.
@@ -1202,7 +1201,7 @@ utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { id: USER_ID, page: 0, per_page: 50, sort: 'date:-1', include_totals: true };
+ * const params = { id: USER_ID, page: 0, per_page: 50, sort: 'date:-1', include_totals: true };
  *
  * management.getUserLogs(params, function (err, logs) {
  *   if (err) {
@@ -1222,7 +1221,7 @@ utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
  *
  * @return {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
+wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
 
 /**
  * Get a list of a user's Guardian enrollments.
@@ -1241,11 +1240,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'getGuardianEnrollments',
-  'users.getGuardianEnrollments'
-);
+wrapPropertyMethod(ManagementClient, 'getGuardianEnrollments', 'users.getGuardianEnrollments');
 
 /**
  * Generate new Guardian recovery code.
@@ -1264,11 +1259,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'regenerateRecoveryCode',
-  'users.regenerateRecoveryCode'
-);
+wrapPropertyMethod(ManagementClient, 'regenerateRecoveryCode', 'users.regenerateRecoveryCode');
 
 /**
  * Get a single Guardian enrollment.
@@ -1287,11 +1278,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'getGuardianEnrollment',
-  'guardian.getGuardianEnrollment'
-);
+wrapPropertyMethod(ManagementClient, 'getGuardianEnrollment', 'guardian.getGuardianEnrollment');
 
 /**
  * Delete a user's Guardian enrollment.
@@ -1314,7 +1301,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
+wrapPropertyMethod(
   ManagementClient,
   'deleteGuardianEnrollment',
   'guardian.deleteGuardianEnrollment'
@@ -1335,7 +1322,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
+wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedTokens.getAll');
 
 /**
  * Blacklist a new token.
@@ -1344,7 +1331,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedT
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var token = {
+ * const token = {
  *  aud: 'aud',
  *  jti: 'jti'
  * };
@@ -1364,7 +1351,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedT
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.add');
+wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.add');
 
 /**
  * Get the email provider.
@@ -1381,7 +1368,7 @@ utils.wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getEmailProvider', 'emailProvider.get');
+wrapPropertyMethod(ManagementClient, 'getEmailProvider', 'emailProvider.get');
 
 /**
  * Configure the email provider.
@@ -1403,7 +1390,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getEmailProvider', 'emailProvider.ge
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'configureEmailProvider', 'emailProvider.configure');
+wrapPropertyMethod(ManagementClient, 'configureEmailProvider', 'emailProvider.configure');
 
 /**
  * Delete email provider.
@@ -1424,7 +1411,7 @@ utils.wrapPropertyMethod(ManagementClient, 'configureEmailProvider', 'emailProvi
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider.delete');
+wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider.delete');
 
 /**
  * Update the email provider.
@@ -1448,7 +1435,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteEmailProvider', 'emailProvider
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateEmailProvider', 'emailProvider.update');
+wrapPropertyMethod(ManagementClient, 'updateEmailProvider', 'emailProvider.update');
 
 /**
  * Get a the active users count.
@@ -1469,7 +1456,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateEmailProvider', 'emailProvider
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActiveUsersCount');
+wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActiveUsersCount');
 
 /**
  * Get the daily stats.
@@ -1478,7 +1465,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActi
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = {
+ * const params = {
  *   from: '{YYYYMMDD}',  // First day included in the stats.
  *   to: '{YYYYMMDD}'  // Last day included in the stats.
  * };
@@ -1498,7 +1485,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getActiveUsersCount', 'stats.getActi
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getDailyStats', 'stats.getDaily');
+wrapPropertyMethod(ManagementClient, 'getDailyStats', 'stats.getDaily');
 
 /**
  * Get the tenant settings..
@@ -1519,7 +1506,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getDailyStats', 'stats.getDaily');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getTenantSettings', 'tenant.getSettings');
+wrapPropertyMethod(ManagementClient, 'getTenantSettings', 'tenant.getSettings');
 
 /**
  * Update the tenant settings.
@@ -1539,7 +1526,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getTenantSettings', 'tenant.getSetti
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updateSettings');
+wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updateSettings');
 
 /**
  * Get a job by its ID.
@@ -1548,7 +1535,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updat
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = {
+ * const params = {
  *   id: '{JOB_ID}'
  * };
  *
@@ -1567,7 +1554,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateTenantSettings', 'tenant.updat
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
+wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 
 /**
  * Given a path to a file and a connection id, create a new job that imports the
@@ -1577,7 +1564,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = {
+ * const params = {
  *   connection_id: '{CONNECTION_ID}',
  *   users: '{PATH_TO_USERS_FILE}'
  * };
@@ -1595,7 +1582,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
+wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
 /**
  * Send a verification email to a user.
@@ -1604,7 +1591,7 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = {
+ * const params = {
  * 	user_id: '{USER_ID}'
  * };
  *
@@ -1620,7 +1607,7 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verifyEmail');
+wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verifyEmail');
 
 /**
  * Create a new password change ticket.
@@ -1629,7 +1616,7 @@ utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verify
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = {
+ * const params = {
  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
  *   user_id: '{USER_ID}',  // Optional.
  *   email: '{USER_EMAIL}',  // Optional.
@@ -1645,7 +1632,7 @@ utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verify
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'tickets.changePassword');
+wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'tickets.changePassword');
 
 /**
  * Create an email verification ticket.
@@ -1654,7 +1641,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'ticket
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var data = {
+ * const data = {
  *   user_id: '{USER_ID}',
  *   result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
  * };
@@ -1668,7 +1655,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createPasswordChangeTicket', 'ticket
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createEmailVerificationTicket', 'tickets.verifyEmail');
+wrapPropertyMethod(ManagementClient, 'createEmailVerificationTicket', 'tickets.verifyEmail');
 
 /**
  * Get an Auth0 log.
@@ -1691,7 +1678,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createEmailVerificationTicket', 'tic
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
+wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
 
 /**
  * Get all logs.
@@ -1706,7 +1693,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 2
  * };
@@ -1727,7 +1714,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
+wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
 
 /**
  * Create a new resource server.
@@ -1749,7 +1736,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServers.create');
+wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServers.create');
 
 /**
  * Get all resource servers.
@@ -1764,7 +1751,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServ
  * </caption>
  *
  * // Pagination settings.
- * var params = {
+ * const params = {
  *   per_page: 10,
  *   page: 0
  * };
@@ -1780,7 +1767,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createResourceServer', 'resourceServ
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getResourceServers', 'resourceServers.getAll');
+wrapPropertyMethod(ManagementClient, 'getResourceServers', 'resourceServers.getAll');
 
 /**
  * Get a Resource Server.
@@ -1803,7 +1790,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getResourceServers', 'resourceServer
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getResourceServer', 'resourceServers.get');
+wrapPropertyMethod(ManagementClient, 'getResourceServer', 'resourceServers.get');
 
 /**
  * Delete an existing resource server.
@@ -1826,7 +1813,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getResourceServer', 'resourceServers
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteResourceServer', 'resourceServers.delete');
+wrapPropertyMethod(ManagementClient, 'deleteResourceServer', 'resourceServers.delete');
 
 /**
  * Update an existing resource server.
@@ -1835,8 +1822,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteResourceServer', 'resourceServ
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var data = { name: 'newResourceServerName' };
- * var params = { id: RESOURCE_SERVER_ID };
+ * const data = { name: 'newResourceServerName' };
+ * const params = { id: RESOURCE_SERVER_ID };
  *
  * management.updateResourceServer(params, data, function (err, resourceServer) {
  *   if (err) {
@@ -1853,7 +1840,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteResourceServer', 'resourceServ
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateResourceServer', 'resourceServers.update');
+wrapPropertyMethod(ManagementClient, 'updateResourceServer', 'resourceServers.update');
 
 /**
  * Set a new rules config.
@@ -1862,8 +1849,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateResourceServer', 'resourceServ
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { key: RULE_CONFIG_KEY };
- * var data =   { value: RULES_CONFIG_VALUE };
+ * const params = { key: RULE_CONFIG_KEY };
+ * const data =   { value: RULES_CONFIG_VALUE };
  *
  * management.setRulesConfig(params, data, function (err, rulesConfig) {
  *   if (err) {
@@ -1881,7 +1868,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateResourceServer', 'resourceServ
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'setRulesConfig', 'rulesConfigs.set');
+wrapPropertyMethod(ManagementClient, 'setRulesConfig', 'rulesConfigs.set');
 
 /**
  * Get rules config.
@@ -1901,7 +1888,7 @@ utils.wrapPropertyMethod(ManagementClient, 'setRulesConfig', 'rulesConfigs.set')
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getRulesConfigs', 'rulesConfigs.getAll');
+wrapPropertyMethod(ManagementClient, 'getRulesConfigs', 'rulesConfigs.getAll');
 
 /**
  * Delete rules config.
@@ -1925,6 +1912,6 @@ utils.wrapPropertyMethod(ManagementClient, 'getRulesConfigs', 'rulesConfigs.getA
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.delete');
+wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.delete');
 
 module.exports = ManagementClient;
