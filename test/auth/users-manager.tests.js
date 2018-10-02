@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var nock = require('nock');
-var Promise = require('bluebird');
+
+const proxy = require('../util-constructor-proxy');
 
 var BASE_URL = 'https://tenant.auth0.com';
 var CLIENT_ID = 'TEST_CLIENT_ID';
@@ -23,11 +24,11 @@ describe('UsersManager', function() {
 
   describe('#constructor', function() {
     it('should require an options object', function() {
-      expect(UsersManager).to.throw(ArgumentError, 'Missing users manager options');
+      expect(proxy(UsersManager)).to.throw(ArgumentError, 'Missing users manager options');
     });
 
     it('should require a base URL', function() {
-      expect(UsersManager.bind(null, {})).to.throw(ArgumentError, 'baseUrl field is required');
+      expect(proxy(UsersManager, {})).to.throw(ArgumentError, 'baseUrl field is required');
     });
   });
 

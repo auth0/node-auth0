@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var assign = Object.assign || require('object.assign');
 
+const proxy = require('../util-constructor-proxy');
+
 var ManagementClient = require('../../src/management');
 
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -46,7 +48,7 @@ describe('ManagementClient', function() {
   });
 
   it('should raise an error when no options object is provided', function() {
-    expect(ManagementClient).to.throw(
+    expect(proxy(ManagementClient)).to.throw(
       ArgumentError,
       'Management API SDK options must be an object'
     );
@@ -55,7 +57,7 @@ describe('ManagementClient', function() {
   it('should raise an error when the domain is not set', function() {
     var config = assign({}, withTokenConfig);
     delete config.domain;
-    var client = ManagementClient.bind(null, config);
+    var client = proxy(ManagementClient, config);
 
     expect(client).to.throw(ArgumentError, 'Must provide a domain');
   });
@@ -63,7 +65,7 @@ describe('ManagementClient', function() {
   it('should raise an error when the domain is not valid', function() {
     var config = assign({}, withTokenConfig);
     config.domain = '';
-    var client = ManagementClient.bind(null, config);
+    var client = proxy(ManagementClient, config);
 
     expect(client).to.throw(ArgumentError, 'Must provide a domain');
   });
@@ -71,7 +73,7 @@ describe('ManagementClient', function() {
   it('should raise an error when the token is not valid', function() {
     var config = assign({}, withTokenConfig);
     config.token = '';
-    var client = ManagementClient.bind(null, config);
+    var client = proxy(ManagementClient, config);
 
     expect(client).to.throw(ArgumentError, 'Must provide a token');
   });
@@ -79,7 +81,7 @@ describe('ManagementClient', function() {
   it('should raise an error when the token and clientId are not set', function() {
     var config = assign({}, withTokenProviderConfig);
     delete config.clientId;
-    var client = ManagementClient.bind(null, config);
+    var client = proxy(ManagementClient, config);
 
     expect(client).to.throw(ArgumentError, 'Must provide a clientId');
   });
@@ -87,7 +89,7 @@ describe('ManagementClient', function() {
   it('should raise an error when the token and clientSecret are not set', function() {
     var config = assign({}, withTokenProviderConfig);
     delete config.clientSecret;
-    var client = ManagementClient.bind(null, config);
+    var client = proxy(ManagementClient, config);
 
     expect(client).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
@@ -139,10 +141,10 @@ describe('ManagementClient', function() {
         property: 'tenant',
         cls: TenantManager
       },
-      'RulesConfigsManager': {
+      RulesConfigsManager: {
         property: 'rulesConfigs',
         cls: RulesConfigsManager
-      },
+      }
     };
 
     before(function() {

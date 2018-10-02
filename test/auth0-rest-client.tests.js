@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
+const proxy = require('./util-constructor-proxy');
+
 var ArgumentError = require('rest-facade').ArgumentError;
 var ManagementTokenProvider = require('../src/management/ManagementTokenProvider');
 var Auth0RestClient = require('../src/Auth0RestClient');
@@ -17,16 +19,16 @@ describe('Auth0RestClient', function() {
   });
 
   it('should raise an error when no resource Url is provided', function() {
-    expect(Auth0RestClient).to.throw(ArgumentError, 'Must provide a Resource Url');
+    expect(proxy(Auth0RestClient)).to.throw(ArgumentError, 'Must provide a Resource Url');
   });
 
   it('should raise an error when resource Url is invalid', function() {
-    var client = Auth0RestClient.bind(null, '');
+    var client = proxy(Auth0RestClient, '');
     expect(client).to.throw(ArgumentError, 'The provided Resource Url is invalid');
   });
 
   it('should raise an error when no options is provided', function() {
-    var client = Auth0RestClient.bind(null, '/some-resource');
+    var client = proxy(Auth0RestClient, '/some-resource');
     expect(client).to.throw(ArgumentError, 'Must provide options');
   });
 

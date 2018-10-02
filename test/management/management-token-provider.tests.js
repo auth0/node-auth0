@@ -1,5 +1,6 @@
 var expect = require('chai').expect;
 var nock = require('nock');
+const proxy = require('../util-constructor-proxy');
 var assign = Object.assign || require('object.assign');
 var ArgumentError = require('rest-facade').ArgumentError;
 var APIError = require('rest-facade').APIError;
@@ -21,13 +22,13 @@ describe('ManagementTokenProvider', function() {
   });
 
   it('should raise an error when no options object is provided', function() {
-    expect(ManagementTokenProvider).to.throw(ArgumentError, 'Options must be an object');
+    expect(proxy(ManagementTokenProvider)).to.throw(ArgumentError, 'Options must be an object');
   });
 
   it('should raise an error when domain is not set', function() {
     var config = assign({}, defaultConfig);
     delete config.domain;
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'Must provide a domain');
   });
@@ -35,7 +36,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when domain is not valid', function() {
     var config = assign({}, defaultConfig);
     config.domain = '';
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'Must provide a domain');
   });
@@ -43,7 +44,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when clientId is not set', function() {
     var config = assign({}, defaultConfig);
     delete config.clientId;
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'Must provide a clientId');
   });
@@ -51,7 +52,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when clientId is not valid', function() {
     var config = assign({}, defaultConfig);
     config.clientId = '';
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'Must provide a clientId');
   });
@@ -59,7 +60,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when clientSecret is not set', function() {
     var config = assign({}, defaultConfig);
     delete config.clientSecret;
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
@@ -67,7 +68,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when clientSecret is not valid', function() {
     var config = assign({}, defaultConfig);
     config.clientSecret = '';
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
@@ -75,7 +76,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when enableCache is not of type boolean', function() {
     var config = assign({}, defaultConfig);
     config.enableCache = 'string';
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'enableCache must be a boolean');
   });
@@ -83,7 +84,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when scope is not of type string', function() {
     var config = assign({}, defaultConfig);
     config.scope = ['foo', 'bar'];
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'scope must be a string');
   });
@@ -119,7 +120,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when the cacheTTLInSeconds is not of type number', function() {
     var config = assign({}, defaultConfig);
     config.cacheTTLInSeconds = 'string';
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'cacheTTLInSeconds must be a number');
   });
@@ -127,7 +128,7 @@ describe('ManagementTokenProvider', function() {
   it('should raise an error when the cacheTTLInSeconds is not a greater than 0', function() {
     var config = assign({}, defaultConfig);
     config.cacheTTLInSeconds = -1;
-    var provider = ManagementTokenProvider.bind(null, config);
+    var provider = proxy(ManagementTokenProvider, config);
 
     expect(provider).to.throw(ArgumentError, 'cacheTTLInSeconds must be a greater than 0');
   });
