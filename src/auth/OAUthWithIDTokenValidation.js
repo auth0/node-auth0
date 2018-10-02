@@ -1,8 +1,8 @@
-var jwt = require('jsonwebtoken');
-var jwksClient = require('jwks-rsa');
-var Promise = require('bluebird');
+const Promise = require('bluebird');
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
 
-var ArgumentError = require('rest-facade').ArgumentError;
+const { ArgumentError } = require('rest-facade');
 
 /**
  * @class
@@ -17,67 +17,71 @@ var ArgumentError = require('rest-facade').ArgumentError;
  * @param  {String}              [options.clientSecret]          Default client Secret.
  * @param  {String}              [options.supportedAlgorithms]   Algorithms that your application expects to receive
  */
-var OAUthWithIDTokenValidation = function(oauth, options) {
-  if (!oauth) {
-    throw new ArgumentError('Missing OAuthAuthenticator param');
+class OAUthWithIDTokenValidation {
+  constructor(oauth, options) {
+    if (!oauth) {
+      throw new ArgumentError('Missing OAuthAuthenticator param');
+    }
+
+    if (!options) {
+      throw new ArgumentError('Missing authenticator options');
+    }
+
+    if (typeof options !== 'object') {
+      throw new ArgumentError('The authenticator options must be an object');
+    }
+
+    const { domain, clientId, clientSecret, supportedAlgorithms = ['HS256', 'RS256'] } = options;
+
+    this.oauth = oauth;
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+    this.domain = domain;
+    this.supportedAlgorithms = supportedAlgorithms;
+    this._jwksClient = jwksClient({
+      jwksUri: `https://${domain}/.well-known/jwks.json`
+    });
   }
 
-  if (!options) {
-    throw new ArgumentError('Missing authenticator options');
-  }
-
-  if (typeof options !== 'object') {
-    throw new ArgumentError('The authenticator options must be an object');
-  }
-
-  this.oauth = oauth;
-  this.clientId = options.clientId;
-  this.clientSecret = options.clientSecret;
-  this.domain = options.domain;
-  this.supportedAlgorithms = options.supportedAlgorithms || ['HS256', 'RS256'];
-  this._jwksClient = jwksClient({
-    jwksUri: 'https://' + options.domain + '/.well-known/jwks.json'
-  });
-};
-
-/**
- * Creates an oauth request and validates the id_token (if any)
- *
- * @method    create
- * @memberOf  module:auth.OAuthWithIDTokenValidation.prototype
- *
- * @param   {Object}    params            OAuth parameters that are passed through
- * @param   {Object}    data              Custom parameters sent to the OAuth endpoint
- * @param   {Function}  [callback]        Callback function
- *
- * @return  {Promise|undefined}
- */
-OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
-  const createAndValidate = this.oauth.create(params, data).then(r => {
-    var _this = this;
-    if (r.id_token) {
-      function getKey(header, callback) {
-        if (header.alg === 'HS256') {
-          return callback(null, Buffer.from(_this.clientSecret, 'base64'));
+  /**
+   * Creates an oauth request and validates the id_token (if any)
+   *
+   * @method    create
+   * @memberOf  module:auth.OAuthWithIDTokenValidation.prototype
+   *
+   * @param   {Object}    params            OAuth parameters that are passed through
+   * @param   {Object}    data              Custom parameters sent to the OAuth endpoint
+   * @param   {Function}  [callback]        Callback function
+   *
+   * @return  {Promise|undefined}
+   */
+  create(params, data, cb) {
+    const createAndValidate = this.oauth.create(params, data).then(r => {
+      if (!r.id_token) {
+        return r;
+      }
+      const getKey = ({ alg, kid }, callback) => {
+        if (alg === 'HS256') {
+          return callback(null, Buffer.from(this.clientSecret, 'base64'));
         }
-        _this._jwksClient.getSigningKey(header.kid, function(err, key) {
+        this._jwksClient.getSigningKey(kid, (err, key) => {
           if (err) {
             return callback(err);
           }
-          var signingKey = key.publicKey || key.rsaPublicKey;
+          const signingKey = key.publicKey || key.rsaPublicKey;
           return callback(null, signingKey);
         });
-      }
+      };
       return new Promise((res, rej) => {
         jwt.verify(
           r.id_token,
-          getKey,
+          getKey.bind(this),
           {
             algorithms: this.supportedAlgorithms,
             audience: this.clientId,
-            issuer: 'https://' + this.domain + '/'
+            issuer: `https://${this.domain}/`
           },
-          function(err, payload) {
+          (err, payload) => {
             if (err) {
               return rej(err);
             }
@@ -85,13 +89,12 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
           }
         );
       });
+    });
+    if (!cb) {
+      return createAndValidate;
     }
-    return r;
-  });
-  if (!cb) {
-    return createAndValidate;
+    createAndValidate.then(r => cb(null, r)).catch(e => cb(e));
   }
-  createAndValidate.then(r => cb(null, r)).catch(e => cb(e));
-};
+}
 
 module.exports = OAUthWithIDTokenValidation;
