@@ -4,7 +4,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
 
 var Auth0RestClient = function(resourceUrl, options, provider) {
   if (resourceUrl === null || resourceUrl === undefined) {
-    throw new ArgumentError('Must provide a Resource URL');
+    throw new ArgumentError('Must provide a Resource Url');
   }
 
   if ('string' !== typeof resourceUrl || resourceUrl.length === 0) {
