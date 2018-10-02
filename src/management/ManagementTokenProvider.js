@@ -1,4 +1,5 @@
-const { promisify } = require('util');
+// @todo: remove bluebird when node v6 becomes EoL
+const { promisify } = require('bluebird');
 const { ArgumentError } = require('rest-facade');
 const memoizer = require('lru-memoizer');
 const AuthenticationClient = require('../auth');
