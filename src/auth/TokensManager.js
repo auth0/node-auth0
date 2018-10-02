@@ -83,7 +83,7 @@ TokensManager.prototype.getInfo = function(idToken, cb) {
 };
 
 /**
- * Exchange the token of the logged in user with a token that is valid to call
+ * Exchange the token of the logged-in user with a token that is valid to call
  * the API (signed with the API secret).
  *
  * @method
@@ -140,7 +140,7 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
   }
 
   if (hasIdToken && hasRefreshToken) {
-    throw new ArgumentError('id_token and refresh_token fields cannot be specified simulatenously');
+    throw new ArgumentError('id_token and refresh_token fields cannot be specified simultaneously');
   }
 
   if (typeof data.target !== 'string' || data.target.trim().length === 0) {
