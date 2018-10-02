@@ -1,4 +1,4 @@
-const ArgumentError = require('rest-facade').ArgumentError;
+const { ArgumentError } = require('rest-facade');
 const { wrapPropertyMethod } = require('../utils');
 const Auth0RestClient = require('../Auth0RestClient');
 const RetryRestClient = require('../RetryRestClient');
