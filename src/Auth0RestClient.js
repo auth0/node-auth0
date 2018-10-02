@@ -8,7 +8,7 @@ var Auth0RestClient = function(resourceUrl, options, provider) {
   }
 
   if ('string' !== typeof resourceUrl || resourceUrl.length === 0) {
-    throw new ArgumentError('The provided Resource Url is invalid');
+    throw new ArgumentError('The provided Resource URL is invalid');
   }
 
   if (options === null || typeof options !== 'object') {

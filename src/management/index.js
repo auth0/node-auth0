@@ -382,7 +382,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
  *     // Handle error.
  *   }
  *
- *   // Conection deleted.
+ *   // Connection deleted.
  * });
  *
  * @param   {Object}    params          Connection parameters.

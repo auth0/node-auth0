@@ -156,13 +156,13 @@ describe('TokensManager', function() {
       );
     });
 
-    it('should not accept an ID token and a refresh token simulatenously', function() {
+    it('should not accept an ID token and a refresh token simultaneously', function() {
       var data = { id_token: 'foo', refresh_token: 'bar' };
       var getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(
         ArgumentError,
-        'id_token and refresh_token fields cannot be specified simulatenously'
+        'id_token and refresh_token fields cannot be specified simultaneously'
       );
     });
 

@@ -16,13 +16,13 @@ describe('Auth0RestClient', function() {
     };
   });
 
-  it('should raise an error when no resource Url is provided', function() {
+  it('should raise an error when no resource URL is provided', function() {
     expect(Auth0RestClient).to.throw(ArgumentError, 'Must provide a Resource Url');
   });
 
-  it('should raise an error when resource Url is invalid', function() {
+  it('should raise an error when resource URL is invalid', function() {
     var client = Auth0RestClient.bind(null, '');
-    expect(client).to.throw(ArgumentError, 'The provided Resource Url is invalid');
+    expect(client).to.throw(ArgumentError, 'The provided Resource URL is invalid');
   });
 
   it('should raise an error when no options is provided', function() {
