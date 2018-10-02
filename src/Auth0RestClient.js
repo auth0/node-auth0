@@ -1,72 +1,72 @@
-var RestClient = require('rest-facade').Client;
-var Promise = require('bluebird');
-var ArgumentError = require('rest-facade').ArgumentError;
+const Promise = require('bluebird');
+const { ArgumentError, Client: RestClient } = require('rest-facade');
 
-var Auth0RestClient = function(resourceUrl, options, provider) {
-  if (resourceUrl === null || resourceUrl === undefined) {
-    throw new ArgumentError('Must provide a Resource Url');
+class Auth0RestClient {
+  constructor(resourceUrl, options, provider) {
+    if (resourceUrl === null || resourceUrl === undefined) {
+      throw new ArgumentError('Must provide a Resource Url');
+    }
+
+    if ('string' !== typeof resourceUrl || resourceUrl.length === 0) {
+      throw new ArgumentError('The provided Resource Url is invalid');
+    }
+
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide options');
+    }
+
+    this.options = options;
+    this.provider = provider;
+    this.restClient = new RestClient(resourceUrl, options);
   }
 
-  if ('string' !== typeof resourceUrl || resourceUrl.length === 0) {
-    throw new ArgumentError('The provided Resource Url is invalid');
-  }
-
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide options');
-  }
-
-  this.options = options;
-  this.provider = provider;
-  this.restClient = new RestClient(resourceUrl, options);
-
-  this.wrappedProvider = function(method, args) {
+  wrappedProvider(method, args) {
     if (!this.provider) {
       return this.restClient[method].apply(this.restClient, args);
     }
 
-    var callback;
+    let callback;
     if (args && args[args.length - 1] instanceof Function) {
       callback = args[args.length - 1];
     }
 
-    var self = this;
     return this.provider
       .getAccessToken()
-      .then(function(access_token) {
-        self.options.headers['Authorization'] = 'Bearer ' + access_token;
-        return self.restClient[method].apply(self.restClient, args);
+      .then(access_token => {
+        this.options.headers.Authorization = `Bearer ${access_token}`;
+        return this.restClient[method].apply(this.restClient, args);
       })
-      .catch(function(err) {
+      .catch(err => {
         if (callback) {
           return callback(err);
         }
         return Promise.reject(err);
       });
-  };
-};
+  }
 
-Auth0RestClient.prototype.getAll = function(/* [params], [callback] */) {
-  return this.wrappedProvider('getAll', arguments);
-};
+  getAll(...args /* [params], [callback] */) {
+    return this.wrappedProvider('getAll', args);
+  }
 
-Auth0RestClient.prototype.get = function(/* [params], [callback] */) {
-  return this.wrappedProvider('get', arguments);
-};
+  get(...args /* [params], [callback] */) {
+    return this.wrappedProvider('get', args);
+  }
 
-Auth0RestClient.prototype.create = function(/* [params], [callback] */) {
-  return this.wrappedProvider('create', arguments);
-};
+  create(...args /* [params], [callback] */) {
+    return this.wrappedProvider('create', args);
+  }
 
-Auth0RestClient.prototype.patch = function(/* [params], [callback] */) {
-  return this.wrappedProvider('patch', arguments);
-};
+  patch(...args /* [params], [callback] */) {
+    return this.wrappedProvider('patch', args);
+  }
 
-Auth0RestClient.prototype.update = function(/* [params], [callback] */) {
-  return this.wrappedProvider('update', arguments);
-};
+  update(...args /* [params], [callback] */) {
+    return this.wrappedProvider('update', args);
+  }
 
-Auth0RestClient.prototype.delete = function(/* [params], [callback] */) {
-  return this.wrappedProvider('delete', arguments);
-};
+  delete(...args /* [params], [callback] */) {
+    return this.wrappedProvider('delete', args);
+  }
+}
 
 module.exports = Auth0RestClient;
