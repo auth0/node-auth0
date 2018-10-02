@@ -493,7 +493,7 @@ class UsersManager {
    * @memberOf  module:management.UsersManager.prototype
    *
    * @example
-   * const params = { id: USER_ID, provider: 'auht0', user_id: OTHER_USER_ID };
+   * const params = { id: USER_ID, provider: 'auth0', user_id: OTHER_USER_ID };
    *
    * management.users.unlink(params, function (err, user) {
    *   if (err) {

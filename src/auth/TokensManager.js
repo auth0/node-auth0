@@ -142,7 +142,7 @@ class TokensManager {
 
     if (hasIdToken && hasRefreshToken) {
       throw new ArgumentError(
-        'id_token and refresh_token fields cannot be specified simulatenously'
+        'id_token and refresh_token fields cannot be specified simultaneously'
       );
     }
 

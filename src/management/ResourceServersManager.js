@@ -153,7 +153,7 @@ wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
  *     // Handle error.
  *   }
  *
- *   console.log(resourceServer.name);  // 'newResourceServernName'
+ *   console.log(resourceServer.name);  // 'newResourceServerName'
  * });
  *
  * @param   {Object}    params            Resource Server parameters.

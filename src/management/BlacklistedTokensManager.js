@@ -32,7 +32,7 @@ class BlacklistedTokensManager {
     const { headers, retry, baseUrl, tokenProvider } = options;
 
     /**
-     * Options object for the Rest Client instace.
+     * Options object for the Rest Client instance.
      *
      * @type {Object}
      */
