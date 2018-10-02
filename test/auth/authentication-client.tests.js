@@ -1,5 +1,7 @@
 var expect = require('chai').expect;
 
+const proxy = require('../util-constructor-proxy');
+
 var ArgumentError = require('rest-facade').ArgumentError;
 
 var AuthenticationClient = require('../../src/auth');
@@ -14,14 +16,14 @@ var ensureProperty = require('../utils').ensureProperty;
 describe('AuthenticationClient', function() {
   describe('#constructor', function() {
     it('should raise an error when no options object is provided', function() {
-      expect(AuthenticationClient).to.throw(
+      expect(proxy(AuthenticationClient)).to.throw(
         ArgumentError,
         'Authentication Client SDK options must be an object'
       );
     });
 
     it('should raise an error when the domain is not valid', function() {
-      var client = AuthenticationClient.bind(null, { token: 'token', domain: '' });
+      var client = proxy(AuthenticationClient, { token: 'token', domain: '' });
 
       expect(client).to.throw(ArgumentError, 'Must provide a domain');
     });

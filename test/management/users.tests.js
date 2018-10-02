@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
+const proxy = require('../util-constructor-proxy');
+
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenants.auth0.com';
 
@@ -43,17 +45,17 @@ describe('UsersManager', function() {
 
   describe('#constructor', function() {
     it('should error when no options are provided', function() {
-      expect(UsersManager).to.throw(ArgumentError, 'Must provide manager options');
+      expect(proxy(UsersManager)).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', function() {
-      var manager = UsersManager.bind(null, {});
+      var manager = proxy(UsersManager, {});
 
       expect(manager).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', function() {
-      var manager = UsersManager.bind(null, { baseUrl: '' });
+      var manager = proxy(UsersManager, { baseUrl: '' });
 
       expect(manager).to.throw(ArgumentError, 'The provided base URL is invalid');
     });

@@ -2,6 +2,8 @@ var expect = require('chai').expect;
 var extend = require('util')._extend;
 var nock = require('nock');
 
+const proxy = require('../util-constructor-proxy');
+
 // Constants.
 var SRC_DIR = '../../src';
 var DOMAIN = 'tenant.auth0.com';
@@ -24,14 +26,14 @@ describe('DatabaseAuthenticator', function() {
 
   describe('#constructor', function() {
     it('should require an options object', function() {
-      expect(Authenticator).to.throw(ArgumentError, 'Missing authenticator options');
+      expect(proxy(Authenticator)).to.throw(ArgumentError, 'Missing authenticator options');
 
-      expect(Authenticator.bind(null, 1)).to.throw(
+      expect(proxy(Authenticator, 1)).to.throw(
         ArgumentError,
         'The authenticator options must be an object'
       );
 
-      expect(Authenticator.bind(null, validOptions)).to.not.throw(ArgumentError);
+      expect(proxy(Authenticator, validOptions)).to.not.throw(ArgumentError);
     });
   });
 

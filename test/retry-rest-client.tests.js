@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
+const proxy = require('./util-constructor-proxy');
+
 var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
@@ -14,18 +16,18 @@ describe('RetryRestClient', function() {
   });
 
   it('should raise an error when no RestClient is provided', function() {
-    expect(RetryRestClient).to.throw(ArgumentError, 'Must provide RestClient');
+    expect(proxy(RetryRestClient)).to.throw(ArgumentError, 'Must provide RestClient');
   });
 
   it('should raise an error when enabled is not of type boolean', function() {
     var options = { enabled: {} };
-    var client = RetryRestClient.bind(null, {}, options);
+    var client = proxy(RetryRestClient, {}, options);
     expect(client).to.throw(ArgumentError, 'Must provide enabled boolean value');
   });
 
   it('should raise an error when maxRetries is negative', function() {
     var options = { maxRetries: -1 };
-    var client = RetryRestClient.bind(null, {}, options);
+    var client = proxy(RetryRestClient, {}, options);
     expect(client).to.throw(ArgumentError, 'Must provide maxRetries as a positive number');
   });
 

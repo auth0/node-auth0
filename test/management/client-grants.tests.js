@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var nock = require('nock');
-var Promise = require('bluebird');
+
+const proxy = require('../util-constructor-proxy');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
@@ -35,17 +36,17 @@ describe('ClientGrantsManager', function() {
 
   describe('#constructor', function() {
     it('should error when no options are provided', function() {
-      expect(ClientGrantsManager).to.throw(ArgumentError, 'Must provide client options');
+      expect(proxy(ClientGrantsManager)).to.throw(ArgumentError, 'Must provide client options');
     });
 
     it('should throw an error when no base URL is provided', function() {
-      var grants = ClientGrantsManager.bind(null, {});
+      var grants = proxy(ClientGrantsManager, {});
 
       expect(grants).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', function() {
-      var grants = ClientGrantsManager.bind(null, { baseUrl: '' });
+      var grants = proxy(ClientGrantsManager, { baseUrl: '' });
 
       expect(grants).to.throw(ArgumentError, 'The provided base URL is invalid');
     });

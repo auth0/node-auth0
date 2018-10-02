@@ -3,6 +3,8 @@ var nock = require('nock');
 var EmailTemplatesManager = require('../../src/management/EmailTemplatesManager');
 var ArgumentError = require('rest-facade').ArgumentError;
 
+const proxy = require('../util-constructor-proxy');
+
 var API_URL = 'https://tenant.auth0.com';
 const TEMPLATE_NAME = 'foobar';
 const DEFAULT_PARAMS = { name: TEMPLATE_NAME };
@@ -37,17 +39,17 @@ describe('EmailTemplatesManager', function() {
 
   describe('#constructor', function() {
     it('should error when no options are provided', function() {
-      expect(EmailTemplatesManager).to.throw(ArgumentError, 'Must provide manager options');
+      expect(proxy(EmailTemplatesManager)).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', function() {
-      var client = EmailTemplatesManager.bind(null, {});
+      var client = proxy(EmailTemplatesManager, {});
 
       expect(client).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', function() {
-      var client = EmailTemplatesManager.bind(null, { baseUrl: '' });
+      var client = proxy(EmailTemplatesManager, { baseUrl: '' });
 
       expect(client).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
     });

@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
+const proxy = require('../util-constructor-proxy');
+
 var BASE_URL = 'https://tenant.auth0.com';
 
 var Promise = require('bluebird');
@@ -23,11 +25,11 @@ describe('TokensManager', function() {
 
   describe('#constructor', function() {
     it('should require an options object', function() {
-      expect(TokensManager).to.throw(ArgumentError, 'Missing tokens manager options');
+      expect(proxy(TokensManager)).to.throw(ArgumentError, 'Missing tokens manager options');
     });
 
     it('should require a base URL', function() {
-      var manager = TokensManager.bind(null, {});
+      var manager = proxy(TokensManager, {});
 
       expect(manager).to.throw(ArgumentError, 'baseUrl field is required');
     });

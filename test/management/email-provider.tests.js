@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
+const proxy = require('../util-constructor-proxy');
+
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
@@ -28,17 +30,17 @@ describe('EmailProviderManager', function() {
 
   describe('#constructor', function() {
     it('should error when no options are provided', function() {
-      expect(EmailProviderManager).to.throw(ArgumentError, 'Must provide client options');
+      expect(proxy(EmailProviderManager)).to.throw(ArgumentError, 'Must provide client options');
     });
 
     it('should throw an error when no base URL is provided', function() {
-      var client = EmailProviderManager.bind(null, {});
+      var client = proxy(EmailProviderManager, {});
 
       expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', function() {
-      var client = EmailProviderManager.bind(null, { baseUrl: '' });
+      var client = proxy(EmailProviderManager, { baseUrl: '' });
 
       expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
     });

@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var nock = require('nock');
-var Promise = require('bluebird');
+
+const proxy = require('../util-constructor-proxy');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
@@ -35,20 +36,20 @@ describe('ResourceServersManager', function() {
 
   describe('#constructor', function() {
     it('should error when no options are provided', function() {
-      expect(ResourceServersManager).to.throw(
+      expect(proxy(ResourceServersManager)).to.throw(
         ArgumentError,
         'Must provide resource server options'
       );
     });
 
     it('should throw an error when no base URL is provided', function() {
-      var resourceServerManager = ResourceServersManager.bind(null, {});
+      var resourceServerManager = proxy(ResourceServersManager, {});
 
       expect(resourceServerManager).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', function() {
-      var resourceServerManager = ResourceServersManager.bind(null, { baseUrl: '' });
+      var resourceServerManager = proxy(ResourceServersManager, { baseUrl: '' });
 
       expect(resourceServerManager).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
