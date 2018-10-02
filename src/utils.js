@@ -44,7 +44,7 @@ module.exports = {
 
   /**
    * Perform a request with the given settings and return a promise that resolves
-   * when the request is successfull and rejects when there's an error.
+   * when the request is successful and rejects when there's an error.
    *
    * @method    getRequestPromise
    * @memberOf  module:utils
