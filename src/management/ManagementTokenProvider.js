@@ -98,7 +98,7 @@ class ManagementTokenProvider {
   }
 }
 
-ManagementTokenProvider.prototype._getCachedAccessToken = promisify(
+ManagementTokenProvider.prototype.getCachedAccessToken = promisify(
   memoizer({
     load(options, callback) {
       const { domain, scope, audience } = options;

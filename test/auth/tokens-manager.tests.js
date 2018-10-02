@@ -81,7 +81,7 @@ describe('TokensManager', function() {
     it('should return a promise when no callback is provided', function() {
       var returnValue = manager.getInfo('VALID_TOKEN');
 
-      expect(returnValue).to.be.an.instanceOf(Promise);
+      expect(returnValue).to.be.a('promise');
     });
 
     it('should not return a promise when a callback is provided', function() {
@@ -158,13 +158,13 @@ describe('TokensManager', function() {
       );
     });
 
-    it('should not accept an ID token and a refresh token simulatenously', function() {
+    it('should not accept an ID token and a refresh token simultaneously', function() {
       var data = { id_token: 'foo', refresh_token: 'bar' };
       var getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(
         ArgumentError,
-        'id_token and refresh_token fields cannot be specified simulatenously'
+        'id_token and refresh_token fields cannot be specified simultaneously'
       );
     });
 
