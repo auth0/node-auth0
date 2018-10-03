@@ -80,7 +80,7 @@ describe('TokensManager', function() {
     it('should return a promise when no callback is provided', function() {
       var returnValue = manager.getInfo('VALID_TOKEN');
 
-      expect(returnValue.then).to.be.a('function');
+      expect(returnValue).to.be.instanceof(Promise);
     });
 
     it('should not return a promise when a callback is provided', function() {
@@ -215,7 +215,7 @@ describe('TokensManager', function() {
       };
       var returnValue = manager.getDelegationToken(data);
 
-      expect(returnValue.then).to.be.a('function');
+      expect(returnValue).to.be.instanceof(Promise);
     });
 
     it('should not return a promise when a callback is given', function() {

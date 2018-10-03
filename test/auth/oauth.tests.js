@@ -4,6 +4,7 @@ var nock = require('nock');
 var sinon = require('sinon');
 
 const proxy = require('../util-constructor-proxy');
+const Promise = require('bluebird');
 
 // Constants.
 var SRC_DIR = '../../src';
@@ -470,7 +471,7 @@ describe('OAuthAuthenticator', function() {
     it('should return a promise when no callback is given', function() {
       var returnValue = this.authenticator.socialSignIn(userData);
 
-      expect(returnValue.then).to.be.a('function');
+      expect(returnValue).to.be.instanceof(Promise);
     });
 
     it('should not return a promise when a callback is given', function() {
