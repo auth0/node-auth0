@@ -230,7 +230,7 @@ describe('JobsManager', function() {
       });
     });
 
-    it('should have two parts: connection_id and users file', function(done) {
+    it('should have four parts: connection_id, users file, upsert and send_completion_email', function(done) {
       nock.cleanAll();
       var boundary = null;
 
@@ -248,6 +248,16 @@ describe('JobsManager', function() {
             .to.exist.to.be.a('string')
             .to.equal(data.connection_id);
 
+          // Validate the upsert param - default is false
+          expect(parts.upsert)
+            .to.exist.to.be.a('string')
+            .to.equal('false');
+
+          // Validate the send_completion_email param - default is true
+          expect(parts.send_completion_email)
+            .to.exist.to.be.a('string')
+            .to.equal('true');
+
           // Validate the content type of the users JSON.
           expect(parts.users)
             .to.exist.to.be.a('string')
@@ -263,6 +273,64 @@ describe('JobsManager', function() {
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should set upsert parameter correctly', function(done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function(header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+
+          return true;
+        })
+        .post('/jobs/users-imports', function(body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the upsert param
+          expect(parts.upsert)
+            .to.exist.to.be.a('string')
+            .to.equal('true');
+
+          return true;
+        })
+        .reply(200);
+
+      this.jobs.importUsers(Object.assign({ upsert: true }, data)).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should set send_completion_email parameter correctly', function(done) {
+      nock.cleanAll();
+      var boundary = null;
+
+      var request = nock(API_URL)
+        .matchHeader('Content-Type', function(header) {
+          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+
+          return true;
+        })
+        .post('/jobs/users-imports', function(body) {
+          var parts = extractParts(body, boundary);
+
+          // Validate the upsert param
+          expect(parts.send_completion_email)
+            .to.exist.to.be.a('string')
+            .to.equal('false');
+
+          return true;
+        })
+        .reply(200);
+
+      this.jobs.importUsers(Object.assign({ send_completion_email: false }, data)).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

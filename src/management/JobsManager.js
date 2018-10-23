@@ -109,7 +109,9 @@ JobsManager.prototype.get = function(params, cb) {
  * @example
  * var params = {
  *   connection_id: '{CONNECTION_ID}',
- *   users: '{PATH_TO_USERS_FILE}'
+ *   users: '{PATH_TO_USERS_FILE}',
+ *   upsert: true, //optional
+ *   send_completion_email: false //optional
  * };
  *
  * management.jobs.get(params, function (err) {
@@ -118,11 +120,13 @@ JobsManager.prototype.get = function(params, cb) {
  *   }
  * });
  *
- * @param   {Object}    data                Users import data.
- * @param   {String}    data.connectionId   Connection for the users insertion.
- * @param   {String}    data.users          Path to the users data file.
- * @param   {String}    data.users_json     JSON data for the users.
- * @param   {Function}  [cb]                Callback function.
+ * @param   {Object}    data                        Users import data.
+ * @param   {String}    data.connectionId           Connection for the users insertion.
+ * @param   {String}    data.users                  Path to the users data file.
+ * @param   {String}    data.users_json             JSON data for the users.
+ * @param   {String}    data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
+ * @param   {String}    data.send_completion_email  OPTIONAL: defaults to true
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -134,6 +138,8 @@ JobsManager.prototype.importUsers = function(data, cb) {
 
   var url = options.baseUrl + '/jobs/users-imports';
   var method = 'POST';
+  var upsert = data.upsert === true ? 'true' : 'false';
+  var send_completion_email = data.send_completion_email === false ? 'false' : 'true';
 
   var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
     return new Promise(function(resolve, reject) {
@@ -151,7 +157,9 @@ JobsManager.prototype.importUsers = function(data, cb) {
                 filename: data.users_json ? 'users.json' : data.users
               }
             },
-            connection_id: data.connection_id
+            connection_id: data.connection_id,
+            upsert: upsert,
+            send_completion_email: send_completion_email
           }
         },
         function(err, res) {
