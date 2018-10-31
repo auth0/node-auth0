@@ -938,6 +938,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getUser', 'users.get');
  * @param   {Function}  [cb]        Callback function
  *
  * @return  {Promise|undefined}
+ *
+ * @deprecated This method will be removed in the next major release.
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteAllUsers', 'users.deleteAll');
 

@@ -386,6 +386,8 @@ UsersManager.prototype.delete = function(params) {
  * @param   {Function}  [cb]        Callback function
  *
  * @return  {Promise|undefined}
+ *
+ * @deprecated This method will be removed in the next major release.
  */
 UsersManager.prototype.deleteAll = function(cb) {
   if (typeof cb !== 'function') {
