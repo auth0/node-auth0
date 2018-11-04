@@ -1945,7 +1945,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.de
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
- * management.customDomains.create(data, function (err) {
+ * management.customDomains.createCustomDomain(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -1958,7 +1958,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.de
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'createCustomDomain', 'customDomains.create');
+utils.wrapPropertyMethod(ManagementClient, 'createCustomDomain', 'customDomains.create');
 
 /**
  * Get all Auth0 CustomDomains.
@@ -1967,13 +1967,13 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'createCustomDomain', 'customDoma
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
- * management.customDomains.getAll(function (err, customDomains) {
+ * management.customDomains.getCustomDomains(function (err, customDomains) {
  *   console.log(customDomains.length);
  * });
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'getCustomDomains', 'customDomains.getAll');
+utils.wrapPropertyMethod(ManagementClient, 'getCustomDomains', 'customDomains.getAll');
 
 /**
  * Get a Custom Domain.
@@ -1982,7 +1982,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'getCustomDomains', 'customDomain
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
- * management.customDomains.get({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
+ * management.customDomains.getCustomDomain({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -1996,7 +1996,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'getCustomDomains', 'customDomain
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'getCustomDomain', 'customDomains.get');
+utils.wrapPropertyMethod(ManagementClient, 'getCustomDomain', 'customDomains.get');
 
 /**
  * Verify a Custom Domain.
@@ -2005,7 +2005,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'getCustomDomain', 'customDomains
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
- * management.customDomains.verify({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
+ * management.customDomains.verifyCustomDomain({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -2019,7 +2019,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'getCustomDomain', 'customDomains
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'verifyCustomDomain', 'customDomains.verify');
+utils.wrapPropertyMethod(ManagementClient, 'verifyCustomDomain', 'customDomains.verify');
 
 /**
  * Delete a Custom Domain.
@@ -2028,7 +2028,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'verifyCustomDomain', 'customDoma
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
- * management.customDomains.delete({ id: CUSTOM_DOMAIN_ID }, function (err) {
+ * management.deleteCustomDomain({ id: CUSTOM_DOMAIN_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -2042,6 +2042,6 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'verifyCustomDomain', 'customDoma
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'delete', 'customDomains.delete');
+utils.wrapPropertyMethod(ManagementClient, 'deleteCustomDomain', 'customDomains.delete');
 
 module.exports = ManagementClient;
