@@ -342,7 +342,7 @@ describe('CustomDomainsManager', function() {
       this.data = { id: 'cd_0000000000000001' };
 
       this.request = nock(API_URL)
-        .post('/custom-domains/' + this.data.id)
+        .post('/custom-domains/' + this.data.id + '/verify')
         .reply(200, this.data);
     });
 
@@ -357,7 +357,7 @@ describe('CustomDomainsManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/custom-domains/cd_0000000000000001', function(done) {
+    it('should perform a POST request to /api/v2/custom-domains/cd_0000000000000001/verify', function(done) {
       var request = this.request;
 
       this.customDomains.verify({ id: this.data.id }, {}).then(function() {
@@ -371,7 +371,7 @@ describe('CustomDomainsManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/custom-domains/' + this.data.id, this.data)
+        .post('/custom-domains/' + this.data.id + '/verify', this.data)
         .reply(200);
 
       this.customDomains.verify({ id: this.data.id }, this.data).then(function() {
@@ -385,7 +385,7 @@ describe('CustomDomainsManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/custom-domains/' + this.data.id)
+        .post('/custom-domains/' + this.data.id + '/verify')
         .reply(500);
 
       this.customDomains.verify({ id: this.data.id }, this.data).catch(function(err) {

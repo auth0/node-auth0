@@ -46,16 +46,29 @@ var CustomDomainsManager = function(options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Clients Auth0 Clients endpoint}.
+   * {@link https://auth0.com/docs/api/v2#!/Custom_Domains Auth0 Custom Domains endpoint}.
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
+  var auth0CustomDomainsRestClient = new Auth0RestClient(
     options.baseUrl + '/custom-domains/:id',
     clientOptions,
     options.tokenProvider
   );
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
+  this.resource = new RetryRestClient(auth0CustomDomainsRestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/v2#!/Custom_Domains Auth0 Custom Domains Verify endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var auth0VerifyRestClient = new Auth0RestClient(
+    options.baseUrl + '/custom-domains/:id/verify',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.vefifyResource = new RetryRestClient(auth0VerifyRestClient, options.retry);
 };
 
 /**
@@ -139,7 +152,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'get', 'resource.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'verify', 'resource.create');
+utils.wrapPropertyMethod(CustomDomainsManager, 'verify', 'vefifyResource.create');
 
 /**
  * Delete a Custom Domain.
