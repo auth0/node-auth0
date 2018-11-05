@@ -1929,4 +1929,154 @@ utils.wrapPropertyMethod(ManagementClient, 'getRulesConfigs', 'rulesConfigs.getA
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.delete');
 
+/**
+ * Create a Guardian enrollment ticket.
+ *
+ * @method    createGuardianEnrollmentTicket
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.createGuardianEnrollmentTicket(function (err, ticket) {
+ *   console.log(ticket);
+ * });
+ *
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'createGuardianEnrollmentTicket',
+  'guardian.tickets.create'
+);
+
+/**
+ * Get a list of Guardian factors and statuses.
+ *
+ * @method    getGuardianFactors
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.getGuardianFactors(function (err, factors) {
+ *   console.log(factors.length);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.factors.getAll');
+
+/**
+ * Get Guardian factor provider configuration
+ *
+ * @method    getGuardianFactorProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.getFactorProvider({ factor: 'sms', provider: 'twilio'}, function (err, provider) {
+ *   console.log(provider);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianFactorProvider',
+  'guardian.factorsProviders.get'
+);
+
+/**
+ * Update Guardian's factor provider
+ *
+ * @method    updateFactorProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.updateGuardianFactorProvider({ factor: 'sms', provider: 'twilio' }, {
+ *  messaging_service_sid: 'XXXXXXXXXXXXXX',
+ *  auth_token: 'XXXXXXXXXXXXXX',
+ *  sid: 'XXXXXXXXXXXXXX'
+ * }, function(err, provider) {
+ *  console.log(provider);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {Object}    data              Updated Factor provider data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianFactorProvider',
+  'guardian.factorsProviders.update'
+);
+
+/**
+ * Get Guardian enrollment and verification factor templates
+ *
+ * @method    getGuardianFactorTemplates
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.getGuardianFactorTemplates({ factor: 'sms' }, function (err, templates) {
+ *   console.log(templates);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianFactorTemplates',
+  'guardian.factorsTemplates.get'
+);
+
+/**
+ * Update Guardian enrollment and verification factor templates
+ *
+ * @method    updateGuardianFactorTemplates
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.updateGuardianFactorTemplates({ factor: 'sms' }, {
+ *  enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+ *  verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}"
+ * }, function(err, templates) {
+ *  console.log(templates);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Object}    data              Updated factor templates data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianFactorTemplates',
+  'guardian.factorsTemplates.update'
+);
+
+/**
+ * Update Guardian Factor
+ *
+ * @method    updateGuardianFactor
+ * @memberOf  module.GuardianManager.prototype
+ *
+ * management.updateGuardianFactor({ factor: 'sms' }, {
+ *  enabled: true
+ * }, function(err, factor) {
+ *  console.log(factor);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Object}    data              Updated factor data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateGuardianFactor', 'guardian.factors.update');
+
 module.exports = ManagementClient;
