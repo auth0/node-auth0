@@ -22,7 +22,7 @@ var RetryRestClient = require('../RetryRestClient');
  */
 var CustomDomainsManager = function(options) {
   if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide client options');
+    throw new ArgumentError('Must provide manager options');
   }
 
   if (options.baseUrl === null || options.baseUrl === undefined) {
@@ -139,7 +139,7 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'get', 'resource.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'verify', 'resource.get');
+utils.wrapPropertyMethod(CustomDomainsManager, 'verify', 'resource.create');
 
 /**
  * Delete a Custom Domain.
