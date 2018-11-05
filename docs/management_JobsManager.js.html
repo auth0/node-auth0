@@ -235,7 +235,8 @@ JobsManager.prototype.importUsers = function(data, cb) {
  *
  * @example
  * var params = {
- * 	user_id: '{USER_ID}'
+ * 	user_id: '{USER_ID}',
+ *  client_id: '{CLIENT_ID}'
  * };
  *
  * management.jobs.verifyEmail(function (err) {
@@ -246,6 +247,7 @@ JobsManager.prototype.importUsers = function(data, cb) {
  *
  * @param   {Object}    data          User data object.
  * @param   {String}    data.user_id  ID of the user to be verified.
+ * @param   {String}    data.client_id  ID of the client for which the verification email will be sent.
  * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
