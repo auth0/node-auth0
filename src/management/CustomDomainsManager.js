@@ -152,7 +152,17 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'get', 'resource.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(CustomDomainsManager, 'verify', 'vefifyResource.create');
+CustomDomainsManager.prototype.verify = function(params, cb) {
+  if (!params || !params.id) {
+    throw new ArgumentError('The custom domain id cannot be null or undefined');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.vefifyResource.create(params, {}, cb);
+  }
+
+  return this.vefifyResource.create(params, {});
+};
 
 /**
  * Delete a Custom Domain.
