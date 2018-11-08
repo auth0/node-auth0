@@ -563,7 +563,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordG
  *   refresh_token: '{REFRESH_TOKEN}',
  * };
  *
- * auth0.oauth.refresh(data, function (err, userData) {
+ * auth0.refresh(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
