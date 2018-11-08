@@ -405,55 +405,48 @@ describe('OAuthAuthenticator', function() {
     });
   });
 
-  describe('#refresh', function () {
+  describe('#refresh', function() {
     var path = '/oauth/token';
     var userData = {
-      refresh_token: 'refresh_token'
+      refreshToken: 'refresh_token'
     };
-    beforeEach(function () {
+    beforeEach(function() {
       this.authenticator = new Authenticator(validOptions);
       this.request = nock(API_URL)
         .post(path)
         .reply(200);
     });
-    it('should require an object as first argument', function () {
-      expect(this.authenticator.refresh)
-        .to.throw(ArgumentError, 'Missing user data object');
+    it('should require an object as first argument', function() {
+      expect(this.authenticator.refresh).to.throw(ArgumentError, 'Missing user data object');
     });
-    it('should require a refresh_token', function () {
+    it('should require a refreshToken', function() {
       var auth = this.authenticator;
       var refresh = auth.refresh.bind(auth, {});
-      expect(refresh)
-        .to.throw(ArgumentError, 'refresh_token field is required');
+      expect(refresh).to.throw(ArgumentError, 'refreshToken field is required');
     });
-    it('should accept a callback', function (done) {
-      this
-        .authenticator
-        .refresh(userData, done.bind(null, null));
+    it('should accept a callback', function(done) {
+      this.authenticator.refresh(userData, done.bind(null, null));
     });
-    it('should return a promise when no callback is provided', function (done) {
-      this
-        .authenticator
+    it('should return a promise when no callback is provided', function(done) {
+      this.authenticator
         .refresh(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
-    it('should perform a POST request to ' + path, function (done) {
+    it('should perform a POST request to ' + path, function(done) {
       var request = this.request;
-      this
-        .authenticator
+      this.authenticator
         .refresh(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
           done();
         })
         .catch(done);
     });
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', function(done) {
       nock.cleanAll();
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           for (var property in userData) {
             if (userData[property] !== body[property]) {
               return false;
@@ -462,46 +455,40 @@ describe('OAuthAuthenticator', function() {
           return true;
         })
         .reply(200);
-      this
-        .authenticator
+      this.authenticator
         .refresh(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
           done();
         })
         .catch(done);
     });
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', function(done) {
       nock.cleanAll();
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.client_id === CLIENT_ID;
         })
         .reply(200);
-      this
-        .authenticator
+      this.authenticator
         .refresh(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
           done();
         })
         .catch(done);
     });
-    it('should use refresh_token as default grant type', function (done) {
+    it('should use refresh_token as default grant type', function(done) {
       nock.cleanAll();
       var request = nock(API_URL)
-        .post(path, function (body) {
+        .post(path, function(body) {
           return body.grant_type === 'refresh_token';
         })
         .reply(200);
-      this
-        .authenticator
+      this.authenticator
         .refresh(userData)
-        .then(function () {
-          expect(request.isDone())
-            .to.be.true;
+        .then(function() {
+          expect(request.isDone()).to.be.true;
           done();
         })
         .catch(done);
