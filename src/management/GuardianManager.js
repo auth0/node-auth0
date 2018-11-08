@@ -1,4 +1,5 @@
 var ArgumentError = require('rest-facade').ArgumentError;
+var utils = require('../utils');
 var Auth0RestClient = require('../Auth0RestClient');
 var RetryRestClient = require('../RetryRestClient');
 
@@ -49,6 +50,60 @@ var GuardianManager = function(options) {
     options.tokenProvider
   );
   this.enrollments = new RetryRestClient(guardianEnrollmentsAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian tickets.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianTicketsAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/enrollments/ticket',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.tickets = new RetryRestClient(guardianTicketsAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian factors.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/:factor',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factors = new RetryRestClient(guardianFactorsAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian factors.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsTemplatesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/:factor/templates',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorsTemplates = new RetryRestClient(
+    guardianFactorsTemplatesAuth0RestClient,
+    options.retry
+  );
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian factor providers.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsProvidersAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/:factor/providers/:provider',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorsProviders = new RetryRestClient(
+    guardianFactorsProvidersAuth0RestClient,
+    options.retry
+  );
 };
 
 /**
@@ -58,7 +113,7 @@ var GuardianManager = function(options) {
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.users.getGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollment) {
+ * management.guardian.getGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollment) {
  *   console.log(enrollment);
  * });
  *
@@ -68,9 +123,7 @@ var GuardianManager = function(options) {
  *
  * @return  {Promise|undefined}
  */
-GuardianManager.prototype.getGuardianEnrollment = function(params, cb) {
-  return this.enrollments.get(params, cb);
-};
+utils.wrapPropertyMethod(GuardianManager, 'getGuardianEnrollment', 'enrollments.get');
 
 /**
  * Delete a Guardian enrollment.
@@ -79,7 +132,7 @@ GuardianManager.prototype.getGuardianEnrollment = function(params, cb) {
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.users.deleteGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollments) {
+ * management.guardian.deleteGuardianEnrollment({ id: ENROLLMENT_ID }, function (err, enrollments) {
  *   console.log(enrollments);
  * });
  *
@@ -89,8 +142,136 @@ GuardianManager.prototype.getGuardianEnrollment = function(params, cb) {
  *
  * @return  {Promise|undefined}
  */
-GuardianManager.prototype.deleteGuardianEnrollment = function(params, cb) {
-  return this.enrollments.delete(params, cb);
-};
+utils.wrapPropertyMethod(GuardianManager, 'deleteGuardianEnrollment', 'enrollments.delete');
+
+/**
+ * Create a Guardian enrollment ticket.
+ *
+ * @method    createEnrollmentTicket
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.createEnrollmentTicket(function (err, ticket) {
+ *   console.log(ticket);
+ * });
+ *
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'createEnrollmentTicket', 'tickets.create');
+
+/**
+ * Get a list of factors and statuses.
+ *
+ * @method    getFactors
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.guardian.getAll(function (err, factors) {
+ *   console.log(factors.length);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getFactors', 'factors.getAll');
+
+/**
+ * Get Guardian factor provider configuration
+ *
+ * @method    getFactorProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.guardian.getFactorProvider({ factor: 'sms', provider: 'twilio'}, function (err, provider) {
+ *   console.log(provider);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getFactorProvider', 'factorsProviders.get');
+
+/**
+ * Update Guardian's factor provider
+ *
+ * @method    updateFactorProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.guardian.updateFactorProvider({ factor: 'sms', provider: 'twilio' }, {
+ *  messaging_service_sid: 'XXXXXXXXXXXXXX',
+ *  auth_token: 'XXXXXXXXXXXXXX',
+ *  sid: 'XXXXXXXXXXXXXX'
+ * }, function(err, provider) {
+ *  console.log(provider);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {Object}    data              Updated Factor provider data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updateFactorProvider', 'factorsProviders.update');
+
+/**
+ * Get Guardian enrollment and verification factor templates
+ *
+ * @method    getFactorTemplates
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.guardian.getFactorTemplates({ factor: 'sms' }, function (err, templates) {
+ *   console.log(templates);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getFactorTemplates', 'factorsTemplates.get');
+
+/**
+ * Update Guardian enrollment and verification factor templates
+ *
+ * @method    updateFactorTemplates
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.guardian.updateFactorProvider({ factor: 'sms' }, {
+ *  enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+ *  verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}"
+ * }, function(err, templates) {
+ *  console.log(templates);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Object}    data              Updated factor templates data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updateFactorTemplates', 'factorsTemplates.update');
+
+/**
+ * Update Guardian Factor
+ *
+ * @method    updateFactor
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * management.guardian.updateFactor({ factor: 'sms' }, {
+ *  enabled: true
+ * }, function(err, factor) {
+ *  console.log(factor);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Object}    data              Updated factor data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updateFactor', 'factors.update');
 
 module.exports = GuardianManager;

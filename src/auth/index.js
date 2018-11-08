@@ -547,7 +547,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordG
  * Sign in using a refresh token
  *
  * @method    refresh
- * @memberOf  module:auth.OAuthAuthenticator.prototype
+ * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @example <caption>
  *   Given a refresh token from a previous authentication request
@@ -563,7 +563,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordG
  *   refreshToken: '{REFRESH_TOKEN}',
  * };
  *
- * auth0.oauth.refresh(data, function (err, userData) {
+ * auth0.refresh(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
