@@ -196,7 +196,7 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
  *
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
- *   refresh_token: '{REFRESH_TOKEN}',
+ *   refreshToken: '{REFRESH_TOKEN}',
  * };
  *
  * auth0.oauth.refresh(data, function (err, userData) {
@@ -208,7 +208,7 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
  * });
  *
  * @param   {Object}    userData                User credentials object.
- * @param   {String}    userData.refresh_token  Refresh token.
+ * @param   {String}    userData.refreshToken  Refresh token.
  *
  * @return  {Promise|undefined}
  */
@@ -224,9 +224,9 @@ OAuthAuthenticator.prototype.refresh = function (userData, cb) {
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');
   }
-  if (typeof data.refresh_token !== 'string'
-    || data.refresh_token.split().length === 0) {
-    throw new ArgumentError('refresh_token field is required');
+  if (typeof data.refreshToken !== 'string'
+    || data.refreshToken.split().length === 0) {
+    throw new ArgumentError('refreshToken field is required');
   }
   if (cb && cb instanceof Function) {
     return this.oauthWithIDTokenValidation.create(params, data, cb);

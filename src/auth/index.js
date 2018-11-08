@@ -560,7 +560,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordG
  *
  * var data = {
  *   client_id: '{CLIENT_ID}',  // Optional field.
- *   refresh_token: '{REFRESH_TOKEN}',
+ *   refreshToken: '{REFRESH_TOKEN}',
  * };
  *
  * auth0.oauth.refresh(data, function (err, userData) {
@@ -572,7 +572,7 @@ utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordG
  * });
  *
  * @param   {Object}    userData                User credentials object.
- * @param   {String}    userData.refresh_token  Refresh token.
+ * @param   {String}    userData.refreshToken  Refresh token.
  *
  * @return  {Promise|undefined}
  */
