@@ -180,6 +180,61 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
 };
 
 /**
+ * Sign in using a refresh token
+ *
+ * @method    refresh
+ * @memberOf  module:auth.OAuthAuthenticator.prototype
+ *
+ * @example <caption>
+ *   Given a refresh token from a previous authentication request
+ *   it will return a JSON with the access_token and id_token.
+ *   More information in the
+ *   <a href="https://auth0.com/docs/api/authentication#refresh-token">
+ *     API Docs
+ *   </a>.
+ * </caption>
+ *
+ * var data = {
+ *   client_id: '{CLIENT_ID}',  // Optional field.
+ *   refresh_token: '{REFRESH_TOKEN}',
+ * };
+ *
+ * auth0.oauth.refresh(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    userData                User credentials object.
+ * @param   {String}    userData.refresh_token  Refresh token.
+ *
+ * @return  {Promise|undefined}
+ */
+OAuthAuthenticator.prototype.refresh = function (userData, cb) {
+  var params = {
+    type: 'token'
+  };
+  var defaultFields = {
+    client_id: this.clientId,
+    grant_type: 'refresh_token'
+  };
+  var data = extend(defaultFields, userData);
+  if (!userData || typeof userData !== 'object') {
+    throw new ArgumentError('Missing user data object');
+  }
+  if (typeof data.refresh_token !== 'string'
+    || data.refresh_token.split().length === 0) {
+    throw new ArgumentError('refresh_token field is required');
+  }
+  if (cb && cb instanceof Function) {
+    return this.oauthWithIDTokenValidation.create(params, data, cb);
+  }
+  return this.oauthWithIDTokenValidation.create(params, data);
+};
+
+/**
  * Sign in using a social provider access token.
  *
  * @method    socialSignIn
