@@ -44,7 +44,13 @@ describe('OAuthAuthenticator', function() {
   });
 
   describe('instance', function() {
-    var methods = ['signIn', 'socialSignIn', 'passwordGrant', 'authorizationCodeGrant', 'refresh'];
+    var methods = [
+      'signIn',
+      'socialSignIn',
+      'passwordGrant',
+      'authorizationCodeGrant',
+      'refreshToken'
+    ];
     var authenticator = new Authenticator(validOptions);
 
     methods.forEach(function(method) {
@@ -405,10 +411,10 @@ describe('OAuthAuthenticator', function() {
     });
   });
 
-  describe('#refresh', function() {
+  describe('#refreshToken', function() {
     var path = '/oauth/token';
     var userData = {
-      refreshToken: 'refresh_token'
+      refresh_token: 'refresh_token'
     };
     beforeEach(function() {
       this.authenticator = new Authenticator(validOptions);
@@ -417,26 +423,26 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
     });
     it('should require an object as first argument', function() {
-      expect(this.authenticator.refresh).to.throw(ArgumentError, 'Missing user data object');
+      expect(this.authenticator.refreshToken).to.throw(ArgumentError, 'Missing user data object');
     });
     it('should require a refreshToken', function() {
       var auth = this.authenticator;
-      var refresh = auth.refresh.bind(auth, {});
-      expect(refresh).to.throw(ArgumentError, 'refreshToken field is required');
+      var refresh = auth.refreshToken.bind(auth, {});
+      expect(refresh).to.throw(ArgumentError, 'refresh_token is required');
     });
     it('should accept a callback', function(done) {
-      this.authenticator.refresh(userData, done.bind(null, null));
+      this.authenticator.refreshToken(userData, done.bind(null, null));
     });
     it('should return a promise when no callback is provided', function(done) {
       this.authenticator
-        .refresh(userData)
+        .refreshToken(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
     it('should perform a POST request to ' + path, function(done) {
       var request = this.request;
       this.authenticator
-        .refresh(userData)
+        .refreshToken(userData)
         .then(function() {
           expect(request.isDone()).to.be.true;
           done();
@@ -456,7 +462,7 @@ describe('OAuthAuthenticator', function() {
         })
         .reply(200);
       this.authenticator
-        .refresh(userData)
+        .refreshToken(userData)
         .then(function() {
           expect(request.isDone()).to.be.true;
           done();
@@ -471,7 +477,7 @@ describe('OAuthAuthenticator', function() {
         })
         .reply(200);
       this.authenticator
-        .refresh(userData)
+        .refreshToken(userData)
         .then(function() {
           expect(request.isDone()).to.be.true;
           done();
@@ -486,7 +492,7 @@ describe('OAuthAuthenticator', function() {
         })
         .reply(200);
       this.authenticator
-        .refresh(userData)
+        .refreshToken(userData)
         .then(function() {
           expect(request.isDone()).to.be.true;
           done();

@@ -182,7 +182,7 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
 /**
  * Sign in using a refresh token
  *
- * @method    refresh
+ * @method    refreshToken
  * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
  * @example <caption>
@@ -195,11 +195,11 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
  * </caption>
  *
  * var data = {
- *   client_id: '{CLIENT_ID}',  // Optional field.
- *   refreshToken: '{REFRESH_TOKEN}',
+ *   client_id: '{CLIENT_ID}', // Optional field.
+ *   refresh_token: '{REFRESH_TOKEN}',
  * };
  *
- * auth0.oauth.refresh(data, function (err, userData) {
+ * auth0.oauth.refreshToken(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -208,11 +208,11 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
  * });
  *
  * @param   {Object}    userData                User credentials object.
- * @param   {String}    userData.refreshToken  Refresh token.
+ * @param   {String}    userData.refresh_token  Refresh token.
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.refresh = function (userData, cb) {
+OAuthAuthenticator.prototype.refreshToken = function(userData, cb) {
   var params = {
     type: 'token'
   };
@@ -224,9 +224,8 @@ OAuthAuthenticator.prototype.refresh = function (userData, cb) {
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');
   }
-  if (typeof data.refreshToken !== 'string'
-    || data.refreshToken.split().length === 0) {
-    throw new ArgumentError('refreshToken field is required');
+  if (typeof data.refresh_token !== 'string' || data.refresh_token.split().length === 0) {
+    throw new ArgumentError('refresh_token is required');
   }
   if (cb && cb instanceof Function) {
     return this.oauthWithIDTokenValidation.create(params, data, cb);
