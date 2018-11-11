@@ -344,7 +344,7 @@ describe('GuardianManager', function() {
 
   describe('#getFactorProvider', function() {
     beforeEach(function() {
-      this.params = { factor: 'sms', provider: 'twilio' };
+      this.params = { name: 'sms', provider: 'twilio' };
       this.data = {
         from: '+1223323',
         messaging_service_sid: '5dEkAiHLPCuQ1uJj4qNXcAnERFAL6cpq',
@@ -353,7 +353,7 @@ describe('GuardianManager', function() {
       };
 
       this.request = nock(API_URL)
-        .get('/guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .get('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .reply(200, this.data);
     });
 
@@ -382,7 +382,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .get('guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .reply(500);
 
       this.guardian.getFactorProvider(this.params).catch(function(err) {
@@ -396,7 +396,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .get('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
@@ -410,7 +410,7 @@ describe('GuardianManager', function() {
 
   describe('#updateFactorProvider', function() {
     beforeEach(function() {
-      this.params = { factor: 'sms', provider: 'twilio' };
+      this.params = { name: 'sms', provider: 'twilio' };
       this.data = {
         from: '+1223323',
         messaging_service_sid: '5dEkAiHLPCuQ1uJj4qNXcAnERFAL6cpq',
@@ -432,7 +432,7 @@ describe('GuardianManager', function() {
 
     it('should perform a PUT request to /api/v2/guardian/factors/sms/providers/twilio', function(done) {
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .put('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .reply(200, this.data);
 
       this.guardian.updateFactorProvider(this.params, this.data).then(function() {
@@ -446,7 +446,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .put('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .reply(200);
 
       this.guardian.updateFactorProvider(this.params, this.data).then(function() {
@@ -460,7 +460,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .put('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .reply(500);
 
       this.guardian.updateFactorProvider(this.params, this.data).catch(function(err) {
@@ -474,7 +474,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/providers/' + this.params.provider)
+        .put('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
@@ -488,7 +488,7 @@ describe('GuardianManager', function() {
 
   describe('#getFactorTemplates', function() {
     beforeEach(function() {
-      this.params = { factor: 'sms' };
+      this.params = { name: 'sms' };
 
       this.data = {
         enrollment_message:
@@ -554,7 +554,7 @@ describe('GuardianManager', function() {
 
   describe('#updateFactorTemplates', function() {
     beforeEach(function() {
-      this.params = { factor: 'sms' };
+      this.params = { name: 'sms' };
       this.data = {
         enrollment_message:
           '{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.',
@@ -575,7 +575,7 @@ describe('GuardianManager', function() {
 
     it('should perform a PUT request to /api/v2/guardian/factors/sms/templates', function(done) {
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/templates')
+        .put('/guardian/factors/' + this.params.name + '/templates')
         .reply(200, this.data);
 
       this.guardian.updateFactorTemplates(this.params, this.data).then(function() {
@@ -589,7 +589,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/templates')
+        .put('/guardian/factors/' + this.params.name + '/templates')
         .reply(200);
 
       this.guardian.updateFactorTemplates(this.params, this.data).then(function() {
@@ -603,7 +603,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/templates')
+        .put('/guardian/factors/' + this.params.name + '/templates')
         .reply(500);
 
       this.guardian.updateFactorTemplates(this.params, this.data).catch(function(err) {
@@ -617,7 +617,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor + '/templates')
+        .put('/guardian/factors/' + this.params.name + '/templates')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
@@ -631,7 +631,7 @@ describe('GuardianManager', function() {
 
   describe('#updateFactor', function() {
     beforeEach(function() {
-      this.params = { factor: 'sms' };
+      this.params = { name: 'sms' };
       this.data = {
         enabled: true
       };
@@ -650,7 +650,7 @@ describe('GuardianManager', function() {
 
     it('should perform a PUT request to /api/v2/guardian/factors/sms', function(done) {
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor)
+        .put('/guardian/factors/' + this.params.name)
         .reply(200, this.data);
 
       this.guardian.updateFactor(this.params, this.data).then(function() {
@@ -664,7 +664,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor)
+        .put('/guardian/factors/' + this.params.name)
         .reply(200);
 
       this.guardian.updateFactor(this.params, this.data).then(function() {
@@ -678,7 +678,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor)
+        .put('/guardian/factors/' + this.params.name)
         .reply(500);
 
       this.guardian.updateFactor(this.params, this.data).catch(function(err) {
@@ -692,7 +692,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.factor)
+        .put('/guardian/factors/' + this.params.name)
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
