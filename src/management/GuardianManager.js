@@ -167,7 +167,7 @@ utils.wrapPropertyMethod(GuardianManager, 'createEnrollmentTicket', 'tickets.cre
  * @method    getFactors
  * @memberOf  module:management.GuardianManager.prototype
  *
- * management.guardian.getAll(function (err, factors) {
+ * management.guardian.getFactors(function (err, factors) {
  *   console.log(factors.length);
  * });
  *
