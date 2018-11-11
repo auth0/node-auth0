@@ -543,4 +543,39 @@ utils.wrapPropertyMethod(
  */
 utils.wrapPropertyMethod(AuthenticationClient, 'passwordGrant', 'oauth.passwordGrant');
 
+/**
+ * Sign in using a refresh token
+ *
+ * @method    refreshToken
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given a refresh token from a previous authentication request,
+ *   it will return a JSON with the access_token and id_token.
+ *   More information in the
+ *   <a href="https://auth0.com/docs/api/authentication#refresh-token">
+ *     API Docs
+ *   </a>.
+ * </caption>
+ *
+ * var data = {
+ *   client_id: '{CLIENT_ID}', // Optional field.
+ *   refresh_token: '{REFRESH_TOKEN}',
+ * };
+ *
+ * auth0.refreshToken(data, function (err, userData) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(userData);
+ * });
+ *
+ * @param   {Object}    userData                User credentials object.
+ * @param   {String}    userData.refresh_token  Refresh token.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(AuthenticationClient, 'refreshToken', 'oauth.refreshToken');
+
 module.exports = AuthenticationClient;
