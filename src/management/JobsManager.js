@@ -121,11 +121,11 @@ JobsManager.prototype.get = function(params, cb) {
  * });
  *
  * @param   {Object}    data                        Users import data.
- * @param   {String}    data.connectionId           Connection for the users insertion.
+ * @param   {String}    data.connection_id          Connection for the users insertion.
  * @param   {String}    data.users                  Path to the users data file.
  * @param   {String}    data.users_json             JSON data for the users.
- * @param   {String}    data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
- * @param   {String}    data.send_completion_email  OPTIONAL: defaults to true
+ * @param   {Boolean}   data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
+ * @param   {Boolean}   data.send_completion_email  OPTIONAL: defaults to true
  * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
@@ -141,46 +141,53 @@ JobsManager.prototype.importUsers = function(data, cb) {
   var upsert = data.upsert === true ? 'true' : 'false';
   var send_completion_email = data.send_completion_email === false ? 'false' : 'true';
 
-  var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
-    return new Promise(function(resolve, reject) {
-      request(
-        {
-          url: url,
-          method: method,
-          headers: extend({ Authorization: `Bearer ${access_token}` }, headers),
-          formData: {
-            users: {
-              value: data.users_json
-                ? Buffer.from(data.users_json)
-                : fs.createReadStream(data.users),
-              options: {
-                filename: data.users_json ? 'users.json' : data.users
-              }
-            },
-            connection_id: data.connection_id,
-            upsert: upsert,
-            send_completion_email: send_completion_email
-          }
-        },
-        function(err, res) {
-          if (err) {
-            reject(err);
-            return;
-          }
-          // `superagent` uses the error parameter in callback on http errors.
-          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-          var type = (res.statusCode / 100) | 0;
-          var isErrorResponse = 4 === type || 5 === type;
-          if (isErrorResponse) {
-            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
-            error.status = res.statusCode;
-            error.method = method;
-            error.text = res.text;
-            reject(error);
-          }
-          resolve(res);
+  var req = {
+    url: url,
+    method: method,
+    formData: {
+      users: {
+        value: data.users_json
+          ? Buffer.from(data.users_json)
+          : fs.createReadStream(data.users),
+        options: {
+          filename: data.users_json ? 'users.json' : data.users
         }
-      );
+      },
+      connection_id: data.connection_id,
+      upsert: upsert,
+      send_completion_email: send_completion_email
+    }
+  };
+  var promise;
+  if (options.tokenProvider) {
+    promise = options.tokenProvider.getAccessToken().then(function(access_token) {
+      req.headers = extend({ Authorization: `Bearer ${access_token}` }, headers);
+      return req;
+    });
+  } else {
+    req.headers = headers;
+    promise = Promise.resolve(req);
+  }
+  promise = promise.then(function(req) {
+    return new Promise(function(resolve, reject) {
+      request(req, function(err, res) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        // `superagent` uses the error parameter in callback on http errors.
+        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+        var type = (res.statusCode / 100) | 0;
+        var isErrorResponse = 4 === type || 5 === type;
+        if (isErrorResponse) {
+          var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
+          error.status = res.statusCode;
+          error.method = method;
+          error.text = res.text;
+          reject(error);
+        }
+        resolve(res);
+      });
     });
   });
 
@@ -226,44 +233,51 @@ JobsManager.prototype.exportUsers = function(data, cb) {
   var options = this.options;
   var headers = extend({}, options.headers);
 
-  headers['Content-Type'] = 'multipart/form-data';
-
   var url = options.baseUrl + '/jobs/users-exports';
   var method = 'POST';
-  var formData = {};
-  if (data.connection_id !== undefined) formData.connection_id = data.connection_id;
-  if (data.format !== undefined) formData.format = data.format;
-  if (data.limit !== undefined) formData.limit = data.limit;
-  if (data.fields !== undefined) formData.fields = data.fields;
+  var reqBody = {};
+  if (data.connection_id !== undefined) reqBody.connection_id = data.connection_id;
+  if (data.format !== undefined) reqBody.format = data.format;
+  if (data.limit !== undefined) reqBody.limit = data.limit;
+  if (data.fields !== undefined) reqBody.fields = data.fields;
 
-  var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
+  var req = {
+    url: url,
+    method: method,
+    json: true,
+    body: reqBody
+  };
+  var promise;
+  if (options.tokenProvider) {
+    promise = options.tokenProvider.getAccessToken().then(function(access_token) {
+      req.headers = extend({ Authorization: `Bearer ${access_token}` }, headers);
+      return req;
+    });
+  } else {
+    req.headers = headers;
+    promise = Promise.resolve(req);
+  }
+  promise = promise.then(function(req) {
     return new Promise(function(resolve, reject) {
-      request(
-        {
-          url: url,
-          method: method,
-          headers: extend({ Authorization: `Bearer ${access_token}` }, headers),
-          formData: formData
-        },
-        function(err, res) {
-          if (err) {
-            reject(err);
-            return;
-          }
-          // `superagent` uses the error parameter in callback on http errors.
-          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-          var type = (res.statusCode / 100) | 0;
-          var isErrorResponse = 4 === type || 5 === type;
-          if (isErrorResponse) {
-            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
-            error.status = res.statusCode;
-            error.method = method;
-            error.text = res.text;
-            reject(error);
-          }
-          resolve(res);
+      request(req, function(err, res) {
+        if (err) {
+          reject(err);
+          return;
         }
-      );
+        // `superagent` uses the error parameter in callback on http errors.
+        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+        var type = (res.statusCode / 100) | 0;
+        var isErrorResponse = 4 === type || 5 === type;
+        if (isErrorResponse) {
+          var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
+          error.status = res.statusCode;
+          error.method = method;
+          error.text = res.text;
+          error.body = res.body;
+          reject(error);
+        }
+        resolve(res.body);
+      });
     });
   });
 
