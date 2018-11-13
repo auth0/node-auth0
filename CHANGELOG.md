@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.14.0](https://github.com/auth0/node-auth0/tree/v2.14.0) (2018-11-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.13.0...v2.14.0)
+
+**Added**
+
+* Add method to refresh a token using a refresh_token [\#313](https://github.com/auth0/node-auth0/pull/313) ([modeswitch](https://github.com/modeswitch))
+* Add all Guardian APIs [\#311](https://github.com/auth0/node-auth0/pull/311) ([stevezau](https://github.com/stevezau))
+* Add Custom Domains methods [\#310](https://github.com/auth0/node-auth0/pull/310) ([stevezau](https://github.com/stevezau))
+* Add send_completion_email and upsert params for importUsers [\#270](https://github.com/auth0/node-auth0/pull/270) ([Floppy](https://github.com/Floppy))
+
+**Deprecated**
+
+* Deprecate UsersManager.deleteAll and deleteAllUsers wrapper methods [\#309](https://github.com/auth0/node-auth0/pull/309) ([M-Zuber](https://github.com/M-Zuber))
+
 ## [v2.13.0](https://github.com/auth0/node-auth0/tree/v2.13.0) (2018-09-28)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.12.0...v2.13.0)
