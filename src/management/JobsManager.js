@@ -195,6 +195,89 @@ JobsManager.prototype.importUsers = function(data, cb) {
 };
 
 /**
+ * Export all users to a file using a long running job.
+ *
+ * @method   exportUsers
+ * @memberOf module:management.JobsManager.prototype
+ *
+ * @example
+ * var params = {
+ *   connection_id: '{CONNECTION_ID}', //optional
+ *   format: 'json',
+ *   fields: [{ 'name': 'name' }, { 'name': 'email', 'export_as': 'e-mail' }] //optional
+ * };
+ *
+ * management.jobs.exportUsers(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data                        Users export data.
+ * @param   {String}    [data.connection_id]        OPTIONAL: Connection from which users will be exported.
+ * @param   {String}    [data.format]               OPTIONAL: The format of the file, either 'json' or 'csv'.
+ * @param   {Number}    [data.limit]                OPTIONAL: Limit the number of records.
+ * @param   {Array<Object>} [data.fields]           OPTIONAL: A list of fields to be included.
+ * @param   {Function}  [cb]                        Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+JobsManager.prototype.exportUsers = function(data, cb) {
+  var options = this.options;
+  var headers = extend({}, options.headers);
+
+  headers['Content-Type'] = 'multipart/form-data';
+
+  var url = options.baseUrl + '/jobs/users-exports';
+  var method = 'POST';
+  var formData = {};
+  if (data.connection_id !== undefined) formData.connection_id = data.connection_id;
+  if (data.format !== undefined) formData.format = data.format;
+  if (data.limit !== undefined) formData.limit = data.limit;
+  if (data.fields !== undefined) formData.fields = data.fields;
+
+  var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
+    return new Promise(function(resolve, reject) {
+      request(
+        {
+          url: url,
+          method: method,
+          headers: extend({ Authorization: `Bearer ${access_token}` }, headers),
+          formData: formData
+        },
+        function(err, res) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          // `superagent` uses the error parameter in callback on http errors.
+          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+          var type = (res.statusCode / 100) | 0;
+          var isErrorResponse = 4 === type || 5 === type;
+          if (isErrorResponse) {
+            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
+            error.status = res.statusCode;
+            error.method = method;
+            error.text = res.text;
+            reject(error);
+          }
+          resolve(res);
+        }
+      );
+    });
+  });
+
+  // Don't return a promise if a callback was given.
+  if (cb && cb instanceof Function) {
+    promise.then(cb.bind(null, null)).catch(cb);
+
+    return;
+  }
+
+  return promise;
+};
+
+/**
  * Send a verification email to a user.
  *
  * @method    verifyEmail

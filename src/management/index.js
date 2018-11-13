@@ -1609,6 +1609,36 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
 /**
+ * Export all users to a file using a long running job.
+ *
+ * @method   exportUsers
+ * @memberOf module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   connection_id: '{CONNECTION_ID}', //optional
+ *   format: 'json',
+ *   fields: [{ 'name': 'name' }, { 'name': 'email', 'export_as': 'e-mail' }] //optional
+ * };
+ *
+ * management.jobs.exportUsers(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data                        Users export data.
+ * @param   {String}    [data.connection_id]        OPTIONAL: Connection from which users will be exported.
+ * @param   {String}    [data.format]               OPTIONAL: The format of the file, either 'json' or 'csv'.
+ * @param   {Number}    [data.limit]                OPTIONAL: Limit the number of records.
+ * @param   {Array<Object>} [data.fields]           OPTIONAL: A list of fields to be included.
+ * @param   {Function}  [cb]                        Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
+
+/**
  * Send a verification email to a user.
  *
  * @method    sendEmailVerification

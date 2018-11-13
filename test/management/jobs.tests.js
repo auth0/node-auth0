@@ -27,7 +27,7 @@ describe('JobsManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['verifyEmail', 'importUsers', 'get'];
+    var methods = ['verifyEmail', 'importUsers', 'exportUsers', 'get'];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
@@ -393,6 +393,43 @@ describe('JobsManager', function() {
         .reply(200);
 
       this.jobs.importUsers(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#exportUsers in JSON', function() {
+    var data = {
+      connection_id: 'con_test',
+      format: 'json'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/jobs/users-exports')
+        .reply(200);
+    });
+
+    it('should perform a POST request to /api/v2/jobs/users-exports', function(done) {
+      var request = this.request;
+
+      this.jobs.exportUsers(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/jobs/users-exports', data)
+        .reply(200);
+
+      this.jobs.exportUsers(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
