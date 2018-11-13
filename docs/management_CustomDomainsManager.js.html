@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DeviceCredentialsManager - Documentation</title>
+    <title>management/CustomDomainsManager.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,1147 +29,209 @@
 
 <div id="main">
     
-    <h1 class="page-title">DeviceCredentialsManager</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-            <span class="ancestors"><a href="module-management.html">management</a>.</span>
-        
-        DeviceCredentialsManager
-        </h2>
-        
-            <div class="class-description"><p>DeviceCredentialsManager
-Manages Auth0 Device Credentials.</p></div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-<div class="section-method">
-
-    
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="DeviceCredentialsManager"><span class="type-signature"></span>new DeviceCredentialsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_DeviceCredentialsManager.js.html">management/DeviceCredentialsManager.js</a>, <a href="management_DeviceCredentialsManager.js.html#line23">line 23</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>The client options.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>baseUrl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>The URL of the API.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>headers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Headers to be included in all requests.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>retry</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Retry Policy Config</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>Provides an abstraction layer for consuming the
-<a href="https://auth0.com/docs/api/v2#!/Device_Credentials"> Auth0 DeviceCredentialsManagers endpoint</a>.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_DeviceCredentialsManager.js.html">management/DeviceCredentialsManager.js</a>, <a href="management_DeviceCredentialsManager.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id="~clientOptions"><span class="type-signature">(inner) </span>clientOptions<span class="type-signature"> :Object</span></h4>
-
-
-
-
-<div class="description">
-    <p>Options object for the RestClient instance.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_DeviceCredentialsManager.js.html">management/DeviceCredentialsManager.js</a>, <a href="management_DeviceCredentialsManager.js.html#line41">line 41</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>Object</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Create an Auth0 credential.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_DeviceCredentialsManager.js.html">management/DeviceCredentialsManager.js</a>, <a href="management_DeviceCredentialsManager.js.html#line62">line 62</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>The device credential data object.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>management.deviceCredentials.create(data, function (err) {
-  if (err) {
-    // Handle error.
+    <h1 class="page-title">management/CustomDomainsManager.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
+var utils = require('../utils');
+var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
+
+/**
+ * @class CustomDomainsManager
+ * Auth0 Custom Domains Manager.
+ *
+ * {@link https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains CustomDomains} represent
+ * custom domain names.
+ * You can learn more about this in the
+ * {@link https://auth0.com/docs/custom-domains CustomDomains} section of the
+ * documentation.
+ * @constructor
+ * @memberOf module:management
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
+ */
+var CustomDomainsManager = function(options) {
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide manager options');
   }
 
-  // Credential created.
-});</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Delete an Auth0 device credential.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_DeviceCredentialsManager.js.html">management/DeviceCredentialsManager.js</a>, <a href="management_DeviceCredentialsManager.js.html#line101">line 101</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>params</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Credential parameters.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Device credential ID.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>var params = { id: CREDENTIAL_ID };
-
-management.deviceCredentials.delete(params, function (err) {
-  if (err) {
-    // Handle error.
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
   }
 
-  // Credential deleted.
-});</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Get all Auth0 credentials.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_DeviceCredentialsManager.js.html">management/DeviceCredentialsManager.js</a>, <a href="management_DeviceCredentialsManager.js.html#line84">line 84</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Callback function.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>management.deviceCredentials.getAll(function (err, credentials) {
-  console.log(credentials.length);
-});</code></pre>
-
-</div>
-
-</div>
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
+  /**
+   * Options object for the Rest Client instance.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
+    headers: options.headers,
+    query: { repeatParams: false }
+  };
+
+  /**
+   * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/v2#!/Custom_Domains Auth0 Custom Domains endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var auth0CustomDomainsRestClient = new Auth0RestClient(
+    options.baseUrl + '/custom-domains/:id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.resource = new RetryRestClient(auth0CustomDomainsRestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/v2#!/Custom_Domains Auth0 Custom Domains Verify endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var auth0VerifyRestClient = new Auth0RestClient(
+    options.baseUrl + '/custom-domains/:id/verify',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.vefifyResource = new RetryRestClient(auth0VerifyRestClient, options.retry);
+};
+
+/**
+ * Create an Auth0 Custom Domain.
+ *
+ * @method    create
+ * @memberOf  module:management.CustomDomainsManager.prototype
+ *
+ * @example
+ * management.customDomains.create(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // CustomDomain created.
+ * });
+ *
+ * @param   {Object}    data     The custom domain data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(CustomDomainsManager, 'create', 'resource.create');
+
+/**
+ * Get all Auth0 CustomDomains.
+ *
+ * @method    getAll
+ * @memberOf  module:management.CustomDomainsManager.prototype
+ *
+ * @example
+ * management.customDomains.getAll(function (err, customDomains) {
+ *   console.log(customDomains.length);
+ * });
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(CustomDomainsManager, 'getAll', 'resource.getAll');
+
+/**
+ * Get a Custom Domain.
+ *
+ * @method    get
+ * @memberOf  module:management.CustomDomainsManager.prototype
+ *
+ * @example
+ * management.customDomains.get({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(customDomain);
+ * });
+ *
+ * @param   {Object}    params            Custom Domain parameters.
+ * @param   {String}    params.id         Custom Domain ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(CustomDomainsManager, 'get', 'resource.get');
+
+/**
+ * Verify a Custom Domain.
+ *
+ * @method    verify
+ * @memberOf  module:management.CustomDomainsManager.prototype
+ *
+ * @example
+ * management.customDomains.verify({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(customDomain);
+ * });
+ *
+ * @param   {Object}    params            Custom Domain parameters.
+ * @param   {String}    params.id         Custom Domain ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+CustomDomainsManager.prototype.verify = function(params, cb) {
+  if (!params || !params.id) {
+    throw new ArgumentError('The custom domain id cannot be null or undefined');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.vefifyResource.create(params, {}, cb);
+  }
+
+  return this.vefifyResource.create(params, {});
+};
+
+/**
+ * Delete a Custom Domain.
+ *
+ * @method    delete
+ * @memberOf  module:management.CustomDomainsManager.prototype
+ *
+ * @example
+ * management.customDomains.delete({ id: CUSTOM_DOMAIN_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // CustomDomain deleted.
+ * });
+ *
+ * @param   {Object}    params            Custom Domain parameters.
+ * @param   {String}    params.id         Custom Domain ID.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(CustomDomainsManager, 'delete', 'resource.delete');
+
+module.exports = CustomDomainsManager;
+</code></pre>
+        </article>
+    </section>
 
 
 
