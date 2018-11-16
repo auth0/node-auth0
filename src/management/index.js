@@ -1941,7 +1941,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.de
 /**
  * Create an Auth0 Custom Domain.
  *
- * @method    create
+ * @method    createCustomDomain
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
@@ -1963,7 +1963,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createCustomDomain', 'customDomains.
 /**
  * Get all Auth0 CustomDomains.
  *
- * @method    getAll
+ * @method    getCustomDomains
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
@@ -1978,7 +1978,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getCustomDomains', 'customDomains.ge
 /**
  * Get a Custom Domain.
  *
- * @method    get
+ * @method    getCustomDomain
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
@@ -2001,7 +2001,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getCustomDomain', 'customDomains.get
 /**
  * Verify a Custom Domain.
  *
- * @method    verify
+ * @method    verifyCustomDomain
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
@@ -2024,7 +2024,7 @@ utils.wrapPropertyMethod(ManagementClient, 'verifyCustomDomain', 'customDomains.
 /**
  * Delete a Custom Domain.
  *
- * @method    delete
+ * @method    deleteCustomDomain
  * @memberOf  module:management.CustomDomainsManager.prototype
  *
  * @example
