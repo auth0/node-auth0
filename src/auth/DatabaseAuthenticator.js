@@ -123,7 +123,7 @@ DatabaseAuthenticator.prototype.signIn = function(userData, cb) {
  * @param   {Object}    data              User credentials object.
  * @param   {String}    data.email        User email address.
  * @param   {String}    data.password     User password.
- * @param   {Stinrg}    data.connection   Identity provider in use.
+ * @param   {String}    data.connection   Identity provider in use.
  * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
