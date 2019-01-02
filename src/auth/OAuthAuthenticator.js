@@ -218,6 +218,7 @@ OAuthAuthenticator.prototype.refreshToken = function(userData, cb) {
   };
   var defaultFields = {
     client_id: this.clientId,
+    client_secret: this.clientSecret,
     grant_type: 'refresh_token'
   };
   var data = extend(defaultFields, userData);
