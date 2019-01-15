@@ -114,7 +114,7 @@ JobsManager.prototype.get = function(params, cb) {
  *   send_completion_email: false //optional
  * };
  *
- * management.jobs.get(params, function (err) {
+ * management.jobs.importUsers(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
