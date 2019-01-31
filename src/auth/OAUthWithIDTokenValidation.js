@@ -86,7 +86,7 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
           },
           function(err) {
             if (!err || err.ignoreValidation) {
-              if (err.ignoreReason) {
+              if (err && err.ignoreReason) {
                 console.warn(err.ignoreReason);
               }
               return res(r);
