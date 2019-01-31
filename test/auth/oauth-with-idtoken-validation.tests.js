@@ -153,11 +153,9 @@ describe('OAUthWithIDTokenValidation', function() {
       };
       sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
         getKey({ alg: 'HS256' }, function(err, key) {
-          expect(err).to.be.eql({
-            ignoreValidation: true,
-            ignoreReason:
-              'The `id_token` was not validated because a `clientSecret` was not provided. To ensure tokens are validated, please provide a `clientSecret` in the constructor.'
-          });
+          expect(err.message).to.contain(
+            'Validation of `id_token` requires a `clientSecret` when using the HS256 algorithm. To ensure tokens are validated, please switch the signing algorithm to RS256 or provide a `clientSecret` in the constructor.'
+          );
           callback(err, key);
         });
       });

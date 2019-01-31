@@ -4,6 +4,9 @@ var Promise = require('bluebird');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 
+var HS256_IGNORE_VALIDATION_MESSAGE =
+  'Validation of `id_token` requires a `clientSecret` when using the HS256 algorithm. To ensure tokens are validated, please switch the signing algorithm to RS256 or provide a `clientSecret` in the constructor.';
+
 /**
  * @class
  * Abstracts the `oauth.create` method with additional id_token validation
@@ -59,11 +62,7 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
       function getKey(header, callback) {
         if (header.alg === 'HS256') {
           if (!_this.clientSecret) {
-            return callback({
-              ignoreValidation: true,
-              ignoreReason:
-                'The `id_token` was not validated because a `clientSecret` was not provided. To ensure tokens are validated, please provide a `clientSecret` in the constructor.'
-            });
+            return callback({ message: HS256_IGNORE_VALIDATION_MESSAGE });
           }
           return callback(null, Buffer.from(_this.clientSecret, 'base64'));
         }
@@ -85,10 +84,11 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
             issuer: 'https://' + this.domain + '/'
           },
           function(err) {
-            if (!err || err.ignoreValidation) {
-              if (err && err.ignoreReason) {
-                console.warn(err.ignoreReason);
-              }
+            if (!err) {
+              return res(r);
+            }
+            if (err.message && err.message.includes(HS256_IGNORE_VALIDATION_MESSAGE)) {
+              console.warn(HS256_IGNORE_VALIDATION_MESSAGE);
               return res(r);
             }
             return rej(err);
