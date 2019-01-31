@@ -128,7 +128,7 @@ describe('OAUthWithIDTokenValidation', function() {
         done();
       });
     });
-    it('Calls uses secret as key when header.alg === HS256', function(done) {
+    it('Uses `clientSecret` as key when header.alg === HS256 and there is a user secret', function(done) {
       var oauth = {
         create: function() {
           return new Promise(res => res({ id_token: 'foobar' }));
@@ -144,6 +144,29 @@ describe('OAUthWithIDTokenValidation', function() {
         clientSecret: CLIENT_SECRET
       });
       oauthWithValidation.create(PARAMS, DATA);
+    });
+    it('Returns unvalidated response when header.alg === HS256 and there is no user secret', function(done) {
+      var oauth = {
+        create: function() {
+          return new Promise(res => res({ id_token: 'foobar' }));
+        }
+      };
+      sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+        getKey({ alg: 'HS256' }, function(err, key) {
+          expect(err).to.be.eql({
+            ignoreValidation: true,
+            ignoreReason:
+              'The `id_token` was not validated because a `clientSecret` was not provided. To ensure tokens are validated, please provide a `clientSecret` in the constructor.'
+          });
+          callback(err, key);
+        });
+      });
+      var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
+      oauthWithValidation.create(PARAMS, DATA, function(err, response) {
+        expect(err).to.be.null;
+        expect(response).to.be.eql({ id_token: 'foobar' });
+        done();
+      });
     });
     describe('when header.alg !== HS256', function() {
       it('creates a jwksClient with the correct jwksUri', function(done) {

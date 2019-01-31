@@ -58,6 +58,13 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
     if (r.id_token) {
       function getKey(header, callback) {
         if (header.alg === 'HS256') {
+          if (!_this.clientSecret) {
+            return callback({
+              ignoreValidation: true,
+              ignoreReason:
+                'The `id_token` was not validated because a `clientSecret` was not provided. To ensure tokens are validated, please provide a `clientSecret` in the constructor.'
+            });
+          }
           return callback(null, Buffer.from(_this.clientSecret, 'base64'));
         }
         _this._jwksClient.getSigningKey(header.kid, function(err, key) {
@@ -77,11 +84,12 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
             audience: this.clientId,
             issuer: 'https://' + this.domain + '/'
           },
-          function(err, payload) {
-            if (err) {
-              return rej(err);
+          function(err) {
+            if (!err || err.ignoreValidation) {
+              console.warn(err.ignoreReason);
+              return res(r);
             }
-            return res(r);
+            return rej(err);
           }
         );
       });
