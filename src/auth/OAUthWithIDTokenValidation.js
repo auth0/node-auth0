@@ -86,9 +86,9 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
           },
           function(err) {
             if (!err || err.ignoreValidation) {
-              console.warn(err.ignoreReason);
               return res(r);
             }
+            console.warn(err.ignoreReason);
             return rej(err);
           }
         );
