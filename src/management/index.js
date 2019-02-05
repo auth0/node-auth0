@@ -12,6 +12,7 @@ var assign = Object.assign || require('object.assign');
 var ClientsManager = require('./ClientsManager');
 var ClientGrantsManager = require('./ClientGrantsManager');
 var UsersManager = require('./UsersManager');
+var UserBlocksManager = require('./UserBlocksManager');
 var ConnectionsManager = require('./ConnectionsManager');
 var BlacklistedTokensManager = require('./BlacklistedTokensManager');
 var RulesManager = require('./RulesManager');
@@ -156,6 +157,14 @@ var ManagementClient = function(options) {
    * @type {UsersManager}
    */
   this.users = new UsersManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * user-blocks endpoint.
+   *
+   * @type {UserBlocksManager}
+   */
+  this.userBlocks = new UserBlocksManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -1280,6 +1289,98 @@ utils.wrapPropertyMethod(
   'regenerateRecoveryCode',
   'users.regenerateRecoveryCode'
 );
+
+/**
+ * Get user blocks by its id.
+ *
+ * @method    getUserBlocks
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getUserBlocks({ id: USER_ID }, function (err, blocks) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(blocks);
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserBlocks', 'userBlocks.get');
+
+/**
+ * Unblock an user by its id.
+ *
+ * @method    unblockUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.unblockUser({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User unblocked.
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'unblockUser', 'userBlocks.delete');
+
+/**
+ * Get user blocks by its identifier.
+ *
+ * @method    getUserBlocksByIdentifier
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getUserBlocksByIdentifier({ identifier: USER_ID }, function (err, blocks) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(blocks);
+ * });
+ *
+ * @param   {Object}    params              The user data object..
+ * @param   {String}    params.identifier   The user identifier, any of: username, phone_number, email.
+ * @param   {Function}  [cb]                Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserBlocksByIdentifier', 'userBlocks.getByIdentifier');
+
+/**
+ * Unblock an user by its id.
+ *
+ * @method    unblockUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.unblockUserByIdentifier({ identifier: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User unblocked.
+ * });
+ *
+ * @param   {Object}    params              The user data object..
+ * @param   {String}    params.identifier   The user identifier, any of: username, phone_number, email.
+ * @param   {Function}  [cb]                Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'unblockUserByIdentifier', 'userBlocks.deleteByIdentifier');
 
 /**
  * Get a single Guardian enrollment.
