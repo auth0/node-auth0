@@ -13,6 +13,7 @@ var RestClient = require('rest-facade').Client;
  * @param  {Object}              options            Authenticator options.
  * @param  {String}              options.baseUrl    The auth0 account URL.
  * @param  {String}              [options.clientId] Default client ID.
+ * @param  {String}              [options.proxy]    Proxy server URI.
  * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
  */
 var DatabaseAuthenticator = function(options, oauth) {
@@ -32,6 +33,10 @@ var DatabaseAuthenticator = function(options, oauth) {
   var clientOptions = {
     errorFormatter: { message: 'message', name: 'error' }
   };
+
+  if (options.proxy !== undefined) {
+    clientOptions.proxy = options.proxy;
+  }
 
   this.oauth = oauth;
   this.dbConnections = new RestClient(options.baseUrl + '/dbconnections/:type', clientOptions);

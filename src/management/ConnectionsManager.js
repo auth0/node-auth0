@@ -12,7 +12,8 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} options            The client options.
  * @param {String} options.baseUrl    The URL of the API.
  * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @param {Object} [options.retry]    Retry Policy Config.
+ * @param {String} [options.proxy]    Proxy server URI.
  */
 var ConnectionsManager = function(options) {
   if (options === null || typeof options !== 'object') {
@@ -36,6 +37,10 @@ var ConnectionsManager = function(options) {
     headers: options.headers,
     query: { repeatParams: false }
   };
+
+  if (options.proxy !== undefined) {
+    clientOptions.proxy = options.proxy;
+  }
 
   /**
    * Provides an abstraction layer for performing CRUD operations on
