@@ -33,7 +33,7 @@ node_modules
 # Compressed files.
 *.tgz
 
-# InelliJ IDEA
+# IntelliJ IDEA
 .idea
 
 build
@@ -44,3 +44,6 @@ test-results.xml
 # Release process
 .release
 .release-tmp-*/
+
+# npm
+package-lock.json
