@@ -3,13 +3,14 @@
   "version": "2.14.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "test": "mocha -R spec $(find ./test -name *.tests.js)",
-    "test:ci":
-      "istanbul cover _mocha --report lcovonly -R $(find ./test -name *.tests.js) -- -R mocha-multi --reporter-options spec=-,mocha-junit-reporter=-",
+    "test": "mocha -R spec ./test/**/*.tests.js ./test/*.tests.js",
+    "test:ci": "istanbul cover _mocha --report lcovonly -R $(find ./test -name *.tests.js) -- -R mocha-multi --reporter-options spec=-,mocha-junit-reporter=-",
     "test:coverage": "codecov",
-    "test:watch": "NODE_ENV=test mocha --timeout 5000 $(find ./test -name *.tests.js) --watch",
+    "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 ./test/**/*.tests.js ./test/*.tests.js --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
     "release:clean": "node scripts/cleanup.js",
     "preversion": "node scripts/prepare.js",
@@ -21,7 +22,10 @@
     "type": "git",
     "url": "https://github.com/auth0/node-auth0"
   },
-  "keywords": ["auth0", "api"],
+  "keywords": [
+    "auth0",
+    "api"
+  ],
   "author": "Auth0",
   "license": "MIT",
   "bugs": {
@@ -41,6 +45,7 @@
   "devDependencies": {
     "chai": "^2.2.0",
     "codecov": "^2.2.0",
+    "cross-env": "^5.2.0",
     "husky": "^0.14.3",
     "istanbul": "^0.4.0",
     "jsdoc": "^3.5.5",
