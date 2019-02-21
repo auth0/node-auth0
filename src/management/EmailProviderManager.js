@@ -91,7 +91,10 @@ utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
  * });
  *
  * @param   {Function}  [cb]    Callback function.
- *
+ * @param   {Object}    [params]          Clients parameters.
+ * @param   {Number}    [params.fields] A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve: name, enabled, settings fields.
+ * @param   {Number}    [params.include_fields]  true if the fields specified are to be excluded from the result, false otherwise (defaults to true)
+
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
