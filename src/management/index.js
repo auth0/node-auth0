@@ -558,8 +558,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteClient', 'clients.delete');
 /**
  * Get all Auth0 Client Grants.
  *
- * @method    getAll
- * @memberOf  module:management.ClientGrantsManager.prototype
+ * @method    getClientGrants
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
@@ -589,8 +589,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getClientGrants', 'clientGrants.getA
 /**
  * Create an Auth0 client grant.
  *
- * @method    create
- * @memberOf  module:management.ClientGrantsManager.prototype
+ * @method    createClientGrant
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.clientGrants.create(data, function (err) {
@@ -611,8 +611,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createClientGrant', 'clientGrants.cr
 /**
  * Update an Auth0 client grant.
  *
- * @method    update
- * @memberOf  module:management.ClientGrantsManager.prototype
+ * @method    updateClientGrant
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * var data = {
@@ -642,8 +642,8 @@ utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.up
 /**
  * Delete an Auth0 client grant.
  *
- * @method    delete
- * @memberOf  module:management.ClientGrantsManager.prototype
+ * @method    deleteClientGrant
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.clientGrants.delete({ id: GRANT_ID }, function (err) {
@@ -1944,8 +1944,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteRulesConfig', 'rulesConfigs.de
 /**
  * Create an Auth0 Custom Domain.
  *
- * @method    create
- * @memberOf  module:management.CustomDomainsManager.prototype
+ * @method    createCustomDomain
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.createCustomDomain(data, function (err) {
@@ -1966,8 +1966,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createCustomDomain', 'customDomains.
 /**
  * Get all Auth0 CustomDomains.
  *
- * @method    getAll
- * @memberOf  module:management.CustomDomainsManager.prototype
+ * @method    getCustomDomains
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.getCustomDomains(function (err, customDomains) {
@@ -1981,8 +1981,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getCustomDomains', 'customDomains.ge
 /**
  * Get a Custom Domain.
  *
- * @method    get
- * @memberOf  module:management.CustomDomainsManager.prototype
+ * @method    getCustomDomain
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.getCustomDomain({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
@@ -2004,8 +2004,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getCustomDomain', 'customDomains.get
 /**
  * Verify a Custom Domain.
  *
- * @method    verify
- * @memberOf  module:management.CustomDomainsManager.prototype
+ * @method    verifyCustomDomain
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.verifyCustomDomain({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
@@ -2027,8 +2027,8 @@ utils.wrapPropertyMethod(ManagementClient, 'verifyCustomDomain', 'customDomains.
 /**
  * Delete a Custom Domain.
  *
- * @method    delete
- * @memberOf  module:management.CustomDomainsManager.prototype
+ * @method    deleteCustomDomain
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.deleteCustomDomain({ id: CUSTOM_DOMAIN_ID }, function (err) {
@@ -2051,7 +2051,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteCustomDomain', 'customDomains.
  * Create a Guardian enrollment ticket.
  *
  * @method    createGuardianEnrollmentTicket
- * @memberOf  module:management.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * management.createGuardianEnrollmentTicket(function (err, ticket) {
@@ -2072,7 +2072,7 @@ utils.wrapPropertyMethod(
  * Get a list of Guardian factors and statuses.
  *
  * @method    getGuardianFactors
- * @memberOf  module:management.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * management.getGuardianFactors(function (err, factors) {
  *   console.log(factors.length);
@@ -2088,7 +2088,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.facto
  * Get Guardian factor provider configuration
  *
  * @method    getGuardianFactorProvider
- * @memberOf  module:management.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * management.getFactorProvider({ name: 'sms', provider: 'twilio'}, function (err, provider) {
  *   console.log(provider);
@@ -2109,7 +2109,7 @@ utils.wrapPropertyMethod(
  * Update Guardian's factor provider
  *
  * @method    updateFactorProvider
- * @memberOf  module:management.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * management.updateGuardianFactorProvider({ name: 'sms', provider: 'twilio' }, {
  *  messaging_service_sid: 'XXXXXXXXXXXXXX',
@@ -2135,7 +2135,7 @@ utils.wrapPropertyMethod(
  * Get Guardian enrollment and verification factor templates
  *
  * @method    getGuardianFactorTemplates
- * @memberOf  module:management.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * management.getGuardianFactorTemplates({ name: 'sms' }, function (err, templates) {
  *   console.log(templates);
@@ -2156,7 +2156,7 @@ utils.wrapPropertyMethod(
  * Update Guardian enrollment and verification factor templates
  *
  * @method    updateGuardianFactorTemplates
- * @memberOf  module:management.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * management.updateGuardianFactorTemplates({ name: 'sms' }, {
  *  enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
@@ -2181,7 +2181,7 @@ utils.wrapPropertyMethod(
  * Update Guardian Factor
  *
  * @method    updateGuardianFactor
- * @memberOf  module.GuardianManager.prototype
+ * @memberOf  module:management.ManagementClient.prototype
  *
  * management.updateGuardianFactor({ name: 'sms' }, {
  *  enabled: true
