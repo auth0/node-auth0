@@ -4,6 +4,7 @@ var Promise = require('bluebird');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var ResourceServersManager = require(SRC_DIR + '/management/ResourceServersManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -15,6 +16,7 @@ describe('ResourceServersManager', function() {
       headers: {
         authorization: 'Bearer ' + this.token
       },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

@@ -7,6 +7,7 @@ var SRC_DIR = '../../src';
 var DOMAIN = 'tenant.auth0.com';
 var API_URL = 'https://' + DOMAIN;
 var CLIENT_ID = 'TEST_CLIENT_ID';
+var PROXY = 'http://test-proxy:3128';
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/PasswordlessAuthenticator');
@@ -14,6 +15,7 @@ var OAuth = require(SRC_DIR + '/auth/OAuthAuthenticator');
 
 var validOptions = {
   baseUrl: API_URL,
+  proxy: PROXY,
   clientId: CLIENT_ID
 };
 

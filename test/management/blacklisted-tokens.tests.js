@@ -3,6 +3,7 @@ var nock = require('nock');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var BlacklistedTokensManager = require(SRC_DIR + '/management/BlacklistedTokensManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -12,6 +13,7 @@ describe('BlacklistedTokensManager', function() {
     this.token = 'TOKEN';
     this.blacklistedTokens = new BlacklistedTokensManager({
       headers: { authorization: 'Bearer ' + this.token },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

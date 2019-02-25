@@ -3,6 +3,7 @@ var nock = require('nock');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var EmailProviderManager = require(SRC_DIR + '/management/EmailProviderManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -12,6 +13,7 @@ describe('EmailProviderManager', function() {
     this.token = 'TOKEN';
     this.emailProvider = new EmailProviderManager({
       headers: { authorization: 'Bearer ' + this.token },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

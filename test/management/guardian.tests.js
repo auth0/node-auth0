@@ -3,6 +3,7 @@ var nock = require('nock');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenants.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var GuardianManager = require(SRC_DIR + '/management/GuardianManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -12,6 +13,7 @@ describe('GuardianManager', function() {
     this.token = 'TOKEN';
     this.guardian = new GuardianManager({
       headers: { authorization: 'Bearer ' + this.token },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

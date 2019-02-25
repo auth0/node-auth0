@@ -45,6 +45,11 @@ describe('ManagementClient', function() {
     expect(new ManagementClient(config)).to.exist.to.be.an.instanceOf(ManagementClient);
   });
 
+  it('should expose an instance of ManagementClient when proxy is passed', function() {
+    var config = assign({ proxy: 'http://test-proxy:3128' }, withTokenConfig);
+    expect(new ManagementClient(config)).to.exist.to.be.an.instanceOf(ManagementClient);
+  });
+
   it('should raise an error when no options object is provided', function() {
     expect(ManagementClient).to.throw(
       ArgumentError,
@@ -139,10 +144,10 @@ describe('ManagementClient', function() {
         property: 'tenant',
         cls: TenantManager
       },
-      'RulesConfigsManager': {
+      RulesConfigsManager: {
         property: 'rulesConfigs',
         cls: RulesConfigsManager
-      },
+      }
     };
 
     before(function() {

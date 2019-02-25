@@ -3,6 +3,7 @@ var nock = require('nock');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenants.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var TenantManager = require(SRC_DIR + '/management/TenantManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -12,6 +13,7 @@ describe('TenantManager', function() {
     this.token = 'TOKEN';
     this.tenant = new TenantManager({
       headers: { authorization: 'Bearer ' + this.token },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

@@ -3,6 +3,7 @@ var nock = require('nock');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenants.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var TicketsManager = require(SRC_DIR + '/management/TicketsManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -12,6 +13,7 @@ describe('TicketsManager', function() {
     this.token = 'TOKEN';
     this.tickets = new TicketsManager({
       headers: { authorization: 'Bearer ' + this.token },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

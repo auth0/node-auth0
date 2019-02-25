@@ -6,6 +6,7 @@ var fs = require('fs');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 
 var JobsManager = require(SRC_DIR + '/management/JobsManager');
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -22,6 +23,7 @@ describe('JobsManager', function() {
         }
       },
       headers: {},
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });

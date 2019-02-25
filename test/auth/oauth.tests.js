@@ -10,6 +10,7 @@ var DOMAIN = 'tenant.auth0.com';
 var API_URL = 'https://' + DOMAIN;
 var CLIENT_ID = 'TEST_CLIENT_ID';
 var CLIENT_SECRET = 'TEST_CLIENT_SECRET';
+var PROXY = 'http://test-proxy:3128';
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var Authenticator = require(SRC_DIR + '/auth/OAuthAuthenticator');
@@ -18,6 +19,7 @@ var OAUthWithIDTokenValidation = require('../../src/auth/OAUthWithIDTokenValidat
 var validOptions = {
   baseUrl: API_URL,
   clientId: CLIENT_ID,
+  proxy: PROXY,
   clientSecret: CLIENT_SECRET
 };
 

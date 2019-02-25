@@ -4,6 +4,7 @@ var EmailTemplatesManager = require('../../src/management/EmailTemplatesManager'
 var ArgumentError = require('rest-facade').ArgumentError;
 
 var API_URL = 'https://tenant.auth0.com';
+var PROXY = 'http://test-proxy:3128';
 const TEMPLATE_NAME = 'foobar';
 const DEFAULT_PARAMS = { name: TEMPLATE_NAME };
 const DEFAULT_DATA = {
@@ -22,6 +23,7 @@ describe('EmailTemplatesManager', function() {
     this.token = 'TOKEN';
     this.emailTemplates = new EmailTemplatesManager({
       headers: { authorization: 'Bearer ' + this.token },
+      proxy: PROXY,
       baseUrl: API_URL
     });
   });
