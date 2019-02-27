@@ -27,7 +27,7 @@ describe('JobsManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['verifyEmail', 'importUsers', 'get'];
+    var methods = ['verifyEmail', 'importUsers', 'exportUsers', 'get'];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
@@ -395,6 +395,82 @@ describe('JobsManager', function() {
       this.jobs.importUsers(data).then(function() {
         expect(request.isDone()).to.be.true;
 
+        done();
+      });
+    });
+  });
+
+  describe('#exportUsers', function() {
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/jobs/users-exports')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.jobs.exportUsers({ format: 'csv' }, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.jobs
+        .exportUsers({ format: 'csv' })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+      nock(API_URL)
+        .post('/jobs/users-exports')
+        .reply(500);
+
+      this.jobs.exportUsers({ format: 'csv' }).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        type: 'users_export',
+        status: 'pending',
+        format: 'csv',
+        created_at: '',
+        id: 'job_0000000000000001'
+      };
+      nock(API_URL)
+        .post('/jobs/users-exports')
+        .reply(200, data);
+
+      this.jobs.exportUsers({ format: 'csv' }).then(function(response) {
+        expect(response).to.be.an.instanceOf(Object);
+        expect(response.status).to.equal('pending');
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/jobs/users-exports', function(done) {
+      var request = this.request;
+
+      this.jobs.exportUsers({ format: 'csv' }).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+      var request = nock(API_URL)
+        .post('/jobs/users-exports')
+        .matchHeader('Authorization', 'Bearer ' + token)
+        .reply(200);
+
+      this.jobs.exportUsers({ format: 'csv' }).then(function() {
+        expect(request.isDone()).to.be.true;
         done();
       });
     });
