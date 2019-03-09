@@ -1612,6 +1612,57 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
 /**
+ * Export all users to a file using a long running job.
+ *
+ * @method   exportUsers
+ * @memberOf module:management.ManagementClient.prototype
+ *
+ * @example
+ * var data = {
+ *   connection_id: 'con_0000000000000001',
+ *   format: 'csv',
+ *   limit: 5,
+ *   fields: [
+ *     {
+ *       "name": "user_id"
+ *     },
+ *     {
+ *       "name": "name"
+ *     },
+ *     {
+ *       "name": "email"
+ *     },
+ *     {
+ *       "name": "identities[0].connection",
+ *       "export_as": "provider"
+ *     },
+ *     {
+ *       "name": "user_metadata.some_field"
+ *     }
+ *   ]
+ * }
+ *
+ * management.exportUsers(data, function (err, results) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(results);
+ * });
+ *
+ * @param   {Object}    data                  Users export data.
+ * @param   {String}    [data.connection_id]  The connection id of the connection from which users will be exported
+ * @param   {String}    [data.format]         The format of the file. Valid values are: "json" and "csv".
+ * @param   {Number}    [data.limit]          Limit the number of records.
+ * @param   {Object[]}  [data.fields]         A list of fields to be included in the CSV. If omitted, a set of predefined fields will be exported.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
+
+/**
  * Send a verification email to a user.
  *
  * @method    sendEmailVerification
