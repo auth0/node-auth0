@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.15.0](https://github.com/auth0/node-auth0/tree/v2.15.0) (2019-03-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.14.0...v2.15.0)
+
+**Added**
+
+* Add users-exports endpoint [\#340](https://github.com/auth0/node-auth0/pull/340) ([arjenvanderende](https://github.com/arjenvanderende))
+
+**Fixed**
+
+* Don't validate id_token when alg is HS256 and there is no clientSecret [\#330](https://github.com/auth0/node-auth0/pull/330) ([luisrudge](https://github.com/luisrudge))
+
 ## [v2.14.0](https://github.com/auth0/node-auth0/tree/v2.14.0) (2018-11-12)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.13.0...v2.14.0)
