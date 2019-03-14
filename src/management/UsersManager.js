@@ -121,6 +121,30 @@ var UsersManager = function(options) {
     recoveryCodeRegenerationAuth0RestClients,
     options.retry
   );
+
+  /**
+   * Provides an abstraction layer for CRD on roles for a user
+   *
+   * @type {external:RestClient}
+   */
+  var userRolesClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/roles',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.roles = new RetryRestClient(userRolesClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for CRD on permissions directly on a user
+   *
+   * @type {external:RestClient}
+   */
+  var userPermissionsClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/permissions',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.permissions = new RetryRestClient(userPermissionsClient, options.retry);
 };
 
 /**
@@ -621,6 +645,232 @@ UsersManager.prototype.regenerateRecoveryCode = function(params, cb) {
   }
 
   return this.recoveryCodeRegenerations.create(params, {});
+};
+
+/**
+ * Get a list of roles for a user.
+ *
+ * @method    getUserRoles
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.getRoles({ id: USER_ID }, function (err, roles) {
+ *   console.log(roles);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getRoles = function() {
+  return this.roles.getAll.apply(this.roles, arguments);
+};
+
+/**
+ * Assign roles to a user
+ *
+ * @method    assignRoles
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * var params =  { id : 'USER_ID';
+ * var data = { "roles" : ["roleId1", "roleID2"]};
+ *
+ * management.users.assignRoles(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // roles added.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of role IDs
+ * @param   {String}    data.roles  Array of role IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+UsersManager.prototype.assignRoles = function(params, data, cb) {
+  var query = params || {};
+  data = data || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The user_id cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The user_id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.roles.create(query, data, cb);
+  }
+
+  return this.roles.create(query, data);
+};
+
+/**
+ * Remove roles from a user
+ *
+ * @method    removeRoles
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * var params =  { id : 'USER_ID';
+ * var data = { "roles" : ["roleId1", "roleID2"]};
+ *
+ * management.users.removeRoles(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // roles removed.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of role IDs
+ * @param   {String}    data.roles  Array of role IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+UsersManager.prototype.removeRoles = function(params, data, cb) {
+  var query = params || {};
+  data = data || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The user_id cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The user_id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.roles.delete(query, data, cb);
+  }
+
+  return this.roles.delete(query, data);
+};
+
+/**
+ * Get a list of permissions for a user.
+ *
+ * @method    getPermissions
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.getPermissions({ id: USER_ID }, function (err, permissions) {
+ *   console.log(permissions);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getPermissions = function() {
+  return this.permissions.getAll.apply(this.permissions, arguments);
+};
+
+/**
+ * Assign permissions to a user
+ *
+ * @method    assignPermissions
+ * @memberOf  module:management.permissionsManager.prototype
+ *
+ * @example
+ * var params =  { id : 'USER_ID';
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
+ *
+ * management.users.assignPermissions(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions added.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of permissions
+ * @param   {String}    data.permissions  Array of permission IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+UsersManager.prototype.assignPermissions = function(params, data, cb) {
+  var query = params || {};
+  data = data || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The user_id cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The user_id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.permissions.create(query, data, cb);
+  }
+
+  return this.permissions.create(query, data);
+};
+
+/**
+ * Remove permissions from a user
+ *
+ * @method    removePermissions
+ * @memberOf  module:management.permissionsManager.prototype
+ *
+ * @example
+ * var params =  { id : 'USER_ID';
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
+ *
+ * management.users.removePermissions(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions removed.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of permission IDs
+ * @param   {String}    data.permissions  Array of permission IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+UsersManager.prototype.removePermissions = function(params, data, cb) {
+  var query = params || {};
+  data = data || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The user_id cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The user_id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.permissions.delete(query, data, cb);
+  }
+
+  return this.permissions.delete(query, data);
 };
 
 module.exports = UsersManager;
