@@ -8,6 +8,7 @@ var UsersManager = require('../../src/management/UsersManager');
 var BlacklistedTokensManager = require('../../src/management/BlacklistedTokensManager');
 var ClientsManager = require('../../src/management/ClientsManager');
 var ClientGrantsManager = require('../../src/management/ClientGrantsManager');
+var GrantsManager = require('../../src/management/GrantsManager');
 var ConnectionsManager = require('../../src/management/ConnectionsManager');
 var DeviceCredentialsManager = require('../../src/management/DeviceCredentialsManager');
 var EmailProviderManager = require('../../src/management/EmailProviderManager');
@@ -116,6 +117,10 @@ describe('ManagementClient', function() {
         property: 'clientGrants',
         cls: ClientGrantsManager
       },
+      GrantsManager: {
+        property: 'grants',
+        cls: GrantsManager
+      },
       ConnectionsManager: {
         property: 'connections',
         cls: ConnectionsManager
@@ -182,6 +187,8 @@ describe('ManagementClient', function() {
       'createClientGrant',
       'updateClientGrant',
       'deleteClientGrant',
+      'getGrants',
+      'deleteGrant',
       'createDevicePublicKey',
       'getDeviceCredentials',
       'deleteDeviceCredential',
