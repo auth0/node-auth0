@@ -11,6 +11,7 @@ var assign = Object.assign || require('object.assign');
 // Managers.
 var ClientsManager = require('./ClientsManager');
 var ClientGrantsManager = require('./ClientGrantsManager');
+var GrantsManager = require('./GrantsManager');
 var UsersManager = require('./UsersManager');
 var ConnectionsManager = require('./ConnectionsManager');
 var BlacklistedTokensManager = require('./BlacklistedTokensManager');
@@ -149,6 +150,14 @@ var ManagementClient = function(options) {
    * @type {ClientGrantsManager}
    */
   this.clientGrants = new ClientGrantsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the grants
+   * endpoint.
+   *
+   * @type {GrantsManager}
+   */
+  this.grants = new GrantsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -670,6 +679,68 @@ utils.wrapPropertyMethod(ManagementClient, 'updateClientGrant', 'clientGrants.up
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteClientGrant', 'clientGrants.delete');
+
+/**
+ * Get all Auth0 Grants.
+ *
+ * @method    getGrants
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   per_page: 10,
+ *   page: 0,
+ *   include_totals: true,
+ *   user_id: USER_ID,
+ *   client_id: CLIENT_ID,
+ *   audience: AUDIENCE
+ * };
+ *
+ * management.getGrants(params, function (err, grants) {
+ *   console.log(grants.length);
+ * });
+ *
+ * @param   {Object}    params                Grants parameters.
+ * @param   {Number}    params.per_page       Number of results per page.
+ * @param   {Number}    params.page           Page number, zero indexed.
+ * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
+ * @param   {String}    params.user_id        The user_id of the grants to retrieve.
+ * @param   {String}    params.client_id      The client_id of the grants to retrieve.
+ * @param   {String}    params.audience       The audience of the grants to retrieve.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getGrants', 'grants.getAll');
+
+/**
+ * Delete an Auth0 grant.
+ *
+ * @method    deleteGrant
+ * @memberOf  module:management.GrantsManager.prototype
+ *
+ * @example
+ * var params = {
+ *    id: GRANT_ID,
+ *    user_id: USER_ID
+ * };
+ *
+ * management.deleteGrant(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Grant deleted.
+ * });
+ *
+ * @param   {Object}    params         Grant parameters.
+ * @param   {String}    params.id      Grant ID.
+ * @param   {String}    params.user_id The user_id of the grants to delete.
+ * @param   {Function}  [cb]           Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteGrant', 'grants.delete');
 
 /**
  * Create an Auth0 credential.
