@@ -1113,6 +1113,20 @@ describe('UsersManager', function() {
         .reply(200);
     });
 
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignRoles({ id: null }, _this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignRoles({ id: 127 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
+    });
+
     it('should accept a callback', function(done) {
       this.users.assignRoles(this.data, {}, function() {
         done();
@@ -1190,6 +1204,20 @@ describe('UsersManager', function() {
       this.request = nock(API_URL)
         .delete('/users/' + this.data.id + '/roles', {})
         .reply(200);
+    });
+
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.removeRoles({ id: null }, this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.removeRoles({ id: 123 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
     });
 
     it('should accept a callback', function(done) {
@@ -1330,6 +1358,20 @@ describe('UsersManager', function() {
         .reply(200);
     });
 
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignPermissions({ id: null }, this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignPermissions({ id: 123 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
+    });
+
     it('should accept a callback', function(done) {
       this.users.assignPermissions(this.data, {}, function() {
         done();
@@ -1407,6 +1449,20 @@ describe('UsersManager', function() {
       this.request = nock(API_URL)
         .delete('/users/' + this.data.id + '/permissions', {})
         .reply(200);
+    });
+
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignPermissions({ id: null }, this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignPermissions({ id: 123 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
     });
 
     it('should accept a callback', function(done) {
