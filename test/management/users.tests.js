@@ -31,7 +31,13 @@ describe('UsersManager', function() {
       'updateUserMetadata',
       'updateAppMetadata',
       'getGuardianEnrollments',
-      'regenerateRecoveryCode'
+      'regenerateRecoveryCode',
+      'getRoles',
+      'assignRoles',
+      'removeRoles',
+      'getPermissions',
+      'assignPermissions',
+      'removePermissions'
     ];
 
     methods.forEach(function(method) {
@@ -1029,6 +1035,496 @@ describe('UsersManager', function() {
         .reply(200);
 
       this.users.regenerateRecoveryCode(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getRoles', function() {
+    var data = {
+      id: 'user_id'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/users/' + data.id + '/roles')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.getRoles(data, done.bind(null, null));
+    });
+
+    it('should return a promise when no callback is given', function(done) {
+      this.users.getRoles(data).then(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/users/user_id/roles', function(done) {
+      var request = this.request;
+
+      this.users.getRoles(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + data.id + '/roles')
+        .reply(500);
+
+      this.users.getRoles(data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + data.id + '/roles')
+        .matchHeader('authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.getRoles(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#assignRoles', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id'
+      };
+      this.body = { roles: ['role1', 'role2', 'role3'] };
+
+      this.request = nock(API_URL)
+        .post('/users/' + this.data.id + '/roles')
+        .reply(200);
+    });
+
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignRoles({ id: null }, _this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignRoles({ id: 127 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.assignRoles(this.data, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .assignRoles(this.data, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/roles')
+        .reply(500);
+
+      this.users.assignRoles(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/users/user_id/roles', function(done) {
+      var request = this.request;
+
+      this.users.assignRoles(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/roles', this.body)
+        .reply(200);
+
+      this.users.assignRoles(this.data, this.body).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/roles')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.assignRoles(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#removeRoles', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id'
+      };
+      this.body = { roles: ['role1', 'role2', 'role3'] };
+
+      this.request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/roles', {})
+        .reply(200);
+    });
+
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.removeRoles({ id: null }, this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.removeRoles({ id: 123 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.removeRoles(this.data, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .removeRoles(this.data, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/roles')
+        .reply(500);
+
+      this.users.removeRoles(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/users/user_id/roles', function(done) {
+      var request = this.request;
+
+      this.users.removeRoles(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/roles', this.body)
+        .reply(200);
+
+      this.users.removeRoles(this.data, this.body).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/roles')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.removeRoles(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getPermissions', function() {
+    var data = {
+      id: 'user_id'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/users/' + data.id + '/permissions')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.getPermissions(data, done.bind(null, null));
+    });
+
+    it('should return a promise when no callback is given', function(done) {
+      this.users.getPermissions(data).then(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/users/user_id/permissions', function(done) {
+      var request = this.request;
+
+      this.users.getPermissions(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + data.id + '/permissions')
+        .reply(500);
+
+      this.users.getPermissions(data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + data.id + '/permissions')
+        .matchHeader('authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.getPermissions(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#assignPermissions', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id'
+      };
+      this.body = { permission_name: 'My Permission', resource_server_identifier: 'test123' };
+
+      this.request = nock(API_URL)
+        .post('/users/' + this.data.id + '/permissions')
+        .reply(200);
+    });
+
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignPermissions({ id: null }, this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.assignPermissions({ id: 123 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.assignPermissions(this.data, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .assignPermissions(this.data, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/permissions')
+        .reply(500);
+
+      this.users.assignPermissions(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/users/user_id/permissions', function(done) {
+      var request = this.request;
+
+      this.users.assignPermissions(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/permissions', this.body)
+        .reply(200);
+
+      this.users.assignPermissions(this.data, this.body).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/permissions')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.assignPermissions(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#removePermissions', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id'
+      };
+      this.body = { permission_name: 'My Permission', resource_server_identifier: 'test123' };
+
+      this.request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/permissions', {})
+        .reply(200);
+    });
+
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.removePermissions({ id: null }, this.body, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.removePermissions({ id: 123 }, _this.body, function() {});
+      }).to.throw('The user_id has to be a string');
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.removePermissions(this.data, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .removePermissions(this.data, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/permissions')
+        .reply(500);
+
+      this.users.removePermissions(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/users/user_id/permissions', function(done) {
+      var request = this.request;
+
+      this.users.removePermissions(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/permissions', this.body)
+        .reply(200);
+
+      this.users.removePermissions(this.data, this.body).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/permissions')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.removePermissions(this.data, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

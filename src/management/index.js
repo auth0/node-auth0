@@ -29,6 +29,7 @@ var RulesConfigsManager = require('./RulesConfigsManager');
 var EmailTemplatesManager = require('./EmailTemplatesManager');
 var GuardianManager = require('./GuardianManager');
 var CustomDomainsManager = require('./CustomDomainsManager');
+var RolesManager = require('./RolesManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -279,6 +280,14 @@ var ManagementClient = function(options) {
    * @type {RulesConfigsManager}
    */
   this.rulesConfigs = new RulesConfigsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * roles endpoint.
+   *
+   * @type {RolesManager}
+   */
+  this.roles = new RolesManager(managerOptions);
 };
 
 /**
@@ -1307,6 +1316,176 @@ utils.wrapPropertyMethod(ManagementClient, 'linkUsers', 'users.link');
 utils.wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
 
 /**
+ * Get user's roles
+ *
+ * @method    getUserRoles
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, page: 0, per_page: 50, sort: 'date:-1', include_totals: true };
+ *
+ * management.getUserRoles(params, function (err, logs) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logs);
+ * });
+ *
+ * @param   {Object}    params                Get roles data.
+ * @param   {String}    params.id             User id.
+ * @param   {Number}    params.per_page       Number of results per page.
+ * @param   {Number}    params.page           Page number, zero indexed.
+ * @param   {String}    params.sort           The field to use for sorting. Use field:order where order is 1 for ascending and -1 for descending. For example date:-1.
+ * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
+
+/**
+ * Asign roles to a user
+ *
+ * @method    assignRolestoUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var parms =  { id : 'USER_ID'};
+ * var data = { "roles" :["role1"]};
+ *
+ * management.assignRolestoUser(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User assigned roles.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of role IDs
+ * @param   {String}    data.roles  Array of role IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'assignRolestoUser', 'users.assignRoles');
+
+/**
+ * Remove roles from a user
+ *
+ * @method    removeRolesFromUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var parms =  { id : 'USER_ID'};
+ * var data = { "roles" :["role1"]};
+ *
+ * management.removeRolesFromUser(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User assigned roles.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of role IDs
+ * @param   {String}    data.roles  Array of role IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'removeRolesFromUser', 'users.removeRoles');
+
+/**
+ * Get user's permissions
+ *
+ * @method    getUserPermissions
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: USER_ID, page: 0, per_page: 50, sort: 'date:-1', include_totals: true };
+ *
+ * management.getUserPermissions(params, function (err, logs) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logs);
+ * });
+ *
+ * @param   {Object}    params                Get permissions data.
+ * @param   {String}    params.id             User id.
+ * @param   {Number}    params.per_page       Number of results per page.
+ * @param   {Number}    params.page           Page number, zero indexed.
+ * @param   {String}    params.sort           The field to use for sorting. Use field:order where order is 1 for ascending and -1 for descending. For example date:-1.
+ * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserPermissions', 'users.getPermissions');
+
+/**
+ * Asign permissions to a user
+ *
+ * @method    assignPermissionsToUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var parms =  { id : 'USER_ID'};
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
+ *
+ * management.assignPermissionsToUser(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User assigned permissions.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of permissions
+ * @param   {String}    data.permissions  Array of permission IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'assignPermissionsToUser', 'users.assignPermissions');
+
+/**
+ * Remove permissions from a user
+ *
+ * @method    removePermissionsFromUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var parms =  { id : 'USER_ID'};
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
+ *
+ * management.removePermissionsFromUser(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User assigned permissions.
+ * });
+ *
+ * @param   {Object}    params       params object
+ * @param   {String}    params.id    user_id
+ * @param   {String}    data         data object containing list of permission IDs
+ * @param   {String}    data.permissions  Array of permission IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'removePermissionsFromUser', 'users.removePermissions');
+
+/**
  * Get a list of a user's Guardian enrollments.
  *
  * @method    getGuardianEnrollments
@@ -2318,5 +2497,231 @@ utils.wrapPropertyMethod(
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'updateGuardianFactor', 'guardian.factors.update');
+
+/**
+ * Get all roles.
+ *
+ * @method    getRoles
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getRoles(params, function (err, roles) {
+ *   console.log(roles.length);
+ * });
+ *
+ * @param   {Object}    [params]          Roles parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getRoles', 'roles.getAll');
+
+/**
+ * Create a new role.
+ *
+ * @method    createRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * data = {"name": "test1","description": "123"}
+ * management.createRole(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Role created.
+ * });
+ *
+ * @param   {Object}    data     Role data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createRole', 'roles.create');
+
+/**
+ * Get an Auth0 role.
+ *
+ * @method    getRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getRole({ id: ROLE_ID }, function (err, role) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(role);
+ * });
+ *
+ * @param   {Object}    params        Role parameters.
+ * @param   {String}    params.id     Role ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getRole', 'roles.get');
+
+/**
+ * Delete an existing role.
+ *
+ * @method    deleteRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteRole({ id: ROLE_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Role deleted.
+ * });
+ *
+ * @param   {Object}    params        Role parameters.
+ * @param   {String}    params.id     Role ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteRole', 'roles.delete');
+
+/**
+ * Update an existing role.
+ *
+ * @method    updateRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: ROLE_ID };
+ * var data = { name: 'my-role'};
+ * management.updateRole(params, data, function (err, role) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(role.name); // 'my-role'.
+ * });
+ *
+ * @param   {Object}    params        Role parameters.
+ * @param   {String}    params.id     Role ID.
+ * @param   {Object}    data          Updated role data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateRole', 'roles.update');
+
+/**
+ * Get permissions for a given role
+ *
+ * @method    getPermissionsInRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * @example <caption>
+ *   This method takes a roleId and
+ *   returns all permissions within that role
+ *
+ * </caption>
+ *
+ * management.getPermissionsInRole(params, function (err, permissions) {
+ *   console.log(permissions);
+ * });
+ *
+ * @param   {String}    [roleId]           Id of the role
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getPermissionsInRole', 'roles.getPermissions');
+
+/**
+ * Add permissions in a role
+ *
+ * @method    addPermissionsInRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id :'ROLE_ID'};
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
+ *
+ * management.addPermissionsInRole(params, data, function (err, permissions) {
+ *   console.log(permissions);
+ * });
+ *
+ * @param   {String}    params.id                ID of the Role.
+ * @param   {Object}    data                permissions data
+ * @param   {String}    data.permissions    Array of permissions
+ * @param   {String}    data.permissions.permission_name  Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'addPermissionsInRole', 'roles.addPermissions');
+
+/**
+ * Remove permissions from a role
+ *
+ * @method    removePermissionsFromRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id :'ROLE_ID'};
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
+ *
+ * management.removePermissionsFromRole(params, data, function (err, permissions) {
+ *   console.log(permissions);
+ * });
+ *
+ * @param   {String}    params.id                ID of the Role.
+ * @param   {Object}    data                permissions data
+ * @param   {String}    data.permissions    Array of permissions
+ * @param   {String}    data.permissions.permission_name  Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'removePermissionsFromRole', 'roles.removePermissions');
+
+/**
+ * Get users in a given role
+ *
+ * @method    getUsersInRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * @example <caption>
+ *   This method takes a roleId and
+ *   returns all users within that role
+ *
+ * </caption>
+ *
+ * management.getUsersInRole(params, function (err, users) {
+ *   console.log(users);
+ * });
+ *
+ * @param   {String}    [roleId]           Id of the role
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUsersInRole', 'roles.getUsers');
 
 module.exports = ManagementClient;
