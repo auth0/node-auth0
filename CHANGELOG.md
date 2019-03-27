@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.16.0](https://github.com/auth0/node-auth0/tree/v2.16.0) (2019-03-18)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.15.0...v2.16.0)
+
+**Added**
+
+* Add support for Auth0 Grants [\#343](https://github.com/auth0/node-auth0/pull/343) ([jsmpereira](https://github.com/jsmpereira))
+
 ## [v2.15.0](https://github.com/auth0/node-auth0/tree/v2.15.0) (2019-03-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.14.0...v2.15.0)
