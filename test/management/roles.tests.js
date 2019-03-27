@@ -561,6 +561,20 @@ describe('RolesManager', function() {
         .reply(200);
     });
 
+    it('should validate empty roleId', function() {
+      var _this = this;
+      expect(function() {
+        _this.roles.removePermissions({ id: null }, _this.body, function() {});
+      }).to.throw('The roleId passed in params cannot be null or undefined');
+    });
+
+    it('should validate non-string roleId', function() {
+      var _this = this;
+      expect(function() {
+        _this.roles.removePermissions({ id: 123 }, _this.body, function() {});
+      }).to.throw('The role Id has to be a string');
+    });
+
     it('should accept a callback', function(done) {
       this.roles.removePermissions(this.data, {}, function() {
         done();
