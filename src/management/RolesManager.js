@@ -352,4 +352,51 @@ RolesManager.prototype.getUsers = function(params, callback) {
   return this.users.getAll(params, callback);
 };
 
+/**
+ * Assign users to a role
+ *
+ * @method    assignUsers
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "users" : ["userId1","userId2"]};
+ *
+ * management.roles.assignUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions added.
+ * });
+ *
+ * @param   {String}    params.id                ID of the Role.
+ * @param   {Object}    data                permissions data
+ * @param   {String}    data.permissions    Array of permissions
+ * @param   {String}    data.permissions.permission_name  Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+RolesManager.prototype.assignUsers = function(params, data, cb) {
+  data = data || {};
+  params = params || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The roleId passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The role Id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.permissions.create(params, data, cb);
+  }
+
+  return this.users.create(params, data);
+};
+
 module.exports = RolesManager;

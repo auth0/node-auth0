@@ -26,7 +26,8 @@ describe('RolesManager', function() {
       'getPermissions',
       'addPermissions',
       'removePermissions',
-      'getUsers'
+      'getUsers',
+      'assignUsers'
     ];
 
     methods.forEach(function(method) {
@@ -694,6 +695,99 @@ describe('RolesManager', function() {
         .reply(200);
 
       this.roles.getUsers(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#assignUsers', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'rol_ID'
+      };
+      this.body = { users: ['userID1'] };
+
+      this.request = nock(API_URL)
+        .post('/roles/' + this.data.id + '/users')
+        .reply(200);
+    });
+
+    it('should validate empty roleId', function() {
+      var _this = this;
+      expect(function() {
+        _this.roles.assignUsers({ id: null }, _this.body, function() {});
+      }).to.throw('The roleId passed in params cannot be null or undefined');
+    });
+
+    it('should validate non-string roleId', function() {
+      var _this = this;
+      expect(function() {
+        _this.roles.assignUsers({ id: 123 }, _this.body, function() {});
+      }).to.throw('The role Id has to be a string');
+    });
+
+    it('should accept a callback', function(done) {
+      this.roles.assignUsers(this.data, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.roles
+        .assignUsers(this.data, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/roles/' + this.data.id + '/users')
+        .reply(500);
+
+      this.roles.assignUsers(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/roles/rol_ID/users', function(done) {
+      var request = this.request;
+
+      this.roles.assignUsers(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/roles/' + this.data.id + '/users', this.body)
+        .reply(200);
+
+      this.roles.assignUsers(this.data, this.body).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/roles/' + this.data.id + '/users')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.roles.assignUsers(this.data, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
