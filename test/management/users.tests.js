@@ -1454,14 +1454,14 @@ describe('UsersManager', function() {
     it('should validate empty user_id', function() {
       var _this = this;
       expect(function() {
-        _this.users.assignPermissions({ id: null }, this.body, function() {});
+        _this.users.removePermissions({ id: null }, this.body, function() {});
       }).to.throw('The user_id cannot be null or undefined');
     });
 
     it('should validate non-string user_id', function() {
       var _this = this;
       expect(function() {
-        _this.users.assignPermissions({ id: 123 }, _this.body, function() {});
+        _this.users.removePermissions({ id: 123 }, _this.body, function() {});
       }).to.throw('The user_id has to be a string');
     });
 
