@@ -823,6 +823,13 @@ describe('UsersManager', function() {
         .reply(200);
     });
 
+    it('should validate empty user_id', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.logs({ id: null }, function() {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
     it('should accept a callback', function(done) {
       this.users.logs(data, done.bind(null, null));
     });
