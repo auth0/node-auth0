@@ -1923,7 +1923,7 @@ utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
  * 	user_id: '{USER_ID}'
  * };
  *
- * management.sendEmailVerification(function (err) {
+ * management.sendEmailVerification(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
