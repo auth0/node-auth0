@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.17.0](https://github.com/auth0/node-auth0/tree/v2.17.0) (2019-04-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.16.0...v2.17.0)
+
+**Added**
+
+* Add method to assign users to a role [\#348](https://github.com/auth0/node-auth0/pull/348) ([pushpabrol](https://github.com/pushpabrol))
+* Add support for roles and permissions [\#344](https://github.com/auth0/node-auth0/pull/344) ([pushpabrol](https://github.com/pushpabrol))
+
 ## [v2.16.0](https://github.com/auth0/node-auth0/tree/v2.16.0) (2019-03-18)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.15.0...v2.16.0)
