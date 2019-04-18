@@ -559,10 +559,11 @@ describe('OAuthAuthenticator', function() {
       this.authenticator.socialSignIn(userData, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function() {
-      var returnValue = this.authenticator.socialSignIn(userData);
-
-      expect(returnValue).to.be.an.instanceOf(Promise);
+    it('should return a promise when no callback is given', function(done) {
+      this.authenticator
+        .socialSignIn(userData)
+        .then(() => done())
+        .catch(() => done());
     });
 
     it('should not return a promise when a callback is given', function() {
