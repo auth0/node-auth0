@@ -302,11 +302,9 @@ ManagementClient.prototype.getClientInfo = function() {
   var clientInfo = {
     name: 'node-auth0',
     version: pkg.version,
-    dependencies: [],
-    environment: [
+    env: [
       {
-        name: 'node.js',
-        version: process.version.replace('v', '')
+        node: process.version.replace('v', '')
       }
     ]
   };
