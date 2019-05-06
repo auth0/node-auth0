@@ -116,7 +116,7 @@ var AuthenticationClient = function(options) {
  * @return {Object}   Object containing client information.
  */
 AuthenticationClient.prototype.getClientInfo = function() {
-  var clientInfo = {
+  return {
     name: 'node-auth0',
     version: pkg.version,
     env: [
@@ -125,16 +125,6 @@ AuthenticationClient.prototype.getClientInfo = function() {
       }
     ]
   };
-
-  // Add the dependencies to the client info object.
-  Object.keys(pkg.dependencies).forEach(function(name) {
-    clientInfo.dependencies.push({
-      name: name,
-      version: pkg.dependencies[name]
-    });
-  });
-
-  return clientInfo;
 };
 
 /**
