@@ -49,7 +49,7 @@ var TenantManager = function(options) {
     clientOptions,
     options.tokenProvider
   );
-  this.tenant = new RetryRestClient(auth0RestClient, options.retry);
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 /**
@@ -72,11 +72,11 @@ var TenantManager = function(options) {
  */
 TenantManager.prototype.updateSettings = function(data, cb) {
   if (cb && cb instanceof Function) {
-    return this.tenant.patch({}, data, cb);
+    return this.resource.patch({}, data, cb);
   }
 
   // Return a promise.
-  return this.tenant.patch({}, data);
+  return this.resource.patch({}, data);
 };
 
 /**
@@ -100,11 +100,11 @@ TenantManager.prototype.updateSettings = function(data, cb) {
  */
 TenantManager.prototype.getSettings = function(cb) {
   if (cb && cb instanceof Function) {
-    return this.tenant.get({}, cb);
+    return this.resource.get({}, cb);
   }
 
   // Return a promise.
-  return this.tenant.get({});
+  return this.resource.get({});
 };
 
 module.exports = TenantManager;
