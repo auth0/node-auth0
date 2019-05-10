@@ -24,7 +24,7 @@ utils.jsonToBase64 = function(json) {
 };
 
 /**
- * Return an object with information about the current client,
+ * Return an object with information about the current client.
  *
  * @method    generateClientInfo
  * @memberOf  module:utils
