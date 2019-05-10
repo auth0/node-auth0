@@ -119,11 +119,9 @@ AuthenticationClient.prototype.getClientInfo = function() {
   return {
     name: 'node-auth0',
     version: pkg.version,
-    env: [
-      {
-        node: process.version.replace('v', '')
-      }
-    ]
+    env: {
+      node: process.version.replace('v', '')
+    }
   };
 };
 

@@ -76,7 +76,7 @@ describe('AuthenticationClient', function() {
       expect(client.getClientInfo()).to.deep.equal({
         name: 'node-auth0',
         version: pkgVersion,
-        env: [{ node: nodeVersion }]
+        env: { node: nodeVersion }
       });
     });
 
