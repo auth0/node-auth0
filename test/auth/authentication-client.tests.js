@@ -1,5 +1,6 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
+var proxyquire = require('proxyquire');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 
@@ -69,22 +70,17 @@ describe('AuthenticationClient', function() {
   });
 
   describe('client info', function() {
-    it('should generate default telemetry value', function() {
-      var client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
-      var pkgVersion = require('../../package.json').version;
-      var nodeVersion = process.version.replace('v', '');
-      expect(client.getClientInfo()).to.deep.equal({
-        name: 'node-auth0',
-        version: pkgVersion,
-        env: { node: nodeVersion }
-      });
-    });
-
     it('should configure instances with default telemetry header', function() {
-      sinon.stub(AuthenticationClient.prototype, 'getClientInfo', function() {
-        return { name: 'test-sdk', version: 'ver-123' };
+      var utilsStub = {
+        generateClientInfo: sinon.spy(function() {
+          return { name: 'test-sdk', version: 'ver-123' };
+        })
+      };
+      var AuthenticationClientProxy = proxyquire('../../src/auth/', {
+        '../utils': utilsStub
       });
-      var client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
+
+      var client = new AuthenticationClientProxy({ token: 'token', domain: 'auth0.com' });
 
       var requestHeaders = {
         'Auth0-Client': 'eyJuYW1lIjoidGVzdC1zZGsiLCJ2ZXJzaW9uIjoidmVyLTEyMyJ9',
@@ -95,8 +91,6 @@ describe('AuthenticationClient', function() {
       expect(client.passwordless.passwordless.options.headers).to.contain(requestHeaders);
       expect(client.users.headers).to.contain(requestHeaders);
       expect(client.tokens.headers).to.contain(requestHeaders);
-
-      AuthenticationClient.prototype.getClientInfo.restore();
     });
 
     it('should configure instances with custom telemetry header', function() {
@@ -117,6 +111,21 @@ describe('AuthenticationClient', function() {
       expect(client.passwordless.passwordless.options.headers).to.contain(requestHeaders);
       expect(client.users.headers).to.contain(requestHeaders);
       expect(client.tokens.headers).to.contain(requestHeaders);
+    });
+
+    it('should configure instances without telemetry when "name" property is empty', function() {
+      var customTelemetry = { name: '', version: 'beta-01', env: { node: 'v10' } };
+      var client = new AuthenticationClient({
+        token: 'token',
+        domain: 'auth0.com',
+        clientInfo: customTelemetry
+      });
+
+      expect(client.oauth.oauth.options.headers).to.not.have.property('Auth0-Client');
+      expect(client.database.dbConnections.options.headers).to.not.have.property('Auth0-Client');
+      expect(client.passwordless.passwordless.options.headers).to.not.have.property('Auth0-Client');
+      expect(client.users.headers).to.not.have.property('Auth0-Client');
+      expect(client.tokens.headers).to.not.have.property('Auth0-Client');
     });
 
     it('should configure instances without telemetry header when disabled', function() {

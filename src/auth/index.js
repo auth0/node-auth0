@@ -1,8 +1,6 @@
 /** @module auth **/
 
 var util = require('util');
-
-var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -67,8 +65,11 @@ var AuthenticationClient = function(options) {
   };
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-    managerOptions.headers['Auth0-Client'] = telemetry;
+    var clientInfo = options.clientInfo || utils.generateClientInfo();
+    if ('string' === typeof clientInfo.name && clientInfo.name.length > 0) {
+      var telemetry = jsonToBase64(clientInfo);
+      managerOptions.headers['Auth0-Client'] = telemetry;
+    }
   }
 
   /**
@@ -105,24 +106,6 @@ var AuthenticationClient = function(options) {
    * @type {TokensManager}
    */
   this.tokens = new TokensManager(managerOptions);
-};
-
-/**
- * Return an object with information about the current client,
- *
- * @method    getClientInfo
- * @memberOf  module:auth.AuthenticationClient.prototype
- *
- * @return {Object}   Object containing client information.
- */
-AuthenticationClient.prototype.getClientInfo = function() {
-  return {
-    name: 'node-auth0',
-    version: pkg.version,
-    env: {
-      node: process.version.replace('v', '')
-    }
-  };
 };
 
 /**
