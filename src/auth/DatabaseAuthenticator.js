@@ -30,7 +30,8 @@ var DatabaseAuthenticator = function(options, oauth) {
    * @type {Object}
    */
   var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' }
+    errorFormatter: { message: 'message', name: 'error' },
+    headers: options.headers
   };
 
   this.oauth = oauth;

@@ -67,7 +67,8 @@ var ManagementTokenProvider = function(options) {
     domain: this.options.domain,
     clientId: this.options.clientId,
     clientSecret: this.options.clientSecret,
-    telemetry: this.options.telemetry
+    telemetry: this.options.telemetry,
+    clientInfo: this.options.clientInfo
   };
   this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 };

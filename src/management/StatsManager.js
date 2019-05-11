@@ -49,7 +49,7 @@ var StatsManager = function(options) {
     clientOptions,
     options.tokenProvider
   );
-  this.stats = new RetryRestClient(auth0RestClient, options.retry);
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 /**
@@ -84,10 +84,10 @@ StatsManager.prototype.getDaily = function(params, cb) {
   params.type = 'daily';
 
   if (cb && cb instanceof Function) {
-    return this.stats.get(params, cb);
+    return this.resource.get(params, cb);
   }
 
-  return this.stats.get(params);
+  return this.resource.get(params);
 };
 
 /**
@@ -113,11 +113,11 @@ StatsManager.prototype.getActiveUsersCount = function(cb) {
   var options = { type: 'active-users' };
 
   if (cb && cb instanceof Function) {
-    return this.stats.get(options, cb);
+    return this.resource.get(options, cb);
   }
 
   // Return a promise.
-  return this.stats.get(options);
+  return this.resource.get(options);
 };
 
 module.exports = StatsManager;

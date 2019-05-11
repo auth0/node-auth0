@@ -1,10 +1,9 @@
 /** @module management */
 
 var util = require('util');
-
-var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
+var generateClientInfo = utils.generateClientInfo;
 var ArgumentError = require('rest-facade').ArgumentError;
 var assign = Object.assign || require('object.assign');
 
@@ -129,8 +128,11 @@ var ManagementClient = function(options) {
   }
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-    managerOptions.headers['Auth0-Client'] = telemetry;
+    var clientInfo = options.clientInfo || generateClientInfo();
+    if ('string' === typeof clientInfo.name && clientInfo.name.length > 0) {
+      var telemetry = jsonToBase64(clientInfo);
+      managerOptions.headers['Auth0-Client'] = telemetry;
+    }
   }
 
   managerOptions.retry = options.retry;
@@ -288,37 +290,6 @@ var ManagementClient = function(options) {
    * @type {RolesManager}
    */
   this.roles = new RolesManager(managerOptions);
-};
-
-/**
- * Return an object with information about the current client,
- *
- * @method    getClientInfo
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @return {Object}   Object containing client information.
- */
-ManagementClient.prototype.getClientInfo = function() {
-  var clientInfo = {
-    name: 'node-auth0',
-    version: pkg.version,
-    dependencies: [],
-    environment: [
-      {
-        name: 'node.js',
-        version: process.version.replace('v', '')
-      }
-    ]
-  };
-  // Add the dependencies to the client info object.
-  Object.keys(pkg.dependencies).forEach(function(name) {
-    clientInfo.dependencies.push({
-      name: name,
-      version: pkg.dependencies[name]
-    });
-  });
-
-  return clientInfo;
 };
 
 /**
