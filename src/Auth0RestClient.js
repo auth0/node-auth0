@@ -33,7 +33,7 @@ var Auth0RestClient = function(resourceUrl, options, provider) {
     return this.provider
       .getAccessToken()
       .then(function(access_token) {
-        self.options.headers['Authorization'] = 'Bearer ' + access_token;
+        self.restClient.options.headers['Authorization'] = 'Bearer ' + access_token;
         return self.restClient[method].apply(self.restClient, args);
       })
       .catch(function(err) {
