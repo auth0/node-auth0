@@ -1,10 +1,9 @@
 /** @module management */
 
 var util = require('util');
-
-var pkg = require('../../package.json');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
+var generateClientInfo = utils.generateClientInfo;
 var ArgumentError = require('rest-facade').ArgumentError;
 var assign = Object.assign || require('object.assign');
 
@@ -13,6 +12,7 @@ var ClientsManager = require('./ClientsManager');
 var ClientGrantsManager = require('./ClientGrantsManager');
 var GrantsManager = require('./GrantsManager');
 var UsersManager = require('./UsersManager');
+var UserBlocksManager = require('./UserBlocksManager');
 var ConnectionsManager = require('./ConnectionsManager');
 var BlacklistedTokensManager = require('./BlacklistedTokensManager');
 var RulesManager = require('./RulesManager');
@@ -129,8 +129,11 @@ var ManagementClient = function(options) {
   }
 
   if (options.telemetry !== false) {
-    var telemetry = jsonToBase64(options.clientInfo || this.getClientInfo());
-    managerOptions.headers['Auth0-Client'] = telemetry;
+    var clientInfo = options.clientInfo || generateClientInfo();
+    if ('string' === typeof clientInfo.name && clientInfo.name.length > 0) {
+      var telemetry = jsonToBase64(clientInfo);
+      managerOptions.headers['Auth0-Client'] = telemetry;
+    }
   }
 
   managerOptions.retry = options.retry;
@@ -166,6 +169,14 @@ var ManagementClient = function(options) {
    * @type {UsersManager}
    */
   this.users = new UsersManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * user-blocks endpoint.
+   *
+   * @type {UserBlocksManager}
+   */
+  this.userBlocks = new UserBlocksManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -288,37 +299,6 @@ var ManagementClient = function(options) {
    * @type {RolesManager}
    */
   this.roles = new RolesManager(managerOptions);
-};
-
-/**
- * Return an object with information about the current client,
- *
- * @method    getClientInfo
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @return {Object}   Object containing client information.
- */
-ManagementClient.prototype.getClientInfo = function() {
-  var clientInfo = {
-    name: 'node-auth0',
-    version: pkg.version,
-    dependencies: [],
-    environment: [
-      {
-        name: 'node.js',
-        version: process.version.replace('v', '')
-      }
-    ]
-  };
-  // Add the dependencies to the client info object.
-  Object.keys(pkg.dependencies).forEach(function(name) {
-    clientInfo.dependencies.push({
-      name: name,
-      version: pkg.dependencies[name]
-    });
-  });
-
-  return clientInfo;
 };
 
 /**
@@ -1530,6 +1510,98 @@ utils.wrapPropertyMethod(
   'regenerateRecoveryCode',
   'users.regenerateRecoveryCode'
 );
+
+/**
+ * Get user blocks by its id.
+ *
+ * @method    getUserBlocks
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getUserBlocks({ id: USER_ID }, function (err, blocks) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(blocks);
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserBlocks', 'userBlocks.get');
+
+/**
+ * Unblock an user by its id.
+ *
+ * @method    unblockUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.unblockUser({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User unblocked.
+ * });
+ *
+ * @param   {Object}    params      The user data object..
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'unblockUser', 'userBlocks.delete');
+
+/**
+ * Get user blocks by its identifier.
+ *
+ * @method    getUserBlocksByIdentifier
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getUserBlocksByIdentifier({ identifier: USER_ID }, function (err, blocks) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(blocks);
+ * });
+ *
+ * @param   {Object}    params              The user data object..
+ * @param   {String}    params.identifier   The user identifier, any of: username, phone_number, email.
+ * @param   {Function}  [cb]                Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getUserBlocksByIdentifier', 'userBlocks.getByIdentifier');
+
+/**
+ * Unblock an user by its id.
+ *
+ * @method    unblockUser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.unblockUserByIdentifier({ identifier: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User unblocked.
+ * });
+ *
+ * @param   {Object}    params              The user data object..
+ * @param   {String}    params.identifier   The user identifier, any of: username, phone_number, email.
+ * @param   {Function}  [cb]                Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'unblockUserByIdentifier', 'userBlocks.deleteByIdentifier');
 
 /**
  * Get a single Guardian enrollment.

@@ -1,10 +1,13 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 var assign = Object.assign || require('object.assign');
+var proxyquire = require('proxyquire');
 
 var ManagementClient = require('../../src/management');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var UsersManager = require('../../src/management/UsersManager');
+var UserBlocksManager = require('../../src/management/UserBlocksManager');
 var BlacklistedTokensManager = require('../../src/management/BlacklistedTokensManager');
 var ClientsManager = require('../../src/management/ClientsManager');
 var ClientGrantsManager = require('../../src/management/ClientGrantsManager');
@@ -16,7 +19,6 @@ var JobsManager = require('../../src/management/JobsManager');
 var RulesManager = require('../../src/management/RulesManager');
 var StatsManager = require('../../src/management/StatsManager');
 var RulesConfigsManager = require('../../src/management/RulesConfigsManager');
-
 var TenantManager = require('../../src/management/TenantManager');
 
 describe('ManagementClient', function() {
@@ -100,6 +102,10 @@ describe('ManagementClient', function() {
         property: 'users',
         cls: UsersManager
       },
+      UserBlocksManager: {
+        property: 'userBlocks',
+        cls: UserBlocksManager
+      },
       BlacklistedTokensManager: {
         property: 'blacklistedTokens',
         cls: BlacklistedTokensManager
@@ -144,11 +150,558 @@ describe('ManagementClient', function() {
         property: 'tenant',
         cls: TenantManager
       },
-      'RulesConfigsManager': {
+      RulesConfigsManager: {
         property: 'rulesConfigs',
         cls: RulesConfigsManager
-      },
+      }
     };
+
+    describe('client info', function() {
+      it('should configure instances with default telemetry header', function() {
+        var utilsStub = {
+          generateClientInfo: sinon.spy(function() {
+            return { name: 'test-sdk', version: 'ver-123' };
+          })
+        };
+        var ManagementClientProxy = proxyquire('../../src/management/', {
+          '../utils': utilsStub
+        });
+        var client = new ManagementClientProxy(withTokenConfig);
+
+        var requestHeaders = {
+          'Auth0-Client': 'eyJuYW1lIjoidGVzdC1zZGsiLCJ2ZXJzaW9uIjoidmVyLTEyMyJ9',
+          'Content-Type': 'application/json'
+        };
+
+        expect(client.clients.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.clientGrants.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.grants.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.users.users.restClient.restClient.options.headers).to.contain(requestHeaders);
+        expect(client.users.multifactor.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.identities.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.userLogs.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.enrollments.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.usersByEmail.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(
+          client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+        expect(client.users.roles.restClient.restClient.options.headers).to.contain(requestHeaders);
+        expect(client.users.permissions.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.guardian.enrollments.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.tickets.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.factors.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.factorsTemplates.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.factorsProviders.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.customDomains.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(
+          client.customDomains.vefifyResource.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+
+        expect(client.connections.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.deviceCredentials.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.rules.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.blacklistedTokens.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.emailProvider.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.stats.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.tenant.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.jobs.jobs.restClient.restClient.options.headers).to.contain(requestHeaders);
+        expect(client.jobs.usersExports.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.tickets.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.logs.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.resourceServers.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.emailTemplates.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.rulesConfigs.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.roles.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.roles.permissions.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.roles.users.restClient.restClient.options.headers).to.contain(requestHeaders);
+      });
+
+      it('should configure instances with custom telemetry header', function() {
+        var customTelemetry = { name: 'custom', version: 'beta-01', env: { node: 'v10' } };
+        var client = new ManagementClient({
+          token: 'token',
+          domain: 'auth0.com',
+          clientInfo: customTelemetry
+        });
+
+        var requestHeaders = {
+          'Auth0-Client':
+            'eyJuYW1lIjoiY3VzdG9tIiwidmVyc2lvbiI6ImJldGEtMDEiLCJlbnYiOnsibm9kZSI6InYxMCJ9fQ',
+          'Content-Type': 'application/json'
+        };
+
+        expect(client.clients.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.clientGrants.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.grants.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.users.users.restClient.restClient.options.headers).to.contain(requestHeaders);
+        expect(client.users.multifactor.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.identities.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.userLogs.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.enrollments.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.users.usersByEmail.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(
+          client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+        expect(client.users.roles.restClient.restClient.options.headers).to.contain(requestHeaders);
+        expect(client.users.permissions.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.guardian.enrollments.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.tickets.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.factors.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.factorsTemplates.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.guardian.factorsProviders.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.customDomains.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(
+          client.customDomains.vefifyResource.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+
+        expect(client.connections.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.deviceCredentials.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.rules.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.blacklistedTokens.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.emailProvider.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.stats.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.tenant.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.jobs.jobs.restClient.restClient.options.headers).to.contain(requestHeaders);
+        expect(client.jobs.usersExports.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.tickets.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.logs.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.resourceServers.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.emailTemplates.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.rulesConfigs.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.roles.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.roles.permissions.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+        expect(client.roles.users.restClient.restClient.options.headers).to.contain(requestHeaders);
+      });
+
+      it('should configure instances without telemetry when "name" property is empty', function() {
+        var customTelemetry = { name: '', version: 'beta-01', env: { node: 'v10' } };
+        var client = new ManagementClient({
+          token: 'token',
+          domain: 'auth0.com',
+          clientInfo: customTelemetry
+        });
+
+        expect(client.clients.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.clientGrants.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.grants.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.users.users.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.multifactor.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.identities.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.userLogs.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.enrollments.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(
+          client.users.usersByEmail.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(client.users.roles.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.permissions.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.guardian.enrollments.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(client.guardian.tickets.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.guardian.factors.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(
+          client.guardian.factorsTemplates.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.guardian.factorsProviders.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.customDomains.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.customDomains.vefifyResource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.connections.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.deviceCredentials.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.rules.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.blacklistedTokens.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.emailProvider.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.stats.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.tenant.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.jobs.jobs.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.jobs.usersExports.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.tickets.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.logs.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.resourceServers.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.emailTemplates.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.rulesConfigs.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.roles.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.roles.permissions.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.roles.users.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+      });
+
+      it('should configure instances without telemetry header when disabled', function() {
+        var client = new ManagementClient({
+          token: 'token',
+          domain: 'auth0.com',
+          telemetry: false
+        });
+
+        expect(client.clients.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.clientGrants.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.grants.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.users.users.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.multifactor.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.identities.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.userLogs.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.enrollments.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(
+          client.users.usersByEmail.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(client.users.roles.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.users.permissions.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.guardian.enrollments.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(client.guardian.tickets.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.guardian.factors.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(
+          client.guardian.factorsTemplates.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.guardian.factorsProviders.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.customDomains.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.customDomains.vefifyResource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.connections.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.deviceCredentials.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.rules.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.blacklistedTokens.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.emailProvider.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.stats.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.tenant.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.jobs.jobs.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.jobs.usersExports.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.tickets.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(client.logs.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+
+        expect(
+          client.resourceServers.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.emailTemplates.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.rulesConfigs.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(client.roles.resource.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.roles.permissions.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+        expect(client.roles.users.restClient.restClient.options.headers).to.not.have.property(
+          'Auth0-Client'
+        );
+      });
+    });
 
     before(function() {
       var config = assign({}, withTokenConfig);
@@ -212,7 +765,11 @@ describe('ManagementClient', function() {
       'deleteUserMultifcator',
       'setRulesConfig',
       'getRulesConfigs',
-      'deleteRulesConfig'
+      'deleteRulesConfig',
+      'getUserBlocks',
+      'unblockUser',
+      'getUserBlocksByIdentifier',
+      'unblockUserByIdentifier'
     ];
 
     before(function() {
