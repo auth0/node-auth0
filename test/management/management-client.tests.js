@@ -7,6 +7,7 @@ var ManagementClient = require('../../src/management');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var UsersManager = require('../../src/management/UsersManager');
+var UserBlocksManager = require('../../src/management/UserBlocksManager');
 var BlacklistedTokensManager = require('../../src/management/BlacklistedTokensManager');
 var ClientsManager = require('../../src/management/ClientsManager');
 var ClientGrantsManager = require('../../src/management/ClientGrantsManager');
@@ -100,6 +101,10 @@ describe('ManagementClient', function() {
       UsersManager: {
         property: 'users',
         cls: UsersManager
+      },
+      UserBlocksManager: {
+        property: 'userBlocks',
+        cls: UserBlocksManager
       },
       BlacklistedTokensManager: {
         property: 'blacklistedTokens',
@@ -760,7 +765,11 @@ describe('ManagementClient', function() {
       'deleteUserMultifcator',
       'setRulesConfig',
       'getRulesConfigs',
-      'deleteRulesConfig'
+      'deleteRulesConfig',
+      'getUserBlocks',
+      'unblockUser',
+      'getUserBlocksByIdentifier',
+      'unblockUserByIdentifier'
     ];
 
     before(function() {
