@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>auth/PasswordlessAuthenticator.js - Documentation</title>
+    <title>GrantsManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,254 +29,1483 @@
 
 <div id="main">
     
-    <h1 class="page-title">auth/PasswordlessAuthenticator.js</h1>
+    <h1 class="page-title">GrantsManager</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>var extend = require('util')._extend;
+        <h2>
+            <span class="ancestors"><a href="module-management.html">management</a>.</span>
+        
+        GrantsManager
+        </h2>
+        
+            <div class="class-description"><p>GrantsManager
+Auth0 Grants Manager.</p>
+<p>See <a href="https://auth0.com/docs/api/v2#!/Grants">Grants</a></p></div>
+        
+    
+</header>
 
-var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
 
-/**
- * @class
- * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
- * @constructor
- * @memberOf module:auth
- *
- * @param  {Object}              options            Authenticator options.
- * @param  {String}              options.baseUrl    The auth0 account URL.
- * @param  {String}              [options.clientId] Default client ID.
- * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
- */
-var PasswordlessAuthenticator = function(options, oauth) {
-  if (!options) {
-    throw new ArgumentError('Missing authenticator options');
-  }
+    
+    <h2>Constructor</h2>
+    
 
-  if (typeof options !== 'object') {
-    throw new ArgumentError('The authenticator options must be an object');
-  }
+    <h4 class="name" id="GrantsManager"><span class="type-signature"></span>new GrantsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
-  /**
-   * Options object for the Rest Client instace.
-   *
-   * @type {Object}
-   */
-  var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' }
-  };
+    
 
-  this.oauth = oauth;
-  this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
-  this.clientId = options.clientId;
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_GrantsManager.js.html">management/GrantsManager.js</a>, <a href="management_GrantsManager.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The client options.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>baseUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>The URL of the API.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>headers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Headers to be included in all requests.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Retry Policy Config</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Provides an abstraction layer for consuming the
+<a href="https://auth0.com/docs/api/v2#!/Grants">Auth0 Grants endpoint</a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_GrantsManager.js.html">management/GrantsManager.js</a>, <a href="management_GrantsManager.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="~clientOptions"><span class="type-signature">(inner) </span>clientOptions<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Options object for the Rest Client instance.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_GrantsManager.js.html">management/GrantsManager.js</a>, <a href="management_GrantsManager.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Delete an Auth0 grant.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_GrantsManager.js.html">management/GrantsManager.js</a>, <a href="management_GrantsManager.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Grant parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Grant ID.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user_id of the grants to delete.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var params = {
+   id: 'GRANT_ID',
+   user_id: 'USER_ID'
 };
 
-/**
- * Sign in with the given user credentials.
- *
- * @method    signIn
- * @memberOf  module:auth.PasswordlessAuthenticator.prototype
- * @example &lt;caption>
- *   Given the user credentials (`phone_number` and `code`), it will do the
- *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
- * &lt;/caption>
- *
- * var data = {
- *   username: '{PHONE_NUMBER}',
- *   password: '{VERIFICATION_CODE}'
- * };
- *
- * auth0.passwordless.signIn(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @example &lt;caption>
- *   The user data object has the following structure.
- * &lt;/caption>
- *
- * {
- *   id_token: String,
- *   access_token: String,
- *   token_type: String
- * }
- *
- * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
- * @param   {String}    [userData.client_id]  Client ID.
- * @param   {Function}  [cb]                  Method callback.
- *
- * @return  {Promise|undefined}
- */
-PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
-
-  // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' &amp;&amp; data.connection !== 'sms')) {
-    data.connection = 'sms';
-  }
-  data.grant_type = 'password';
-
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
+management.deleteGrant(params, function (err) {
+  if (err) {
+    // Handle error.
   }
 
-  if (typeof data.username !== 'string' || data.username.trim().length === 0) {
-    throw new ArgumentError('username field (phone number) is required');
-  }
+  // Grant deleted.
+});</code></pre>
 
-  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
-    throw new ArgumentError('password field (verification code) is required');
-  }
+</div>
 
-  return this.oauth.signIn(data, cb);
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="deleteGrant"><span class="type-signature"></span>deleteGrant<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Delete an Auth0 grant.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_index.js.html">management/index.js</a>, <a href="management_index.js.html#line716">line 716</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Grant parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Grant ID.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user_id of the grants to delete.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var params = {
+   id: GRANT_ID,
+   user_id: USER_ID
 };
 
-/**
- * Start passwordless flow sending an email.
- *
- * @method    sendEmail
- * @memberOf  module:auth.PasswordlessAuthenticator.prototype
- * @example &lt;caption>
- *   Given the user `email` address, it will send an email with:
- *
- *   &lt;ul>
- *     &lt;li>A link (default, `send:"link"`). You can then authenticate with this
- *       user opening the link and he will be automatically logged in to the
- *       application. Optionally, you can append/override parameters to the link
- *       (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
- *       `authParams` object.
- *     &lt;/li>
- *     &lt;li>
- *       A verification code (`send:"code"`). You can then authenticate with
- *       this user using the `/oauth/ro` endpoint specifying `email` as
- *       `username` and `code` as `password`.
- *     &lt;/li>
- *   &lt;/ul>
- *
- *   Find more information in the
- *   &lt;a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs&lt;/a>
- * &lt;/caption>
- *
- * var data = {
- *   email: '{EMAIL}',
- *   send: 'link',
- *   authParams: {} // Optional auth params.
- * };
- *
- * auth0.passwordless.sendEmail(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @param   {Object}    userData                User account data.
- * @param   {String}    userData.email          User email address.
- * @param   {String}    userData.send           The type of email to be sent.
- * @param   {Function}  [cb]                    Method callback.
- *
- * @return  {Promise|undefined}
- */
-PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
-
-  // Don't let the user override the connection nor the grant type.
-  data.connection = 'email';
-
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
+management.deleteGrant(params, function (err) {
+  if (err) {
+    // Handle error.
   }
 
-  if (typeof data.email !== 'string' || data.email.trim().length === 0) {
-    throw new ArgumentError('email field is required');
-  }
+  // Grant deleted.
+});</code></pre>
 
-  if (typeof data.send !== 'string' || data.send.trim().length === 0) {
-    throw new ArgumentError('send field is required');
-  }
+</div>
 
-  if (cb &amp;&amp; cb instanceof Function) {
-    return this.passwordless.create(data, cb);
-  }
+</div>
+        
+            
+<div class="section-method">
 
-  return this.passwordless.create(data);
+    
+
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get all Auth0 Grants.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_GrantsManager.js.html">management/GrantsManager.js</a>, <a href="management_GrantsManager.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Grants parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>per_page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Number of results per page.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Page number, zero indexed.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>include_totals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Boolean</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>true if a query summary must be included in the result, false otherwise. Default false;</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The user_id of the grants to retrieve.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>client_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The client_id of the grants to retrieve.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>audience</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The audience of the grants to retrieve.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var params = {
+  per_page: 10,
+  page: 0,
+  include_totals: true,
+  user_id: 'USER_ID',
+  client_id: 'CLIENT_ID',
+  audience: 'AUDIENCE'
 };
 
-/**
- * Start passwordless flow sending an SMS.
- *
- * @method    sendSMS
- * @memberOf  module:auth.PasswordlessAuthenticator.prototype
- *
- * @example &lt;caption>
- *   Given the user `phone_number`, it will send a SMS message with a
- *   verification code. You can then authenticate with this user using the
- *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
- *   `password`:
- * &lt;/caption>
- *
- * var data = {
- *   phone_number: '{PHONE}'
- * };
- *
- * auth0.passwordless.sendSMS(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @param   {Object}    userData                User account data.
- * @param   {String}    userData.phone_number   User phone number.
- * @param   {String}    [userData.client_id]    Client ID.
- * @param   {Function}  [cb]                    Method callback.
- *
- * @return  {Promise|undefined}
- */
-PasswordlessAuthenticator.prototype.sendSMS = function(userData, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
+management.getGrants(params, function (err, grants) {
+  console.log(grants.length);
+});</code></pre>
 
-  // Don't let the user override the connection nor the grant type.
-  data.connection = 'sms';
+</div>
 
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
-  }
+</div>
+        
+    
 
-  if (typeof data.phone_number !== 'string' || data.phone_number.trim().length === 0) {
-    throw new ArgumentError('phone_number field is required');
-  }
+    
 
-  if (cb &amp;&amp; cb instanceof Function) {
-    return this.passwordless.create(data, cb);
-  }
+    
+</article>
 
-  return this.passwordless.create(data);
-};
-
-module.exports = PasswordlessAuthenticator;
-</code></pre>
-        </article>
-    </section>
+</section>
 
 
 

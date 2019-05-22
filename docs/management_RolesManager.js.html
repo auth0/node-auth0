@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>auth/PasswordlessAuthenticator.js - Documentation</title>
+    <title>management/RolesManager.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">auth/PasswordlessAuthenticator.js</h1>
+    <h1 class="page-title">management/RolesManager.js</h1>
     
 
     
@@ -39,241 +39,408 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var extend = require('util')._extend;
-
-var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
+            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
+var utils = require('../utils');
+var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
- * @class
- * Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.
- * @constructor
- * @memberOf module:auth
- *
- * @param  {Object}              options            Authenticator options.
- * @param  {String}              options.baseUrl    The auth0 account URL.
- * @param  {String}              [options.clientId] Default client ID.
- * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
  */
-var PasswordlessAuthenticator = function(options, oauth) {
-  if (!options) {
-    throw new ArgumentError('Missing authenticator options');
+
+/**
+ * @class RolesManager
+ * The role class provides a simple abstraction for performing CRUD operations
+ * on Auth0 RolesManager.
+ * @constructor
+ * @memberOf module:management
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
+ */
+var RolesManager = function(options) {
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide manager options');
   }
 
-  if (typeof options !== 'object') {
-    throw new ArgumentError('The authenticator options must be an object');
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
+
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
   }
 
   /**
-   * Options object for the Rest Client instace.
+   * Options object for the Rest Client instance.
    *
    * @type {Object}
    */
   var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' }
+    headers: options.headers,
+    query: { repeatParams: false }
   };
 
-  this.oauth = oauth;
-  this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
-  this.clientId = options.clientId;
+  /**
+   * Provides an abstraction layer for performing CRUD operations on
+   * {@link https://auth0.com/docs/api/v2#!/RolesManager Auth0 RolesManagers}.
+   *
+   * @type {external:RestClient}
+   */
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/roles/:id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+  var permissionsInRoleClient = new Auth0RestClient(
+    options.baseUrl + '/roles/:id/permissions',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.permissions = new RetryRestClient(permissionsInRoleClient, options.retry);
+
+  var usersInRoleClient = new Auth0RestClient(
+    options.baseUrl + '/roles/:id/users',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.users = new RetryRestClient(usersInRoleClient, options.retry);
 };
 
 /**
- * Sign in with the given user credentials.
+ * Create a new role.
  *
- * @method    signIn
- * @memberOf  module:auth.PasswordlessAuthenticator.prototype
- * @example &lt;caption>
- *   Given the user credentials (`phone_number` and `code`), it will do the
- *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
- * &lt;/caption>
+ * @method    create
+ * @memberOf  module:management.RolesManager.prototype
  *
- * var data = {
- *   username: '{PHONE_NUMBER}',
- *   password: '{VERIFICATION_CODE}'
- * };
- *
- * auth0.passwordless.signIn(data, function (err) {
+ * @example
+ * management.roles.create(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
+ *
+ *   // Role created.
  * });
  *
- * @example &lt;caption>
- *   The user data object has the following structure.
- * &lt;/caption>
- *
- * {
- *   id_token: String,
- *   access_token: String,
- *   token_type: String
- * }
- *
- * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
- * @param   {String}    [userData.client_id]  Client ID.
- * @param   {Function}  [cb]                  Method callback.
+ * @param   {Object}    data     Role data object.
+ * @param   {Function}  [cb]     Callback function.
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
+utils.wrapPropertyMethod(RolesManager, 'create', 'resource.create');
 
-  // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' &amp;&amp; data.connection !== 'sms')) {
-    data.connection = 'sms';
-  }
-  data.grant_type = 'password';
+/**
+ * Get all roles.
+ *
+ * @method    getAll
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example &lt;caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * &lt;/caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.roles.getAll(params, function (err, roles) {
+ *   console.log(roles.length);
+ * });
+ *
+ * @param   {Object}    [params]          Roles parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(RolesManager, 'getAll', 'resource.getAll');
 
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
-  }
+/**
+ * Get an Auth0 role.
+ *
+ * @method    get
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * management.roles.get({ id: ROLE_ID }, function (err, role) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(role);
+ * });
+ *
+ * @param   {Object}    params        Role parameters.
+ * @param   {String}    params.id     Role ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(RolesManager, 'get', 'resource.get');
 
-  if (typeof data.username !== 'string' || data.username.trim().length === 0) {
-    throw new ArgumentError('username field (phone number) is required');
-  }
+/**
+ * Update an existing role.
+ *
+ * @method    update
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * var data = { name: 'New name' };
+ * var params = { id: ROLE_ID };
+ *
+ * // Using auth0 instance.
+ * management.updateRole(params, data, function (err, role) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(role.name);  // 'New name'
+ * });
+ *
+ * // Using the roles manager directly.
+ * management.roles.update(params, data, function (err, role) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(role.name);  // 'New name'
+ * });
+ *
+ * @param   {Object}    params        Role parameters.
+ * @param   {String}    params.id     Role ID.
+ * @param   {Object}    data          Updated role data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(RolesManager, 'update', 'resource.patch');
 
-  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
-    throw new ArgumentError('password field (verification code) is required');
-  }
+/**
+ * Delete an existing role.
+ *
+ * @method    delete
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * management.roles.delete({ id: ROLE_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Role deleted.
+ * });
+ *
+ * @param   {Object}    params        Role parameters.
+ * @param   {String}    params.id     Role ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(RolesManager, 'delete', 'resource.delete');
 
-  return this.oauth.signIn(data, cb);
+/**
+ * Get Permissions in a Role
+ *
+ * @method    getPermissionsInRole
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * var params = {id : 'ROLE_ID'}
+ * @example &lt;caption>
+ *   This method takes a first argument as the roleId and returns the permissions within that role
+ * &lt;/caption>
+ *
+ * management.roles.getPermissions( {id : 'ROLE_ID'}, function (err, permissions) {
+ *   console.log(permissions);
+ * });
+ *
+ * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+RolesManager.prototype.getPermissions = function(params, callback) {
+  return this.permissions.getAll(params, callback);
 };
 
 /**
- * Start passwordless flow sending an email.
+ * Add permissions in a role
  *
- * @method    sendEmail
- * @memberOf  module:auth.PasswordlessAuthenticator.prototype
- * @example &lt;caption>
- *   Given the user `email` address, it will send an email with:
+ * @method    addPermissions
+ * @memberOf  module:management.RolesManager.prototype
  *
- *   &lt;ul>
- *     &lt;li>A link (default, `send:"link"`). You can then authenticate with this
- *       user opening the link and he will be automatically logged in to the
- *       application. Optionally, you can append/override parameters to the link
- *       (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
- *       `authParams` object.
- *     &lt;/li>
- *     &lt;li>
- *       A verification code (`send:"code"`). You can then authenticate with
- *       this user using the `/oauth/ro` endpoint specifying `email` as
- *       `username` and `code` as `password`.
- *     &lt;/li>
- *   &lt;/ul>
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
  *
- *   Find more information in the
- *   &lt;a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs&lt;/a>
- * &lt;/caption>
- *
- * var data = {
- *   email: '{EMAIL}',
- *   send: 'link',
- *   authParams: {} // Optional auth params.
- * };
- *
- * auth0.passwordless.sendEmail(data, function (err) {
+ * management.roles.addPermissions(params, data, function (err, user) {
  *   if (err) {
  *     // Handle error.
  *   }
+ *
+ *   // permissions added.
  * });
  *
- * @param   {Object}    userData                User account data.
- * @param   {String}    userData.email          User email address.
- * @param   {String}    userData.send           The type of email to be sent.
- * @param   {Function}  [cb]                    Method callback.
+ * @param   {String}    params.id                ID of the Role.
+ * @param   {Object}    data                permissions data
+ * @param   {String}    data.permissions    Array of permissions
+ * @param   {String}    data.permissions.permission_name  Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
-  data.connection = 'email';
+RolesManager.prototype.addPermissions = function(params, data, cb) {
+  data = data || {};
+  params = params || {};
 
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The roleId passed in params cannot be null or undefined');
   }
-
-  if (typeof data.email !== 'string' || data.email.trim().length === 0) {
-    throw new ArgumentError('email field is required');
-  }
-
-  if (typeof data.send !== 'string' || data.send.trim().length === 0) {
-    throw new ArgumentError('send field is required');
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The role Id has to be a string');
   }
 
   if (cb &amp;&amp; cb instanceof Function) {
-    return this.passwordless.create(data, cb);
+    return this.permissions.create(params, data, cb);
   }
 
-  return this.passwordless.create(data);
+  return this.permissions.create(params, data);
 };
 
 /**
- * Start passwordless flow sending an SMS.
+ * Remove permissions from a role
  *
- * @method    sendSMS
- * @memberOf  module:auth.PasswordlessAuthenticator.prototype
+ * @method    removePermissions
+ * @memberOf  module:management.RolesManager.prototype
  *
- * @example &lt;caption>
- *   Given the user `phone_number`, it will send a SMS message with a
- *   verification code. You can then authenticate with this user using the
- *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
- *   `password`:
- * &lt;/caption>
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
  *
- * var data = {
- *   phone_number: '{PHONE}'
- * };
- *
- * auth0.passwordless.sendSMS(data, function (err) {
+ * management.roles.removePermissions(params, data, function (err, user) {
  *   if (err) {
  *     // Handle error.
  *   }
+ *
+ *   // permissions added.
  * });
  *
- * @param   {Object}    userData                User account data.
- * @param   {String}    userData.phone_number   User phone number.
- * @param   {String}    [userData.client_id]    Client ID.
- * @param   {Function}  [cb]                    Method callback.
+ * @param   {String}    params.id                ID of the Role.
+ * @param   {Object}    data                permissions data
+ * @param   {String}    data.permissions    Array of permissions
+ * @param   {String}    data.permissions.permission_name  Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.sendSMS = function(userData, cb) {
-  var defaultFields = {
-    client_id: this.clientId
-  };
-  var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
-  data.connection = 'sms';
+RolesManager.prototype.removePermissions = function(params, data, cb) {
+  data = data || {};
+  params = params || {};
 
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The roleId passed in params cannot be null or undefined');
   }
-
-  if (typeof data.phone_number !== 'string' || data.phone_number.trim().length === 0) {
-    throw new ArgumentError('phone_number field is required');
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The role Id has to be a string');
   }
 
   if (cb &amp;&amp; cb instanceof Function) {
-    return this.passwordless.create(data, cb);
+    return this.permissions.delete(params, data, cb);
   }
 
-  return this.passwordless.create(data);
+  return this.permissions.delete(params, data);
 };
 
-module.exports = PasswordlessAuthenticator;
+/**
+ * Get Users in a Role
+ *
+ * @method    getUsers
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * params = {id : 'ROLE_ID'}
+ * @example &lt;caption>
+ *   This method takes a roleId and returns the users with that role assigned
+ * &lt;/caption>
+ *
+ * management.roles.getUsers( {id : 'ROLE_ID'}, function (err, users) {
+ *   console.log(users);
+ * });
+ *
+ * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+RolesManager.prototype.getUsers = function(params, callback) {
+  return this.users.getAll(params, callback);
+};
+
+/**
+ * Assign users to a role
+ *
+ * @method    assignUsers
+ * @memberOf  module:management.RolesManager.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "users" : ["userId1","userId2"]};
+ *
+ * management.roles.assignUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions added.
+ * });
+ *
+ * @param   {String}    params.id                ID of the Role.
+ * @param   {Object}    data                permissions data
+ * @param   {String}    data.permissions    Array of permissions
+ * @param   {String}    data.permissions.permission_name  Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+RolesManager.prototype.assignUsers = function(params, data, cb) {
+  data = data || {};
+  params = params || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The roleId passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The role Id has to be a string');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.permissions.create(params, data, cb);
+  }
+
+  return this.users.create(params, data);
+};
+
+module.exports = RolesManager;
 </code></pre>
         </article>
     </section>

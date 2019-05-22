@@ -43,7 +43,7 @@ var TicketsManager = function(options) {
     clientOptions,
     options.tokenProvider
   );
-  this.ticket = new RetryRestClient(auth0RestClient, options.retry);
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 /**
@@ -73,11 +73,11 @@ TicketsManager.prototype.changePassword = function(data, cb) {
   var params = { type: 'password-change' };
 
   if (cb && cb instanceof Function) {
-    return this.ticket.create(params, data, cb);
+    return this.resource.create(params, data, cb);
   }
 
   // Return a promise.
-  return this.ticket.create(params, data);
+  return this.resource.create(params, data);
 };
 
 /**
@@ -105,11 +105,11 @@ TicketsManager.prototype.verifyEmail = function(data, cb) {
   var params = { type: 'email-verification' };
 
   if (cb && cb instanceof Function) {
-    return this.ticket.create(params, data, cb);
+    return this.resource.create(params, data, cb);
   }
 
   // Return a promise.
-  return this.ticket.create(params, data);
+  return this.resource.create(params, data);
 };
 
 module.exports = TicketsManager;

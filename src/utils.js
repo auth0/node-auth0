@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var request = require('request');
+var pkg = require('../package.json');
 
 /**
  * @module utils
@@ -20,6 +21,24 @@ utils.jsonToBase64 = function(json) {
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=+$/, '');
+};
+
+/**
+ * Return an object with information about the current client.
+ *
+ * @method    generateClientInfo
+ * @memberOf  module:utils
+ *
+ * @return {Object}   Object containing client information.
+ */
+utils.generateClientInfo = function() {
+  return {
+    name: 'node-auth0',
+    version: pkg.version,
+    env: {
+      node: process.version.replace('v', '')
+    }
+  };
 };
 
 /**
