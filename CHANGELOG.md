@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.17.1](https://github.com/auth0/node-auth0/tree/v2.17.1) (2019-05-22)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.17.0...v2.17.1)
+
+**Fixed**
+- Fix telemetry header [\#362](https://github.com/auth0/node-auth0/pull/362) ([lbalmaceda](https://github.com/lbalmaceda))
+
 ## [v2.17.0](https://github.com/auth0/node-auth0/tree/v2.17.0) (2019-04-15)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.16.0...v2.17.0)
