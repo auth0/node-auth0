@@ -97,7 +97,7 @@ describe('Auth0RestClient', function() {
 
     var client = new Auth0RestClient(API_URL + '/some-resource', options, this.providerMock);
     client.getAll().then(function(data) {
-      expect(client.options.headers['Authorization']).to.be.equal('Bearer access_token');
+      expect(client.restClient.options.headers['Authorization']).to.be.equal('Bearer access_token');
       done();
       nock.cleanAll();
     });
