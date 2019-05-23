@@ -2016,11 +2016,18 @@ utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verify
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
+ * 
+ * var params = {
+  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+  *   user_id: '{USER_ID}'
+  * };
+  * 
+  * // or
+  * 
  * var params = {
  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
- *   user_id: '{USER_ID}',  // Optional.
- *   email: '{USER_EMAIL}',  // Optional.
- *   new_password: '{PASSWORD}'
+ *   email: '{USER_EMAIL}',
+ *   connection_id: '{CONNECTION}' // eg. con_00000000001
  * };
  *
  * auth0.createPasswordChangeTicket(params, function (err) {
