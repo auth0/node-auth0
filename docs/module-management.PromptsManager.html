@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>PasswordlessAuthenticator - Documentation</title>
+    <title>PromptsManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">PasswordlessAuthenticator</h1>
+    <h1 class="page-title">PromptsManager</h1>
     
 
     
@@ -42,12 +42,13 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="module-auth.html">auth</a>.</span>
+            <span class="ancestors"><a href="module-management.html">management</a>.</span>
         
-        PasswordlessAuthenticator
+        PromptsManager
         </h2>
         
-            <div class="class-description"><p>Handles authenticator with passwordless flows, e.g. SMS, Touch ID, etc.</p></div>
+            <div class="class-description"><p>PromptsManager
+Manages settings related to prompts.</p></div>
         
     
 </header>
@@ -62,7 +63,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="PasswordlessAuthenticator"><span class="type-signature"></span>new PasswordlessAuthenticator<span class="signature">(options, oauth)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="PromptsManager"><span class="type-signature"></span>new PromptsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -101,7 +102,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_PasswordlessAuthenticator.js.html">auth/PasswordlessAuthenticator.js</a>, <a href="auth_PasswordlessAuthenticator.js.html#line17">line 17</a>
+        <a href="management_PromptsManager.js.html">management/PromptsManager.js</a>, <a href="management_PromptsManager.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -162,7 +163,7 @@
             
 
             <td class="description last">
-                <p>Authenticator options.</p>
+                <p>The client options.</p>
                 
                     
 
@@ -215,7 +216,7 @@
             
 
             <td class="description last">
-                <p>The auth0 account URL.</p>
+                <p>The URL of the API.</p>
                 
             </td>
         </tr>
@@ -224,13 +225,13 @@
 
         <tr>
             
-                <td class="name"><code>clientId</code></td>
+                <td class="name"><code>headers</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>String</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -251,15 +252,7 @@
             
 
             <td class="description last">
-                <p>Default client ID.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                <p>Headers to be included in all requests.</p>
                 
             </td>
         </tr>
@@ -268,24 +261,42 @@
 
         <tr>
             
-                <td class="name"><code>oauth</code></td>
+                <td class="name"><code>retry</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>OAuthAuthenticator</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">
-                <p>OAuthAuthenticator instance.</p>
+                <p>Retry Policy Config</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
                 
             </td>
         </tr>
@@ -329,13 +340,14 @@
         
             
 <div class="section-members">
-<h4 class="name" id="~clientOptions"><span class="type-signature">(inner) </span>clientOptions<span class="type-signature"> :Object</span></h4>
+<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
 
 
 
 
 <div class="description">
-    <p>Options object for the Rest Client instace.</p>
+    <p>Provides an abstraction layer for consuming the
+<a href="https://auth0.com/docs/api/management/v2#!/Prompts">Prompts endpoint</a>.</p>
 </div>
 
 
@@ -371,7 +383,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_PasswordlessAuthenticator.js.html">auth/PasswordlessAuthenticator.js</a>, <a href="auth_PasswordlessAuthenticator.js.html#line31">line 31</a>
+        <a href="management_PromptsManager.js.html">management/PromptsManager.js</a>, <a href="management_PromptsManager.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -388,7 +400,7 @@
     <ul>
         <li>
             
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
 
 
         </li>
@@ -412,14 +424,14 @@
 
     
 
-    <h4 class="name" id="sendEmail"><span class="type-signature"></span>sendEmail<span class="signature">(userData, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="getSettings"><span class="type-signature"></span>getSettings<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Start passwordless flow sending an email.</p>
+    <p>Get the prompts settings..</p>
 </div>
 
 
@@ -455,7 +467,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_PasswordlessAuthenticator.js.html">auth/PasswordlessAuthenticator.js</a>, <a href="auth_PasswordlessAuthenticator.js.html#line109">line 109</a>
+        <a href="management_PromptsManager.js.html">management/PromptsManager.js</a>, <a href="management_PromptsManager.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -501,7 +513,7 @@
 
         <tr>
             
-                <td class="name"><code>userData</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
@@ -526,50 +538,7 @@
             
 
             <td class="description last">
-                <p>User account data.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>User email address.</p>
+                <p>Prompts parameters.</p>
                 
             </td>
         </tr>
@@ -578,32 +547,32 @@
 
         <tr>
             
-                <td class="name"><code>send</code></td>
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>String</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
 
             <td class="description last">
-                <p>The type of email to be sent.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                <p>Prompts data.</p>
                 
             </td>
         </tr>
@@ -639,7 +608,7 @@
             
 
             <td class="description last">
-                <p>Method callback.</p>
+                <p>Callback function.</p>
                 
             </td>
         </tr>
@@ -690,37 +659,13 @@
 <div class="section-examples">
 <h5>Example</h5>
 
-        <p class="code-caption">
-  Given the user `email` address, it will send an email with:
-
-  <ul>
-    <li>A link (default, `send:"link"`). You can then authenticate with this
-      user opening the link and he will be automatically logged in to the
-      application. Optionally, you can append/override parameters to the link
-      (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
-      `authParams` object.
-    </li>
-    <li>
-      A verification code (`send:"code"`). You can then authenticate with
-      this user using the `/oauth/ro` endpoint specifying `email` as
-      `username` and `code` as `password`.
-    </li>
-  </ul>
-
-  Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  send: 'link',
-  authParams: {} // Optional auth params.
-};
-
-auth0.passwordless.sendEmail(data, function (err) {
+    <pre class="prettyprint"><code>management.prompts.getSettings(data, function (err, prompts) {
   if (err) {
     // Handle error.
   }
+
+// Prompts
+   console.log(prompts);
 });</code></pre>
 
 </div>
@@ -732,14 +677,14 @@ auth0.passwordless.sendEmail(data, function (err) {
 
     
 
-    <h4 class="name" id="sendSMS"><span class="type-signature"></span>sendSMS<span class="signature">(userData, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="updateSettings"><span class="type-signature"></span>updateSettings<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Start passwordless flow sending an SMS.</p>
+    <p>Update the prompts settings.</p>
 </div>
 
 
@@ -775,7 +720,7 @@ auth0.passwordless.sendEmail(data, function (err) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_PasswordlessAuthenticator.js.html">auth/PasswordlessAuthenticator.js</a>, <a href="auth_PasswordlessAuthenticator.js.html#line182">line 182</a>
+        <a href="management_PromptsManager.js.html">management/PromptsManager.js</a>, <a href="management_PromptsManager.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -821,7 +766,7 @@ auth0.passwordless.sendEmail(data, function (err) {
 
         <tr>
             
-                <td class="name"><code>userData</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
@@ -846,41 +791,22 @@ auth0.passwordless.sendEmail(data, function (err) {
             
 
             <td class="description last">
-                <p>User account data.</p>
+                <p>Prompts parameters.</p>
                 
-                    
+            </td>
+        </tr>
 
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>phone_number</code></td>
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>String</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -899,51 +825,7 @@ auth0.passwordless.sendEmail(data, function (err) {
             
 
             <td class="description last">
-                <p>User phone number.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>client_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Client ID.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                <p>Updated prompts data.</p>
                 
             </td>
         </tr>
@@ -979,7 +861,7 @@ auth0.passwordless.sendEmail(data, function (err) {
             
 
             <td class="description last">
-                <p>Method callback.</p>
+                <p>Callback function.</p>
                 
             </td>
         </tr>
@@ -1030,446 +912,14 @@ auth0.passwordless.sendEmail(data, function (err) {
 <div class="section-examples">
 <h5>Example</h5>
 
-        <p class="code-caption">
-  Given the user `phone_number`, it will send a SMS message with a
-  verification code. You can then authenticate with this user using the
-  `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
-  `password`:
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  phone_number: '{PHONE}'
-};
-
-auth0.passwordless.sendSMS(data, function (err) {
+    <pre class="prettyprint"><code>management.prompts.updateSettings(data, function (err, prompts) {
   if (err) {
     // Handle error.
   }
+
+// Updated prompts
+   console.log(prompts);
 });</code></pre>
-
-</div>
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="signIn"><span class="type-signature"></span>signIn<span class="signature">(userData, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Sign in with the given user credentials.</p>
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_PasswordlessAuthenticator.js.html">auth/PasswordlessAuthenticator.js</a>, <a href="auth_PasswordlessAuthenticator.js.html#line41">line 41</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userData</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>User credentials object.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                <p>Username.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                <p>Password.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    sms
-                
-                </td>
-            
-
-            <td class="description last">
-                <p>Connection string: &quot;sms&quot; or &quot;email&quot;.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>client_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                <p>Client ID.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>Method callback.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>Promise</code></span>
-|
-
-<span class="param-type"><code>undefined</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-<div class="section-examples">
-<h5>Examples</h5>
-
-        <p class="code-caption">
-  Given the user credentials (`phone_number` and `code`), it will do the
-  authentication on the provider and return a JSON with the `access_token`
-  and `id_token`.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  username: '{PHONE_NUMBER}',
-  password: '{VERIFICATION_CODE}'
-};
-
-auth0.passwordless.signIn(data, function (err) {
-  if (err) {
-    // Handle error.
-  }
-});</code></pre>
-
-        <p class="code-caption">
-  The user data object has the following structure.
-</p>
-    
-    <pre class="prettyprint"><code>{
-  id_token: String,
-  access_token: String,
-  token_type: String
-}</code></pre>
 
 </div>
 

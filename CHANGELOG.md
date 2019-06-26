@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.18.0](https://github.com/auth0/node-auth0/tree/v2.18.0) (2019-06-26)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.17.1...v2.18.0)
+
+**Added**
+- Add Management API support for Branding and Prompts endpoints. [\#370](https://github.com/auth0/node-auth0/pull/370) ([chrisscott](https://github.com/chrisscott))
+
 ## [v2.17.1](https://github.com/auth0/node-auth0/tree/v2.17.1) (2019-05-22)
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.17.0...v2.17.1)
 
