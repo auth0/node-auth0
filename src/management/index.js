@@ -1332,7 +1332,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
  *
  * @example
  * var parms =  { id : 'USER_ID'};
- * var data = { "roles" :["role1"]};
+ * var data = { "roles" :["rol_0xyYU0uHV16VVVbs"]};
  *
  * management.assignRolestoUser(params, data, function (err) {
  *   if (err) {
@@ -1360,7 +1360,7 @@ utils.wrapPropertyMethod(ManagementClient, 'assignRolestoUser', 'users.assignRol
  *
  * @example
  * var parms =  { id : 'USER_ID'};
- * var data = { "roles" :["role1"]};
+ * var data = { "roles" :["rol_0xyYU0uHV16VVVbs"]};
  *
  * management.removeRolesFromUser(params, data, function (err) {
  *   if (err) {
@@ -1578,7 +1578,11 @@ utils.wrapPropertyMethod(ManagementClient, 'unblockUser', 'userBlocks.delete');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getUserBlocksByIdentifier', 'userBlocks.getByIdentifier');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getUserBlocksByIdentifier',
+  'userBlocks.getByIdentifier'
+);
 
 /**
  * Unblock an user by its id.
@@ -1601,7 +1605,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserBlocksByIdentifier', 'userBlo
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'unblockUserByIdentifier', 'userBlocks.deleteByIdentifier');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'unblockUserByIdentifier',
+  'userBlocks.deleteByIdentifier'
+);
 
 /**
  * Get a single Guardian enrollment.
@@ -2016,14 +2024,14 @@ utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verify
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * 
+ *
  * var params = {
-  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
-  *   user_id: '{USER_ID}'
-  * };
-  * 
-  * // or
-  * 
+ *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+ *   user_id: '{USER_ID}'
+ * };
+ *
+ * // or
+ *
  * var params = {
  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
  *   email: '{USER_EMAIL}',
