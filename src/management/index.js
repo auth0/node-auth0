@@ -125,6 +125,11 @@ var ManagementClient = function(options) {
   } else if (typeof options.token !== 'string' || options.token.length === 0) {
     throw new ArgumentError('Must provide a token');
   } else {
+    this.tokenProvider = {
+      getAccessToken: function() {
+        return Promise.resolve(options.token);
+      }
+    };
     managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
   }
 
@@ -1578,7 +1583,11 @@ utils.wrapPropertyMethod(ManagementClient, 'unblockUser', 'userBlocks.delete');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getUserBlocksByIdentifier', 'userBlocks.getByIdentifier');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getUserBlocksByIdentifier',
+  'userBlocks.getByIdentifier'
+);
 
 /**
  * Unblock an user by its id.
@@ -1601,7 +1610,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserBlocksByIdentifier', 'userBlo
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'unblockUserByIdentifier', 'userBlocks.deleteByIdentifier');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'unblockUserByIdentifier',
+  'userBlocks.deleteByIdentifier'
+);
 
 /**
  * Get a single Guardian enrollment.
@@ -2016,14 +2029,14 @@ utils.wrapPropertyMethod(ManagementClient, 'sendEmailVerification', 'jobs.verify
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * 
+ *
  * var params = {
-  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
-  *   user_id: '{USER_ID}'
-  * };
-  * 
-  * // or
-  * 
+ *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
+ *   user_id: '{USER_ID}'
+ * };
+ *
+ * // or
+ *
  * var params = {
  *   result_url: '{REDIRECT_URL}',  // Redirect after using the ticket.
  *   email: '{USER_EMAIL}',
@@ -2802,5 +2815,15 @@ utils.wrapPropertyMethod(ManagementClient, 'removePermissionsFromRole', 'roles.r
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUsersInRole', 'roles.getUsers');
+
+/**
+ * Returns the access_token.
+ *
+ * @method    getAccessToken
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @return {Promise}   Promise returning an access_token.
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getAccessToken', 'tokenProvider.getAccessToken');
 
 module.exports = ManagementClient;
