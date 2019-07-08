@@ -90,3 +90,15 @@ utils.getRequestPromise = function(settings) {
     );
   });
 };
+
+utils.containsUnsafeChars = s => {
+  const safeChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*'(),%";
+  return !!s.split('').find(c => !safeChars.includes(c));
+};
+
+utils.maybeDecode = url => {
+  if (utils.containsUnsafeChars(url)) {
+    return encodeURIComponent(url);
+  }
+  return url;
+};
