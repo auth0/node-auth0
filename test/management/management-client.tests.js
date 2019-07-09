@@ -26,7 +26,10 @@ describe('ManagementClient', function() {
   var withTokenProviderConfig = {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
-    domain: 'auth0-node-sdk.auth0.com'
+    domain: 'auth0-node-sdk.auth0.com',
+    tokenProvider: {
+      enableCache: false
+    }
   };
 
   var withTokenConfig = {
@@ -106,15 +109,14 @@ describe('ManagementClient', function() {
         done();
       });
     });
-
     it('should return token from provider', function(done) {
       var config = assign({}, withTokenProviderConfig);
       var client = new ManagementClient(config);
 
       nock('https://' + config.domain)
         .post('/oauth/token', function(body) {
-          expect(body.client_id).to.equal('clientId');
-          expect(body.client_secret).to.equal('clientSecret');
+          expect(body.client_id).to.equal(config.clientId);
+          expect(body.client_secret).to.equal(config.clientSecret);
           expect(body.grant_type).to.equal('client_credentials');
           return true;
         })
