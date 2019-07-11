@@ -58,9 +58,9 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
  * @return  {Promise|undefined}
  */
 OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
-  const self = this;
+  const _this = this;
   const createAndValidate = this.oauth.create(params, data).then(r => {
-    if (self.bypassIdTokenValidation) {
+    if (_this.bypassIdTokenValidation) {
       return r;
     }
     if (r.id_token) {
