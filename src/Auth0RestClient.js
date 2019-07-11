@@ -2,6 +2,8 @@ var RestClient = require('rest-facade').Client;
 var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 
+var utils = require('./utils');
+
 var Auth0RestClient = function(resourceUrl, options, provider) {
   if (resourceUrl === null || resourceUrl === undefined) {
     throw new ArgumentError('Must provide a Resource Url');
@@ -45,12 +47,15 @@ var Auth0RestClient = function(resourceUrl, options, provider) {
   };
 };
 
-Auth0RestClient.prototype.getAll = function(/* [params], [callback] */) {
+Auth0RestClient.prototype.getAll = function(params, callback) {
   return this.wrappedProvider('getAll', arguments);
 };
 
-Auth0RestClient.prototype.get = function(/* [params], [callback] */) {
-  return this.wrappedProvider('get', arguments);
+Auth0RestClient.prototype.get = function(params, callback) {
+  if (typeof params === 'object' && params.id) {
+    params.id = utils.maybeDecode(`${params.id}`);
+  }
+  return this.wrappedProvider('get', [...[params, callback].filter(Boolean)]);
 };
 
 Auth0RestClient.prototype.create = function(/* [params], [callback] */) {

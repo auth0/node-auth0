@@ -13,4 +13,22 @@ describe('Utils', function() {
       });
     });
   });
+  describe('maybe decode', () => {
+    it('encodes regular user_id', () => {
+      const normalId = 'auth0|1234';
+      expect(utils.maybeDecode(normalId)).to.be.equal('auth0%7C1234');
+    });
+    it('encodes a malicious user_id', () => {
+      const maliciousId = 'anotherUserId/secret';
+      expect(utils.maybeDecode(maliciousId)).to.be.equal('anotherUserId%2Fsecret');
+    });
+    it('encodes a malicious user_id with a percentage', () => {
+      const maliciousId = 'anotherUserId/secret%23';
+      expect(utils.maybeDecode(maliciousId)).to.be.equal('anotherUserId%2Fsecret%2523');
+    });
+    it('does not encode an already encoded user_id', () => {
+      const maliciousId = 'auth0%7C1234';
+      expect(utils.maybeDecode(maliciousId)).to.be.equal('auth0%7C1234');
+    });
+  });
 });
