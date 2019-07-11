@@ -151,6 +151,7 @@ describe('ManagementTokenProvider', function() {
     client.getAccessToken().catch(function(err) {
       expect(err).to.exist;
       done();
+      nock.cleanAll();
     });
   });
 
