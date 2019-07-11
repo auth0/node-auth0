@@ -77,6 +77,17 @@ describe('OAUthWithIDTokenValidation', function() {
       var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
       oauthWithValidation.create(PARAMS, DATA, done);
     });
+    it('Bypasses validation when options.bypassIdTokenValidation is true', function(done) {
+      var oauth = {
+        create: function() {
+          return new Promise(res => res({ id_token: 'foobar' }));
+        }
+      };
+      var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        bypassIdTokenValidation: true
+      });
+      oauthWithValidation.create(PARAMS, DATA, done);
+    });
     it('Calls jwt.verify with token and algs', function(done) {
       var oauth = {
         create: function() {
