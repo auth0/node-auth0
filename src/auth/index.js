@@ -62,7 +62,7 @@ var AuthenticationClient = function(options) {
     },
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
-    __bypassIdTokenValidation: options.supportedAlgorithms
+    __bypassIdTokenValidation: options.__bypassIdTokenValidation
   };
 
   if (options.telemetry !== false) {
