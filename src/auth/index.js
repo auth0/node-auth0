@@ -42,7 +42,6 @@ var BASE_URL_FORMAT = 'https://%s';
  * @param   {String}  [options.clientId]                Default client ID.
  * @param   {String}  [options.clientSecret]            Default client Secret.
  * @param   {String}  [options.supportedAlgorithms]     Algorithms that your application expects to receive
- * @param  {Boolean}  [options.bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {
@@ -63,7 +62,7 @@ var AuthenticationClient = function(options) {
     },
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
-    bypassIdTokenValidation: options.supportedAlgorithms
+    __bypassIdTokenValidation: options.supportedAlgorithms
   };
 
   if (options.telemetry !== false) {

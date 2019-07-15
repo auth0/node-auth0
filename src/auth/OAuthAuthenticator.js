@@ -17,7 +17,6 @@ var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
  * @param  {String}              options.domain                    AuthenticationClient server domain
  * @param  {String}              [options.clientId]                Default client ID.
  * @param  {String}              [options.clientSecret]            Default client Secret.
- * @param  {Boolean}             [options.bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var OAuthAuthenticator = function(options) {
   if (!options) {

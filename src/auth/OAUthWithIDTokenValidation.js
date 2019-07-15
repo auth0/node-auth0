@@ -19,7 +19,6 @@ var HS256_IGNORE_VALIDATION_MESSAGE =
  * @param  {String}              [options.clientId]                Default client ID.
  * @param  {String}              [options.clientSecret]            Default client Secret.
  * @param  {String}              [options.supportedAlgorithms]     Algorithms that your application expects to receive
- * @param  {Boolean}             [options.bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var OAUthWithIDTokenValidation = function(oauth, options) {
   if (!oauth) {
@@ -35,7 +34,7 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
   }
 
   this.oauth = oauth;
-  this.bypassIdTokenValidation = options.bypassIdTokenValidation;
+  this.__bypassIdTokenValidation = options.__bypassIdTokenValidation;
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
   this.domain = options.domain;
@@ -60,7 +59,7 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
 OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
   const _this = this;
   const createAndValidate = this.oauth.create(params, data).then(r => {
-    if (_this.bypassIdTokenValidation) {
+    if (_this.__bypassIdTokenValidation) {
       return r;
     }
     if (r.id_token) {
