@@ -43,7 +43,7 @@
     "retry": "^0.10.1"
   },
   "devDependencies": {
-    "chai": "^2.2.0",
+    "chai": "^4.2.0",
     "codecov": "^2.2.0",
     "cross-env": "^5.2.0",
     "husky": "^0.14.3",
