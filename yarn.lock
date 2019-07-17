@@ -2183,7 +2183,7 @@ lodash.isstring@^4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
   integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
 
-lodash.once@^4.0.0:
+lodash.once@^4.0.0, lodash.once@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
@@ -2441,13 +2441,14 @@ mocha-junit-reporter@^1.13.0:
     strip-ansi "^4.0.0"
     xml "^1.0.0"
 
-mocha-multi@^0.11.0:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/mocha-multi/-/mocha-multi-0.11.1.tgz#38f94242aff5d5e8313f61afcd0012bb7c478a52"
-  integrity sha512-bhZG9KwPIG/7K0P0kbB5wpwPEurDvaOIZbhVxSkAj8QhVHMxwOjQjnP6FaAd7qzwUgtbNODLo59vdyIJLHQopg==
+mocha-multi@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/mocha-multi/-/mocha-multi-1.1.0.tgz#5081f0f1f9d63ceb36791b54576d219d8e546649"
+  integrity sha512-arxYYafYVx/FEmA9xk8lw2nhc57Ld227YqX1yBYVcTQAeOhCBsvI7kIEeoxMcmwWOT1Ed+3C60Ambng4n2xRuw==
   dependencies:
     debug "^3.1.0"
     is-string "^1.0.4"
+    lodash.once "^4.1.1"
     mkdirp "^0.5.1"
     object-assign "^4.1.1"
 
