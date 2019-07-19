@@ -9,7 +9,6 @@ var RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-
 /**
  * @class RulesConfigsManager
  * The rules configs manager class provides a simple abstraction for performing CRUD operations
@@ -22,7 +21,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var RulesConfigsManager = function (options) {
+var RulesConfigsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -51,10 +50,13 @@ var RulesConfigsManager = function (options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(options.baseUrl + '/rules-configs/:key', clientOptions, options.tokenProvider);
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/rules-configs/:key',
+    clientOptions,
+    options.tokenProvider
+  );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
-
 
 /**
  * Set a new rules config.
@@ -65,7 +67,7 @@ var RulesConfigsManager = function (options) {
  * @example
  * var params = { key: RULE_CONFIG_KEY };
  * var data =   { value: RULES_CONFIG_VALUE };
- *  
+ *
  * management.rulesConfigs.set(params, data, function (err, rulesConfig) {
  *   if (err) {
  *     // Handle error.
@@ -84,7 +86,6 @@ var RulesConfigsManager = function (options) {
  */
 utils.wrapPropertyMethod(RulesConfigsManager, 'set', 'resource.update');
 
-
 /**
  * Get all rules configs.
  *
@@ -101,7 +102,6 @@ utils.wrapPropertyMethod(RulesConfigsManager, 'set', 'resource.update');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesConfigsManager, 'getAll', 'resource.getAll');
-
 
 /**
  * Delete an existing rules config.

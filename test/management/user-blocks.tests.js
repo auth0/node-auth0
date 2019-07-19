@@ -55,10 +55,10 @@ describe('UserBlocksManager', function() {
 
     afterEach(function() {
       nock.cleanAll();
-    })
+    });
 
     it('should throw an error when no id is provided', function() {
-      var userBlocks = this.userBlocks
+      var userBlocks = this.userBlocks;
 
       expect(function() {
         userBlocks.get({});
@@ -76,7 +76,8 @@ describe('UserBlocksManager', function() {
     it('should perform a get request to /user-blocks/' + id, function(done) {
       var request = this.request;
 
-      this.userBlocks.get({ id })
+      this.userBlocks
+        .get({ id })
         .then(function() {
           expect(request.isDone()).to.be.true;
           done();
@@ -91,7 +92,8 @@ describe('UserBlocksManager', function() {
         .get('/user-blocks/' + id)
         .reply(500);
 
-      this.userBlocks.get({ id })
+      this.userBlocks
+        .get({ id })
         .catch(function(err) {
           expect(err).to.exist;
 
@@ -108,7 +110,8 @@ describe('UserBlocksManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.userBlocks.get({ id })
+      this.userBlocks
+        .get({ id })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -129,10 +132,10 @@ describe('UserBlocksManager', function() {
 
     afterEach(function() {
       nock.cleanAll();
-    })
+    });
 
     it('should throw an error when no id is provided', function() {
-      var userBlocks = this.userBlocks
+      var userBlocks = this.userBlocks;
 
       expect(function() {
         userBlocks.delete({});
@@ -150,7 +153,8 @@ describe('UserBlocksManager', function() {
     it('should perform a delete request to /user-blocks/' + id, function(done) {
       var request = this.request;
 
-      this.userBlocks.delete({ id })
+      this.userBlocks
+        .delete({ id })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -166,7 +170,8 @@ describe('UserBlocksManager', function() {
         .delete('/user-blocks/' + id)
         .reply(500);
 
-      this.userBlocks.delete({ id })
+      this.userBlocks
+        .delete({ id })
         .catch(function(err) {
           expect(err).to.exist;
 
@@ -183,7 +188,8 @@ describe('UserBlocksManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.userBlocks.delete({ id })
+      this.userBlocks
+        .delete({ id })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -205,14 +211,17 @@ describe('UserBlocksManager', function() {
 
     afterEach(function() {
       nock.cleanAll();
-    })
+    });
 
     it('should throw an error when no identifier is provided', function() {
-      var userBlocks = this.userBlocks
+      var userBlocks = this.userBlocks;
 
       expect(function() {
         userBlocks.getByIdentifier({});
-      }).to.throw(ArgumentError, 'You must provide an user identifier for the getByIdentifier method');
+      }).to.throw(
+        ArgumentError,
+        'You must provide an user identifier for the getByIdentifier method'
+      );
     });
 
     it('should accept a callback', function(done) {
@@ -226,7 +235,8 @@ describe('UserBlocksManager', function() {
     it('should perform a get request to /user-blocks', function(done) {
       var request = this.request;
 
-      this.userBlocks.getByIdentifier({ identifier })
+      this.userBlocks
+        .getByIdentifier({ identifier })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -243,7 +253,8 @@ describe('UserBlocksManager', function() {
         .query({ identifier })
         .reply(500);
 
-      this.userBlocks.getByIdentifier({ identifier })
+      this.userBlocks
+        .getByIdentifier({ identifier })
         .catch(function(err) {
           expect(err).to.exist;
 
@@ -261,7 +272,8 @@ describe('UserBlocksManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.userBlocks.getByIdentifier({ identifier })
+      this.userBlocks
+        .getByIdentifier({ identifier })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -283,14 +295,17 @@ describe('UserBlocksManager', function() {
 
     afterEach(function() {
       nock.cleanAll();
-    })
+    });
 
     it('should throw an error when no identifier is provided', function() {
-      var userBlocks = this.userBlocks
+      var userBlocks = this.userBlocks;
 
       expect(function() {
         userBlocks.deleteByIdentifier({});
-      }).to.throw(ArgumentError, 'You must provide an user identifier for the deleteByIdentifier method');
+      }).to.throw(
+        ArgumentError,
+        'You must provide an user identifier for the deleteByIdentifier method'
+      );
     });
 
     it('should accept a callback', function(done) {
@@ -304,7 +319,8 @@ describe('UserBlocksManager', function() {
     it('should perform a delete request to /user-blocks', function(done) {
       var request = this.request;
 
-      this.userBlocks.deleteByIdentifier({ identifier })
+      this.userBlocks
+        .deleteByIdentifier({ identifier })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -321,7 +337,8 @@ describe('UserBlocksManager', function() {
         .query({ identifier })
         .reply(500);
 
-      this.userBlocks.deleteByIdentifier({ identifier })
+      this.userBlocks
+        .deleteByIdentifier({ identifier })
         .catch(function(err) {
           expect(err).to.exist;
 
@@ -339,7 +356,8 @@ describe('UserBlocksManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.userBlocks.deleteByIdentifier({ identifier })
+      this.userBlocks
+        .deleteByIdentifier({ identifier })
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -348,5 +366,4 @@ describe('UserBlocksManager', function() {
         .catch(done);
     });
   });
-
 });
