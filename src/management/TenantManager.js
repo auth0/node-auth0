@@ -86,7 +86,7 @@ TenantManager.prototype.updateSettings = function(data, cb) {
  * @memberOf  module:management.TenantManager.prototype
  *
  * @example
- * management.tenant.getSettings(function (err, settings) {
+ * management.tenant.getSettings({ include_fields: true, fields: 'friendly_name' }, function (err, settings) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -94,17 +94,22 @@ TenantManager.prototype.updateSettings = function(data, cb) {
  *   console.log(settings);
  * });
  *
- * @param   {Function}  [cb]  Callback function.
+ * @param   {Object}    [data]  Request parameters
+ * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}
  */
-TenantManager.prototype.getSettings = function(cb) {
+TenantManager.prototype.getSettings = function(data, cb) {
+  if (data instanceof Function && !cb) {
+    cb = data;
+    data = {};
+  }
   if (cb && cb instanceof Function) {
-    return this.resource.get({}, cb);
+    return this.resource.get(data, cb);
   }
 
   // Return a promise.
-  return this.resource.get({});
+  return this.resource.get(data);
 };
 
 module.exports = TenantManager;
