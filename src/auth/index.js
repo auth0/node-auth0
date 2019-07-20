@@ -42,6 +42,7 @@ var BASE_URL_FORMAT = 'https://%s';
  * @param   {String}  [options.clientId]                Default client ID.
  * @param   {String}  [options.clientSecret]            Default client Secret.
  * @param   {String}  [options.supportedAlgorithms]     Algorithms that your application expects to receive
+ * @param  {Boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {

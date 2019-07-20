@@ -13,12 +13,13 @@ var HS256_IGNORE_VALIDATION_MESSAGE =
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}              oauth                             An instance of @type {OAuthAuthenticator}
- * @param  {Object}              options                           Authenticator options.
- * @param  {String}              options.domain                    AuthenticationClient server domain
- * @param  {String}              [options.clientId]                Default client ID.
- * @param  {String}              [options.clientSecret]            Default client Secret.
- * @param  {String}              [options.supportedAlgorithms]     Algorithms that your application expects to receive
+ * @param  {Object}              oauth                               An instance of @type {OAuthAuthenticator}
+ * @param  {Object}              options                             Authenticator options.
+ * @param  {String}              options.domain                      AuthenticationClient server domain
+ * @param  {String}              [options.clientId]                  Default client ID.
+ * @param  {String}              [options.clientSecret]              Default client Secret.
+ * @param  {String}              [options.supportedAlgorithms]       Algorithms that your application expects to receive
+ * @param  {Boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var OAUthWithIDTokenValidation = function(oauth, options) {
   if (!oauth) {
