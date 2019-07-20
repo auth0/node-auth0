@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var nock = require('nock');
 var sinon = require('sinon');
 var assign = Object.assign || require('object.assign');
 var proxyquire = require('proxyquire');
@@ -25,7 +26,10 @@ describe('ManagementClient', function() {
   var withTokenProviderConfig = {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
-    domain: 'auth0-node-sdk.auth0.com'
+    domain: 'auth0-node-sdk.auth0.com',
+    tokenProvider: {
+      enableCache: false
+    }
   };
 
   var withTokenConfig = {
@@ -93,6 +97,39 @@ describe('ManagementClient', function() {
     var client = ManagementClient.bind(null, config);
 
     expect(client).to.throw(ArgumentError, 'Must provide a clientSecret');
+  });
+
+  describe('getAccessToken', function() {
+    it('should return token provided in config', function(done) {
+      var config = assign({}, withTokenConfig);
+      var client = new ManagementClient(config);
+
+      client.getAccessToken().then(function(accessToken) {
+        expect(accessToken).to.equal(withTokenConfig.token);
+        done();
+      });
+    });
+    it('should return token from provider', function(done) {
+      var config = assign({}, withTokenProviderConfig);
+      var client = new ManagementClient(config);
+
+      nock('https://' + config.domain)
+        .post('/oauth/token', function(body) {
+          expect(body.client_id).to.equal(config.clientId);
+          expect(body.client_secret).to.equal(config.clientSecret);
+          expect(body.grant_type).to.equal('client_credentials');
+          return true;
+        })
+        .reply(function(uri, requestBody, cb) {
+          return cb(null, [200, { access_token: 'token', expires_in: 3600 }]);
+        });
+
+      client.getAccessToken().then(function(data) {
+        expect(data).to.equal('token');
+        done();
+        nock.cleanAll();
+      });
+    });
   });
 
   describe('instance properties', function() {
@@ -769,7 +806,12 @@ describe('ManagementClient', function() {
       'getUserBlocks',
       'unblockUser',
       'getUserBlocksByIdentifier',
-      'unblockUserByIdentifier'
+      'unblockUserByIdentifier',
+      'getAccessToken',
+      'getBrandingSettings',
+      'updateBrandingSettings',
+      'getPromptsSettings',
+      'updatePromptsSettings'
     ];
 
     before(function() {
