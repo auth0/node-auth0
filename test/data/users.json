@@ -3,9 +3,7 @@
     "email": "jane.doe@contoso.com",
     "email_verified": true,
     "app_metadata": {
-      "roles": [
-        "admin"
-      ],
+      "roles": ["admin"],
       "plan": "premium"
     },
     "user_metadata": {

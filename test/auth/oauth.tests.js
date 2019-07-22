@@ -583,48 +583,16 @@ describe('OAuthAuthenticator', function() {
       });
     });
 
-    it('should use the default client ID if none specified', function(done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post(path)
-        .query({ client_id: CLIENT_ID })
-        .reply(200);
-
-      this.authenticator.socialSignIn(userData).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
     it('should allow the user to specify a custom client ID', function(done) {
       nock.cleanAll();
 
       var data = extend({}, userData);
-      var request = nock(API_URL)
-        .post(path)
-        .query({ client_id: 'OVERRIDEN_ID' })
-        .reply(200);
-
       data.client_id = 'OVERRIDEN_ID';
+      var request = nock(API_URL)
+        .post(path, data)
+        .reply(200);
 
       this.authenticator.socialSignIn(data).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
-    it('should use the openid scope by default', function(done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .post(path)
-        .query({ scope: 'openid' })
-        .reply(200);
-
-      this.authenticator.socialSignIn(userData).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -635,12 +603,10 @@ describe('OAuthAuthenticator', function() {
       nock.cleanAll();
 
       var data = extend({}, userData);
-      var request = nock(API_URL)
-        .post(path)
-        .query({ scope: 'openid name email' })
-        .reply(200);
-
       data.scope = 'openid name email';
+      var request = nock(API_URL)
+        .post(path, data)
+        .reply(200);
 
       this.authenticator.socialSignIn(data).then(function() {
         expect(request.isDone()).to.be.true;

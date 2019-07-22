@@ -135,13 +135,13 @@ UserBlocksManager.prototype.delete = function(params) {
  *
  * @return  {Promise|undefined}
  */
- UserBlocksManager.prototype.getByIdentifier = function(params) {
-   if (typeof params !== 'object' || typeof params.identifier !== 'string') {
-     throw new ArgumentError('You must provide an user identifier for the getByIdentifier method');
-   }
+UserBlocksManager.prototype.getByIdentifier = function(params) {
+  if (typeof params !== 'object' || typeof params.identifier !== 'string') {
+    throw new ArgumentError('You must provide an user identifier for the getByIdentifier method');
+  }
 
-   return this.userBlocksByIdentifier.get.apply(this.userBlocksByIdentifier, arguments);
- };
+  return this.userBlocksByIdentifier.get.apply(this.userBlocksByIdentifier, arguments);
+};
 
 /**
  * Unblock an user by identifier.
@@ -165,12 +165,14 @@ UserBlocksManager.prototype.delete = function(params) {
  *
  * @return  {Promise|undefined}
  */
- UserBlocksManager.prototype.deleteByIdentifier = function(params) {
-   if (typeof params !== 'object' || typeof params.identifier !== 'string') {
-     throw new ArgumentError('You must provide an user identifier for the deleteByIdentifier method');
-   }
+UserBlocksManager.prototype.deleteByIdentifier = function(params) {
+  if (typeof params !== 'object' || typeof params.identifier !== 'string') {
+    throw new ArgumentError(
+      'You must provide an user identifier for the deleteByIdentifier method'
+    );
+  }
 
-   return this.userBlocksByIdentifier.delete.apply(this.userBlocksByIdentifier, arguments);
- };
+  return this.userBlocksByIdentifier.delete.apply(this.userBlocksByIdentifier, arguments);
+};
 
- module.exports = UserBlocksManager;
+module.exports = UserBlocksManager;

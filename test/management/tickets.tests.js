@@ -109,8 +109,7 @@ describe('TicketsManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .post('/tickets/email-verification')
-        .query({
+        .post('/tickets/email-verification', {
           include_fields: true,
           fields: 'test'
         })

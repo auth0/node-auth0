@@ -7,7 +7,7 @@ var execSync = require('child_process').execSync;
 var fs = require('fs');
 
 if (fs.existsSync('out')) {
-  execSync(`rm -r out`, {stdio: 'inherit'});
+  execSync(`rm -r out`, { stdio: 'inherit' });
 }
 
 if (!fs.existsSync('.release')) {
@@ -16,7 +16,7 @@ if (!fs.existsSync('.release')) {
 }
 var tmp = fs.readFileSync('.release');
 if (fs.existsSync(tmp)) {
-  execSync(`rm -r ${tmp}`, {stdio: 'inherit'});
+  execSync(`rm -r ${tmp}`, { stdio: 'inherit' });
 }
 
-execSync(`rm -r .release`, {stdio: 'inherit'});
+execSync(`rm -r .release`, { stdio: 'inherit' });
