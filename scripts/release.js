@@ -54,5 +54,5 @@ const createDocs = async () => {
   await createDocs();
   await createChangelog();
   await exec('git add docs');
-  await exec(`git commit -s -am "Release v${newVersion}"`);
+  await exec(`git commit -am "Release v${newVersion}"`);
 })();
