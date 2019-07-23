@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.18.0",
+  "version": "2.18.1",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "files": [
@@ -12,10 +12,7 @@
     "test:coverage": "codecov",
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 ./test/**/*.tests.js ./test/*.tests.js --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
-    "release:clean": "node scripts/cleanup.js",
-    "preversion": "node scripts/prepare.js",
-    "version": "node scripts/changelog.js && node scripts/jsdocs.js",
-    "postversion": "npm run release:clean",
+    "version": "node ./scripts/release.js",
     "precommit": "pretty-quick --staged"
   },
   "repository": {
