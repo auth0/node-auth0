@@ -807,11 +807,7 @@ describe('ManagementClient', function() {
       'unblockUser',
       'getUserBlocksByIdentifier',
       'unblockUserByIdentifier',
-      'getAccessToken',
-      'getBrandingSettings',
-      'updateBrandingSettings',
-      'getPromptsSettings',
-      'updatePromptsSettings'
+      'getAccessToken'
     ];
 
     before(function() {
