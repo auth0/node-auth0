@@ -10,7 +10,7 @@ var pem = require('pem');
 // Constants.
 var DOMAIN = 'tenant.auth0.com';
 var CLIENT_ID = 'TEST_CLIENT_ID';
-var CLIENT_SECRET = new Buffer('TEST_CLIENT_SECRET', 'base64');
+var CLIENT_SECRET = Buffer.from('TEST_CLIENT_SECRET', 'base64');
 
 var OAUthWithIDTokenValidation = require('../../src/auth/OAUthWithIDTokenValidation');
 var PARAMS = { params: true };
@@ -94,7 +94,7 @@ describe('OAUthWithIDTokenValidation', function() {
           return new Promise(res => res({ id_token: 'foobar' }));
         }
       };
-      sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+      sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         expect(idtoken).to.be.equal('foobar');
         expect(options).to.be.eql({
           audience: CLIENT_ID,
@@ -115,7 +115,7 @@ describe('OAUthWithIDTokenValidation', function() {
           return new Promise(res => res({ id_token: 'foobar' }));
         }
       };
-      sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+      sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         callback(null, { verification: 'result' });
       });
       var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
@@ -130,7 +130,7 @@ describe('OAUthWithIDTokenValidation', function() {
           return new Promise(res => res({ id_token: 'foobar' }));
         }
       };
-      sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+      sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         callback({ the: 'error' });
       });
       var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
@@ -145,7 +145,7 @@ describe('OAUthWithIDTokenValidation', function() {
           return new Promise(res => res({ id_token: 'foobar' }));
         }
       };
-      sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+      sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         getKey({ alg: 'HS256' }, function(err, key) {
           expect(key).to.be.eql(Buffer.from(CLIENT_SECRET, 'base64'));
           done();
@@ -162,7 +162,7 @@ describe('OAUthWithIDTokenValidation', function() {
           return new Promise(res => res({ id_token: 'foobar' }));
         }
       };
-      sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+      sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         getKey({ alg: 'HS256' }, function(err, key) {
           expect(err.message).to.contain(
             'Validation of `id_token` requires a `clientSecret` when using the HS256 algorithm. To ensure tokens are validated, please switch the signing algorithm to RS256 or provide a `clientSecret` in the constructor.'
@@ -195,7 +195,7 @@ describe('OAUthWithIDTokenValidation', function() {
           'jwks-rsa': jwksClientStub
         });
 
-        sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+        sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
           getKey({ alg: 'RS256' }, function(err, key) {
             expect(jwksClientStub.getCall(0).args[0].jwksUri).to.be.equal(
               'https://tenant.auth0.com/.well-known/jwks.json'
@@ -226,7 +226,7 @@ describe('OAUthWithIDTokenValidation', function() {
           'jwks-rsa': jwksClientStub
         });
 
-        sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+        sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
           getKey({ kid: 'kid', alg: 'RS256' }, function(err, key) {
             expect(err).to.be.eql({ the: 'error' });
             done();
@@ -256,7 +256,7 @@ describe('OAUthWithIDTokenValidation', function() {
           'jwks-rsa': jwksClientStub
         });
 
-        sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+        sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
           getKey({ kid: 'kid', alg: 'RS256' }, function(err, key) {
             expect(key).to.be.equal('publicKey');
             done();
@@ -286,7 +286,7 @@ describe('OAUthWithIDTokenValidation', function() {
           'jwks-rsa': jwksClientStub
         });
 
-        sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+        sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
           getKey({ kid: 'kid', alg: 'RS256' }, function(err, key) {
             expect(key).to.be.equal('publicKey');
             done();
@@ -316,7 +316,7 @@ describe('OAUthWithIDTokenValidation', function() {
           'jwks-rsa': jwksClientStub
         });
 
-        sinon.stub(jwt, 'verify', function(idtoken, getKey, options, callback) {
+        sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
           getKey({ kid: 'kid', alg: 'RS256' }, function(err, key) {
             expect(key).to.be.equal('rsaPublicKey');
             done();

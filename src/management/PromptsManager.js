@@ -21,36 +21,36 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.retry]    Retry Policy Config
  */
 var PromptsManager = function(options) {
-    if (options === null || typeof options !== 'object') {
-        throw new ArgumentError('Must provide manager options');
-    }
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide manager options');
+  }
 
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-        throw new ArgumentError('Must provide a base URL for the API');
-    }
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
+  }
 
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-        throw new ArgumentError('The provided base URL is invalid');
-    }
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
 
-    var clientOptions = {
-        errorFormatter: { message: 'message', name: 'error' },
-        headers: options.headers,
-        query: { repeatParams: false }
-    };
+  var clientOptions = {
+    errorFormatter: { message: 'message', name: 'error' },
+    headers: options.headers,
+    query: { repeatParams: false }
+  };
 
-    /**
-     * Provides an abstraction layer for consuming the
-     * {@link https://auth0.com/docs/api/management/v2#!/Prompts Prompts endpoint}.
-     *
-     * @type {external:RestClient}
-     */
-    var auth0RestClient = new Auth0RestClient(
-        options.baseUrl + '/prompts',
-        clientOptions,
-        options.tokenProvider
-    );
-    this.resource = new RetryRestClient(auth0RestClient, options.retry);
+  /**
+   * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/management/v2#!/Prompts Prompts endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/prompts',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
 };
 
 /**

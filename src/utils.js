@@ -14,7 +14,7 @@ var utils = (module.exports = {});
  * @memberOf  module:utils
  */
 utils.jsonToBase64 = function(json) {
-  var bytes = new Buffer(JSON.stringify(json));
+  var bytes = Buffer.from(JSON.stringify(json));
 
   return bytes
     .toString('base64')
