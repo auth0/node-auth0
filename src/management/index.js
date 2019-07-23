@@ -30,8 +30,6 @@ var EmailTemplatesManager = require('./EmailTemplatesManager');
 var GuardianManager = require('./GuardianManager');
 var CustomDomainsManager = require('./CustomDomainsManager');
 var RolesManager = require('./RolesManager');
-var BrandingManager = require('./BrandingManager');
-var PromptsManager = require('./PromptsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -306,22 +304,6 @@ var ManagementClient = function(options) {
    * @type {RolesManager}
    */
   this.roles = new RolesManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * branding endpoint.
-   *
-   * @type {BrandingManager}
-   */
-  this.branding = new BrandingManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * prompts endpoint.
-   *
-   * @type {PromptsManager}
-   */
-  this.prompts = new PromptsManager(managerOptions);
 };
 
 /**
@@ -2843,86 +2825,5 @@ utils.wrapPropertyMethod(ManagementClient, 'getUsersInRole', 'roles.getUsers');
  * @return {Promise}   Promise returning an access_token.
  */
 utils.wrapPropertyMethod(ManagementClient, 'getAccessToken', 'tokenProvider.getAccessToken');
-
-/** Get branding settings.
- *
- * @method    getBrandingSettings
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @example
- * management.getBrandingSettings(function (err, settings) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(settings);
- * });
- *
- * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getSettings');
-
-/**
- * Update branding settings.
- *
- * @method    updateBrandingSettings
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @example
- * management.updateBrandingSettings(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @param   {Object}    data  The new branding settings.
- * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ManagementClient, 'updateBrandingSettings', 'branding.updateSettings');
-
-/**
- * Get prompts settings..
- *
- * @method    getPromptsSettings
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @example
- * management.getPromptsSettings(function (err, settings) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(settings);
- * });
- *
- * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ManagementClient, 'getPromptsSettings', 'prompts.getSettings');
-
-/**
- * Update prompts settings.
- *
- * @method    updatePromptsSettings
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @example
- * management.updatePromptsSettings(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @param   {Object}    data  The new prompts settings.
- * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ManagementClient, 'updatePromptsSettings', 'prompts.updateSettings');
 
 module.exports = ManagementClient;
