@@ -37,11 +37,12 @@ var BASE_URL_FORMAT = 'https://%s';
  *   clientId: '{OPTIONAL_CLIENT_ID}'
  * });
  *
- * @param   {Object}  options                         Options for the Authentication Client SDK.
- * @param   {String}  options.domain                  AuthenticationClient server domain.
- * @param   {String}  [options.clientId]              Default client ID.
- * @param   {String}  [options.clientSecret]          Default client Secret.
- * @param   {String}  [options.supportedAlgorithms]   Algorithms that your application expects to receive
+ * @param   {Object}  options                           Options for the Authentication Client SDK.
+ * @param   {String}  options.domain                    AuthenticationClient server domain.
+ * @param   {String}  [options.clientId]                Default client ID.
+ * @param   {String}  [options.clientSecret]            Default client Secret.
+ * @param   {String}  [options.supportedAlgorithms]     Algorithms that your application expects to receive
+ * @param  {Boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {
@@ -61,7 +62,8 @@ var AuthenticationClient = function(options) {
       'Content-Type': 'application/json'
     },
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
-    supportedAlgorithms: options.supportedAlgorithms
+    supportedAlgorithms: options.supportedAlgorithms,
+    __bypassIdTokenValidation: options.__bypassIdTokenValidation
   };
 
   if (options.telemetry !== false) {

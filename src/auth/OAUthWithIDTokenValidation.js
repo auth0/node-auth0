@@ -13,12 +13,13 @@ var HS256_IGNORE_VALIDATION_MESSAGE =
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}              oauth                           An instance of @type {OAuthAuthenticator}
- * @param  {Object}              options                         Authenticator options.
- * @param  {String}              options.domain                  AuthenticationClient server domain
- * @param  {String}              [options.clientId]              Default client ID.
- * @param  {String}              [options.clientSecret]          Default client Secret.
- * @param  {String}              [options.supportedAlgorithms]   Algorithms that your application expects to receive
+ * @param  {Object}              oauth                               An instance of @type {OAuthAuthenticator}
+ * @param  {Object}              options                             Authenticator options.
+ * @param  {String}              options.domain                      AuthenticationClient server domain
+ * @param  {String}              [options.clientId]                  Default client ID.
+ * @param  {String}              [options.clientSecret]              Default client Secret.
+ * @param  {String}              [options.supportedAlgorithms]       Algorithms that your application expects to receive
+ * @param  {Boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
  */
 var OAUthWithIDTokenValidation = function(oauth, options) {
   if (!oauth) {
@@ -34,6 +35,7 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
   }
 
   this.oauth = oauth;
+  this.__bypassIdTokenValidation = options.__bypassIdTokenValidation;
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
   this.domain = options.domain;
@@ -56,8 +58,11 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
  * @return  {Promise|undefined}
  */
 OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
+  const _this = this;
   const createAndValidate = this.oauth.create(params, data).then(r => {
-    var _this = this;
+    if (_this.__bypassIdTokenValidation) {
+      return r;
+    }
     if (r.id_token) {
       function getKey(header, callback) {
         if (header.alg === 'HS256') {
