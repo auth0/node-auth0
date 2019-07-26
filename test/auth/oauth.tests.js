@@ -67,6 +67,9 @@ describe('OAuthAuthenticator', function() {
       password: 'pwd',
       connection: 'Username-Password-Authentication'
     };
+    var options = {
+      forwardedFor: '0.0.0.0'
+    };
 
     beforeEach(function() {
       this.authenticator = new Authenticator(validOptions);
@@ -230,6 +233,26 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .signIn(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
     it('should use OAUthWithIDTokenValidation', function(done) {
       this.authenticator
         .signIn(userData)
@@ -246,6 +269,9 @@ describe('OAuthAuthenticator', function() {
     var userData = {
       username: 'username',
       password: 'pwd'
+    };
+    var options = {
+      forwardedFor: '0.0.0.0'
     };
 
     beforeEach(function() {
@@ -400,6 +426,26 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .passwordGrant(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
     it('should use OAUthWithIDTokenValidation', function(done) {
       this.authenticator
         .passwordGrant(userData)
@@ -416,6 +462,10 @@ describe('OAuthAuthenticator', function() {
     var userData = {
       refresh_token: 'refresh_token'
     };
+    var options = {
+      forwardedFor: '0.0.0.0'
+    };
+
     beforeEach(function() {
       this.authenticator = new Authenticator(validOptions);
       this.request = nock(API_URL)
@@ -484,6 +534,26 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .refreshToken(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
     it('should use refresh_token as default grant type', function(done) {
       nock.cleanAll();
       var request = nock(API_URL)
@@ -506,6 +576,9 @@ describe('OAuthAuthenticator', function() {
     var userData = {
       access_token: 'TEST_ACCESS_TOKEN',
       connection: 'facebook'
+    };
+    var options = {
+      forwardedFor: '0.0.0.0'
     };
 
     beforeEach(function() {
@@ -613,6 +686,25 @@ describe('OAuthAuthenticator', function() {
 
         done();
       });
+    });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .socialSignIn(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
     });
 
     it('should use application/json as Content-Type', function(done) {
@@ -760,11 +852,32 @@ describe('OAuthAuthenticator', function() {
         expect(request.isDone()).to.be.true;
       });
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      const extension = { forwardedFor: '0.0.0.0' };
+      var data = extend(extension, options);
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === extension.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .clientCredentialsGrant(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('#authorizationCodeGrant', function() {
     var path = '/oauth/token';
-    var data = {
+    var options = {
       code: 'auth_code',
       redirect_uri: API_URL
     };
@@ -798,12 +911,12 @@ describe('OAuthAuthenticator', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.authenticator.authorizationCodeGrant(data, done.bind(null, null));
+      this.authenticator.authorizationCodeGrant(options, done.bind(null, null));
     });
 
     it('should return a promise when no callback is provided', function(done) {
       this.authenticator
-        .authorizationCodeGrant(data)
+        .authorizationCodeGrant(options)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -812,7 +925,7 @@ describe('OAuthAuthenticator', function() {
       var request = this.request;
 
       this.authenticator
-        .authorizationCodeGrant(data)
+        .authorizationCodeGrant(options)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -826,8 +939,8 @@ describe('OAuthAuthenticator', function() {
 
       var request = nock(API_URL)
         .post(path, function(body) {
-          for (var property in data) {
-            if (data[property] !== body[property]) {
+          for (var property in options) {
+            if (options[property] !== body[property]) {
               return false;
             }
           }
@@ -837,7 +950,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizationCodeGrant(data)
+        .authorizationCodeGrant(options)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -856,7 +969,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizationCodeGrant(data)
+        .authorizationCodeGrant(options)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -875,7 +988,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
-        .authorizationCodeGrant(data)
+        .authorizationCodeGrant(options)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
@@ -894,6 +1007,27 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
 
       this.authenticator
+        .authorizationCodeGrant(options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      const extension = { forwardedFor: '0.0.0.0' };
+      var data = extend(extension, options);
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === extension.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
         .authorizationCodeGrant(data)
         .then(function() {
           expect(request.isDone()).to.be.true;
@@ -902,9 +1036,10 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
     it('should use OAUthWithIDTokenValidation', function(done) {
       this.authenticator
-        .authorizationCodeGrant(data)
+        .authorizationCodeGrant(options)
         .then(function() {
           expect(OAUthWithIDTokenValidation.prototype.create.calledOnce).to.be.true;
           done();
