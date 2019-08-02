@@ -22,7 +22,7 @@ For more information about [auth0](https://auth0.com) check our [documentation p
 
 ## Authentication API Client
 
-This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
 
 The **AuthenticationClient** constructor takes an _optional_ client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
