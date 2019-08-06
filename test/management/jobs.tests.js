@@ -87,6 +87,15 @@ describe('JobsManager', function() {
       });
     });
 
+    it('should throw an ArgumentError if an invalid id is passed', function(done) {
+      try {
+        this.jobs.errors({ id: 12345 }, function() {});
+      } catch (err) {
+        expect(err).to.exist;
+        done();
+      }
+    });
+
     it('should pass the body of the response to the "then" handler', function(done) {
       nock.cleanAll();
 
@@ -180,6 +189,15 @@ describe('JobsManager', function() {
         expect(err).to.exist;
         done();
       });
+    });
+
+    it('should throw an ArgumentError if an invalid id is passed', function(done) {
+      try {
+        this.jobs.errors({ id: null }, function() {});
+      } catch (err) {
+        expect(err).to.exist;
+        done();
+      }
     });
 
     it('should pass the body of the response to the "then" handler', function(done) {

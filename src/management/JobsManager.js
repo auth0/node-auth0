@@ -207,7 +207,7 @@ JobsManager.prototype.importUsers = function(data, cb) {
                 error.text = JSON.parse(res.body).message;
               }
             } catch (ex) {
-              console.error(ex);
+              // Ignore the error.
             }
             reject(error);
           }
