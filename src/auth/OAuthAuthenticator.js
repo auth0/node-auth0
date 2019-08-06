@@ -233,17 +233,13 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, options, cb) {
  *
  * @param   {Object}    userData                User credentials object.
  * @param   {String}    userData.refresh_token  Refresh token.
- * @param   {Object}    [options]               Additional options.
- * @param   {String}    [options.forwardedFor]  Value to be used for auth0-forwarded-for header
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.refreshToken = function(userData, options, cb) {
-  var { options, cb } = sanitizeArguments(options, cb);
-  var defaultParams = {
+OAuthAuthenticator.prototype.refreshToken = function(userData, cb) {
+  var params = {
     type: 'token'
   };
-  var params = extend(defaultParams, getParamsFromOptions(options));
   var defaultFields = {
     client_id: this.clientId,
     grant_type: 'refresh_token'
@@ -267,20 +263,16 @@ OAuthAuthenticator.prototype.refreshToken = function(userData, options, cb) {
  * @method    socialSignIn
  * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
- * @param   {Object}    data                   User credentials object.
- * @param   {String}    data.access_token      User access token.
- * @param   {String}    data.connection        Identity provider.
- * @param   {Object}    [options]              Additional options.
- * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
+ * @param   {Object}    data                User credentials object.
+ * @param   {String}    data.access_token   User access token.
+ * @param   {String}    data.connection     Identity provider.
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.socialSignIn = function(data, options, cb) {
-  var { options, cb } = sanitizeArguments(options, cb);
-  var defaultParams = {
+OAuthAuthenticator.prototype.socialSignIn = function(data, cb) {
+  var params = {
     type: 'access_token'
   };
-  var params = extend(defaultParams, getParamsFromOptions(options));
 
   if (typeof data !== 'object') {
     throw new ArgumentError('Missing user credential objects');
@@ -302,10 +294,9 @@ OAuthAuthenticator.prototype.socialSignIn = function(data, options, cb) {
 };
 
 OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
-  var defaultParams = {
+  var params = {
     type: 'token'
   };
-  var params = extend(defaultParams, getParamsFromOptions(options));
 
   var defaultFields = {
     grant_type: 'client_credentials',
@@ -365,18 +356,16 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *   console.log(userData);
  * });
  *
- * @param   {Object}    options                  Authorization code payload
- * @param   {String}    options.code             Code in URL returned after authentication
- * @param   {String}    option.redirect_uri      The URL to which Auth0 will redirect the browser after authorization has been granted by the user.
- * @param   {String}    [options.forwardedFor]   Value to be used for auth0-forwarded-for header
+ * @param   {Object}    data                  Authorization code payload
+ * @param   {String}    userData.code         Code in URL returned after authentication
+ * @param   {String}    userData.redirect_uri The URL to which Auth0 will redirect the browser after authorization has been granted by the user.
  *
  * @return  {Promise|undefined}
  */
 OAuthAuthenticator.prototype.authorizationCodeGrant = function(options, cb) {
-  var defaultParams = {
+  var params = {
     type: 'token'
   };
-  var params = extend(defaultParams, getParamsFromOptions(options));
 
   var defaultFields = {
     grant_type: 'authorization_code',
