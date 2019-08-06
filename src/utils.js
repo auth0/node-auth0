@@ -102,3 +102,16 @@ utils.maybeDecode = url => {
   }
   return url;
 };
+
+utils.sanitizeArguments = function(optionsCandidate, cbCandidate) {
+  if (optionsCandidate instanceof Function) {
+    return {
+      cb: optionsCandidate,
+      options: undefined
+    };
+  }
+  return {
+    cb: cbCandidate,
+    options: optionsCandidate
+  };
+};

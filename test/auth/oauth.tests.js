@@ -67,6 +67,9 @@ describe('OAuthAuthenticator', function() {
       password: 'pwd',
       connection: 'Username-Password-Authentication'
     };
+    var options = {
+      forwardedFor: '0.0.0.0'
+    };
 
     beforeEach(function() {
       this.authenticator = new Authenticator(validOptions);
@@ -230,6 +233,26 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .signIn(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
     it('should use OAUthWithIDTokenValidation', function(done) {
       this.authenticator
         .signIn(userData)
@@ -246,6 +269,9 @@ describe('OAuthAuthenticator', function() {
     var userData = {
       username: 'username',
       password: 'pwd'
+    };
+    var options = {
+      forwardedFor: '0.0.0.0'
     };
 
     beforeEach(function() {
@@ -400,6 +426,26 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .passwordGrant(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
     it('should use OAUthWithIDTokenValidation', function(done) {
       this.authenticator
         .passwordGrant(userData)
@@ -416,6 +462,7 @@ describe('OAuthAuthenticator', function() {
     var userData = {
       refresh_token: 'refresh_token'
     };
+
     beforeEach(function() {
       this.authenticator = new Authenticator(validOptions);
       this.request = nock(API_URL)
@@ -902,6 +949,7 @@ describe('OAuthAuthenticator', function() {
         })
         .catch(done);
     });
+
     it('should use OAUthWithIDTokenValidation', function(done) {
       this.authenticator
         .authorizationCodeGrant(data)
