@@ -1,9 +1,23 @@
 var extend = require('util')._extend;
+var sanitizeArguments = require('../utils').sanitizeArguments;
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
 var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
+
+function getParamsFromOptions(options) {
+  const params = {};
+  if (!options || typeof options !== 'object') {
+    return params;
+  }
+  if (options.forwardedFor) {
+    params._requestCustomizer = function(req) {
+      req.set('auth0-forwarded-for', options.forwardedFor);
+    };
+  }
+  return params;
+}
 
 /**
  * @class
@@ -75,17 +89,21 @@ var OAuthAuthenticator = function(options) {
  *   console.log(userData);
  * });
  *
- * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     User password.
- * @param   {String}    userData.connection   The identity provider in use.
+ * @param   {Object}    userData               User credentials object.
+ * @param   {String}    userData.username      Username.
+ * @param   {String}    userData.password      User password.
+ * @param   {String}    userData.connection    The identity provider in use.
+ * @param   {Object}    [options]              Additional options.
+ * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.signIn = function(userData, cb) {
-  var params = {
+OAuthAuthenticator.prototype.signIn = function(userData, options, cb) {
+  var { options, cb } = sanitizeArguments(options, cb);
+  var defaultParams = {
     type: 'ro'
   };
+  var params = extend(defaultParams, getParamsFromOptions(options));
   var defaultFields = {
     client_id: this.clientId,
     grant_type: 'password',
@@ -140,17 +158,21 @@ OAuthAuthenticator.prototype.signIn = function(userData, cb) {
  *   console.log(userData);
  * });
  *
- * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     User password.
- * @param   {String}    [userData.realm]      Name of the realm to use to authenticate or the connection name
+ * @param   {Object}    userData               User credentials object.
+ * @param   {String}    userData.username      Username.
+ * @param   {String}    userData.password      User password.
+ * @param   {String}    [userData.realm]       Name of the realm to use to authenticate or the connection name
+ * @param   {Object}    [options]              Additional options.
+ * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.passwordGrant = function(userData, cb) {
-  var params = {
+OAuthAuthenticator.prototype.passwordGrant = function(userData, options, cb) {
+  var { options, cb } = sanitizeArguments(options, cb);
+  var defaultParams = {
     type: 'token'
   };
+  var params = extend(defaultParams, getParamsFromOptions(options));
   var defaultFields = {
     client_id: this.clientId,
     client_secret: this.clientSecret,
