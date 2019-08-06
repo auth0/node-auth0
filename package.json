@@ -33,14 +33,20 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
+    "@auth0/hooks-api-core": "https://auth0-hooks-api-core-test.s3.amazonaws.com/auth0-hooks-api-core-1.0.0.tgz",
     "bluebird": "^2.10.2",
+    "inversify": "^5.0.1",
+    "inversify-binding-decorators": "^4.0.0",
+    "inversify-token": "^5.1.0",
     "jsonwebtoken": "^8.3.0",
     "jwks-rsa": "^1.4.0",
     "lru-memoizer": "^1.12.0",
     "object.assign": "^4.0.4",
+    "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
     "rest-facade": "^1.10.1",
-    "retry": "^0.10.1"
+    "retry": "^0.10.1",
+    "ts-cqs": "^0.1.0"
   },
   "devDependencies": {
     "chai": "^2.2.0",
