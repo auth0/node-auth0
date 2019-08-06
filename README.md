@@ -16,13 +16,13 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ## Documentation
 
-You can find this library documentation in this [page](http://auth0.github.io/node-auth0/).
+You can find this library documentation in this [page](https://auth0.github.io/node-auth0/).
 
-For more information about [auth0](http://auth0.com) check our [documentation page](http://docs.auth0.com/).
+For more information about [auth0](https://auth0.com) check our [documentation page](https://docs.auth0.com/).
 
 ## Authentication API Client
 
-This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/auth-api).
+This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
 
 The **AuthenticationClient** constructor takes an _optional_ client ID, if specified it will be used as default value for all endpoints that accept a client ID.
 
@@ -150,11 +150,11 @@ This project is licensed under the MIT license. See the [LICENSE](LICENSE) file 
 
 [npm-image]: https://img.shields.io/npm/v/auth0.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/auth0
-[circleci-image]: http://img.shields.io/circleci/project/github/auth0/node-auth0.svg?branch=master&style=flat-square
+[circleci-image]: https://img.shields.io/circleci/project/github/auth0/node-auth0.svg?branch=master&style=flat-square
 [circleci-url]: https://circleci.com/gh/auth0/node-auth0
 [codecov-image]: https://img.shields.io/codecov/c/github/auth0/node-auth0.svg?style=flat-square
 [codecov-url]: https://codecov.io/github/auth0/node-auth0?branch=master
-[license-image]: http://img.shields.io/npm/l/auth0.svg?style=flat-square
+[license-image]: https://img.shields.io/npm/l/auth0.svg?style=flat-square
 [license-url]: #license
-[downloads-image]: http://img.shields.io/npm/dm/auth0.svg?style=flat-square
+[downloads-image]: https://img.shields.io/npm/dm/auth0.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/auth0
