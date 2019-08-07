@@ -42,9 +42,6 @@ out/
 test-results.xml
 .nyc_output
 
-# Release process
-.release
-.release-tmp-*/
 
 # npm
 package-lock.json
