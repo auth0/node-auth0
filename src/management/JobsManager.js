@@ -60,6 +60,19 @@ var JobsManager = function(options) {
 
   /**
    * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/v2#!/Jobs/:id/errors Errors endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var jobErrorsRestClient = new Auth0RestClient(
+    options.baseUrl + '/jobs/:id/errors',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.jobErrors = new RetryRestClient(jobErrorsRestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for consuming the
    * {@link https://auth0.com/docs/api/v2#!/Jobs/post_users_exports Create job to export users endpoint}
    *
    * @type {external:RestClient}
@@ -189,6 +202,13 @@ JobsManager.prototype.importUsers = function(data, cb) {
             error.status = res.statusCode;
             error.method = method;
             error.text = res.text;
+            try {
+              if (!error.text && res.body) {
+                error.text = JSON.parse(res.body).message;
+              }
+            } catch (ex) {
+              // Ignore the error.
+            }
             reject(error);
           }
           resolve(res);
@@ -262,6 +282,45 @@ JobsManager.prototype.exportUsers = function(data, cb) {
   }
 
   return this.usersExports.create(data);
+};
+
+/**
+ * Given a job ID, retrieve the failed/errored items
+ *
+ * @method   get
+ * @memberOf module:management.JobsManager.prototype
+ *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * management.jobs.errors(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+JobsManager.prototype.errors = function(params, cb) {
+  if (!params.id || typeof params.id !== 'string') {
+    throw new ArgumentError('The id parameter must be a valid job id');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.jobErrors.get(params, cb);
+  }
+
+  // Return a promise.
+  return this.jobErrors.get(params);
 };
 
 /**

@@ -87,6 +87,15 @@ describe('JobsManager', function() {
       });
     });
 
+    it('should throw an ArgumentError if an invalid id is passed', function(done) {
+      try {
+        this.jobs.errors({ id: 12345 }, function() {});
+      } catch (err) {
+        expect(err).to.exist;
+        done();
+      }
+    });
+
     it('should pass the body of the response to the "then" handler', function(done) {
       nock.cleanAll();
 
@@ -125,6 +134,110 @@ describe('JobsManager', function() {
         .reply(200);
 
       this.jobs.get({ id: this.id }).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the parameters in the query-string', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/jobs/' + this.id)
+        .query({
+          include_fields: true,
+          fields: 'test'
+        })
+        .reply(200);
+
+      this.jobs.get({ id: this.id, include_fields: true, fields: 'test' }).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+  });
+
+  // Error retrieval tests
+  describe('#errors', function() {
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/jobs/' + this.id + '/errors')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.jobs.errors({ id: this.id }, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.jobs
+        .errors({ id: this.id })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/jobs/' + this.id + '/errors')
+        .reply(500);
+
+      this.jobs.errors({ id: this.id }).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should throw an ArgumentError if an invalid id is passed', function(done) {
+      try {
+        this.jobs.errors({ id: null }, function() {});
+      } catch (err) {
+        expect(err).to.exist;
+        done();
+      }
+    });
+
+    it('should pass the body of the response to the "then" handler', function(done) {
+      nock.cleanAll();
+
+      var data = [{ test: true }];
+      var request = nock(API_URL)
+        .get('/jobs/' + this.id + '/errors')
+        .reply(200, data);
+
+      this.jobs.errors({ id: this.id }).then(function(blacklistedTokens) {
+        expect(blacklistedTokens).to.be.an.instanceOf(Array);
+
+        expect(blacklistedTokens.length).to.equal(data.length);
+
+        expect(blacklistedTokens[0].test).to.equal(data[0].test);
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/jobs/:id/errors', function(done) {
+      var request = this.request;
+
+      this.jobs.errors({ id: this.id }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/jobs/' + this.id + '/errors')
+        .matchHeader('Authorization', 'Bearer ' + token)
+        .reply(200);
+
+      this.jobs.errors({ id: this.id }).then(function() {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -199,6 +312,31 @@ describe('JobsManager', function() {
         expect(err.message).to.equal(
           'cannot POST https://tenant.auth0.com/jobs/users-imports (500)'
         );
+        done();
+      });
+    });
+
+    it('should pass rest-api json error messages to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply((uri, requestBody) => {
+          return [
+            429,
+            {
+              statusCode: 429,
+              error: 'Too Many Requests',
+              message: 'There are 4 active import users jobs'
+            }
+          ];
+        });
+
+      this.jobs.importUsers(data).catch(function(err) {
+        expect(err.message).to.equal(
+          'cannot POST https://tenant.auth0.com/jobs/users-imports (429)'
+        );
+        expect(err.text).to.equal('There are 4 active import users jobs');
         done();
       });
     });
