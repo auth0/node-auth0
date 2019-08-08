@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.18.1](https://github.com/auth0/node-auth0/tree/v2.19.0) (2019-08-08)
+
+**Added**
+
+- Implement auth0-forwarded-for header passing in Authentication Client [\#401](https://github.com/auth0/node-auth0/pull/401) ([kjarmicki](https://github.com/kjarmicki))
+
+**Changed**
+
+- Improve JobManager (get errors + parse error message when importing users) [\#407](https://github.com/auth0/node-auth0/pull/407) ([jbauth0](https://github.com/jbauth0))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.18.1...v2.19.0)
+
 ## [v2.18.0](https://github.com/auth0/node-auth0/tree/v2.18.1) (2019-07-23)
 
 **Changed**
