@@ -33,8 +33,8 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
-    "@auth0/hooks-api-core": "https://auth0-hooks-api-core-test.s3.amazonaws.com/auth0-hooks-api-core-1.0.0.tgz",
-    "bluebird": "^2.10.2",
+    "@auth0/hooks-api-core": "https://tmp-hooks-client.s3-us-west-1.amazonaws.com/auth0-hooks-api-core-1.0.0.tgz",
+    "bluebird": "^3.5.5",
     "inversify": "^5.0.1",
     "inversify-binding-decorators": "^4.0.0",
     "inversify-token": "^5.1.0",

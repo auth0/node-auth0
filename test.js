@@ -46,6 +46,17 @@ management.hooks
     }
   })
   .then(hook => {
+    console.log('hook created');
+    console.log(hook);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
+management.hooks
+  .get('cce-hook')
+  .then(hook => {
+    console.log('hook retreived');
     console.log(hook);
   })
   .catch(err => {

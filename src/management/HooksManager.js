@@ -45,4 +45,25 @@ var HooksManager = function(options) {
  */
 utils.wrapPropertyMethod(HooksManager, 'create', 'resource.createHook');
 
+/**
+ * Get a hook by id.
+ *
+ * @method    get
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * management.hooks.get(id, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Rule created.
+ * });
+ *
+ * @param   {string}    id     Hook data object.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'get', 'resource.getHookById');
+
 module.exports = HooksManager;
