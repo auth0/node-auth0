@@ -69,5 +69,8 @@
     "sinon": "^1.17.1",
     "string-replace-webpack-plugin": "0.0.3",
     "webpack": "^1.12.14"
+  },
+  "publishConfig":{
+    "registry": "https://a0us.jfrog.io/a0us/api/npm/npm/"
   }
 }
