@@ -28,28 +28,28 @@ module.exports = function(client, scope, audience, context, cb) {
   cb(null, access_token);
 };
 `;
-
-management.hooks
-  .create({
-    triggerId: 'credentials-exchange',
-    name: 'cce hook', // Also testing that kebab casing works
-    active: true,
-    code: hook_temlate,
-    secrets: {
-      'api-key': 'my custom api key'
-    },
-    dependencies: {
-      bcrypt: '3.0.6'
-    }
-  })
-  .then(hook => {
-    console.log('hook created');
-    console.log(hook);
-    return getHook();
-  })
-  .catch(err => {
-    console.error(err);
-  });
+function createHook() {
+  management.hooks
+    .create({
+      triggerId: 'credentials-exchange',
+      name: 'cce hook', // Also testing that kebab casing works
+      active: true,
+      code: hook_temlate,
+      secrets: {
+        'api-key': 'my custom api key'
+      },
+      dependencies: {
+        bcrypt: '3.0.6'
+      }
+    })
+    .then(hook => {
+      console.log('hook created');
+      console.log(hook);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
 
 function getHook() {
   return management.hooks
@@ -57,7 +57,6 @@ function getHook() {
     .then(hook => {
       console.log('hook retreived');
       console.log(hook);
-      return deleteHook();
     })
     .catch(err => {
       console.error(err);
@@ -70,6 +69,21 @@ function deleteHook() {
       console.log('hook deleted');
     })
     .catch(err => {
-      console.err(err);
+      console.error(err);
     });
 }
+
+function getAllHooks() {
+  return management.hooks
+    .getAll(0, 100)
+    .then(hook => {
+      console.log('hook retreived');
+      console.log(hook);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
+createHook();
+//getAllHooks();

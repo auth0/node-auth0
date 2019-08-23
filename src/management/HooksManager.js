@@ -24,6 +24,30 @@ var HooksManager = function(options) {
 };
 
 /**
+ * Get all rules.
+ *
+ * @method    getAll
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * management.hooks.getAll(0, 100, function (err, hooks) {
+ *   console.log(hooks.length);
+ * });
+ *
+ * @param   {Number}    [offset]   The number of records to skip
+ * @param   {Number}    [limit]     Number of records to return
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'getAll', 'resource.getHooks');
+
+/**
  * Create a new hook.
  *
  * @method    create
