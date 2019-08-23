@@ -1,8 +1,5 @@
 const ManagementClient = require('./src/index').ManagementClient;
 
-process.env.WEBTASK_API_TOKEN = '<your sandbox token>';
-process.env.WEBTASK_API_URL = '<sandbox url>';
-
 var management = new ManagementClient({
   token: '<management api token>',
   domain: 'keystone-test.auth0.com'
@@ -48,17 +45,31 @@ management.hooks
   .then(hook => {
     console.log('hook created');
     console.log(hook);
+    return getHook();
   })
   .catch(err => {
     console.error(err);
   });
 
-management.hooks
-  .get('cce-hook')
-  .then(hook => {
-    console.log('hook retreived');
-    console.log(hook);
-  })
-  .catch(err => {
-    console.error(err);
-  });
+function getHook() {
+  return management.hooks
+    .get('cce-hook')
+    .then(hook => {
+      console.log('hook retreived');
+      console.log(hook);
+      return deleteHook();
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+function deleteHook() {
+  return management.hooks
+    .delete('cce-hook')
+    .then(() => {
+      console.log('hook deleted');
+    })
+    .catch(err => {
+      console.err(err);
+    });
+}

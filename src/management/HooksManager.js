@@ -66,4 +66,26 @@ utils.wrapPropertyMethod(HooksManager, 'create', 'resource.createHook');
  */
 utils.wrapPropertyMethod(HooksManager, 'get', 'resource.getHookById');
 
+/**
+ * Delete an existing hook.
+ *
+ * @method    delete
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * management.hooks.delete(id, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook deleted.
+ * });
+ *
+ * @param   {String}    id        Hook ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'delete', 'resource.deleteHookById');
+
 module.exports = HooksManager;
