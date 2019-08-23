@@ -1,5 +1,5 @@
 {
-  "name": "auth0",
+  "name": "auth0-ext-alpha",
   "version": "2.19.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
