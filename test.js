@@ -1,8 +1,5 @@
 const ManagementClient = require('./src/index').ManagementClient;
 
-process.env.WEBTASK_API_TOKEN = '<your sandbox token>';
-process.env.WEBTASK_API_URL = '<sandbox url>';
-
 var management = new ManagementClient({
   token: '<management api token>',
   domain: 'keystone-test.auth0.com'
@@ -31,34 +28,62 @@ module.exports = function(client, scope, audience, context, cb) {
   cb(null, access_token);
 };
 `;
+function createHook() {
+  management.hooks
+    .create({
+      triggerId: 'credentials-exchange',
+      name: 'cce hook', // Also testing that kebab casing works
+      active: true,
+      code: hook_temlate,
+      secrets: {
+        'api-key': 'my custom api key'
+      },
+      dependencies: {
+        bcrypt: '3.0.6'
+      }
+    })
+    .then(hook => {
+      console.log('hook created');
+      console.log(hook);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
 
-management.hooks
-  .create({
-    triggerId: 'credentials-exchange',
-    name: 'cce hook', // Also testing that kebab casing works
-    active: true,
-    code: hook_temlate,
-    secrets: {
-      'api-key': 'my custom api key'
-    },
-    dependencies: {
-      bcrypt: '3.0.6'
-    }
-  })
-  .then(hook => {
-    console.log('hook created');
-    console.log(hook);
-  })
-  .catch(err => {
-    console.error(err);
-  });
+function getHook() {
+  return management.hooks
+    .get('cce-hook')
+    .then(hook => {
+      console.log('hook retreived');
+      console.log(hook);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+function deleteHook() {
+  return management.hooks
+    .delete('cce-hook')
+    .then(() => {
+      console.log('hook deleted');
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
 
-management.hooks
-  .get('cce-hook')
-  .then(hook => {
-    console.log('hook retreived');
-    console.log(hook);
-  })
-  .catch(err => {
-    console.error(err);
-  });
+function getAllHooks() {
+  return management.hooks
+    .getAll(0, 100)
+    .then(hook => {
+      console.log('hook retreived');
+      console.log(hook);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
+createHook();
+//getAllHooks();
