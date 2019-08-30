@@ -947,6 +947,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  * @param   {Number}    [params.search_engine] The version of the search engine to use.
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
+ * @param   {String}    [params.q]             User Search string to filter which users are returned.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
