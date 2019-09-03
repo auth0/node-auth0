@@ -1,6 +1,6 @@
 {
   "name": "auth0-ext-alpha",
-  "version": "2.19.1",
+  "version": "2.19.2",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "files": [
@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
-    "@auth0/hooks-api-core": "^1.0.6",
+    "@auth0/hooks-api-core": "^1.0.7",
     "bluebird": "^3.5.5",
     "inversify": "^5.0.1",
     "inversify-binding-decorators": "^4.0.0",
