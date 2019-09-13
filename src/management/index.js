@@ -1713,6 +1713,76 @@ utils.wrapPropertyMethod(ManagementClient, 'getBlacklistedTokens', 'blacklistedT
 utils.wrapPropertyMethod(ManagementClient, 'blacklistToken', 'blacklistedTokens.add');
 
 /**
+ *  Create a new Email Template.
+ *
+ * @method    createEmailTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createEmailTemplate(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   // Email Template created.
+ * });
+ *
+ * @param   {Object}    data     Email Template data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createEmailTemplate', 'emailTemplates.create');
+
+/**
+ * Get an Auth0 Email Template.
+ *
+ * @method    getEmailTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getEmailTemplate({ name: EMAIL_TEMPLATE_NAME }, function (err, emailTemplate) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(emailTemplate);
+ * });
+ *
+ * @param   {Object}    params          Email Template parameters.
+ * @param   {String}    params.name     Template Name
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getEmailTemplate', 'emailTemplates.get');
+
+/**
+ * Update an existing Email Template.
+ *
+ * @method    updateEmailTemplates
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var data = { from: 'new@email.com' };
+ * var params = { name: EMAIL_TEMPLATE_NAME };
+ *
+ * management.updateEmailTemplates(params, data, function (err, emailTemplate) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(emailTemplate.from);  // 'new@email.com'
+ * });
+ *
+ * @param   {Object}    params          Email Template parameters.
+ * @param   {String}    params.name     Template Name
+ * @param   {Object}    data            Updated Email Template data.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateEmailTemplate', 'emailTemplates.update');
+
+/**
  * Get the email provider.
  *
  * @method    getEmailProvider

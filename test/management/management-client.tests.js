@@ -16,6 +16,7 @@ var GrantsManager = require('../../src/management/GrantsManager');
 var ConnectionsManager = require('../../src/management/ConnectionsManager');
 var DeviceCredentialsManager = require('../../src/management/DeviceCredentialsManager');
 var EmailProviderManager = require('../../src/management/EmailProviderManager');
+var EmailTemplatesManager = require('../../src/management/EmailTemplatesManager');
 var JobsManager = require('../../src/management/JobsManager');
 var RulesManager = require('../../src/management/RulesManager');
 var StatsManager = require('../../src/management/StatsManager');
@@ -171,6 +172,10 @@ describe('ManagementClient', function() {
         property: 'emailProvider',
         cls: EmailProviderManager
       },
+      EmailTemplatesManager: {
+        property: 'emailTemplates',
+        cls: EmailTemplatesManager
+      },
       JobsManager: {
         property: 'jobs',
         cls: JobsManager
@@ -286,6 +291,10 @@ describe('ManagementClient', function() {
         );
 
         expect(client.emailProvider.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
+        expect(client.emailTemplates.resource.restClient.restClient.options.headers).to.contain(
           requestHeaders
         );
 
@@ -424,6 +433,10 @@ describe('ManagementClient', function() {
           requestHeaders
         );
 
+        expect(client.emailTemplates.resource.restClient.restClient.options.headers).to.contain(
+          requestHeaders
+        );
+
         expect(client.stats.resource.restClient.restClient.options.headers).to.contain(
           requestHeaders
         );
@@ -555,6 +568,10 @@ describe('ManagementClient', function() {
 
         expect(
           client.emailProvider.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
+        expect(
+          client.emailTemplates.resource.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
 
         expect(client.stats.resource.restClient.restClient.options.headers).to.not.have.property(
@@ -693,6 +710,10 @@ describe('ManagementClient', function() {
           client.emailProvider.resource.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
 
+        expect(
+          client.emailTemplates.resource.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+
         expect(client.stats.resource.restClient.restClient.options.headers).to.not.have.property(
           'Auth0-Client'
         );
@@ -790,6 +811,9 @@ describe('ManagementClient', function() {
       'updateUser',
       'getBlacklistedTokens',
       'blacklistToken',
+      'createEmailTemplate',
+      'getEmailTemplate',
+      'updateEmailTemplate',
       'getEmailProvider',
       'configureEmailProvider',
       'deleteEmailProvider',
