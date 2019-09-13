@@ -4,6 +4,7 @@ var sanitizeArguments = require('../utils').sanitizeArguments;
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 
+var SanitizedError = require('../errors').SanitizedError;
 var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
 
 function getParamsFromOptions(options) {
@@ -48,6 +49,7 @@ var OAuthAuthenticator = function(options) {
    * @type {Object}
    */
   var clientOptions = {
+    errorCustomizer: SanitizedError,
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers
   };

@@ -807,6 +807,19 @@ describe('OAuthAuthenticator', function() {
         expect(request.isDone()).to.be.true;
       });
     });
+
+    it('should sanitize sensitive request data from errors', function() {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path)
+        .reply(401);
+
+      return this.authenticator.clientCredentialsGrant(options).catch(function(err) {
+        const originalRequestData = err.originalError.response.request._data;
+        expect(originalRequestData.client_secret).to.not.equal(CLIENT_SECRET);
+      });
+    });
   });
 
   describe('#authorizationCodeGrant', function() {

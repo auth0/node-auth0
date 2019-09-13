@@ -4289,10 +4289,10 @@ resolve@^1.10.0, resolve@^1.11.1:
   dependencies:
     path-parse "^1.0.6"
 
-rest-facade@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.11.0.tgz#96c99f3051ae3ea87600f90227d5ca7e1496f91d"
-  integrity sha512-/LtQhugC4zRc+3qDF9gvyQCMbejeviYCPCpTT1Dj9/ty+eCLeUX1iUOR//iLGJvg3wikQShvphRB1MOufEmB0w==
+rest-facade@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.12.0.tgz#e6a25958b34bab2323af5a953c0135ac2684d371"
+  integrity sha512-LsrzWP+aAy8LWwAi1ZshecO7nOWWZB9bB4gJTwXLl5DS40D5vmmdupKvqEcz8m0GUybLI3uJX8bofJtSrs5Acw==
   dependencies:
     change-case "^2.3.0"
     deepmerge "^3.2.0"
