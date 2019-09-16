@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var nock = require('nock');
 var assign = Object.assign || require('object.assign');
 var ArgumentError = require('rest-facade').ArgumentError;
-var APIError = require('rest-facade').APIError;
+var SanitizedError = require('../../src/errors').SanitizedError;
 
 var ManagementTokenProvider = require('../../src/management/ManagementTokenProvider');
 
@@ -162,7 +162,7 @@ describe('ManagementTokenProvider', function() {
       .reply(401);
 
     client.getAccessToken().catch(function(err) {
-      expect(err).to.exist.to.be.an.instanceOf(APIError);
+      expect(err).to.exist.to.be.an.instanceOf(SanitizedError);
       expect(err.statusCode).to.be.equal(401);
       done();
       nock.cleanAll();
