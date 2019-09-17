@@ -24,7 +24,7 @@ const createChangelog = async () => {
       '# Change Log',
       `# Change Log
 
-## [v${pkg.version}](https://github.com/auth0/node-auth0/tree/v${newVersion}) (${today})
+## [v${newVersion}](https://github.com/auth0/node-auth0/tree/v${newVersion}) (${today})
 ${changelog}
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v${pkg.version}...v${newVersion})`
     )
