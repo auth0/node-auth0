@@ -112,4 +112,26 @@ utils.wrapPropertyMethod(HooksManager, 'get', 'resource.getHookById');
  */
 utils.wrapPropertyMethod(HooksManager, 'delete', 'resource.deleteHookById');
 
+/**
+ * Update an existing hook.
+ *
+ * @method    update
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * management.hooks.update(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook updated.
+ * });
+ *
+ * @param   {Object}    data     Hook data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'update', 'resource.updateHook');
+
 module.exports = HooksManager;
