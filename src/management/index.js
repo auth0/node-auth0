@@ -935,6 +935,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  * // Pagination settings.
  * var params = {
  *   search_engine: 'v3',
+ *   q: 'name:*jane*',
  *   per_page: 10,
  *   page: 0
  * };
@@ -945,6 +946,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateRule', 'rules.update');
  *
  * @param   {Object}    [params]               Users params.
  * @param   {Number}    [params.search_engine] The version of the search engine to use.
+ * @param   {String}    [params.q]             User Search string to filter which users are returned. Follows Lucene query string syntax as documented at https://auth0.com/docs/api/management/v2#!/Users/get_users.
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
  * @param   {Function}  [cb]                   Callback function.
