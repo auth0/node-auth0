@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.20.0](https://github.com/auth0/node-auth0/tree/v2.20.0) (2019-09-17)
+
+**Added**
+
+- expose createEmailTemplate, getEmailTemplate, updateEmailTemplates vi… [\#416](https://github.com/auth0/node-auth0/pull/416) ([rameshanandakrishnan](https://github.com/rameshanandakrishnan))
+
+**Security**
+
+- Sanitize Error Request Data [\#424](https://github.com/auth0/node-auth0/pull/424) ([davidpatrick](https://github.com/davidpatrick))
+- [Security] Bump mixin-deep from 1.3.1 to 1.3.2 [\#421](https://github.com/auth0/node-auth0/pull/421) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.19.0...v2.20.0)
+
 ## [v2.18.1](https://github.com/auth0/node-auth0/tree/v2.19.0) (2019-08-08)
 
 **Added**
