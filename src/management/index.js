@@ -1351,7 +1351,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
  *
  * @param   {Object}    params       params object
  * @param   {String}    params.id    user_id
- * @param   {String}    data         data object containing list of role IDs
+ * @param   {Object}    data         data object containing list of role IDs
  * @param   {String}    data.roles  Array of role IDs
  * @param   {Function}  [cb]                  Callback function.
  *
