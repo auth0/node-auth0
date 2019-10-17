@@ -470,7 +470,7 @@ describe('OAuthAuthenticator', function() {
         .reply(200);
     });
     it('should require an object as first argument', function() {
-      expect(this.authenticator.refreshToken).to.throw(ArgumentError, 'Missing user data object');
+      expect(this.authenticator.refreshToken).to.throw(ArgumentError, 'Missing data object');
     });
     it('should require a refreshToken', function() {
       var auth = this.authenticator;
@@ -521,6 +521,21 @@ describe('OAuthAuthenticator', function() {
       var request = nock(API_URL)
         .post(path, function(body) {
           return body.client_id === CLIENT_ID;
+        })
+        .reply(200);
+      this.authenticator
+        .refreshToken(userData)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+          done();
+        })
+        .catch(done);
+    });
+    it('should include the Auth0 client secret in the request', function(done) {
+      nock.cleanAll();
+      var request = nock(API_URL)
+        .post(path, function(body) {
+          return body.client_secret === CLIENT_SECRET;
         })
         .reply(200);
       this.authenticator

@@ -206,14 +206,15 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, options, cb) {
 };
 
 /**
- * Sign in using a refresh token
+ * Exchange a refresh token
  *
  * @method    refreshToken
  * @memberOf  module:auth.OAuthAuthenticator.prototype
  *
  * @example <caption>
  *   Given a refresh token from a previous authentication request
- *   it will return a JSON with the access_token and id_token.
+ *   it will return a JSON with the access_token and id_token if
+ *   the openid scope was originally included.
  *   More information in the
  *   <a href="https://auth0.com/docs/api/authentication#refresh-token">
  *     API Docs
@@ -221,42 +222,46 @@ OAuthAuthenticator.prototype.passwordGrant = function(userData, options, cb) {
  * </caption>
  *
  * var data = {
- *   client_id: '{CLIENT_ID}', // Optional field.
  *   refresh_token: '{REFRESH_TOKEN}',
  * };
  *
- * auth0.oauth.refreshToken(data, function (err, userData) {
+ * auth0.oauth.refreshToken(data, function (err, data) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(userData);
+ *   console.log(data);
  * });
  *
- * @param   {Object}    userData                User credentials object.
- * @param   {String}    userData.refresh_token  Refresh token.
+ * @param   {Object}    data                Data object.
+ * @param   {String}    data.refresh_token  Refresh token.
  *
  * @return  {Promise|undefined}
  */
-OAuthAuthenticator.prototype.refreshToken = function(userData, cb) {
-  var params = {
-    type: 'token'
-  };
+OAuthAuthenticator.prototype.refreshToken = function(data, cb) {
+  if (!data || typeof data !== 'object') {
+    throw new ArgumentError('Missing data object');
+  }
+
   var defaultFields = {
     client_id: this.clientId,
+    client_secret: this.clientSecret,
     grant_type: 'refresh_token'
   };
-  var data = extend(defaultFields, userData);
-  if (!userData || typeof userData !== 'object') {
-    throw new ArgumentError('Missing user data object');
-  }
+
+  var data = extend(defaultFields, data);
   if (typeof data.refresh_token !== 'string' || data.refresh_token.split().length === 0) {
     throw new ArgumentError('refresh_token is required');
   }
+
+  var params = {
+    type: 'token'
+  };
+
   if (cb && cb instanceof Function) {
-    return this.oauthWithIDTokenValidation.create(params, data, cb);
+    return this.oauth.create(params, data, cb);
   }
-  return this.oauthWithIDTokenValidation.create(params, data);
+  return this.oauth.create(params, data);
 };
 
 /**
