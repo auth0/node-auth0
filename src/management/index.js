@@ -16,6 +16,7 @@ var UserBlocksManager = require('./UserBlocksManager');
 var ConnectionsManager = require('./ConnectionsManager');
 var BlacklistedTokensManager = require('./BlacklistedTokensManager');
 var RulesManager = require('./RulesManager');
+var HooksManager = require('./HooksManager');
 var DeviceCredentialsManager = require('./DeviceCredentialsManager');
 var EmailProviderManager = require('./EmailProviderManager');
 var StatsManager = require('./StatsManager');
@@ -222,6 +223,14 @@ var ManagementClient = function(options) {
    * @type {RulesManager}
    */
   this.rules = new RulesManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * rules endpoint.
+   *
+   * @type {HooksManager}
+   */
+  this.hooks = new HooksManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
