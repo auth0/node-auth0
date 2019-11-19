@@ -226,7 +226,7 @@ var ManagementClient = function(options) {
 
   /**
    * Simple abstraction for performing CRUD operations on the
-   * rules endpoint.
+   * hooks endpoint.
    *
    * @type {HooksManager}
    */
