@@ -84,19 +84,19 @@ describe('HooksManager', function() {
       };
 
       this.request = nock(API_URL)
-        .get('/hooks/' + this.data.id)
+        .get('/hooks/' + this.data.name)
         .reply(200, this.data);
     });
 
     it('should accept a callback', function(done) {
-      var params = { id: this.data.id };
+      var params = { id: this.data.name };
 
       this.hooks.get(params, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function(done) {
       this.hooks
-        .get({ id: this.data.id })
+        .get({ id: this.data.name })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -104,7 +104,7 @@ describe('HooksManager', function() {
     it('should perform a GET request to /api/v2/hooks/:id', function(done) {
       var request = this.request;
 
-      this.hooks.get({ id: this.data.id }).then(function() {
+      this.hooks.get({ id: this.data.name }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -115,10 +115,10 @@ describe('HooksManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/hooks/' + this.data.id)
+        .get('/hooks/' + this.data.name)
         .reply(500);
 
-      this.hooks.get({ id: this.data.id }).catch(function(err) {
+      this.hooks.get({ id: this.data.name }).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -129,11 +129,11 @@ describe('HooksManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/hooks/' + this.data.id)
+        .get('/hooks/' + this.data.name)
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.hooks.get({ id: this.data.id }).then(function() {
+      this.hooks.get({ id: this.data.name }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

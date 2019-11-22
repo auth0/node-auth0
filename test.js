@@ -1,0 +1,44 @@
+const ManagementClient = require('./src/index').ManagementClient;
+
+var management = new ManagementClient({
+  token:
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5EVTNRemhETlRKR00wRTJSVEUwUVVSQ1JEZENRalEwUVVOQ016TkdNRVZGUmtReVJqRkdNUSJ9.eyJpc3MiOiJodHRwczovL21heHdlbGwtMi5hdXRoMC5jb20vIiwic3ViIjoiSkVIM0lVM2NSMzk2aHBxVmNqbGtTZVNJRE9LeThTSWVAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vbWF4d2VsbC0yLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNTc0MTg1MDMxLCJleHAiOjE1NzQyNzE0MzEsImF6cCI6IkpFSDNJVTNjUjM5NmhwcVZjamxrU2VTSURPS3k4U0llIiwic2NvcGUiOiJyZWFkOmNsaWVudF9ncmFudHMgY3JlYXRlOmNsaWVudF9ncmFudHMgZGVsZXRlOmNsaWVudF9ncmFudHMgdXBkYXRlOmNsaWVudF9ncmFudHMgcmVhZDp1c2VycyB1cGRhdGU6dXNlcnMgZGVsZXRlOnVzZXJzIGNyZWF0ZTp1c2VycyByZWFkOnVzZXJzX2FwcF9tZXRhZGF0YSB1cGRhdGU6dXNlcnNfYXBwX21ldGFkYXRhIGRlbGV0ZTp1c2Vyc19hcHBfbWV0YWRhdGEgY3JlYXRlOnVzZXJzX2FwcF9tZXRhZGF0YSBjcmVhdGU6dXNlcl90aWNrZXRzIHJlYWQ6Y2xpZW50cyB1cGRhdGU6Y2xpZW50cyBkZWxldGU6Y2xpZW50cyBjcmVhdGU6Y2xpZW50cyByZWFkOmNsaWVudF9rZXlzIHVwZGF0ZTpjbGllbnRfa2V5cyBkZWxldGU6Y2xpZW50X2tleXMgY3JlYXRlOmNsaWVudF9rZXlzIHJlYWQ6Y29ubmVjdGlvbnMgdXBkYXRlOmNvbm5lY3Rpb25zIGRlbGV0ZTpjb25uZWN0aW9ucyBjcmVhdGU6Y29ubmVjdGlvbnMgcmVhZDpyZXNvdXJjZV9zZXJ2ZXJzIHVwZGF0ZTpyZXNvdXJjZV9zZXJ2ZXJzIGRlbGV0ZTpyZXNvdXJjZV9zZXJ2ZXJzIGNyZWF0ZTpyZXNvdXJjZV9zZXJ2ZXJzIHJlYWQ6ZGV2aWNlX2NyZWRlbnRpYWxzIHVwZGF0ZTpkZXZpY2VfY3JlZGVudGlhbHMgZGVsZXRlOmRldmljZV9jcmVkZW50aWFscyBjcmVhdGU6ZGV2aWNlX2NyZWRlbnRpYWxzIHJlYWQ6cnVsZXMgdXBkYXRlOnJ1bGVzIGRlbGV0ZTpydWxlcyBjcmVhdGU6cnVsZXMgcmVhZDpydWxlc19jb25maWdzIHVwZGF0ZTpydWxlc19jb25maWdzIGRlbGV0ZTpydWxlc19jb25maWdzIHJlYWQ6aG9va3MgdXBkYXRlOmhvb2tzIGRlbGV0ZTpob29rcyBjcmVhdGU6aG9va3MgcmVhZDplbWFpbF9wcm92aWRlciB1cGRhdGU6ZW1haWxfcHJvdmlkZXIgZGVsZXRlOmVtYWlsX3Byb3ZpZGVyIGNyZWF0ZTplbWFpbF9wcm92aWRlciBibGFja2xpc3Q6dG9rZW5zIHJlYWQ6c3RhdHMgcmVhZDp0ZW5hbnRfc2V0dGluZ3MgdXBkYXRlOnRlbmFudF9zZXR0aW5ncyByZWFkOmxvZ3MgcmVhZDpzaGllbGRzIGNyZWF0ZTpzaGllbGRzIGRlbGV0ZTpzaGllbGRzIHJlYWQ6YW5vbWFseV9ibG9ja3MgZGVsZXRlOmFub21hbHlfYmxvY2tzIHVwZGF0ZTp0cmlnZ2VycyByZWFkOnRyaWdnZXJzIHJlYWQ6Z3JhbnRzIGRlbGV0ZTpncmFudHMgcmVhZDpndWFyZGlhbl9mYWN0b3JzIHVwZGF0ZTpndWFyZGlhbl9mYWN0b3JzIHJlYWQ6Z3VhcmRpYW5fZW5yb2xsbWVudHMgZGVsZXRlOmd1YXJkaWFuX2Vucm9sbG1lbnRzIGNyZWF0ZTpndWFyZGlhbl9lbnJvbGxtZW50X3RpY2tldHMgcmVhZDp1c2VyX2lkcF90b2tlbnMgY3JlYXRlOnBhc3N3b3Jkc19jaGVja2luZ19qb2IgZGVsZXRlOnBhc3N3b3Jkc19jaGVja2luZ19qb2IgcmVhZDpjdXN0b21fZG9tYWlucyBkZWxldGU6Y3VzdG9tX2RvbWFpbnMgY3JlYXRlOmN1c3RvbV9kb21haW5zIHJlYWQ6ZW1haWxfdGVtcGxhdGVzIGNyZWF0ZTplbWFpbF90ZW1wbGF0ZXMgdXBkYXRlOmVtYWlsX3RlbXBsYXRlcyByZWFkOm1mYV9wb2xpY2llcyB1cGRhdGU6bWZhX3BvbGljaWVzIHJlYWQ6cm9sZXMgY3JlYXRlOnJvbGVzIGRlbGV0ZTpyb2xlcyB1cGRhdGU6cm9sZXMgcmVhZDpwcm9tcHRzIHVwZGF0ZTpwcm9tcHRzIHJlYWQ6YnJhbmRpbmcgdXBkYXRlOmJyYW5kaW5nIHJlYWQ6bG9nX3N0cmVhbXMgY3JlYXRlOmxvZ19zdHJlYW1zIGRlbGV0ZTpsb2dfc3RyZWFtcyB1cGRhdGU6bG9nX3N0cmVhbXMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.I1fPyJP1_WN4cHg7nrEEzWlKEC7SgvK1ZTlxr65N4blBZaWbBc1wg_UXAxl9pJTOzVR6vGrNkofa-fusjHpW8zfU9ck6pLdjdgRzyN5tUuXJT2WWPDvDnbci-jUBVYMUNH1kHXR_NHMpct0SeI64p4aocQdguFhuIj5sFmmB1mTfh_u4J0t9xlNGwMT2m916TWR1SyN5uzl5HosXFjpwASRMfIaD3hs_29Ak1hy61OYseHKV8eZDv5DA9hK6NUEwgTrbbbZLJEyDDXPBEGV6jAdsb7lEd0PWspllFTKEdCudriRYsa_9RfPUp4hO8_kv1j-t6gM4_urqtzg7q8SM1w',
+  domain: 'maxwell-2.auth0.com'
+});
+
+const hook_temlate = `/**
+@param {object} client - information about the client
+@param {string} client.name - name of client
+@param {string} client.id - client id
+@param {string} client.tenant - Auth0 tenant name
+@param {object} client.metadata - client metadata
+@param {array|undefined} scope - array of strings representing the scope claim or undefined
+@param {string} audience - token's audience claim
+@param {object} context - additional authorization context
+@param {object} context.webtask - webtask context
+@param {function} cb - function (error, accessTokenClaims)
+*/
+module.exports = function(client, scope, audience, context, cb) {
+  var access_token = {};
+  access_token.scope = scope;
+
+  // Modify scopes or add extra claims
+  // access_token['https://example.com/claim'] = 'bar';
+  // access_token.scope.push('extra');
+
+  cb(null, access_token);
+};
+`;
+
+function getHook() {
+  return management.hooks
+    .get({ id: 'trset' })
+    .then(hook => {
+      console.log('hook retreived');
+      console.log(hook);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+getHook();

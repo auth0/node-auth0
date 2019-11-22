@@ -4,12 +4,6 @@ var Auth0RestClient = require('../Auth0RestClient');
 var RetryRestClient = require('../RetryRestClient');
 
 /**
- * Simple facade for consuming a REST API endpoint.
- * @external RestClient
- * @see https://github.com/ngonzalvez/rest-facade
- */
-
-/**
  * @class HooksManager
  * The hook class provides a simple abstraction for performing CRUD operations
  * on Auth0 HooksManagers.
