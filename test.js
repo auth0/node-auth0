@@ -1,8 +1,11 @@
 const ManagementClient = require('./src/index').ManagementClient;
 
+process.env.WEBTASK_API_TOKEN = '<webtask_token>';
+process.env.WEBTASK_API_URL = '<webtask_url>';
+
 var management = new ManagementClient({
-  token: '<management api token>',
-  domain: 'keystone-test.auth0.com'
+  token: '<management_api_token>',
+  domain: '<Auth0_application_domain>'
 });
 
 const hook_temlate = `/**
@@ -32,7 +35,7 @@ function createHook() {
   management.hooks
     .create({
       triggerId: 'credentials-exchange',
-      name: 'cce hook', // Also testing that kebab casing works
+      name: 'cce-hook', // Also testing that kebab casing works
       active: true,
       code: hook_temlate,
       secrets: {
@@ -53,7 +56,7 @@ function createHook() {
 
 function getHook() {
   return management.hooks
-    .get('cce-hook')
+    .get({ id: '01DTAMRX9G7T2C2CZ5CBHH6G09' })
     .then(hook => {
       console.log('hook retreived');
       console.log(hook);
@@ -64,7 +67,7 @@ function getHook() {
 }
 function deleteHook() {
   return management.hooks
-    .delete('cce-hook')
+    .delete({ id: '01DTAMRX9G7T2C2CZ5CBHH6G09' })
     .then(() => {
       console.log('hook deleted');
     })
@@ -87,3 +90,5 @@ function getAllHooks() {
 
 createHook();
 //getAllHooks();
+//getHook();
+//deleteHook();
