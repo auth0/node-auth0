@@ -104,14 +104,7 @@ utils.wrapPropertyMethod(HooksManager, 'create', 'resourceLib.createHook');
  *
  * @return  {Promise|undefined}
  */
-HooksManager.prototype.getAll = function(params = {}, cb) {
-  if (cb && cb instanceof Function) {
-    throw Error('Callback not supported in this iteration.');
-  }
-
-  // Return a promise.
-  return this.resourceLib.getHooks(params.offset || 0, params.limit || 100);
-};
+utils.wrapPropertyMethod(HooksManager, 'getAll', 'resourceRest.getAll');
 
 /**
  * Get a hook by id.
