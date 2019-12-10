@@ -1,6 +1,7 @@
 var ArgumentError = require('rest-facade').ArgumentError;
+var RestClient = require('rest-facade').Client;
+var SanitizedError = require('../errors').SanitizedError;
 var assign = Object.assign || require('object.assign');
-var AuthenticationClient = require('../auth');
 var memoizer = require('lru-memoizer');
 var Promise = require('bluebird');
 
@@ -63,14 +64,6 @@ var ManagementTokenProvider = function(options) {
   }
 
   this.options = params;
-  var authenticationClientOptions = {
-    domain: this.options.domain,
-    clientId: this.options.clientId,
-    clientSecret: this.options.clientSecret,
-    telemetry: this.options.telemetry,
-    clientInfo: this.options.clientInfo
-  };
-  this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 
   var self = this;
   this.getCachedAccessToken = Promise.promisify(
@@ -132,10 +125,26 @@ ManagementTokenProvider.prototype.getAccessToken = function() {
 };
 
 ManagementTokenProvider.prototype.clientCredentialsGrant = function(domain, scope, audience) {
-  return this.authenticationClient.clientCredentialsGrant({
+  var clientOptions = {
+    errorCustomizer: SanitizedError,
+    errorFormatter: { message: 'message', name: 'error' },
+    headers: {}
+  };
+  var oauth = new RestClient('https://' + domain + '/oauth/:type', clientOptions);
+
+  var params = {
+    type: 'token'
+  };
+
+  var data = {
+    grant_type: 'client_credentials',
+    client_id: this.options.clientId,
+    client_secret: this.options.clientSecret,
     audience: audience,
     scope: scope
-  });
+  };
+
+  return oauth.post(params, data);
 };
 
 module.exports = ManagementTokenProvider;
