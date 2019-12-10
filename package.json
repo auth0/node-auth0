@@ -32,7 +32,6 @@
   "dependencies": {
     "bluebird": "^3.5.5",
     "lru-memoizer": "^2.0.1",
-    "object.assign": "^4.1.0",
     "request": "^2.88.0",
     "rest-facade": "^1.12.0",
     "retry": "^0.12.0"

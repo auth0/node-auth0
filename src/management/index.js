@@ -5,7 +5,6 @@ var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var generateClientInfo = utils.generateClientInfo;
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 
 // Managers.
 var ClientsManager = require('./ClientsManager');
@@ -109,7 +108,7 @@ var ManagementClient = function(options) {
   };
 
   if (options.token === undefined) {
-    var config = assign(
+    var config = Object.assign(
       { audience: util.format(MANAGEMENT_API_AUD_FORMAT, options.domain) },
       options
     );

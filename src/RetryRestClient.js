@@ -1,7 +1,6 @@
 var Promise = require('bluebird');
 var retry = require('retry');
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 
 var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
 
@@ -20,7 +19,7 @@ var RetryRestClient = function(restClient, options) {
     throw new ArgumentError('Must provide RestClient');
   }
 
-  var params = assign({}, DEFAULT_OPTIONS, options);
+  var params = Object.assign({}, DEFAULT_OPTIONS, options);
 
   if (typeof params.enabled !== 'boolean') {
     throw new ArgumentError('Must provide enabled boolean value');
