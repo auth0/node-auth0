@@ -5,6 +5,7 @@ coverage:
   status:
     patch:
       default:
+        threshold: 50
         if_no_uploads: error
     changes: true
     project:
