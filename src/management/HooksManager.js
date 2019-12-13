@@ -217,7 +217,7 @@ utils.wrapPropertyMethod(HooksManager, 'delete', 'resource.delete');
  *   console.log(secrets);
  * });
  *
- * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {String}    params.id          ID of the Hook.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
@@ -326,7 +326,7 @@ HooksManager.prototype.updateSecrets = function(params, data, cb) {
  * var params =  { id :'HOOK_ID'};
  * var data =["DB_PASS"];
  *
- * management.hooks.removeSecrets(params, data, function (err, user) {
+ * management.hooks.removeSecrets(params, data, function (err, hook) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -334,7 +334,7 @@ HooksManager.prototype.updateSecrets = function(params, data, cb) {
  *   // secrets added.
  * });
  *
- * @param   {String}    params.id   ID of the Role.
+ * @param   {String}    params.id   ID of the Hook.
  * @param   {Object}    data        Array of secret names
  * @param   {Function}  [cb]        Callback function.
  *
