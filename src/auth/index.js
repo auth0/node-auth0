@@ -61,7 +61,10 @@ var AuthenticationClient = function(options) {
       'User-agent': 'node.js/' + process.version.replace('v', ''),
       'Content-Type': 'application/json'
     },
-    baseUrl: util.format(BASE_URL_FORMAT, options.domain),
+    baseUrl:
+      options.domain.length >= 8 && options.domain.substring(0, 8) === 'https://'
+        ? options.domain
+        : util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
     __bypassIdTokenValidation: options.__bypassIdTokenValidation
   };
