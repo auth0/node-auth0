@@ -63,8 +63,8 @@ var AuthenticationClient = function(options) {
     },
     baseUrl:
       options.domain.length >= 8 && options.domain.substring(0, 8) === 'https://'
-        ? options.domain
-        : util.format(BASE_URL_FORMAT, options.domain),
+        ? options.domain.replace(/\/$/, '')
+        : util.format(BASE_URL_FORMAT, options.domain).replace(/\/$/, ''),
     supportedAlgorithms: options.supportedAlgorithms,
     __bypassIdTokenValidation: options.__bypassIdTokenValidation
   };
