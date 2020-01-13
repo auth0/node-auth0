@@ -46,6 +46,7 @@
     "husky": "^3.0.1",
     "jsdoc": "^3.6.3",
     "json-loader": "^0.5.7",
+    "jws": "^3.2.2",
     "minami": "^1.2.3",
     "mocha": "^6.2.0",
     "mocha-junit-reporter": "^1.23.1",

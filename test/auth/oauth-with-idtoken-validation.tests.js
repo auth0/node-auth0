@@ -118,7 +118,11 @@ describe('OAUthWithIDTokenValidation', function() {
       sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         callback(null, { verification: 'result' });
       });
-      var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
+      OAUthWithIDTokenValidationProxy = proxyquire('../../src/auth/OAUthWithIDTokenValidation', {
+        './idToken': { validate: token => token }
+      });
+
+      var oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {});
       oauthWithValidation.create(PARAMS, DATA).then(function(r) {
         expect(r).to.be.eql({ id_token: 'foobar' });
         done();
@@ -162,6 +166,10 @@ describe('OAUthWithIDTokenValidation', function() {
           return new Promise(res => res({ id_token: 'foobar' }));
         }
       };
+      OAUthWithIDTokenValidationProxy = proxyquire('../../src/auth/OAUthWithIDTokenValidation', {
+        './idToken': { validate: token => token }
+      });
+
       sinon.stub(jwt, 'verify').callsFake(function(idtoken, getKey, options, callback) {
         getKey({ alg: 'HS256' }, function(err, key) {
           expect(err.message).to.contain(
@@ -170,7 +178,7 @@ describe('OAUthWithIDTokenValidation', function() {
           callback(err, key);
         });
       });
-      var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
+      var oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {});
       oauthWithValidation.create(PARAMS, DATA, function(err, response) {
         expect(err).to.be.null;
         expect(response).to.be.eql({ id_token: 'foobar' });
