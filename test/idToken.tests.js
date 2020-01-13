@@ -195,7 +195,6 @@ describe('idToken.validate', function() {
       'Authorized Party (azp) claim mismatch in the ID token; expected "external-test-999", found "tokens-test-123"'
     );
   });
-
   it('should throw when nonce is in options, but missing from claim', function() {
     expect(function() {
       idToken.validate(generateJWT({ nonce: undefined }), expectedOptions);
@@ -209,6 +208,11 @@ describe('idToken.validate', function() {
     }).to.throw(
       'Nonce (nonce) claim mismatch in the ID token; expected "noncey", found "notExpectedNonce"'
     );
+  });
+  it('should throw when nonce claim is not a string', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ nonce: 10000 }), expectedOptions);
+    }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
   });
   it('should throw when auth_time is not a number', function() {
     expect(function() {
