@@ -1,4 +1,5 @@
 var assert = require('assert');
+var expect = require('chai').expect;
 var jws = require('jws');
 var idToken = require('../src/auth/idToken');
 
@@ -130,179 +131,107 @@ describe('idToken.validate', function() {
     expectedOptions.maxAge = 123;
   });
 
-  it('should throw when no id token is present', function(done) {
-    var EXPECTED_ERROR_MESSAGE = 'ID token is required but missing';
-    try {
+  it('should throw when no id token is present', function() {
+    expect(function() {
       idToken.validate();
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw('ID token is required but missing');
   });
-  it('should throw when no Issuer is present in the claim', function(done) {
-    var EXPECTED_ERROR_MESSAGE = 'Issuer (iss) claim must be a string present in the ID token';
-    try {
+  it('should throw when no Issuer is present in the claim', function() {
+    expect(function() {
       idToken.validate(generateJWT({ iss: undefined }));
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw('Issuer (iss) claim must be a string present in the ID token');
   });
-  it('should throw when the expected issuer is not in the claim', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Issuer (iss) claim mismatch in the ID token; expected "ExpectedIssuer", found "https://tokens-test.auth0.com/"';
-    try {
+  it('should throw when the expected issuer is not in the claim', function() {
+    expect(function() {
       idToken.validate(generateJWT({}), { issuer: 'ExpectedIssuer' });
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw(
+      'Issuer (iss) claim mismatch in the ID token; expected "ExpectedIssuer", found "https://tokens-test.auth0.com/"'
+    );
   });
-  it('should throw when the claim has no Subject', function(done) {
-    var EXPECTED_ERROR_MESSAGE = 'Subject (sub) claim must be a string present in the ID token';
-    try {
+  it('should throw when the claim has no Subject', function() {
+    expect(function() {
       idToken.validate(generateJWT({ sub: undefined }), defaultOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw('Subject (sub) claim must be a string present in the ID token');
   });
-  it('should throw when the alg is neither rs256 or hs256', function(done) {
+  it('should throw when the alg is neither rs256 or hs256', function() {
     var token =
       'eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwczovL3Rva2Vucy10ZXN0LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHwxMjM0NTY3ODkiLCJhdWQiOiJ0b2tlbnMtdGVzdC0xMjMifQ.cZ4qDwoKdKQx8DtD-F-xVKCxd3rz58wSJh3k28z5qnpzm4x3xRiyHCuUvtxmL2aPdBQ37Zt8Mt5drd9hZhNzFQ';
-    var EXPECTED_ERROR_MESSAGE =
-      'Signature algorithm of "HS512" is not supported. Expected the ID token to be signed with "RS256" or "HS256".';
-    try {
+
+    expect(function() {
       idToken.validate(token, defaultOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw(
+      'Signature algorithm of "HS512" is not supported. Expected the ID token to be signed with "RS256" or "HS256".'
+    );
   });
-  it('should throw when the audience is not a string or array', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Audience (aud) claim must be a string or array of strings present in the ID token';
-    try {
+  it('should throw when the audience is not a string or array', function() {
+    expect(function() {
       idToken.validate(generateJWT({ aud: undefined }), defaultOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw(
+      'Audience (aud) claim must be a string or array of strings present in the ID token'
+    );
   });
-  it('should throw when expected audience doesnt match claim audience', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Audience (aud) claim mismatch in the ID token; expected "expectedAudience" but was not one of "tokens-test-123, external-test-999"';
-    try {
-      expectedOptions.audience = 'expectedAudience';
+  it('should throw when expected audience doesnt match claim audience', function() {
+    expectedOptions.audience = 'expectedAudience';
+
+    expect(function() {
       idToken.validate(generateJWT({}), expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    }).to.throw(
+      'Audience (aud) claim mismatch in the ID token; expected "expectedAudience" but was not one of "tokens-test-123, external-test-999"'
+    );
   });
-  it('should throw when azp claim not found when aud has multiple values', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Authorized Party (azp) claim must be a string present in the ID token when Audience (aud) claim has multiple values';
-    try {
-      var token = generateJWT({ azp: undefined });
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+  it('should throw when azp claim not found when aud has multiple values', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ azp: undefined }), expectedOptions);
+    }).to.throw(
+      'Authorized Party (azp) claim must be a string present in the ID token when Audience (aud) claim has multiple values'
+    );
   });
-  it('should throw when azp claim doesnt match the expected aud', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Authorized Party (azp) claim mismatch in the ID token; expected "external-test-999", found "tokens-test-123"';
-    try {
-      var token = generateJWT({});
-      expectedOptions.audience = expectations.clientIdAlt;
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+  it('should throw when azp claim doesnt match the expected aud', function() {
+    expectedOptions.audience = expectations.clientIdAlt;
+
+    expect(function() {
+      idToken.validate(generateJWT({}), expectedOptions);
+    }).to.throw(
+      'Authorized Party (azp) claim mismatch in the ID token; expected "external-test-999", found "tokens-test-123"'
+    );
   });
 
-  it('should throw when nonce is in options, but missing from claim', function(done) {
-    var EXPECTED_ERROR_MESSAGE = 'Nonce (nonce) claim must be a string present in the ID token';
-    try {
-      var token = generateJWT({ nonce: undefined });
+  it('should throw when nonce is in options, but missing from claim', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ nonce: undefined }), expectedOptions);
+    }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
+  });
+  it('should throw when nonce claim doesnt match nonce expected', function() {
+    expectedOptions.nonce = 'noncey';
 
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+    expect(function() {
+      idToken.validate(generateJWT({ nonce: 'notExpectedNonce' }), expectedOptions);
+    }).to.throw(
+      'Nonce (nonce) claim mismatch in the ID token; expected "noncey", found "notExpectedNonce"'
+    );
   });
-  it('should throw when nonce claim doesnt match nonce expected', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Nonce (nonce) claim mismatch in the ID token; expected "noncey", found "notExpectedNonce"';
-    try {
-      var token = generateJWT({ nonce: 'notExpectedNonce' });
-      expectedOptions.nonce = 'noncey';
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+  it('should throw when auth_time is not a number', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ auth_time: undefined }), expectedOptions);
+    }).to.throw(
+      'Authentication Time (auth_time) claim must be a number present in the ID token when Max Age (max_age) is specified'
+    );
   });
-  it('should throw when auth_time is not a number', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Authentication Time (auth_time) claim must be a number present in the ID token when Max Age (max_age) is specified';
-    try {
-      var token = generateJWT({ auth_time: undefined });
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+  it('should throw when exp is not a number', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ exp: 'not a number' }), expectedOptions);
+    }).to.throw('Expiration Time (exp) claim must be a number present in the ID token');
   });
-  it('should throw when exp is not a number', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Expiration Time (exp) claim must be a number present in the ID token';
-    try {
-      var token = generateJWT({ exp: 'not a number' });
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert.equal(error.message, EXPECTED_ERROR_MESSAGE);
-      done();
-    }
+  it('should throw when exp has passed', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ exp: yesterday() }), expectedOptions);
+    }).to.throw('is after expiration time');
   });
-  it('should throw when exp has passed', function(done) {
-    var EXPECTED_ERROR_MESSAGE = 'is after expiration time';
-    try {
-      var token = generateJWT({ exp: yesterday() });
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert(error.message.includes(EXPECTED_ERROR_MESSAGE));
-      done();
-    }
-  });
-  it('should throw when idtoken indicates too much time has passed', function(done) {
-    var EXPECTED_ERROR_MESSAGE =
-      'Authentication Time (auth_time) claim in the ID token indicates that too much time has passed since the last end-user authentication.';
-    try {
-      var token = generateJWT({ auth_time: yesterday() });
-      idToken.validate(token, expectedOptions);
-      done(new Error('Should have thrown error: ' + EXPECTED_ERROR_MESSAGE));
-    } catch (error) {
-      assert(error.message.includes(EXPECTED_ERROR_MESSAGE));
-      done();
-    }
+  it('should throw when idtoken indicates too much time has passed', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ auth_time: yesterday() }), expectedOptions);
+    }).to.throw(
+      'Authentication Time (auth_time) claim in the ID token indicates that too much time has passed since the last end-user authentication.'
+    );
   });
 });
