@@ -179,6 +179,14 @@ describe('idToken.validate', function() {
       'Audience (aud) claim mismatch in the ID token; expected "expectedAudience" but was not one of "tokens-test-123, external-test-999"'
     );
   });
+  it('should throw when expected audience is not a String or Array', function() {
+    expectedOptions.audience = 'expectedAudience';
+    expect(function() {
+      idToken.validate(generateJWT({ aud: 10000 }), expectedOptions);
+    }).to.throw(
+      'Audience (aud) claim must be a string or array of strings present in the ID token'
+    );
+  });
   it('should throw when azp claim not found when aud has multiple values', function() {
     expect(function() {
       idToken.validate(generateJWT({ azp: undefined }), expectedOptions);
