@@ -186,6 +186,11 @@ describe('idToken.validate', function() {
     }).to.throw(
       'Audience (aud) claim must be a string or array of strings present in the ID token'
     );
+    expect(function() {
+      idToken.validate(generateJWT({ aud: {} }), expectedOptions);
+    }).to.throw(
+      'Audience (aud) claim must be a string or array of strings present in the ID token'
+    );
   });
   it('should throw when azp claim not found when aud has multiple values', function() {
     expect(function() {
@@ -220,6 +225,9 @@ describe('idToken.validate', function() {
   it('should throw when nonce claim is not a string', function() {
     expect(function() {
       idToken.validate(generateJWT({ nonce: 10000 }), expectedOptions);
+    }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
+    expect(function() {
+      idToken.validate(generateJWT({ nonce: {} }), expectedOptions);
     }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
   });
   it('should throw when auth_time is not a number', function() {
