@@ -170,17 +170,21 @@ describe('idToken.validate', function() {
       'Audience (aud) claim must be a string or array of strings present in the ID token'
     );
   });
-  it('should throw when expected audience doesnt match claim audience', function() {
-    expectedOptions.audience = 'expectedAudience';
-
+  it('should throw when claim audience is a String and not expected audience', function() {
     expect(function() {
-      idToken.validate(generateJWT({}), expectedOptions);
+      idToken.validate(generateJWT({ aud: 'notExpected' }), expectedOptions);
     }).to.throw(
-      'Audience (aud) claim mismatch in the ID token; expected "expectedAudience" but was not one of "tokens-test-123, external-test-999"'
+      'Audience (aud) claim mismatch in the ID token; expected "tokens-test-123" but found "notExpected"'
+    );
+  });
+  it('should throw when claim audience is an Array and not expected audience', function() {
+    expect(function() {
+      idToken.validate(generateJWT({ aud: ['notExpected'] }), expectedOptions);
+    }).to.throw(
+      'Audience (aud) claim mismatch in the ID token; expected "tokens-test-123" but was not one of "notExpected"'
     );
   });
   it('should throw when expected audience is not a String or Array', function() {
-    expectedOptions.audience = 'expectedAudience';
     expect(function() {
       idToken.validate(generateJWT({ aud: 10000 }), expectedOptions);
     }).to.throw(
