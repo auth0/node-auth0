@@ -1,5 +1,22 @@
 # Change Log
 
+## [v2.21.0](https://github.com/auth0/node-auth0/tree/v2.21.0) (2020-01-15)
+
+**Added**
+
+- Improved OIDC compliance [\#446](https://github.com/auth0/node-auth0/pull/446) ([davidpatrick](https://github.com/davidpatrick))
+
+**Changed**
+
+- Add client secret to refreshToken and remove ID token validation [\#433](https://github.com/auth0/node-auth0/pull/433) ([joshcanhelp](https://github.com/joshcanhelp))
+
+**Security**
+
+- [Security] Bump handlebars from 4.1.2 to 4.5.3 [\#441](https://github.com/auth0/node-auth0/pull/441) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update rest-facade dependency [\#436](https://github.com/auth0/node-auth0/pull/436) ([joshcanhelp](https://github.com/joshcanhelp))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.20.0...v2.21.0)
+
 ## [v2.20.0](https://github.com/auth0/node-auth0/tree/v2.20.0) (2019-09-17)
 
 **Added**
