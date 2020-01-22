@@ -3,6 +3,7 @@ var jwksClient = require('jwks-rsa');
 var Promise = require('bluebird');
 
 var ArgumentError = require('rest-facade').ArgumentError;
+var validateIdToken = require('./idToken').validate;
 
 var HS256_IGNORE_VALIDATION_MESSAGE =
   'Validation of `id_token` requires a `clientSecret` when using the HS256 algorithm. To ensure tokens are validated, please switch the signing algorithm to RS256 or provide a `clientSecret` in the constructor.';
@@ -80,25 +81,37 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
         });
       }
       return new Promise((res, rej) => {
-        jwt.verify(
-          r.id_token,
-          getKey,
-          {
-            algorithms: this.supportedAlgorithms,
-            audience: this.clientId,
-            issuer: 'https://' + this.domain + '/'
-          },
-          function(err) {
-            if (!err) {
-              return res(r);
-            }
+        var options = {
+          algorithms: this.supportedAlgorithms,
+          audience: this.clientId,
+          issuer: 'https://' + this.domain + '/'
+        };
+
+        if (data.nonce) {
+          options.nonce = data.nonce;
+        }
+
+        if (data.maxAge) {
+          options.maxAge = data.maxAge;
+        }
+
+        jwt.verify(r.id_token, getKey, options, function(err) {
+          if (err) {
             if (err.message && err.message.includes(HS256_IGNORE_VALIDATION_MESSAGE)) {
               console.warn(HS256_IGNORE_VALIDATION_MESSAGE);
-              return res(r);
+            } else {
+              return rej(err);
             }
-            return rej(err);
           }
-        );
+
+          try {
+            validateIdToken(r.id_token, options);
+          } catch (idTokenError) {
+            return rej(idTokenError);
+          }
+
+          return res(r);
+        });
       });
     }
     return r;
