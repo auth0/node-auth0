@@ -217,7 +217,8 @@ utils.wrapPropertyMethod(HooksManager, 'delete', 'resource.delete');
  *   console.log(secrets);
  * });
  *
- * @param   {String}    params.id          ID of the Hook.
+ * @param   {Object}    params            Hook parameters.
+ * @param   {String}    params.id         ID of the Hook.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
@@ -244,6 +245,7 @@ HooksManager.prototype.getSecrets = function(params, callback) {
  *   // secrets added.
  * });
  *
+ * @param   {Object}    params        Hook parameters.
  * @param   {String}    params.id     ID of the Hook.
  * @param   {Object}    data          object containing secrets as key/value pairs
  * @param   {Function}  [cb]          Callback function.
@@ -289,6 +291,7 @@ HooksManager.prototype.addSecrets = function(params, data, cb) {
  *   // secrets updated.
  * });
  *
+ * @param   {Object}    params        Hook parameters.
  * @param   {String}    params.id     ID of the Hook.
  * @param   {Object}    data          object containing secrets as key/value pairs
  * @param   {Function}  [cb]          Callback function.
@@ -334,6 +337,7 @@ HooksManager.prototype.updateSecrets = function(params, data, cb) {
  *   // secrets added.
  * });
  *
+ * @param   {Object}    params      Hook parameters.
  * @param   {String}    params.id   ID of the Hook.
  * @param   {Object}    data        Array of secret names
  * @param   {Function}  [cb]        Callback function.
