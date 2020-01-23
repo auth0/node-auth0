@@ -30,6 +30,7 @@ var EmailTemplatesManager = require('./EmailTemplatesManager');
 var GuardianManager = require('./GuardianManager');
 var CustomDomainsManager = require('./CustomDomainsManager');
 var RolesManager = require('./RolesManager');
+var HooksManager = require('./HooksManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -304,6 +305,14 @@ var ManagementClient = function(options) {
    * @type {RolesManager}
    */
   this.roles = new RolesManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * hooks endpoint.
+   *
+   * @type {HooksManager}
+   */
+  this.hooks = new HooksManager(managerOptions);
 };
 
 /**
@@ -2887,6 +2896,233 @@ utils.wrapPropertyMethod(ManagementClient, 'removePermissionsFromRole', 'roles.r
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getUsersInRole', 'roles.getUsers');
+
+/**
+ * Get all hooks.
+ *
+ * @method    getHooks
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getHooks(params, function (err, hooks) {
+ *   console.log(hooks.length);
+ * });
+ *
+ * @param   {Object}    [params]          Hooks parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getHooks', 'hooks.getAll');
+
+/**
+ * Get an Auth0 hook.
+ *
+ * @method    getHook
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getHook({ id: HOOK_ID }, function (err, hook) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(hook);
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getHook', 'hooks.get');
+
+/**
+ * Create a new hook.
+ *
+ * @method    createHook
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createHook(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook created.
+ * });
+ *
+ * @param   {Object}    data     Hook data object.
+ * @param   {Function}  [cb]     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createHook', 'hooks.create');
+
+/**
+ * Update an existing hook.
+ *
+ * @method    updateHook
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: HOOK_ID };
+ * var data = { name: 'my-hook'};
+ * management.updateHook(params, data, function (err, hook) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(hook.name); // 'my-hook'.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Object}    data          Updated hook data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateHook', 'hooks.update');
+
+/**
+ * Delete an existing hook.
+ *
+ * @method    deleteHook
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * auth0.deleteHook({ id: HOOK_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook deleted.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteHook', 'hooks.delete');
+
+/**
+ * Get an Auth0 hook's secrets.
+ *
+ * @method    getHookSecrets
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: HOOK_ID }
+ * management.getHookSecrets(params, function (err, secrets) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(secrets);
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getHookSecrets', 'hooks.getSecrets');
+
+/**
+ * Add hook screts.
+ *
+ * @method    addHookScrets
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: 'HOOK_ID' }
+ * var data = { DB_PASSWORD: 'password1', API_TOKEN: 'secret' }
+ * management.addHookScrets(params, data, function (err, secrets) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook secrets created.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Object}    data          Secrets key/value pairs
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'addHookSecrets', 'hooks.addSecrets');
+
+/**
+ * Update an existing hook.
+ *
+ * @method    updateHookSecrets
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: HOOK_ID };
+ * var data = { API_TOKEN: 'updated-secret'};
+ * management.updateHookSecrets(params, data, function (err, secrets) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(secrets)
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Object}    data          Secrets key/value pairs
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateHookSecrets', 'hooks.updateSecrets');
+
+/**
+ * Delete an existing hook.
+ *
+ * @method    removeHookSecrets
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: HOOK_ID }
+ * var data = ['API_TOKEN', 'DB_PASSWORD']
+ * auth0.removeHookSecrets(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook deleted.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Object}    data          Secrets key/value pairs
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'removeHookSecrets', 'hooks.removeSecrets');
 
 /**
  * Returns the access_token.
