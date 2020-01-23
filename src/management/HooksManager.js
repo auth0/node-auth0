@@ -11,7 +11,7 @@ var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class HooksManager
- * The hook class provides a simple abstraction for performing CRUD operations
+ * The hooks manager class provides a simple abstraction for performing CRUD operations
  * on Auth0 HooksManagers.
  * @constructor
  * @memberOf module:management
