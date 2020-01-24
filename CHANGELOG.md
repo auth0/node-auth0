@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.22.0](https://github.com/auth0/node-auth0/tree/v2.22.0) (2020-01-24)
+
+**Added**
+
+- Support for Hooks API [\#440](https://github.com/auth0/node-auth0/pull/440) ([astanciu](https://github.com/astanciu))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.21.0...v2.22.0)
+
 ## [v2.21.0](https://github.com/auth0/node-auth0/tree/v2.21.0) (2020-01-15)
 
 **Added**
