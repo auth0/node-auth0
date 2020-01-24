@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>auth/TokensManager.js - Documentation</title>
+    <title>management/HooksManager.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">auth/TokensManager.js</h1>
+    <h1 class="page-title">management/HooksManager.js</h1>
     
 
     
@@ -39,181 +39,374 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var extend = require('util')._extend;
-var getRequestPromise = require('../utils').getRequestPromise;
-
-var ArgumentError = require('rest-facade').ArgumentError;
+            <pre class="prettyprint source linenums"><code>var ArgumentError = require('rest-facade').ArgumentError;
+var utils = require('../utils');
+var Auth0RestClient = require('../Auth0RestClient');
+var RetryRestClient = require('../RetryRestClient');
 
 /**
- * @class
- * Provides methods for getting token data and exchanging tokens.
- * @constructor
- * @memberOf module:auth
- *
- * @param  {Object}   options               Manager options.
- * @param  {String}   options.baseUrl       The auth0 account URL.
- * @param  {String}   [options.headers]     Default request headers.
- * @param  {String}   [options.clientId]    Default client ID.
+ * Simple facade for consuming a REST API endpoint.
+ * @external RestClient
+ * @see https://github.com/ngonzalvez/rest-facade
  */
-var TokensManager = function(options) {
-  if (typeof options !== 'object') {
-    throw new ArgumentError('Missing tokens manager options');
+
+/**
+ * @class HooksManager
+ * The hooks manager class provides a simple abstraction for performing CRUD operations
+ * on Auth0 HooksManagers.
+ * @constructor
+ * @memberOf module:management
+ *
+ * @param {Object} options            The client options.
+ * @param {String} options.baseUrl    The URL of the API.
+ * @param {Object} [options.headers]  Headers to be included in all requests.
+ * @param {Object} [options.retry]    Retry Policy Config
+ */
+var HooksManager = function(options) {
+  if (options === null || typeof options !== 'object') {
+    throw new ArgumentError('Must provide manager options');
   }
 
-  if (typeof options.baseUrl !== 'string') {
-    throw new ArgumentError('baseUrl field is required');
+  if (options.baseUrl === null || options.baseUrl === undefined) {
+    throw new ArgumentError('Must provide a base URL for the API');
   }
 
-  this.baseUrl = options.baseUrl;
-  this.headers = options.headers || {};
-  this.clientId = options.clientId || '';
+  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+    throw new ArgumentError('The provided base URL is invalid');
+  }
+
+  /**
+   * Options object for the Rest Client instance.
+   *
+   * @type {Object}
+   */
+  var clientOptions = {
+    headers: options.headers,
+    query: { repeatParams: false }
+  };
+
+  /**
+   * Provides an abstraction layer for performing CRUD operations on
+   * {@link https://auth0.com/docs/api/v2#!/HooksManagers Auth0 HooksManagers}.
+   *
+   * @type {external:RestClient}
+   */
+  var auth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/hooks/:id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+  var hookSecretsClient = new Auth0RestClient(
+    options.baseUrl + '/hooks/:id/secrets',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.secrets = new RetryRestClient(hookSecretsClient, options.retry);
 };
 
 /**
- * Given an ID token get the user profile linked to it.
+ * Create a new hook.
  *
- * @method
- * @memberOf module:auth.TokensManager.prototype
+ * @method    create
+ * @memberOf  module:management.HooksManager.prototype
  *
- * @example &lt;caption>
- *   Validates a JSON Web Token (signature and expiration) and returns the user
- *   information associated with the user id (sub property) of the token. Find
- *   more information in the
- *   &lt;a href="https://auth0.com/docs/auth-api#!#post--tokeninfo">API Docs&lt;/a>.
- * &lt;/caption>
- *
- * auth0.tokens.getInfo(token, function (err, tokenInfo) {
+ * @example
+ * management.hooks.create(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(tokenInfo);
+ *   // Hook created.
  * });
  *
- * @param   {String}    idToken     User ID token.
- * @param   {Function}  [cb]        Method callback.
+ * @param   {Object}    data     Hook data object.
+ * @param   {Function}  [cb]     Callback function.
  *
  * @return  {Promise|undefined}
  */
-TokensManager.prototype.getInfo = function(idToken, cb) {
-  var headers = extend({}, this.headers);
-
-  if (idToken === null || idToken === undefined) {
-    throw new ArgumentError('An ID token is required');
-  }
-
-  if (typeof idToken !== 'string' || idToken.trim().length === 0) {
-    throw new ArgumentError('The ID token is not valid');
-  }
-
-  // Perform the request.
-  var promise = getRequestPromise({
-    method: 'POST',
-    url: this.baseUrl + '/tokeninfo',
-    data: { id_token: idToken },
-    headers: headers
-  });
-
-  // Use callback if given.
-  if (cb instanceof Function) {
-    promise.then(cb.bind(null, null)).catch(cb);
-    return;
-  }
-
-  return promise;
-};
+utils.wrapPropertyMethod(HooksManager, 'create', 'resource.create');
 
 /**
- * Exchange the token of the logged in user with a token that is valid to call
- * the API (signed with the API secret).
+ * Get all hooks.
  *
- * @method
- * @memberOf module:auth.TokensManager.prototype
+ * @method    getAll
+ * @memberOf  module:management.HooksManager.prototype
  *
  * @example &lt;caption>
- *   Given an existing token, this endpoint will generate a new token signed
- *   with the target client secret. This is used to flow the identity of the
- *   user from the application to an API or across different APIs that are
- *   protected with different secrets. Find more information in the
- *   &lt;a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs&lt;/a>.
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
  * &lt;/caption>
  *
- * var data = {
- *   id_token: '{ID_TOKEN}',
- *   api_type: 'app',
- *   target: '{TARGET}',
- *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
  * };
  *
- * auth0.tokens.getDelegationToken(data, function (err, token) {
+ * management.hooks.getAll(params, function (err, hooks) {
+ *   console.log(hooks.length);
+ * });
+ *
+ * @param   {Object}    [params]          Hooks parameters.
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'getAll', 'resource.getAll');
+
+/**
+ * Get an Auth0 hook.
+ *
+ * @method    get
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * management.hooks.get({ id: HOOK_ID }, function (err, hook) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(token);
+ *   console.log(hook);
  * });
  *
- * @param   {Object}    data                Token data object.
- * @param   {String}    data.id_token       User ID token.
- * @param   {String}    data.refresh_token  User refresh token.
- * @param   {String}    data.target         Target client ID.
- * @param   {String}    data.api_type       The API to be used (aws, auth0, etc).
- * @param   {String}    data.grant_type     Grant type (password, jwt, etc).
- * @param   {Function}  [cb]                Callback function.
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
  */
-TokensManager.prototype.getDelegationToken = function(data, cb) {
-  var body = extend({ client_id: this.clientId }, data);
-  var headers = this.headers;
+utils.wrapPropertyMethod(HooksManager, 'get', 'resource.get');
 
-  if (!data) {
-    throw new ArgumentError('Missing token data object');
-  }
+/**
+ * Update an existing hook.
+ *
+ * @method    update
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * var data = { name: 'New name' };
+ * var params = { id: HOOK_ID };
+ *
+ * // Using auth0 instance.
+ * management.updateHook(params, data, function (err, hook) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(hook.name);  // 'New name'
+ * });
+ *
+ * // Using the hooks manager directly.
+ * management.hooks.update(params, data, function (err, hook) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(hook.name);  // 'New name'
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Object}    data          Updated hook data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'update', 'resource.patch');
 
-  var hasIdToken = typeof data.id_token === 'string' &amp;&amp; data.id_token.trim().length !== 0;
+/**
+ * Delete an existing hook.
+ *
+ * @method    delete
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * management.hooks.delete({ id: HOOK_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Hook deleted.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     Hook ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(HooksManager, 'delete', 'resource.delete');
 
-  var hasRefreshToken =
-    typeof data.refresh_token === 'string' &amp;&amp; data.refresh_token.trim().length !== 0;
-
-  if (!hasIdToken &amp;&amp; !hasRefreshToken) {
-    throw new ArgumentError('one of id_token or refresh_token is required');
-  }
-
-  if (hasIdToken &amp;&amp; hasRefreshToken) {
-    throw new ArgumentError('id_token and refresh_token fields cannot be specified simulatenously');
-  }
-
-  if (typeof data.target !== 'string' || data.target.trim().length === 0) {
-    throw new ArgumentError('target field is required');
-  }
-
-  if (typeof data.api_type !== 'string' || data.api_type.trim().length === 0) {
-    throw new ArgumentError('api_type field is required');
-  }
-
-  if (typeof data.grant_type !== 'string' || data.grant_type.trim().length === 0) {
-    throw new ArgumentError('grant_type field is required');
-  }
-
-  // Perform the request.
-  var promise = getRequestPromise({
-    method: 'POST',
-    url: this.baseUrl + '/delegation',
-    data: body,
-    headers: headers
-  });
-
-  // Use callback if given.
-  if (cb instanceof Function) {
-    promise.then(cb.bind(null, null)).catch(cb);
-    return;
-  }
-
-  return promise;
+/**
+ * Get Hook secrets
+ *
+ * @method    getSecrets
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * var params = {id : 'HOOK_ID'}
+ * @example &lt;caption>
+ *   This method takes a first argument as the hookId and returns the secrets for the hook. The secret values will be hidden.
+ * &lt;/caption>
+ *
+ * management.hooks.getSecrets( {id : 'HOOK_ID'}, function (err, secrets) {
+ *   console.log(secrets);
+ * });
+ *
+ * @param   {Object}    params            Hook parameters.
+ * @param   {String}    params.id         ID of the Hook.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+HooksManager.prototype.getSecrets = function(params, callback) {
+  return this.secrets.getAll(params, callback);
 };
 
-module.exports = TokensManager;
+/**
+ * Add secrets in a hook
+ *
+ * @method    addSecrets
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * var params =  { id :'HOOK_ID'};
+ * var data   = { "DB_USER" :  "jdoe", "DB_PASS": "password123!"};
+ *
+ * management.hooks.addSecrets(params, data, function (err, secrets) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // secrets added.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     ID of the Hook.
+ * @param   {Object}    data          object containing secrets as key/value pairs
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+HooksManager.prototype.addSecrets = function(params, data, cb) {
+  params = params || {};
+  data = data || {};
+
+  // Require an ID.
+  if (!params.id) {
+    throw new ArgumentError('The id passed in params cannot be null or undefined');
+  }
+
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The hook Id has to be a string');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.secrets.create(params, data, cb);
+  }
+
+  return this.secrets.create(params, data);
+};
+
+/**
+ * Update secrets in a hook
+ *
+ * @method    updateSecrets
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * var params =  { id :'HOOK_ID'};
+ * var data   = { "DB_USER" :  "jdoe", "DB_PASS": "password123!"};
+ *
+ * management.hooks.updateSecrets(params, data, function (err, secrets) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // secrets updated.
+ * });
+ *
+ * @param   {Object}    params        Hook parameters.
+ * @param   {String}    params.id     ID of the Hook.
+ * @param   {Object}    data          object containing secrets as key/value pairs
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+HooksManager.prototype.updateSecrets = function(params, data, cb) {
+  params = params || {};
+  data = data || {};
+
+  // Require an ID.
+  if (!params.id) {
+    throw new ArgumentError('The id passed in params cannot be null or undefined');
+  }
+
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The hook Id has to be a string');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.secrets.patch(params, data, cb);
+  }
+
+  return this.secrets.patch(params, data);
+};
+
+/**
+ * Remove secrets from a hook
+ *
+ * @method    removeSecrets
+ * @memberOf  module:management.HooksManager.prototype
+ *
+ * @example
+ * var params =  { id :'HOOK_ID'};
+ * var data =["DB_PASS"];
+ *
+ * management.hooks.removeSecrets(params, data, function (err, hook) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // secrets added.
+ * });
+ *
+ * @param   {Object}    params      Hook parameters.
+ * @param   {String}    params.id   ID of the Hook.
+ * @param   {Object}    data        Array of secret names
+ * @param   {Function}  [cb]        Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+HooksManager.prototype.removeSecrets = function(params, data, cb) {
+  params = params || {};
+  data = data || {};
+
+  // Require an ID.
+  if (!params.id) {
+    throw new ArgumentError('The id passed in params cannot be null or undefined');
+  }
+
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The hook Id has to be a string');
+  }
+
+  if (cb &amp;&amp; cb instanceof Function) {
+    return this.secrets.delete(params, data, cb);
+  }
+
+  return this.secrets.delete(params, data);
+};
+
+module.exports = HooksManager;
 </code></pre>
         </article>
     </section>

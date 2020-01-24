@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>auth/TokensManager.js - Documentation</title>
+    <title>HooksManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,194 +29,3067 @@
 
 <div id="main">
     
-    <h1 class="page-title">auth/TokensManager.js</h1>
+    <h1 class="page-title">HooksManager</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>var extend = require('util')._extend;
-var getRequestPromise = require('../utils').getRequestPromise;
+        <h2>
+            <span class="ancestors"><a href="module-management.html">management</a>.</span>
+        
+        HooksManager
+        </h2>
+        
+            <div class="class-description"><p>HooksManager
+The hooks manager class provides a simple abstraction for performing CRUD operations
+on Auth0 HooksManagers.</p></div>
+        
+    
+</header>
 
-var ArgumentError = require('rest-facade').ArgumentError;
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
 
-/**
- * @class
- * Provides methods for getting token data and exchanging tokens.
- * @constructor
- * @memberOf module:auth
- *
- * @param  {Object}   options               Manager options.
- * @param  {String}   options.baseUrl       The auth0 account URL.
- * @param  {String}   [options.headers]     Default request headers.
- * @param  {String}   [options.clientId]    Default client ID.
- */
-var TokensManager = function(options) {
-  if (typeof options !== 'object') {
-    throw new ArgumentError('Missing tokens manager options');
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="HooksManager"><span class="type-signature"></span>new HooksManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The client options.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>baseUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>The URL of the API.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>headers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Headers to be included in all requests.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Retry Policy Config</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Provides an abstraction layer for performing CRUD operations on
+<a href="https://auth0.com/docs/api/v2#!/HooksManagers">Auth0 HooksManagers</a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="~clientOptions"><span class="type-signature">(inner) </span>clientOptions<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Options object for the Rest Client instance.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="addSecrets"><span class="type-signature"></span>addSecrets<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Add secrets in a hook</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line230">line 230</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>ID of the Hook.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>object containing secrets as key/value pairs</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var params =  { id :'HOOK_ID'};
+var data   = { "DB_USER" :  "jdoe", "DB_PASS": "password123!"};
+
+management.hooks.addSecrets(params, data, function (err, secrets) {
+  if (err) {
+    // Handle error.
   }
 
-  if (typeof options.baseUrl !== 'string') {
-    throw new ArgumentError('baseUrl field is required');
+  // secrets added.
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Create a new hook.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line68">line 68</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook data object.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>management.hooks.create(data, function (err) {
+  if (err) {
+    // Handle error.
   }
 
-  this.baseUrl = options.baseUrl;
-  this.headers = options.headers || {};
-  this.clientId = options.clientId || '';
+  // Hook created.
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Delete an existing hook.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Hook ID.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>management.hooks.delete({ id: HOOK_ID }, function (err) {
+  if (err) {
+    // Handle error.
+  }
+
+  // Hook deleted.
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get an Auth0 hook.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line121">line 121</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Hook ID.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>management.hooks.get({ id: HOOK_ID }, function (err, hook) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(hook);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(params<span class="signature-attributes">opt</span>, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get all hooks.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hooks parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>per_page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Number of results per page.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Page number, zero indexed.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+        <p class="code-caption">
+  This method takes an optional object as first argument that may be used to
+  specify pagination settings. If pagination options are not present,
+  the first page of a limited number of results will be returned.
+</p>
+    
+    <pre class="prettyprint"><code>// Pagination settings.
+var params = {
+  per_page: 10,
+  page: 0
 };
 
-/**
- * Given an ID token get the user profile linked to it.
- *
- * @method
- * @memberOf module:auth.TokensManager.prototype
- *
- * @example &lt;caption>
- *   Validates a JSON Web Token (signature and expiration) and returns the user
- *   information associated with the user id (sub property) of the token. Find
- *   more information in the
- *   &lt;a href="https://auth0.com/docs/auth-api#!#post--tokeninfo">API Docs&lt;/a>.
- * &lt;/caption>
- *
- * auth0.tokens.getInfo(token, function (err, tokenInfo) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(tokenInfo);
- * });
- *
- * @param   {String}    idToken     User ID token.
- * @param   {Function}  [cb]        Method callback.
- *
- * @return  {Promise|undefined}
- */
-TokensManager.prototype.getInfo = function(idToken, cb) {
-  var headers = extend({}, this.headers);
+management.hooks.getAll(params, function (err, hooks) {
+  console.log(hooks.length);
+});</code></pre>
 
-  if (idToken === null || idToken === undefined) {
-    throw new ArgumentError('An ID token is required');
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getSecrets"><span class="type-signature"></span>getSecrets<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get Hook secrets</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line204">line 204</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>ID of the Hook.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Examples</h5>
+
+    <pre class="prettyprint"><code>var params = {id : 'HOOK_ID'}</code></pre>
+
+        <p class="code-caption">
+  This method takes a first argument as the hookId and returns the secrets for the hook. The secret values will be hidden.
+</p>
+    
+    <pre class="prettyprint"><code>management.hooks.getSecrets( {id : 'HOOK_ID'}, function (err, secrets) {
+  console.log(secrets);
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="removeSecrets"><span class="type-signature"></span>removeSecrets<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove secrets from a hook</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line322">line 322</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>ID of the Hook.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Array of secret names</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var params =  { id :'HOOK_ID'};
+var data =["DB_PASS"];
+
+management.hooks.removeSecrets(params, data, function (err, hook) {
+  if (err) {
+    // Handle error.
   }
 
-  if (typeof idToken !== 'string' || idToken.trim().length === 0) {
-    throw new ArgumentError('The ID token is not valid');
+  // secrets added.
+});</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Update an existing hook.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line144">line 144</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Hook ID.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Updated hook data.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var data = { name: 'New name' };
+var params = { id: HOOK_ID };
+
+// Using auth0 instance.
+management.updateHook(params, data, function (err, hook) {
+  if (err) {
+    // Handle error.
   }
 
-  // Perform the request.
-  var promise = getRequestPromise({
-    method: 'POST',
-    url: this.baseUrl + '/tokeninfo',
-    data: { id_token: idToken },
-    headers: headers
-  });
+  console.log(hook.name);  // 'New name'
+});
 
-  // Use callback if given.
-  if (cb instanceof Function) {
-    promise.then(cb.bind(null, null)).catch(cb);
-    return;
+// Using the hooks manager directly.
+management.hooks.update(params, data, function (err, hook) {
+  if (err) {
+    // Handle error.
   }
 
-  return promise;
-};
+  console.log(hook.name);  // 'New name'
+});</code></pre>
 
-/**
- * Exchange the token of the logged in user with a token that is valid to call
- * the API (signed with the API secret).
- *
- * @method
- * @memberOf module:auth.TokensManager.prototype
- *
- * @example &lt;caption>
- *   Given an existing token, this endpoint will generate a new token signed
- *   with the target client secret. This is used to flow the identity of the
- *   user from the application to an API or across different APIs that are
- *   protected with different secrets. Find more information in the
- *   &lt;a href="https://auth0.com/docs/auth-api#!#post--delegation">API Docs&lt;/a>.
- * &lt;/caption>
- *
- * var data = {
- *   id_token: '{ID_TOKEN}',
- *   api_type: 'app',
- *   target: '{TARGET}',
- *   grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
- * };
- *
- * auth0.tokens.getDelegationToken(data, function (err, token) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(token);
- * });
- *
- * @param   {Object}    data                Token data object.
- * @param   {String}    data.id_token       User ID token.
- * @param   {String}    data.refresh_token  User refresh token.
- * @param   {String}    data.target         Target client ID.
- * @param   {String}    data.api_type       The API to be used (aws, auth0, etc).
- * @param   {String}    data.grant_type     Grant type (password, jwt, etc).
- * @param   {Function}  [cb]                Callback function.
- *
- * @return  {Promise|undefined}
- */
-TokensManager.prototype.getDelegationToken = function(data, cb) {
-  var body = extend({ client_id: this.clientId }, data);
-  var headers = this.headers;
+</div>
 
-  if (!data) {
-    throw new ArgumentError('Missing token data object');
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="updateSecrets"><span class="type-signature"></span>updateSecrets<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Update secrets in a hook</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_HooksManager.js.html">management/HooksManager.js</a>, <a href="management_HooksManager.js.html#line276">line 276</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Hook parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>ID of the Hook.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>object containing secrets as key/value pairs</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var params =  { id :'HOOK_ID'};
+var data   = { "DB_USER" :  "jdoe", "DB_PASS": "password123!"};
+
+management.hooks.updateSecrets(params, data, function (err, secrets) {
+  if (err) {
+    // Handle error.
   }
 
-  var hasIdToken = typeof data.id_token === 'string' &amp;&amp; data.id_token.trim().length !== 0;
+  // secrets updated.
+});</code></pre>
 
-  var hasRefreshToken =
-    typeof data.refresh_token === 'string' &amp;&amp; data.refresh_token.trim().length !== 0;
+</div>
 
-  if (!hasIdToken &amp;&amp; !hasRefreshToken) {
-    throw new ArgumentError('one of id_token or refresh_token is required');
-  }
+</div>
+        
+    
 
-  if (hasIdToken &amp;&amp; hasRefreshToken) {
-    throw new ArgumentError('id_token and refresh_token fields cannot be specified simulatenously');
-  }
+    
 
-  if (typeof data.target !== 'string' || data.target.trim().length === 0) {
-    throw new ArgumentError('target field is required');
-  }
+    
+</article>
 
-  if (typeof data.api_type !== 'string' || data.api_type.trim().length === 0) {
-    throw new ArgumentError('api_type field is required');
-  }
-
-  if (typeof data.grant_type !== 'string' || data.grant_type.trim().length === 0) {
-    throw new ArgumentError('grant_type field is required');
-  }
-
-  // Perform the request.
-  var promise = getRequestPromise({
-    method: 'POST',
-    url: this.baseUrl + '/delegation',
-    data: body,
-    headers: headers
-  });
-
-  // Use callback if given.
-  if (cb instanceof Function) {
-    promise.then(cb.bind(null, null)).catch(cb);
-    return;
-  }
-
-  return promise;
-};
-
-module.exports = TokensManager;
-</code></pre>
-        </article>
-    </section>
+</section>
 
 
 
