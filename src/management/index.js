@@ -31,6 +31,7 @@ var GuardianManager = require('./GuardianManager');
 var CustomDomainsManager = require('./CustomDomainsManager');
 var RolesManager = require('./RolesManager');
 var HooksManager = require('./HooksManager');
+var BrandingManager = require('./BrandingManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -313,6 +314,14 @@ var ManagementClient = function(options) {
    * @type {HooksManager}
    */
   this.hooks = new HooksManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * branding endpoint.
+   *
+   * @type {HooksManager}
+   */
+  this.branding = new BrandingManager(managerOptions);
 };
 
 /**
@@ -3133,5 +3142,53 @@ utils.wrapPropertyMethod(ManagementClient, 'removeHookSecrets', 'hooks.removeSec
  * @return {Promise}   Promise returning an access_token.
  */
 utils.wrapPropertyMethod(ManagementClient, 'getAccessToken', 'tokenProvider.getAccessToken');
+
+/**
+ * Update the branding settings.
+ *
+ * @method    updateBrandingSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateBrandingSettings(data, function (err, branding) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Updated branding
+ *    console.log(branding);
+ * });
+ *
+ * @param   {Object}    params            Branding parameters.
+ * @param   {Object}    data              Updated branding data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateBrandingSettings', 'branding.updateSettings');
+
+/**
+ * Get the branding settings..
+ *
+ * @method    getBrandingSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getBrandingSettings(data, function (err, branding) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Branding
+ *    console.log(branding);
+ * });
+ *
+ * @param   {Object}    params            Branding parameters.
+ * @param   {Object}    data              Branding data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getSettings');
 
 module.exports = ManagementClient;
