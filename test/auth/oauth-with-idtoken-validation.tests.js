@@ -380,24 +380,44 @@ describe('OAUthWithIDTokenValidation', function() {
         });
       });
       it('fails when `token.exp` is expired', done => {
-        var oauth = {
-          create: function() {
-            return new Promise(res =>
-              res({
-                id_token:
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5FVkJOVU5CT1RneFJrRTVOa1F6UXpjNE9UQkVNRUZGUkRRNU4wUTJRamswUmtRMU1qRkdNUSJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMToxNzoyNy41NjVaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9icnVja2UuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg3MDQ3LCJleHAiOjE1MzY3ODcwNTJ9.Wn6ie7sXQ7jG94MDumSa2vciKkt5qrDN8LGWw1U9cz8Oh15JxFZOxtPJxWST5t6i8biJ4l7fvjez7KkoibRf9TPXpe0VxE2SsQCy-H2TRlUSnodBg25WRPPKmXvA6tB_CeaZjDplaTV21fnvcRq7kCwl_O91meWS7Qs3rEWvrD_M63LvDPvAReKcNFRg42p_nZS5fnq2CLC6OHUBznkZfMforNJ8YC0GufcrBd2lRaNljF57Z6fHSupfwY9vLIxfp-nx7yYl7H1vjp75f-08h8mOLRgZdpCjG3z8QKCBwsY_5t8dnQfZiUsGhRFx6hsTb6BC35JHkNHSyOw75tfl9A'
-              })
-            );
-          }
-        };
-        var oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
-          clientSecret: CLIENT_SECRET,
-          domain: 'auth.brucke.club',
-          supportedAlgorithms: ['RS256']
-        });
-        oauthWithValidation.create(PARAMS, DATA, function(e, d) {
-          expect(e.message).to.eq('jwt expired');
-          done();
+        createCertificate(function(c) {
+          var idtoken = jwt.sign({ foo: 'bar' }, c.serviceKey, {
+            algorithm: 'RS256',
+            issuer: 'https://auth.brucke.club',
+            audience: 'foobar',
+            expiresIn: '-1h'
+          });
+          var oauth = {
+            create: function() {
+              return new Promise(res =>
+                res({
+                  id_token: idtoken
+                })
+              );
+            }
+          };
+          var jwksClientStub = sinon.spy(function() {
+            return {
+              getSigningKey: function(kid, cb) {
+                cb(null, { publicKey: c.publicKey });
+              }
+            };
+          });
+          OAUthWithIDTokenValidationProxy = proxyquire(
+            '../../src/auth/OAUthWithIDTokenValidation',
+            {
+              'jwks-rsa': jwksClientStub
+            }
+          );
+          var oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
+            clientSecret: CLIENT_SECRET,
+            domain: 'auth.brucke.club',
+            supportedAlgorithms: ['RS256']
+          });
+          oauthWithValidation.create(PARAMS, DATA, function(e, d) {
+            expect(e.message).to.eq('jwt expired');
+            done();
+          });
         });
       });
       describe('when using a valid certificate to generate an invalid id_token', function() {
