@@ -2888,18 +2888,23 @@ utils.wrapPropertyMethod(ManagementClient, 'removePermissionsFromRole', 'roles.r
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params =  { id :'ROLE_ID'};
- * @example <caption>
- *   This method takes a roleId and
- *   returns all users within that role
+ * var params = {
+ *   id: 'ROLE_ID'
+ *   per_page: 50,
+ *   page: 0
+ * };
  *
+ * @example <caption>
+ *   This method takes a roleId and returns all users within that role
  * </caption>
  *
  * management.getUsersInRole(params, function (err, users) {
  *   console.log(users);
  * });
  *
- * @param   {String}    [roleId]           Id of the role
+ * @param   {String}    [id]           Id of the role
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}

@@ -334,16 +334,23 @@ RolesManager.prototype.removePermissions = function(params, data, cb) {
  * @memberOf  module:management.RolesManager.prototype
  *
  * @example
- * params = {id : 'ROLE_ID'}
+ * var params = {
+ *   roleId: 'ROLE_ID'
+ *   per_page: 50,
+ *   page: 0
+ * };
+ *
  * @example <caption>
- *   This method takes a roleId and returns the users with that role assigned
+ *   This method takes a roleId and returns all users within that role
  * </caption>
  *
- * management.roles.getUsers( {id : 'ROLE_ID'}, function (err, users) {
+ * management.roles.getUsers(params, function (err, users) {
  *   console.log(users);
  * });
  *
- * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {String}    [roleId]           Id of the role
+ * @param   {Number}    [params.per_page] Number of results per page.
+ * @param   {Number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
