@@ -90,6 +90,7 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  * @param   {Number}  [options.tokenProvider.cacheTTLInSeconds]   By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
  * @param   {Boolean} [options.retry.enabled=true]                Enabled or Disable Retry Policy functionality.
  * @param   {Number}  [options.retry.maxRetries=10]               Retry failed requests X times.
+ * @param   {Object}  [options.headers]                           Additional headers that will be added to the outgoing requests.
  *
  */
 var ManagementClient = function(options) {
@@ -102,11 +103,15 @@ var ManagementClient = function(options) {
   }
 
   var baseUrl = util.format(BASE_URL_FORMAT, options.domain);
+  var userAgent = options.userAgent || 'node.js/' + process.version.replace('v', '');
+
+  var defaultHeaders = {
+    'User-agent': 'node.js/' + process.version.replace('v', ''),
+    'Content-Type': 'application/json'
+  };
+
   var managerOptions = {
-    headers: {
-      'User-agent': 'node.js/' + process.version.replace('v', ''),
-      'Content-Type': 'application/json'
-    },
+    headers: assign(defaultHeaders, options.headers || {}),
     baseUrl: baseUrl
   };
 
