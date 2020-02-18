@@ -4,6 +4,7 @@ var util = require('util');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('rest-facade').ArgumentError;
+var assign = Object.assign || require('object.assign');
 
 // Authenticators.
 var OAuthAuthenticator = require('./OAuthAuthenticator');
@@ -43,6 +44,7 @@ var BASE_URL_FORMAT = 'https://%s';
  * @param   {String}  [options.clientSecret]            Default client Secret.
  * @param   {String}  [options.supportedAlgorithms]     Algorithms that your application expects to receive
  * @param  {Boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+ * @param   {Object}  [options.headers]                 Additional headers that will be added to the outgoing requests.
  */
 var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {
@@ -53,14 +55,16 @@ var AuthenticationClient = function(options) {
     throw new ArgumentError('Must provide a domain');
   }
 
+  var defaultHeaders = {
+    'User-agent': 'node.js/' + process.version.replace('v', ''),
+    'Content-Type': 'application/json'
+  };
+
   var managerOptions = {
     clientId: options.clientId,
     domain: options.domain,
     clientSecret: options.clientSecret,
-    headers: {
-      'User-agent': 'node.js/' + process.version.replace('v', ''),
-      'Content-Type': 'application/json'
-    },
+    headers: assign(defaultHeaders, options.headers || {}),
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
     __bypassIdTokenValidation: options.__bypassIdTokenValidation

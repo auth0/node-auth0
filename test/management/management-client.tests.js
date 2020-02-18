@@ -198,6 +198,39 @@ describe('ManagementClient', function() {
       }
     };
 
+    describe('user agent', function() {
+      for (var name in managers) {
+        manager = managers[name];
+
+        it(manager + ' should use the node version by default', function() {
+          var client = new ManagementClient(withTokenConfig);
+
+          expect(
+            client[manager.property].resource.restClient.restClient.options.headers
+          ).to.contain({
+            'User-agent': 'node.js/' + process.version.replace('v', '')
+          });
+        });
+
+        it(manager + ' should include additional headers when provided', function() {
+          var customHeaders = {
+            'User-agent': 'my-user-agent',
+            'Another-header': 'test-header'
+          };
+
+          var options = assign({ headers: customHeaders }, withTokenConfig);
+          var client = new ManagementClient(options);
+
+          expect(
+            client[manager.property].resource.restClient.restClient.options.headers
+          ).to.contain({
+            'User-agent': 'my-user-agent',
+            'Another-header': 'test-header'
+          });
+        });
+      }
+    });
+
     describe('client info', function() {
       it('should configure instances with default telemetry header', function() {
         var utilsStub = {

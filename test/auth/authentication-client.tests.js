@@ -143,6 +143,42 @@ describe('AuthenticationClient', function() {
     });
   });
 
+  describe('user agent', function() {
+    it('should use the node version when the user agent option is not provided', function() {
+      var client = new AuthenticationClient({
+        token: 'token',
+        domain: 'auth0.com'
+      });
+
+      var expected = { 'User-agent': 'node.js/' + process.version.replace('v', '') };
+
+      expect(client.oauth.oauth.options.headers).to.contain(expected);
+      expect(client.database.dbConnections.options.headers).to.contain(expected);
+      expect(client.passwordless.passwordless.options.headers).to.contain(expected);
+      expect(client.users.headers).to.contain(expected);
+      expect(client.tokens.headers).to.contain(expected);
+    });
+
+    it('should include additional headers when provided', function() {
+      var customHeaders = {
+        'User-agent': 'my-user-agent',
+        'Another-header': 'test-header'
+      };
+
+      var client = new AuthenticationClient({
+        token: 'token',
+        domain: 'auth0.com',
+        headers: customHeaders
+      });
+
+      expect(client.oauth.oauth.options.headers).to.contain(customHeaders);
+      expect(client.database.dbConnections.options.headers).to.contain(customHeaders);
+      expect(client.passwordless.passwordless.options.headers).to.contain(customHeaders);
+      expect(client.users.headers).to.contain(customHeaders);
+      expect(client.tokens.headers).to.contain(customHeaders);
+    });
+  });
+
   describe('instance methods', function() {
     var methods = [];
     var client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
