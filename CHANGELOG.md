@@ -1,5 +1,26 @@
 # Change Log
 
+## [v2.23.0](https://github.com/auth0/node-auth0/tree/v2.23.0) (2020-02-21)
+
+**Added**
+
+- [DXEX-455] Allow custom headers to be set in Management/Auth Clients. [\#460](https://github.com/auth0/node-auth0/pull/460) ([seejee](https://github.com/seejee))
+
+**Changed**
+
+- Updates node-jwks-rsa [\#461](https://github.com/auth0/node-auth0/pull/461) ([davidpatrick](https://github.com/davidpatrick))
+
+**Fixed**
+
+- Update lru-memoizer dependency to avoid DeprecationWarning Buffer() [\#459](https://github.com/auth0/node-auth0/pull/459) ([jalie](https://github.com/jalie))
+- getUsersInRole Docs [\#457](https://github.com/auth0/node-auth0/pull/457) ([davidpatrick](https://github.com/davidpatrick))
+
+**Security**
+
+- [Security] Bump codecov from 3.5.0 to 3.6.5 [\#462](https://github.com/auth0/node-auth0/pull/462) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.22.0...v2.23.0)
+
 ## [v2.22.0](https://github.com/auth0/node-auth0/tree/v2.22.0) (2020-01-24)
 
 **Added**
