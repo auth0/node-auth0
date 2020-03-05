@@ -12,6 +12,7 @@ var RestClient = require('rest-facade').Client;
  * @param  {Object}              options            Authenticator options.
  * @param  {String}              options.baseUrl    The auth0 account URL.
  * @param  {String}              [options.clientId] Default client ID.
+ * @param  {String}              [options.clientSecret] Default client secret.
  * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
  */
 var PasswordlessAuthenticator = function(options, oauth) {
@@ -36,6 +37,7 @@ var PasswordlessAuthenticator = function(options, oauth) {
   this.oauth = oauth;
   this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
   this.clientId = options.clientId;
+  this.clientSecret = options.clientSecret;
 };
 
 /**
@@ -74,14 +76,14 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
  * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
- * @param   {String}    [userData.client_id]  Client ID.
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
  */
 PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   var defaultFields = {
-    client_id: this.clientId
+    client_id: this.clientId,
+    client_secret: this.clientSecret
   };
   var data = extend(defaultFields, userData);
 
@@ -153,7 +155,8 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
  */
 PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
   var defaultFields = {
-    client_id: this.clientId
+    client_id: this.clientId,
+    client_secret: this.clientSecret
   };
   var data = extend(defaultFields, userData);
 
@@ -204,14 +207,14 @@ PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.phone_number   User phone number.
- * @param   {String}    [userData.client_id]    Client ID.
  * @param   {Function}  [cb]                    Method callback.
  *
  * @return  {Promise|undefined}
  */
 PasswordlessAuthenticator.prototype.sendSMS = function(userData, cb) {
   var defaultFields = {
-    client_id: this.clientId
+    client_id: this.clientId,
+    client_secret: this.clientSecret
   };
   var data = extend(defaultFields, userData);
 
