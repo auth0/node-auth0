@@ -146,8 +146,8 @@ JobsManager.prototype.get = function(params, cb) {
  *
  * @param   {Object}    data                        Users import data.
  * @param   {String}    data.connection_id          connection_id of the connection to which users will be imported.
- * @param   {String}    data.users                  Path to the users data file.
- * @param   {String}    data.users_json             JSON data for the users.
+ * @param   {String}    [data.users]                Path to the users data file. Either users or users_json is mandatory.
+ * @param   {String}    [data.users_json]           JSON data for the users.
  * @param   {String}    data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
  * @param   {String}    data.send_completion_email  OPTIONAL: defaults to true
  * @param   {Function}  [cb]                        Callback function.
