@@ -2015,7 +2015,8 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 
 /**
  * Given a path to a file and a connection id, create a new job that imports the
- * users contained in the file and associate them with the given connection.
+ * users contained in the file or JSON string and associate them with the given
+ * connection.
  *
  * @method    importUsers
  * @memberOf  module:management.ManagementClient.prototype
@@ -2023,19 +2024,24 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
  * @example
  * var params = {
  *   connection_id: '{CONNECTION_ID}',
- *   users: '{PATH_TO_USERS_FILE}'
+ *   users: '{PATH_TO_USERS_FILE}',
+ *   upsert: true, //optional
+ *   send_completion_email: false //optional
  * };
  *
- * management.get(params, function (err) {
+ * management.importUsers(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
  *
- * @param   {Object}    data                Users import data.
- * @param   {String}    data.connectionId   Connection for the users insertion.
- * @param   {String}    data.users          Path to the users data file.
- * @param   {Function}  [cb]                Callback function.
+ * @param   {Object}    data                        Users import data.
+ * @param   {String}    data.connectionId           Connection for the users insertion.
+ * @param   {String}    data.users                  Path to the users data file.
+ * @param   {String}    data.users_json             JSON data for the users.
+ * @param   {String}    data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
+ * @param   {String}    data.send_completion_email  OPTIONAL: defaults to true
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */
