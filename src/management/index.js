@@ -2034,7 +2034,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
  * });
  *
  * @param   {Object}    data                        Users import data.
- * @param   {String}    data.connectionId           Connection for the users insertion.
+ * @param   {String}    data.connection_id          connection_id of the connection to which users will be imported.
  * @param   {String}    data.users                  Path to the users data file.
  * @param   {String}    data.users_json             JSON data for the users.
  * @param   {String}    data.upsert                 OPTIONAL: set to true to upsert users, defaults to false
