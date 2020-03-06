@@ -135,9 +135,7 @@ JobsManager.prototype.get = function(params, cb) {
  * @example
  * var params = {
  *   connection_id: '{CONNECTION_ID}',
- *   users: '{PATH_TO_USERS_FILE}',
- *   upsert: true, //optional
- *   send_completion_email: false //optional
+ *   users: '{PATH_TO_USERS_FILE}'
  * };
  *
  * management.jobs.importUsers(params, function (err) {

@@ -2024,9 +2024,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
  * @example
  * var params = {
  *   connection_id: '{CONNECTION_ID}',
- *   users: '{PATH_TO_USERS_FILE}',
- *   upsert: true, //optional
- *   send_completion_email: false //optional
+ *   users: '{PATH_TO_USERS_FILE}'
  * };
  *
  * management.importUsers(params, function (err) {
