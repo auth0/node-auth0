@@ -135,7 +135,7 @@ JobsManager.prototype.get = function(params, cb) {
  * @example
  * var params = {
  *   connection_id: '{CONNECTION_ID}',
- *   users: '{PATH_TO_USERS_FILE}'
+ *   users: '{PATH_TO_USERS_FILE}' // or users_json: '{USERS_JSON_STRING}'
  * };
  *
  * management.jobs.importUsers(params, function (err) {
