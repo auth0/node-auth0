@@ -287,7 +287,7 @@ JobsManager.prototype.exportUsers = function(data, cb) {
 /**
  * Given a job ID, retrieve the failed/errored items
  *
- * @method   get
+ * @method   errors
  * @memberOf module:management.JobsManager.prototype
  *
  * @example
