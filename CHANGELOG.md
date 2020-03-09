@@ -1,5 +1,15 @@
 # Change Log
 
+## [v2.24.0](https://github.com/auth0/node-auth0/tree/v2.24.0) (2020-03-06)
+
+**Fixed**
+
+- Update and fix JSDocs related to JobsManager [\#469](https://github.com/auth0/node-auth0/pull/469) ([orangain](https://github.com/orangain))
+- Fixes test on supportedAlgorithms [\#466](https://github.com/auth0/node-auth0/pull/466) ([davidpatrick](https://github.com/davidpatrick))
+- Fixes calls on passwordless endpoints [\#465](https://github.com/auth0/node-auth0/pull/465) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.23.0...v2.24.0)
+
 ## [v2.23.0](https://github.com/auth0/node-auth0/tree/v2.23.0) (2020-02-21)
 
 **Added**
