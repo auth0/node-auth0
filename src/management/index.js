@@ -2394,6 +2394,7 @@ utils.wrapPropertyMethod(ManagementClient, 'setRulesConfig', 'rulesConfigs.set')
  *
  * @method    getRulesConfigs
  * @memberOf  module:management.ManagementClient.prototype
+ * @param     {Function}  [cb]  Callback function.
  *
  * @example
  *
