@@ -1,5 +1,5 @@
 var extend = require('util')._extend;
-var getRequestPromise = require('../utils').getRequestPromise;
+var axios = require('axios');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 
@@ -69,11 +69,10 @@ UsersManager.prototype.getInfo = function(accessToken, cb) {
   headers['Authorization'] = 'Bearer ' + accessToken;
 
   // Perform the request.
-  var promise = getRequestPromise({
+  var promise = axios({
     method: 'GET',
     url: url,
-    headers: headers,
-    data: {}
+    headers: headers
   });
 
   // Use callback if given.
@@ -154,7 +153,7 @@ UsersManager.prototype.impersonate = function(userId, settings, cb) {
   var data = extend({ client_id: settings.clientId || this.clientId }, settings);
   var headers = extend({ Authorization: `Bearer ${settings.token}` }, this.headers);
   // Perform the request.
-  var promise = getRequestPromise({
+  var promise = axios({
     method: 'POST',
     headers: headers,
     data: data,

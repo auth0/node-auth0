@@ -1,6 +1,7 @@
-var request = require('request');
+var axios = require('axios');
 var extend = require('util')._extend;
 var Promise = require('bluebird');
+var FormData = require('form-data');
 var fs = require('fs');
 
 var ArgumentError = require('rest-facade').ArgumentError;
@@ -156,63 +157,36 @@ JobsManager.prototype.get = function(params, cb) {
  */
 JobsManager.prototype.importUsers = function(data, cb) {
   var options = this.options;
-  var headers = extend({}, options.headers);
+  var url = options.baseUrl + '/jobs/users-imports';
+  var userData = data.users_json ? Buffer.from(data.users_json) : fs.createReadStream(data.users);
+  var userFilename = data.users_json ? 'users.json' : data.users;
 
+  var form = new FormData();
+  form.append('users', userData, userFilename);
+  form.append('connection_id', data.connection_id);
+  form.append('upsert', data.upsert === true ? 'true' : 'false');
+  form.append('send_completion_email', data.send_completion_email === false ? 'false' : 'true');
+
+  var headers = { ...options.headers, ...form.getHeaders() };
   headers['Content-Type'] = 'multipart/form-data';
 
-  var url = options.baseUrl + '/jobs/users-imports';
-  var method = 'POST';
-  var upsert = data.upsert === true ? 'true' : 'false';
-  var send_completion_email = data.send_completion_email === false ? 'false' : 'true';
-
   var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
-    return new Promise(function(resolve, reject) {
-      request(
-        {
-          url: url,
-          method: method,
-          headers: extend({ Authorization: `Bearer ${access_token}` }, headers),
-          formData: {
-            users: {
-              value: data.users_json
-                ? Buffer.from(data.users_json)
-                : fs.createReadStream(data.users),
-              options: {
-                filename: data.users_json ? 'users.json' : data.users
-              }
-            },
-            connection_id: data.connection_id,
-            upsert: upsert,
-            send_completion_email: send_completion_email
-          }
-        },
-        function(err, res) {
-          if (err) {
-            reject(err);
-            return;
-          }
-          // `superagent` uses the error parameter in callback on http errors.
-          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-          var type = (res.statusCode / 100) | 0;
-          var isErrorResponse = 4 === type || 5 === type;
-          if (isErrorResponse) {
-            var error = new Error('cannot ' + method + ' ' + url + ' (' + res.statusCode + ')');
-            error.status = res.statusCode;
-            error.method = method;
-            error.text = res.text;
-            try {
-              if (!error.text && res.body) {
-                error.text = JSON.parse(res.body).message;
-              }
-            } catch (ex) {
-              // Ignore the error.
-            }
-            reject(error);
-          }
-          resolve(res);
+    return axios
+      .post(url, form, { headers: { ...headers, Authorization: `Bearer ${access_token}` } })
+      .catch(function(err) {
+        if (!err.response) {
+          return Promise.reject(err);
         }
-      );
-    });
+
+        var res = err.response;
+        // `superagent` uses the error parameter in callback on http errors.
+        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+        var error = new Error('cannot POST' + ' ' + url + ' (' + res.status + ')');
+        error.status = res.status;
+        error.method = 'POST';
+        error.text = res.data.message || res.statusText || error.message;
+        return Promise.reject(error);
+      });
   });
 
   // Don't return a promise if a callback was given.
