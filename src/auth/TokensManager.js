@@ -1,5 +1,5 @@
 var extend = require('util')._extend;
-var getRequestPromise = require('../utils').getRequestPromise;
+var axios = require('axios');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 
@@ -66,7 +66,7 @@ TokensManager.prototype.getInfo = function(idToken, cb) {
   }
 
   // Perform the request.
-  var promise = getRequestPromise({
+  var promise = axios({
     method: 'POST',
     url: this.baseUrl + '/tokeninfo',
     data: { id_token: idToken },
@@ -156,7 +156,7 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
   }
 
   // Perform the request.
-  var promise = getRequestPromise({
+  var promise = axios({
     method: 'POST',
     url: this.baseUrl + '/delegation',
     data: body,

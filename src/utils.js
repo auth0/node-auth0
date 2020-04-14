@@ -1,5 +1,4 @@
 var Promise = require('bluebird');
-var request = require('request');
 var pkg = require('../package.json');
 
 /**
@@ -59,35 +58,6 @@ utils.wrapPropertyMethod = function(Parent, name, propertyMethod) {
     get: function() {
       return this[property][method].bind(this[property]);
     }
-  });
-};
-
-/**
- * Perform a request with the given settings and return a promise that resolves
- * when the request is successfull and rejects when there's an error.
- *
- * @method    getRequestPromise
- * @memberOf  module:utils
- */
-utils.getRequestPromise = function(settings) {
-  return new Promise(function(resolve, reject) {
-    request(
-      {
-        url: settings.url,
-        method: settings.method,
-        body: settings.data,
-        json: typeof settings.data === 'object',
-        headers: settings.headers
-      },
-      function(err, res, body) {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(res.body);
-      }
-    );
   });
 };
 
