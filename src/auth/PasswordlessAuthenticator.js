@@ -25,7 +25,7 @@ var PasswordlessAuthenticator = function(options, oauth) {
   }
 
   /**
-   * Options object for the Rest Client instace.
+   * Options object for the Rest Client instance.
    *
    * @type {Object}
    */

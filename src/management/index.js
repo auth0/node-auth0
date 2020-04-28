@@ -372,7 +372,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnections', 'connections.getAll
  *     // Handle error.
  *   }
  *
- *   // Conection created.
+ *   // Connection created.
  * });
  *
  * @param   {Object}    data     Connection data object.
@@ -417,7 +417,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getConnection', 'connections.get');
  *     // Handle error.
  *   }
  *
- *   // Conection deleted.
+ *   // Connection deleted.
  * });
  *
  * @param   {Object}    params          Connection parameters.
@@ -1355,7 +1355,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserLogs', 'users.logs');
 utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
 
 /**
- * Asign roles to a user
+ * Assign roles to a user
  *
  * @method    assignRolestoUser
  * @memberOf  module:management.ManagementClient.prototype
@@ -1440,7 +1440,7 @@ utils.wrapPropertyMethod(ManagementClient, 'removeRolesFromUser', 'users.removeR
 utils.wrapPropertyMethod(ManagementClient, 'getUserPermissions', 'users.getPermissions');
 
 /**
- * Asign permissions to a user
+ * Assign permissions to a user
  *
  * @method    assignPermissionsToUser
  * @memberOf  module:management.ManagementClient.prototype

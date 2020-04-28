@@ -64,7 +64,7 @@ var ConnectionsManager = function(options) {
  *     // Handle error.
  *   }
  *
- *   // Conection created.
+ *   // Connection created.
  * });
  *
  * @param   {Object}    data     Connection data object.
@@ -146,7 +146,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
  *   console.log(connection.name);  // 'newConnectionName'
  * });
  *
- * @param   {Object}    params        Conneciton parameters.
+ * @param   {Object}    params        Connection parameters.
  * @param   {String}    params.id     Connection ID.
  * @param   {Object}    data          Updated connection data.
  * @param   {Function}  [cb]          Callback function.
@@ -167,7 +167,7 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  *     // Handle error.
  *   }
  *
- *   // Conection deleted.
+ *   // Connection deleted.
  * });
  *
  * @param   {Object}    params          Connection parameters.
