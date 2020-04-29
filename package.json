@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.24.0",
+  "version": "2.25.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "files": [
@@ -49,7 +49,7 @@
     "json-loader": "^0.5.7",
     "jws": "^3.2.2",
     "minami": "^1.2.3",
-    "mocha": "^6.2.3",
+    "mocha": "^6.2.0",
     "mocha-junit-reporter": "^1.23.1",
     "moment": "^2.24.0",
     "nock": "^10.0.6",
@@ -60,6 +60,6 @@
     "proxyquire": "^2.1.1",
     "sinon": "^7.3.2",
     "string-replace-webpack-plugin": "0.1.3",
-    "webpack": "^4.43.0"
+    "webpack": "^4.36.1"
   }
 }

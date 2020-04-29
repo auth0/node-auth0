@@ -1,5 +1,23 @@
 # Change Log
 
+## [v2.25.0](https://github.com/auth0/node-auth0/tree/v2.25.0) (2020-04-29)
+
+**Changed**
+
+- Deprecate Request lib [\#475](https://github.com/auth0/node-auth0/pull/475) ([davidpatrick](https://github.com/davidpatrick))
+
+**Fixed**
+
+- Fix typos [\#480](https://github.com/auth0/node-auth0/pull/480) ([pgrimaud](https://github.com/pgrimaud))
+- Update getRulesConfigs docs to include callback [\#473](https://github.com/auth0/node-auth0/pull/473) ([akvamalin](https://github.com/akvamalin))
+
+**Security**
+
+- Dependency bump [\#481](https://github.com/auth0/node-auth0/pull/481) ([davidpatrick](https://github.com/davidpatrick))
+- [Security] Bump acorn from 6.2.1 to 6.4.1 [\#471](https://github.com/auth0/node-auth0/pull/471) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.24.0...v2.25.0)
+
 ## [v2.24.0](https://github.com/auth0/node-auth0/tree/v2.24.0) (2020-03-06)
 
 **Fixed**
