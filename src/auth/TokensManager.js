@@ -71,7 +71,7 @@ TokensManager.prototype.getInfo = function(idToken, cb) {
     url: this.baseUrl + '/tokeninfo',
     data: { id_token: idToken },
     headers: headers
-  });
+  }).then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {
@@ -161,7 +161,7 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
     url: this.baseUrl + '/delegation',
     data: body,
     headers: headers
-  });
+  }).then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {

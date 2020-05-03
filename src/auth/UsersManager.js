@@ -73,7 +73,7 @@ UsersManager.prototype.getInfo = function(accessToken, cb) {
     method: 'GET',
     url: url,
     headers: headers
-  });
+  }).then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {
@@ -158,7 +158,7 @@ UsersManager.prototype.impersonate = function(userId, settings, cb) {
     headers: headers,
     data: data,
     url: url
-  });
+  }).then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {
