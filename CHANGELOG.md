@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.25.1](https://github.com/auth0/node-auth0/tree/v2.25.1) (2020-05-03)
+
+**Fixed**
+
+- Return response.data where Axios is used [\#484](https://github.com/auth0/node-auth0/pull/484) ([taylorbryant](https://github.com/taylorbryant))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.25.0...v2.25.1)
+
 ## [v2.25.0](https://github.com/auth0/node-auth0/tree/v2.25.0) (2020-04-29)
 
 **Changed**
