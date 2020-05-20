@@ -407,6 +407,7 @@ AuthenticationClient.prototype.changePassword = function(data, cb) {
  * @param   {String}    data.email      User email.
  * @param   {String}    data.connection Identity provider for the user.
  * @param   {String}    data.client_id  Client ID of the App the user should be returned to.
+ * @param   {Function}  [cb]            Method callback.
  *
  * @return  {Promise|undefined}
  */
