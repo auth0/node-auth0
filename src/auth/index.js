@@ -391,7 +391,8 @@ AuthenticationClient.prototype.changePassword = function(data, cb) {
  *
  * var data = {
  *   email: '{EMAIL}',
- *   connection: 'Username-Password-Authentication'
+ *   connection: 'Username-Password-Authentication',
+ *   client_id: 'OS1VzKTVjizL0VCc9Hx2ae2aTPXWy6BD
  * };
  *
  * auth0.requestChangePasswordEmail(data, function (err, message) {
@@ -405,6 +406,7 @@ AuthenticationClient.prototype.changePassword = function(data, cb) {
  * @param   {Object}    data            User data object.
  * @param   {String}    data.email      User email.
  * @param   {String}    data.connection Identity provider for the user.
+ * @param   {String}    data.client_id  Client ID of the App the user should be returned to.
  *
  * @return  {Promise|undefined}
  */
