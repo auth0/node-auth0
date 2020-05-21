@@ -247,7 +247,7 @@ DatabaseAuthenticator.prototype.changePassword = function(userData, cb) {
  * var data = {
  *   email: '{EMAIL}',
  *   connection: 'Username-Password-Authentication',
- *   client_id: 'OS1VzKTVjizL0VCc9Hx2ae2aTPXWy6BD
+ *   client_id: 'OS1VzKTVjizL0VCc9Hx2ae2aTPXWy6BD'
  * };
  *
  * auth0.database.requestChangePasswordEmail(data, function (err, message) {
@@ -261,7 +261,7 @@ DatabaseAuthenticator.prototype.changePassword = function(userData, cb) {
  * @param   {Object}    data              User credentials object.
  * @param   {String}    data.email        User email address.
  * @param   {String}    data.connection   Identity provider in use.
- * @param   {String}    data.client_id    Client ID of the App the user should be returned to.
+ * @param   {String}    data.client_id    Client ID of the Application requesting the password change, to be included in the email template.
  * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
