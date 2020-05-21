@@ -142,9 +142,10 @@ var AuthenticationClient = function(options) {
  *   }
  * };
  *
- * @param   {Object}  data              User data object.
- * @param   {String}  data.email        User email address.
- * @param   {Object}  [data.authParams] Authentication parameters.
+ * @param   {Object}    data              User data object.
+ * @param   {String}    data.email        User email address.
+ * @param   {Object}    [data.authParams] Authentication parameters.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -180,9 +181,10 @@ AuthenticationClient.prototype.requestMagicLink = function(data, cb) {
  *   }
  * };
  *
- * @param   {Object}  data              User data object.
- * @param   {String}  data.email        User email address.
- * @param   {Object}  [data.authParams] Authentication parameters.
+ * @param   {Object}    data              User data object.
+ * @param   {String}    data.email        User email address.
+ * @param   {Object}    [data.authParams] Authentication parameters.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -216,8 +218,9 @@ AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
  *
  * });
  *
- * @param   {Object}  data                User data object.
- * @param   {String}  data.phone_number   The user phone number.
+ * @param   {Object}    data                User data object.
+ * @param   {String}    data.phone_number   The user phone number.
+ * @param   {Function}  [cb]                Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -262,11 +265,12 @@ AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
  *   token_type: String
  * }
  *
- * @param   {Object}  data              Credentials object.
- * @param   {String}  data.username     Phone number.
- * @param   {String}  data.password     Verification code.
- * @param   {String}  data.target       Target client ID.
- * @param   {String}  data.grant_type   Grant type.
+ * @param   {Object}    data              Credentials object.
+ * @param   {String}    data.username     Phone number.
+ * @param   {String}    data.password     Verification code.
+ * @param   {String}    data.target       Target client ID.
+ * @param   {String}    data.grant_type   Grant type.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -309,11 +313,12 @@ AuthenticationClient.prototype.verifySMSCode = function(data, cb) {
  *   console.log(token);
  * });
  *
- * @param   {Object}  data              Token data object.
- * @param   {String}  data.id_token     The user ID token.
- * @param   {String}  data.api_type     The API type (aws, firebase, etc).
- * @param   {String}  data.target       The target client ID.
- * @param   {String}  data.grant_type   The grant type.
+ * @param   {Object}    data              Token data object.
+ * @param   {String}    data.id_token     The user ID token.
+ * @param   {String}    data.api_type     The API type (aws, firebase, etc).
+ * @param   {String}    data.target       The target client ID.
+ * @param   {String}    data.grant_type   The grant type.
+ * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
@@ -362,6 +367,7 @@ AuthenticationClient.prototype.getDelegationToken = function(data, cb) {
  * @param   {String}    data.email      User email.
  * @param   {String}    data.password   User password.
  * @param   {String}    data.connection Identity provider for the user.
+ * @param   {Function}  [cb]            Method callback.
  *
  * @return  {Promise|undefined}
  */
