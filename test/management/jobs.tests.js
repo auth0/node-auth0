@@ -268,11 +268,21 @@ describe('JobsManager', function() {
       users: usersFilePath,
       connection_id: 'con_test'
     };
+    var payload = {
+      status: 'pending',
+      type: 'users_import',
+      created_at: '',
+      id: 'job_0000000000000001',
+      connection_id: 'con_0000000000000001',
+      upsert: false,
+      external_id: '',
+      send_completion_email: true
+    };
 
     beforeEach(function() {
       this.request = nock(API_URL)
         .post('/jobs/users-imports')
-        .reply(200);
+        .reply(200, payload);
     });
 
     it('should accept a callback', function(done) {
@@ -285,6 +295,16 @@ describe('JobsManager', function() {
       this.jobs
         .importUsers(data)
         .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should return a promise with the api response as the value passed back', function(done) {
+      this.jobs
+        .importUsers(data)
+        .then(data => {
+          expect(data).to.eql(payload);
+          done();
+        })
         .catch(done.bind(null, null));
     });
 

@@ -173,6 +173,7 @@ JobsManager.prototype.importUsers = function(data, cb) {
   var promise = options.tokenProvider.getAccessToken().then(function(access_token) {
     return axios
       .post(url, form, { headers: { ...headers, Authorization: `Bearer ${access_token}` } })
+      .then(({ data }) => data)
       .catch(function(err) {
         if (!err.response) {
           return Promise.reject(err);
