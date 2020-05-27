@@ -288,6 +288,31 @@ describe('JobsManager', function() {
         .catch(done.bind(null, null));
     });
 
+    it('should have the payload in response.data', function(done) {
+      nock.cleanAll();
+      var payload = {
+        status: 'pending',
+        type: 'users_import',
+        created_at: '',
+        id: 'job_0000000000000001',
+        connection_id: 'con_0000000000000001',
+        upsert: false,
+        external_id: '',
+        send_completion_email: true
+      };
+      var request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply(200, payload);
+
+      this.jobs
+        .importUsers(data)
+        .then(response => {
+          expect(response.data).to.deep.equal(payload);
+          done();
+        })
+        .catch(err => done(err));
+    });
+
     it('should pass request errors to the promise catch handler', function(done) {
       nock.cleanAll();
 
@@ -535,6 +560,58 @@ describe('JobsManager', function() {
 
         done();
       });
+    });
+  });
+
+  describe('#importUsersJob', function() {
+    var data = {
+      users: usersFilePath,
+      connection_id: 'con_test'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.jobs.importUsersJob(data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.jobs
+        .importUsersJob(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should extract data from the response', function(done) {
+      nock.cleanAll();
+
+      var payload = {
+        status: 'pending',
+        type: 'users_import',
+        created_at: '',
+        id: 'job_0000000000000001',
+        connection_id: 'con_0000000000000001',
+        upsert: false,
+        external_id: '',
+        send_completion_email: true
+      };
+      var request = nock(API_URL)
+        .post('/jobs/users-imports')
+        .reply(200, payload);
+
+      this.jobs
+        .importUsersJob(data)
+        .then(response => {
+          expect(response).to.deep.equal(payload);
+          done();
+        })
+        .catch(err => done(err));
     });
   });
 
