@@ -129,6 +129,7 @@ JobsManager.prototype.get = function(params, cb) {
  * Given a path to a file and a connection id, create a new job that imports the
  * users contained in the file or JSON string and associate them with the given
  * connection.
+ * @deprecated since version 2.26. It will be deleted in version 3.0.
  *
  * @method   importUsers
  * @memberOf module:management.JobsManager.prototype
@@ -156,6 +157,10 @@ JobsManager.prototype.get = function(params, cb) {
  * @return  {Promise|undefined}
  */
 JobsManager.prototype.importUsers = function(data, cb) {
+  console.warn(
+    '"importUsers" has been deprecated as it was inconsistent with the API. Please, use "importUsersJob" which returns the response data directly.'
+  );
+
   var options = this.options;
   var url = options.baseUrl + '/jobs/users-imports';
   var userData = data.users_json ? Buffer.from(data.users_json) : fs.createReadStream(data.users);
