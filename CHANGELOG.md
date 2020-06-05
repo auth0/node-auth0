@@ -1,5 +1,25 @@
 # Change Log
 
+## [v2.26.0](https://github.com/auth0/node-auth0/tree/v2.26.0) (2020-06-05)
+
+**Added**
+
+- JobsManager handling importUsers response payload [\#492](https://github.com/auth0/node-auth0/pull/492) ([davidpatrick](https://github.com/davidpatrick))
+
+**Deprecated**
+
+- Deprecate importUsers in favor of importUsersJob [\#494](https://github.com/auth0/node-auth0/pull/494) ([davidpatrick](https://github.com/davidpatrick))
+
+**Fixed**
+
+- Bump codecov - npm audit fix [\#495](https://github.com/auth0/node-auth0/pull/495) ([davidpatrick](https://github.com/davidpatrick))
+
+**Security**
+
+- Fixes dependency vulnerabilities from webpack [\#498](https://github.com/auth0/node-auth0/pull/498) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.25.1...v2.26.0)
+
 ## [v2.25.1](https://github.com/auth0/node-auth0/tree/v2.25.1) (2020-05-03)
 
 **Fixed**
