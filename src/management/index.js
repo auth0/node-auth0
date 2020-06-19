@@ -2567,6 +2567,7 @@ utils.wrapPropertyMethod(
  * @method    getGuardianFactors
  * @memberOf  module:management.ManagementClient.prototype
  *
+ * @example
  * management.getGuardianFactors(function (err, factors) {
  *   console.log(factors.length);
  * });
@@ -2583,6 +2584,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.facto
  * @method    getGuardianFactorProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
+ * @example
  * management.getFactorProvider({ name: 'sms', provider: 'twilio'}, function (err, provider) {
  *   console.log(provider);
  * });
@@ -2604,12 +2606,13 @@ utils.wrapPropertyMethod(
  * @method    updateFactorProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
+ * @example
  * management.updateGuardianFactorProvider({ name: 'sms', provider: 'twilio' }, {
- *  messaging_service_sid: 'XXXXXXXXXXXXXX',
- *  auth_token: 'XXXXXXXXXXXXXX',
- *  sid: 'XXXXXXXXXXXXXX'
- * }, function(err, provider) {
- *  console.log(provider);
+ *   messaging_service_sid: 'XXXXXXXXXXXXXX',
+ *   auth_token: 'XXXXXXXXXXXXXX',
+ *   sid: 'XXXXXXXXXXXXXX'
+ * }, function (err, provider) {
+ *   console.log(provider);
  * });
  *
  * @param   {Object}    params            Factor provider parameters.
@@ -2630,6 +2633,7 @@ utils.wrapPropertyMethod(
  * @method    getGuardianFactorTemplates
  * @memberOf  module:management.ManagementClient.prototype
  *
+ * @example
  * management.getGuardianFactorTemplates({ name: 'sms' }, function (err, templates) {
  *   console.log(templates);
  * });
@@ -2651,11 +2655,12 @@ utils.wrapPropertyMethod(
  * @method    updateGuardianFactorTemplates
  * @memberOf  module:management.ManagementClient.prototype
  *
+ * @example
  * management.updateGuardianFactorTemplates({ name: 'sms' }, {
- *  enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
- *  verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}"
- * }, function(err, templates) {
- *  console.log(templates);
+ *   enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+ *   verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}"
+ * }, function (err, templates) {
+ *   console.log(templates);
  * });
  *
  * @param   {Object}    params            Factor parameters.
@@ -2676,10 +2681,11 @@ utils.wrapPropertyMethod(
  * @method    updateGuardianFactor
  * @memberOf  module:management.ManagementClient.prototype
  *
+ * @example
  * management.updateGuardianFactor({ name: 'sms' }, {
- *  enabled: true
- * }, function(err, factor) {
- *  console.log(factor);
+ *   enabled: true
+ * }, function (err, factor) {
+ *   console.log(factor);
  * });
  *
  * @param   {Object}    params            Factor parameters.
