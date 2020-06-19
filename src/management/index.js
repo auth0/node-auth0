@@ -2558,7 +2558,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteCustomDomain', 'customDomains.
 utils.wrapPropertyMethod(
   ManagementClient,
   'createGuardianEnrollmentTicket',
-  'guardian.tickets.create'
+  'guardian.createEnrollmentTicket'
 );
 
 /**
@@ -2576,7 +2576,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.factors.getAll');
+utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.getFactors');
 
 /**
  * Get Guardian factor provider configuration
@@ -2597,7 +2597,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.facto
 utils.wrapPropertyMethod(
   ManagementClient,
   'getGuardianFactorProvider',
-  'guardian.factorsProviders.get'
+  'guardian.getFactorProvider'
 );
 
 /**
@@ -2624,7 +2624,7 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(
   ManagementClient,
   'updateGuardianFactorProvider',
-  'guardian.factorsProviders.update'
+  'guardian.updateFactorProvider'
 );
 
 /**
@@ -2646,7 +2646,7 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(
   ManagementClient,
   'getGuardianFactorTemplates',
-  'guardian.factorsTemplates.get'
+  'guardian.getFactorTemplates'
 );
 
 /**
@@ -2672,7 +2672,7 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(
   ManagementClient,
   'updateGuardianFactorTemplates',
-  'guardian.factorsTemplates.update'
+  'guardian.updateFactorTemplates'
 );
 
 /**
@@ -2694,7 +2694,7 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'updateGuardianFactor', 'guardian.factors.update');
+utils.wrapPropertyMethod(ManagementClient, 'updateGuardianFactor', 'guardian.updateFactor');
 
 /**
  * Get all roles.

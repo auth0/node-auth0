@@ -810,7 +810,6 @@ describe('ManagementClient', function() {
   });
 
   describe('instance methods', function() {
-    var method;
     var methods = [
       'getConnections',
       'createConnection',
@@ -839,7 +838,7 @@ describe('ManagementClient', function() {
       'getUsers',
       'getUser',
       'deleteAllUsers',
-      'deleteUsers',
+      'deleteUser',
       'createUser',
       'updateUser',
       'getBlacklistedTokens',
@@ -860,6 +859,13 @@ describe('ManagementClient', function() {
       'setRulesConfig',
       'getRulesConfigs',
       'deleteRulesConfig',
+      'createGuardianEnrollmentTicket',
+      'getGuardianFactors',
+      'getGuardianFactorProvider',
+      'updateGuardianFactorProvider',
+      'getGuardianFactorTemplates',
+      'updateGuardianFactorTemplates',
+      'updateGuardianFactor',
       'getUserBlocks',
       'unblockUser',
       'getUserBlocksByIdentifier',
@@ -872,12 +878,10 @@ describe('ManagementClient', function() {
       this.client = new ManagementClient(config);
     });
 
-    for (var i = 0, l = methods.length; i < l; i++) {
-      method = methods[i];
-
+    methods.forEach(function (method) {
       it('should have a ' + method + ' method', function() {
         expect(this.client[method]).to.exist.to.be.an.instanceOf(Function);
       });
-    }
+    });
   });
 });
