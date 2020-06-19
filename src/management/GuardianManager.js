@@ -104,6 +104,48 @@ var GuardianManager = function(options) {
     guardianFactorsProvidersAuth0RestClient,
     options.retry
   );
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian policies.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianPoliciesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/policies',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.policies = new RetryRestClient(guardianPoliciesAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for retrieving a Guardian factor selected provider.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsSelectedProviderAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/:name/selected-provider',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorsSelectedProvider = new RetryRestClient(
+    guardianFactorsSelectedProviderAuth0RestClient,
+    options.retry
+  );
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian factor message types.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsMessageTypesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/:name/message-types',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorsMessageTypes = new RetryRestClient(
+    guardianFactorsMessageTypesAuth0RestClient,
+    options.retry
+  );
 };
 
 /**
@@ -279,5 +321,135 @@ utils.wrapPropertyMethod(GuardianManager, 'updateFactorTemplates', 'factorsTempl
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(GuardianManager, 'updateFactor', 'factors.update');
+
+/**
+ * Get enabled Guardian policies
+ *
+ * @method    getPolicies
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getPolicies(function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getPolicies', 'policies.get');
+
+/**
+ * Update enabled Guardian policies
+ *
+ * @method    updatePolicies
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updatePolicies({}, [
+ *   'all-applications'
+ * ], function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {String[]}  data              Policies to enable. Empty array disables all policies.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updatePolicies', 'policies.update');
+
+/**
+ * Get the Guardian factor's selected provider
+ *
+ * @method    getFactorSelectedProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getFactorSelectedProvider({ name: 'phone' }, function (err, selectedProvider) {
+ *   console.log(selectedProvider);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {String}    params.name       Factor name (only `"phone"` is supported).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'getFactorSelectedProvider',
+  'factorsSelectedProvider.get'
+);
+
+/**
+ * Update the Guardian factor's selected provider
+ *
+ * @method    updateFactorSelectedProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updateFactorSelectedProvider({ name: 'phone' }, {
+ *   provider: 'twilio'
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {String}    params.name       Factor name (only `"phone"` is supported).
+ * @param   {Object}    data              Updated selected provider data.
+ * @param   {String}    data.provider     Name of the selected provider
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'updateFactorSelectedProvider',
+  'factorsSelectedProvider.update'
+);
+
+/**
+ * Get the Guardian factor's message types
+ *
+ * @method    getFactorMessageTypes
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getFactorMessageTypes({ name: 'phone' }, function (err, messageTypes) {
+ *   console.log(messageTypes);
+ * });
+ *
+ * @param   {Object}    params            Factor provider parameters.
+ * @param   {String}    params.name       Factor name (only `"phone"` is supported).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getFactorMessageTypes', 'factorsMessageTypes.get');
+
+/**
+ * Update the Guardian factor's message types
+ *
+ * @method    updateFactorMessageTypes
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updateFactorMessageTypes({ name: 'phone' }, {
+ *   message_types: ['sms', 'voice']
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params                Factor provider parameters.
+ * @param   {String}    params.name           Factor name (only `"phone"` is supported).
+ * @param   {Object}    data                  Updated selected provider data.
+ * @param   {String[]}  data.message_types    Message types (only `"sms"` and `"voice"` are supported).
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updateFactorMessageTypes', 'factorsMessageTypes.update');
 
 module.exports = GuardianManager;

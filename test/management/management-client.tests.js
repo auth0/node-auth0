@@ -299,6 +299,12 @@ describe('ManagementClient', function() {
         expect(client.guardian.factorsProviders.restClient.restClient.options.headers).to.contain(
           requestHeaders
         );
+        expect(
+          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+        expect(
+          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
 
         expect(client.customDomains.resource.restClient.restClient.options.headers).to.contain(
           requestHeaders
@@ -438,6 +444,12 @@ describe('ManagementClient', function() {
         expect(client.guardian.factorsProviders.restClient.restClient.options.headers).to.contain(
           requestHeaders
         );
+        expect(
+          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+        expect(
+          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
 
         expect(client.customDomains.resource.restClient.restClient.options.headers).to.contain(
           requestHeaders
@@ -574,6 +586,12 @@ describe('ManagementClient', function() {
         ).to.not.have.property('Auth0-Client');
         expect(
           client.guardian.factorsProviders.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
 
         expect(
@@ -714,6 +732,12 @@ describe('ManagementClient', function() {
         ).to.not.have.property('Auth0-Client');
         expect(
           client.guardian.factorsProviders.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
 
         expect(
@@ -866,6 +890,12 @@ describe('ManagementClient', function() {
       'getGuardianFactorTemplates',
       'updateGuardianFactorTemplates',
       'updateGuardianFactor',
+      'getGuardianPolicies',
+      'updateGuardianPolicies',
+      'getGuardianFactorSelectedProvider',
+      'updateGuardianFactorSelectedProvider',
+      'getGuardianFactorMessageTypes',
+      'updateGuardianFactorMessageTypes',
       'getUserBlocks',
       'unblockUser',
       'getUserBlocksByIdentifier',
@@ -878,7 +908,7 @@ describe('ManagementClient', function() {
       this.client = new ManagementClient(config);
     });
 
-    methods.forEach(function (method) {
+    methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
         expect(this.client[method]).to.exist.to.be.an.instanceOf(Function);
       });

@@ -25,7 +25,11 @@ describe('GuardianManager', function() {
       'updateFactorProvider',
       'getFactorTemplates',
       'updateFactorTemplates',
-      'updateFactor'
+      'updateFactor',
+      'getFactorSelectedProvider',
+      'updateFactorSelectedProvider',
+      'getFactorMessageTypes',
+      'updateFactorMessageTypes'
     ];
 
     methods.forEach(function(method) {
@@ -302,7 +306,7 @@ describe('GuardianManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/guardian/factors', function(done) {
+    it('should perform a GET request to /api/v2/guardian/factors', function(done) {
       var request = this.request;
 
       this.guardian.getFactors().then(function() {
@@ -368,7 +372,7 @@ describe('GuardianManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/guardian/factors/sms/twilio', function(done) {
+    it('should perform a GET request to /api/v2/guardian/factors/sms/twilio', function(done) {
       var request = this.request;
 
       this.guardian.getFactorProvider(this.params).then(function() {
@@ -446,7 +450,10 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.name + '/providers/' + this.params.provider)
+        .put(
+          '/guardian/factors/' + this.params.name + '/providers/' + this.params.provider,
+          this.data
+        )
         .reply(200);
 
       this.guardian.updateFactorProvider(this.params, this.data).then(function() {
@@ -512,7 +519,7 @@ describe('GuardianManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/guardian/factors/sms/templates', function(done) {
+    it('should perform a GET request to /api/v2/guardian/factors/sms/templates', function(done) {
       var request = this.request;
 
       this.guardian.getFactorTemplates(this.params).then(function() {
@@ -589,7 +596,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.name + '/templates')
+        .put('/guardian/factors/' + this.params.name + '/templates', this.data)
         .reply(200);
 
       this.guardian.updateFactorTemplates(this.params, this.data).then(function() {
@@ -664,7 +671,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/' + this.params.name)
+        .put('/guardian/factors/' + this.params.name, this.data)
         .reply(200);
 
       this.guardian.updateFactor(this.params, this.data).then(function() {
@@ -697,6 +704,413 @@ describe('GuardianManager', function() {
         .reply(200);
 
       this.guardian.updateFactor(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getPolicies', function() {
+    beforeEach(function() {
+      this.data = ['all-applications'];
+
+      this.request = nock(API_URL)
+        .get('/guardian/policies')
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.getPolicies(done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .getPolicies()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/guardian/policies', function(done) {
+      var request = this.request;
+
+      this.guardian.getPolicies().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/policies')
+        .reply(500);
+
+      this.guardian.getPolicies().catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/policies')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.getPolicies().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#updatePolicies', function() {
+    beforeEach(function() {
+      this.params = {};
+      this.data = ['all-applications'];
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.updatePolicies(this.params, this.data, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .updatePolicies(this.params, this.data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PUT request to /api/v2/guardian/policies', function(done) {
+      var request = nock(API_URL)
+        .put('/guardian/policies')
+        .reply(200, this.data);
+
+      this.guardian.updatePolicies(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/policies', this.data)
+        .reply(200);
+
+      this.guardian.updatePolicies(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/policies')
+        .reply(500);
+
+      this.guardian.updatePolicies(this.params, this.data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/policies')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.updatePolicies(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getFactorSelectedProvider', function() {
+    beforeEach(function() {
+      this.data = {
+        provider: 'twilio'
+      };
+
+      this.request = nock(API_URL)
+        .get('/guardian/factors/phone/selected-provider')
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.getFactorSelectedProvider({ name: 'phone' }, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .getFactorSelectedProvider({ name: 'phone' })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/guardian/factors/phone/selected-provider', function(done) {
+      var request = this.request;
+
+      this.guardian.getFactorSelectedProvider({ name: 'phone' }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/factors/phone/selected-provider')
+        .reply(500);
+
+      this.guardian.getFactorSelectedProvider({ name: 'phone' }).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/factors/phone/selected-provider')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.getFactorSelectedProvider({ name: 'phone' }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateFactorSelectedProvider', function() {
+    beforeEach(function() {
+      this.params = { name: 'phone' };
+      this.data = {
+        provider: 'twilio'
+      };
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.updateFactorSelectedProvider(this.params, this.data, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .updateFactorSelectedProvider(this.params, this.data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PUT request to /api/v2/guardian/factors/phone/selected-provider', function(done) {
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/selected-provider')
+        .reply(200, this.data);
+
+      this.guardian.updateFactorSelectedProvider(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/selected-provider', this.data)
+        .reply(200);
+
+      this.guardian.updateFactorSelectedProvider(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/selected-provider')
+        .reply(500);
+
+      this.guardian.updateFactorSelectedProvider(this.params, this.data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/selected-provider')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.updateFactorSelectedProvider(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getFactorMessageTypes', function() {
+    beforeEach(function() {
+      this.data = {
+        message_types: ['sms', 'voice']
+      };
+
+      this.request = nock(API_URL)
+        .get('/guardian/factors/phone/message-types')
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.getFactorMessageTypes({ name: 'phone' }, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .getFactorMessageTypes({ name: 'phone' })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/guardian/factors/phone/message-types', function(done) {
+      var request = this.request;
+
+      this.guardian.getFactorMessageTypes({ name: 'phone' }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/factors/phone/message-types')
+        .reply(500);
+
+      this.guardian.getFactorMessageTypes({ name: 'phone' }).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/factors/phone/message-types')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.getFactorMessageTypes({ name: 'phone' }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateFactorMessageTypes', function() {
+    beforeEach(function() {
+      this.params = { name: 'phone' };
+      this.data = {
+        message_types: ['sms', 'voice']
+      };
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.updateFactorMessageTypes(this.params, this.data, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .updateFactorMessageTypes(this.params, this.data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PUT request to /api/v2/guardian/factors/phone/message-types', function(done) {
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/message-types')
+        .reply(200, this.data);
+
+      this.guardian.updateFactorMessageTypes(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/message-types', this.data)
+        .reply(200);
+
+      this.guardian.updateFactorMessageTypes(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/message-types')
+        .reply(500);
+
+      this.guardian.updateFactorMessageTypes(this.params, this.data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/message-types')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.updateFactorMessageTypes(this.params, this.data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
