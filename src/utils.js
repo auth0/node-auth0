@@ -50,6 +50,9 @@ utils.generateClientInfo = function() {
  */
 utils.wrapPropertyMethod = function(Parent, name, propertyMethod) {
   var path = propertyMethod.split('.');
+  if (path.length > 2) {
+    throw new Error('wrapPropertyMethod() only supports one level of nesting for propertyMethod');
+  }
   var property = path.shift();
   var method = path.pop();
 
