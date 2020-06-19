@@ -76,7 +76,7 @@ var GuardianManager = function(options) {
   this.factors = new RetryRestClient(guardianFactorsAuth0RestClient, options.retry);
 
   /**
-   * Provides an abstraction layer for retrieving Guardian factors.
+   * Provides an abstraction layer for retrieving Guardian factor templates.
    *
    * @type {external:RestClient}
    */
@@ -167,6 +167,7 @@ utils.wrapPropertyMethod(GuardianManager, 'createEnrollmentTicket', 'tickets.cre
  * @method    getFactors
  * @memberOf  module:management.GuardianManager.prototype
  *
+ * @example
  * management.guardian.getFactors(function (err, factors) {
  *   console.log(factors.length);
  * });
@@ -183,6 +184,7 @@ utils.wrapPropertyMethod(GuardianManager, 'getFactors', 'factors.getAll');
  * @method    getFactorProvider
  * @memberOf  module:management.GuardianManager.prototype
  *
+ * @example
  * management.guardian.getFactorProvider({ name: 'sms', provider: 'twilio'}, function (err, provider) {
  *   console.log(provider);
  * });
@@ -200,12 +202,13 @@ utils.wrapPropertyMethod(GuardianManager, 'getFactorProvider', 'factorsProviders
  * @method    updateFactorProvider
  * @memberOf  module:management.GuardianManager.prototype
  *
+ * @example
  * management.guardian.updateFactorProvider({ name: 'sms', provider: 'twilio' }, {
- *  messaging_service_sid: 'XXXXXXXXXXXXXX',
- *  auth_token: 'XXXXXXXXXXXXXX',
- *  sid: 'XXXXXXXXXXXXXX'
- * }, function(err, provider) {
- *  console.log(provider);
+ *   messaging_service_sid: 'XXXXXXXXXXXXXX',
+ *   auth_token: 'XXXXXXXXXXXXXX',
+ *   sid: 'XXXXXXXXXXXXXX'
+ * }, function (err, provider) {
+ *   console.log(provider);
  * });
  *
  * @param   {Object}    params            Factor provider parameters.
@@ -222,6 +225,7 @@ utils.wrapPropertyMethod(GuardianManager, 'updateFactorProvider', 'factorsProvid
  * @method    getFactorTemplates
  * @memberOf  module:management.GuardianManager.prototype
  *
+ * @example
  * management.guardian.getFactorTemplates({ name: 'sms' }, function (err, templates) {
  *   console.log(templates);
  * });
@@ -239,11 +243,12 @@ utils.wrapPropertyMethod(GuardianManager, 'getFactorTemplates', 'factorsTemplate
  * @method    updateFactorTemplates
  * @memberOf  module:management.GuardianManager.prototype
  *
+ * @example
  * management.guardian.updateFactorProvider({ name: 'sms' }, {
- *  enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
- *  verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}"
- * }, function(err, templates) {
- *  console.log(templates);
+ *   enrollment_message: "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+ *   verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}"
+ * }, function (err, templates) {
+ *   console.log(templates);
  * });
  *
  * @param   {Object}    params            Factor parameters.
@@ -260,10 +265,11 @@ utils.wrapPropertyMethod(GuardianManager, 'updateFactorTemplates', 'factorsTempl
  * @method    updateFactor
  * @memberOf  module:management.GuardianManager.prototype
  *
+ * @example
  * management.guardian.updateFactor({ name: 'sms' }, {
- *  enabled: true
- * }, function(err, factor) {
- *  console.log(factor);
+ *   enabled: true
+ * }, function (err, factor) {
+ *   console.log(factor);
  * });
  *
  * @param   {Object}    params            Factor parameters.
