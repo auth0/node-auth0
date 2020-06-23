@@ -2735,43 +2735,40 @@ utils.wrapPropertyMethod(ManagementClient, 'getGuardianPolicies', 'guardian.getP
 utils.wrapPropertyMethod(ManagementClient, 'updateGuardianPolicies', 'guardian.updatePolicies');
 
 /**
- * Get the Guardian factor's selected provider
+ * Get the Guardian phone factor's selected provider
  *
- * @method    getGuardianFactorSelectedProvider
+ * @method    getGuardianPhoneFactorSelectedProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.getGuardianFactorSelectedProvider({ name: 'phone' }, function (err, selectedProvider) {
+ * management.getGuardianPhoneFactorSelectedProvider(function (err, selectedProvider) {
  *   console.log(selectedProvider);
  * });
  *
- * @param   {Object}    params            Factor provider parameters.
- * @param   {String}    params.name       Factor name (only `"phone"` is supported).
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(
   ManagementClient,
-  'getGuardianFactorSelectedProvider',
-  'guardian.getFactorSelectedProvider'
+  'getGuardianPhoneFactorSelectedProvider',
+  'guardian.getPhoneFactorSelectedProvider'
 );
 
 /**
- * Update the Guardian factor's selected provider
+ * Update the Guardian phone factor's selected provider
  *
- * @method    updateGuardianFactorSelectedProvider
+ * @method    updateGuardianPhoneFactorSelectedProvider
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.updateGuardianFactorSelectedProvider({ name: 'phone' }, {
+ * management.updateGuardianPhoneFactorSelectedProvider({}, {
  *   provider: 'twilio'
  * }, function (err, factor) {
  *   console.log(factor);
  * });
  *
- * @param   {Object}    params            Factor provider parameters.
- * @param   {String}    params.name       Factor name (only `"phone"` is supported).
+ * @param   {Object}    params            Parameters.
  * @param   {Object}    data              Updated selected provider data.
  * @param   {String}    data.provider     Name of the selected provider
  * @param   {Function}  [cb]              Callback function.
@@ -2780,48 +2777,45 @@ utils.wrapPropertyMethod(
  */
 utils.wrapPropertyMethod(
   ManagementClient,
-  'updateGuardianFactorSelectedProvider',
-  'guardian.updateFactorSelectedProvider'
+  'updateGuardianPhoneFactorSelectedProvider',
+  'guardian.updatePhoneFactorSelectedProvider'
 );
 
 /**
- * Get the Guardian factor's message types
+ * Get the Guardian phone factor's message types
  *
- * @method    getGuardianFactorMessageTypes
+ * @method    getGuardianPhoneFactorMessageTypes
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.getGuardianFactorMessageTypes({ name: 'phone' }, function (err, messageTypes) {
+ * management.getGuardianPhoneFactorMessageTypes(function (err, messageTypes) {
  *   console.log(messageTypes);
  * });
  *
- * @param   {Object}    params            Factor provider parameters.
- * @param   {String}    params.name       Factor name (only `"phone"` is supported).
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(
   ManagementClient,
-  'getGuardianFactorMessageTypes',
-  'guardian.getFactorMessageTypes'
+  'getGuardianPhoneFactorMessageTypes',
+  'guardian.getPhoneFactorMessageTypes'
 );
 
 /**
- * Update the Guardian factor's message types
+ * Update the Guardian phone factor's message types
  *
- * @method    updateGuardianFactorMessageTypes
+ * @method    updateGuardianPhoneFactorMessageTypes
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.updateGuardianFactorMessageTypes({ name: 'phone' }, {
+ * management.updateGuardianPhoneFactorMessageTypes({}, {
  *   message_types: ['sms', 'voice']
  * }, function (err, factor) {
  *   console.log(factor);
  * });
  *
- * @param   {Object}    params                Factor provider parameters.
- * @param   {String}    params.name           Factor name (only `"phone"` is supported).
+ * @param   {Object}    params                Parameters.
  * @param   {Object}    data                  Updated selected provider data.
  * @param   {String[]}  data.message_types    Message types (only `"sms"` and `"voice"` are supported).
  * @param   {Function}  [cb]                  Callback function.
@@ -2830,8 +2824,8 @@ utils.wrapPropertyMethod(
  */
 utils.wrapPropertyMethod(
   ManagementClient,
-  'updateGuardianFactorMessageTypes',
-  'guardian.updateFactorMessageTypes'
+  'updateGuardianPhoneFactorMessageTypes',
+  'guardian.updatePhoneFactorMessageTypes'
 );
 
 /**

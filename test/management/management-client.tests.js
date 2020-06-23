@@ -300,10 +300,10 @@ describe('ManagementClient', function() {
           requestHeaders
         );
         expect(
-          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+          client.guardian.factorsPhoneSelectedProvider.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
         expect(
-          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
+          client.guardian.factorsPhoneMessageTypes.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
 
         expect(client.customDomains.resource.restClient.restClient.options.headers).to.contain(
@@ -445,10 +445,10 @@ describe('ManagementClient', function() {
           requestHeaders
         );
         expect(
-          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+          client.guardian.factorsPhoneSelectedProvider.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
         expect(
-          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
+          client.guardian.factorsPhoneMessageTypes.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
 
         expect(client.customDomains.resource.restClient.restClient.options.headers).to.contain(
@@ -588,10 +588,10 @@ describe('ManagementClient', function() {
           client.guardian.factorsProviders.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(
-          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+          client.guardian.factorsPhoneSelectedProvider.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(
-          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
+          client.guardian.factorsPhoneMessageTypes.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
 
         expect(
@@ -734,10 +734,10 @@ describe('ManagementClient', function() {
           client.guardian.factorsProviders.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(
-          client.guardian.factorsSelectedProvider.restClient.restClient.options.headers
+          client.guardian.factorsPhoneSelectedProvider.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(
-          client.guardian.factorsMessageTypes.restClient.restClient.options.headers
+          client.guardian.factorsPhoneMessageTypes.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
 
         expect(
@@ -892,10 +892,10 @@ describe('ManagementClient', function() {
       'updateGuardianFactor',
       'getGuardianPolicies',
       'updateGuardianPolicies',
-      'getGuardianFactorSelectedProvider',
-      'updateGuardianFactorSelectedProvider',
-      'getGuardianFactorMessageTypes',
-      'updateGuardianFactorMessageTypes',
+      'getGuardianPhoneFactorSelectedProvider',
+      'updateGuardianPhoneFactorSelectedProvider',
+      'getGuardianPhoneFactorMessageTypes',
+      'updateGuardianPhoneFactorMessageTypes',
       'getUserBlocks',
       'unblockUser',
       'getUserBlocksByIdentifier',

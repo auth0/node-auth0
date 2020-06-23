@@ -118,32 +118,32 @@ var GuardianManager = function(options) {
   this.policies = new RetryRestClient(guardianPoliciesAuth0RestClient, options.retry);
 
   /**
-   * Provides an abstraction layer for retrieving a Guardian factor selected provider.
+   * Provides an abstraction layer for retrieving Guardian phone factor selected provider.
    *
    * @type {external:RestClient}
    */
-  var guardianFactorsSelectedProviderAuth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/guardian/factors/:name/selected-provider',
+  var guardianFactorsPhoneSelectedProviderAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/phone/selected-provider',
     clientOptions,
     options.tokenProvider
   );
-  this.factorsSelectedProvider = new RetryRestClient(
-    guardianFactorsSelectedProviderAuth0RestClient,
+  this.factorsPhoneSelectedProvider = new RetryRestClient(
+    guardianFactorsPhoneSelectedProviderAuth0RestClient,
     options.retry
   );
 
   /**
-   * Provides an abstraction layer for retrieving Guardian factor message types.
+   * Provides an abstraction layer for retrieving Guardian phone factor message types.
    *
    * @type {external:RestClient}
    */
-  var guardianFactorsMessageTypesAuth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/guardian/factors/:name/message-types',
+  var guardianFactorsPhoneMessageTypesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/phone/message-types',
     clientOptions,
     options.tokenProvider
   );
-  this.factorsMessageTypes = new RetryRestClient(
-    guardianFactorsMessageTypesAuth0RestClient,
+  this.factorsPhoneMessageTypes = new RetryRestClient(
+    guardianFactorsPhoneMessageTypesAuth0RestClient,
     options.retry
   );
 };
@@ -361,43 +361,40 @@ utils.wrapPropertyMethod(GuardianManager, 'getPolicies', 'policies.get');
 utils.wrapPropertyMethod(GuardianManager, 'updatePolicies', 'policies.update');
 
 /**
- * Get the Guardian factor's selected provider
+ * Get the Guardian phone factor's selected provider
  *
- * @method    getFactorSelectedProvider
+ * @method    getPhoneFactorSelectedProvider
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.guardian.getFactorSelectedProvider({ name: 'phone' }, function (err, selectedProvider) {
+ * management.guardian.getPhoneFactorSelectedProvider(function (err, selectedProvider) {
  *   console.log(selectedProvider);
  * });
  *
- * @param   {Object}    params            Factor provider parameters.
- * @param   {String}    params.name       Factor name (only `"phone"` is supported).
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(
   GuardianManager,
-  'getFactorSelectedProvider',
-  'factorsSelectedProvider.get'
+  'getPhoneFactorSelectedProvider',
+  'factorsPhoneSelectedProvider.get'
 );
 
 /**
- * Update the Guardian factor's selected provider
+ * Update the Guardian phone factor's selected provider
  *
- * @method    updateFactorSelectedProvider
+ * @method    updatePhoneFactorSelectedProvider
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.guardian.updateFactorSelectedProvider({ name: 'phone' }, {
+ * management.guardian.updatePhoneFactorSelectedProvider({}, {
  *   provider: 'twilio'
  * }, function (err, factor) {
  *   console.log(factor);
  * });
  *
- * @param   {Object}    params            Factor provider parameters.
- * @param   {String}    params.name       Factor name (only `"phone"` is supported).
+ * @param   {Object}    params            Parameters.
  * @param   {Object}    data              Updated selected provider data.
  * @param   {String}    data.provider     Name of the selected provider
  * @param   {Function}  [cb]              Callback function.
@@ -406,50 +403,55 @@ utils.wrapPropertyMethod(
  */
 utils.wrapPropertyMethod(
   GuardianManager,
-  'updateFactorSelectedProvider',
-  'factorsSelectedProvider.update'
+  'updatePhoneFactorSelectedProvider',
+  'factorsPhoneSelectedProvider.update'
 );
 
 /**
- * Get the Guardian factor's message types
+ * Get the Guardian phone factor's message types
  *
- * @method    getFactorMessageTypes
+ * @method    getPhoneFactorMessageTypes
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.guardian.getFactorMessageTypes({ name: 'phone' }, function (err, messageTypes) {
+ * management.guardian.getPhoneFactorMessageTypes(function (err, messageTypes) {
  *   console.log(messageTypes);
  * });
  *
- * @param   {Object}    params            Factor provider parameters.
- * @param   {String}    params.name       Factor name (only `"phone"` is supported).
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(GuardianManager, 'getFactorMessageTypes', 'factorsMessageTypes.get');
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'getPhoneFactorMessageTypes',
+  'factorsPhoneMessageTypes.get'
+);
 
 /**
- * Update the Guardian factor's message types
+ * Update the Guardian phone factor's message types
  *
- * @method    updateFactorMessageTypes
+ * @method    updatePhoneFactorMessageTypes
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
- * management.guardian.updateFactorMessageTypes({ name: 'phone' }, {
+ * management.guardian.updatePhoneFactorMessageTypes({}, {
  *   message_types: ['sms', 'voice']
  * }, function (err, factor) {
  *   console.log(factor);
  * });
  *
- * @param   {Object}    params                Factor provider parameters.
- * @param   {String}    params.name           Factor name (only `"phone"` is supported).
+ * @param   {Object}    params                Parameters.
  * @param   {Object}    data                  Updated selected provider data.
  * @param   {String[]}  data.message_types    Message types (only `"sms"` and `"voice"` are supported).
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(GuardianManager, 'updateFactorMessageTypes', 'factorsMessageTypes.update');
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'updatePhoneFactorMessageTypes',
+  'factorsPhoneMessageTypes.update'
+);
 
 module.exports = GuardianManager;
