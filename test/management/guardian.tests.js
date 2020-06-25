@@ -851,7 +851,7 @@ describe('GuardianManager', function() {
       };
 
       this.request = nock(API_URL)
-        .get('/guardian/factors/phone/selected-provider')
+        .get('/guardian/factors/sms/selected-provider')
         .reply(200, this.data);
     });
 
@@ -866,7 +866,7 @@ describe('GuardianManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a GET request to /api/v2/guardian/factors/phone/selected-provider', function(done) {
+    it('should perform a GET request to /api/v2/guardian/factors/sms/selected-provider', function(done) {
       var request = this.request;
 
       this.guardian.getPhoneFactorSelectedProvider().then(function() {
@@ -880,7 +880,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/guardian/factors/phone/selected-provider')
+        .get('/guardian/factors/sms/selected-provider')
         .reply(500);
 
       this.guardian.getPhoneFactorSelectedProvider().catch(function(err) {
@@ -894,7 +894,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .get('/guardian/factors/phone/selected-provider')
+        .get('/guardian/factors/sms/selected-provider')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
@@ -929,9 +929,9 @@ describe('GuardianManager', function() {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a PUT request to /api/v2/guardian/factors/phone/selected-provider', function(done) {
+    it('should perform a PUT request to /api/v2/guardian/factors/sms/selected-provider', function(done) {
       var request = nock(API_URL)
-        .put('/guardian/factors/phone/selected-provider')
+        .put('/guardian/factors/sms/selected-provider')
         .reply(200, this.data);
 
       this.guardian.updatePhoneFactorSelectedProvider(this.params, this.data).then(function() {
@@ -945,7 +945,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/phone/selected-provider', this.data)
+        .put('/guardian/factors/sms/selected-provider', this.data)
         .reply(200);
 
       this.guardian.updatePhoneFactorSelectedProvider(this.params, this.data).then(function() {
@@ -959,7 +959,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/phone/selected-provider')
+        .put('/guardian/factors/sms/selected-provider')
         .reply(500);
 
       this.guardian.updatePhoneFactorSelectedProvider(this.params, this.data).catch(function(err) {
@@ -973,7 +973,7 @@ describe('GuardianManager', function() {
       nock.cleanAll();
 
       var request = nock(API_URL)
-        .put('/guardian/factors/phone/selected-provider')
+        .put('/guardian/factors/sms/selected-provider')
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 

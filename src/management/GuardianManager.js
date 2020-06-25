@@ -123,7 +123,7 @@ var GuardianManager = function(options) {
    * @type {external:RestClient}
    */
   var guardianFactorsPhoneSelectedProviderAuth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/guardian/factors/phone/selected-provider',
+    options.baseUrl + '/guardian/factors/sms/selected-provider',
     clientOptions,
     options.tokenProvider
   );
