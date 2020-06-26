@@ -32,6 +32,7 @@ var CustomDomainsManager = require('./CustomDomainsManager');
 var RolesManager = require('./RolesManager');
 var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
+var MigrationsManager = require('./MigrationsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -327,6 +328,13 @@ var ManagementClient = function(options) {
    * @type {HooksManager}
    */
   this.branding = new BrandingManager(managerOptions);
+
+  /**
+   * ManagementClient migrationss manager.
+   *
+   * @type {MigrationsManager}
+   */
+  this.migrations = new MigrationsManager(managerOptions);
 };
 
 /**
@@ -3211,5 +3219,51 @@ utils.wrapPropertyMethod(ManagementClient, 'updateBrandingSettings', 'branding.u
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getSettings');
+
+/**
+ * Update the tenant migrations.
+ *
+ * @method    updateMigrations
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * data = { flags: { migration: true } };
+ * management.updateMigrations(data, function (err, migrations) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Updated migrations flags
+ *    console.log(migrations.flags);
+ * });
+ *
+ * @param   {Object}    data              Updated migrations data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateMigrations', 'migrations.updateMigrations');
+
+/**
+ * Get migrations flags
+ *
+ * @method    getMigrations
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getMigrations(function (err, migrations) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Migration flags
+ *    console.log(migrations.flags);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getMigrations', 'migrations.getMigrations');
 
 module.exports = ManagementClient;
