@@ -454,4 +454,77 @@ describe('ConnectionsManager', function() {
       });
     });
   });
+
+  describe('#delete user', function() {
+    var id = 5;
+    var email = 'user@domain.com';
+    var endpoint = '/connections/' + id + '/users?email=' + encodeURIComponent(email);
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .delete(endpoint, {})
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.connections.deleteUserByEmail({ id: id, email: email }, done.bind(null, null));
+    });
+
+    it('should return a promise when no callback is given', function(done) {
+      this.connections.deleteUserByEmail({ id: id, email: email }).then(done.bind(null, null));
+    });
+
+    it('should perform a DELETE request to ' + endpoint, function(done) {
+      var request = this.request;
+
+      this.connections.deleteUserByEmail({ id: id, email: email }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete(endpoint, {})
+        .reply(500);
+
+      this.connections.deleteUserByEmail({ id: id, email: email }).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should require a connection id', function() {
+      expect(this.connections.deleteUserByEmail.bind(null, { email: email })).to.throw(
+        ArgumentError,
+        'The connection id cannot be null or undefined'
+      );
+    });
+
+    it('should require an email', function() {
+      expect(this.connections.deleteUserByEmail.bind(null, { id: id })).to.throw(
+        ArgumentError,
+        'You must provide an email for the deleteUserByEmail method'
+      );
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete(endpoint, {})
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.connections.deleteUserByEmail({ id: id, email: email }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
 });

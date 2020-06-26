@@ -50,6 +50,20 @@ var ConnectionsManager = function(options) {
     options.tokenProvider
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/management/v2#!/Connections/delete_users_by_email
+   * endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var userAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/connections/:id/users',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.user = new RetryRestClient(userAuth0RestClient, options.retry);
 };
 
 /**
@@ -177,5 +191,43 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
+
+/**
+ * Delete a connection user by email.
+ *
+ * @method    delete
+ * @memberOf  module:management.ConnectionsManager.prototype
+ *
+ * @example
+ * management.connections.deleteUserByEmail({ id: CONNECTION_ID, email:USER_EMAIL }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User deleted.
+ * });
+ *
+ * @param   {Object}    params          Connection parameters.
+ * @param   {String}    params.id       Connection ID.
+ * @param   {String}    params.email    User Email.
+ * @param   {Function}  [cb]            Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ConnectionsManager.prototype.deleteUserByEmail = function(params, cb) {
+  if (typeof params !== 'object' || typeof params.email !== 'string' || params.email.length < 1) {
+    throw new ArgumentError('You must provide an email for the deleteUserByEmail method');
+  }
+
+  if (!params.id) {
+    throw new ArgumentError('The connection id cannot be null or undefined');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.user.delete(params, {}, cb);
+  }
+
+  return this.user.delete(params, {});
+};
 
 module.exports = ConnectionsManager;
