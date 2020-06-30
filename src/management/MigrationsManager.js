@@ -78,7 +78,7 @@ MigrationsManager.prototype.updateMigrations = function(data, cb) {
  * Get the tenant migrations.
  *
  * @method    getMigrations
- * @memberOf  module:management.MIgrationsManager.prototype
+ * @memberOf  module:management.MigrationsManager.prototype
  *
  * @example
  * management.migrations.getMigrations(function (err, settings) {
