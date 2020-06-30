@@ -2705,6 +2705,138 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(ManagementClient, 'updateGuardianFactor', 'guardian.updateFactor');
 
 /**
+ * Get enabled Guardian policies
+ *
+ * @method    getGuardianPolicies
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianPolicies(function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getGuardianPolicies', 'guardian.getPolicies');
+
+/**
+ * Update enabled Guardian policies
+ *
+ * @method    updateGuardianPolicies
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianPolicies({}, [
+ *   'all-applications'
+ * ], function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {String[]}  data              Policies to enable. Empty array disables all policies.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateGuardianPolicies', 'guardian.updatePolicies');
+
+/**
+ * Get the Guardian phone factor's selected provider
+ *
+ * @method    getGuardianPhoneFactorSelectedProvider
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianPhoneFactorSelectedProvider(function (err, selectedProvider) {
+ *   console.log(selectedProvider);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianPhoneFactorSelectedProvider',
+  'guardian.getPhoneFactorSelectedProvider'
+);
+
+/**
+ * Update the Guardian phone factor's selected provider
+ *
+ * @method    updateGuardianPhoneFactorSelectedProvider
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianPhoneFactorSelectedProvider({}, {
+ *   provider: 'twilio'
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {Object}    data              Updated selected provider data.
+ * @param   {String}    data.provider     Name of the selected provider
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianPhoneFactorSelectedProvider',
+  'guardian.updatePhoneFactorSelectedProvider'
+);
+
+/**
+ * Get the Guardian phone factor's message types
+ *
+ * @method    getGuardianPhoneFactorMessageTypes
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianPhoneFactorMessageTypes(function (err, messageTypes) {
+ *   console.log(messageTypes);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianPhoneFactorMessageTypes',
+  'guardian.getPhoneFactorMessageTypes'
+);
+
+/**
+ * Update the Guardian phone factor's message types
+ *
+ * @method    updateGuardianPhoneFactorMessageTypes
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianPhoneFactorMessageTypes({}, {
+ *   message_types: ['sms', 'voice']
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params                Parameters.
+ * @param   {Object}    data                  Updated selected provider data.
+ * @param   {String[]}  data.message_types    Message types (only `"sms"` and `"voice"` are supported).
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianPhoneFactorMessageTypes',
+  'guardian.updatePhoneFactorMessageTypes'
+);
+
+/**
  * Get all roles.
  *
  * @method    getRoles
