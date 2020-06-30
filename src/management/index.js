@@ -32,6 +32,7 @@ var CustomDomainsManager = require('./CustomDomainsManager');
 var RolesManager = require('./RolesManager');
 var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
+var MigrationsManager = require('./MigrationsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -327,6 +328,13 @@ var ManagementClient = function(options) {
    * @type {HooksManager}
    */
   this.branding = new BrandingManager(managerOptions);
+
+  /**
+   * ManagementClient migrations manager.
+   *
+   * @type {MigrationsManager}
+   */
+  this.migrations = new MigrationsManager(managerOptions);
 };
 
 /**
@@ -2697,6 +2705,138 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(ManagementClient, 'updateGuardianFactor', 'guardian.updateFactor');
 
 /**
+ * Get enabled Guardian policies
+ *
+ * @method    getGuardianPolicies
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianPolicies(function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getGuardianPolicies', 'guardian.getPolicies');
+
+/**
+ * Update enabled Guardian policies
+ *
+ * @method    updateGuardianPolicies
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianPolicies({}, [
+ *   'all-applications'
+ * ], function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {String[]}  data              Policies to enable. Empty array disables all policies.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateGuardianPolicies', 'guardian.updatePolicies');
+
+/**
+ * Get the Guardian phone factor's selected provider
+ *
+ * @method    getGuardianPhoneFactorSelectedProvider
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianPhoneFactorSelectedProvider(function (err, selectedProvider) {
+ *   console.log(selectedProvider);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianPhoneFactorSelectedProvider',
+  'guardian.getPhoneFactorSelectedProvider'
+);
+
+/**
+ * Update the Guardian phone factor's selected provider
+ *
+ * @method    updateGuardianPhoneFactorSelectedProvider
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianPhoneFactorSelectedProvider({}, {
+ *   provider: 'twilio'
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {Object}    data              Updated selected provider data.
+ * @param   {String}    data.provider     Name of the selected provider
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianPhoneFactorSelectedProvider',
+  'guardian.updatePhoneFactorSelectedProvider'
+);
+
+/**
+ * Get the Guardian phone factor's message types
+ *
+ * @method    getGuardianPhoneFactorMessageTypes
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianPhoneFactorMessageTypes(function (err, messageTypes) {
+ *   console.log(messageTypes);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianPhoneFactorMessageTypes',
+  'guardian.getPhoneFactorMessageTypes'
+);
+
+/**
+ * Update the Guardian phone factor's message types
+ *
+ * @method    updateGuardianPhoneFactorMessageTypes
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianPhoneFactorMessageTypes({}, {
+ *   message_types: ['sms', 'voice']
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params                Parameters.
+ * @param   {Object}    data                  Updated selected provider data.
+ * @param   {String[]}  data.message_types    Message types (only `"sms"` and `"voice"` are supported).
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianPhoneFactorMessageTypes',
+  'guardian.updatePhoneFactorMessageTypes'
+);
+
+/**
  * Get all roles.
  *
  * @method    getRoles
@@ -3211,5 +3351,51 @@ utils.wrapPropertyMethod(ManagementClient, 'updateBrandingSettings', 'branding.u
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getSettings');
+
+/**
+ * Update the tenant migrations.
+ *
+ * @method    updateMigrations
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * data = { flags: { migration: true } };
+ * management.updateMigrations(data, function (err, migrations) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Updated migrations flags
+ *    console.log(migrations.flags);
+ * });
+ *
+ * @param   {Object}    data              Updated migrations data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateMigrations', 'migrations.updateMigrations');
+
+/**
+ * Get migrations flags
+ *
+ * @method    getMigrations
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getMigrations(function (err, migrations) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Migration flags
+ *    console.log(migrations.flags);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getMigrations', 'migrations.getMigrations');
 
 module.exports = ManagementClient;
