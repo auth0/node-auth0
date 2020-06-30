@@ -330,7 +330,7 @@ var ManagementClient = function(options) {
   this.branding = new BrandingManager(managerOptions);
 
   /**
-   * ManagementClient migrationss manager.
+   * ManagementClient migrations manager.
    *
    * @type {MigrationsManager}
    */
