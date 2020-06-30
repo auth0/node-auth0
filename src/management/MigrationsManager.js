@@ -80,12 +80,12 @@ MigrationsManager.prototype.updateMigrations = function(data, cb) {
  * @memberOf  module:management.MigrationsManager.prototype
  *
  * @example
- * management.migrations.getMigrations(function (err, settings) {
+ * management.migrations.getMigrations(function (err, migrations) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(settings);
+ *   console.log(migrations.flags);
  * });
  *
  * @param   {Function}  [cb]    Callback function.
