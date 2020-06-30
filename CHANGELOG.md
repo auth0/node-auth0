@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.27.0](https://github.com/auth0/node-auth0/tree/v2.27.0) (2020-06-30)
+
+**Added**
+
+- feat(migrations): adds migrations manager [\#503](https://github.com/auth0/node-auth0/pull/503) ([CriGoT](https://github.com/CriGoT))
+- Added deleteUserByEmail to ConnectionsManager [\#502](https://github.com/auth0/node-auth0/pull/502) ([MatthewBacalakis](https://github.com/MatthewBacalakis))
+- feat(guardian): support policies, selected-provider, message-types methods [MFA-310][\#501](https://github.com/auth0/node-auth0/pull/501) ([pmalouin](https://github.com/pmalouin))
+
+**Fixed**
+
+- fix: management methods throwing error on access [\#500](https://github.com/auth0/node-auth0/pull/500) ([pmalouin](https://github.com/pmalouin))
+- fix: guardian-related code examples [\#499](https://github.com/auth0/node-auth0/pull/499) ([pmalouin](https://github.com/pmalouin))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.26.0...v2.27.0)
+
 ## [v2.26.0](https://github.com/auth0/node-auth0/tree/v2.26.0) (2020-06-05)
 
 **Added**
