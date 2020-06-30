@@ -104,6 +104,48 @@ var GuardianManager = function(options) {
     guardianFactorsProvidersAuth0RestClient,
     options.retry
   );
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian policies.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianPoliciesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/policies',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.policies = new RetryRestClient(guardianPoliciesAuth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian phone factor selected provider.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsPhoneSelectedProviderAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/sms/selected-provider',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorsPhoneSelectedProvider = new RetryRestClient(
+    guardianFactorsPhoneSelectedProviderAuth0RestClient,
+    options.retry
+  );
+
+  /**
+   * Provides an abstraction layer for retrieving Guardian phone factor message types.
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorsPhoneMessageTypesAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/phone/message-types',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorsPhoneMessageTypes = new RetryRestClient(
+    guardianFactorsPhoneMessageTypesAuth0RestClient,
+    options.retry
+  );
 };
 
 /**
@@ -279,5 +321,137 @@ utils.wrapPropertyMethod(GuardianManager, 'updateFactorTemplates', 'factorsTempl
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(GuardianManager, 'updateFactor', 'factors.update');
+
+/**
+ * Get enabled Guardian policies
+ *
+ * @method    getPolicies
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getPolicies(function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getPolicies', 'policies.get');
+
+/**
+ * Update enabled Guardian policies
+ *
+ * @method    updatePolicies
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updatePolicies({}, [
+ *   'all-applications'
+ * ], function (err, policies) {
+ *   console.log(policies);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {String[]}  data              Policies to enable. Empty array disables all policies.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updatePolicies', 'policies.update');
+
+/**
+ * Get the Guardian phone factor's selected provider
+ *
+ * @method    getPhoneFactorSelectedProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getPhoneFactorSelectedProvider(function (err, selectedProvider) {
+ *   console.log(selectedProvider);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'getPhoneFactorSelectedProvider',
+  'factorsPhoneSelectedProvider.get'
+);
+
+/**
+ * Update the Guardian phone factor's selected provider
+ *
+ * @method    updatePhoneFactorSelectedProvider
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updatePhoneFactorSelectedProvider({}, {
+ *   provider: 'twilio'
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params            Parameters.
+ * @param   {Object}    data              Updated selected provider data.
+ * @param   {String}    data.provider     Name of the selected provider
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'updatePhoneFactorSelectedProvider',
+  'factorsPhoneSelectedProvider.update'
+);
+
+/**
+ * Get the Guardian phone factor's message types
+ *
+ * @method    getPhoneFactorMessageTypes
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getPhoneFactorMessageTypes(function (err, messageTypes) {
+ *   console.log(messageTypes);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'getPhoneFactorMessageTypes',
+  'factorsPhoneMessageTypes.get'
+);
+
+/**
+ * Update the Guardian phone factor's message types
+ *
+ * @method    updatePhoneFactorMessageTypes
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updatePhoneFactorMessageTypes({}, {
+ *   message_types: ['sms', 'voice']
+ * }, function (err, factor) {
+ *   console.log(factor);
+ * });
+ *
+ * @param   {Object}    params                Parameters.
+ * @param   {Object}    data                  Updated selected provider data.
+ * @param   {String[]}  data.message_types    Message types (only `"sms"` and `"voice"` are supported).
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  GuardianManager,
+  'updatePhoneFactorMessageTypes',
+  'factorsPhoneMessageTypes.update'
+);
 
 module.exports = GuardianManager;
