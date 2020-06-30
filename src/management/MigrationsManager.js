@@ -53,7 +53,7 @@ var MigrationsManager = function(options) {
  * @memberOf  module:management.MigrationsManager.prototype
  *
  * @example
- * management.tmigrations.updateMigrations(data, function (err) {
+ * management.migrations.updateMigrations(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
