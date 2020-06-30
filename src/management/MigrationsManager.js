@@ -33,8 +33,7 @@ var MigrationsManager = function(options) {
   };
 
   /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Stats Stats endpoint}.
+   * Provides an abstraction layer for consuming the migrations endpoint
    *
    * @type {external:RestClient}
    */
