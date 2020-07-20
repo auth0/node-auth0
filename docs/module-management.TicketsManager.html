@@ -508,43 +508,18 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
+        <tr> 
+            <td class="name"><code>cb</code></td>
+            <td class="type">     
+                <span class="param-type"><code>function</code></span>
             </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
+            <td class="attributes">      
+                &lt;optional><br>
+            </td>
             <td class="description last">
-                <p>Callback function.</p>
-                
+                <p>Callback function.</p> 
             </td>
         </tr>
-
-    
     </tbody>
 </table>
 
@@ -609,7 +584,7 @@ management.tickets.changePassword(params, function (err) {
 
     
 
-    <h4 class="name" id="verifyEmail"><span class="type-signature"></span>verifyEmail<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="verifyEmail"><span class="type-signature"></span>verifyEmail<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -676,61 +651,129 @@ management.tickets.changePassword(params, function (err) {
 
 <table class="params">
     <thead>
-    <tr>
-        
+    <tr> 
         <th>Name</th>
-        
-
         <th>Type</th>
-
-        
         <th>Attributes</th>
-        
-
-        
-
         <th class="last">Description</th>
     </tr>
     </thead>
-
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>function</code></span>
-
-
-            
+        <tr> 
+            <td class="name"><code>data</code></td>
+            <td class="type">     
+                <span class="param-type"><code>object</code></span>
             </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
+            <td class="attributes">      
+            </td>
             <td class="description last">
-                <p>Callback function.</p>
-                
+                <table class="params">
+                    <thead>
+                    <tr>   
+                        <th>Name</th> 
+                        <th>Type</th>
+                        <th>Attributes</th>
+                        <th class="last">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="name"><code>result_url</code></td>
+                            <td class="type">                
+                                <span class="param-type"><code>String</code></span>
+                            </td>  
+                            <td class="attributes">
+                                &lt;optional><br>
+                            </td>
+                            <td class="description last">
+                                <p>URL the user will be redirected to once ticket is used</p>
+                            </td>
+                        </tr>   
+                        <tr>
+                            <td class="name"><code>user_id</code></td>
+                            <td class="type">                
+                                <span class="param-type"><code>String</code></span>
+                            </td>  
+                            <td class="attributes">
+                            </td>
+                            <td class="description last">
+                                <p>user_id for whom the ticket should be created</p>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td class="name"><code>ttl_sec</code></td>
+                            <td class="type">                
+                                <span class="param-type"><code>Integer</code></span>
+                            </td>  
+                            <td class="attributes">
+                                &lt;optional><br>
+                            </td>
+                            <td class="description last">
+                                <p>Number of seconds for which the ticket is valid before expiration</p>
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td class="name"><code>includeEmailInRedirect</code></td>
+                            <td class="type">                
+                                <span class="param-type"><code>Boolean</code></span>
+                            </td>  
+                            <td class="attributes">
+                                &lt;optional><br>
+                            </td>
+                            <td class="description last">
+                                <p>Whether to include the email address as part of the returnUrl in the reset_email (true), or not (false)</p>
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td class="name"><code>identity</code></td>
+                            <td class="type">
+                                <span class="param-type"><code>Object</code></span>
+                            </td>
+                            <td class="attributes">
+                                &lt;optional><br>
+                            </td>
+                            <td class="description last">
+                                <p>Used to verify secondary, federated, and passwordless-email identities</p>
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td class="name"><code>identity.user_id</code></td>
+                            <td class="type">
+                                <span class="param-type"><code>String</code></span>
+                            </td>
+                            <td class="attributes">
+                            </td>
+                            <td class="description last">
+                                <p>Identity user_id</p>
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td class="name"><code>identity.provider</code></td>
+                            <td class="type">
+                                <span class="param-type"><code>String</code></span>
+                            </td>
+                            <td class="attributes">
+                            </td>
+                            <td class="description last">
+                                <p>Identity provider</p>
+                            </td>
+                        </tr>   
+                    </tbody>
+                </table>
             </td>
         </tr>
-
-    
+        <tr>  
+            <td class="name"><code>cb</code></td>
+            <td class="type">   
+                <span class="param-type"><code>function</code></span>
+            </td>
+            <td class="attributes">
+                &lt;optional><br> 
+            </td>
+            <td class="description last">
+                <p>Callback function.</p>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -775,7 +818,11 @@ management.tickets.changePassword(params, function (err) {
 
     <pre class="prettyprint"><code>var data = {
   user_id: '{USER_ID}',
-  result_url: '{REDIRECT_URL}' // Optional redirect after the ticket is used.
+  result_url: '{REDIRECT_URL}', // Optional redirect after the ticket is used.
+  identity: { //Optional to verify secondary, federated, and passwordless-email identities.
+      user_id: '{IDENTITY_USER_ID}',
+      provider: '{PROVIDER}' 
+  }
 };
 
 management.tickets.verifyEmail(data, function (err) {

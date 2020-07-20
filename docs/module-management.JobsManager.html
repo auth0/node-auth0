@@ -2516,14 +2516,8 @@ management.jobs.importUsers(params, function (err) {
     <tr>
         
         <th>Name</th>
-        
-
         <th>Type</th>
-
-        
-
-        
-
+        <th>Attributes</th>
         <th class="last">Description</th>
     </tr>
     </thead>
@@ -2531,31 +2525,51 @@ management.jobs.importUsers(params, function (err) {
     <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>user_id</code></td>
-            
-
+        <tr>    
+            <td class="name"><code>user_id</code></td>
             <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
+                <span class="param-type"><code>String</code></span>
             </td>
-
-            
-
-            
-
+            <td class="attributes">   
+            </td>
             <td class="description last">
                 <p>ID of the user to be verified.</p>
-                
             </td>
         </tr>
-
-    
+        <tr>    
+            <td class="name"><code>identity</code></td>
+            <td class="type">
+                <span class="param-type"><code>Object</code></span>
+            </td>
+            <td class="attributes">
+                &lt;optional><br>
+            </td>
+            <td class="description last">
+                <p>Used to verify secondary, federated, and passwordless-email identities</p>
+            </td>
+        </tr>
+        <tr>    
+            <td class="name"><code>identity.user_id</code></td>
+            <td class="type">
+                <span class="param-type"><code>String</code></span>
+            </td>
+            <td class="attributes">
+            </td>
+            <td class="description last">
+                <p>Identity user_id</p>
+            </td>
+        </tr>
+        <tr>    
+            <td class="name"><code>identity.provider</code></td>
+            <td class="type">
+                <span class="param-type"><code>String</code></span>
+            </td>
+            <td class="attributes">
+            </td>
+            <td class="description last">
+                <p>Identity provider</p>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -2581,13 +2595,7 @@ management.jobs.importUsers(params, function (err) {
 
             
                 <td class="attributes">
-                
                     &lt;optional><br>
-                
-
-                
-
-                
                 </td>
             
 
@@ -2646,7 +2654,11 @@ management.jobs.importUsers(params, function (err) {
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>var params = {
-	user_id: '{USER_ID}'
+    user_id: '{USER_ID}',
+    identity: { //Optional to verify secondary, federated, and passwordless-email identities.
+        user_id: '{IDENTITY_USER_ID}',
+        provider: '{PROVIDER}' 
+    }
 };
 
 management.jobs.verifyEmail(function (err) {
