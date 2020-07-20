@@ -4,7 +4,7 @@ var errors = require('../src/errors');
 
 describe('Errors', function() {
   describe('sanitizeErrorRequestData', function() {
-    describe('when passed in error is missing request data', function() {
+    describe('when passed in error is missing request data and headers', function() {
       var error = { response: { request: {} } };
       var sanitizedError = errors.sanitizeErrorRequestData(error);
 
@@ -36,6 +36,24 @@ describe('Errors', function() {
       });
       it('should return original value for USER_NAME', function() {
         expect(sanitizedData.USER_NAME).to.equal(sanitizedData.USER_NAME);
+      });
+    });
+
+    describe('when passed in error has header data', function() {
+      const error = {
+        response: {
+          request: {
+            _header: {
+              authorization: 'Bearer xyz'
+            }
+          }
+        }
+      };
+      const sanitizedError = errors.sanitizeErrorRequestData(error);
+      const sanitizedData = sanitizedError.response.request._header;
+
+      it('should return [SANITIZED] for authorization', function() {
+        expect(sanitizedData.authorization).to.equal('[SANITIZED]');
       });
     });
   });
