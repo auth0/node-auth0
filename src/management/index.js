@@ -23,6 +23,7 @@ var TenantManager = require('./TenantManager');
 var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
+var LogStreamsManager = require('./LogStreamsManager');
 var ResourceServersManager = require('./ResourceServersManager');
 var ManagementTokenProvider = require('./ManagementTokenProvider');
 var RulesConfigsManager = require('./RulesConfigsManager');
@@ -281,6 +282,13 @@ var ManagementClient = function(options) {
    * @type {LogsManager}
    */
   this.logs = new LogsManager(managerOptions);
+
+  /**
+   * Log Streams manager.
+   *
+   * @type {LogStreamsManager}
+   */
+  this.logstreams = new LogStreamsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
