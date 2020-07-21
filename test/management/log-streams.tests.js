@@ -220,5 +220,80 @@ describe('LogStreamsManager', function() {
     });
   });
 
-  // describe('#create')
+  describe('#create', function() {
+    var data = {
+      name: 'Test log stream'
+    };
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/log-streams')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.logstreams.create(data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.logstreams
+        .create(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/log-streams')
+        .reply(500);
+
+      this.logstreams.create(data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/log-streams', function(done) {
+      var request = this.request;
+
+      this.logstreams.create(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/log-streams', data)
+        .reply(200);
+
+      this.logstreams.create(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/log-streams')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.logstreams.create(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
 });
