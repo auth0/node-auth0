@@ -149,7 +149,7 @@ utils.wrapPropertyMethod(LogStreamsManager, 'create', 'resource.create');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(LogStreamsManager, 'update', 'resource.update');
+utils.wrapPropertyMethod(LogStreamsManager, 'update', 'resource.patch');
 
 /**
  * Delete an Auth0 log streams.

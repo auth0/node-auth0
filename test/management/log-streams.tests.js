@@ -296,4 +296,120 @@ describe('LogStreamsManager', function() {
       });
     });
   });
+
+  describe('#update', function() {
+    beforeEach(function() {
+      this.data = { id: 5 };
+
+      this.request = nock(API_URL)
+        .patch('/log-streams/' + this.data.id)
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function(done) {
+      this.logstreams.update({ id: 5 }, {}, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.logstreams
+        .update({ id: 5 }, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PATCH request to /api/v2/log-streams/5', function(done) {
+      var request = this.request;
+
+      this.logstreams.update({ id: 5 }, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/log-streams/' + this.data.id, this.data)
+        .reply(200);
+
+      this.logstreams.update({ id: 5 }, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/log-streams/' + this.data.id)
+        .reply(500);
+
+      this.logstreams.update({ id: this.data.id }, this.data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+  });
+
+  describe('#delete', function() {
+    var id = 5;
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .delete('/log-streams/' + id)
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.logstreams.delete({ id: id }, done.bind(null, null));
+    });
+
+    it('should return a promise when no callback is given', function(done) {
+      this.logstreams.delete({ id: id }).then(done.bind(null, null));
+    });
+
+    it('should perform a delete request to /log-streams/' + id, function(done) {
+      var request = this.request;
+
+      this.logstreams.delete({ id: id }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/log-streams/' + id)
+        .reply(500);
+
+      this.logstreams.delete({ id: id }).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/log-streams/' + id)
+        .matchHeader('authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.logstreams.delete({ id: id }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
 });
