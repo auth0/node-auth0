@@ -98,6 +98,14 @@ TicketsManager.prototype.changePassword = function(data, cb) {
  *   }
  * });
  *
+ * @param   {Object}  data
+ * @param   {String}  [data.result_url] URL the user will be redirected to once ticket is used
+ * @param   {String}  data.user_id user_id for whom the ticket should be created
+ * @param   {Integer} [data.ttl_sec] Number of seconds for which the ticket is valid before expiration
+ * @param   {Boolean} [data.includeEmailInRedirect] Whether to include the email address as part of the returnUrl in the reset_email (true), or not (false)
+ * @param   {Object}  [data.identity] Used to verify secondary, federated, and passwordless-email identities
+ * @param   {String}  data.identity.user_id user_id of the identity
+ * @param   {String}  data.identity.provider provider of the identity
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
