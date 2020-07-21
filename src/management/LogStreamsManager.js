@@ -5,7 +5,8 @@ var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class LogStreamsManager
- * Represents the relationship between Auth0 and an Identity provider.
+ * The logstreams class provides a simple abstraction for performing CRUD operations
+ * on Auth0 Log Streams.
  * @constructor
  * @memberOf module:management
  *
