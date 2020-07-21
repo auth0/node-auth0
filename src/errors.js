@@ -12,17 +12,30 @@ var errors = (module.exports = {});
  * @memberOf  module:errors
  */
 errors.sanitizeErrorRequestData = function(error) {
-  if (!error.response || !error.response.request || !error.response.request._data) {
+  if (
+    !error.response ||
+    !error.response.request ||
+    (!error.response.request._data && !error.response.request._header)
+  ) {
     return error;
   }
 
-  Object.keys(error.response.request._data).forEach(function(key) {
-    if (key.toLowerCase().match('password|secret')) {
-      error.response.request._data[key] = '[SANITIZED]';
-    }
-  });
+  sanitizeErrors(error.response.request._header);
+  sanitizeErrors(error.response.request._data);
 
   return error;
+};
+
+var sanitizeErrors = function(collection) {
+  if (!collection) {
+    return;
+  }
+
+  Object.keys(collection).forEach(function(key) {
+    if (key.toLowerCase().match('password|secret|authorization')) {
+      collection[key] = '[SANITIZED]';
+    }
+  });
 };
 
 /**

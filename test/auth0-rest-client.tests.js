@@ -151,6 +151,24 @@ describe('Auth0RestClient', function() {
     });
   });
 
+  it('should sanitize error when access token is in authorization header', function(done) {
+    nock(API_URL)
+      .get('/some-resource')
+      .reply(401);
+
+    var options = {
+      headers: {}
+    };
+
+    var client = new Auth0RestClient(API_URL + '/some-resource', options, this.providerMock);
+    client.getAll().catch(function(err) {
+      const originalRequestHeader = err.originalError.response.request._header;
+      expect(originalRequestHeader.authorization).to.equal('[SANITIZED]');
+      done();
+      nock.cleanAll();
+    });
+  });
+
   it('should catch error when provider.getAccessToken throws an error', function(done) {
     var providerMock = {
       getAccessToken: function() {
