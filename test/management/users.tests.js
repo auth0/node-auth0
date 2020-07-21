@@ -37,7 +37,10 @@ describe('UsersManager', function() {
       'removeRoles',
       'getPermissions',
       'assignPermissions',
-      'removePermissions'
+      'removePermissions',
+      'createCustomBlock',
+      'getCustomBlocks',
+      'deleteCustomBlock'
     ];
 
     methods.forEach(function(method) {
@@ -1527,6 +1530,203 @@ describe('UsersManager', function() {
       this.users.removePermissions(this.data, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
+        done();
+      });
+    });
+  });
+  describe('#createCustomBlock', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id'
+      };
+      this.body = {
+        reason_code: 'some-reason'
+      };
+
+      this.request = nock(API_URL)
+        .post('/users/' + this.data.id + '/custom-blocks')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.createCustomBlock(this.data, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .createCustomBlock(this.data, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .post('/users/' + this.data.id + '/custom-blocks')
+        .reply(500);
+
+      this.users.createCustomBlock(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/users/user_id/custom-blocks', function(done) {
+      var request = this.request;
+
+      this.users.createCustomBlock(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/custom-blocks', this.body)
+        .reply(200);
+
+      this.users.createCustomBlock(this.data, this.body).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + this.data.id + '/custom-blocks')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.createCustomBlock(this.data, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+  });
+  describe('#getCustomBlocks', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id'
+      };
+
+      this.request = nock(API_URL)
+        .get('/users/' + this.data.id + '/custom-blocks')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.getCustomBlocks(this.data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .getCustomBlocks(this.data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .get('/users/' + this.data.id + '/custom-blocks')
+        .reply(500);
+
+      this.users.getCustomBlocks(this.data, {}).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/users/user_id/custom-blocks', function(done) {
+      var request = this.request;
+
+      this.users.getCustomBlocks(this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/users/' + this.data.id + '/custom-blocks')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.getCustomBlocks(this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+  });
+  describe('#deleteCustomBlock', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'user_id',
+        reason_code: 'some_reason'
+      };
+
+      this.request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/custom-blocks/' + this.data.reason_code)
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.deleteCustomBlock(this.data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .deleteCustomBlock(this.data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .delete('/users/' + this.data.id + '/custom-blocks/' + this.data.reason_code)
+        .reply(500);
+
+      this.users.deleteCustomBlock(this.data).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/users/user_id/custom-blocks/reason_code', function(done) {
+      var request = this.request;
+
+      this.users.deleteCustomBlock(this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/users/' + this.data.id + '/custom-blocks/' + this.data.reason_code)
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.deleteCustomBlock(this.data).then(function() {
+        expect(request.isDone()).to.be.true;
         done();
       });
     });

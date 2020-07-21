@@ -45,6 +45,13 @@ var UsersManager = function(options) {
   );
   this.users = new RetryRestClient(usersAuth0RestClient, options.retry);
 
+  var customUserBlocksAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/custom-blocks/:reason_code',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.customUserBlocks = new RetryRestClient(customUserBlocksAuth0RestClient, options.retry);
+
   /**
    * Provides an abstraction layer for consuming the
    * {@link https://auth0.com/docs/api/v2#!/Users/delete_multifactor_by_provider
@@ -421,6 +428,79 @@ UsersManager.prototype.deleteAll = function(cb) {
   }
 
   return this.users.delete.apply(this.users, arguments);
+};
+
+/**
+ * Create a custom block on a user
+ *
+ * @method    createCustomBlock
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.createCustomBlock(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Custom user block created.
+ * });
+ * @param   {Object}    params      The custom block parameters.
+ * @param   {String}    params.id   The user id.
+ * @param   {Object}    data    Custom block data.
+ * @param   {String}    data.reason_code Reason code for the block.  It can contain up to 128 uppercase letters, lowercase letters, numbers, and hyphens.
+ * @param   {Function}  [cb]    Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.createCustomBlock = function() {
+  return this.customUserBlocks.create.apply(this.customUserBlocks, arguments);
+};
+
+/**
+ * Get all custom blocks for a user
+ *
+ * @method    getCustomBlocks
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.getCustomBlocks({ id: USER_ID }, function (err, blocks) {
+ *   console.log(blocks);
+ * });
+ *
+ * @param   {Object}    params      The custom block parameters.
+ * @param   {String}    params.id   The user id.
+ * @param   {Function}  [cb]        Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getCustomBlocks = function() {
+  return this.customUserBlocks.getAll.apply(this.customUserBlocks, arguments);
+};
+
+/**
+ * Delete a custom block for a user
+ *
+ * @method    deleteCustomBlock
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.deleteCustomBlock({ id: USER_ID, reason_code: REASON_CODE }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // User deleted.
+ * });
+ *
+ * @param   {Object}    params              The custom block parameters.
+ * @param   {String}    params.id           The user id.
+ * @param   {String}    params.reason_code  The reason code for the block.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.deleteCustomBlock = function() {
+  return this.customUserBlocks.delete.apply(this.customUserBlocks, arguments);
 };
 
 /**
