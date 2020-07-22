@@ -95,7 +95,7 @@ utils.wrapPropertyMethod(LogStreamsManager, 'getAll', 'resource.getAll');
 utils.wrapPropertyMethod(LogStreamsManager, 'get', 'resource.get');
 
 /**
- * Get an Auth0 Log Streams.
+ * Create an Auth0 Log Stream.
  *
  * @method    create
  * @memberOf  module:management.LogStreamsManager.prototype
@@ -109,15 +109,8 @@ utils.wrapPropertyMethod(LogStreamsManager, 'get', 'resource.get');
  *   console.log(log);
  * });
  *
- * @param   {Object}    params                              Log Stream parameters.
- * @param   {String}    params.name                         Log Stream Name.
- * @param   {String}    params.type                         Log Stream Type values: http.
- * @param   {Object}    params.sink                         Log Stream sink parameters.
- * @param   {String}    params.sink.httpEndpoint            Log Stream sink HTTP endpoint.
- * @param   {String}    params.sink.httpContentType         Log Stream sink HTTP Content Type.
- * @param   {String}    params.sink.httpContentFormat       Log Stream sink HTTP Content Format values: (JSONLINES|JSONARRAY)
- * @param   {String}    params.sink.httpAuthorizationHeader Log Stream sink HTTP Authorization header
- * @param   {Function}  [cb]                                Callback function.
+ * @param   {Object}    data          Log Stream data.
+ * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -130,23 +123,31 @@ utils.wrapPropertyMethod(LogStreamsManager, 'create', 'resource.create');
  * @memberOf  module:management.LogStreamsManager.prototype
  *
  * @example
- * management.logStreams.update({ id: LOG_STREAM_ID }, function (err, logStream) {
+ * var data = { name: 'New name' };
+ * var params = { id: LOG_STREAM_ID };
+ *
+ * // Using auth0 instance.
+ * management.updateLogStream(params, data, function (err, logStream) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(logStream);
+ *   console.log(logStream.name);  // 'New name'
  * });
  *
- * @param   {Object}    params                              Log Stream parameters.
- * @param   {String}    params.name                         Log Stream Name.
- * @param   {String}    params.status                       Log Stream Status values: (active|paused).
- * @param   {Object}    params.sink                         Log Stream sink parameters.
- * @param   {String}    params.sink.httpEndpoint            Log Stream sink HTTP endpoint.
- * @param   {String}    params.sink.httpContentType         Log Stream sink HTTP Content Type.
- * @param   {String}    params.sink.httpContentFormat       Log Stream sink HTTP Content Format values: (JSONLINES|JSONARRAY)
- * @param   {String}    params.sink.httpAuthorizationHeader Log Stream sink HTTP Authorization header
- * @param   {Function}  [cb]                                Callback function.
+ * // Using the logStreams manager directly.
+ * management.logStreams.update(params, data, function (err, logStream) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logStream.name);
+ * });
+ *
+ * @param   {Object}    params          Log Stream parameters.
+ * @param   {String}    params.id       Log Stream ID.
+ * @param   {Object}    data            Updated Log Stream data.
+ * @param   {Function}  [cb]            Callback function.
  *
  * @return  {Promise|undefined}
  */
