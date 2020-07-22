@@ -5,7 +5,7 @@ var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class LogStreamsManager
- * The logstreams class provides a simple abstraction for performing CRUD operations
+ * The logStreams class provides a simple abstraction for performing CRUD operations
  * on Auth0 Log Streams.
  * @constructor
  * @memberOf module:management
@@ -54,15 +54,15 @@ var LogStreamsManager = function(options) {
 };
 
 /**
- * Get all log streams.
+ * Get all Log Streams.
  *
  * @method    getAll
  * @memberOf  module:management.LogStreamsManager.prototype
  *
  * @example
  *
- * management.logstreams.getAll(function (err, logs) {
- *   console.log(logs.length);
+ * management.logStreams.getAll(function (err, logStreams) {
+ *   console.log(logStreams.length);
  * });
  *
  * @param   {Function}  [cb]                    Callback function.
@@ -72,21 +72,21 @@ var LogStreamsManager = function(options) {
 utils.wrapPropertyMethod(LogStreamsManager, 'getAll', 'resource.getAll');
 
 /**
- * Get an Auth0 log streams.
+ * Get an Auth0 Log Streams.
  *
  * @method    get
  * @memberOf  module:management.LogStreamsManager.prototype
  *
  * @example
- * management.logstreams.get({ id: STREAM_ID }, function (err, log) {
+ * management.logStreams.get({ id: LOG_STREAM_ID }, function (err, logStream) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(log);
+ *   console.log(logStream);
  * });
  *
- * @param   {Object}    params          Log stream parameters.
+ * @param   {Object}    params          Log Stream parameters.
  * @param   {String}    params.id       Log Stream ID.
  * @param   {Function}  [cb]            Callback function.
  *
@@ -95,13 +95,13 @@ utils.wrapPropertyMethod(LogStreamsManager, 'getAll', 'resource.getAll');
 utils.wrapPropertyMethod(LogStreamsManager, 'get', 'resource.get');
 
 /**
- * Get an Auth0 log streams.
+ * Get an Auth0 Log Streams.
  *
  * @method    create
  * @memberOf  module:management.LogStreamsManager.prototype
  *
  * @example
- * management.logstreams.create({ id: STREAM_ID }, function (err, log) {
+ * management.logStreams.create({ id: LOG_STREAM_ID }, function (err, log) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -109,7 +109,7 @@ utils.wrapPropertyMethod(LogStreamsManager, 'get', 'resource.get');
  *   console.log(log);
  * });
  *
- * @param   {Object}    params                              Log stream parameters.
+ * @param   {Object}    params                              Log Stream parameters.
  * @param   {String}    params.name                         Log Stream Name.
  * @param   {String}    params.type                         Log Stream Type values: http.
  * @param   {Object}    params.sink                         Log Stream sink parameters.
@@ -124,21 +124,21 @@ utils.wrapPropertyMethod(LogStreamsManager, 'get', 'resource.get');
 utils.wrapPropertyMethod(LogStreamsManager, 'create', 'resource.create');
 
 /**
- * Update an Auth0 log streams.
+ * Update an Auth0 Log Streams.
  *
  * @method    update
  * @memberOf  module:management.LogStreamsManager.prototype
  *
  * @example
- * management.logstreams.update({ id: STREAM_ID }, function (err, log) {
+ * management.logStreams.update({ id: LOG_STREAM_ID }, function (err, logStream) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(log);
+ *   console.log(logStream);
  * });
  *
- * @param   {Object}    params                              Log stream parameters.
+ * @param   {Object}    params                              Log Stream parameters.
  * @param   {String}    params.name                         Log Stream Name.
  * @param   {String}    params.status                       Log Stream Status values: (active|paused).
  * @param   {Object}    params.sink                         Log Stream sink parameters.
@@ -153,13 +153,13 @@ utils.wrapPropertyMethod(LogStreamsManager, 'create', 'resource.create');
 utils.wrapPropertyMethod(LogStreamsManager, 'update', 'resource.patch');
 
 /**
- * Delete an Auth0 log streams.
+ * Delete an Auth0 Log Streams.
  *
  * @method    delete
  * @memberOf  module:management.LogStreamsManager.prototype
  *
  * @example
- * management.logstreams.delete({ id: STREAM_ID }, function (err, log) {
+ * management.logStreams.delete({ id: LOG_STREAM_ID }, function (err, log) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -167,7 +167,7 @@ utils.wrapPropertyMethod(LogStreamsManager, 'update', 'resource.patch');
  *   console.log(log);
  * });
  *
- * @param   {Object}    params          Log stream parameters.
+ * @param   {Object}    params          Log Stream parameters.
  * @param   {String}    params.id       Log Stream ID.
  * @param   {Function}  [cb]            Callback function.
  *
