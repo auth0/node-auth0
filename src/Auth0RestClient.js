@@ -3,6 +3,7 @@ var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 var utils = require('./utils');
+var SanitizedError = require('./errors').SanitizedError;
 
 var Auth0RestClient = function(resourceUrl, options, provider) {
   if (resourceUrl === null || resourceUrl === undefined) {
@@ -16,6 +17,9 @@ var Auth0RestClient = function(resourceUrl, options, provider) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide options');
   }
+
+  options.errorCustomizer = options.errorCustomizer || SanitizedError;
+  options.errorFormatter = options.errorFormatter || { message: 'message', name: 'error' };
 
   this.options = options;
   this.provider = provider;
