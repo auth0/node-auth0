@@ -288,7 +288,7 @@ var ManagementClient = function(options) {
    *
    * @type {LogStreamsManager}
    */
-  this.logstreams = new LogStreamsManager(managerOptions);
+  this.logStreams = new LogStreamsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
@@ -2250,6 +2250,118 @@ utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
+
+/**
+ * Get all Log Streams.
+ *
+ * @method    getLogStreams
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ *
+ *
+ * management.getLogStreams( function (err, logStreams) {
+ *   console.log(logStreams.length);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getLogStreams', 'logStreams.getAll');
+
+/**
+ * Create a new Log Stream.
+ *
+ * @method    createLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createLogStream(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Log Stream created.
+ * });
+ *
+ * @param   {Object}    data          Log Stream data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createLogStream', 'logStreams.create');
+
+/**
+ * Get an Auth0 Log Stream.
+ *
+ * @method    getLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getLogStream({ id: LOG_STREAM_ID }, function (err, logStream) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logStream);
+ * });
+ *
+ * @param   {Object}    params        Log Stream parameters.
+ * @param   {String}    params.id     Log Stream ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getLogStream', 'logStreams.get');
+
+/**
+ * Delete an existing Log Stream.
+ *
+ * @method    deleteLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteLogStream({ id: LOG_STREAM_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Log Stream deleted.
+ * });
+ *
+ * @param   {Object}    params        Log Stream parameters.
+ * @param   {String}    params.id     Log Stream ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteLogStream', 'logStreams.delete');
+
+/**
+ * Update an existing Log Stream.
+ *
+ * @method    updateLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: LOG_STREAM_ID };
+ * var data = { name: 'my-log-stream'};
+ * management.updateLogStream(params, data, function (err, logStream) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logStream.name); // 'my-log-stream'.
+ * });
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Object}    data          Updated rule data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateLogStream', 'logStreams.update');
 
 /**
  * Create a new resource server.
