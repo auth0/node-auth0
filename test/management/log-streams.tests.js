@@ -10,7 +10,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
 describe('LogStreamsManager', function() {
   before(function() {
     this.token = 'TOKEN';
-    this.logstreams = new LogStreamsManager({
+    this.logStreams = new LogStreamsManager({
       headers: { authorization: 'Bearer ' + this.token },
       baseUrl: API_URL
     });
@@ -21,7 +21,7 @@ describe('LogStreamsManager', function() {
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
-        expect(this.logstreams[method]).to.exist.to.be.an.instanceOf(Function);
+        expect(this.logStreams[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
@@ -52,13 +52,13 @@ describe('LogStreamsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.logstreams.getAll(function() {
+      this.logStreams.getAll(function() {
         done();
       });
     });
 
     it('should return a promise if no callback is given', function(done) {
-      this.logstreams
+      this.logStreams
         .getAll()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
@@ -71,7 +71,7 @@ describe('LogStreamsManager', function() {
         .get('/log-streams')
         .reply(500);
 
-      this.logstreams.getAll().catch(function(err) {
+      this.logStreams.getAll().catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -86,12 +86,12 @@ describe('LogStreamsManager', function() {
         .get('/log-streams')
         .reply(200, data);
 
-      this.logstreams.getAll().then(function(logs) {
-        expect(logs).to.be.an.instanceOf(Array);
+      this.logStreams.getAll().then(function(logStreams) {
+        expect(logStreams).to.be.an.instanceOf(Array);
 
-        expect(logs.length).to.equal(data.length);
+        expect(logStreams.length).to.equal(data.length);
 
-        expect(logs[0].test).to.equal(data[0].test);
+        expect(logStreams[0].test).to.equal(data[0].test);
 
         done();
       });
@@ -100,7 +100,7 @@ describe('LogStreamsManager', function() {
     it('should perform a GET request to /api/v2/log-streams', function(done) {
       var request = this.request;
 
-      this.logstreams.getAll().then(function() {
+      this.logStreams.getAll().then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -115,7 +115,7 @@ describe('LogStreamsManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.logstreams.getAll().then(function() {
+      this.logStreams.getAll().then(function() {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -136,13 +136,13 @@ describe('LogStreamsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.logstreams.get(params, function() {
+      this.logStreams.get(params, function() {
         done();
       });
     });
 
     it('should return a promise if no callback is given', function(done) {
-      this.logstreams
+      this.logStreams
         .get(params)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
@@ -155,7 +155,7 @@ describe('LogStreamsManager', function() {
         .get('/log-streams/' + params.id)
         .reply(500);
 
-      this.logstreams.get().catch(function(err) {
+      this.logStreams.get().catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -169,7 +169,7 @@ describe('LogStreamsManager', function() {
         .get('/log-streams/' + params.id)
         .reply(200, data);
 
-      this.logstreams.get(params).then(function(log) {
+      this.logStreams.get(params).then(function(log) {
         expect(log.id).to.equal(data.id);
 
         done();
@@ -179,7 +179,7 @@ describe('LogStreamsManager', function() {
     it('should perform a GET request to /api/v2/log-streams/:id', function(done) {
       var request = this.request;
 
-      this.logstreams.get(params).then(function() {
+      this.logStreams.get(params).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -194,7 +194,7 @@ describe('LogStreamsManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.logstreams.getAll().then(function() {
+      this.logStreams.getAll().then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -212,7 +212,7 @@ describe('LogStreamsManager', function() {
         })
         .reply(200);
 
-      this.logstreams.getAll({ include_fields: true, fields: 'test' }).then(function() {
+      this.logStreams.getAll({ include_fields: true, fields: 'test' }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -231,13 +231,13 @@ describe('LogStreamsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.logstreams.create(data, function() {
+      this.logStreams.create(data, function() {
         done();
       });
     });
 
     it('should return a promise if no callback is given', function(done) {
-      this.logstreams
+      this.logStreams
         .create(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
@@ -250,7 +250,7 @@ describe('LogStreamsManager', function() {
         .post('/log-streams')
         .reply(500);
 
-      this.logstreams.create(data).catch(function(err) {
+      this.logStreams.create(data).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -260,7 +260,7 @@ describe('LogStreamsManager', function() {
     it('should perform a POST request to /api/v2/log-streams', function(done) {
       var request = this.request;
 
-      this.logstreams.create(data).then(function() {
+      this.logStreams.create(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -274,7 +274,7 @@ describe('LogStreamsManager', function() {
         .post('/log-streams', data)
         .reply(200);
 
-      this.logstreams.create(data).then(function() {
+      this.logStreams.create(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -289,7 +289,7 @@ describe('LogStreamsManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.logstreams.create(data).then(function() {
+      this.logStreams.create(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -307,11 +307,11 @@ describe('LogStreamsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.logstreams.update({ id: 5 }, {}, done.bind(null, null));
+      this.logStreams.update({ id: 5 }, {}, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function(done) {
-      this.logstreams
+      this.logStreams
         .update({ id: 5 }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
@@ -320,7 +320,7 @@ describe('LogStreamsManager', function() {
     it('should perform a PATCH request to /api/v2/log-streams/5', function(done) {
       var request = this.request;
 
-      this.logstreams.update({ id: 5 }, {}).then(function() {
+      this.logStreams.update({ id: 5 }, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -334,7 +334,7 @@ describe('LogStreamsManager', function() {
         .patch('/log-streams/' + this.data.id, this.data)
         .reply(200);
 
-      this.logstreams.update({ id: 5 }, this.data).then(function() {
+      this.logStreams.update({ id: 5 }, this.data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -348,7 +348,7 @@ describe('LogStreamsManager', function() {
         .patch('/log-streams/' + this.data.id)
         .reply(500);
 
-      this.logstreams.update({ id: this.data.id }, this.data).catch(function(err) {
+      this.logStreams.update({ id: this.data.id }, this.data).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -366,17 +366,17 @@ describe('LogStreamsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.logstreams.delete({ id: id }, done.bind(null, null));
+      this.logStreams.delete({ id: id }, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function(done) {
-      this.logstreams.delete({ id: id }).then(done.bind(null, null));
+      this.logStreams.delete({ id: id }).then(done.bind(null, null));
     });
 
     it('should perform a delete request to /log-streams/' + id, function(done) {
       var request = this.request;
 
-      this.logstreams.delete({ id: id }).then(function() {
+      this.logStreams.delete({ id: id }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -390,7 +390,7 @@ describe('LogStreamsManager', function() {
         .delete('/log-streams/' + id)
         .reply(500);
 
-      this.logstreams.delete({ id: id }).catch(function(err) {
+      this.logStreams.delete({ id: id }).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -405,7 +405,7 @@ describe('LogStreamsManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.logstreams.delete({ id: id }).then(function() {
+      this.logStreams.delete({ id: id }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
