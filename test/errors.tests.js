@@ -4,12 +4,12 @@ var errors = require('../src/errors');
 
 describe('Errors', function() {
   describe('sanitizeErrorRequestData', function() {
-    describe('when passed in error is missing request data', function() {
+    describe('when passed in error is missing request data and headers', function() {
       var error = { response: { request: {} } };
-      var sanitizedError = errors.sanitizeErrorRequestData(error);
+      var redactedError = errors.sanitizeErrorRequestData(error);
 
       it('should return error', function() {
-        expect(sanitizedError).to.equal(error);
+        expect(redactedError).to.equal(error);
       });
     });
 
@@ -25,17 +25,35 @@ describe('Errors', function() {
           }
         }
       };
-      const sanitizedError = errors.sanitizeErrorRequestData(error);
-      const sanitizedData = sanitizedError.response.request._data;
+      const redactedError = errors.sanitizeErrorRequestData(error);
+      const sanitizedData = redactedError.response.request._data;
 
-      it('should return [SANITIZED] for DATA_SECRET', function() {
-        expect(sanitizedData.DATA_SECRET).to.equal('[SANITIZED]');
+      it('should return [REDACTED] for DATA_SECRET', function() {
+        expect(sanitizedData.DATA_SECRET).to.equal('[REDACTED]');
       });
-      it('should return [SANITIZED] for DATA_SECRET', function() {
-        expect(sanitizedData.DATA_SECRET).to.equal('[SANITIZED]');
+      it('should return [REDACTED] for DATA_SECRET', function() {
+        expect(sanitizedData.DATA_SECRET).to.equal('[REDACTED]');
       });
       it('should return original value for USER_NAME', function() {
         expect(sanitizedData.USER_NAME).to.equal(sanitizedData.USER_NAME);
+      });
+    });
+
+    describe('when passed in error has header data', function() {
+      const error = {
+        response: {
+          request: {
+            _header: {
+              authorization: 'Bearer xyz'
+            }
+          }
+        }
+      };
+      const redactedError = errors.sanitizeErrorRequestData(error);
+      const sanitizedData = redactedError.response.request._header;
+
+      it('should return [REDACTED] for authorization', function() {
+        expect(sanitizedData.authorization).to.equal('[REDACTED]');
       });
     });
   });
@@ -82,8 +100,8 @@ describe('Errors', function() {
       expect(sanitizedError.originalError).to.eql(originalError);
     });
 
-    it('should sanitize the original error sensitive information', function() {
-      expect(sanitizedError.originalError.response.request._data.secret).to.eql('[SANITIZED]');
+    it('should redact the original error sensitive information', function() {
+      expect(sanitizedError.originalError.response.request._data.secret).to.eql('[REDACTED]');
     });
 
     it('should have a stack with the message and location the error was created', function() {
