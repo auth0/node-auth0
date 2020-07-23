@@ -791,10 +791,13 @@ utils.wrapPropertyMethod(
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.getDeviceCredentials(function (err, credentials) {
+ * var params = {user_id: "USER_ID"};
+ *
+ * management.getDeviceCredentials(params, function (err, credentials) {
  *   console.log(credentials.length);
  * });
  *
+ * @param   {Object}    params  Credential parameters.
  * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}
