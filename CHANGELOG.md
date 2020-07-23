@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.27.1](https://github.com/auth0/node-auth0/tree/v2.27.1) (2020-07-23)
+
+**Changed**
+
+- Use [REDACTED] instead of [SANITIZED] when cleaning errors [\#515](https://github.com/auth0/node-auth0/pull/515) ([jimmyjames](https://github.com/jimmyjames))
+
+**Security**
+
+- Sanitize Headers on Errors [\#507](https://github.com/auth0/node-auth0/pull/507) ([jimmyjames](https://github.com/jimmyjames))
+- Bump lodash from 4.17.15 to 4.17.19 [\#506](https://github.com/auth0/node-auth0/pull/506) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.27.0...v2.27.1)
+
 ## [v2.27.0](https://github.com/auth0/node-auth0/tree/v2.27.0) (2020-06-30)
 
 **Added**
