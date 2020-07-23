@@ -33,7 +33,7 @@ var sanitizeErrors = function(collection) {
 
   Object.keys(collection).forEach(function(key) {
     if (key.toLowerCase().match('password|secret|authorization')) {
-      collection[key] = '[SANITIZED]';
+      collection[key] = '[REDACTED]';
     }
   });
 };
