@@ -1,6 +1,5 @@
 var expect = require('chai').expect;
 var nock = require('nock');
-var Promise = require('bluebird');
 
 var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
