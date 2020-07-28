@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var retry = require('retry');
 var ArgumentError = require('rest-facade').ArgumentError;
 var assign = Object.assign || require('object.assign');
