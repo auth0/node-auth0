@@ -32,6 +32,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bluebird": "^3.5.5",
+    "es6-promisify": "^6.1.1",
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.0",
