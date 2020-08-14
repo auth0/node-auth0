@@ -3714,7 +3714,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createAction', 'actions.create');
  * var params = {
  *   per_page: 10,
  *   page: 0
- *   trigger_id : TRIGGER_ID
+ *   triggerId : TRIGGER_ID
  * };
  *
  * management.getActions(params, function (err, actions) {
@@ -3724,7 +3724,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createAction', 'actions.create');
  * @param   {Object}    [params]                  Actions parameters.
  * @param   {Number}    [params.per_page]         Number of results per page.
  * @param   {Number}    [params.page]             Page number, zero indexed.
- * @param   {String}    [params.trigger_id]      Actions trigger ID.
+ * @param   {String}    [params.triggerId]      Actions trigger ID.
  * @param   {Function}  [cb]                      Callback function.
  *
  * @return  {Promise|undefined}
