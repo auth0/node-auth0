@@ -97,14 +97,14 @@ utils.wrapPropertyMethod(ActionsManager, 'create', 'resource.create');
  *   page: 0
  * };
  *
- * management.actions.getAll({ trigger_id: TRIGGER_ID }, function (err, actions) {
+ * management.actions.getAll({ triggerId: TRIGGER_ID }, function (err, actions) {
  *   console.log(actions.length);
  * });
  *
  * @param   {Object}    [params]               Actions parameters.
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
- * @param   {String}    [params.trigger_id]     Actions trigger ID.
+ * @param   {String}    [params.triggerId]     Actions trigger ID.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
