@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.28.0](https://github.com/auth0/node-auth0/tree/v2.28.0) (2020-08-27)
+
+**Added**
+
+- Added support for Log Streams [\#518](https://github.com/auth0/node-auth0/pull/518) ([cv711](https://github.com/cv711))
+
+**Removed**
+
+- Remove bluebird [\#520](https://github.com/auth0/node-auth0/pull/520) ([mattiasnixell](https://github.com/mattiasnixell))
+
+**Security**
+
+- [Security] Bump elliptic from 6.5.2 to 6.5.3 [\#521](https://github.com/auth0/node-auth0/pull/521) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.27.1...v2.28.0)
+
 ## [v2.27.1](https://github.com/auth0/node-auth0/tree/v2.27.1) (2020-07-23)
 
 **Changed**
