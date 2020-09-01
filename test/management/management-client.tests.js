@@ -279,6 +279,9 @@ describe('ManagementClient', function() {
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
         expect(client.users.roles.restClient.restClient.options.headers).to.contain(requestHeaders);
         expect(client.users.permissions.restClient.restClient.options.headers).to.contain(
           requestHeaders
@@ -424,6 +427,9 @@ describe('ManagementClient', function() {
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
         expect(client.users.roles.restClient.restClient.options.headers).to.contain(requestHeaders);
         expect(client.users.permissions.restClient.restClient.options.headers).to.contain(
           requestHeaders
@@ -564,6 +570,9 @@ describe('ManagementClient', function() {
         ).to.not.have.property('Auth0-Client');
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(client.users.roles.restClient.restClient.options.headers).to.not.have.property(
           'Auth0-Client'
@@ -710,6 +719,9 @@ describe('ManagementClient', function() {
         ).to.not.have.property('Auth0-Client');
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(client.users.roles.restClient.restClient.options.headers).to.not.have.property(
           'Auth0-Client'

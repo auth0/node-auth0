@@ -1561,6 +1561,33 @@ utils.wrapPropertyMethod(
 );
 
 /**
+ * Invalidate all remembered browsers for MFA.
+ *
+ * @method    invalidateRememberBrowser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.invalidateRememberBrowser({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Invalidated all remembered browsers.
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'invalidateRememberBrowser',
+  'users.invalidateRememberBrowser'
+);
+
+/**
  * Get user blocks by its id.
  *
  * @method    getUserBlocks
