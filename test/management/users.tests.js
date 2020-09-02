@@ -32,6 +32,7 @@ describe('UsersManager', function() {
       'updateAppMetadata',
       'getGuardianEnrollments',
       'regenerateRecoveryCode',
+      'invalidateRememberBrowser',
       'getRoles',
       'assignRoles',
       'removeRoles',
@@ -1035,6 +1036,77 @@ describe('UsersManager', function() {
         .reply(200);
 
       this.users.regenerateRecoveryCode(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#invalidateRememberBrowser', function() {
+    var data = {
+      id: 'USER_ID'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/users/' + data.id + '/multifactor/actions/invalidate-remember-browser')
+        .reply(204);
+    });
+
+    it('should validate empty userId', function() {
+      var _this = this;
+      expect(function() {
+        _this.users.invalidateRememberBrowser(null, function() {});
+      }).to.throw('The userId cannot be null or undefined');
+    });
+
+    it('should accept a callback', function(done) {
+      this.users.invalidateRememberBrowser(data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.users
+        .invalidateRememberBrowser(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + data.id + '/multifactor/actions/invalidate-remember-browser')
+        .reply(500);
+
+      this.users.invalidateRememberBrowser(data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/users/:id/multifactor/actions/invalidate-remember-browser', function(done) {
+      var request = this.request;
+
+      this.users.invalidateRememberBrowser(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/users/' + data.id + '/multifactor/actions/invalidate-remember-browser')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.users.invalidateRememberBrowser(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
