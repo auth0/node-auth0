@@ -912,7 +912,9 @@ describe('ManagementClient', function() {
       'unblockUser',
       'getUserBlocksByIdentifier',
       'unblockUserByIdentifier',
-      'getAccessToken'
+      'getAccessToken',
+      'getPromptsSettings',
+      'updatePromptsSettings'
     ];
 
     before(function() {
