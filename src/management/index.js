@@ -34,6 +34,7 @@ var RolesManager = require('./RolesManager');
 var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
+var PromptsManager = require('./PromptsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -343,6 +344,13 @@ var ManagementClient = function(options) {
    * @type {MigrationsManager}
    */
   this.migrations = new MigrationsManager(managerOptions);
+
+  /**
+   * Prompts Manager
+   *
+   * @type {PromptsManager}
+   */
+  this.prompts = new PromptsManager(managerOptions);
 };
 
 /**
@@ -3547,5 +3555,111 @@ utils.wrapPropertyMethod(ManagementClient, 'updateMigrations', 'migrations.updat
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getMigrations', 'migrations.getMigrations');
+
+/**
+ * Get prompts settings..
+ *
+ * @method    getPromptsSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getPromptsSettings(function (err, settings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(ManagementClient, 'getPromptsSettings', 'prompts.getSettings');
+
+/**
+ * Update prompts settings.
+ *
+ * @method    updatePromptsSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updatePromptsSettings(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data  The new prompts settings.
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(ManagementClient, 'updatePromptsSettings', 'prompts.updateSettings');
+
+/**
+ * Retrieve custom text for a specific prompt and language.
+ *
+ * @method    getCustomTextByLanguage
+ * @memberOf  module:management.PromptsManager.prototype
+ *
+ * @example
+ * var params = { prompt: PROMPT_NAME, language: LANGUAGE };
+ *
+ * management.prompts.getCustomTextByLanguage(params, function (err, customText) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log('CustomText', customText);
+ * });
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.prompt     Name of the prompt.
+ * @param   {String}    params.language   Language to retrieve.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getCustomTextByLanguage',
+  'prompts.getCustomTextByLanguage'
+);
+
+/**
+ * Set custom text for a specific prompt.
+ *
+ * @method    updateCustomTextByLanguage
+ * @memberOf  module:management.PromptsManager.prototype
+ *
+ * @example
+ * var params = { prompt: PROMPT_NAME, language: LANGUAGE, body: BODY_OBJECT };
+ *
+ * management.prompts.updateCustomTextByLanguage(params, function (err, customText) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log('CustomText', customText);
+ * });
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.prompt     Name of the prompt.
+ * @param   {String}    params.language   Language to retrieve.
+ * @param   {Object}    params.body       An object containing custom dictionaries for a group of screens.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateCustomTextByLanguage',
+  'prompts.updateCustomTextByLanguage'
+);
 
 module.exports = ManagementClient;
