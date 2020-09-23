@@ -1,5 +1,24 @@
 # Change Log
 
+## [v2.29.0](https://github.com/auth0/node-auth0/tree/v2.29.0) (2020-09-23)
+
+**Added**
+
+- Adding support for prompts and custom texts [\#533](https://github.com/auth0/node-auth0/pull/533) ([davidpatrick](https://github.com/davidpatrick))
+- Adding call to invalidate all remembered browsers. [\#528](https://github.com/auth0/node-auth0/pull/528) ([tandrup](https://github.com/tandrup))
+- Adding docs for secondary and federated identity email verification [\#519](https://github.com/auth0/node-auth0/pull/519) ([jimmyjames](https://github.com/jimmyjames))
+
+**Changed**
+
+- Update dependencies [\#535](https://github.com/auth0/node-auth0/pull/535) ([davidpatrick](https://github.com/davidpatrick))
+- Update jwks-rsa dependency to avoid DeprecationWarning Buffer() [\#534](https://github.com/auth0/node-auth0/pull/534) ([jalie](https://github.com/jalie))
+
+**Security**
+
+- [Security] Bump node-fetch from 2.6.0 to 2.6.1 [\#532](https://github.com/auth0/node-auth0/pull/532) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.28.0...v2.29.0)
+
 ## [v2.28.0](https://github.com/auth0/node-auth0/tree/v2.28.0) (2020-08-27)
 
 **Added**
