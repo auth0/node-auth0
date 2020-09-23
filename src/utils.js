@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var pkg = require('../package.json');
 
 /**

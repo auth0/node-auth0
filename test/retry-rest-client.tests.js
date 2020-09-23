@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
-var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 var RetryRestClient = require('../src/RetryRestClient');

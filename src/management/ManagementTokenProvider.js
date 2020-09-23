@@ -2,7 +2,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
 var assign = Object.assign || require('object.assign');
 var AuthenticationClient = require('../auth');
 var memoizer = require('lru-memoizer');
-var Promise = require('bluebird');
+var es6Promisify = require('es6-promisify');
 
 var DEFAULT_OPTIONS = { enableCache: true };
 
@@ -73,7 +73,7 @@ var ManagementTokenProvider = function(options) {
   this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 
   var self = this;
-  this.getCachedAccessToken = Promise.promisify(
+  this.getCachedAccessToken = es6Promisify.promisify(
     memoizer({
       load: function(options, callback) {
         self

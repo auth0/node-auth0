@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "2.27.1",
+  "version": "2.28.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "files": [
@@ -31,10 +31,10 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "axios": "^0.19.2",
-    "bluebird": "^3.5.5",
+    "es6-promisify": "^6.1.1",
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.0",
+    "jwks-rsa": "^1.10.0",
     "lru-memoizer": "^2.1.0",
     "object.assign": "^4.1.0",
     "rest-facade": "^1.12.0",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "codecov": "^3.7.0",
+    "codecov": "^3.7.2",
     "cross-env": "^5.2.0",
     "husky": "^3.0.1",
     "jsdoc": "^3.6.3",

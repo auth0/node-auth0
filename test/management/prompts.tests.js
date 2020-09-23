@@ -219,4 +219,174 @@ describe('PromptsManager', function() {
       });
     });
   });
+
+  describe('#getCustomTextByLanguage', function() {
+    var data = {};
+    var params = {
+      prompt: 'test',
+      language: 'english'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/prompts/test/custom-text/english')
+        .reply(200);
+    });
+
+    it('should validate empty prompt parameter', function() {
+      var _this = this;
+      expect(function() {
+        _this.prompts.getCustomTextByLanguage({}, _this.body, function() {});
+      }).to.throw('The prompt parameter must be a string');
+    });
+
+    it('should validate empty language parameter', function() {
+      var _this = this;
+      expect(function() {
+        _this.prompts.getCustomTextByLanguage({ prompt: 'test' }, _this.body, function() {});
+      }).to.throw('The language parameter must be a string');
+    });
+
+    it('should accept a callback', function(done) {
+      this.prompts.getCustomTextByLanguage(params, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.prompts
+        .getCustomTextByLanguage(params)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/prompts/test/custom-text/english')
+        .reply(500);
+
+      this.prompts.getCustomTextByLanguage(params).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/prompts/test/custom-text/english', function(done) {
+      var request = this.request;
+
+      this.prompts.getCustomTextByLanguage(params).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/prompts/test/custom-text/english')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.prompts.getCustomTextByLanguage(params).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateCustomTextByLanguage', function() {
+    var data = {};
+    var params = {
+      prompt: 'test',
+      language: 'english',
+      body: {}
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .put('/prompts/test/custom-text/english')
+        .reply(200);
+    });
+
+    it('should validate empty prompt parameter', function() {
+      var _this = this;
+      expect(function() {
+        _this.prompts.updateCustomTextByLanguage({}, _this.body, function() {});
+      }).to.throw('The prompt parameter must be a string');
+    });
+
+    it('should validate empty language parameter', function() {
+      var _this = this;
+      expect(function() {
+        _this.prompts.updateCustomTextByLanguage({ prompt: 'test' }, _this.body, function() {});
+      }).to.throw('The language parameter must be a string');
+    });
+
+    it('should validate empty body parameter', function() {
+      var _this = this;
+      expect(function() {
+        _this.prompts.updateCustomTextByLanguage(
+          { prompt: 'test', language: 'english' },
+          _this.body,
+          function() {}
+        );
+      }).to.throw('The body parameter must be an object');
+    });
+
+    it('should accept a callback', function(done) {
+      this.prompts.updateCustomTextByLanguage(params, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.prompts
+        .updateCustomTextByLanguage(params)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/prompts/test/custom-text/english')
+        .reply(500);
+
+      this.prompts.updateCustomTextByLanguage(params).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('shoushould perform a GET request to /api/v2/prompts/test/custom-text/english', function(done) {
+      var request = this.request;
+
+      this.prompts.updateCustomTextByLanguage(params).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/prompts/test/custom-text/english')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.prompts.updateCustomTextByLanguage(params).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
 });

@@ -1,6 +1,5 @@
 var axios = require('axios');
 var extend = require('util')._extend;
-var Promise = require('bluebird');
 var FormData = require('form-data');
 var fs = require('fs');
 
