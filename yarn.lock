@@ -1016,10 +1016,10 @@ co@^4.6.0:
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
   integrity sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=
 
-codecov@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.7.0.tgz#4a09939cde24447a43f36d068e8b4e0188dc3f27"
-  integrity sha512-uIixKofG099NbUDyzRk1HdGtaG8O+PBUAg3wfmjwXw2+ek+PZp+puRvbTohqrVfuudaezivJHFgTtSC3M8MXww==
+codecov@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.7.2.tgz#998e68c8c1ef4b55cfcf11cd456866d35e13d693"
+  integrity sha512-fmCjAkTese29DUX3GMIi4EaKGflHa4K51EoMc29g8fBHawdk/+KEq5CWOeXLdd9+AT7o1wO4DIpp/Z1KCqCz1g==
   dependencies:
     argv "0.0.2"
     ignore-walk "3.0.3"
@@ -2625,10 +2625,10 @@ jwa@^1.4.1:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
-jwks-rsa@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-1.9.0.tgz#efa0cd550c13b70397e27cd8764bd53c45a1ad91"
-  integrity sha512-UPCfQQg0s2kF2Ju6UFJrQH73f7MaVN/hKBnYBYOp+X9KN4y6TLChhLtaXS5nRKbZqshwVdrZ9OY63m/Q9CLqcg==
+jwks-rsa@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-1.10.0.tgz#48d55f168eb731ed730a86c732068e03e16b3c22"
+  integrity sha512-ix1h4R1+dNTmeUDo+oLpHjVrql34SR89sw9lAVXmKICj3DVUszhhMIwTM8PzhQ+58I4hDnk7x5mxA1SWiGZPDg==
   dependencies:
     "@types/express-jwt" "0.0.42"
     axios "^0.19.2"
