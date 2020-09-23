@@ -6,7 +6,7 @@
 
 - Adding support for prompts and custom texts [\#533](https://github.com/auth0/node-auth0/pull/533) ([davidpatrick](https://github.com/davidpatrick))
 - Adding call to invalidate all remembered browsers. [\#528](https://github.com/auth0/node-auth0/pull/528) ([tandrup](https://github.com/tandrup))
-- Merge pull request #510 from ademartini/ESD-7544-redux [\#519](https://github.com/auth0/node-auth0/pull/519) ([jimmyjames](https://github.com/jimmyjames))
+- Adding docs for secondary and federated identity email verification [\#519](https://github.com/auth0/node-auth0/pull/519) ([jimmyjames](https://github.com/jimmyjames))
 
 **Changed**
 
