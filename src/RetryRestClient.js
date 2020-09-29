@@ -91,7 +91,6 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
   };
 
   var self = this;
-  let now = Date.now();
   return new Promise(function(resolve, reject) {
     var operation = retry.operation(retryOptions);
 
@@ -102,7 +101,6 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
           resolve(body);
         })
         .catch(function(err) {
-          now = Date.now();
           if (err && err.statusCode === 429 && operation.retry(err)) {
             return;
           }
