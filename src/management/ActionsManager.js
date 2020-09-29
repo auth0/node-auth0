@@ -81,7 +81,7 @@ var ActionsManager = function(options) {
 utils.wrapPropertyMethod(ActionsManager, 'create', 'resource.create');
 
 /**
- * Get all actions by trigger id.
+ * Get all actions.
  *
  * @method    getAll
  * @memberOf  module:management.ActionsManager.prototype
@@ -94,17 +94,20 @@ utils.wrapPropertyMethod(ActionsManager, 'create', 'resource.create');
  * // Pagination settings.
  * var params = {
  *   per_page: 10,
- *   page: 0
+ *   page: 0,
+ *   triggerId:'TRIGGER_ID',
+ *   name: 'ACTION_NAME'
  * };
  *
- * management.actions.getAll({ triggerId: TRIGGER_ID }, function (err, actions) {
+ * management.actions.getAll(params, function (err, actions) {
  *   console.log(actions.length);
  * });
  *
  * @param   {Object}    [params]               Actions parameters.
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
- * @param   {String}    [params.triggerId]     Actions trigger ID.
+ * @param   {String}    [params.triggerId]     The trigger ID of the actions to retrieve.
+ * @param   {String}    [params.name]          The name of the actions to retrieve.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
@@ -172,7 +175,7 @@ utils.wrapPropertyMethod(ActionsManager, 'get', 'resource.get');
 utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
 
 /**
- * Delete an existing action.
+ * Delete an existing action. Deleting an Action deletes all the action's versions
  *
  * @method    delete
  * @memberOf  module:management.ActionsManager.prototype

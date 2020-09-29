@@ -35,7 +35,7 @@ var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
 var ActionsManager = require('./ActionsManager');
 var ActionsVersionsManager = require('./ActionVersionsManager');
-var ActionsTriggerBindingsManager = require('./ActionTriggerBindingsManager');
+var ActionsBindingsManager = require('./ActionBindingsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -359,9 +359,9 @@ var ManagementClient = function(options) {
    * Simple abstraction for performing CRUD operations on the
    * actions trigger binding endpoint.
    *
-   * @type {ActionsTriggerBindingsManager}
+   * @type {ActionsBindingsManager}
    */
-  this.actionTriggerBindings = new ActionsTriggerBindingsManager(managerOptions);
+  this.actionTriggerBindings = new ActionsBindingsManager(managerOptions);
 };
 
 /**

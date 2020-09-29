@@ -10,7 +10,7 @@ var RetryRestClient = require('../RetryRestClient');
  */
 
 /**
- * @class ActionsTriggerBindingsManager
+ * @class ActionsBindingsManager
  * Auth0 ActionsTriggerBindings Provider.
  * @constructor
  * @memberOf module:management
@@ -20,7 +20,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var ActionsTriggerBindingsManager = function(options) {
+var ActionsBindingsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -62,7 +62,7 @@ var ActionsTriggerBindingsManager = function(options) {
  * Create a new ActionsTriggerBinding.
  *
  * @method    create
- * @memberOf  module:management.ActionsTriggerBindingsManager.prototype
+ * @memberOf  module:management.ActionsBindingsManager.prototype
  *
  * @example
  * var params = { trigger_id: TRIGGER_ID };
@@ -87,13 +87,13 @@ var ActionsTriggerBindingsManager = function(options) {
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'create', 'resource.create');
+utils.wrapPropertyMethod(ActionsBindingsManager, 'create', 'resource.create');
 
 /**
  * Get all actionsTriggerBindings by trigger id.
  *
  * @method    getAll
- * @memberOf  module:management.ActionsTriggerBindingsManager.prototype
+ * @memberOf  module:management.ActionsBindingsManager.prototype
  *
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
@@ -118,13 +118,13 @@ utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'create', 'resource.crea
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'getAll', 'resource.getAll');
+utils.wrapPropertyMethod(ActionsBindingsManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 action trigger binding.
  *
  * @method    get
- * @memberOf  module:management.ActionsTriggerBindingsManager.prototype
+ * @memberOf  module:management.ActionsBindingsManager.prototype
  *
  * @example
  * management.actionsTriggerBindings.get({ id: ACTION_ID }, function (err, action) {
@@ -142,13 +142,13 @@ utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'getAll', 'resource.getA
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'get', 'resource.get');
+utils.wrapPropertyMethod(ActionsBindingsManager, 'get', 'resource.get');
 
 /**
  * Update an existing action trigger binding.
  *
  * @method    update
- * @memberOf  module:management.ActionsTriggerBindingsManager.prototype
+ * @memberOf  module:management.ActionsBindingsManager.prototype
  *
  * @example
  * var data = { display_name: 'new-display_name' };
@@ -180,13 +180,13 @@ utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'get', 'resource.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'update', 'resource.patch');
+utils.wrapPropertyMethod(ActionsBindingsManager, 'update', 'resource.patch');
 
 /**
  * Delete an existing action trigger binding.
  *
  * @method    delete
- * @memberOf  module:management.ActionsTriggerBindingsManager.prototype
+ * @memberOf  module:management.ActionsBindingsManager.prototype
  *
  * @example
  * management.actionsTriggerBindings.delete({ trigger_id: TRIGGER_ID , binding_id: BINDING_ID }, function (err) {
@@ -204,6 +204,6 @@ utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'update', 'resource.patc
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsTriggerBindingsManager, 'delete', 'resource.delete');
+utils.wrapPropertyMethod(ActionsBindingsManager, 'delete', 'resource.delete');
 
-module.exports = ActionsTriggerBindingsManager;
+module.exports = ActionsBindingsManager;
