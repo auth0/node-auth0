@@ -96,7 +96,7 @@ utils.wrapPropertyMethod(ActionsManager, 'create', 'resource.create');
  *   per_page: 10,
  *   page: 0,
  *   triggerId:'TRIGGER_ID',
- *   name: 'ACTION_NAME'
+ *   actionName: 'ACTION_NAME'
  * };
  *
  * management.actions.getAll(params, function (err, actions) {
@@ -107,7 +107,7 @@ utils.wrapPropertyMethod(ActionsManager, 'create', 'resource.create');
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
  * @param   {String}    [params.triggerId]     The trigger ID of the actions to retrieve.
- * @param   {String}    [params.name]          The name of the actions to retrieve.
+ * @param   {String}    [params.actionName]    The name of the actions to retrieve.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}

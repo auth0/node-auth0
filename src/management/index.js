@@ -372,7 +372,7 @@ var ManagementClient = function(options) {
 
   /**
    * Simple abstraction for performing CRUD operations on the
-   * actions trigger binding endpoint.
+   * actions binding endpoint.
    *
    * @type {ActionBindingsManager}
    */
@@ -3830,8 +3830,8 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteAction', 'actions.delete');
  * });
  * @param   {Object}    params                 ActionBinding parameters.
  * @param   {String}    params.triggger_id     Action Trigger ID.
- * @param   {Object}    data     ActionBinding data object.
- * @param   {Function}  [cb]     Callback function.
+ * @param   {Object}    data                   ActionBinding data object.
+ * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
  */
