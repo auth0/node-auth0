@@ -115,7 +115,7 @@ utils.wrapPropertyMethod(ActionVersionsManager, 'create', 'resource.create');
 utils.wrapPropertyMethod(ActionVersionsManager, 'getAll', 'resource.getAll');
 
 /**
- * Get an Auth0 action version.
+ * Get an action version.
  *
  * @method    get
  * @memberOf  module:management.ActionManager.prototype

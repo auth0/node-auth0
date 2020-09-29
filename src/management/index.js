@@ -36,7 +36,7 @@ var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
 var ActionsManager = require('./ActionsManager');
 var ActionsVersionsManager = require('./ActionVersionsManager');
-var ActionsBindingsManager = require('./ActionBindingsManager');
+var ActionBindingsManager = require('./ActionBindingsManager');
 var PromptsManager = require('./PromptsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
@@ -368,9 +368,9 @@ var ManagementClient = function(options) {
    * Simple abstraction for performing CRUD operations on the
    * actions trigger binding endpoint.
    *
-   * @type {ActionsBindingsManager}
+   * @type {ActionBindingsManager}
    */
-  this.actionTriggerBindings = new ActionsBindingsManager(managerOptions);
+  this.actionTriggerBindings = new ActionBindingsManager(managerOptions);
 
   /**
    * Prompts Manager
@@ -3726,8 +3726,9 @@ utils.wrapPropertyMethod(ManagementClient, 'createAction', 'actions.create');
  *
  * var params = {
  *   per_page: 10,
- *   page: 0
- *   triggerId : TRIGGER_ID
+ *   page: 0,
+ *   triggerId : TRIGGER_ID,
+ *   name : ACTION_NAME
  * };
  *
  * management.getActions(params, function (err, actions) {
@@ -3737,7 +3738,8 @@ utils.wrapPropertyMethod(ManagementClient, 'createAction', 'actions.create');
  * @param   {Object}    [params]                  Actions parameters.
  * @param   {Number}    [params.per_page]         Number of results per page.
  * @param   {Number}    [params.page]             Page number, zero indexed.
- * @param   {String}    [params.triggerId]      Actions trigger ID.
+ * @param   {String}    [params.triggerId]        trigger ID of actions to be retrieved.
+ * @param   {String}    [params.name]             name of action to be retrieved.
  * @param   {Function}  [cb]                      Callback function.
  *
  * @return  {Promise|undefined}
@@ -3745,7 +3747,7 @@ utils.wrapPropertyMethod(ManagementClient, 'createAction', 'actions.create');
 utils.wrapPropertyMethod(ManagementClient, 'getActions', 'actions.getAll');
 
 /**
- * Get an Auth0 action.
+ * Get an action.
  *
  * @method    getAction
  * @memberOf  module:management.ManagementClient.prototype
@@ -3796,7 +3798,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAction', 'actions.update');
 /**
  * Delete an existing action.
  *
- * @method    deleteActions
+ * @method    deleteAction
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
@@ -3817,9 +3819,9 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAction', 'actions.update');
 utils.wrapPropertyMethod(ManagementClient, 'deleteAction', 'actions.delete');
 
 /**
- * Create a new Action Trigger Binding.
+ * Create a new Action Binding.
  *
- * @method    createActionTriggerBinding
+ * @method    createActionBinding
  * @memberOf  module:management.ManagementClient.prototype
  *
  *
@@ -3832,30 +3834,26 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteAction', 'actions.delete');
  *   configuration: [],
  *   metadata: {},
  * };
- * auth0.createActionTriggerBinding(params, data, function (err) {
+ * auth0.createActionBinding(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *    // ActionTriggerBinding created.
+ *    // ActionBinding created.
  * });
- * @param   {Object}    params                 ActionTriggerBinding parameters.
+ * @param   {Object}    params                 ActionBinding parameters.
  * @param   {String}    params.triggger_id     Action Trigger ID.
- * @param   {Object}    data     ActionTriggerBinding data object.
+ * @param   {Object}    data     ActionBinding data object.
  * @param   {Function}  [cb]     Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'createActionTriggerBinding',
-  'actionTriggerBindings.create'
-);
+utils.wrapPropertyMethod(ManagementClient, 'createActionBinding', 'actionBindings.create');
 
 /**
- * Get all Actions Trigger Bindings.
+ * Get all Action Bindings.
  *
- * @method    getActionsTriggerBindings
+ * @method    getActionBindings
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example <caption>
@@ -3871,7 +3869,7 @@ utils.wrapPropertyMethod(
  *   trigger_id : TRIGGER_ID
  * };
  *
- * management.getActionTriggerBinding(params, function (err, actions) {
+ * management.getActionBindings(params, function (err, actions) {
  *   console.log(actions.length);
  * });
  *
@@ -3883,94 +3881,82 @@ utils.wrapPropertyMethod(
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'getActionTriggerBindings',
-  'actionTriggerBindings.getAll'
-);
+utils.wrapPropertyMethod(ManagementClient, 'getActionBindings', 'actionBindings.getAll');
 
 /**
- * Get an Actions Trigger Binding by id.
+ * Get an Action Binding by id.
  *
- * @method    getActionsTriggerBinding
+ * @method    getActionBinding
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.getActionsTriggerBinding({ trigger_id: TRIGGER_ID, binding_id: BINDING_ID }, function (err, action) {
+ * management.getActionBinding({ trigger_id: TRIGGER_ID, binding_id: BINDING_ID }, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(actionsTriggerBinding);
+ *   console.log(actionBinding);
  * });
  *
  * @param   {Object}    [params]                  Actions parameters.
  * @param   {String}    [params.trigger_id]       Actions trigger ID.
- * @param   {String}    [params.binding_id]       Actions trigger binding ID.
+ * @param   {String}    [params.binding_id]       Actions binding ID.
  * @param   {Function}  [cb]                      Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getActionTriggerBinding', 'actionTriggerBindings.get');
+utils.wrapPropertyMethod(ManagementClient, 'getActionBinding', 'actionBindings.get');
 
 /**
- * Update an existing action trigger binding.
+ * Update an existing action binding.
  *
- * @method    updateActionTriggerBinding
+ * @method    updateActionBinding
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
  * var params = { trigger_id: TRIGGER_ID, binding_id: BINDING_ID };
  * var data = { display_name: 'my-new-display-name'};
- * management.updateActionTriggerBinding(params, data, function (err, actionTriggerBinding) {
+ * management.updateActionBinding(params, data, function (err, actionBinding) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(actionTriggerBinding.display_name); // 'my-new-display-name'.
+ *   console.log(actionBinding.display_name); // 'my-new-display-name'.
  * });
  *
  * @param   {Object}    params                  Action parameters.
  * @param   {String}    params.trigger_id       Action trigger ID.
- * @param   {String}    params.binding_id       Action trigger binding ID.
- * @param   {Object}    data                    Updated action trigger binding data.
+ * @param   {String}    params.binding_id       Action binding ID.
+ * @param   {Object}    data                    Updated action binding data.
  * @param   {Function}  [cb]                    Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'updateActionTriggerBinding',
-  'actionTriggerBindings.update'
-);
+utils.wrapPropertyMethod(ManagementClient, 'updateActionBinding', 'actionBindings.update');
 
 /**
- * Delete an existing action trigger binding .
+ * Delete an existing action binding.
  *
- * @method    deleteActionTriggerBinding
+ * @method    deleteActionBinding
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * auth0.deleteActionTriggerBinding({ trigger_id: TRIGGER_ID, binding_id: BINDING_ID }, function (err) {
+ * auth0.deleteActionBinding({ trigger_id: TRIGGER_ID, binding_id: BINDING_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   // actionTriggerBinding deleted.
+ *   // actionBinding deleted.
  * });
  *
  * @param   {Object}    params                  Action parameters.
  * @param   {String}    params.trigger_id       Action trigger ID.
- * @param   {String}    params.binding_id       Action trigger binding ID.
+ * @param   {String}    params.binding_id       Action binding ID.
  * @param   {Function}  [cb]                    Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'deleteActionTriggerBinding',
-  'actionTriggerBindings.delete'
-);
+utils.wrapPropertyMethod(ManagementClient, 'deleteActionBinding', 'actionBindings.delete');
 
 /**
  * Create a new Action Version.
@@ -3998,9 +3984,9 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(ManagementClient, 'createActionVersion', 'actionVersions.create');
 
 /**
- * Get all Actions Versions.
+ * Get all Action Versions.
  *
- * @method    getActionsVersions
+ * @method    getActionVersions
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example <caption>
@@ -4033,16 +4019,16 @@ utils.wrapPropertyMethod(ManagementClient, 'getActionVersions', 'actionVersions.
 /**
  * Get an Action Version by id.
  *
- * @method    getActionsVersion
+ * @method    getActionVersion
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.getActionsVersion({ action_id: ACTION_ID, version_id: VERSION_ID }, function (err, actionVersion) {
+ * management.getActionVersion({ action_id: ACTION_ID, version_id: VERSION_ID }, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(actionsVersion);
+ *   console.log(actionVersion);
  * });
  *
  * @param   {Object}    [params]                  Actions parameters.

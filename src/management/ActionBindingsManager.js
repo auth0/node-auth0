@@ -10,8 +10,8 @@ var RetryRestClient = require('../RetryRestClient');
  */
 
 /**
- * @class ActionsBindingsManager
- * Auth0 ActionsTriggerBindings Provider.
+ * @class ActionBindingsManager
+ * Auth0 ActionBindings Provider.
  * @constructor
  * @memberOf module:management
  *
@@ -20,7 +20,7 @@ var RetryRestClient = require('../RetryRestClient');
  * @param {Object} [options.headers]  Headers to be included in all requests.
  * @param {Object} [options.retry]    Retry Policy Config
  */
-var ActionsBindingsManager = function(options) {
+var ActionBindingsManager = function(options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -46,7 +46,7 @@ var ActionsBindingsManager = function(options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Auth0 ActionsTriggerBindings endpoint]{@link https://auth0.com/docs/api/v2#!/actionsTriggerBindings}.
+   * [Auth0 ActionBindings endpoint]{@link https://auth0.com/docs/api/v2#!/actionsBindings}.
    *
    * @type {external:RestClient}
    */
@@ -59,10 +59,10 @@ var ActionsBindingsManager = function(options) {
 };
 
 /**
- * Create a new ActionsTriggerBinding.
+ * Create a new ActionBinding.
  *
  * @method    create
- * @memberOf  module:management.ActionsBindingsManager.prototype
+ * @memberOf  module:management.ActionBindingsManager.prototype
  *
  * @example
  * var params = { trigger_id: TRIGGER_ID };
@@ -73,27 +73,27 @@ var ActionsBindingsManager = function(options) {
  *   configuration: [],
  *   metadata: {},
  * };
- * auth0.createActionTriggerBinding(params, data, function (err) {
+ * auth0.createActionBinding(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *    // ActionTriggerBinding created.
+ *    // ActionBinding created.
  * });
- * @param   {Object}    params                 ActionTriggerBinding parameters.
+ * @param   {Object}    params                 ActionBinding parameters.
  * @param   {String}    params.triggger_id     Action Trigger ID.
- * @param   {Object}    data                   ActionTriggerBinding data object.
+ * @param   {Object}    data                   ActionBinding data object.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsBindingsManager, 'create', 'resource.create');
+utils.wrapPropertyMethod(ActionBindingsManager, 'create', 'resource.create');
 
 /**
- * Get all actionsTriggerBindings by trigger id.
+ * Get all actionsBindings by trigger id.
  *
  * @method    getAll
- * @memberOf  module:management.ActionsBindingsManager.prototype
+ * @memberOf  module:management.ActionBindingsManager.prototype
  *
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
@@ -106,28 +106,28 @@ utils.wrapPropertyMethod(ActionsBindingsManager, 'create', 'resource.create');
  *   page: 0
  * };
  *
- * management.actionsTriggerBindings.getAll({ trigger_id: TRIGGER_ID }, function (err, actionsTriggerBindings) {
- *   console.log(actionsTriggerBindings.length);
+ * management.actionBindings.getAll({ trigger_id: TRIGGER_ID }, function (err, actionBindings) {
+ *   console.log(actionBindings.length);
  * });
  *
- * @param   {Object}    [params]               ActionsTriggerBindings parameters.
+ * @param   {Object}    [params]               ActionBindings parameters.
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
- * @param   {String}    [params.trigger_id]     ActionsTriggerBindings trigger ID.
+ * @param   {String}    [params.trigger_id]    trigger ID.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsBindingsManager, 'getAll', 'resource.getAll');
+utils.wrapPropertyMethod(ActionBindingsManager, 'getAll', 'resource.getAll');
 
 /**
- * Get an Auth0 action trigger binding.
+ * Get an Auth0 action binding.
  *
  * @method    get
- * @memberOf  module:management.ActionsBindingsManager.prototype
+ * @memberOf  module:management.ActionBindingsManager.prototype
  *
  * @example
- * management.actionsTriggerBindings.get({ id: ACTION_ID }, function (err, action) {
+ * management.actionBindings.get({ id: ACTION_ID }, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -135,36 +135,36 @@ utils.wrapPropertyMethod(ActionsBindingsManager, 'getAll', 'resource.getAll');
  *   console.log(action);
  * });
  *
- * @param   {Object}    params        ActionsTriggerBindings parameters.
+ * @param   {Object}    params                ActionBindings parameters.
  * @param   {String}    params.trigger_id     Action trigger ID.
  * @param   {String}    params.binding_id     Action trigger binding ID.
- * @param   {Function}  [cb]          Callback function.
+ * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsBindingsManager, 'get', 'resource.get');
+utils.wrapPropertyMethod(ActionBindingsManager, 'get', 'resource.get');
 
 /**
- * Update an existing action trigger binding.
+ * Update an existing action binding.
  *
  * @method    update
- * @memberOf  module:management.ActionsBindingsManager.prototype
+ * @memberOf  module:management.ActionBindingsManager.prototype
  *
  * @example
  * var data = { display_name: 'new-display_name' };
  * var params = { trigger_id: TRIGGER_ID, binding_id: BINDING_ID };
  *
  * // Using auth0 instance.
- * management.updateActionsTriggerBindings(params, data, function (err, actionTriggerBinding) {
+ * management.updateActionBindings(params, data, function (err, actionBinding) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   console.log(actionTriggerBinding.display_name);  // 'new-display_name'
+ *   console.log(actionBinding.display_name);  // 'new-display_name'
  * });
  *
- * // Using the ActionsTriggerBindings manager directly.
- * management.actionsTriggerBindings.update(params, data, function (err, action) {
+ * // Using the ActionBindings manager directly.
+ * management.actionBindings.update(params, data, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -172,38 +172,38 @@ utils.wrapPropertyMethod(ActionsBindingsManager, 'get', 'resource.get');
  *   console.log(action.name);  // 'new-name'
  * });
  *
- * @param   {Object}    params                Actions Trigger Binding parameters.
+ * @param   {Object}    params                Actions Binding parameters.
  * @param   {String}    params.trigger_id     Actions Trigger ID.
- * @param   {String}    params.binding_id     Actions Trigger Binding ID.
- * @param   {Object}    data                  Updated action trigger binding data.
+ * @param   {String}    params.binding_id     Actions Binding ID.
+ * @param   {Object}    data                  Updated action binding data.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsBindingsManager, 'update', 'resource.patch');
+utils.wrapPropertyMethod(ActionBindingsManager, 'update', 'resource.patch');
 
 /**
- * Delete an existing action trigger binding.
+ * Delete an existing action binding.
  *
  * @method    delete
- * @memberOf  module:management.ActionsBindingsManager.prototype
+ * @memberOf  module:management.ActionBindingsManager.prototype
  *
  * @example
- * management.actionsTriggerBindings.delete({ trigger_id: TRIGGER_ID , binding_id: BINDING_ID }, function (err) {
+ * management.actionBindings.delete({ trigger_id: TRIGGER_ID , binding_id: BINDING_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
- *   // Action Trigger Binding deleted.
+ *   // Action Binding deleted.
  * });
  *
- * @param   {Object}    params                Action Trigger Binding parameters.
+ * @param   {Object}    params                Action  Binding parameters.
  * @param   {String}    params.trigger_id     Action Trigger ID.
- * @param   {String}    params.binding_id     Action Trigger Binding ID.
+ * @param   {String}    params.binding_id     Action  Binding ID.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsBindingsManager, 'delete', 'resource.delete');
+utils.wrapPropertyMethod(ActionBindingsManager, 'delete', 'resource.delete');
 
-module.exports = ActionsBindingsManager;
+module.exports = ActionBindingsManager;
