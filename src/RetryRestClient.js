@@ -81,15 +81,18 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
     return this.restClient[method].apply(this.restClient, args);
   }
 
+  // The formula used to calculate the individual timeouts is:
+  // (1 + Math.random()) * minTimeout * Math.pow(factor, attempt)
   var retryOptions = {
     retries: this.maxRetries,
-    factor: 1,
-    minTimeout: 1, // retry immediate, use custom logic to control this.
-    randomize: false
+    factor: 2,
+    minTimeout: 1000,
+    randomize: true
   };
 
   var self = this;
-  var promise = new Promise(function(resolve, reject) {
+  let now = Date.now();
+  return new Promise(function(resolve, reject) {
     var operation = retry.operation(retryOptions);
 
     operation.attempt(function() {
@@ -99,57 +102,14 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
           resolve(body);
         })
         .catch(function(err) {
-          self.invokeRetry(err, operation, reject);
+          now = Date.now();
+          if (err && err.statusCode === 429 && operation.retry(err)) {
+            return;
+          }
+          reject(err);
         });
     });
   });
-
-  return promise;
-};
-
-RetryRestClient.prototype.invokeRetry = function(err, operation, reject) {
-  var ratelimits = this.extractRatelimits(err);
-  if (ratelimits) {
-    var delay = ratelimits.reset * 1000 - new Date().getTime();
-    if (delay > 0) {
-      this.retryWithDelay(delay, operation, err, reject);
-    } else {
-      this.retryWithImmediate(operation, err, reject);
-    }
-  } else {
-    reject(err);
-  }
-};
-
-RetryRestClient.prototype.extractRatelimits = function(err) {
-  if (err && err.statusCode === 429 && err.originalError && err.originalError.response) {
-    var headers = err.originalError.response.header;
-    if (headers && headers['x-ratelimit-limit']) {
-      return {
-        limit: headers['x-ratelimit-limit'],
-        remaining: headers['x-ratelimit-remaining'],
-        reset: headers['x-ratelimit-reset']
-      };
-    }
-  }
-
-  return;
-};
-
-RetryRestClient.prototype.retryWithImmediate = function(operation, err, reject) {
-  if (operation.retry(err)) {
-    return;
-  }
-  reject(err);
-};
-
-RetryRestClient.prototype.retryWithDelay = function(delay, operation, err, reject) {
-  setTimeout(() => {
-    if (operation.retry(err)) {
-      return;
-    }
-    reject(err);
-  }, delay);
 };
 
 module.exports = RetryRestClient;
