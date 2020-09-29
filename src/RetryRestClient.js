@@ -2,7 +2,11 @@ var retry = require('retry');
 var ArgumentError = require('rest-facade').ArgumentError;
 var assign = Object.assign || require('object.assign');
 
-var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
+var DEFAULT_OPTIONS = {
+  maxRetries: 10,
+  enabled: true,
+  randomize: true
+};
 
 /**
  * @class RetryRestClient
@@ -13,6 +17,7 @@ var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
  * @param {Object}  [options]                    Options for the RetryRestClient.
  * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.
  * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10.
+ * @param {*}       [options.*]                  Any options that are available in https://github.com/tim-kos/node-retry#retryoperationoptions
  */
 var RetryRestClient = function(restClient, options) {
   if (restClient === null || typeof restClient !== 'object') {
@@ -30,8 +35,8 @@ var RetryRestClient = function(restClient, options) {
   }
 
   this.restClient = restClient;
-  this.maxRetries = params.maxRetries;
   this.enabled = params.enabled;
+  this.retryOptions = assign({ retries: params.maxRetries }, params);
 };
 
 RetryRestClient.prototype.getAll = function(/* [params], [callback] */) {
@@ -81,18 +86,9 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
     return this.restClient[method].apply(this.restClient, args);
   }
 
-  // The formula used to calculate the individual timeouts is:
-  // (1 + Math.random()) * minTimeout * Math.pow(factor, attempt)
-  var retryOptions = {
-    retries: this.maxRetries,
-    factor: 2,
-    minTimeout: 1000,
-    randomize: true
-  };
-
   var self = this;
   return new Promise(function(resolve, reject) {
-    var operation = retry.operation(retryOptions);
+    var operation = retry.operation(self.retryOptions);
 
     operation.attempt(function() {
       self.restClient[method]
