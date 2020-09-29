@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>DatabaseAuthenticator - Documentation</title>
+    <title>LogStreamsManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">DatabaseAuthenticator</h1>
+    <h1 class="page-title">LogStreamsManager</h1>
     
 
     
@@ -42,13 +42,14 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="module-auth.html">auth</a>.</span>
+            <span class="ancestors"><a href="module-management.html">management</a>.</span>
         
-        DatabaseAuthenticator
+        LogStreamsManager
         </h2>
         
-            <div class="class-description"><p>Abstracts the sign-in, sign-up and change-password processes for Database &amp;
-Active Directory authentication services.</p></div>
+            <div class="class-description"><p>LogStreamsManager
+The logStreams class provides a simple abstraction for performing CRUD operations
+on Auth0 Log Streams.</p></div>
         
     
 </header>
@@ -63,7 +64,7 @@ Active Directory authentication services.</p></div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="DatabaseAuthenticator"><span class="type-signature"></span>new DatabaseAuthenticator<span class="signature">(options, oauth)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="LogStreamsManager"><span class="type-signature"></span>new LogStreamsManager<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
@@ -102,7 +103,7 @@ Active Directory authentication services.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_DatabaseAuthenticator.js.html">auth/DatabaseAuthenticator.js</a>, <a href="auth_DatabaseAuthenticator.js.html#line18">line 18</a>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -163,7 +164,7 @@ Active Directory authentication services.</p></div>
             
 
             <td class="description last">
-                <p>Authenticator options.</p>
+                <p>The client options.</p>
                 
                     
 
@@ -216,7 +217,7 @@ Active Directory authentication services.</p></div>
             
 
             <td class="description last">
-                <p>The auth0 account URL.</p>
+                <p>The URL of the API.</p>
                 
             </td>
         </tr>
@@ -225,13 +226,13 @@ Active Directory authentication services.</p></div>
 
         <tr>
             
-                <td class="name"><code>clientId</code></td>
+                <td class="name"><code>headers</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>String</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
@@ -252,15 +253,7 @@ Active Directory authentication services.</p></div>
             
 
             <td class="description last">
-                <p>Default client ID.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                <p>Headers to be included in all requests.</p>
                 
             </td>
         </tr>
@@ -269,24 +262,42 @@ Active Directory authentication services.</p></div>
 
         <tr>
             
-                <td class="name"><code>oauth</code></td>
+                <td class="name"><code>retry</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>OAuthAuthenticator</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">
-                <p>OAuthAuthenticator instance.</p>
+                <p>Retry Policy Config</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
                 
             </td>
         </tr>
@@ -326,6 +337,81 @@ Active Directory authentication services.</p></div>
 
     
         <h3 class="subsection-title">Members</h3>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="~auth0RestClient"><span class="type-signature">(inner) </span>auth0RestClient<span class="type-signature"> :<a href="external-RestClient.html">external:RestClient</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Provides an abstraction layer for performing CRUD operations on
+<a href="https://auth0.com/docs/api/management/v2#!/Log_Streams">Auth0 Log Streams</a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="external-RestClient.html">external:RestClient</a></code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
 
         
             
@@ -372,7 +458,7 @@ Active Directory authentication services.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_DatabaseAuthenticator.js.html">auth/DatabaseAuthenticator.js</a>, <a href="auth_DatabaseAuthenticator.js.html#line32">line 32</a>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -413,14 +499,14 @@ Active Directory authentication services.</p></div>
 
     
 
-    <h4 class="name" id="changePassword"><span class="type-signature"></span>changePassword<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Change password using a database or active directory service.</p>
+    <p>Create an Auth0 Log Stream.</p>
 </div>
 
 
@@ -456,7 +542,7 @@ Active Directory authentication services.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_DatabaseAuthenticator.js.html">auth/DatabaseAuthenticator.js</a>, <a href="auth_DatabaseAuthenticator.js.html#line164">line 164</a>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -527,110 +613,7 @@ Active Directory authentication services.</p></div>
             
 
             <td class="description last">
-                <p>User credentials object.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>User email address.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>New password.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Identity provider in use.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+                <p>Log Stream data.</p>
                 
             </td>
         </tr>
@@ -666,7 +649,7 @@ Active Directory authentication services.</p></div>
             
 
             <td class="description last">
-                <p>Method callback.</p>
+                <p>Callback function.</p>
                 
             </td>
         </tr>
@@ -717,27 +700,12 @@ Active Directory authentication services.</p></div>
 <div class="section-examples">
 <h5>Example</h5>
 
-        <p class="code-caption">
-  Given the user email, the connection specified and the new password to
-  use, Auth0 will send a forgot password email. Once the user clicks on the
-  confirm password change link, the new password specified in this POST will
-  be set to this user. Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
-  API Docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  password: '{PASSWORD}',
-  connection: 'Username-Password-Authentication'
-};
-
-auth0.database.changePassword(data, function (err, message) {
+    <pre class="prettyprint"><code>management.logStreams.create(data, function (err, log) {
   if (err) {
     // Handle error.
   }
 
-  console.log(message);
+  console.log(log);
 });</code></pre>
 
 </div>
@@ -749,14 +717,14 @@ auth0.database.changePassword(data, function (err, message) {
 
     
 
-    <h4 class="name" id="requestChangePasswordEmail"><span class="type-signature"></span>requestChangePasswordEmail<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Request a change password email using a database or active directory service.</p>
+    <p>Delete an Auth0 Log Streams.</p>
 </div>
 
 
@@ -792,7 +760,7 @@ auth0.database.changePassword(data, function (err, message) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_DatabaseAuthenticator.js.html">auth/DatabaseAuthenticator.js</a>, <a href="auth_DatabaseAuthenticator.js.html#line233">line 233</a>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -838,7 +806,7 @@ auth0.database.changePassword(data, function (err, message) {
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
@@ -863,7 +831,7 @@ auth0.database.changePassword(data, function (err, message) {
             
 
             <td class="description last">
-                <p>User credentials object.</p>
+                <p>Log Stream parameters.</p>
                 
                     
 
@@ -889,7 +857,7 @@ auth0.database.changePassword(data, function (err, message) {
 
         <tr>
             
-                <td class="name"><code>email</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -906,59 +874,7 @@ auth0.database.changePassword(data, function (err, message) {
             
 
             <td class="description last">
-                <p>User email address.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Identity provider in use.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>client_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Client ID of the Application requesting the password change, to be included in the email template.</p>
+                <p>Log Stream ID.</p>
                 
             </td>
         </tr>
@@ -1002,7 +918,7 @@ auth0.database.changePassword(data, function (err, message) {
             
 
             <td class="description last">
-                <p>Method callback.</p>
+                <p>Callback function.</p>
                 
             </td>
         </tr>
@@ -1053,26 +969,12 @@ auth0.database.changePassword(data, function (err, message) {
 <div class="section-examples">
 <h5>Example</h5>
 
-        <p class="code-caption">
-  Given the user email, the connection specified, Auth0 will send a change
-  password email. once the user clicks on the confirm password change link,
-  the new password specified in this POST will be set to this user. Find more
-  information in the <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-change_password>
-  API Docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  connection: 'Username-Password-Authentication',
-  client_id: 'OS1VzKTVjizL0VCc9Hx2ae2aTPXWy6BD'
-};
-
-auth0.database.requestChangePasswordEmail(data, function (err, message) {
+    <pre class="prettyprint"><code>management.logStreams.delete({ id: LOG_STREAM_ID }, function (err, log) {
   if (err) {
     // Handle error.
   }
 
-  console.log(message);
+  console.log(log);
 });</code></pre>
 
 </div>
@@ -1084,14 +986,14 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
 
     
 
-    <h4 class="name" id="signIn"><span class="type-signature"></span>signIn<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(params, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Sign in using a database or active directory service.</p>
+    <p>Get an Auth0 Log Streams.</p>
 </div>
 
 
@@ -1127,7 +1029,7 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_DatabaseAuthenticator.js.html">auth/DatabaseAuthenticator.js</a>, <a href="auth_DatabaseAuthenticator.js.html#line42">line 42</a>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -1173,7 +1075,7 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>params</code></td>
             
 
             <td class="type">
@@ -1198,7 +1100,7 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
             
 
             <td class="description last">
-                <p>User credentials object.</p>
+                <p>Log Stream parameters.</p>
                 
                     
 
@@ -1224,7 +1126,7 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
 
         <tr>
             
-                <td class="name"><code>username</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -1241,59 +1143,7 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
             
 
             <td class="description last">
-                <p>Username.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>User password.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Identity provider in use.</p>
+                <p>Log Stream ID.</p>
                 
             </td>
         </tr>
@@ -1337,7 +1187,7 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
             
 
             <td class="description last">
-                <p>Method callback.</p>
+                <p>Callback function.</p>
                 
             </td>
         </tr>
@@ -1388,26 +1238,12 @@ auth0.database.requestChangePasswordEmail(data, function (err, message) {
 <div class="section-examples">
 <h5>Example</h5>
 
-        <p class="code-caption">
-  Given the user credentials and the connection specified, it will do the
-  authentication on the provider and return a JSON with the `access_token`
-  and `id_token`. Find more information about the structure of the data
-  object in the <a href="https://auth0.com/docs/auth-api#!#post--oauth-ro">
-  API docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  username: '{USERNAME}',
-  password: '{PASSWORD}',
-  connection: 'Username-Password-Authentication' // Optional field.
-};
-
-auth0.database.signIn(data, function (err, userData) {
+    <pre class="prettyprint"><code>management.logStreams.get({ id: LOG_STREAM_ID }, function (err, logStream) {
   if (err) {
     // Handle error.
   }
 
-  console.log(userData);
+  console.log(logStream);
 });</code></pre>
 
 </div>
@@ -1419,14 +1255,14 @@ auth0.database.signIn(data, function (err, userData) {
 
     
 
-    <h4 class="name" id="signUp"><span class="type-signature"></span>signUp<span class="signature">(data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll<span class="signature">(cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Sign up using a database or active directory service.</p>
+    <p>Get all Log Streams.</p>
 </div>
 
 
@@ -1462,7 +1298,7 @@ auth0.database.signIn(data, function (err, userData) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="auth_DatabaseAuthenticator.js.html">auth/DatabaseAuthenticator.js</a>, <a href="auth_DatabaseAuthenticator.js.html#line98">line 98</a>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -1508,143 +1344,6 @@ auth0.database.signIn(data, function (err, userData) {
 
         <tr>
             
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Object</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                <p>User credentials object.</p>
-                
-                    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>User email address.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>User password.</p>
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>String</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                <p>Identity provider in use.</p>
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>cb</code></td>
             
 
@@ -1672,7 +1371,7 @@ auth0.database.signIn(data, function (err, userData) {
             
 
             <td class="description last">
-                <p>Method callback.</p>
+                <p>Callback function.</p>
                 
             </td>
         </tr>
@@ -1723,25 +1422,324 @@ auth0.database.signIn(data, function (err, userData) {
 <div class="section-examples">
 <h5>Example</h5>
 
-        <p class="code-caption">
-  Given the user credentials, the connection specified and (optionally) the
-  client ID, it will create a new user. Find more information in the
-  <a href="https://auth0.com/docs/auth-api#!#post--dbconnections-signup">
-  API Docs</a>.
-</p>
-    
-    <pre class="prettyprint"><code>var data = {
-  email: '{EMAIL}',
-  password: '{PASSWORD}',
-  connection: 'Username-Password-Authentication' // Optional field.
-};
+    <pre class="prettyprint"><code>management.logStreams.getAll(function (err, logStreams) {
+  console.log(logStreams.length);
+});</code></pre>
 
-auth0.database.signUp(data, function (err, userData) {
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(params, data, cb<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Update an Auth0 Log Streams.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="management_LogStreamsManager.js.html">management/LogStreamsManager.js</a>, <a href="management_LogStreamsManager.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Log Stream parameters.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Log Stream ID.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Updated Log Stream data.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Callback function.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>var data = { name: 'New name' };
+var params = { id: LOG_STREAM_ID };
+
+// Using auth0 instance.
+management.updateLogStream(params, data, function (err, logStream) {
   if (err) {
     // Handle error.
   }
 
-  console.log(userData);
+  console.log(logStream.name);  // 'New name'
+});
+
+// Using the logStreams manager directly.
+management.logStreams.update(params, data, function (err, logStream) {
+  if (err) {
+    // Handle error.
+  }
+
+  console.log(logStream.name);
 });</code></pre>
 
 </div>
@@ -1765,7 +1763,7 @@ auth0.database.signUp(data, function (err, userData) {
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Sep 23 2020 13:43:07 GMT-0700 (Pacific Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Sep 23 2020 13:43:08 GMT-0700 (Pacific Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

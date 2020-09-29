@@ -123,6 +123,21 @@ var UsersManager = function(options) {
   );
 
   /**
+   * Provides an abstraction layer for invalidating all remembered browsers for MFA.
+   *
+   * @type {external:RestClient}
+   */
+  var invalidateRememberBrowserAuth0RestClients = new Auth0RestClient(
+    options.baseUrl + '/users/:id/multifactor/actions/invalidate-remember-browser',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.invalidateRememberBrowsers = new RetryRestClient(
+    invalidateRememberBrowserAuth0RestClients,
+    options.retry
+  );
+
+  /**
    * Provides an abstraction layer for CRD on roles for a user
    *
    * @type {external:RestClient}
@@ -645,6 +660,39 @@ UsersManager.prototype.regenerateRecoveryCode = function(params, cb) {
   }
 
   return this.recoveryCodeRegenerations.create(params, {});
+};
+
+/**
+ * Invalidate all remembered browsers for MFA.
+ *
+ * @method    invalidateRememberBrowser
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.invalidateRememberBrowser({ id: USER_ID }, function (err, result) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Invalidated all remembered browsers.
+ * });
+ *
+ * @param   {Object}    params                The user data object.
+ * @param   {String}    params.id             The user id.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.invalidateRememberBrowser = function(params, cb) {
+  if (!params || !params.id) {
+    throw new ArgumentError('The userId cannot be null or undefined');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.invalidateRememberBrowsers.create(params, {}, cb);
+  }
+
+  return this.invalidateRememberBrowsers.create(params, {});
 };
 
 /**

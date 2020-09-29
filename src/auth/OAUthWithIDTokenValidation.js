@@ -1,6 +1,5 @@
 var jwt = require('jsonwebtoken');
 var jwksClient = require('jwks-rsa');
-var Promise = require('bluebird');
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var validateIdToken = require('./idToken').validate;
