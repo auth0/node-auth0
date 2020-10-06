@@ -37,6 +37,7 @@ var MigrationsManager = require('./MigrationsManager');
 var ActionsManager = require('./ActionsManager');
 var ActionsVersionsManager = require('./ActionVersionsManager');
 var ActionBindingsManager = require('./ActionBindingsManager');
+var ActionExecutionsManager = require('./ActionExecutionsManager');
 var PromptsManager = require('./PromptsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
@@ -371,6 +372,14 @@ var ManagementClient = function(options) {
    * @type {ActionBindingsManager}
    */
   this.actionBindings = new ActionBindingsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * actions binding endpoint.
+   *
+   * @type {ActionExecutionsManager}
+   */
+  this.actionExecutions = new ActionExecutionsManager(managerOptions);
 
   /**
    * Prompts Manager
@@ -3747,6 +3756,37 @@ utils.wrapPropertyMethod(ManagementClient, 'createAction', 'actions.create');
 utils.wrapPropertyMethod(ManagementClient, 'getActions', 'actions.getAll');
 
 /**
+ * Get all Action Triggers.
+ *
+ * @method    getTriggers
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ *
+ *
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.getTriggers(params, function (err, actions) {
+ *   console.log(actions.length);
+ * });
+ *
+ * @param   {Object}    [params]                  Actions parameters.
+ * @param   {Number}    [params.per_page]         Number of results per page.
+ * @param   {Number}    [params.page]             Page number, zero indexed.
+ * @param   {Function}  [cb]                      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getTriggers', 'actions.getAllTriggers');
+
+/**
  * Get an action.
  *
  * @method    getAction
@@ -3817,6 +3857,29 @@ utils.wrapPropertyMethod(ManagementClient, 'updateAction', 'actions.update');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteAction', 'actions.delete');
+
+/**
+ * test Trigger.
+ *
+ * @method    testTrigger
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ *
+ * @example
+ * var params = { trigger_id: TRIGGER_ID };
+ * auth0.testTrigger(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ * @param   {Object}    params              Test trigger parameters.
+ * @param   {String}    params.trigger_id   Trigger ID.
+ * @param   {Object}    payload             Payload represents the entire structure necessary to test a particular trigger.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'testTrigger', 'action.testTrigger');
 
 /**
  * Create a new Action Binding.
@@ -3959,6 +4022,30 @@ utils.wrapPropertyMethod(ManagementClient, 'updateActionBinding', 'actionBinding
 utils.wrapPropertyMethod(ManagementClient, 'deleteActionBinding', 'actionBindings.delete');
 
 /**
+ * test Action Binding.
+ *
+ * @method    testActionBinding
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , binding_id: BINDING_ID};
+ * auth0.testActionVersion(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ * @param   {Object}    params              ActionVersion parameters.
+ * @param   {String}    params.action_id    Action ID.
+ * @param   {String}    params.binding_id   Binding ID.
+ * @param   {Object}    payload             Payload represents the entire structure necessary to test a particular binding.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'testActionBinding', 'actionBindings.test');
+
+/**
  * Create a new Action Version.
  *
  * @method    createActionVersion
@@ -3982,6 +4069,55 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteActionBinding', 'actionBinding
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'createActionVersion', 'actionVersions.create');
+
+/**
+ * deploy Action Version.
+ *
+ * @method    deployActionVersion
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , version_id: VERSION_ID};
+ * auth0.deployActionVersion(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *    // ActionVersionDeployed.
+ * });
+ * @param   {Object}    params              ActionVersion parameters.
+ * @param   {String}    params.action_id    Action ID.
+ * @param   {String}    params.version_id   Version ID.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deployActionVersion', 'actionVersions.deploy');
+
+/**
+ * test Action Version.
+ *
+ * @method    testActionVersion
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , version_id: VERSION_ID};
+ * auth0.testActionVersion(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ * @param   {Object}    params              ActionVersion parameters.
+ * @param   {String}    params.action_id    Action ID.
+ * @param   {String}    params.version_id   Version ID.
+ * @param   {Object}    payload             Payload represents the entire structure necessary to test a particular action version.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'testActionVersion', 'actionVersions.test');
 
 /**
  * Get all Action Versions.
@@ -4041,6 +4177,35 @@ utils.wrapPropertyMethod(ManagementClient, 'getActionVersions', 'actionVersions.
 utils.wrapPropertyMethod(ManagementClient, 'getActionVersion', 'actionVersions.get');
 
 /**
+ * Upsert draft action version.
+ *
+ * @method    upsertDraftActionVersion
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID, version_id: 'draft' };
+ * management.upsertDraftActionVersion(params, data, function (err, actionBinding) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(DraftActionVersion);
+ * });
+ *
+ * @param   {Object}    params                  Action parameters.
+ * @param   {String}    params.action_id        Action ID.
+ * @param   {Object}    data                    Updated action binding data.
+ * @param   {Function}  [cb]                    Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'upsertDraftActionVersion',
+  'actionVersions.upsertDraft'
+);
+
+/**
  * Delete an existing action version.
  *
  * @method    deleteActionVersion
@@ -4063,5 +4228,28 @@ utils.wrapPropertyMethod(ManagementClient, 'getActionVersion', 'actionVersions.g
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'deleteActionVersion', 'actionVersions.delete');
+
+/**
+ * Get an action Execution.
+ *
+ * @method    getActionExecution
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getActionExecution({ execution_id: EXECUTION_ID }, function (err, action) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(actionExecution);
+ * });
+ *
+ * @param   {Object}    params                   Action parameters.
+ * @param   {String}    params.execution_id      Action Execution ID.
+ * @param   {Function}  [cb]                     Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getActionExecution', 'actionExecutions.get');
 
 module.exports = ManagementClient;

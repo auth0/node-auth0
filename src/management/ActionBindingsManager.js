@@ -56,6 +56,13 @@ var ActionBindingsManager = function(options) {
     options.tokenProvider
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+  var testBinding = new Auth0RestClient(
+    options.baseUrl + '/actions/triggers/:trigger_id/bindings/:binding_id/test',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.testActionBinding = new RetryRestClient(testBinding, options.retry);
 };
 
 /**
@@ -205,5 +212,39 @@ utils.wrapPropertyMethod(ActionBindingsManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ActionBindingsManager, 'delete', 'resource.delete');
+
+/**
+ * test an ActionBinding.
+ *
+ * @method    test
+ * @memberOf  module:management.ActionBindingsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , binding_id: BINDING_ID};
+ * auth0.testActionBinding(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ 
+ * });
+ *
+ * @param   {Object}    params                ActionBinding parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.binding_id      Version ID.
+ * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular binding
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionBindingsManager.prototype.test = function(params, payload, cb) {
+  params = params || {};
+  payload = payload || {};
+
+  if (cb && cb instanceof Function) {
+    return this.testActionBinding.create(params, payload, cb);
+  }
+
+  return this.testActionBinding.create(params, payload);
+};
 
 module.exports = ActionBindingsManager;
