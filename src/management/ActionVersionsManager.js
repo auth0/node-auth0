@@ -56,6 +56,20 @@ var ActionVersionsManager = function(options) {
     options.tokenProvider
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+  var deployVersionsClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/versions/:version_id/deploy',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionVersion = new RetryRestClient(deployVersionsClient, options.retry);
+
+  var testVersionsClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/versions/:version_id/test',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.testActionVersion = new RetryRestClient(testVersionsClient, options.retry);
 };
 
 /**
@@ -82,6 +96,74 @@ var ActionVersionsManager = function(options) {
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ActionVersionsManager, 'create', 'resource.create');
+
+/**
+ * deploy an ActionVersion.
+ *
+ * @method    deploy
+ * @memberOf  module:management.ActionVersionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , version_id: VERSION_ID};
+ * auth0.deployActionVersion(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *    // ActionVersion deployed.
+ * });
+ *
+ * @param   {Object}    params                ActionVersion parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.verion_id      Version ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionVersionsManager.prototype.deploy = function(params, data, cb) {
+  params = params || {};
+  data = data || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersion.create(params, data, cb);
+  }
+
+  return this.actionVersion.create(params, data);
+};
+
+/**
+ * test an ActionVersion.
+ *
+ * @method    test
+ * @memberOf  module:management.ActionVersionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , version_id: VERSION_ID};
+ * auth0.testActionVersion(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ 
+ * });
+ *
+ * @param   {Object}    params                ActionVersion parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.verion_id      Version ID.
+ * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular action version
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionVersionsManager.prototype.test = function(params, payload, cb) {
+  params = params || {};
+  payload = payload || {};
+
+  if (cb && cb instanceof Function) {
+    return this.testActionVersion.create(params, payload, cb);
+  }
+
+  return this.testActionVersion.create(params, payload);
+};
 
 /**
  * Get all action versions
@@ -161,5 +243,42 @@ utils.wrapPropertyMethod(ActionVersionsManager, 'get', 'resource.get');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ActionVersionsManager, 'delete', 'resource.delete');
+
+/**
+ * Update/create an draft action version.
+ *
+ * @method    upsertDraft
+ * @memberOf  module:management.ActionVersionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID , version_id: VERSION_ID};
+ *
+ * // Using auth0 instance.
+ * management.upsertDraftActionVersion(params, data, function (err, action) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(draftActionVersion);
+ * });
+ *
+ * // Using the ActionVersions manager directly.
+ * management.actionVersions.upsertDraft(params, data, function (err, action) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(draftActionVersion);
+ * });
+ *
+ * @param   {Object}    params               Action parameters.
+ * @param   {String}    params.action_id     Action ID.
+ * @param   {String}    params.version_id    This value must be 'draft'.
+ * @param   {Object}    data                 Updated action data.
+ * @param   {Function}  [cb]                 Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ActionVersionsManager, 'upsertDraft', 'resource.patch');
 
 module.exports = ActionVersionsManager;
