@@ -3,7 +3,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
 var assign = Object.assign || require('object.assign');
 
 var DEFAULT_OPTIONS = {
-  maxRetries: 10,
+  maxRetries: 3,
   enabled: true,
   randomize: true
 };

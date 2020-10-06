@@ -207,7 +207,7 @@ describe('RetryRestClient', function() {
       .get('/')
       .reply(200, { success: true });
 
-    var client = new RetryRestClient(restClientSpy);
+    var client = new RetryRestClient(restClientSpy, { maxRetries: 10 });
 
     client.getAll().then(function(data) {
       clock.restore();
