@@ -1,5 +1,4 @@
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 var AuthenticationClient = require('../auth');
 var memoizer = require('lru-memoizer');
 var es6Promisify = require('es6-promisify');
@@ -26,7 +25,7 @@ var ManagementTokenProvider = function(options) {
     throw new ArgumentError('Options must be an object');
   }
 
-  var params = assign({}, DEFAULT_OPTIONS, options);
+  var params = Object.assign({}, DEFAULT_OPTIONS, options);
 
   if (!params.domain || params.domain.length === 0) {
     throw new ArgumentError('Must provide a domain');
