@@ -375,7 +375,7 @@ var ManagementClient = function(options) {
 
   /**
    * Simple abstraction for performing CRUD operations on the
-   * actions binding endpoint.
+   * actions executions endpoint.
    *
    * @type {ActionExecutionsManager}
    */
@@ -4183,7 +4183,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getActionVersion', 'actionVersions.g
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * var params = { action_id: ACTION_ID, version_id: 'draft' };
+ * var params = { action_id: ACTION_ID };
  * management.upsertDraftActionVersion(params, data, function (err, actionBinding) {
  *   if (err) {
  *     // Handle error.

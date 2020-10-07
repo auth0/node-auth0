@@ -17,7 +17,7 @@ describe('ActionVersionsManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['get', 'getAll', 'create', 'delete'];
+    var methods = ['get', 'getAll', 'create', 'delete', 'upsertDraft', 'deploy', 'test'];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
@@ -87,12 +87,12 @@ describe('ActionVersionsManager', function() {
         .get('/actions/actions/' + action_id + '/versions')
         .reply(200, data);
 
-      this.actionVersions.getAll({ action_id }).then(function(credentials) {
-        expect(credentials).to.be.an.instanceOf(Array);
+      this.actionVersions.getAll({ action_id }).then(function(versions) {
+        expect(versions).to.be.an.instanceOf(Array);
 
-        expect(credentials.length).to.equal(data.length);
+        expect(versions.length).to.equal(data.length);
 
-        expect(credentials[0].test).to.equal(data[0].test);
+        expect(versions[0].test).to.equal(data[0].test);
 
         done();
       });
@@ -309,6 +309,235 @@ describe('ActionVersionsManager', function() {
         .reply(200);
 
       this.actionVersions.create(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#test', function() {
+    const params = { action_id: 'action-id-1', version_id: 'version-id-1' };
+    const data = {
+      payload: {
+        user_info: 'userInfo'
+      }
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post(
+          '/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/test',
+          data
+        )
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.actionVersions.test(params, data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.actionVersions
+        .test(params, data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(
+          '/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/test',
+          data
+        )
+        .reply(500);
+
+      this.actionVersions.test(params, data).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a POST request', function(done) {
+      var request = this.request;
+
+      this.actionVersions.test(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(
+          '/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/test',
+          data
+        )
+        .reply(200);
+
+      this.actionVersions.test(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(
+          '/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/test',
+          data
+        )
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.actionVersions.test(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#upsertDraft', function() {
+    const params = { action_id: 'action-id-1', version_id: 'draft' };
+    const data = {
+      runtime: 'node12',
+      code:
+        "module.exports = function(user, context, cb) { console.log(require('lodash/package.json').version); cb(null, user, context); }",
+      dependencies: [{ name: 'lodash', version: '4.17.19' }]
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .patch('/actions/actions/' + params.action_id + '/versions/draft')
+        .reply(202);
+    });
+
+    it('should accept a callback', function(done) {
+      this.actionVersions.upsertDraft(params, data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.actionVersions
+        .upsertDraft(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/actions/actions/' + params.action_id + '/versions/draft')
+        .reply(500);
+
+      this.actionVersions.upsertDraft(params, data).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a PATCH request', function(done) {
+      var request = this.request;
+
+      this.actionVersions.upsertDraft(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/actions/actions/' + params.action_id + '/versions/draft', data)
+        .reply(202);
+
+      this.actionVersions.upsertDraft(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .patch('/actions/actions/' + params.action_id + '/versions/draft')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(202);
+
+      this.actionVersions.upsertDraft(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#deploy', function() {
+    const params = { action_id: 'action-id-1', version_id: 'version-id-1' };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/deploy')
+        .reply(202);
+    });
+
+    it('should accept a callback', function(done) {
+      this.actionVersions.deploy(params, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.actionVersions
+        .deploy(params)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/deploy')
+        .reply(500);
+
+      this.actionVersions.deploy(params).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a POST request', function(done) {
+      var request = this.request;
+
+      this.actionVersions.deploy(params).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/actions/actions/' + params.action_id + '/versions/' + params.version_id + '/deploy')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.actionVersions.deploy(params).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

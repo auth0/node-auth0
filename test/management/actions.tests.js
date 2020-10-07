@@ -17,7 +17,7 @@ describe('ActionsManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['get', 'getAll', 'create', 'update', 'delete'];
+    var methods = ['get', 'getAll', 'create', 'update', 'delete', 'getAllTriggers', 'testTrigger'];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
@@ -132,6 +132,179 @@ describe('ActionsManager', function() {
         .reply(200);
 
       this.actions.getAll(params).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getAllTriggers', function() {
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/actions/triggers')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.actions.getAllTriggers(function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.actions
+        .getAllTriggers()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/actions/triggers')
+        .reply(500);
+
+      this.actions.getAllTriggers().catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function(done) {
+      nock.cleanAll();
+
+      var data = [{ trigger1: 'rigger1' }];
+      var request = nock(API_URL)
+        .get('/actions/triggers')
+        .reply(200, data);
+
+      this.actions.getAllTriggers().then(function(triggers) {
+        expect(triggers).to.be.an.instanceOf(Array);
+
+        expect(triggers.length).to.equal(data.length);
+
+        expect(triggers[0].trigger1).to.equal(data[0].trigger1);
+
+        done();
+      });
+    });
+
+    it('should perform a GET request', function(done) {
+      var request = this.request;
+
+      this.actions.getAllTriggers().then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/actions/triggers')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.actions.getAllTriggers().then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the parameters in the query-string', function(done) {
+      nock.cleanAll();
+
+      var params = {
+        include_fields: true,
+        fields: 'test'
+      };
+      var request = nock(API_URL)
+        .get('/actions/triggers')
+        .query(params)
+        .reply(200);
+
+      this.actions.getAllTriggers(params).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#testTrigger', function() {
+    const params = { trigger_id: 'post-login' };
+    const data = {
+      payload: {
+        user_info: 'userInfo'
+      }
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post('/actions/triggers/' + params.trigger_id + '/test', data)
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.actions.testTrigger(params, data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.actions
+        .testTrigger(params, data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/actions/triggers/' + params.trigger_id + '/test', data)
+        .reply(500);
+
+      this.actions.testTrigger(params, data).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a POST request', function(done) {
+      var request = this.request;
+
+      this.actions.testTrigger(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/actions/triggers/' + params.trigger_id + '/test', data)
+        .reply(200);
+
+      this.actions.testTrigger(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post('/actions/triggers/' + params.trigger_id + '/test', data)
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.actions.testTrigger(params, data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
