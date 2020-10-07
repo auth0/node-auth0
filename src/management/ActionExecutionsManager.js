@@ -46,12 +46,12 @@ var ActionExecutionsManager = function(options) {
 
   /**
    * Provides an abstraction layer for consuming the
-   * [Auth0 Actions endpoint]{@link https://auth0.com/docs/api/v2#!/actions}.
+   * [Auth0 ActionExecutions endpoint]{@link https://auth0.com/docs/api/v2#!/actionExecutions}.
    *
    * @type {external:RestClient}
    */
   var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/api/v2/actions/executions/:execution_id',
+    options.baseUrl + '/actions/executions/:execution_id',
     clientOptions,
     options.tokenProvider
   );
@@ -59,7 +59,7 @@ var ActionExecutionsManager = function(options) {
 };
 
 /**
- * Get an execution.
+ * Get an execution by ID.
  *
  * @method    get
  * @memberOf  module:management.ActionExecutionsManager.prototype

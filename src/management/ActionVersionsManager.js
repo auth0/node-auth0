@@ -148,7 +148,7 @@ ActionVersionsManager.prototype.deploy = function(params, data, cb) {
  *
  * @param   {Object}    params                ActionVersion parameters.
  * @param   {String}    params.action_id      Action ID.
- * @param   {String}    params.verion_id      Version ID.
+ * @param   {String}    params.version_id     Version ID.
  * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular action version
  * @param   {Function}  [cb]                  Callback function.
  *
@@ -200,7 +200,7 @@ utils.wrapPropertyMethod(ActionVersionsManager, 'getAll', 'resource.getAll');
  * Get an action version.
  *
  * @method    get
- * @memberOf  module:management.ActionManager.prototype
+ * @memberOf  module:management.ActionVersionsManager.prototype
  *
  * @example
  * management.actionVersions.get({ action_id: ACTION_ID, version_id : VERSION_ID }, function (err, actionVersion) {

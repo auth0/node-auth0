@@ -17,7 +17,7 @@ describe('ActionBindingsManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['get', 'getAll', 'create', 'update', 'delete'];
+    var methods = ['get', 'getAll', 'create', 'update', 'delete', 'test'];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
@@ -88,12 +88,12 @@ describe('ActionBindingsManager', function() {
         .get(actionTriggerBindingsURL)
         .reply(200, data);
 
-      this.actionTriggerBindings.getAll(params).then(function(credentials) {
-        expect(credentials).to.be.an.instanceOf(Array);
+      this.actionTriggerBindings.getAll(params).then(function(bindings) {
+        expect(bindings).to.be.an.instanceOf(Array);
 
-        expect(credentials.length).to.equal(data.length);
+        expect(bindings.length).to.equal(data.length);
 
-        expect(credentials[0].test).to.equal(data[0].test);
+        expect(bindings[0].test).to.equal(data[0].test);
 
         done();
       });
@@ -299,6 +299,96 @@ describe('ActionBindingsManager', function() {
         .reply(200);
 
       this.actionTriggerBindings.create(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#test', function() {
+    const params = { trigger_id: 'post-login', binding_id: 'binding-id-1' };
+    const data = {
+      payload: {
+        user_info: 'userInfo'
+      }
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .post(
+          '/actions/triggers/' + params.trigger_id + '/bindings/' + params.binding_id + '/test',
+          data
+        )
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.actionTriggerBindings.test(params, data, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.actionTriggerBindings
+        .test(params, data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(
+          '/actions/triggers/' + params.trigger_id + '/bindings/' + params.binding_id + '/test',
+          data
+        )
+        .reply(500);
+
+      this.actionTriggerBindings.test(params, data).catch(function(err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should perform a POST request', function(done) {
+      var request = this.request;
+
+      this.actionTriggerBindings.test(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(
+          '/actions/triggers/' + params.trigger_id + '/bindings/' + params.binding_id + '/test',
+          data
+        )
+        .reply(200);
+
+      this.actionTriggerBindings.test(params, data).then(function() {
+        expect(request.isDone()).to.be.true;
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(
+          '/actions/triggers/' + params.trigger_id + '/bindings/' + params.binding_id + '/test',
+          data
+        )
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.actionTriggerBindings.test(params, data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

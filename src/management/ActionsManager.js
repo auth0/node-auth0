@@ -58,11 +58,18 @@ var ActionsManager = function(options) {
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
   var triggersRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/actions/triggers/:trigger_id/test',
+    options.baseUrl + '/actions/triggers',
     clientOptions,
     options.tokenProvider
   );
   this.triggers = new RetryRestClient(triggersRestClient, options.retry);
+
+  var triggersTestRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/triggers/:trigger_id/test',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.triggersTest = new RetryRestClient(triggersTestRestClient, options.retry);
 };
 
 /**
@@ -149,7 +156,7 @@ utils.wrapPropertyMethod(ActionsManager, 'getAll', 'resource.getAll');
  *
  * @return  {Promise|undefined}
  */
-ActionManager.prototype.getAllTriggers = function(params, cb) {
+ActionsManager.prototype.getAllTriggers = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
@@ -163,7 +170,7 @@ ActionManager.prototype.getAllTriggers = function(params, cb) {
  * test an Trigger.
  *
  * @method    testTrigger
- * @memberOf  module:management.ActionManager.prototype
+ * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
  * var params = { trigger_id: TRIGGER_ID};
@@ -181,22 +188,22 @@ ActionManager.prototype.getAllTriggers = function(params, cb) {
  *
  * @return  {Promise|undefined}
  */
-ActionVersionsManager.prototype.testTrigger = function(params, payload, cb) {
+ActionsManager.prototype.testTrigger = function(params, payload, cb) {
   params = params || {};
   payload = payload || {};
 
   if (cb && cb instanceof Function) {
-    return this.triggers.create(params, payload, cb);
+    return this.triggersTest.create(params, payload, cb);
   }
 
-  return this.triggers.create(params, payload);
+  return this.triggersTest.create(params, payload);
 };
 
 /**
  * Get an Auth0 action.
  *
  * @method    get
- * @memberOf  module:management.ActionManager.prototype
+ * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
  * management.actions.get({ action_id: ACTION_ID }, function (err, action) {
