@@ -3866,7 +3866,7 @@ utils.wrapPropertyMethod(ManagementClient, 'deleteAction', 'actions.delete');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'testTrigger', 'action.testTrigger');
+utils.wrapPropertyMethod(ManagementClient, 'testTrigger', 'actions.testTrigger');
 
 /**
  * Create a new Action Binding.
