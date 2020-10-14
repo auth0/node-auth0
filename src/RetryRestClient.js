@@ -1,6 +1,11 @@
 var retry = require('retry');
 var ArgumentError = require('rest-facade').ArgumentError;
-var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
+
+var DEFAULT_OPTIONS = {
+  maxRetries: 3,
+  enabled: true,
+  randomize: true
+};
 
 /**
  * @class RetryRestClient
@@ -11,6 +16,7 @@ var DEFAULT_OPTIONS = { maxRetries: 10, enabled: true };
  * @param {Object}  [options]                    Options for the RetryRestClient.
  * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.
  * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10.
+ * @param {*}       [options.*]                  Any options that are available in https://github.com/tim-kos/node-retry#retryoperationoptions
  */
 var RetryRestClient = function(restClient, options) {
   if (restClient === null || typeof restClient !== 'object') {
@@ -28,8 +34,8 @@ var RetryRestClient = function(restClient, options) {
   }
 
   this.restClient = restClient;
-  this.maxRetries = params.maxRetries;
   this.enabled = params.enabled;
+  this.retryOptions = Object.assign({ retries: params.maxRetries }, params);
 };
 
 RetryRestClient.prototype.getAll = function(/* [params], [callback] */) {
@@ -79,16 +85,9 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
     return this.restClient[method].apply(this.restClient, args);
   }
 
-  var retryOptions = {
-    retries: this.maxRetries,
-    factor: 1,
-    minTimeout: 1, // retry immediate, use custom logic to control this.
-    randomize: false
-  };
-
   var self = this;
-  var promise = new Promise(function(resolve, reject) {
-    var operation = retry.operation(retryOptions);
+  return new Promise(function(resolve, reject) {
+    var operation = retry.operation(self.retryOptions);
 
     operation.attempt(function() {
       self.restClient[method]
@@ -97,57 +96,13 @@ RetryRestClient.prototype.handleRetry = function(method, args) {
           resolve(body);
         })
         .catch(function(err) {
-          self.invokeRetry(err, operation, reject);
+          if (err && err.statusCode === 429 && operation.retry(err)) {
+            return;
+          }
+          reject(err);
         });
     });
   });
-
-  return promise;
-};
-
-RetryRestClient.prototype.invokeRetry = function(err, operation, reject) {
-  var ratelimits = this.extractRatelimits(err);
-  if (ratelimits) {
-    var delay = ratelimits.reset * 1000 - new Date().getTime();
-    if (delay > 0) {
-      this.retryWithDelay(delay, operation, err, reject);
-    } else {
-      this.retryWithImmediate(operation, err, reject);
-    }
-  } else {
-    reject(err);
-  }
-};
-
-RetryRestClient.prototype.extractRatelimits = function(err) {
-  if (err && err.statusCode === 429 && err.originalError && err.originalError.response) {
-    var headers = err.originalError.response.header;
-    if (headers && headers['x-ratelimit-limit']) {
-      return {
-        limit: headers['x-ratelimit-limit'],
-        remaining: headers['x-ratelimit-remaining'],
-        reset: headers['x-ratelimit-reset']
-      };
-    }
-  }
-
-  return;
-};
-
-RetryRestClient.prototype.retryWithImmediate = function(operation, err, reject) {
-  if (operation.retry(err)) {
-    return;
-  }
-  reject(err);
-};
-
-RetryRestClient.prototype.retryWithDelay = function(delay, operation, err, reject) {
-  setTimeout(() => {
-    if (operation.retry(err)) {
-      return;
-    }
-    reject(err);
-  }, delay);
 };
 
 module.exports = RetryRestClient;
