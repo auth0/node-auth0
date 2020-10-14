@@ -33,6 +33,10 @@ var RolesManager = require('./RolesManager');
 var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
+var ActionsManager = require('./ActionsManager');
+var ActionsVersionsManager = require('./ActionVersionsManager');
+var ActionBindingsManager = require('./ActionBindingsManager');
+var ActionExecutionsManager = require('./ActionExecutionsManager');
 var PromptsManager = require('./PromptsManager');
 var ActionsManager = require('./ActionsManager');
 var ActionsVersionsManager = require('./ActionVersionsManager');
@@ -347,6 +351,38 @@ var ManagementClient = function(options) {
    * @type {MigrationsManager}
    */
   this.migrations = new MigrationsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * actions endpoint.
+   *
+   * @type {ActionsManager}
+   */
+  this.actions = new ActionsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * actions versions endpoint.
+   *
+   * @type {ActionsVersionsManager}
+   */
+  this.actionVersions = new ActionsVersionsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * actions binding endpoint.
+   *
+   * @type {ActionBindingsManager}
+   */
+  this.actionBindings = new ActionBindingsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * actions executions endpoint.
+   *
+   * @type {ActionExecutionsManager}
+   */
+  this.actionExecutions = new ActionExecutionsManager(managerOptions);
 
   /**
    * Prompts Manager
