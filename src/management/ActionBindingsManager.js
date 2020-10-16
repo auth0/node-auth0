@@ -190,6 +190,43 @@ utils.wrapPropertyMethod(ActionBindingsManager, 'get', 'resource.get');
 utils.wrapPropertyMethod(ActionBindingsManager, 'update', 'resource.patch');
 
 /**
+ * Update an existing action binding list.
+ *
+ * @method    updateList
+ * @memberOf  module:management.ActionBindingsManager.prototype
+ *
+ * @example
+ * var data = { bindings: [{id: BINDING_ID1},{id: BINDING_ID2}];
+ * var params = { trigger_id: TRIGGER_ID };
+ *
+ * // Using auth0 instance.
+ * management.updateActionBindings(params, data, function (err, actionBinding) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(actionBinding.display_name);  // 'new-display_name'
+ * });
+ *
+ * // Using the ActionBindings manager directly.
+ * management.actionBindings.updateList(params, data, function (err, action) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(action.name);  // 'new-name'
+ * });
+ *
+ * @param   {Object}    params                Actions Binding parameters.
+ * @param   {String}    params.trigger_id     Actions Trigger ID.
+ * @param   {Object}    data                  bindings_id list
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ActionBindingsManager, 'updateList', 'resource.patch');
+
+/**
  * Delete an existing action binding.
  *
  * @method    delete
