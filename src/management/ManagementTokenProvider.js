@@ -19,6 +19,8 @@ var DEFAULT_OPTIONS = { enableCache: true };
  * @param {String}  options.audience                Audience of the Management API.
  * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
  * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ * @param {Object}  [options.headers]               Additional headers that will be added to the outgoing requests.
+ *
  */
 var ManagementTokenProvider = function(options) {
   if (!options || typeof options !== 'object') {
@@ -67,7 +69,8 @@ var ManagementTokenProvider = function(options) {
     clientId: this.options.clientId,
     clientSecret: this.options.clientSecret,
     telemetry: this.options.telemetry,
-    clientInfo: this.options.clientInfo
+    clientInfo: this.options.clientInfo,
+    headers: this.options.headers
   };
   this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 

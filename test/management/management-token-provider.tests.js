@@ -138,6 +138,16 @@ describe('ManagementTokenProvider', function() {
     expect(provider.options.cacheTTLInSeconds).to.be.equal(15);
   });
 
+  it('should set headers when passed into options', function() {
+    var config = Object.assign({}, defaultConfig);
+    config.headers = {
+      'User-agent': 'node.js',
+      'Content-Type': 'application/json'
+    };
+    var provider = new ManagementTokenProvider(config);
+    expect(provider.options.headers).to.be.equal(config.headers);
+  });
+
   it('should handle network errors correctly', function(done) {
     var config = Object.assign({}, defaultConfig);
     config.domain = 'domain';
