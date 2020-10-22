@@ -616,7 +616,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line306">line 306</a>
+        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line309">line 309</a>
     </li></ul></dd>
     
 
@@ -890,7 +890,7 @@ management.jobs.errors(params, function (err, job) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line249">line 249</a>
+        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line252">line 252</a>
     </li></ul></dd>
     
 
@@ -1582,7 +1582,7 @@ connection.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line127">line 127</a>
+        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line171">line 171</a>
     </li></ul></dd>
     
 
@@ -2010,7 +2010,7 @@ connection.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line206">line 206</a>
+        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -2436,7 +2436,7 @@ management.jobs.importUsers(params, function (err) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line345">line 345</a>
+        <a href="management_JobsManager.js.html">management/JobsManager.js</a>, <a href="management_JobsManager.js.html#line348">line 348</a>
     </li></ul></dd>
     
 
@@ -2521,6 +2521,131 @@ management.jobs.importUsers(params, function (err) {
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>ID of the user to be verified.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>client_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>client_id of the client (application). If no value provided, the global Client ID will be used.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>identity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Used to verify secondary, federated, and passwordless-email identities.</p>
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
 
         
 
@@ -2550,7 +2675,41 @@ management.jobs.importUsers(params, function (err) {
             
 
             <td class="description last">
-                <p>ID of the user to be verified.</p>
+                <p>user_id of the identity.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>provider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>String</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>provider of the identity.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
                 
             </td>
         </tr>
@@ -2676,7 +2835,7 @@ management.jobs.verifyEmail(function (err) {
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Sep 23 2020 13:43:08 GMT-0700 (Pacific Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Thu Oct 22 2020 14:44:11 GMT-0700 (Pacific Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
