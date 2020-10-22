@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.30.0](https://github.com/auth0/node-auth0/tree/v2.30.0) (2020-10-22)
+
+**Added**
+
+- Provide headers on mgmt token fetch [\#543](https://github.com/auth0/node-auth0/pull/543) ([davidpatrick](https://github.com/davidpatrick))
+
+**Changed**
+
+- [SDK-1975] Use exponential backoff rather than rate limit headers [\#538](https://github.com/auth0/node-auth0/pull/538) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+**Fixed**
+
+- Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.29.0...v2.30.0)
+
 ## [v2.29.0](https://github.com/auth0/node-auth0/tree/v2.29.0) (2020-09-23)
 
 **Added**
