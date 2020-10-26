@@ -26,12 +26,13 @@ function getParamsFromOptions(options) {
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}              options                             Authenticator options.
- * @param  {String}              options.baseUrl                     The Auth0 account URL.
- * @param  {String}              options.domain                      AuthenticationClient server domain
- * @param  {String}              [options.clientId]                  Default client ID.
- * @param  {String}              [options.clientSecret]              Default client Secret.
- * @param  {Boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+ * @param  {Object}   options                             Authenticator options.
+ * @param  {String}   options.baseUrl                     The Auth0 account URL.
+ * @param  {String}   options.domain                      AuthenticationClient server domain
+ * @param  {String}   [options.clientId]                  Default client ID.
+ * @param  {String}   [options.clientSecret]              Default client Secret.
+ * @param  {Boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+ * @param  {Boolean}  [options.keepAlive=false]           Enable HTTP persistent connections.
  */
 var OAuthAuthenticator = function(options) {
   if (!options) {

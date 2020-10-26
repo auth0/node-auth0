@@ -9,11 +9,12 @@ var RestClient = require('../KeepAliveRestClient');
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}              options            Authenticator options.
- * @param  {String}              options.baseUrl    The auth0 account URL.
- * @param  {String}              [options.clientId] Default client ID.
- * @param  {String}              [options.clientSecret] Default client secret.
- * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
+ * @param  {Object}              options                    Authenticator options.
+ * @param  {String}              options.baseUrl            The auth0 account URL.
+ * @param  {String}              [options.clientId]         Default client ID.
+ * @param  {String}              [options.clientSecret]     Default client secret.
+ * @param  {Boolean}             [options.keepAlive=false]  Enable HTTP persistent connections.
+ * @param  {OAuthAuthenticator}  oauth                      OAuthAuthenticator instance.
  */
 var PasswordlessAuthenticator = function(options, oauth) {
   if (!options) {

@@ -2,7 +2,6 @@ var RestClient = require('./KeepAliveRestClient');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 var utils = require('./utils');
-var keepAliveAgent = require('./KeepAliveRestClient');
 var SanitizedError = require('./errors').SanitizedError;
 
 var Auth0RestClient = function(resourceUrl, options, provider) {

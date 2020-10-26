@@ -10,10 +10,11 @@ var RetryRestClient = require('../RetryRestClient');
  * @constructor
  * @memberOf module:management
  *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @param {Object}  options                   The client options.
+ * @param {String}  options.baseUrl           The URL of the API.
+ * @param {Object}  [options.headers]         Headers to be included in all requests.
+ * @param {Object}  [options.retry]           Retry Policy Config
+ * @param {Boolean} [options.keepAlive=false] Enable HTTP persistent connections.
  */
 var LogStreamsManager = function(options) {
   if (options === null || typeof options !== 'object') {

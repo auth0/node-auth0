@@ -10,10 +10,11 @@ var keepAliveAgent = require('../utils').keepAliveAgent;
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}   options               Manager options.
- * @param  {String}   options.baseUrl       The auth0 account URL.
- * @param  {String}   [options.headers]     Default request headers.
- * @param  {String}   [options.clientId]    Default client ID.
+ * @param  {Object}   options                   Manager options.
+ * @param  {String}   options.baseUrl           The auth0 account URL.
+ * @param  {Boolean}  [options.keepAlive=false] Enable HTTP persistent connections.
+ * @param  {String}   [options.headers]         Default request headers.
+ * @param  {String}   [options.clientId]        Default client ID.
  */
 var TokensManager = function(options) {
   if (typeof options !== 'object') {
