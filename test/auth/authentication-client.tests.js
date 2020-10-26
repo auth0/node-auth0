@@ -10,6 +10,8 @@ var DatabaseAuthenticator = require('../../src/auth/DatabaseAuthenticator');
 var PasswordlessAuthenticator = require('../../src/auth/PasswordlessAuthenticator');
 var UsersManager = require('../../src/auth/UsersManager');
 var TokensManager = require('../../src/auth/TokensManager');
+var KeepAliveRestClient = require('../../src/KeepAliveRestClient');
+var keepAliveAgent = require('../../src/utils').keepAliveAgent;
 
 var ensureProperty = require('../utils').ensureProperty;
 
@@ -140,6 +142,28 @@ describe('AuthenticationClient', function() {
       expect(client.passwordless.passwordless.options.headers).to.not.have.property('Auth0-Client');
       expect(client.users.headers).to.not.have.property('Auth0-Client');
       expect(client.tokens.headers).to.not.have.property('Auth0-Client');
+    });
+  });
+
+  describe('when using persistent connections', () => {
+    it('should configure the rest client with keep alive flag', function() {
+      var client = new AuthenticationClient({
+        token: 'token',
+        domain: 'auth0.com',
+        keepAlive: true
+      });
+
+      expect(client.oauth.oauth.options.request.customizer).to.eq(
+        KeepAliveRestClient.prototype.useKeepAliveAgent
+      );
+      expect(client.database.dbConnections.options.request.customizer).to.eq(
+        KeepAliveRestClient.prototype.useKeepAliveAgent
+      );
+      expect(client.passwordless.passwordless.options.request.customizer).to.eq(
+        KeepAliveRestClient.prototype.useKeepAliveAgent
+      );
+      expect(client.users.axiosInstance.defaults.httpsAgent).to.eq(keepAliveAgent);
+      expect(client.tokens.axiosInstance.defaults.httpsAgent).to.eq(keepAliveAgent);
     });
   });
 

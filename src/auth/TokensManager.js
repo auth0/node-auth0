@@ -2,6 +2,7 @@ var extend = require('util')._extend;
 var axios = require('axios');
 
 var ArgumentError = require('rest-facade').ArgumentError;
+var keepAliveAgent = require('../utils').keepAliveAgent;
 
 /**
  * @class
@@ -26,6 +27,11 @@ var TokensManager = function(options) {
   this.baseUrl = options.baseUrl;
   this.headers = options.headers || {};
   this.clientId = options.clientId || '';
+  var axiosConfig = {};
+  if (options.keepAlive) {
+    axiosConfig.httpsAgent = keepAliveAgent;
+  }
+  this.axiosInstance = axios.create(axiosConfig);
 };
 
 /**
@@ -66,12 +72,14 @@ TokensManager.prototype.getInfo = function(idToken, cb) {
   }
 
   // Perform the request.
-  var promise = axios({
-    method: 'POST',
-    url: this.baseUrl + '/tokeninfo',
-    data: { id_token: idToken },
-    headers: headers
-  }).then(({ data }) => data);
+  var promise = this.axiosInstance
+    .request({
+      method: 'POST',
+      url: this.baseUrl + '/tokeninfo',
+      data: { id_token: idToken },
+      headers: headers
+    })
+    .then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {
@@ -156,12 +164,14 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
   }
 
   // Perform the request.
-  var promise = axios({
-    method: 'POST',
-    url: this.baseUrl + '/delegation',
-    data: body,
-    headers: headers
-  }).then(({ data }) => data);
+  var promise = this.axiosInstance
+    .request({
+      method: 'POST',
+      url: this.baseUrl + '/delegation',
+      data: body,
+      headers: headers
+    })
+    .then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {

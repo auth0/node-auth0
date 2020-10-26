@@ -93,6 +93,7 @@ var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  * @param   {Boolean} [options.retry.enabled=true]                Enabled or Disable Retry Policy functionality.
  * @param   {Number}  [options.retry.maxRetries=10]               Retry failed requests X times.
  * @param   {Object}  [options.headers]                           Additional headers that will be added to the outgoing requests.
+ *  @param   {Boolean}  [options.keepAlive=false]                  Enable HTTP persistent connections.
  *
  */
 var ManagementClient = function(options) {
@@ -114,7 +115,8 @@ var ManagementClient = function(options) {
 
   var managerOptions = {
     headers: Object.assign(defaultHeaders, options.headers || {}),
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    keepAlive: options.keepAlive || false
   };
 
   if (options.token === undefined) {

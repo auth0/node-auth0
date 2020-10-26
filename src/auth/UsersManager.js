@@ -2,6 +2,7 @@ var extend = require('util')._extend;
 var axios = require('axios');
 
 var ArgumentError = require('rest-facade').ArgumentError;
+var keepAliveAgent = require('../utils').keepAliveAgent;
 
 /**
  * @class
@@ -26,6 +27,11 @@ var UsersManager = function(options) {
   this.baseUrl = options.baseUrl;
   this.headers = options.headers;
   this.clientId = options.clientId;
+  var axiosConfig = {};
+  if (options.keepAlive) {
+    axiosConfig.httpsAgent = keepAliveAgent;
+  }
+  this.axiosInstance = axios.create(axiosConfig);
 };
 
 /**
@@ -69,11 +75,13 @@ UsersManager.prototype.getInfo = function(accessToken, cb) {
   headers['Authorization'] = 'Bearer ' + accessToken;
 
   // Perform the request.
-  var promise = axios({
-    method: 'GET',
-    url: url,
-    headers: headers
-  }).then(({ data }) => data);
+  var promise = this.axiosInstance
+    .request({
+      method: 'GET',
+      url: url,
+      headers: headers
+    })
+    .then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {
@@ -153,12 +161,14 @@ UsersManager.prototype.impersonate = function(userId, settings, cb) {
   var data = extend({ client_id: settings.clientId || this.clientId }, settings);
   var headers = extend({ Authorization: `Bearer ${settings.token}` }, this.headers);
   // Perform the request.
-  var promise = axios({
-    method: 'POST',
-    headers: headers,
-    data: data,
-    url: url
-  }).then(({ data }) => data);
+  var promise = this.axiosInstance
+    .request({
+      method: 'POST',
+      headers: headers,
+      data: data,
+      url: url
+    })
+    .then(({ data }) => data);
 
   // Use callback if given.
   if (cb instanceof Function) {

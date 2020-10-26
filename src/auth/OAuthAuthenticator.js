@@ -2,8 +2,7 @@ var extend = require('util')._extend;
 var sanitizeArguments = require('../utils').sanitizeArguments;
 
 var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
-
+var RestClient = require('../KeepAliveRestClient');
 var SanitizedError = require('../errors').SanitizedError;
 var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
 
@@ -51,6 +50,7 @@ var OAuthAuthenticator = function(options) {
   var clientOptions = {
     errorCustomizer: SanitizedError,
     errorFormatter: { message: 'message', name: 'error' },
+    keepAlive: options.keepAlive || false,
     headers: options.headers
   };
 

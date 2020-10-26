@@ -37,6 +37,7 @@ var ClientGrantsManager = function(options) {
   var clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
+    keepAlive: options.keepAlive || false,
     query: { repeatParams: false }
   };
 

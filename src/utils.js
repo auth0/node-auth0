@@ -1,5 +1,5 @@
 var pkg = require('../package.json');
-
+var HttpsAgent = require('https').Agent;
 /**
  * @module utils
  */
@@ -87,3 +87,8 @@ utils.sanitizeArguments = function(optionsCandidate, cbCandidate) {
     options: optionsCandidate
   };
 };
+
+utils.keepAliveAgent = new HttpsAgent({
+  keepAlive: true,
+  keepAliveMsecs: 30000
+});

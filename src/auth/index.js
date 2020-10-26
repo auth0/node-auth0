@@ -42,8 +42,9 @@ var BASE_URL_FORMAT = 'https://%s';
  * @param   {String}  [options.clientId]                Default client ID.
  * @param   {String}  [options.clientSecret]            Default client Secret.
  * @param   {String}  [options.supportedAlgorithms]     Algorithms that your application expects to receive
- * @param  {Boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+ * @param   {Boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
  * @param   {Object}  [options.headers]                 Additional headers that will be added to the outgoing requests.
+ * @param   {Boolean}  [options.keepAlive=false]        Enable HTTP persistent connections.
  */
 var AuthenticationClient = function(options) {
   if (!options || typeof options !== 'object') {
@@ -66,6 +67,7 @@ var AuthenticationClient = function(options) {
     headers: Object.assign(defaultHeaders, options.headers || {}),
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
+    keepAlive: options.keepAlive || false,
     __bypassIdTokenValidation: options.__bypassIdTokenValidation
   };
 

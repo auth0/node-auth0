@@ -1,10 +1,10 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 var nock = require('nock');
 
+var RestClient = require('../src/KeepAliveRestClient');
 var ArgumentError = require('rest-facade').ArgumentError;
-var ManagementTokenProvider = require('../src/management/ManagementTokenProvider');
 var Auth0RestClient = require('../src/Auth0RestClient');
-
 var API_URL = 'https://tenant.auth0.com';
 
 describe('Auth0RestClient', function() {
@@ -88,6 +88,24 @@ describe('Auth0RestClient', function() {
       var client = new Auth0RestClient(API_URL + '/some-resource', options, this.providerMock);
       client.get().then(data => {
         expect(data).to.deep.equal({ data: 'value' });
+        done();
+        nock.cleanAll();
+      });
+    });
+
+    it('should use a custom agent when keep alive is provided', function(done) {
+      nock(API_URL)
+        .get('/some-resource/auth0%7C1234')
+        .reply(200);
+
+      var options = {
+        headers: {},
+        keepAlive: true
+      };
+      sinon.spy(RestClient.prototype, 'useKeepAliveAgent');
+      var client = new Auth0RestClient(API_URL + '/some-resource/:id', options, this.providerMock);
+      client.get({ id: 'auth0|1234' }, function() {
+        expect(RestClient.prototype.useKeepAliveAgent.calledOnce).to.be.true;
         done();
         nock.cleanAll();
       });

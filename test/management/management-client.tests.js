@@ -233,6 +233,84 @@ describe('ManagementClient', function() {
       }
     });
 
+    describe('when using persistent connections', function() {
+      it('should provide the keep alive option to the rest client', function() {
+        var client = new ManagementClient({
+          token: 'token',
+          domain: 'auth0.com',
+          keepAlive: true
+        });
+
+        expect(client.clients.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.clientGrants.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.grants.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.users.users.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.multifactor.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.identities.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.userLogs.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.enrollments.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.usersByEmail.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.recoveryCodeRegenerations.restClient.restClient.options.keepAlive).to.be
+          .true;
+        expect(client.users.invalidateRememberBrowsers.restClient.restClient.options.keepAlive).to
+          .be.true;
+        expect(client.users.roles.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.users.permissions.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.guardian.enrollments.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.guardian.tickets.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.guardian.factors.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.guardian.factorsTemplates.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.guardian.factorsProviders.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.guardian.factorsPhoneSelectedProvider.restClient.restClient.options.keepAlive)
+          .to.be.true;
+        expect(client.guardian.factorsPhoneMessageTypes.restClient.restClient.options.keepAlive).to
+          .be.true;
+
+        expect(client.customDomains.resource.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.customDomains.vefifyResource.restClient.restClient.options.keepAlive).to.be
+          .true;
+
+        expect(client.connections.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.deviceCredentials.resource.restClient.restClient.options.keepAlive).to.be
+          .true;
+
+        expect(client.rules.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.blacklistedTokens.resource.restClient.restClient.options.keepAlive).to.be
+          .true;
+
+        expect(client.emailProvider.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.emailTemplates.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.stats.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.tenant.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.jobs.jobs.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.jobs.usersExports.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.tickets.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.logs.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.resourceServers.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.emailTemplates.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.rulesConfigs.resource.restClient.restClient.options.keepAlive).to.be.true;
+
+        expect(client.roles.resource.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.roles.permissions.restClient.restClient.options.keepAlive).to.be.true;
+        expect(client.roles.users.restClient.restClient.options.keepAlive).to.be.true;
+      });
+    });
+
     describe('client info', function() {
       it('should configure instances with default telemetry header', function() {
         var utilsStub = {

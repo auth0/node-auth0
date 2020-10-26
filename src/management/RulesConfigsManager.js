@@ -41,6 +41,7 @@ var RulesConfigsManager = function(options) {
    */
   var clientOptions = {
     headers: options.headers,
+    keepAlive: options.keepAlive || false,
     query: { repeatParams: false }
   };
 

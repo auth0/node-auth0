@@ -35,6 +35,7 @@ var BrandingManager = function(options) {
 
   var clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
+    keepAlive: options.keepAlive || false,
     headers: options.headers,
     query: { repeatParams: false }
   };
