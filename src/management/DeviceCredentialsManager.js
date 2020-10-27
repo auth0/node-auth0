@@ -88,10 +88,13 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.
  * @memberOf  module:management.DeviceCredentialsManager.prototype
  *
  * @example
- * management.deviceCredentials.getAll(function (err, credentials) {
+ * var params = {user_id: "USER_ID"};
+ *
+ * management.deviceCredentials.getAll(params, function (err, credentials) {
  *   console.log(credentials.length);
  * });
  *
+ * @param   {Object}    params  Credential parameters.
  * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}

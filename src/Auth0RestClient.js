@@ -1,5 +1,4 @@
 var RestClient = require('rest-facade').Client;
-var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 var utils = require('./utils');

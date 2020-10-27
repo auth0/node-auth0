@@ -5,7 +5,6 @@ var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var generateClientInfo = utils.generateClientInfo;
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 
 // Managers.
 var ClientsManager = require('./ClientsManager');
@@ -23,6 +22,7 @@ var TenantManager = require('./TenantManager');
 var JobsManager = require('./JobsManager');
 var TicketsManager = require('./TicketsManager');
 var LogsManager = require('./LogsManager');
+var LogStreamsManager = require('./LogStreamsManager');
 var ResourceServersManager = require('./ResourceServersManager');
 var ManagementTokenProvider = require('./ManagementTokenProvider');
 var RulesConfigsManager = require('./RulesConfigsManager');
@@ -33,6 +33,7 @@ var RolesManager = require('./RolesManager');
 var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
+var PromptsManager = require('./PromptsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -112,12 +113,12 @@ var ManagementClient = function(options) {
   };
 
   var managerOptions = {
-    headers: assign(defaultHeaders, options.headers || {}),
+    headers: Object.assign(defaultHeaders, options.headers || {}),
     baseUrl: baseUrl
   };
 
   if (options.token === undefined) {
-    var config = assign(
+    var config = Object.assign(
       { audience: util.format(MANAGEMENT_API_AUD_FORMAT, options.domain) },
       options
     );
@@ -283,6 +284,13 @@ var ManagementClient = function(options) {
   this.logs = new LogsManager(managerOptions);
 
   /**
+   * Log Streams manager.
+   *
+   * @type {LogStreamsManager}
+   */
+  this.logStreams = new LogStreamsManager(managerOptions);
+
+  /**
    * Simple abstraction for performing CRUD operations on the
    * resource servers endpoint.
    *
@@ -335,6 +343,13 @@ var ManagementClient = function(options) {
    * @type {MigrationsManager}
    */
   this.migrations = new MigrationsManager(managerOptions);
+
+  /**
+   * Prompts Manager
+   *
+   * @type {PromptsManager}
+   */
+  this.prompts = new PromptsManager(managerOptions);
 };
 
 /**
@@ -791,10 +806,13 @@ utils.wrapPropertyMethod(
  * @memberOf  module:management.ManagementClient.prototype
  *
  * @example
- * management.getDeviceCredentials(function (err, credentials) {
+ * var params = {user_id: "USER_ID"};
+ *
+ * management.getDeviceCredentials(params, function (err, credentials) {
  *   console.log(credentials.length);
  * });
  *
+ * @param   {Object}    params  Credential parameters.
  * @param   {Function}  [cb]    Callback function.
  *
  * @return  {Promise|undefined}
@@ -1550,6 +1568,33 @@ utils.wrapPropertyMethod(
 );
 
 /**
+ * Invalidate all remembered browsers for MFA.
+ *
+ * @method    invalidateRememberBrowser
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.invalidateRememberBrowser({ id: USER_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Invalidated all remembered browsers.
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'invalidateRememberBrowser',
+  'users.invalidateRememberBrowser'
+);
+
+/**
  * Get user blocks by its id.
  *
  * @method    getUserBlocks
@@ -2242,6 +2287,118 @@ utils.wrapPropertyMethod(ManagementClient, 'getLog', 'logs.get');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getLogs', 'logs.getAll');
+
+/**
+ * Get all Log Streams.
+ *
+ * @method    getLogStreams
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ *
+ *
+ * management.getLogStreams( function (err, logStreams) {
+ *   console.log(logStreams.length);
+ * });
+ *
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getLogStreams', 'logStreams.getAll');
+
+/**
+ * Create a new Log Stream.
+ *
+ * @method    createLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.createLogStream(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Log Stream created.
+ * });
+ *
+ * @param   {Object}    data          Log Stream data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'createLogStream', 'logStreams.create');
+
+/**
+ * Get an Auth0 Log Stream.
+ *
+ * @method    getLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getLogStream({ id: LOG_STREAM_ID }, function (err, logStream) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logStream);
+ * });
+ *
+ * @param   {Object}    params        Log Stream parameters.
+ * @param   {String}    params.id     Log Stream ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getLogStream', 'logStreams.get');
+
+/**
+ * Delete an existing Log Stream.
+ *
+ * @method    deleteLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteLogStream({ id: LOG_STREAM_ID }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Log Stream deleted.
+ * });
+ *
+ * @param   {Object}    params        Log Stream parameters.
+ * @param   {String}    params.id     Log Stream ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteLogStream', 'logStreams.delete');
+
+/**
+ * Update an existing Log Stream.
+ *
+ * @method    updateLogStream
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = { id: LOG_STREAM_ID };
+ * var data = { name: 'my-log-stream'};
+ * management.updateLogStream(params, data, function (err, logStream) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(logStream.name); // 'my-log-stream'.
+ * });
+ *
+ * @param   {Object}    params        Rule parameters.
+ * @param   {String}    params.id     Rule ID.
+ * @param   {Object}    data          Updated rule data.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'updateLogStream', 'logStreams.update');
 
 /**
  * Create a new resource server.
@@ -3397,5 +3554,111 @@ utils.wrapPropertyMethod(ManagementClient, 'updateMigrations', 'migrations.updat
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getMigrations', 'migrations.getMigrations');
+
+/**
+ * Get prompts settings..
+ *
+ * @method    getPromptsSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getPromptsSettings(function (err, settings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(ManagementClient, 'getPromptsSettings', 'prompts.getSettings');
+
+/**
+ * Update prompts settings.
+ *
+ * @method    updatePromptsSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updatePromptsSettings(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data  The new prompts settings.
+ * @param   {Function}  [cb]  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(ManagementClient, 'updatePromptsSettings', 'prompts.updateSettings');
+
+/**
+ * Retrieve custom text for a specific prompt and language.
+ *
+ * @method    getCustomTextByLanguage
+ * @memberOf  module:management.PromptsManager.prototype
+ *
+ * @example
+ * var params = { prompt: PROMPT_NAME, language: LANGUAGE };
+ *
+ * management.prompts.getCustomTextByLanguage(params, function (err, customText) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log('CustomText', customText);
+ * });
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.prompt     Name of the prompt.
+ * @param   {String}    params.language   Language to retrieve.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getCustomTextByLanguage',
+  'prompts.getCustomTextByLanguage'
+);
+
+/**
+ * Set custom text for a specific prompt.
+ *
+ * @method    updateCustomTextByLanguage
+ * @memberOf  module:management.PromptsManager.prototype
+ *
+ * @example
+ * var params = { prompt: PROMPT_NAME, language: LANGUAGE, body: BODY_OBJECT };
+ *
+ * management.prompts.updateCustomTextByLanguage(params, function (err, customText) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log('CustomText', customText);
+ * });
+ *
+ * @param   {Object}    params            Data object.
+ * @param   {String}    params.prompt     Name of the prompt.
+ * @param   {String}    params.language   Language to retrieve.
+ * @param   {Object}    params.body       An object containing custom dictionaries for a group of screens.
+ * @param   {Function}  [cb]              Callback function
+ *
+ * @return  {Promise|undefined}
+ */
+
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateCustomTextByLanguage',
+  'prompts.updateCustomTextByLanguage'
+);
 
 module.exports = ManagementClient;

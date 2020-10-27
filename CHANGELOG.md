@@ -1,5 +1,69 @@
 # Change Log
 
+## [v2.30.0](https://github.com/auth0/node-auth0/tree/v2.30.0) (2020-10-22)
+
+**Added**
+
+- Provide headers on mgmt token fetch [\#543](https://github.com/auth0/node-auth0/pull/543) ([davidpatrick](https://github.com/davidpatrick))
+
+**Changed**
+
+- [SDK-1975] Use exponential backoff rather than rate limit headers [\#538](https://github.com/auth0/node-auth0/pull/538) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+**Fixed**
+
+- Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.29.0...v2.30.0)
+
+## [v2.29.0](https://github.com/auth0/node-auth0/tree/v2.29.0) (2020-09-23)
+
+**Added**
+
+- Adding support for prompts and custom texts [\#533](https://github.com/auth0/node-auth0/pull/533) ([davidpatrick](https://github.com/davidpatrick))
+- Adding call to invalidate all remembered browsers. [\#528](https://github.com/auth0/node-auth0/pull/528) ([tandrup](https://github.com/tandrup))
+- Adding docs for secondary and federated identity email verification [\#519](https://github.com/auth0/node-auth0/pull/519) ([jimmyjames](https://github.com/jimmyjames))
+
+**Changed**
+
+- Update dependencies [\#535](https://github.com/auth0/node-auth0/pull/535) ([davidpatrick](https://github.com/davidpatrick))
+- Update jwks-rsa dependency to avoid DeprecationWarning Buffer() [\#534](https://github.com/auth0/node-auth0/pull/534) ([jalie](https://github.com/jalie))
+
+**Security**
+
+- [Security] Bump node-fetch from 2.6.0 to 2.6.1 [\#532](https://github.com/auth0/node-auth0/pull/532) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.28.0...v2.29.0)
+
+## [v2.28.0](https://github.com/auth0/node-auth0/tree/v2.28.0) (2020-08-27)
+
+**Added**
+
+- Added support for Log Streams [\#518](https://github.com/auth0/node-auth0/pull/518) ([cv711](https://github.com/cv711))
+
+**Removed**
+
+- Remove bluebird [\#520](https://github.com/auth0/node-auth0/pull/520) ([mattiasnixell](https://github.com/mattiasnixell))
+
+**Security**
+
+- [Security] Bump elliptic from 6.5.2 to 6.5.3 [\#521](https://github.com/auth0/node-auth0/pull/521) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.27.1...v2.28.0)
+
+## [v2.27.1](https://github.com/auth0/node-auth0/tree/v2.27.1) (2020-07-23)
+
+**Changed**
+
+- Use [REDACTED] instead of [SANITIZED] when cleaning errors [\#515](https://github.com/auth0/node-auth0/pull/515) ([jimmyjames](https://github.com/jimmyjames))
+
+**Security**
+
+- Sanitize Headers on Errors [\#507](https://github.com/auth0/node-auth0/pull/507) ([jimmyjames](https://github.com/jimmyjames))
+- Bump lodash from 4.17.15 to 4.17.19 [\#506](https://github.com/auth0/node-auth0/pull/506) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.27.0...v2.27.1)
+
 ## [v2.27.0](https://github.com/auth0/node-auth0/tree/v2.27.0) (2020-06-30)
 
 **Added**

@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 var nock = require('nock');
 
-var Promise = require('bluebird');
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
 var RetryRestClient = require('../src/RetryRestClient');
@@ -103,15 +103,7 @@ describe('RetryRestClient', function() {
 
     nock(API_URL)
       .get('/')
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': '1508253300'
-        }
-      )
+      .reply(429, { success: false })
       .get('/')
       .reply(200, { success: true });
 
@@ -125,104 +117,56 @@ describe('RetryRestClient', function() {
 
   it('should try 4 times when request fails 3 times', function(done) {
     var self = this;
+    var clock = sinon.useFakeTimers();
     var timesCalled = 0;
     var restClientSpy = {
       getAll: function() {
         timesCalled += 1;
-        return self.restClient.getAll(arguments);
+        return self.restClient.getAll(arguments).finally(() => {
+          clock.runAllAsync();
+        });
       }
     };
 
     nock(API_URL)
       .get('/')
       .times(3)
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': '1508253300'
-        }
-      )
+      .reply(429, { success: false })
       .get('/')
       .reply(200, { success: true });
 
     var client = new RetryRestClient(restClientSpy);
     client.getAll().then(function(data) {
+      clock.restore();
       expect(data.success).to.be.true;
       expect(timesCalled).to.be.equal(4);
       done();
     });
   });
 
-  it('should retry 2 times and fail when maxRetries is exceeded with no delay time', function(done) {
+  it('should retry 2 times and fail when maxRetries is exceeded', function(done) {
     var self = this;
+    var clock = sinon.useFakeTimers();
     var timesCalled = 0;
     var restClientSpy = {
       getAll: function() {
         timesCalled += 1;
-        return self.restClient.getAll(arguments);
+        return self.restClient.getAll(arguments).finally(() => {
+          clock.runAllAsync();
+        });
       }
     };
 
     nock(API_URL)
       .get('/')
       .times(4)
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': (new Date().getTime() - 10) / 1000 // past.
-        }
-      );
+      .reply(429, { success: false });
 
     var client = new RetryRestClient(restClientSpy, { maxRetries: 3 });
     client.getAll().catch(function(err) {
+      clock.restore();
       expect(err).to.not.null;
       expect(timesCalled).to.be.equal(4); // Initial call + 3 retires.
-      done();
-    });
-  });
-
-  it('should retry 2 times and fail when maxRetries is exceeded with delay time', function(done) {
-    var self = this;
-    var timesCalled = 0;
-    var restClientSpy = {
-      getAll: function() {
-        timesCalled += 1;
-        return self.restClient.getAll(arguments);
-      }
-    };
-
-    nock(API_URL)
-      .get('/')
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': (new Date().getTime() + 50) / 1000 // epoch seconds + 50ms
-        }
-      )
-      .get('/')
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': (new Date().getTime() + 100) / 1000 // epoch seconds + 100ms
-        }
-      );
-
-    var client = new RetryRestClient(restClientSpy, { maxRetries: 1 });
-    client.getAll().catch(function(err) {
-      expect(err).to.not.null;
-      expect(timesCalled).to.be.equal(2); // Initial call + 3 retires.
       done();
     });
   });
@@ -240,38 +184,44 @@ describe('RetryRestClient', function() {
     });
   });
 
-  it('should delay the retry using x-ratelimit-reset header value and succeed after retry', function(done) {
+  it('should delay the retry using exponential backoff and succeed after retry', function(done) {
     var self = this;
-    var calledAt = [];
+    var clock = sinon.useFakeTimers();
+    var backoffs = [];
+    var prev = 0;
     var restClientSpy = {
       getAll: function() {
-        calledAt.push(new Date().getTime());
-        return self.restClient.getAll(arguments);
+        var now = new Date().getTime();
+        backoffs.push(now - prev);
+        prev = now;
+        return self.restClient.getAll(arguments).finally(() => {
+          clock.runAllAsync();
+        });
       }
     };
 
     nock(API_URL)
       .get('/')
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': (new Date().getTime() + 50) / 1000 // epoch seconds + 50ms
-        }
-      )
+      .times(9)
+      .reply(429, { success: false })
       .get('/')
       .reply(200, { success: true });
 
-    var client = new RetryRestClient(restClientSpy);
+    var client = new RetryRestClient(restClientSpy, { maxRetries: 10 });
 
     client.getAll().then(function(data) {
+      clock.restore();
       expect(data.success).to.be.true;
-      expect(calledAt.length).to.be.equal(2);
+      expect(backoffs.length).to.be.equal(10);
 
-      var elapsedTime = calledAt[1] - calledAt[0];
-      expect(elapsedTime).to.be.above(49); // Time between the requests should at least be more than 49ms
+      expect(backoffs.shift()).to.be.equal(0, 'first request should happen immediately');
+      for (var i = 0; i < backoffs.length; i++) {
+        expect(backoffs[i] / 1000).to.be.within(
+          Math.pow(2, i),
+          2 * Math.pow(2, i),
+          'attempt ' + (i + 1) + ' in secs'
+        );
+      }
       done();
     });
   });
@@ -288,15 +238,7 @@ describe('RetryRestClient', function() {
 
     nock(API_URL)
       .get('/')
-      .reply(
-        429,
-        { success: false },
-        {
-          'x-ratelimit-limit': '10',
-          'x-ratelimit-remaining': '0',
-          'x-ratelimit-reset': '1508253300'
-        }
-      );
+      .reply(429, { success: false });
 
     var client = new RetryRestClient(restClientSpy, { enabled: false });
     client.getAll().catch(function(err) {

@@ -4,7 +4,6 @@ var util = require('util');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 
 // Authenticators.
 var OAuthAuthenticator = require('./OAuthAuthenticator');
@@ -64,7 +63,7 @@ var AuthenticationClient = function(options) {
     clientId: options.clientId,
     domain: options.domain,
     clientSecret: options.clientSecret,
-    headers: assign(defaultHeaders, options.headers || {}),
+    headers: Object.assign(defaultHeaders, options.headers || {}),
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
     __bypassIdTokenValidation: options.__bypassIdTokenValidation

@@ -163,7 +163,7 @@ describe('Auth0RestClient', function() {
     var client = new Auth0RestClient(API_URL + '/some-resource', options, this.providerMock);
     client.getAll().catch(function(err) {
       const originalRequestHeader = err.originalError.response.request._header;
-      expect(originalRequestHeader.authorization).to.equal('[SANITIZED]');
+      expect(originalRequestHeader.authorization).to.equal('[REDACTED]');
       done();
       nock.cleanAll();
     });

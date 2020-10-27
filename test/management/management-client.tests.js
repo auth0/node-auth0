@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 var sinon = require('sinon');
-var assign = Object.assign || require('object.assign');
 var proxyquire = require('proxyquire');
 
 var ManagementClient = require('../../src/management');
@@ -49,7 +48,10 @@ describe('ManagementClient', function() {
   });
 
   it('should expose an instance of ManagementClient when withTokenProviderConfig and audience is passed', function() {
-    var config = assign({ audience: 'https://auth0-node-sdk.auth0.com/api/v2/' }, withTokenConfig);
+    var config = Object.assign(
+      { audience: 'https://auth0-node-sdk.auth0.com/api/v2/' },
+      withTokenConfig
+    );
     expect(new ManagementClient(config)).to.exist.to.be.an.instanceOf(ManagementClient);
   });
 
@@ -61,7 +63,7 @@ describe('ManagementClient', function() {
   });
 
   it('should raise an error when the domain is not set', function() {
-    var config = assign({}, withTokenConfig);
+    var config = Object.assign({}, withTokenConfig);
     delete config.domain;
     var client = ManagementClient.bind(null, config);
 
@@ -69,7 +71,7 @@ describe('ManagementClient', function() {
   });
 
   it('should raise an error when the domain is not valid', function() {
-    var config = assign({}, withTokenConfig);
+    var config = Object.assign({}, withTokenConfig);
     config.domain = '';
     var client = ManagementClient.bind(null, config);
 
@@ -77,7 +79,7 @@ describe('ManagementClient', function() {
   });
 
   it('should raise an error when the token is not valid', function() {
-    var config = assign({}, withTokenConfig);
+    var config = Object.assign({}, withTokenConfig);
     config.token = '';
     var client = ManagementClient.bind(null, config);
 
@@ -85,7 +87,7 @@ describe('ManagementClient', function() {
   });
 
   it('should raise an error when the token and clientId are not set', function() {
-    var config = assign({}, withTokenProviderConfig);
+    var config = Object.assign({}, withTokenProviderConfig);
     delete config.clientId;
     var client = ManagementClient.bind(null, config);
 
@@ -93,7 +95,7 @@ describe('ManagementClient', function() {
   });
 
   it('should raise an error when the token and clientSecret are not set', function() {
-    var config = assign({}, withTokenProviderConfig);
+    var config = Object.assign({}, withTokenProviderConfig);
     delete config.clientSecret;
     var client = ManagementClient.bind(null, config);
 
@@ -102,7 +104,7 @@ describe('ManagementClient', function() {
 
   describe('getAccessToken', function() {
     it('should return token provided in config', function(done) {
-      var config = assign({}, withTokenConfig);
+      var config = Object.assign({}, withTokenConfig);
       var client = new ManagementClient(config);
 
       client.getAccessToken().then(function(accessToken) {
@@ -111,7 +113,7 @@ describe('ManagementClient', function() {
       });
     });
     it('should return token from provider', function(done) {
-      var config = assign({}, withTokenProviderConfig);
+      var config = Object.assign({}, withTokenProviderConfig);
       var client = new ManagementClient(config);
 
       nock('https://' + config.domain)
@@ -218,7 +220,7 @@ describe('ManagementClient', function() {
             'Another-header': 'test-header'
           };
 
-          var options = assign({ headers: customHeaders }, withTokenConfig);
+          var options = Object.assign({ headers: customHeaders }, withTokenConfig);
           var client = new ManagementClient(options);
 
           expect(
@@ -278,6 +280,9 @@ describe('ManagementClient', function() {
         );
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
         expect(client.users.roles.restClient.restClient.options.headers).to.contain(requestHeaders);
         expect(client.users.permissions.restClient.restClient.options.headers).to.contain(
@@ -424,6 +429,9 @@ describe('ManagementClient', function() {
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
         ).to.contain(requestHeaders);
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
+        ).to.contain(requestHeaders);
         expect(client.users.roles.restClient.restClient.options.headers).to.contain(requestHeaders);
         expect(client.users.permissions.restClient.restClient.options.headers).to.contain(
           requestHeaders
@@ -564,6 +572,9 @@ describe('ManagementClient', function() {
         ).to.not.have.property('Auth0-Client');
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
         expect(client.users.roles.restClient.restClient.options.headers).to.not.have.property(
           'Auth0-Client'
@@ -711,6 +722,9 @@ describe('ManagementClient', function() {
         expect(
           client.users.recoveryCodeRegenerations.restClient.restClient.options.headers
         ).to.not.have.property('Auth0-Client');
+        expect(
+          client.users.invalidateRememberBrowsers.restClient.restClient.options.headers
+        ).to.not.have.property('Auth0-Client');
         expect(client.users.roles.restClient.restClient.options.headers).to.not.have.property(
           'Auth0-Client'
         );
@@ -819,7 +833,7 @@ describe('ManagementClient', function() {
     });
 
     before(function() {
-      var config = assign({}, withTokenConfig);
+      var config = Object.assign({}, withTokenConfig);
       this.client = new ManagementClient(config);
     });
 
@@ -900,11 +914,13 @@ describe('ManagementClient', function() {
       'unblockUser',
       'getUserBlocksByIdentifier',
       'unblockUserByIdentifier',
-      'getAccessToken'
+      'getAccessToken',
+      'getPromptsSettings',
+      'updatePromptsSettings'
     ];
 
     before(function() {
-      var config = assign({}, withTokenConfig);
+      var config = Object.assign({}, withTokenConfig);
       this.client = new ManagementClient(config);
     });
 

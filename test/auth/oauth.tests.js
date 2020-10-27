@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var extend = require('util')._extend;
 var nock = require('nock');
-var Promise = require('bluebird');
 var sinon = require('sinon');
 
 // Constants.
