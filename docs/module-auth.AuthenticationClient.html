@@ -2305,7 +2305,7 @@ auth0.getDelegationToken(data, function (err, token) {
   scope: 'openid'  // Optional field.
 };
 
-auth0.oauth.token(data, function (err, userData) {
+auth0.passwordGrant(data, function (err, userData) {
   if (err) {
     // Handle error.
   }
