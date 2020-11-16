@@ -2099,6 +2099,38 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
 /**
+ * Given a path to a file and a connection id, create a new job that imports the
+ * users contained in the file or JSON string and associate them with the given
+ * connection.
+ *
+ * @method    importUsersJob
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   connection_id: '{CONNECTION_ID}',
+ *   users: '{PATH_TO_USERS_FILE}' // or users_json: '{USERS_JSON_STRING}'
+ * };
+ *
+ * management.importUsersJob(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data                          Users import data.
+ * @param   {String}    data.connection_id            connection_id of the connection to which users will be imported.
+ * @param   {String}    [data.users]                  Path to the users data file. Either users or users_json is mandatory.
+ * @param   {String}    [data.users_json]             JSON data for the users.
+ * @param   {Boolean}   [data.upsert]                 Whether to update users if they already exist (true) or to ignore them (false).
+ * @param   {Boolean}   [data.send_completion_email]  Whether to send a completion email to all tenant owners when the job is finished (true) or not (false).
+ * @param   {Function}  [cb]                          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'importUsersJob', 'jobs.importUsersJob');
+
+/**
  * Export all users to a file using a long running job.
  *
  * @method   exportUsers
