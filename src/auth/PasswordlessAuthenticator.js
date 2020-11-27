@@ -91,6 +91,7 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   if (!data.realm || (data.realm !== 'email' && data.realm !== 'sms')) {
     data.realm = 'sms';
   }
+  data.connection = data.realm;
   data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
 
   if (!userData || typeof userData !== 'object') {
