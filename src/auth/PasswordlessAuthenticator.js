@@ -107,7 +107,6 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   }
   // Move password into otp field
   data.otp = data.password;
-  data.password = undefined;
 
   return this.oauth.signIn(data, cb);
 };

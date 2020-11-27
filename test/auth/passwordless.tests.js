@@ -48,7 +48,7 @@ describe('PasswordlessAuthenticator', function() {
   });
 
   describe('#signIn', function() {
-    var path = '/oauth/ro';
+    var path = '/oauth/token';
     var userData = {
       username: 'username',
       password: 'pwd'
@@ -150,12 +150,12 @@ describe('PasswordlessAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use SMS connection', function(done) {
+    it('should use SMS realm', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.connection === 'sms';
+          return body.realm === 'sms';
         })
         .reply(200);
 
@@ -169,12 +169,12 @@ describe('PasswordlessAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use email connection', function(done) {
+    it('should use email realm', function(done) {
       nock.cleanAll();
-      var data = extend({ connection: 'email' }, userData);
+      var data = extend({ realm: 'email' }, userData);
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.connection === 'email';
+          return body.realm === 'email';
         })
         .reply(200);
 
@@ -191,10 +191,10 @@ describe('PasswordlessAuthenticator', function() {
     it('should allow the user to specify the connection as sms or email', function(done) {
       nock.cleanAll();
 
-      var data = extend({ connection: 'TEST_CONNECTION' }, userData);
+      var data = extend({ realm: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.connection === 'sms' || body.connection === 'email';
+          return body.realm === 'sms' || body.realm === 'email';
         })
         .reply(200);
 
@@ -208,12 +208,12 @@ describe('PasswordlessAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use password as grant type', function(done) {
+    it('should use `otp` as grant type', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.grant_type === 'password';
+          return body.grant_type === 'http://auth0.com/oauth/grant-type/passwordless/otp';
         })
         .reply(200);
 

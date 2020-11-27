@@ -48,7 +48,7 @@ describe('DatabaseAuthenticator', function() {
   });
 
   describe('#signIn', function() {
-    var path = '/oauth/ro';
+    var path = '/oauth/token';
     var userData = {
       username: 'username',
       password: 'pwd'
