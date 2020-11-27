@@ -101,7 +101,7 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
     throw new ArgumentError('username field (phone number) is required');
   }
 
-  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
+  if (typeof data.otp !== 'string' || data.otp.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
 
