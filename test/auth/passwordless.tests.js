@@ -150,12 +150,12 @@ describe('PasswordlessAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use SMS realm', function(done) {
+    it('should use SMS connection', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.realm === 'sms';
+          return body.connection === 'sms';
         })
         .reply(200);
 
@@ -169,12 +169,12 @@ describe('PasswordlessAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use email realm', function(done) {
+    it('should use email connection', function(done) {
       nock.cleanAll();
-      var data = extend({ realm: 'email' }, userData);
+      var data = extend({ connection: 'email' }, userData);
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.realm === 'email';
+          return body.connection === 'email';
         })
         .reply(200);
 
@@ -191,10 +191,10 @@ describe('PasswordlessAuthenticator', function() {
     it('should allow the user to specify the connection as sms or email', function(done) {
       nock.cleanAll();
 
-      var data = extend({ realm: 'TEST_CONNECTION' }, userData);
+      var data = extend({ connection: 'TEST_CONNECTION' }, userData);
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.realm === 'sms' || body.realm === 'email';
+          return body.connection === 'sms' || body.connection === 'email';
         })
         .reply(200);
 
