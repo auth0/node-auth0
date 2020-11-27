@@ -75,7 +75,7 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @param   {Object}    userData              User credentials object.
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
+ * @param   {String}    [userData.realm=sms]  Realm string: "sms" or "email".
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
@@ -87,9 +87,9 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   };
   var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
-    data.connection = 'sms';
+  // Don't let the user override the realm nor the grant type.
+  if (!data.realm || (data.realm !== 'email' && data.realm !== 'sms')) {
+    data.realm = 'sms';
   }
   data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
 
