@@ -17,6 +17,9 @@ function getParamsFromOptions(options) {
       req.set('auth0-forwarded-for', options.forwardedFor);
     };
   }
+  if (options.type) {
+    params.type = options.type
+  }
   return params;
 }
 
@@ -103,7 +106,7 @@ var OAuthAuthenticator = function(options) {
 OAuthAuthenticator.prototype.signIn = function(userData, options, cb) {
   var { options, cb } = sanitizeArguments(options, cb);
   var defaultParams = {
-    type: 'ro'
+    type: 'token'
   };
   var params = extend(defaultParams, getParamsFromOptions(options));
   var defaultFields = {

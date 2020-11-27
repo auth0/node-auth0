@@ -91,7 +91,7 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
     data.connection = 'sms';
   }
-  data.grant_type = 'password';
+  data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
 
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');
