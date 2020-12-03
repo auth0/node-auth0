@@ -87,13 +87,6 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   };
   var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
-    data.connection = 'sms';
-  }
-  data.realm = data.connection;
-  data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
-
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');
   }
@@ -102,16 +95,24 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
     throw new ArgumentError('username field (phone number) is required');
   }
 
-  if (typeof data.otp === 'string' && data.otp.trim().length > 0 &&
-      typeof data.realm === 'string' && data.realm.trim().length > 0
-  ) {
+  // If otp is provided, attempt to sign in using otp grant
+  if (typeof data.otp === 'string' && data.otp.trim().length > 0) {
+    if (!data.realm || (data.realm !== 'email' && data.realm !== 'sms')) {
+      data.realm = 'sms';
+    }
     data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
     return this.oauth.signIn(data, { type: 'token' }, cb);
-  } else if (typeof data.password !== 'string' || data.password.trim().length === 0) {
+  }
+
+  // Don't let the user override the connection nor the grant type.
+  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
+    data.connection = 'sms';
+  }
+  data.grant_type = 'password';
+
+  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
-  // Move password into otp field
-  data.otp = data.password;
 
   return this.oauth.signIn(data, cb);
 };

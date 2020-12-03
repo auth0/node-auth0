@@ -48,7 +48,7 @@ describe('PasswordlessAuthenticator', function() {
   });
 
   describe('#signIn', function() {
-    var path = '/oauth/token';
+    var path = '/oauth/ro';
     var userData = {
       username: 'username',
       password: 'pwd'
@@ -208,12 +208,12 @@ describe('PasswordlessAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use `otp` as grant type', function(done) {
+    it('should use password as grant type', function(done) {
       nock.cleanAll();
 
       var request = nock(API_URL)
         .post(path, function(body) {
-          return body.grant_type === 'http://auth0.com/oauth/grant-type/passwordless/otp';
+          return body.grant_type === 'password';
         })
         .reply(200);
 

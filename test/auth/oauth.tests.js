@@ -60,7 +60,7 @@ describe('OAuthAuthenticator', function() {
   });
 
   describe('#signIn', function() {
-    var path = '/oauth/token';
+    var path = '/oauth/ro';
     var userData = {
       username: 'username',
       password: 'pwd',

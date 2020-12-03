@@ -106,7 +106,7 @@ var OAuthAuthenticator = function(options) {
 OAuthAuthenticator.prototype.signIn = function(userData, options, cb) {
   var { options, cb } = sanitizeArguments(options, cb);
   var defaultParams = {
-    type: 'token'
+    type: 'ro'
   };
   var params = extend(defaultParams, getParamsFromOptions(options));
   var defaultFields = {
@@ -120,7 +120,10 @@ OAuthAuthenticator.prototype.signIn = function(userData, options, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.connection !== 'string' || data.connection.split().length === 0) {
+  if (
+    data.type === 'ro' &&
+    (typeof data.connection !== 'string' || data.connection.split().length === 0)
+  ) {
     throw new ArgumentError('connection field is required');
   }
 
