@@ -102,7 +102,12 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
     throw new ArgumentError('username field (phone number) is required');
   }
 
-  if (typeof data.password !== 'string' || data.password.trim().length === 0) {
+  if (typeof data.otp === 'string' && data.otp.trim().length > 0 &&
+      typeof data.realm === 'string' && data.realm.trim().length > 0
+  ) {
+    data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
+    return this.oauth.signIn(data, { type: 'token' }, cb);
+  } else if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
   // Move password into otp field

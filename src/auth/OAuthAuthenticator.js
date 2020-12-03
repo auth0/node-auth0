@@ -18,7 +18,7 @@ function getParamsFromOptions(options) {
     };
   }
   if (options.type) {
-    params.type = options.type
+    params.type = options.type;
   }
   return params;
 }
