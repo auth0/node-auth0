@@ -75,7 +75,7 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @param   {Object}    userData              User credentials object.
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.connection=sms]  Realm string: "sms" or "email".
+ * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
