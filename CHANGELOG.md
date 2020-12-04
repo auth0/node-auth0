@@ -13,6 +13,7 @@
 **Fixed**
 
 - Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
+- Fix deprecation warning in importUserJobs [\#537](https://github.com/auth0/node-auth0/pull/537) ([JCQuintas](https://github.com/JCQuintas))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.29.0...v2.30.0)
 
