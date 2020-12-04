@@ -121,7 +121,7 @@ OAuthAuthenticator.prototype.signIn = function(userData, options, cb) {
   }
 
   if (
-    data.type === 'ro' &&
+    params.type === 'ro' &&
     (typeof data.connection !== 'string' || data.connection.split().length === 0)
   ) {
     throw new ArgumentError('connection field is required');

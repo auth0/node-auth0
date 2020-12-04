@@ -48,12 +48,27 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @example <caption>
  *   Given the user credentials (`phone_number` and `code`), it will do the
  *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
+ *   and `id_token` using `/oauth/ro` endpoint.
  * </caption>
  *
  * var data = {
  *   username: '{PHONE_NUMBER}',
  *   password: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.passwordless.signIn(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ * To use `/oauth/token` endpoint, use `otp` and `realm` instead
+ * </caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}',
+ *   otp: '{VERIFICATION_CODE}'
  * };
  *
  * auth0.passwordless.signIn(data, function (err) {
@@ -76,6 +91,8 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     Password.
  * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
+ * @param   {String}    userData.otp          Verification code.
+ * @param   {String}    [userData.realm=sms]  Realm string: "sms" or "email".
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
