@@ -88,11 +88,11 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * }
  *
  * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
- * @param   {String}    userData.otp          Verification code.
+ * @param   {String}    userData.otp          The user's verification code.
  * @param   {String}    [userData.realm=sms]  Realm string: "sms" or "email".
+ * @param   {String}    userData.username     The user's phone number if realm=sms, or the user's email if realm=email
+ * @param   {String}    userData.password     [DEPRECATED] Password.
+ * @param   {String}    [userData.connection=sms] [DEPRECATED] Connection string: "sms" or "email".
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
@@ -130,6 +130,10 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
+
+  console.warn(
+    'The oauth/ro endpoint has been deprecated. Please use the realm and otp parameters in this function.'
+  );
 
   return this.oauth.signIn(data, cb);
 };
