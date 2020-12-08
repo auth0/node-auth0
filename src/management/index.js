@@ -1316,6 +1316,8 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
  * @param   {Object}    params                Secondary user data.
  * @param   {String}    params.user_id        ID of the user to be linked.
  * @param   {String}    params.connection_id  ID of the connection to be used.
+ * @param   {String}    params.provider       Identity provider of the secondary user account being linked.
+ * @param   {String}    params.link_with      JWT for the secondary account being linked. If sending this parameter, provider, user_id, and connection_id must not be sent.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
