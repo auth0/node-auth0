@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.31.0](https://github.com/auth0/node-auth0/tree/v2.31.0) (2020-12-08)
+
+**Added**
+
+- Updated documentation on Link Users [\#558](https://github.com/auth0/node-auth0/pull/558) ([davidpatrick](https://github.com/davidpatrick))
+- Add support for new passwordless endpoint [\#556](https://github.com/auth0/node-auth0/pull/556) ([nbandarchi](https://github.com/nbandarchi))
+
+**Fixed**
+
+- Adds importUsersJob to ManagementClient [\#553](https://github.com/auth0/node-auth0/pull/553) ([mikemeerschaert](https://github.com/mikemeerschaert))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.30.0...v2.31.0)
+
 ## [v2.30.0](https://github.com/auth0/node-auth0/tree/v2.30.0) (2020-10-22)
 
 **Added**
