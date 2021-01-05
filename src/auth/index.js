@@ -55,7 +55,7 @@ var AuthenticationClient = function(options) {
   }
 
   var defaultHeaders = {
-    'User-agent': 'node.js/' + process.version.replace('v', ''),
+    'User-Agent': 'node.js/' + process.version.replace('v', ''),
     'Content-Type': 'application/json'
   };
 

@@ -141,7 +141,7 @@ describe('ManagementTokenProvider', function() {
   it('should set headers when passed into options', function() {
     var config = Object.assign({}, defaultConfig);
     config.headers = {
-      'User-agent': 'node.js',
+      'User-Agent': 'node.js',
       'Content-Type': 'application/json'
     };
     var provider = new ManagementTokenProvider(config);
