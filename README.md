@@ -19,7 +19,7 @@ npm install auth0
 
 You can find this library documentation in this [page](https://auth0.github.io/node-auth0/).
 
-For more information about [auth0](https://auth0.com) check our [documentation page](https://docs.auth0.com/).
+For more information about [auth0](https://auth0.com) check our [documentation page](https://auth0.com/docs).
 
 ## Authentication API Client
 
