@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.31.1](https://github.com/auth0/node-auth0/tree/v2.31.1) (2021-01-05)
+
+**Fixed**
+
+- Expose getJobErrors to management client [\#563](https://github.com/auth0/node-auth0/pull/563) ([davidaubin19](https://github.com/davidaubin19))
+- Fix passing a custom User-Agent to Axios. [\#562](https://github.com/auth0/node-auth0/pull/562) ([djanowski](https://github.com/djanowski))
+- Expose assignUsersToRole to ManagementClient [\#561](https://github.com/auth0/node-auth0/pull/561) ([davidaubin19](https://github.com/davidaubin19))
+
+**Security**
+
+- [Security] Bump axios from 0.19.2 to 0.21.1 [\#565](https://github.com/auth0/node-auth0/pull/565) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.0...v2.31.1)
+
 ## [v2.31.0](https://github.com/auth0/node-auth0/tree/v2.31.0) (2020-12-08)
 
 **Added**
