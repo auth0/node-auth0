@@ -1411,6 +1411,35 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
 utils.wrapPropertyMethod(ManagementClient, 'assignRolestoUser', 'users.assignRoles');
 
 /**
+ * Assign users to a role
+ *
+ * @method    assignUsersToRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "users" : ["userId1","userId2"]};
+ *
+ * management.roles.assignUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions added.
+ * });
+ *
+ * @param   {String}    params.id                                     ID of the Role.
+ * @param   {Object}    data                                          permissions data
+ * @param   {String}    data.permissions                              Array of permissions
+ * @param   {String}    data.permissions.permission_name              Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier   Identifier for a resource
+ * @param   {Function}  [cb]                                          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'assignUsersToRole', 'roles.assignUsers');
+
+/**
  * Remove roles from a user
  *
  * @method    removeRolesFromUser
@@ -2182,6 +2211,34 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsersJob', 'jobs.importUsersJo
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
+
+/**
+ * Given a job ID, retrieve the failed/errored items
+ *
+ * @method   errors
+ * @memberOf module:management.JobsManager.prototype
+ *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * management.jobs.errors(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getJobErrors', 'jobs.errors');
 
 /**
  * Send a verification email to a user.
