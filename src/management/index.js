@@ -2213,6 +2213,34 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsersJob', 'jobs.importUsersJo
 utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
 
 /**
+ * Given a job ID, retrieve the failed/errored items
+ *
+ * @method   errors
+ * @memberOf module:management.JobsManager.prototype
+ *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * management.jobs.errors(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getJobErrors', 'jobs.errors');
+
+/**
  * Send a verification email to a user.
  *
  * @method    sendEmailVerification
