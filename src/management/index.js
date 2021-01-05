@@ -108,7 +108,7 @@ var ManagementClient = function(options) {
   var userAgent = options.userAgent || 'node.js/' + process.version.replace('v', '');
 
   var defaultHeaders = {
-    'User-agent': 'node.js/' + process.version.replace('v', ''),
+    'User-Agent': 'node.js/' + process.version.replace('v', ''),
     'Content-Type': 'application/json'
   };
 
@@ -2211,6 +2211,34 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsersJob', 'jobs.importUsersJo
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
+
+/**
+ * Given a job ID, retrieve the failed/errored items
+ *
+ * @method   errors
+ * @memberOf module:management.JobsManager.prototype
+ *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * management.jobs.errors(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getJobErrors', 'jobs.errors');
 
 /**
  * Send a verification email to a user.
