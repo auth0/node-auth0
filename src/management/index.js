@@ -1411,6 +1411,35 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
 utils.wrapPropertyMethod(ManagementClient, 'assignRolestoUser', 'users.assignRoles');
 
 /**
+ * Assign users to a role
+ *
+ * @method    assignUsersToRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "users" : ["userId1","userId2"]};
+ *
+ * management.roles.assignUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions added.
+ * });
+ *
+ * @param   {String}    params.id                                     ID of the Role.
+ * @param   {Object}    data                                          permissions data
+ * @param   {String}    data.permissions                              Array of permissions
+ * @param   {String}    data.permissions.permission_name              Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier   Identifier for a resource
+ * @param   {Function}  [cb]                                          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'assignUsersToRole', 'roles.assignUsers');
+
+/**
  * Remove roles from a user
  *
  * @method    removeRolesFromUser

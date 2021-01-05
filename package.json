@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "es6-promisify": "^6.1.1",
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
