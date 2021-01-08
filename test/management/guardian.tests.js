@@ -7,7 +7,7 @@ var API_URL = 'https://tenants.auth0.com';
 var GuardianManager = require(SRC_DIR + '/management/GuardianManager');
 var ArgumentError = require('rest-facade').ArgumentError;
 
-describe.only('GuardianManager', function() {
+describe('GuardianManager', function() {
   before(function() {
     this.token = 'TOKEN';
     this.guardian = new GuardianManager({
