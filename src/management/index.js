@@ -112,7 +112,7 @@ var ManagementClient = function(options) {
   var userAgent = options.userAgent || 'node.js/' + process.version.replace('v', '');
 
   var defaultHeaders = {
-    'User-agent': 'node.js/' + process.version.replace('v', ''),
+    'User-Agent': 'node.js/' + process.version.replace('v', ''),
     'Content-Type': 'application/json'
   };
 
@@ -1352,6 +1352,8 @@ utils.wrapPropertyMethod(ManagementClient, 'unlinkUsers', 'users.unlink');
  * @param   {Object}    params                Secondary user data.
  * @param   {String}    params.user_id        ID of the user to be linked.
  * @param   {String}    params.connection_id  ID of the connection to be used.
+ * @param   {String}    params.provider       Identity provider of the secondary user account being linked.
+ * @param   {String}    params.link_with      JWT for the secondary account being linked. If sending this parameter, provider, user_id, and connection_id must not be sent.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
@@ -1443,6 +1445,35 @@ utils.wrapPropertyMethod(ManagementClient, 'getUserRoles', 'users.getRoles');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'assignRolestoUser', 'users.assignRoles');
+
+/**
+ * Assign users to a role
+ *
+ * @method    assignUsersToRole
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params =  { id :'ROLE_ID'};
+ * var data = { "users" : ["userId1","userId2"]};
+ *
+ * management.roles.assignUsers(params, data, function (err, user) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // permissions added.
+ * });
+ *
+ * @param   {String}    params.id                                     ID of the Role.
+ * @param   {Object}    data                                          permissions data
+ * @param   {String}    data.permissions                              Array of permissions
+ * @param   {String}    data.permissions.permission_name              Name of a permission
+ * @param   {String}    data.permissions.resource_server_identifier   Identifier for a resource
+ * @param   {Function}  [cb]                                          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'assignUsersToRole', 'roles.assignUsers');
 
 /**
  * Remove roles from a user
@@ -2135,6 +2166,38 @@ utils.wrapPropertyMethod(ManagementClient, 'getJob', 'jobs.get');
 utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
 
 /**
+ * Given a path to a file and a connection id, create a new job that imports the
+ * users contained in the file or JSON string and associate them with the given
+ * connection.
+ *
+ * @method    importUsersJob
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * var params = {
+ *   connection_id: '{CONNECTION_ID}',
+ *   users: '{PATH_TO_USERS_FILE}' // or users_json: '{USERS_JSON_STRING}'
+ * };
+ *
+ * management.importUsersJob(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    data                          Users import data.
+ * @param   {String}    data.connection_id            connection_id of the connection to which users will be imported.
+ * @param   {String}    [data.users]                  Path to the users data file. Either users or users_json is mandatory.
+ * @param   {String}    [data.users_json]             JSON data for the users.
+ * @param   {Boolean}   [data.upsert]                 Whether to update users if they already exist (true) or to ignore them (false).
+ * @param   {Boolean}   [data.send_completion_email]  Whether to send a completion email to all tenant owners when the job is finished (true) or not (false).
+ * @param   {Function}  [cb]                          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'importUsersJob', 'jobs.importUsersJob');
+
+/**
  * Export all users to a file using a long running job.
  *
  * @method   exportUsers
@@ -2184,6 +2247,34 @@ utils.wrapPropertyMethod(ManagementClient, 'importUsers', 'jobs.importUsers');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'exportUsers', 'jobs.exportUsers');
+
+/**
+ * Given a job ID, retrieve the failed/errored items
+ *
+ * @method   errors
+ * @memberOf module:management.JobsManager.prototype
+ *
+ * @example
+ * var params = {
+ *   id: '{JOB_ID}'
+ * };
+ *
+ * management.jobs.errors(params, function (err, job) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Retrieved job.
+ *   console.log(job);
+ * });
+ *
+ * @param   {Object}    params        Job parameters.
+ * @param   {String}    params.id     Job ID.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getJobErrors', 'jobs.errors');
 
 /**
  * Send a verification email to a user.

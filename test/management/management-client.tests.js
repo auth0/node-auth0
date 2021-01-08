@@ -210,13 +210,13 @@ describe('ManagementClient', function() {
           expect(
             client[manager.property].resource.restClient.restClient.options.headers
           ).to.contain({
-            'User-agent': 'node.js/' + process.version.replace('v', '')
+            'User-Agent': 'node.js/' + process.version.replace('v', '')
           });
         });
 
         it(manager + ' should include additional headers when provided', function() {
           var customHeaders = {
-            'User-agent': 'my-user-agent',
+            'User-Agent': 'my-user-agent',
             'Another-header': 'test-header'
           };
 
@@ -226,7 +226,7 @@ describe('ManagementClient', function() {
           expect(
             client[manager.property].resource.restClient.restClient.options.headers
           ).to.contain({
-            'User-agent': 'my-user-agent',
+            'User-Agent': 'my-user-agent',
             'Another-header': 'test-header'
           });
         });

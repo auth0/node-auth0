@@ -17,6 +17,9 @@ function getParamsFromOptions(options) {
       req.set('auth0-forwarded-for', options.forwardedFor);
     };
   }
+  if (options.type) {
+    params.type = options.type;
+  }
   return params;
 }
 
@@ -117,7 +120,10 @@ OAuthAuthenticator.prototype.signIn = function(userData, options, cb) {
     throw new ArgumentError('Missing user data object');
   }
 
-  if (typeof data.connection !== 'string' || data.connection.split().length === 0) {
+  if (
+    params.type === 'ro' &&
+    (typeof data.connection !== 'string' || data.connection.split().length === 0)
+  ) {
     throw new ArgumentError('connection field is required');
   }
 
