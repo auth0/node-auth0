@@ -253,7 +253,7 @@ utils.wrapPropertyMethod(GuardianManager, 'getFactorSettings', 'factorSettings.g
 /**
  * Update Guardian factor configuration
  *
- * @method    getFactorSettings
+ * @method    updateFactorSettings
  * @memberOf  module:management.GuardianManager.prototype
  *
  * @example
