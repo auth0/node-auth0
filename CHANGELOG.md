@@ -1,5 +1,49 @@
 # Change Log
 
+## [v2.31.1](https://github.com/auth0/node-auth0/tree/v2.31.1) (2021-01-05)
+
+**Fixed**
+
+- Expose getJobErrors to management client [\#563](https://github.com/auth0/node-auth0/pull/563) ([davidaubin19](https://github.com/davidaubin19))
+- Fix passing a custom User-Agent to Axios. [\#562](https://github.com/auth0/node-auth0/pull/562) ([djanowski](https://github.com/djanowski))
+- Expose assignUsersToRole to ManagementClient [\#561](https://github.com/auth0/node-auth0/pull/561) ([davidaubin19](https://github.com/davidaubin19))
+
+**Security**
+
+- [Security] Bump axios from 0.19.2 to 0.21.1 [\#565](https://github.com/auth0/node-auth0/pull/565) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.0...v2.31.1)
+
+## [v2.31.0](https://github.com/auth0/node-auth0/tree/v2.31.0) (2020-12-08)
+
+**Added**
+
+- Updated documentation on Link Users [\#558](https://github.com/auth0/node-auth0/pull/558) ([davidpatrick](https://github.com/davidpatrick))
+- Add support for new passwordless endpoint [\#556](https://github.com/auth0/node-auth0/pull/556) ([nbandarchi](https://github.com/nbandarchi))
+
+**Fixed**
+
+- Adds importUsersJob to ManagementClient [\#553](https://github.com/auth0/node-auth0/pull/553) ([mikemeerschaert](https://github.com/mikemeerschaert))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.30.0...v2.31.0)
+
+## [v2.30.0](https://github.com/auth0/node-auth0/tree/v2.30.0) (2020-10-22)
+
+**Added**
+
+- Provide headers on mgmt token fetch [\#543](https://github.com/auth0/node-auth0/pull/543) ([davidpatrick](https://github.com/davidpatrick))
+
+**Changed**
+
+- [SDK-1975] Use exponential backoff rather than rate limit headers [\#538](https://github.com/auth0/node-auth0/pull/538) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+**Fixed**
+
+- Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
+- Fix deprecation warning in importUserJobs [\#537](https://github.com/auth0/node-auth0/pull/537) ([JCQuintas](https://github.com/JCQuintas))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.29.0...v2.30.0)
+
 ## [v2.29.0](https://github.com/auth0/node-auth0/tree/v2.29.0) (2020-09-23)
 
 **Added**

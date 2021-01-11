@@ -150,7 +150,7 @@ describe('AuthenticationClient', function() {
         domain: 'auth0.com'
       });
 
-      var expected = { 'User-agent': 'node.js/' + process.version.replace('v', '') };
+      var expected = { 'User-Agent': 'node.js/' + process.version.replace('v', '') };
 
       expect(client.oauth.oauth.options.headers).to.contain(expected);
       expect(client.database.dbConnections.options.headers).to.contain(expected);
@@ -161,7 +161,7 @@ describe('AuthenticationClient', function() {
 
     it('should include additional headers when provided', function() {
       var customHeaders = {
-        'User-agent': 'my-user-agent',
+        'User-Agent': 'my-user-agent',
         'Another-header': 'test-header'
       };
 

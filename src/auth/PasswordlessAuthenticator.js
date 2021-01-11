@@ -48,12 +48,27 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @example <caption>
  *   Given the user credentials (`phone_number` and `code`), it will do the
  *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
+ *   and `id_token` using `/oauth/ro` endpoint.
  * </caption>
  *
  * var data = {
  *   username: '{PHONE_NUMBER}',
  *   password: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.passwordless.signIn(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ * To use `/oauth/token` endpoint, use `otp` and `realm` instead
+ * </caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}',
+ *   otp: '{VERIFICATION_CODE}'
  * };
  *
  * auth0.passwordless.signIn(data, function (err) {
@@ -73,9 +88,11 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * }
  *
  * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.username     Username.
- * @param   {String}    userData.password     Password.
- * @param   {String}    [userData.connection=sms]  Connection string: "sms" or "email".
+ * @param   {String}    userData.otp          The user's verification code.
+ * @param   {String}    [userData.realm=sms]  Realm string: "sms" or "email".
+ * @param   {String}    userData.username     The user's phone number if realm=sms, or the user's email if realm=email
+ * @param   {String}    userData.password     [DEPRECATED] Password.
+ * @param   {String}    [userData.connection=sms] [DEPRECATED] Connection string: "sms" or "email".
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
@@ -87,12 +104,6 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   };
   var data = extend(defaultFields, userData);
 
-  // Don't let the user override the connection nor the grant type.
-  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
-    data.connection = 'sms';
-  }
-  data.grant_type = 'password';
-
   if (!userData || typeof userData !== 'object') {
     throw new ArgumentError('Missing user data object');
   }
@@ -101,9 +112,28 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
     throw new ArgumentError('username field (phone number) is required');
   }
 
+  // If otp is provided, attempt to sign in using otp grant
+  if (typeof data.otp === 'string' && data.otp.trim().length > 0) {
+    if (!data.realm || (data.realm !== 'email' && data.realm !== 'sms')) {
+      data.realm = 'sms';
+    }
+    data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
+    return this.oauth.signIn(data, { type: 'token' }, cb);
+  }
+
+  // Don't let the user override the connection nor the grant type.
+  if (!data.connection || (data.connection !== 'email' && data.connection !== 'sms')) {
+    data.connection = 'sms';
+  }
+  data.grant_type = 'password';
+
   if (typeof data.password !== 'string' || data.password.trim().length === 0) {
     throw new ArgumentError('password field (verification code) is required');
   }
+
+  console.warn(
+    'The oauth/ro endpoint has been deprecated. Please use the realm and otp parameters in this function.'
+  );
 
   return this.oauth.signIn(data, cb);
 };
