@@ -2835,6 +2835,28 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.getFactors');
 
 /**
+ * Get the settings of a Guardian factor.
+ *
+ * @method    getGuardianFactorSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianFactorSettings({ name: 'duo' }, function (err, settings) {
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianFactorSettings',
+  'guardian.getFactorSettings'
+);
+
+/**
  * Get Guardian factor provider configuration
  *
  * @method    getGuardianFactorProvider
@@ -2881,6 +2903,32 @@ utils.wrapPropertyMethod(
   ManagementClient,
   'updateGuardianFactorProvider',
   'guardian.updateFactorProvider'
+);
+
+/**
+ * Update a Guardian's factor settings
+ *
+ * @method    updateGuardianFactorSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianFactorSettings(
+ *  { name: 'webauthn-roaming' },
+ *  { userVerification: 'discouraged', overrideRelyingParty: false },
+ *  function (err, settings) {
+ *   console.log(settings);
+ * })
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Object}    data              Updated Factor settings data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianFactorSettings',
+  'guardian.updateFactorSettings'
 );
 
 /**
