@@ -51,6 +51,19 @@ var BrandingManager = function(options) {
     options.tokenProvider
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+  /**
+   * Provides an abstraction layer for consuming the
+   * {@link https://auth0.com/docs/api/management/v2#!/Branding/get_universal_login Branding new universal login template endpoint}.
+   *
+   * @type {external:RestClient}
+   */
+  var brandingTemplateAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/branding/templates/universal-login',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.brandingTemplates = new RetryRestClient(brandingTemplateAuth0RestClient, options.retry);
 };
 
 /**
@@ -100,5 +113,71 @@ utils.wrapPropertyMethod(BrandingManager, 'updateSettings', 'resource.patch');
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(BrandingManager, 'getSettings', 'resource.get');
+
+/**
+ * Get the new universal login template.
+ *
+ * @method    getUniversalLoginTemplate
+ * @memberOf  module:management.BrandingManager.prototype
+ *
+ * @example
+ * management.branding.getUniversalLoginTemplate(data, function (err, template) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Branding
+ *    console.log(template);
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {Object}    data              Branding data (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(BrandingManager, 'getUniversalLoginTemplate', 'brandingTemplates.get');
+
+/**
+ * Set the new universal login template.
+ *
+ * @method    setUniversalLoginTemplate
+ * @memberOf  module:management.BrandingManager.prototype
+ *
+ * @example
+ * management.branding.setUniversalLoginTemplate({ template: "a template" }, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leavy empty).
+ * @param   {Object}    data              Branding data (object with template field).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(BrandingManager, 'setUniversalLoginTemplate', 'brandingTemplates.update');
+
+/**
+ * Delete the new universal login template (revert to default).
+ *
+ * @method    deleteUniversalLoginTemplate
+ * @memberOf  module:management.BrandingManager.prototype
+ *
+ * @example
+ * management.branding.deleteUniversalLoginTemplate(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leavy empty).
+ * @param   {Object}    data              Branding data (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(BrandingManager, 'deleteUniversalLoginTemplate', 'brandingTemplates.delete');
 
 module.exports = BrandingManager;
