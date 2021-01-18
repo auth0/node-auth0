@@ -3649,6 +3649,72 @@ utils.wrapPropertyMethod(ManagementClient, 'updateBrandingSettings', 'branding.u
 utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getSettings');
 
 /**
+ * Get the new universal login template.
+ *
+ * @method    getBrandingUniversalLoginTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getBrandingUniversalLoginTemplate(data, function (err, template) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Branding
+ *    console.log(template);
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {Object}    data              Branding data (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getBrandingUniversalLoginTemplate', 'branding.getUniversalLoginTemplate');
+
+/**
+ * Get the new universal login template.
+ *
+ * @method    setBrandingUniversalLoginTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.setBrandingUniversalLoginTemplate(template, function (err, template) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {string}    template          Template.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'setBrandingUniversalLoginTemplate', 'branding.setUniversalLoginTemplate');
+
+/**
+ * Delete the new universal login template.
+ *
+ * @method    deleteBrandingUniversalLoginTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteBrandingUniversalLoginTemplate(template, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {Object}    data              Branding data (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteBrandingUniversalLoginTemplate', 'branding.deleteUniversalLoginTemplate');
+
+/**
  * Update the tenant migrations.
  *
  * @method    updateMigrations
