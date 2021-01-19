@@ -52,6 +52,13 @@ var BrandingManager = function(options) {
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
+  // HACK! Force rest-facade to support plain/text for PUT
+  var data_;
+  var customRequest = function(req, params) {
+    req.type('text');
+    req.send(data_);
+  }
+
   /**
    * Provides an abstraction layer for consuming the
    * {@link https://auth0.com/docs/api/management/v2#!/Branding/get_universal_login Branding new universal login template endpoint}.
@@ -60,7 +67,11 @@ var BrandingManager = function(options) {
    */
   var brandingTemplateAuth0RestClient = new Auth0RestClient(
     options.baseUrl + '/branding/templates/universal-login',
-    clientOptions,
+    Object.assign({ 
+      request: { 
+        customizer: customRequest 
+      }
+    }, clientOptions),
     options.tokenProvider
   );
   this.brandingTemplates = new RetryRestClient(brandingTemplateAuth0RestClient, options.retry);
@@ -68,7 +79,6 @@ var BrandingManager = function(options) {
   // HACK!
   // This API call requires the data object to be a string, so there is no way
   // to use the update method from rest-facade. 
-  // If you know of a better way to fix this, let me know.
   brandingTemplateAuth0RestClient.restClient.update = function(params, data, callback) {
     // Prevent the getURL function from modifying this object.
     params = Object.assign({}, params);
@@ -77,11 +87,16 @@ var BrandingManager = function(options) {
       throw new ArgumentError('The data must be a string');
     }
 
-    const options = {
+    var options = {
       method: 'PUT',
       url: this.getURL(params),
-      data: data
+      data: data,
+      headers: {
+        'content-type': 'text/plain; charset=utf-8'
+      }
     };
+
+    data_ = data;
 
     return this.request(options, params, callback);
   };

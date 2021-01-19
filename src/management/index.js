@@ -109,7 +109,6 @@ var ManagementClient = function(options) {
 
   var defaultHeaders = {
     'User-Agent': 'node.js/' + process.version.replace('v', ''),
-    'Content-Type': 'application/json'
   };
 
   var managerOptions = {
