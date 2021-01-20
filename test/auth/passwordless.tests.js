@@ -54,6 +54,9 @@ describe('PasswordlessAuthenticator', function() {
         username: 'username',
         password: 'pwd'
       };
+      var options = {
+        forwardedFor: '0.0.0.0'
+      };
 
       beforeEach(function() {
         var oauth = new OAuth(validOptions);
@@ -246,6 +249,25 @@ describe('PasswordlessAuthenticator', function() {
           })
           .catch(done);
       });
+
+      it('should make it possible to pass auth0-forwarded-for header', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .post(path, function() {
+            return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+          })
+          .reply(200);
+
+        this.authenticator
+          .signIn(userData, options)
+          .then(function() {
+            expect(request.isDone()).to.be.true;
+
+            done();
+          })
+          .catch(done);
+      });
     });
 
     describe('/oauth/token', function() {
@@ -253,6 +275,9 @@ describe('PasswordlessAuthenticator', function() {
       var userData = {
         username: 'username',
         otp: '000000'
+      };
+      var options = {
+        forwardedFor: '0.0.0.0'
       };
 
       beforeEach(function() {
@@ -446,6 +471,25 @@ describe('PasswordlessAuthenticator', function() {
           })
           .catch(done);
       });
+
+      it('should make it possible to pass auth0-forwarded-for header', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .post(path, function() {
+            return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+          })
+          .reply(200);
+
+        this.authenticator
+          .signIn(userData, options)
+          .then(function() {
+            expect(request.isDone()).to.be.true;
+
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 
@@ -454,6 +498,9 @@ describe('PasswordlessAuthenticator', function() {
     var userData = {
       email: 'email@domain.com',
       send: 'link'
+    };
+    var options = {
+      forwardedFor: '0.0.0.0'
     };
 
     beforeEach(function() {
@@ -612,12 +659,34 @@ describe('PasswordlessAuthenticator', function() {
         })
         .catch(done);
     });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .sendEmail(userData, options)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('#sendSMS', function() {
     var path = '/passwordless/start';
     var userData = {
       phone_number: '12345678'
+    };
+    var options = {
+      forwardedFor: '0.0.0.0'
     };
 
     beforeEach(function() {
@@ -739,6 +808,25 @@ describe('PasswordlessAuthenticator', function() {
 
       this.authenticator
         .sendSMS(data)
+        .then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should make it possible to pass auth0-forwarded-for header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .post(path, function() {
+          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+        })
+        .reply(200);
+
+      this.authenticator
+        .sendSMS(userData, options)
         .then(function() {
           expect(request.isDone()).to.be.true;
 
