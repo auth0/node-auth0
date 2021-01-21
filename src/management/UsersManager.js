@@ -1,6 +1,7 @@
 var ArgumentError = require('rest-facade').ArgumentError;
 var Auth0RestClient = require('../Auth0RestClient');
 var RetryRestClient = require('../RetryRestClient');
+var sanitizeArguments = require('../utils').sanitizeArguments;
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -238,13 +239,18 @@ UsersManager.prototype.getAll = function(params) {
  *   console.log(users);
  * });
  *
- * @param   {String}    [email]           Email address of user(s) to find
- * @param   {Function}  [cb]              Callback function.
+ * @param   {String}    [email]                     Email address of user(s) to find
+ * @param   {Object}    [options]                   Additional options to pass to the endpoint
+ * @param   {String}    [options.fields]            Comma-separated list of fields to include or exclude in the result
+ * @param   {Boolean}   [options.include_fields]    Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */
-UsersManager.prototype.getByEmail = function(email, callback) {
-  return this.usersByEmail.getAll({ email }, callback);
+UsersManager.prototype.getByEmail = function(email, options, cb) {
+  var { options, cb } = sanitizeArguments(options, cb);
+
+  return this.usersByEmail.getAll({ email, ...options }, cb);
 };
 
 /**
