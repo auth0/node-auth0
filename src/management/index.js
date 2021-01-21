@@ -1019,8 +1019,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
  *   console.log(users);
  * });
  *
- * @param   {String}    [email]           Email Address of users to locate
- * @param   {Function}  [cb]              Callback function.
+ * @param   {String}    [email]                     Email address of user(s) to find
+ * @param   {Object}    [options]                   Additional options to pass to the endpoint
+ * @param   {String}    [options.fields]            Comma-separated list of fields to include or exclude in the result
+ * @param   {Boolean}   [options.include_fields]    Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */

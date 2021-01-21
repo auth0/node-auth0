@@ -259,6 +259,30 @@ describe('UsersManager', function() {
         done();
       });
     });
+
+    it('should pass additional options into the query string', function(done) {
+      nock.cleanAll();
+
+      var additionalOptions = {
+        fields: 'user_id, email, email_verified',
+        include_fields: true
+      };
+      var params = {
+        email: 'email@example.com',
+        ...additionalOptions
+      };
+
+      var request = nock(API_URL)
+        .get('/users-by-email')
+        .query(params)
+        .reply(200);
+
+      this.users.getByEmail(params.email, additionalOptions).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
   });
 
   describe('#get', function() {
