@@ -198,22 +198,15 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
  *   // Do stuff.
  * });
  *
- * @param   {Object}    data        Token data object.
- * @param   {String}    data.token  User refresh token.
- * @param   {Function}  [cb]        Callback function.
+ * @param   {Object}    data                  Token data object.
+ * @param   {String}    data.token            User refresh token.
+ * @param   {String}    [data.client_id]      Target client ID.
+ * @param   {String}    [data.client_secret]  Target client secret.
+ * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
 TokensManager.prototype.revokeRefreshToken = function(data, cb) {
-  var body = extend(
-    {
-      client_id: this.clientId,
-      client_secret: this.clientSecret
-    },
-    data
-  );
-  var headers = this.headers;
-
   if (!data) {
     throw new ArgumentError('Missing token data object');
   }
@@ -221,8 +214,28 @@ TokensManager.prototype.revokeRefreshToken = function(data, cb) {
   var hasToken = typeof data.token === 'string' && data.token.trim().length !== 0;
 
   if (!hasToken) {
-    throw new ArgumentError('token is required');
+    throw new ArgumentError('token property is required');
   }
+
+  var hasClientId =
+    (data.client_id && typeof data.client_id === 'string' && data.client_id.trim().length !== 0) ||
+    this.clientId !== '';
+
+  if (!hasClientId) {
+    throw new ArgumentError(
+      'Neither token data client_id property or constructor clientId property has been set'
+    );
+  }
+
+  var body = extend(
+    {
+      client_id: this.clientId,
+      client_secret: this.clientSecret
+    },
+    data
+  );
+
+  var headers = this.headers;
 
   // Perform the request.
   var promise = axios({

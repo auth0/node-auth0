@@ -339,17 +339,38 @@ describe('TokensManager', function() {
         .reply(200);
     });
 
-    it('should require a data object', function() {
+    it('should require a token data object', function() {
       var revokeRefreshToken = manager.revokeRefreshToken.bind(manager);
 
       expect(revokeRefreshToken).to.throw(ArgumentError, 'Missing token data object');
     });
 
-    it('should require a token', function() {
+    it('should require a token property in the token data object', function() {
       var data = {};
-      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
 
-      expect(getDelegationToken).to.throw(ArgumentError, 'token is required');
+      expect(revokeRefreshToken).to.throw(ArgumentError, 'token property is required');
+    });
+
+    it('should require at least a target client ID', function() {
+      var manager = new TokensManager({
+        baseUrl: BASE_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          'Test-Header': 'TEST'
+        }
+      });
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
+
+      expect(revokeRefreshToken).to.throw(
+        ArgumentError,
+        'Neither token data client_id property or constructor clientId property has been set'
+      );
     });
 
     it('should accept a callback', function(done) {
@@ -405,7 +426,7 @@ describe('TokensManager', function() {
       });
     });
 
-    it('should use the instance client ID if none specified', function(done) {
+    it('should use the TokensManager instance client ID if none specified', function(done) {
       nock.cleanAll();
 
       var data = {
@@ -446,7 +467,7 @@ describe('TokensManager', function() {
       });
     });
 
-    it('should use the instance client secret if none specified', function(done) {
+    it('should use the TokensManager instance client secret if none specified', function(done) {
       nock.cleanAll();
 
       var data = {
