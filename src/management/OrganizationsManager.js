@@ -65,11 +65,25 @@ var OrganizationsManager = function(options) {
   this.connections = new RetryRestClient(connectionsInRoleClient, options.retry);
 
   var membersClient = new Auth0RestClient(
-    options.baseUrl + '/organizations/:id/members',
+    options.baseUrl + '/organizations/:id/members/:user_id',
     clientOptions,
     options.tokenProvider
   );
   this.members = new RetryRestClient(membersClient, options.retry);
+
+  var invitationClient = new Auth0RestClient(
+    options.baseUrl + '/organizations/:id/invitations/:invitation_id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.invitations = new RetryRestClient(invitationClient, options.retry);
+
+  var rolesClient = new Auth0RestClient(
+    options.baseUrl + '/organizations/:id/members/:user_id/roles',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.roles = new RetryRestClient(rolesClient, options.retry);
 };
 
 /**
@@ -209,7 +223,11 @@ utils.wrapPropertyMethod(OrganizationsManager, 'update', 'organizations.patch');
 utils.wrapPropertyMethod(OrganizationsManager, 'delete', 'organizations.delete');
 
 /**
- * Get Connections in a Organization
+ **** Organization Connections
+ */
+
+/**
+ * Get Enabled Connections in a Organization
  *
  * @method    getEnabledConnections
  * @memberOf  module:management.OrganizationsManager.prototype
@@ -266,7 +284,7 @@ OrganizationsManager.prototype.getEnabledConnection = function(params, callback)
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID'};
- * var data = { "connection_id" : "CONNECTION_ID" };
+ * var data = { "connection_id" : "CONNECTION_ID", assign_membership_on_login: false };
  *
  * management.organizations.addEnableConnection(params, data, function (err) {
  *   if (err) {
@@ -309,16 +327,16 @@ OrganizationsManager.prototype.addEnabledConnection = function(params, data, cb)
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
- * var params =  { id :'ORGANIZATION_ID'};
+ * var params =  { id :'ORGANIZATION_ID', connection_id: 'CONNECTION_ID' };
  *
- * management.organizations.removeEnableConnection(params, data, function (err) {
+ * management.organizations.removeEnableConnection(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
  *
  * @param   {String}    params.id             ID of the Organization.
- * @param   {Object}    data                  permissions data
+ * @param   {String}    params.connection_id  ID of the Connection.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
@@ -346,6 +364,405 @@ OrganizationsManager.prototype.removeEnabledConnection = function(params, cb) {
   }
 
   return this.connections.delete(params, {});
+};
+
+/**
+ **** Organization Members
+ */
+
+/**
+ * Get Members in a Organization
+ *
+ * @method    getMembers
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params = {id : 'ORGANIZATION_ID'}
+ * @example <caption>
+ *   This method takes an organization ID and returns the members in an Organization
+ * </caption>
+ *
+ * management.organizations.getMembers( {id : 'ORGANIZATION_ID'}, function (err, members) {
+ *   console.log(members);
+ * });
+ *
+ * @param   {String}    [organization_id]   Organization ID
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.getMembers = function(params, callback) {
+  return this.members.getAll(params, callback);
+};
+
+/**
+ * Get a Member in a Organization
+ *
+ * @method    getMember
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params = {id : 'ORGANIZATION_ID', user_id: 'USER_ID'}
+ * @example <caption>
+ *   This methods takes the organization ID and user ID and returns the member
+ * </caption>
+ *
+ * management.organizations.getMember( {id : 'ORGANIZATION_ID', user_id: 'USER_ID'}, function (err, member) {
+ *   console.log(member);
+ * });
+ *
+ * @param   {String}    [organization_id]   Organization ID
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.getMember = function(params, callback) {
+  return this.members.get(params, callback);
+};
+
+/**
+ * Add members in an organization
+ *
+ * @method    addMembers
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  { id :'ORGANIZATION_ID'};
+ * var data = [ 'USER_ID1', 'USER_ID2' ]
+ *
+ * management.organizations.addMembers(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {Array}     data                  Array of user IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.addMembers = function(params, data, cb) {
+  data = data || [];
+  params = params || {};
+
+  // Require a user ID.
+  if (!params.id) {
+    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization Id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.members.create(params, data, cb);
+  }
+
+  return this.members.create(params, data);
+};
+
+/**
+ * Remove members from an organization
+ *
+ * @method    removeMembers
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  { id :'ORGANIZATION_ID' };
+ * var data =  [ 'USER_ID1', 'USER_ID2' ]
+ *
+ * management.organizations.removeMembers(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {Array}     data                  Array of User ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
+  data = data || [];
+  params = params || {};
+
+  if (!params.id) {
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization ID has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.members.delete(params, data, cb);
+  }
+
+  return this.members.delete(params, data);
+};
+
+/**
+ **** Organization Invites
+ */
+
+/**
+ * Get Invites in a Organization
+ *
+ * @method    getInvites
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params = {id : 'ORGANIZATION_ID'}
+ * @example <caption>
+ *   This method takes an organization ID and returns the invites in an Organization
+ * </caption>
+ *
+ * management.organizations.getInvites( {id : 'ORGANIZATION_ID'}, function (err, invites) {
+ *   console.log(invites);
+ * });
+ *
+ * @param   {String}    [organization_id]   Organization ID
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.getInvites = function(params, callback) {
+  return this.invitations.getAll(params, callback);
+};
+
+/**
+ * Get an Invitation in a Organization
+ *
+ * @method    getInvite
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params = {id : 'ORGANIZATION_ID', invitation_id: 'INVITATION_ID'}
+ * @example <caption>
+ *   This methods takes the organization ID and user ID and returns the invitation
+ * </caption>
+ *
+ * management.organizations.getInvite( {id : 'ORGANIZATION_ID', invitation_id: 'INVITATION_ID'}, function (err, invite) {
+ *   console.log(invite);
+ * });
+ *
+ * @param   {String}    [organization_id]   Organization ID
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.getInvite = function(params, callback) {
+  return this.invitations.get(params, callback);
+};
+
+/**
+ * Create an invitation in an organization
+ *
+ * @method    createInvite
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  { id :'ORGANIZATION_ID'};
+ * var data = {}
+ *
+ * management.organizations.createInvite(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {Array}     data                  Invitation data
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.createInvite = function(params, data, cb) {
+  data = data || [];
+  params = params || {};
+
+  if (!params.id) {
+    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization Id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.invitations.create(params, data, cb);
+  }
+
+  return this.invitations.create(params, data);
+};
+
+/**
+ * Delete an invitation from an organization
+ *
+ * @method    deleteInvitation
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  { id :'ORGANIZATION_ID', invitation_id: 'INVITATION_ID };
+ *
+ * management.organizations.deleteInvitation(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {String}    params.invitation_id  Invitation ID
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.deleteInvite = function(params, cb) {
+  params = params || {};
+
+  if (!params.id) {
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization ID has to be a string');
+  }
+
+  if (!params.invitation_id) {
+    throw new ArgumentError('The invitation ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.invitation_id !== 'string') {
+    throw new ArgumentError('The invitation ID has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.invitations.delete(params, {}, cb);
+  }
+
+  return this.invitations.delete(params, {});
+};
+
+/**
+ **** Organization Roles Membership
+ */
+
+/**
+ * Get Roles from a Member in a Organization
+ *
+ * @method    getRoles
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params = {id : 'ORGANIZATION_ID', user_id: 'user_id'}
+ * @example <caption>
+ *   This methods takes the organization ID and user ID and returns the roles
+ * </caption>
+ *
+ * management.organizations.getRoles( {id : 'ORGANIZATION_ID', user_id: 'user_id'}, function (err, invite) {
+ *   console.log(invite);
+ * });
+ *
+ * @param   {String}    params.id           ID of the Organization.
+ * @param   {String}    params.user_id      ID of the user.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.getMemberRoles = function(params, callback) {
+  return this.roles.getAll(params, callback);
+};
+
+/**
+ * Add a Role to a Member in an organization
+ *
+ * @method    addRoles
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  {id : 'ORGANIZATION_ID', user_id: 'user_id'};
+ * var data = {}
+ *
+ * management.organizations.addRoles(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {String}    params.user_id        ID of the user.
+ * @param   {Array}     data                  Array of Role IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.addMemberRoles = function(params, data, cb) {
+  data = data || [];
+  params = params || {};
+
+  if (!params.id) {
+    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization Id has to be a string');
+  }
+
+  if (!params.user_id) {
+    throw new ArgumentError('The user passed in params cannot be null or undefined');
+  }
+  if (typeof params.user_id !== 'string') {
+    throw new ArgumentError('The user Id has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.roles.create(params, data, cb);
+  }
+
+  return this.roles.create(params, data);
+};
+
+/**
+ * Remove Roles from a Member of an organization
+ *
+ * @method    removeRoles
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  { id :'ORGANIZATION_ID', user_id: 'USER_ID };
+ *
+ * management.organizations.removeRoles(params, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {String}    params.user_id        Id of the User
+ * @param   {Array}     data                  Array of Role IDs
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+OrganizationsManager.prototype.removeMemberRoles = function(params, data, cb) {
+  data = data || [];
+  params = params || {};
+
+  if (!params.id) {
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization ID has to be a string');
+  }
+
+  if (!params.user_id) {
+    throw new ArgumentError('The user ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.user_id !== 'string') {
+    throw new ArgumentError('The user ID has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.roles.delete(params, data, cb);
+  }
+
+  return this.roles.delete(params, data);
 };
 
 module.exports = OrganizationsManager;
