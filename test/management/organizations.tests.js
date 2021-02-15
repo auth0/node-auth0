@@ -26,7 +26,18 @@ describe('OrganizationsManager', function() {
       'getEnabledConnections',
       'getEnabledConnection',
       'addEnabledConnection',
-      'removeEnabledConnection'
+      'removeEnabledConnection',
+      'getMembers',
+      'getMember',
+      'addMembers',
+      'removeMembers',
+      'getMemberRoles',
+      'addMemberRoles',
+      'removeMemberRoles',
+      'getInvites',
+      'getInvite',
+      'createInvite',
+      'deleteInvite'
     ];
 
     methods.forEach(function(method) {
