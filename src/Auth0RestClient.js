@@ -20,6 +20,11 @@ var Auth0RestClient = function(resourceUrl, options, provider) {
   options.errorCustomizer = options.errorCustomizer || SanitizedError;
   options.errorFormatter = options.errorFormatter || { message: 'message', name: 'error' };
 
+  if (process.env.http_proxy && process.env.http_proxy !== '') {
+    options.proxy = process.env.http_proxy;
+    console.log('with in Auth0' + process.env.http_proxy);
+  }
+
   this.options = options;
   this.provider = provider;
   this.restClient = new RestClient(resourceUrl, options);

@@ -23,6 +23,11 @@ var RetryRestClient = function(restClient, options) {
     throw new ArgumentError('Must provide RestClient');
   }
 
+  if (process.env.http_proxy && process.env.http_proxy !== '') {
+    options.proxy = process.env.http_proxy;
+    console.log('with in retry' + process.env.http_proxy);
+  }
+
   var params = Object.assign({}, DEFAULT_OPTIONS, options);
 
   if (typeof params.enabled !== 'boolean') {
