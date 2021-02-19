@@ -323,7 +323,7 @@ OrganizationsManager.prototype.addEnabledConnection = function(params, data, cb)
 /**
  * Remove an enabled connection from an organization
  *
- * @method    removePermissions
+ * @method    removeEnabledConnection
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
@@ -364,6 +364,54 @@ OrganizationsManager.prototype.removeEnabledConnection = function(params, cb) {
   }
 
   return this.connections.delete(params, {});
+};
+
+/**
+ * Update an enabled connection from an organization
+ *
+ * @method    updateEnabledConnection
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params =  { id :'ORGANIZATION_ID', connection_id: 'CONNECTION_ID' };
+ *
+ * management.organizations.removeEnableConnection(params, data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {String}    params.id             ID of the Organization.
+ * @param   {String}    params.connection_id  ID of the Connection.
+ * @param   {Object}    data                  Updated connection.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+
+OrganizationsManager.prototype.updateEnabledConnection = function(params, data, cb) {
+  data = data || {};
+  params = params || {};
+
+  if (!params.id) {
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization ID has to be a string');
+  }
+
+  if (!params.connection_id) {
+    throw new ArgumentError('The connection ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.connection_id !== 'string') {
+    throw new ArgumentError('The connection ID has to be a string');
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.connections.patch(params, data, cb);
+  }
+
+  return this.connections.patch(params, data);
 };
 
 /**
