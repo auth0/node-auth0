@@ -6,5 +6,10 @@
 
 module.exports = {
   ManagementClient: require('./management'),
-  AuthenticationClient: require('./auth')
+  AuthenticationClient: require('./auth'),
+  OAuthAuthenticator: require('./auth/OAuthAuthenticator'),
+  DatabaseAuthenticator: require('./auth/DatabaseAuthenticator'),
+  PasswordlessAuthenticator: require('./auth/PasswordlessAuthenticator'),
+  TokensManager: require('./auth/TokensManager'),
+  UsersManager: require('./auth/UsersManager')
 };
