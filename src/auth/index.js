@@ -238,9 +238,28 @@ AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
  * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @example <caption>
- *   Given the user credentials (`phone_number` and `code`), it will do the
- *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
+ *   Given the user credentials (`phone_number` and `otp`), authenticates
+ *   with the provider using the `/oauth/token` endpoint. Upon successful
+ *   authentication, returns a JSON object containing the `access_token` and
+ *   `id_token`.
+ * </caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}'
+ *   otp: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.verifySMSCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ *   Given the user credentials (`phone_number` and `password`), authenticates
+ *   with the provider using the deprecated `/oauth/ro` endpoint. Upon successful
+ *   authentication, returns a JSON object containing the `access_token` and
+ *   `id_token`.
  * </caption>
  *
  * var data = {
@@ -266,18 +285,22 @@ AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
  *
  * @param   {Object}    data              Credentials object.
  * @param   {String}    data.username     Phone number.
- * @param   {String}    data.password     Verification code.
- * @param   {String}    data.target       Target client ID.
- * @param   {String}    data.grant_type   Grant type.
+ * @param   {String}    data.otp          Verification code. Use this instead of `password` to use the `/oauth/token` endpoint.
+ * @param   {String}    data.password     Verification code. Use this instead of `otp` to use the `/oauth/ro` endpoint.
  * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.verifySMSCode = function(data, cb) {
   var translatedData = {
-    username: data.phoneNumber || data.phone_number || data.username,
-    password: data.code || data.password
+    username: data.phoneNumber || data.phone_number || data.username
   };
+
+  if (data.otp) {
+    translatedData.otp = data.otp;
+  } else {
+    translatedData.password = data.code || data.password;
+  }
 
   return this.passwordless.signIn(translatedData, cb);
 };
