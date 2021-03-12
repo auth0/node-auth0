@@ -307,10 +307,10 @@ OrganizationsManager.prototype.addEnabledConnection = function(params, data, cb)
 
   // Require a user ID.
   if (!params.id) {
-    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
   }
   if (typeof params.id !== 'string') {
-    throw new ArgumentError('The organization Id has to be a string');
+    throw new ArgumentError('The organization ID has to be a string');
   }
 
   if (cb && cb instanceof Function) {
@@ -496,10 +496,10 @@ OrganizationsManager.prototype.addMembers = function(params, data, cb) {
 
   // Require a user ID.
   if (!params.id) {
-    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
   }
   if (typeof params.id !== 'string') {
-    throw new ArgumentError('The organization Id has to be a string');
+    throw new ArgumentError('The organization ID has to be a string');
   }
 
   if (cb && cb instanceof Function) {
@@ -630,10 +630,10 @@ OrganizationsManager.prototype.createInvite = function(params, data, cb) {
   params = params || {};
 
   if (!params.id) {
-    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
   }
   if (typeof params.id !== 'string') {
-    throw new ArgumentError('The organization Id has to be a string');
+    throw new ArgumentError('The organization ID has to be a string');
   }
 
   if (cb && cb instanceof Function) {
@@ -746,17 +746,17 @@ OrganizationsManager.prototype.addMemberRoles = function(params, data, cb) {
   params = params || {};
 
   if (!params.id) {
-    throw new ArgumentError('The organizationId passed in params cannot be null or undefined');
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
   }
   if (typeof params.id !== 'string') {
-    throw new ArgumentError('The organization Id has to be a string');
+    throw new ArgumentError('The organization ID has to be a string');
   }
 
   if (!params.user_id) {
-    throw new ArgumentError('The user passed in params cannot be null or undefined');
+    throw new ArgumentError('The user ID passed in params cannot be null or undefined');
   }
   if (typeof params.user_id !== 'string') {
-    throw new ArgumentError('The user Id has to be a string');
+    throw new ArgumentError('The user ID has to be a string');
   }
 
   if (cb && cb instanceof Function) {

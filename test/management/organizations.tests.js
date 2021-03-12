@@ -585,11 +585,25 @@ describe('OrganizationsManager', function() {
     it('should perform a POST request to /api/v2/organizations/org_id/enabled_connections', function(done) {
       var request = this.request;
 
-      this.organizations.addEnabledConnection(this.data, {}).then(function() {
+      this.organizations.addEnabledConnection(this.data, this.body).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
       });
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addEnabledConnection({ id: null }, {}, function() {});
+      }).to.throw('The organization ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not a string', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addEnabledConnection({ id: 123 }, {}, function() {});
+      }).to.throw('The organization ID has to be a string');
     });
 
     it('should pass the data in the body of the request', function(done) {
@@ -670,6 +684,42 @@ describe('OrganizationsManager', function() {
 
         done();
       });
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.updateEnabledConnection({ id: null }, {}, function() {});
+      }).to.throw('The organization ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not a string', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.updateEnabledConnection({ id: 123 }, {}, function() {});
+      }).to.throw('The organization ID has to be a string');
+    });
+
+    it('should return error when connection_id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.updateEnabledConnection(
+          { id: 'org_123', connection_id: null },
+          {},
+          function() {}
+        );
+      }).to.throw('The connection ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when connection_id is not a string', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.updateEnabledConnection(
+          { id: 'org_123', connection_id: 123 },
+          {},
+          function() {}
+        );
+      }).to.throw('The connection ID has to be a string');
     });
 
     it('should pass the data in the body of the request', function(done) {
@@ -977,6 +1027,20 @@ describe('OrganizationsManager', function() {
       });
     });
 
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addMembers({ id: null }, {}, function() {});
+      }).to.throw('The organization ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addMembers({ id: 123 }, {}, function() {});
+      }).to.throw('The organization ID has to be a string');
+    });
+
     it('should pass the data in the body of the request', function(done) {
       nock.cleanAll();
 
@@ -1062,7 +1126,7 @@ describe('OrganizationsManager', function() {
         .delete('/organizations/' + this.data.id + '/members', this.body)
         .reply(200);
 
-      this.organizations.removeMembers(this.data, this.body).then(function() {
+      this.organizations.removeMembers(this.data, this.body, function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1199,6 +1263,20 @@ describe('OrganizationsManager', function() {
       });
     });
 
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addMemberRoles({ id: 'org_123', user_id: null }, {}, function() {});
+      }).to.throw('The user ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addMemberRoles({ id: 'org_123', user_id: 123 }, {}, function() {});
+      }).to.throw('The user ID has to be a string');
+    });
+
     it('should pass the data in the body of the request', function(done) {
       nock.cleanAll();
 
@@ -1279,6 +1357,20 @@ describe('OrganizationsManager', function() {
 
         done();
       });
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.removeMemberRoles({ id: 'org_123', user_id: null }, {}, function() {});
+      }).to.throw('The user ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.removeMemberRoles({ id: 'org_123', user_id: 123 }, {}, function() {});
+      }).to.throw('The user ID has to be a string');
     });
 
     it('should perform a DELETE request to /api/v2/organizations/organization_id/members/user_id/roles', function(done) {
@@ -1489,6 +1581,20 @@ describe('OrganizationsManager', function() {
       });
     });
 
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.createInvite({ id: null }, {}, function() {});
+      }).to.throw('The organization ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.createInvite({ id: 123 }, {}, function() {});
+      }).to.throw('The organization ID has to be a string');
+    });
+
     it('should pass the data in the body of the request', function(done) {
       nock.cleanAll();
 
@@ -1573,11 +1679,25 @@ describe('OrganizationsManager', function() {
         .delete('/organizations/' + this.data.id + '/invitations/' + this.data.invitation_id, {})
         .reply(200);
 
-      this.organizations.deleteInvite(this.data).then(function(err) {
+      this.organizations.deleteInvite(this.data, function(err) {
         expect(request.isDone()).to.be.true;
 
         done();
       });
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.deleteInvite({ id: 'org_123', invitation_id: null }, function() {});
+      }).to.throw('The invitation ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.deleteInvite({ id: 'org_123', invitation_id: 123 }, function() {});
+      }).to.throw('The invitation ID has to be a string');
     });
 
     it('should include the token in the Authorization header', function(done) {
