@@ -17,7 +17,19 @@ describe('ActionsManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['get', 'getAll', 'create', 'update', 'delete', 'getAllTriggers', 'testTrigger'];
+    var methods = [
+      'get',
+      'getAll',
+      'create',
+      'update',
+      'delete',
+      'getAllTriggers',
+      'testTrigger',
+      'getTriggerBindings',
+      'updateTriggerBindings',
+      'deployAction',
+      'testAction'
+    ];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {

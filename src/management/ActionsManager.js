@@ -57,12 +57,33 @@ var ActionsManager = function(options) {
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
+  var actionsDeployRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/deploy',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionsDeploy = new RetryRestClient(actionsDeployRestClient, options.retry);
+
+  var actionsTestRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/test',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionsTest = new RetryRestClient(actionsTestRestClient, options.retry);
+
   var triggersRestClient = new Auth0RestClient(
     options.baseUrl + '/actions/triggers',
     clientOptions,
     options.tokenProvider
   );
   this.triggers = new RetryRestClient(triggersRestClient, options.retry);
+
+  var triggerBindingsRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/trigger/:trigger_id/bindings',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.triggerBindings = new RetryRestClient(triggerBindingsRestClient, options.retry);
 
   var triggersTestRestClient = new Auth0RestClient(
     options.baseUrl + '/actions/triggers/:trigger_id/test',
@@ -178,7 +199,7 @@ ActionsManager.prototype.getAllTriggers = function(params, cb) {
  *   if (err) {
  *     // Handle error.
  *   }
- 
+
  * });
  *
  * @param   {Object}    params                Action parameters.
@@ -197,6 +218,76 @@ ActionsManager.prototype.testTrigger = function(params, payload, cb) {
   }
 
   return this.triggersTest.create(params, payload);
+};
+
+/**
+ * Get the actions bound to a trigger .
+ *
+ * @method    getTriggerBindings
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { trigger_id: TRIGGER_ID };
+ *
+ * // Using auth0 instance.
+ * management.getTriggerBindings(params, function (err, bindings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(bindings.length);  // 2
+ * });
+ *
+ * @param   {Object}    params                Actions Binding parameters.
+ * @param   {String}    params.trigger_id     Actions Trigger ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getAll = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.triggerBindings.getAll(params, cb);
+  }
+
+  return this.triggerBindings.getAll(params);
+};
+
+/**
+ * Update the actions bound to a trigger .
+ *
+ * @method    updateTriggerBindings
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var data = { bindings: [{ id_type: "action_id", id_value: ACTION_ID1},{id_type: "action_name", id_value: ACTION_NAME2}];
+ * var params = { trigger_id: TRIGGER_ID };
+ *
+ * // Using auth0 instance.
+ * management.updateTriggerBindings(params, data, function (err, bindings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(bindings.length);  // 2
+ * });
+ *
+ * @param   {Object}    params                Actions Binding parameters.
+ * @param   {String}    params.trigger_id     Actions Trigger ID.
+ * @param   {Object}    data                  bindings_id list
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.updateTriggerBindings = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.triggerBindings.patch(params, cb);
+  }
+
+  return this.triggerBindings.patch(params);
 };
 
 /**
@@ -281,5 +372,70 @@ utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
+
+/**
+ * test an Action.
+ *
+ * @method    testAction
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { trigger_id: TRIGGER_ID};
+ * auth0.testAction(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular trigger
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.testAction = function(params, payload, cb) {
+  params = params || {};
+  payload = payload || {};
+
+  if (cb && cb instanceof Function) {
+    return this.testAction.create(params, payload, cb);
+  }
+
+  return this.testAction.create(params, payload);
+};
+
+/**
+ * deploy an Action.
+ * The action must be in a state of 'built' before it can be deployed.
+ *
+ * @method    deployAction
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { trigger_id: TRIGGER_ID};
+ * auth0.deployAction(params, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.deployAction = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.deployAction.create(params, cb);
+  }
+
+  return this.deployAction.create(params);
+};
 
 module.exports = ActionsManager;
