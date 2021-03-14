@@ -1055,8 +1055,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getUsers', 'users.getAll');
  *   console.log(users);
  * });
  *
- * @param   {String}    [email]           Email Address of users to locate
- * @param   {Function}  [cb]              Callback function.
+ * @param   {String}    [email]                     Email address of user(s) to find
+ * @param   {Object}    [options]                   Additional options to pass to the endpoint
+ * @param   {String}    [options.fields]            Comma-separated list of fields to include or exclude in the result
+ * @param   {Boolean}   [options.include_fields]    Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -2871,6 +2874,28 @@ utils.wrapPropertyMethod(
 utils.wrapPropertyMethod(ManagementClient, 'getGuardianFactors', 'guardian.getFactors');
 
 /**
+ * Get the settings of a Guardian factor.
+ *
+ * @method    getGuardianFactorSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getGuardianFactorSettings({ name: 'duo' }, function (err, settings) {
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getGuardianFactorSettings',
+  'guardian.getFactorSettings'
+);
+
+/**
  * Get Guardian factor provider configuration
  *
  * @method    getGuardianFactorProvider
@@ -2917,6 +2942,32 @@ utils.wrapPropertyMethod(
   ManagementClient,
   'updateGuardianFactorProvider',
   'guardian.updateFactorProvider'
+);
+
+/**
+ * Update a Guardian's factor settings
+ *
+ * @method    updateGuardianFactorSettings
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.updateGuardianFactorSettings(
+ *  { name: 'webauthn-roaming' },
+ *  { userVerification: 'discouraged', overrideRelyingParty: false },
+ *  function (err, settings) {
+ *   console.log(settings);
+ * })
+ *
+ * @param   {Object}    params            Factor parameters.
+ * @param   {Object}    data              Updated Factor settings data.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'updateGuardianFactorSettings',
+  'guardian.updateFactorSettings'
 );
 
 /**
@@ -3329,22 +3380,24 @@ utils.wrapPropertyMethod(ManagementClient, 'removePermissionsFromRole', 'roles.r
  *
  * @example
  * var params = {
- *   id: 'ROLE_ID'
+ *   id: 'ROLE_ID',
  *   per_page: 50,
  *   page: 0
  * };
  *
  * @example <caption>
- *   This method takes a roleId and returns all users within that role
+ *   This method takes a roleId and returns all users within that role. Supports offset (page, per_page) and checkpoint pagination (from, take). You must use checkpoint pagination to retrieve beyond the first 1000 records.
  * </caption>
  *
  * management.getUsersInRole(params, function (err, users) {
  *   console.log(users);
  * });
  *
- * @param   {String}    [id]           Id of the role
+ * @param   {String}    [id]              Id of the role
  * @param   {Number}    [params.per_page] Number of results per page.
  * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {String}    [params.from]     Optional id from which to start selection.
+ * @param   {Number}    [params.take]     The total amount of entries to retrieve when using the from parameter. Defaults to 50.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
@@ -3635,6 +3688,72 @@ utils.wrapPropertyMethod(ManagementClient, 'updateBrandingSettings', 'branding.u
  * @return    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getSettings');
+
+/**
+ * Get the new universal login template.
+ *
+ * @method    getBrandingUniversalLoginTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.getBrandingUniversalLoginTemplate(data, function (err, template) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ * // Branding
+ *    console.log(template);
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {Object}    data              Branding data (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'getBrandingUniversalLoginTemplate', 'branding.getUniversalLoginTemplate');
+
+/**
+ * Get the new universal login template.
+ *
+ * @method    setBrandingUniversalLoginTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.setBrandingUniversalLoginTemplate({ template: "a template" }, function (err, template) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {Object}    template          Branding data (object with template field).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'setBrandingUniversalLoginTemplate', 'branding.setUniversalLoginTemplate');
+
+/**
+ * Delete the new universal login template.
+ *
+ * @method    deleteBrandingUniversalLoginTemplate
+ * @memberOf  module:management.ManagementClient.prototype
+ *
+ * @example
+ * management.deleteBrandingUniversalLoginTemplate(template, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params            Branding parameters (leave empty).
+ * @param   {Object}    data              Branding data (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ManagementClient, 'deleteBrandingUniversalLoginTemplate', 'branding.deleteUniversalLoginTemplate');
 
 /**
  * Update the tenant migrations.

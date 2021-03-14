@@ -1,5 +1,24 @@
 # Change Log
 
+## [v2.33.0](https://github.com/auth0/node-auth0/tree/v2.33.0) (2021-02-05)
+
+**Added**
+
+- feat: add revokeRefreshToken [\#579](https://github.com/auth0/node-auth0/pull/579) ([andreafspeziale](https://github.com/andreafspeziale))
+- ULP-2609/ULP-2914: add page templates support to /branding [\#574](https://github.com/auth0/node-auth0/pull/574) ([sebadoom](https://github.com/sebadoom))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.32.0...v2.33.0)
+
+## [v2.32.0](https://github.com/auth0/node-auth0/tree/v2.32.0) (2021-01-21)
+
+**Added**
+
+- Additional options on getByEmail [SDK-2268][\#577](https://github.com/auth0/node-auth0/pull/577) ([davidpatrick](https://github.com/davidpatrick))
+- [SDK-2261] Add forwardFor support to passwordless calls [\#576](https://github.com/auth0/node-auth0/pull/576) ([frederikprijck](https://github.com/frederikprijck))
+- Adding Support for Guardian factor settings endpoints [\#569](https://github.com/auth0/node-auth0/pull/569) ([JayHelton](https://github.com/JayHelton))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.1...v2.32.0)
+
 ## [v2.31.1](https://github.com/auth0/node-auth0/tree/v2.31.1) (2021-01-05)
 
 **Fixed**
