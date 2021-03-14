@@ -36,7 +36,6 @@ var MigrationsManager = require('./MigrationsManager');
 var PromptsManager = require('./PromptsManager');
 var ActionsManager = require('./ActionsManager');
 var ActionsVersionsManager = require('./ActionVersionsManager');
-var ActionBindingsManager = require('./ActionBindingsManager');
 var ActionExecutionsManager = require('./ActionExecutionsManager');
 var OrganizationsManager = require('./OrganizationsManager');
 
@@ -371,14 +370,6 @@ var ManagementClient = function(options) {
    * @type {ActionsVersionsManager}
    */
   this.actionVersions = new ActionsVersionsManager(managerOptions);
-
-  /**
-   * Simple abstraction for performing CRUD operations on the
-   * actions binding endpoint.
-   *
-   * @type {ActionBindingsManager}
-   */
-  this.actionBindings = new ActionBindingsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the
