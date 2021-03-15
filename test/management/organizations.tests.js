@@ -18,7 +18,8 @@ describe('OrganizationsManager', function() {
 
   describe('instance', function() {
     var methods = [
-      'get',
+      'getByID',
+      'getByName',
       'getAll',
       'create',
       'update',
@@ -29,16 +30,15 @@ describe('OrganizationsManager', function() {
       'updateEnabledConnection',
       'removeEnabledConnection',
       'getMembers',
-      'getMember',
       'addMembers',
       'removeMembers',
       'getMemberRoles',
       'addMemberRoles',
       'removeMemberRoles',
-      'getInvites',
-      'getInvite',
-      'createInvite',
-      'deleteInvite'
+      'getInvitations',
+      'getInvitation',
+      'createInvitation',
+      'deleteInvitation'
     ];
 
     methods.forEach(function(method) {
@@ -161,7 +161,7 @@ describe('OrganizationsManager', function() {
     });
   });
 
-  describe('#get', function() {
+  describe('#getByID', function() {
     beforeEach(function() {
       this.data = {
         id: 'org_123456',
@@ -177,12 +177,12 @@ describe('OrganizationsManager', function() {
     it('should accept a callback', function(done) {
       var params = { id: this.data.id };
 
-      this.organizations.get(params, done.bind(null, null));
+      this.organizations.getByID(params, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function(done) {
       this.organizations
-        .get({ id: this.data.id })
+        .getByID({ id: this.data.id })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -190,7 +190,7 @@ describe('OrganizationsManager', function() {
     it('should perform a GET request to /api/v2/organizations/:id', function(done) {
       var request = this.request;
 
-      this.organizations.get({ id: this.data.id }).then(function() {
+      this.organizations.getByID({ id: this.data.id }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -204,7 +204,7 @@ describe('OrganizationsManager', function() {
         .get('/organizations/' + this.data.id)
         .reply(500);
 
-      this.organizations.get({ id: this.data.id }).catch(function(err) {
+      this.organizations.getByID({ id: this.data.id }).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -219,7 +219,73 @@ describe('OrganizationsManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.organizations.get({ id: this.data.id }).then(function() {
+      this.organizations.getByID({ id: this.data.id }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getByName', function() {
+    beforeEach(function() {
+      this.data = {
+        id: 'org_123456',
+        name: 'organizations',
+        display_name: 'My organization'
+      };
+
+      this.request = nock(API_URL)
+        .get('/organizations/name/' + this.data.name)
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function(done) {
+      var params = { name: this.data.name };
+
+      this.organizations.getByName(params, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.organizations
+        .getByName({ name: this.data.name })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/organizations/name/:name', function(done) {
+      var request = this.request;
+
+      this.organizations.getByName({ name: this.data.name }).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/organizations/' + this.data.name)
+        .reply(500);
+
+      this.organizations.getByName({ name: this.data.name }).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/organizations/name/' + this.data.name)
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.organizations.getByName({ name: this.data.name }).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -918,66 +984,6 @@ describe('OrganizationsManager', function() {
     });
   });
 
-  describe('#getMember', function() {
-    var data = {
-      id: 'org_id',
-      user_id: 'user_id'
-    };
-
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/organizations/' + data.id + '/members/' + data.user_id)
-        .reply(200);
-    });
-
-    it('should accept a callback', function(done) {
-      this.organizations.getMember(data, done.bind(null, null));
-    });
-
-    it('should return a promise when no callback is given', function(done) {
-      this.organizations.getMember(data).then(done.bind(null, null));
-    });
-
-    it('should perform a GET request to /api/v2/organizations/rol_ID/members/member_id', function(done) {
-      var request = this.request;
-
-      this.organizations.getMember(data).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
-    it('should pass any errors to the promise catch handler', function(done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .get('/organizations/' + data.id + '/members/' + data.user_id)
-        .reply(500);
-
-      this.organizations.getMember(data).catch(function(err) {
-        expect(err).to.exist;
-
-        done();
-      });
-    });
-
-    it('should include the token in the authorization header', function(done) {
-      nock.cleanAll();
-
-      var request = nock(API_URL)
-        .get('/organizations/' + data.id + '/members/' + data.user_id)
-        .matchHeader('authorization', 'Bearer ' + this.token)
-        .reply(200);
-
-      this.organizations.getMember(data).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-  });
-
   describe('#addMembers', function() {
     beforeEach(function() {
       this.data = {
@@ -1410,7 +1416,7 @@ describe('OrganizationsManager', function() {
   });
 
   //// Invites
-  describe('#getInvites', function() {
+  describe('#getInvitations', function() {
     var data = {
       id: 'org_id'
     };
@@ -1422,17 +1428,17 @@ describe('OrganizationsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.organizations.getInvites(data, done.bind(null, null));
+      this.organizations.getInvitations(data, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function(done) {
-      this.organizations.getInvites(data).then(done.bind(null, null));
+      this.organizations.getInvitations(data).then(done.bind(null, null));
     });
 
     it('should perform a GET request to /api/v2/organizations/org_ID/invitations', function(done) {
       var request = this.request;
 
-      this.organizations.getInvites(data).then(function() {
+      this.organizations.getInvitations(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1446,7 +1452,7 @@ describe('OrganizationsManager', function() {
         .get('/organizations/' + data.id + '/invitations')
         .reply(500);
 
-      this.organizations.getInvites(data).catch(function(err) {
+      this.organizations.getInvitations(data).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -1461,7 +1467,7 @@ describe('OrganizationsManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.organizations.getInvites(data).then(function() {
+      this.organizations.getInvitations(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1469,7 +1475,7 @@ describe('OrganizationsManager', function() {
     });
   });
 
-  describe('#getInvite', function() {
+  describe('#getInvitation', function() {
     var data = {
       id: 'org_id',
       invitation_id: 'inv_123'
@@ -1482,17 +1488,17 @@ describe('OrganizationsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.organizations.getInvite(data, done.bind(null, null));
+      this.organizations.getInvitation(data, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function(done) {
-      this.organizations.getInvite(data).then(done.bind(null, null));
+      this.organizations.getInvitation(data).then(done.bind(null, null));
     });
 
     it('should perform a GET request to /api/v2/organizations/rol_ID/invitations/inv_id', function(done) {
       var request = this.request;
 
-      this.organizations.getInvite(data).then(function() {
+      this.organizations.getInvitation(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1506,7 +1512,7 @@ describe('OrganizationsManager', function() {
         .get('/organizations/' + data.id + '/invitations/' + data.invitation_id)
         .reply(500);
 
-      this.organizations.getInvite(data).catch(function(err) {
+      this.organizations.getInvitation(data).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -1521,7 +1527,7 @@ describe('OrganizationsManager', function() {
         .matchHeader('authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.organizations.getInvite(data).then(function() {
+      this.organizations.getInvitation(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1529,7 +1535,7 @@ describe('OrganizationsManager', function() {
     });
   });
 
-  describe('#createInvite', function() {
+  describe('#createInvitation', function() {
     beforeEach(function() {
       this.data = {
         id: 'org_123'
@@ -1545,14 +1551,14 @@ describe('OrganizationsManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.organizations.createInvite(this.data, {}, function() {
+      this.organizations.createInvitation(this.data, {}, function() {
         done();
       });
     });
 
     it('should return a promise if no callback is given', function(done) {
       this.organizations
-        .createInvite(this.data, {})
+        .createInvitation(this.data, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -1564,7 +1570,7 @@ describe('OrganizationsManager', function() {
         .post('/organizations/' + this.data.id + '/invitations')
         .reply(500);
 
-      this.organizations.createInvite(this.data, {}).catch(function(err) {
+      this.organizations.createInvitation(this.data, {}).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -1574,7 +1580,7 @@ describe('OrganizationsManager', function() {
     it('should perform a POST request to /api/v2/organizations/org_id/invitations', function(done) {
       var request = this.request;
 
-      this.organizations.createInvite(this.data, {}).then(function() {
+      this.organizations.createInvitation(this.data, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1584,14 +1590,14 @@ describe('OrganizationsManager', function() {
     it('should return error when id is not sent', function() {
       var _this = this;
       expect(function() {
-        _this.organizations.createInvite({ id: null }, {}, function() {});
+        _this.organizations.createInvitation({ id: null }, {}, function() {});
       }).to.throw('The organization ID passed in params cannot be null or undefined');
     });
 
     it('should return error when id is not sent', function() {
       var _this = this;
       expect(function() {
-        _this.organizations.createInvite({ id: 123 }, {}, function() {});
+        _this.organizations.createInvitation({ id: 123 }, {}, function() {});
       }).to.throw('The organization ID has to be a string');
     });
 
@@ -1602,7 +1608,7 @@ describe('OrganizationsManager', function() {
         .post('/organizations/' + this.data.id + '/invitations', this.body)
         .reply(200);
 
-      this.organizations.createInvite(this.data, this.body).then(function() {
+      this.organizations.createInvitation(this.data, this.body).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1617,7 +1623,7 @@ describe('OrganizationsManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.organizations.createInvite(this.data, {}).then(function() {
+      this.organizations.createInvitation(this.data, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1625,7 +1631,7 @@ describe('OrganizationsManager', function() {
     });
   });
 
-  describe('#deleteInvite', function() {
+  describe('#deleteInvitation', function() {
     beforeEach(function() {
       this.data = {
         id: 'org_123',
@@ -1640,14 +1646,14 @@ describe('OrganizationsManager', function() {
     it('should validate empty organizationId', function() {
       var _this = this;
       expect(function() {
-        _this.organizations.deleteInvite({ id: null }, function() {});
+        _this.organizations.deleteInvitation({ id: null }, function() {});
       }).to.throw('The organization ID passed in params cannot be null or undefined');
     });
 
     it('should validate non-string organizationId', function() {
       var _this = this;
       expect(function() {
-        _this.organizations.deleteInvite({ id: 123 }, function() {});
+        _this.organizations.deleteInvitation({ id: 123 }, function() {});
       }).to.throw('The organization ID has to be a string');
     });
 
@@ -1665,7 +1671,7 @@ describe('OrganizationsManager', function() {
         .delete('/organizations/' + this.data.id + '/invitations/' + this.data.invitation_id, {})
         .reply(500);
 
-      this.organizations.deleteInvite(this.data).catch(function(err) {
+      this.organizations.deleteInvitation(this.data).catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -1679,7 +1685,7 @@ describe('OrganizationsManager', function() {
         .delete('/organizations/' + this.data.id + '/invitations/' + this.data.invitation_id, {})
         .reply(200);
 
-      this.organizations.deleteInvite(this.data, function(err) {
+      this.organizations.deleteInvitation(this.data, function(err) {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1689,14 +1695,14 @@ describe('OrganizationsManager', function() {
     it('should return error when id is not sent', function() {
       var _this = this;
       expect(function() {
-        _this.organizations.deleteInvite({ id: 'org_123', invitation_id: null }, function() {});
+        _this.organizations.deleteInvitation({ id: 'org_123', invitation_id: null }, function() {});
       }).to.throw('The invitation ID passed in params cannot be null or undefined');
     });
 
     it('should return error when id is not sent', function() {
       var _this = this;
       expect(function() {
-        _this.organizations.deleteInvite({ id: 'org_123', invitation_id: 123 }, function() {});
+        _this.organizations.deleteInvitation({ id: 'org_123', invitation_id: 123 }, function() {});
       }).to.throw('The invitation ID has to be a string');
     });
 
@@ -1708,7 +1714,7 @@ describe('OrganizationsManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.organizations.deleteInvite(this.data).then(function() {
+      this.organizations.deleteInvitation(this.data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

@@ -46,7 +46,7 @@ var OrganizationsManager = function(options) {
 
   /**
    * Provides an abstraction layer for performing CRUD operations on
-   * {@link https://auth0.com/docs/api/v2#!/RolesManager Auth0 RolesManagers}.
+   * {@link https://auth0.com/docs/api/v2}.
    *
    * @type {external:RestClient}
    */
@@ -84,6 +84,13 @@ var OrganizationsManager = function(options) {
     options.tokenProvider
   );
   this.roles = new RetryRestClient(rolesClient, options.retry);
+
+  var organizationByNameClient = new Auth0RestClient(
+    options.baseUrl + '/organizations/name/:name',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.organizationsByName = new RetryRestClient(organizationByNameClient, options.retry);
 };
 
 /**
@@ -142,11 +149,11 @@ utils.wrapPropertyMethod(OrganizationsManager, 'getAll', 'organizations.getAll')
 /**
  * Get an Auth0 organization.
  *
- * @method    get
+ * @method    getByID
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
- * management.organizations.get({ id: ORGANIZATION_ID }, function (err, role) {
+ * management.organizations.getByID({ id: ORGANIZATION_ID }, function (err, role) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -160,7 +167,30 @@ utils.wrapPropertyMethod(OrganizationsManager, 'getAll', 'organizations.getAll')
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(OrganizationsManager, 'get', 'organizations.get');
+utils.wrapPropertyMethod(OrganizationsManager, 'getByID', 'organizations.get');
+
+/**
+ * Get an Auth0 organization.
+ *
+ * @method    getByName
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * management.organizations.getByName({ name: ORGANIZATION_NAME}, function (err, role) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(organization);
+ * });
+ *
+ * @param   {Object}    params        Organization parameters.
+ * @param   {String}    params.name   Organization name.
+ * @param   {Function}  [cb]          Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(OrganizationsManager, 'getByName', 'organizationsByName.get');
 
 /**
  * Update an existing organization.
@@ -329,7 +359,7 @@ OrganizationsManager.prototype.addEnabledConnection = function(params, data, cb)
  * @example
  * var params =  { id :'ORGANIZATION_ID', connection_id: 'CONNECTION_ID' };
  *
- * management.organizations.removeEnableConnection(params, function (err) {
+ * management.organizations.removeEnabledConnection(params, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -375,7 +405,7 @@ OrganizationsManager.prototype.removeEnabledConnection = function(params, cb) {
  * @example
  * var params =  { id :'ORGANIZATION_ID', connection_id: 'CONNECTION_ID' };
  *
- * management.organizations.removeEnableConnection(params, data, function (err) {
+ * management.organizations.updateEnabledConnection(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -444,31 +474,6 @@ OrganizationsManager.prototype.getMembers = function(params, callback) {
 };
 
 /**
- * Get a Member in a Organization
- *
- * @method    getMember
- * @memberOf  module:management.OrganizationsManager.prototype
- *
- * @example
- * var params = {id : 'ORGANIZATION_ID', user_id: 'USER_ID'}
- * @example <caption>
- *   This methods takes the organization ID and user ID and returns the member
- * </caption>
- *
- * management.organizations.getMember( {id : 'ORGANIZATION_ID', user_id: 'USER_ID'}, function (err, member) {
- *   console.log(member);
- * });
- *
- * @param   {String}    [organization_id]   Organization ID
- * @param   {Function}  [cb]                Callback function.
- *
- * @return  {Promise|undefined}
- */
-OrganizationsManager.prototype.getMember = function(params, callback) {
-  return this.members.get(params, callback);
-};
-
-/**
  * Add members in an organization
  *
  * @method    addMembers
@@ -476,8 +481,7 @@ OrganizationsManager.prototype.getMember = function(params, callback) {
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID'};
- * var data = [ 'USER_ID1', 'USER_ID2' ]
- *
+ * var data = { members: [ 'USER_ID1', 'USER_ID2' ] }
  * management.organizations.addMembers(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
@@ -485,13 +489,14 @@ OrganizationsManager.prototype.getMember = function(params, callback) {
  * });
  *
  * @param   {String}    params.id             ID of the Organization.
- * @param   {Array}     data                  Array of user IDs
+ * @param   {Object}    data                  add members data
+ * @param   {Array}     data.members          Array of user IDs
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
 OrganizationsManager.prototype.addMembers = function(params, data, cb) {
-  data = data || [];
+  data = data || {};
   params = params || {};
 
   // Require a user ID.
@@ -517,7 +522,7 @@ OrganizationsManager.prototype.addMembers = function(params, data, cb) {
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID' };
- * var data =  [ 'USER_ID1', 'USER_ID2' ]
+ * var data = { members: [ 'USER_ID1', 'USER_ID2' ] }
  *
  * management.organizations.removeMembers(params, data, function (err) {
  *   if (err) {
@@ -526,13 +531,14 @@ OrganizationsManager.prototype.addMembers = function(params, data, cb) {
  * });
  *
  * @param   {String}    params.id             ID of the Organization.
- * @param   {Array}     data                  Array of User ID.
+ * @param   {Object}    data                  add members data
+ * @param   {Array}     data.members          Array of user IDs
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
 OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
-  data = data || [];
+  data = data || {};
   params = params || {};
 
   if (!params.id) {
@@ -556,7 +562,7 @@ OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
 /**
  * Get Invites in a Organization
  *
- * @method    getInvites
+ * @method   getInvitations
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
@@ -565,7 +571,7 @@ OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
  *   This method takes an organization ID and returns the invites in an Organization
  * </caption>
  *
- * management.organizations.getInvites( {id : 'ORGANIZATION_ID'}, function (err, invites) {
+ * management.organizations.getInvitations( {id : 'ORGANIZATION_ID'}, function (err, invites) {
  *   console.log(invites);
  * });
  *
@@ -574,14 +580,14 @@ OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
  *
  * @return  {Promise|undefined}
  */
-OrganizationsManager.prototype.getInvites = function(params, callback) {
+OrganizationsManager.prototype.getInvitations = function(params, callback) {
   return this.invitations.getAll(params, callback);
 };
 
 /**
  * Get an Invitation in a Organization
  *
- * @method    getInvite
+ * @method    getInvitation
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
@@ -590,7 +596,7 @@ OrganizationsManager.prototype.getInvites = function(params, callback) {
  *   This methods takes the organization ID and user ID and returns the invitation
  * </caption>
  *
- * management.organizations.getInvite( {id : 'ORGANIZATION_ID', invitation_id: 'INVITATION_ID'}, function (err, invite) {
+ * management.organizations.getInvitation({id : 'ORGANIZATION_ID', invitation_id: 'INVITATION_ID'}, function (err, invite) {
  *   console.log(invite);
  * });
  *
@@ -599,21 +605,21 @@ OrganizationsManager.prototype.getInvites = function(params, callback) {
  *
  * @return  {Promise|undefined}
  */
-OrganizationsManager.prototype.getInvite = function(params, callback) {
+OrganizationsManager.prototype.getInvitation = function(params, callback) {
   return this.invitations.get(params, callback);
 };
 
 /**
  * Create an invitation in an organization
  *
- * @method    createInvite
+ * @method    createInvitation
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID'};
  * var data = {}
  *
- * management.organizations.createInvite(params, data, function (err) {
+ * management.organizations.createInvitation(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -625,7 +631,7 @@ OrganizationsManager.prototype.getInvite = function(params, callback) {
  *
  * @return  {Promise|undefined}
  */
-OrganizationsManager.prototype.createInvite = function(params, data, cb) {
+OrganizationsManager.prototype.createInvitation = function(params, data, cb) {
   data = data || [];
   params = params || {};
 
@@ -664,7 +670,7 @@ OrganizationsManager.prototype.createInvite = function(params, data, cb) {
  *
  * @return  {Promise|undefined}
  */
-OrganizationsManager.prototype.deleteInvite = function(params, cb) {
+OrganizationsManager.prototype.deleteInvitation = function(params, cb) {
   params = params || {};
 
   if (!params.id) {
@@ -695,7 +701,7 @@ OrganizationsManager.prototype.deleteInvite = function(params, cb) {
 /**
  * Get Roles from a Member in a Organization
  *
- * @method    getRoles
+ * @method    getMemberRoles
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
@@ -704,8 +710,8 @@ OrganizationsManager.prototype.deleteInvite = function(params, cb) {
  *   This methods takes the organization ID and user ID and returns the roles
  * </caption>
  *
- * management.organizations.getRoles( {id : 'ORGANIZATION_ID', user_id: 'user_id'}, function (err, invite) {
- *   console.log(invite);
+ * management.organizations.getMemberRoles( {id : 'ORGANIZATION_ID', user_id: 'user_id'}, function (err, roles) {
+ *   console.log(roles);
  * });
  *
  * @param   {String}    params.id           ID of the Organization.
@@ -721,14 +727,14 @@ OrganizationsManager.prototype.getMemberRoles = function(params, callback) {
 /**
  * Add a Role to a Member in an organization
  *
- * @method    addRoles
+ * @method    addMemberRoles
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
  * var params =  {id : 'ORGANIZATION_ID', user_id: 'user_id'};
- * var data = {}
+ * var data = { roles: ["ROLE_ID_1", "ROLE_ID_2"]}
  *
- * management.organizations.addRoles(params, data, function (err) {
+ * management.organizations.addMemberRoles(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -736,13 +742,14 @@ OrganizationsManager.prototype.getMemberRoles = function(params, callback) {
  *
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.user_id        ID of the user.
- * @param   {Array}     data                  Array of Role IDs
+ * @param   {Object}    data                  Add member roles data.
+ * @param   {Array}     data.roles            Array of role IDs.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
 OrganizationsManager.prototype.addMemberRoles = function(params, data, cb) {
-  data = data || [];
+  data = data || {};
   params = params || {};
 
   if (!params.id) {
@@ -769,13 +776,14 @@ OrganizationsManager.prototype.addMemberRoles = function(params, data, cb) {
 /**
  * Remove Roles from a Member of an organization
  *
- * @method    removeRoles
+ * @method    removeMemberRoles
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID', user_id: 'USER_ID };
+ * var data = { roles: ["ROLE_ID_1", "ROLE_ID_2"]}
  *
- * management.organizations.removeRoles(params, function (err) {
+ * management.organizations.removeMemberRoles(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -783,13 +791,14 @@ OrganizationsManager.prototype.addMemberRoles = function(params, data, cb) {
  *
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.user_id        Id of the User
- * @param   {Array}     data                  Array of Role IDs
+ * @param   {Object}    data                  Remove member roles data.
+ * @param   {Array}     data.roles            Array of role IDs.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
  */
 OrganizationsManager.prototype.removeMemberRoles = function(params, data, cb) {
-  data = data || [];
+  data = data || {};
   params = params || {};
 
   if (!params.id) {

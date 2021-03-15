@@ -3811,26 +3811,4 @@ utils.wrapPropertyMethod(
   'prompts.updateCustomTextByLanguage'
 );
 
-/**
- * Get organizations
- *
- * @method    getOrganizations
- * @memberOf  module:management.ManagementClient.prototype
- *
- * @example
- * management.getOrganizations(function (err, organizations) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- * // Migration flags
- *    console.log(organizations.flags);
- * });
- *
- * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
- */
-utils.wrapPropertyMethod(ManagementClient, 'getOrganizations', 'organizations.getAll');
-
 module.exports = ManagementClient;
