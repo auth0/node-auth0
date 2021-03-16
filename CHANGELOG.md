@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.33.0](https://github.com/auth0/node-auth0/tree/v2.33.0) (2021-02-05)
+
+**Added**
+
+- feat: add revokeRefreshToken [\#579](https://github.com/auth0/node-auth0/pull/579) ([andreafspeziale](https://github.com/andreafspeziale))
+- ULP-2609/ULP-2914: add page templates support to /branding [\#574](https://github.com/auth0/node-auth0/pull/574) ([sebadoom](https://github.com/sebadoom))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.32.0...v2.33.0)
+
 ## [v2.32.0](https://github.com/auth0/node-auth0/tree/v2.32.0) (2021-01-21)
 
 **Added**
