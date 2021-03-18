@@ -364,6 +364,7 @@ JobsManager.prototype.errors = function(params, cb) {
  *
  * @param   {Object}    data          User data object.
  * @param   {String}    data.user_id  ID of the user to be verified.
+ * @param   {String}    [data.organization_id] Organization ID
  * @param   {String}    [data.client_id] client_id of the client (application). If no value provided, the global Client ID will be used.
  * @param   {Object}    [data.identity] Used to verify secondary, federated, and passwordless-email identities.
  * @param   {String}    data.identity.user_id user_id of the identity.
