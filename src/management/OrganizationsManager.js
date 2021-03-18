@@ -116,7 +116,7 @@ var OrganizationsManager = function(options) {
 utils.wrapPropertyMethod(OrganizationsManager, 'create', 'organizations.create');
 
 /**
- * Get all roles.
+ * Get all organizations.
  *
  * @method    getAll
  * @memberOf  module:management.OrganizationsManager.prototype
@@ -199,19 +199,9 @@ utils.wrapPropertyMethod(OrganizationsManager, 'getByName', 'organizationsByName
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
- * var data = { name: 'New name' };
+ * var data = { display_name: 'New name' };
  * var params = { id: ORGANIZATION_ID };
  *
- * // Using auth0 instance.
- * management.updateOrganization(params, data, function (err, organization) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(organization.name);  // 'New name'
- * });
- *
- * // Using the organizations manager directly.
  * management.organizations.update(params, data, function (err, organization) {
  *   if (err) {
  *     // Handle error.
@@ -307,16 +297,16 @@ OrganizationsManager.prototype.getEnabledConnection = function(params, callback)
 };
 
 /**
- * Add enable a connection for an organization
+ * Add an enabled connection for an organization
  *
- * @method    addEnableConnection
+ * @method    addEnabledConnection
  * @memberOf  module:management.OrganizationsManager.prototype
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID'};
  * var data = { "connection_id" : "CONNECTION_ID", assign_membership_on_login: false };
  *
- * management.organizations.addEnableConnection(params, data, function (err) {
+ * management.organizations.addEnabledConnection(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -404,6 +394,7 @@ OrganizationsManager.prototype.removeEnabledConnection = function(params, cb) {
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID', connection_id: 'CONNECTION_ID' };
+ * var data = { assign_membership_on_login: true };
  *
  * management.organizations.updateEnabledConnection(params, data, function (err) {
  *   if (err) {
@@ -464,8 +455,8 @@ OrganizationsManager.prototype.updateEnabledConnection = function(params, data, 
  *   console.log(members);
  * });
  *
- * @param   {String}    [organization_id]   Organization ID
- * @param   {Function}  [cb]                Callback function.
+ * @param   {String}    [params.id]   Organization ID
+ * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -499,7 +490,6 @@ OrganizationsManager.prototype.addMembers = function(params, data, cb) {
   data = data || {};
   params = params || {};
 
-  // Require a user ID.
   if (!params.id) {
     throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
   }
@@ -575,7 +565,7 @@ OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
  *   console.log(invites);
  * });
  *
- * @param   {String}    [organization_id]   Organization ID
+ * @param   {String}    [params.id]   Organization ID
  * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
@@ -617,7 +607,11 @@ OrganizationsManager.prototype.getInvitation = function(params, callback) {
  *
  * @example
  * var params =  { id :'ORGANIZATION_ID'};
- * var data = {}
+ * var data = {
+ *   client_id: CLIENT_ID,
+ *   invitee: { email: 'invitee@example.com' },
+ *   inviter: { name: 'John Doe' }
+ * };
  *
  * management.organizations.createInvitation(params, data, function (err) {
  *   if (err) {

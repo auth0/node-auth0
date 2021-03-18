@@ -943,8 +943,8 @@ UsersManager.prototype.removePermissions = function(params, data, cb) {
  * @memberOf  module:management.UsersManager.prototype
  *
  * @example
- * management.users.getUserOrganizations({ id: USER_ID }, function (err, roles) {
- *   console.log(roles);
+ * management.users.getUserOrganizations({ id: USER_ID }, function (err, orgs) {
+ *   console.log(orgs);
  * });
  *
  * @param   {Object}    data      The user data object.
