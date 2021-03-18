@@ -325,7 +325,6 @@ OrganizationsManager.prototype.addEnabledConnection = function(params, data, cb)
   data = data || {};
   params = params || {};
 
-  // Require a user ID.
   if (!params.id) {
     throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
   }
