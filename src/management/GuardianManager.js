@@ -76,6 +76,18 @@ var GuardianManager = function(options) {
   this.factors = new RetryRestClient(guardianFactorsAuth0RestClient, options.retry);
 
   /**
+   * Provides an abstraction layer for configuring Factor settings
+   *
+   * @type {external:RestClient}
+   */
+  var guardianFactorSettingsAuth0RestClient = new Auth0RestClient(
+    options.baseUrl + '/guardian/factors/:name/settings',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.factorSettings = new RetryRestClient(guardianFactorSettingsAuth0RestClient, options.retry);
+
+  /**
    * Provides an abstraction layer for retrieving Guardian factor templates.
    *
    * @type {external:RestClient}
@@ -219,6 +231,45 @@ utils.wrapPropertyMethod(GuardianManager, 'createEnrollmentTicket', 'tickets.cre
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(GuardianManager, 'getFactors', 'factors.getAll');
+
+/**
+ * Get Guardian factor configuration
+ *
+ * @method    getFactorSettings
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.getFactorSettings({ name: 'webauthn-roaming' }, function (err, settings) {
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Object}    params            Factor  parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'getFactorSettings', 'factorSettings.get');
+
+/**
+ * Update Guardian factor configuration
+ *
+ * @method    updateFactorSettings
+ * @memberOf  module:management.GuardianManager.prototype
+ *
+ * @example
+ * management.guardian.updateFactorSettings(
+ *  { name: 'webauthn-roaming' },
+ *  { userVerification: 'discouraged', overrideRelyingParty: false },
+ *  function (err, settings) {
+ *   console.log(settings);
+ * });
+ *
+ * @param   {Object}    params            Factor  parameters.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(GuardianManager, 'updateFactorSettings', 'factorSettings.update');
 
 /**
  * Get Guardian factor provider configuration
