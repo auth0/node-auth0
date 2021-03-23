@@ -1272,6 +1272,20 @@ describe('OrganizationsManager', function() {
     it('should return error when id is not sent', function() {
       var _this = this;
       expect(function() {
+        _this.organizations.addMemberRoles({ id: null }, {}, function() {});
+      }).to.throw('The organization ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.addMemberRoles({ id: 123 }, {}, function() {});
+      }).to.throw('The organization ID has to be a string');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
         _this.organizations.addMemberRoles({ id: 'org_123', user_id: null }, {}, function() {});
       }).to.throw('The user ID passed in params cannot be null or undefined');
     });
@@ -1389,7 +1403,7 @@ describe('OrganizationsManager', function() {
         )
         .reply(200);
 
-      this.organizations.removeMemberRoles(this.data, this.body).then(function() {
+      this.organizations.removeMemberRoles(this.data, this.body, function() {
         expect(request.isDone()).to.be.true;
 
         done();
