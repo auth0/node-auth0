@@ -63,6 +63,7 @@ var payload = {
   iat: yesterday(),
   nonce: expectations.nonce,
   azp: expectations.clientId,
+  org_id: 'test|org',
   auth_time: TODAY_IN_SECONDS
 };
 
@@ -257,5 +258,28 @@ describe('idToken.validate', function() {
     }).to.throw(
       'Authentication Time (auth_time) claim in the ID token indicates that too much time has passed since the last end-user authentication.'
     );
+  });
+  it('should throw when organization is in options, but org_id missing from claim', function() {
+    expectedOptions.organization = 'testorg';
+
+    expect(function() {
+      idToken.validate(generateJWT({ org_id: undefined }), expectedOptions);
+    }).to.throw('Organization Id (org_id) claim must be a string present in the ID token');
+  });
+  it('should throw when org claim doesnt match org expected', function() {
+    expectedOptions.organization = 'testorg';
+
+    expect(function() {
+      idToken.validate(generateJWT({ org_id: 'notExpectedOrg' }), expectedOptions);
+    }).to.throw(
+      'Organization Id (org_id) claim value mismatch in the ID token; expected "testorg", found "notExpectedOrg'
+    );
+  });
+  it('should NOT throw when org_id matches expected organization', function() {
+    expectedOptions.organization = 'testorg';
+
+    expect(function() {
+      idToken.validate(generateJWT({ org_id: 'testorg' }), expectedOptions);
+    }).not.to.throw();
   });
 });

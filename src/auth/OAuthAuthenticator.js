@@ -359,6 +359,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *   redirect_uri: '{REDIRECT_URI}',
  *   client_id: '{CLIENT_ID}',  // Optional field.
  *   client_secret: '{CLIENT_SECRET}',  // Optional field.
+ *   organization: '{ORGANIZATION_ID}' // Optiional field.
  * };
  *
  * auth0.oauth.authorizationCodeGrant(data, function (err, userData) {
@@ -370,6 +371,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  * });
  *
  * @param   {Object}    data                  Authorization code payload
+ * @param   {String}    userData.organization Organization ID
  * @param   {String}    userData.code         Code in URL returned after authentication
  * @param   {String}    userData.redirect_uri The URL to which Auth0 will redirect the browser after authorization has been granted by the user.
  *

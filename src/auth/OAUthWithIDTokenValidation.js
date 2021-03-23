@@ -86,6 +86,10 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
           issuer: 'https://' + this.domain + '/'
         };
 
+        if (data.organization) {
+          options.organization = data.organization;
+        }
+
         if (data.nonce) {
           options.nonce = data.nonce;
         }
