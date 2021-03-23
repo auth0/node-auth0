@@ -1519,6 +1519,34 @@ describe('OrganizationsManager', function() {
       });
     });
 
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.getInvitation({ id: null }, function() {});
+      }).to.throw('The organization ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.getInvitation({ id: 123 }, function() {});
+      }).to.throw('The organization ID has to be a string');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.getInvitation({ id: 'org_123', invitation_id: null }, function() {});
+      }).to.throw('The invitation ID passed in params cannot be null or undefined');
+    });
+
+    it('should return error when id is not sent', function() {
+      var _this = this;
+      expect(function() {
+        _this.organizations.getInvitation({ id: 'org_123', invitation_id: 123 }, function() {});
+      }).to.throw('The invitation ID has to be a string');
+    });
+
     it('should include the token in the authorization header', function(done) {
       nock.cleanAll();
 

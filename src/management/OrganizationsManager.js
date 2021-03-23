@@ -595,6 +595,20 @@ OrganizationsManager.prototype.getInvitations = function(params, callback) {
  * @return  {Promise|undefined}
  */
 OrganizationsManager.prototype.getInvitation = function(params, callback) {
+  if (!params.id) {
+    throw new ArgumentError('The organization ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.id !== 'string') {
+    throw new ArgumentError('The organization ID has to be a string');
+  }
+
+  if (!params.invitation_id) {
+    throw new ArgumentError('The invitation ID passed in params cannot be null or undefined');
+  }
+  if (typeof params.invitation_id !== 'string') {
+    throw new ArgumentError('The invitation ID has to be a string');
+  }
+
   return this.invitations.get(params, callback);
 };
 
@@ -618,9 +632,20 @@ OrganizationsManager.prototype.getInvitation = function(params, callback) {
  *   }
  * });
  *
- * @param   {String}    params.id             ID of the Organization.
- * @param   {Array}     data                  Invitation data
- * @param   {Function}  [cb]                  Callback function.
+ * @param   {String}  params.id                     ID of the Organization.
+ * @param   {Array}   data                          Invitation data
+ * @param   {Object}  data.inviter                  The person who is sending the invite.
+ * @param   {String}  data.inviter.name             Name of the person who is sending the invite
+ * @param   {Object}  data.invitee                  Invitee to whom invitation is intended for
+ * @param   {Object}  data.invitee.email            Email of the invitee to whom invitation is intended for
+ * @param   {String}  data.client_id                Auth0 client used to resolve the default application login URI. This endpoint must expect &invitation=... and &organization=... parameters (added by API2) to continue the flow with /authorize. If client_id  does not have configured login URI, use the tenant level default login route if configured, otherwise return 400
+ * @param   {String}  [data.connection_id]          Force user to authenticate against a specific identity provider.
+ * @param   {Object}  [data.app_metadata]           Application metadata to be assigned to the user after accept the invitation.
+ * @param   {Object}  [data.user_metadata]          User metadata to be assigned to the user after accept the invitation.
+ * @param   {Array}   [data.roles]                  List of roles to be assigned to the user
+ * @param   {Number}  [data.ttl_sec]                Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this value defaults to 604800 seconds (7 days).  Upper limit on ttl_sec is 30 days.
+ * @param   {Boolean} [data.send_invitation_email]  Whether the user will receive an invitation email (true) or no email (false). Default is true.
+ * @param   {Function}  [cb]                        Callback function.
  *
  * @return  {Promise|undefined}
  */
