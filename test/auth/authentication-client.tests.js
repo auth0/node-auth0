@@ -187,4 +187,38 @@ describe('AuthenticationClient', function() {
       ensureMethod(client, method);
     });
   });
+
+  describe(`verifySMSCode`, () => {
+    before(function() {
+      this.client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
+      this.passwordlessMock = sinon.mock(this.client.passwordless);
+      this.callback = function() {};
+    });
+    it('should call signIn with otp if provided', function() {
+      this.passwordlessMock
+        .expects('signIn')
+        .once()
+        .withExactArgs(
+          {
+            username: '123',
+            otp: 'code'
+          },
+          this.callback
+        );
+      this.client.verifySMSCode({ phone_number: '123', otp: 'code' }, this.callback);
+    });
+    it('should call signIn with password if provided', function() {
+      this.passwordlessMock
+        .expects('signIn')
+        .once()
+        .withExactArgs(
+          {
+            username: '123',
+            password: 'code'
+          },
+          this.callback
+        );
+      this.client.verifySMSCode({ phone_number: '123', password: 'code' }, this.callback);
+    });
+  });
 });

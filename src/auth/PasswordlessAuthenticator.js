@@ -2,6 +2,20 @@ var extend = require('util')._extend;
 
 var ArgumentError = require('rest-facade').ArgumentError;
 var RestClient = require('rest-facade').Client;
+var sanitizeArguments = require('../utils').sanitizeArguments;
+
+function getParamsFromOptions(options) {
+  const params = {};
+  if (!options || typeof options !== 'object') {
+    return params;
+  }
+  if (options.forwardedFor) {
+    params._requestCustomizer = function(req) {
+      req.set('auth0-forwarded-for', options.forwardedFor);
+    };
+  }
+  return params;
+}
 
 /**
  * @class
@@ -93,11 +107,14 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @param   {String}    userData.username     The user's phone number if realm=sms, or the user's email if realm=email
  * @param   {String}    userData.password     [DEPRECATED] Password.
  * @param   {String}    [userData.connection=sms] [DEPRECATED] Connection string: "sms" or "email".
+ * @param   {Object}    [options]              Additional options.
+ * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
  * @param   {Function}  [cb]                  Method callback.
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
+PasswordlessAuthenticator.prototype.signIn = function(userData, options, cb) {
+  var { options, cb } = sanitizeArguments(options, cb);
   var defaultFields = {
     client_id: this.clientId,
     client_secret: this.clientSecret
@@ -118,7 +135,7 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
       data.realm = 'sms';
     }
     data.grant_type = 'http://auth0.com/oauth/grant-type/passwordless/otp';
-    return this.oauth.signIn(data, { type: 'token' }, cb);
+    return this.oauth.signIn(data, extend({ type: 'token' }, options), cb);
   }
 
   // Don't let the user override the connection nor the grant type.
@@ -134,8 +151,7 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
   console.warn(
     'The oauth/ro endpoint has been deprecated. Please use the realm and otp parameters in this function.'
   );
-
-  return this.oauth.signIn(data, cb);
+  return this.oauth.signIn(data, options, cb);
 };
 
 /**
@@ -179,15 +195,19 @@ PasswordlessAuthenticator.prototype.signIn = function(userData, cb) {
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.email          User email address.
  * @param   {String}    userData.send           The type of email to be sent.
+ * @param   {Object}    [options]              Additional options.
+ * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
  * @param   {Function}  [cb]                    Method callback.
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
+PasswordlessAuthenticator.prototype.sendEmail = function(userData, options, cb) {
+  var { options, cb } = sanitizeArguments(options, cb);
   var defaultFields = {
     client_id: this.clientId,
     client_secret: this.clientSecret
   };
+  var params = getParamsFromOptions(options);
   var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
@@ -206,10 +226,10 @@ PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
   }
 
   if (cb && cb instanceof Function) {
-    return this.passwordless.create(data, cb);
+    return this.passwordless.create(params, data, cb);
   }
 
-  return this.passwordless.create(data);
+  return this.passwordless.create(params, data);
 };
 
 /**
@@ -237,15 +257,19 @@ PasswordlessAuthenticator.prototype.sendEmail = function(userData, cb) {
  *
  * @param   {Object}    userData                User account data.
  * @param   {String}    userData.phone_number   User phone number.
+ * @param   {Object}    [options]              Additional options.
+ * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
  * @param   {Function}  [cb]                    Method callback.
  *
  * @return  {Promise|undefined}
  */
-PasswordlessAuthenticator.prototype.sendSMS = function(userData, cb) {
+PasswordlessAuthenticator.prototype.sendSMS = function(userData, options, cb) {
+  var { options, cb } = sanitizeArguments(options, cb);
   var defaultFields = {
     client_id: this.clientId,
     client_secret: this.clientSecret
   };
+  var params = getParamsFromOptions(options);
   var data = extend(defaultFields, userData);
 
   // Don't let the user override the connection nor the grant type.
@@ -260,10 +284,10 @@ PasswordlessAuthenticator.prototype.sendSMS = function(userData, cb) {
   }
 
   if (cb && cb instanceof Function) {
-    return this.passwordless.create(data, cb);
+    return this.passwordless.create(params, data, cb);
   }
 
-  return this.passwordless.create(data);
+  return this.passwordless.create(params, data);
 };
 
 module.exports = PasswordlessAuthenticator;
