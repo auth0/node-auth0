@@ -93,7 +93,7 @@ var ActionsManager = function(options) {
   this.triggersTest = new RetryRestClient(triggersTestRestClient, options.retry);
 
   var executionsRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/executions/:id',
+    options.baseUrl + '/actions/executions/:execution_id',
     clientOptions,
     options.tokenProvider
   );
@@ -111,10 +111,7 @@ var ActionsManager = function(options) {
     clientOptions,
     options.tokenProvider
   );
-  this.deployActionVersionRestClient = new RetryRestClient(
-    deployActionVersionRestClient,
-    options.retry
-  );
+  this.actionVersionDeploy = new RetryRestClient(deployActionVersionRestClient, options.retry);
 };
 
 /**
@@ -400,7 +397,7 @@ utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
 /**
  * test an Action.
  *
- * @method    testAction
+ * @method    test
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
@@ -419,7 +416,7 @@ utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
  *
  * @return  {Promise|undefined}
  */
-ActionsManager.prototype.testAction = function(params, payload, cb) {
+ActionsManager.prototype.test = function(params, payload, cb) {
   params = params || {};
   payload = payload || {};
 
@@ -434,12 +431,12 @@ ActionsManager.prototype.testAction = function(params, payload, cb) {
  * deploy an Action.
  * The action must be in a state of 'built' before it can be deployed.
  *
- * @method    deployAction
+ * @method    deploy
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
  * var params = { action_id: ACTION_ID};
- * mangement.actions.deployAction(params, function (err, actionVersion) {
+ * mangement.actions.deploy(params, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -452,7 +449,7 @@ ActionsManager.prototype.testAction = function(params, payload, cb) {
  *
  * @return  {Promise|undefined}
  */
-ActionsManager.prototype.deployAction = function(params, cb) {
+ActionsManager.prototype.deploy = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
@@ -479,7 +476,7 @@ ActionsManager.prototype.deployAction = function(params, cb) {
  *   page: 0
  * };
  *
- * management.actionVersions.getAll({ action_id: ACTION_ID }, function (err, actionVersions) {
+ * management.actions.getActionVersions({ action_id: ACTION_ID }, function (err, actionVersions) {
  *   console.log(actionVersions.length);
  * });
  *
@@ -495,7 +492,7 @@ ActionsManager.prototype.getActionVersions = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
-    return this.actionsVersions.getAll(params, cb);
+    return this.actionVersions.getAll(params, cb);
   }
 
   return this.actionVersions.getAll(params);
@@ -527,10 +524,10 @@ ActionsManager.prototype.deployActionVersion = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
-    return this.deployActionVersion.create(params, cb);
+    return this.actionVersionDeploy.create(params, {}, cb);
   }
 
-  return this.deployActionVersion.create(params);
+  return this.actionVersionDeploy.create(params, {});
 };
 
 /**
@@ -558,10 +555,10 @@ ActionsManager.prototype.getExecution = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
-    return this.execution.get(params, cb);
+    return this.executions.get(params, cb);
   }
 
-  return this.execution.get(params);
+  return this.executions.get(params);
 };
 
 module.exports = ActionsManager;
