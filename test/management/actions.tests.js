@@ -605,4 +605,84 @@ describe('ActionsManager', function() {
       });
     });
   });
+
+  describe('executions', function() {
+    before(function() {
+      this.token = 'TOKEN';
+      this.actionExecutions = new ActionExecutionsManager({
+        headers: { authorization: 'Bearer ' + this.token },
+        baseUrl: API_URL
+      });
+    });
+
+    describe('#getExecution', function() {
+      beforeEach(function() {
+        this.data = {
+          id: '0d565aa1-d8ce-4802-83e7',
+          name: 'Execution'
+        };
+
+        this.request = nock(API_URL)
+          .get('/actions/executions/' + this.data.id)
+          .reply(200);
+      });
+
+      it('should accept a callback', function(done) {
+        var params = { execution_id: this.data.id };
+
+        this.actionExecutions.get(params, done.bind(null, null));
+      });
+
+      it('should return a promise if no callback is given', function(done) {
+        this.actionExecutions
+          .get({ execution_id: this.data.id })
+          .then(done.bind(null, null))
+          .catch(done.bind(null, null));
+      });
+
+      it('should perform a GET request', function(done) {
+        var request = this.request;
+
+        this.actionExecutions
+          .get({ execution_id: this.data.id })
+          .then(function() {
+            expect(request.isDone()).to.be.true;
+
+            done();
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      });
+
+      it('should pass any errors to the promise catch handler', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .get('/actions/executions/' + this.data.id)
+          .reply(500);
+
+        this.actionExecutions.get({ execution_id: this.data.id }).catch(function(err) {
+          expect(err).to.exist;
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .get('/actions/executions/' + this.data.id)
+          .matchHeader('Authorization', 'Bearer ' + this.token)
+          .reply(200);
+
+        this.actionExecutions.get({ execution_id: this.data.id }).then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+    });
+  });
 });
