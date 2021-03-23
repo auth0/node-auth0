@@ -80,7 +80,7 @@ var validate = function(token, options) {
   }
 
   // Organization
-  if (options.organization) {
+  if (options.organization || typeof payload.org_id !== 'string') {
     if (!payload.org_id) {
       throw new Error('Organization Id (org_id) claim must be a string present in the ID token');
     }
