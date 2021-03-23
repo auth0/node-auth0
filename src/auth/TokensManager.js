@@ -4,7 +4,7 @@ var axios = require('axios');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 /**
- * @class
+ * @class TokensManager
  * Provides methods for getting token data and exchanging tokens.
  * @constructor
  * @memberOf module:auth
