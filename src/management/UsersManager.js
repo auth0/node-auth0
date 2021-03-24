@@ -161,6 +161,13 @@ var UsersManager = function(options) {
     options.tokenProvider
   );
   this.permissions = new RetryRestClient(userPermissionsClient, options.retry);
+
+  var organizationsClient = new Auth0RestClient(
+    options.baseUrl + '/users/:id/organizations',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.organizations = new RetryRestClient(organizationsClient, options.retry);
 };
 
 /**
@@ -927,6 +934,27 @@ UsersManager.prototype.removePermissions = function(params, data, cb) {
   }
 
   return this.permissions.delete(query, data);
+};
+
+/**
+ * Get a list of organizations for a user.
+ *
+ * @method    getUserOrganizations
+ * @memberOf  module:management.UsersManager.prototype
+ *
+ * @example
+ * management.users.getUserOrganizations({ id: USER_ID }, function (err, orgs) {
+ *   console.log(orgs);
+ * });
+ *
+ * @param   {Object}    data      The user data object.
+ * @param   {String}    data.id   The user id.
+ * @param   {Function}  [cb]      Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+UsersManager.prototype.getUserOrganizations = function() {
+  return this.organizations.getAll.apply(this.organizations, arguments);
 };
 
 module.exports = UsersManager;

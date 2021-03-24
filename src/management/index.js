@@ -34,6 +34,7 @@ var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
 var PromptsManager = require('./PromptsManager');
+var OrganizationsManager = require('./OrganizationsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -350,6 +351,13 @@ var ManagementClient = function(options) {
    * @type {PromptsManager}
    */
   this.prompts = new PromptsManager(managerOptions);
+
+  /**
+   * Organizations Manager
+   *
+   * @type {OrganizationsManager}
+   */
+  this.organizations = new OrganizationsManager(managerOptions);
 };
 
 /**
