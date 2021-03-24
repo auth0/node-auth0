@@ -354,7 +354,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *   </a>.
  * </caption>
  *
- * var data = {
+ * var options = {
  *   code: '{CODE}',
  *   redirect_uri: '{REDIRECT_URI}',
  *   client_id: '{CLIENT_ID}',  // Optional field.
@@ -362,7 +362,7 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *   organization: '{ORGANIZATION_ID}' // Optiional field.
  * };
  *
- * auth0.oauth.authorizationCodeGrant(data, function (err, userData) {
+ * auth0.oauth.authorizationCodeGrant(options, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -370,10 +370,10 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  *   console.log(userData);
  * });
  *
- * @param   {Object}    data                  Authorization code payload
- * @param   {String}    userData.organization Organization ID
- * @param   {String}    userData.code         Code in URL returned after authentication
- * @param   {String}    userData.redirect_uri The URL to which Auth0 will redirect the browser after authorization has been granted by the user.
+ * @param   {Object}    options                  Authorization code payload
+ * @param   {String}    options.organization     Organization ID
+ * @param   {String}    options.code             Code in URL returned after authentication
+ * @param   {String}    options.redirect_uri     The URL to which Auth0 will redirect the browser after authorization has been granted by the user.
  *
  * @return  {Promise|undefined}
  */
