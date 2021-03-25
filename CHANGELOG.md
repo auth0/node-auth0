@@ -1,5 +1,25 @@
 # Change Log
 
+## [v2.34.0](https://github.com/auth0/node-auth0/tree/v2.34.0) (2021-03-24)
+
+**Added**
+
+- feat(orgs): Support Organization feature [\#592](https://github.com/auth0/node-auth0/pull/592) ([mcastany](https://github.com/mcastany))
+- Org idtoken validation support [\#597](https://github.com/auth0/node-auth0/pull/597) ([davidpatrick](https://github.com/davidpatrick))
+- Allow passwordless SMS code verification to use token endpoint [\#591](https://github.com/auth0/node-auth0/pull/591) ([jimmyjames](https://github.com/jimmyjames))
+
+**Changed**
+
+- Doc Updates [\#599](https://github.com/auth0/node-auth0/pull/599) ([davidpatrick](https://github.com/davidpatrick))
+- Update get role users docs [\#587](https://github.com/auth0/node-auth0/pull/587) ([jhiner](https://github.com/jhiner))
+- revokeRefreshToken method is missing in docs [\#584](https://github.com/auth0/node-auth0/issues/584)
+
+**Security**
+
+- [Security] Bump elliptic from 6.5.3 to 6.5.4 [\#589](https://github.com/auth0/node-auth0/pull/589) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.33.0...v2.34.0)
+
 ## [v2.33.0](https://github.com/auth0/node-auth0/tree/v2.33.0) (2021-02-05)
 
 **Added**
