@@ -499,6 +499,72 @@ ActionsManager.prototype.getActionVersions = function(params, cb) {
 };
 
 /**
+ * Get an Action Version.
+ *
+ * @method    getActionVersion
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+ * management.actions.getActionVersion(params, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.version_id     ActionVersion ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getActionVersion = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersions.get(params, cb);
+  }
+
+  return this.actionVersions.get(params);
+};
+
+/**
+ * Create an Action Version. In general, updating an action and then
+ * deploying it is the preferred way of creating an action version, but
+ * this operation is supported as a way of creating versions without
+ * updating the action's code (which can be useful in some CI/CD scenarios).
+ *
+ * @method    createActionVersion
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID };
+ * management.actions.createActionVersion(params, data, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {Object}    data                  ActionVersion parameters.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.createActionVersion = function(params, data, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersions.create(params, data, cb);
+  }
+
+  return this.actionVersions.create(params, data);
+};
+
+/**
  * deploy an Action Version to roll back to a previous version.
  *
  * @method    deployActionVersion
