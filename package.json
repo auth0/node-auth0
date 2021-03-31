@@ -34,7 +34,7 @@
     "es6-promisify": "^6.1.1",
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.10.0",
+    "jwks-rsa": "^1.12.1",
     "lru-memoizer": "^2.1.0",
     "rest-facade": "^1.13.0",
     "retry": "^0.12.0"
