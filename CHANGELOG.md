@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.34.1](https://github.com/auth0/node-auth0/tree/v2.34.1) (2021-04-01)
+
+**Fixed**
+
+- Small fix to ManagementTokenProvider Cache [\#604](https://github.com/auth0/node-auth0/pull/604) ([davidpatrick](https://github.com/davidpatrick))
+
+**Security**
+
+- Bump y18n from 4.0.0 to 4.0.1 [\#602](https://github.com/auth0/node-auth0/pull/602) ([dependabot-preview](https://github.com/dependabot-preview))
+- Security upgrade jwks-rsa from 1.10.0 to 1.12.1 [\#601](https://github.com/auth0/node-auth0/pull/601) ([snyk-bot](https://github.com/snyk-bot))
+
 ## [v2.34.0](https://github.com/auth0/node-auth0/tree/v2.34.0) (2021-03-24)
 
 **Added**
