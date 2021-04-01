@@ -357,8 +357,6 @@ OAuthAuthenticator.prototype.clientCredentialsGrant = function(options, cb) {
  * var options = {
  *   code: '{CODE}',
  *   redirect_uri: '{REDIRECT_URI}',
- *   client_id: '{CLIENT_ID}',  // Optional field.
- *   client_secret: '{CLIENT_SECRET}',  // Optional field.
  *   organization: '{ORGANIZATION_ID}' // Optiional field.
  * };
  *
