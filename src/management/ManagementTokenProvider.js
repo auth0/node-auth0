@@ -95,8 +95,8 @@ var ManagementTokenProvider = function(options) {
           return options.cacheTTLInSeconds * 1000;
         }
 
-        // if the expires_in is lower than 10 seconds, do not subtract 10 additional seconds.
-        if (data.expires_in && data.expires_in < 10 /* seconds */) {
+        // if the expires_in is lower or equal to than 10 seconds, do not subtract 10 additional seconds.
+        if (data.expires_in && data.expires_in <= 10 /* seconds */) {
           return data.expires_in * 1000;
         } else if (data.expires_in) {
           // Subtract 10 seconds from expires_in to fetch a new one, before it expires.

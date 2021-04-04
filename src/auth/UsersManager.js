@@ -4,7 +4,7 @@ var axios = require('axios');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 /**
- * @class
+ * @class UsersManager
  * Provides methods for getting user information and impersonating users.
  * @constructor
  * @memberOf module:auth

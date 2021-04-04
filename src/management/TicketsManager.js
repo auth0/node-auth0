@@ -66,6 +66,16 @@ var TicketsManager = function(options) {
  *   }
  * });
  *
+ * @param   {Object}  data
+ * @param   {String}  [data.result_url] URL the user will be redirected to once ticket is used.
+ * @param   {String}  [data.user_id] user_id for whom the ticket should be created. (Conflicts with: connection_id, email)
+ * @param   {String}  [data.client_id] ID of the client.
+ * @param   {String}  [data.organization_id] ID of the organization.
+ * @param   {String}  [data.connection_id] ID of the connection.
+ * @param   {Integer} [data.ttl_sec] Number of seconds for which the ticket is valid before expiration.
+ * @param   {String}  [data.email] Email of the user. (Requires: connection_id)
+ * @param   {Boolean} [data.mark_email_as_verified] Whether to set the email_verified attribute to true (true) or whether it should not be updated (false).
+ * @param   {Boolean} [data.includeEmailInRedirect] Whether to include the email address as part of the returnUrl in the reset_email (true), or not (false).
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */
@@ -106,6 +116,8 @@ TicketsManager.prototype.changePassword = function(data, cb) {
  * @param   {Object}  [data.identity] Used to verify secondary, federated, and passwordless-email identities.
  * @param   {String}  data.identity.user_id user_id of the identity.
  * @param   {String}  data.identity.provider provider of the identity.
+ * @param   {String}  [data.client_id] client ID.
+ * @param   {String}  [data.organization_id] organization ID.
  * @param   {Function}  [cb]  Callback function.
  * @return  {Promise}
  */

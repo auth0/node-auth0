@@ -60,29 +60,16 @@ var PasswordlessAuthenticator = function(options, oauth) {
  * @method    signIn
  * @memberOf  module:auth.PasswordlessAuthenticator.prototype
  * @example <caption>
- *   Given the user credentials (`phone_number` and `code`), it will do the
- *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token` using `/oauth/ro` endpoint.
+ * Once you have a verification code, use this endpoint to login
+ * the user with their phone number/email and verification code.
+ *
+ * https://auth0.com/docs/api/authentication#authenticate-user
  * </caption>
  *
  * var data = {
- *   username: '{PHONE_NUMBER}',
- *   password: '{VERIFICATION_CODE}'
- * };
- *
- * auth0.passwordless.signIn(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- * });
- *
- * @example <caption>
- * To use `/oauth/token` endpoint, use `otp` and `realm` instead
- * </caption>
- *
- * var data = {
- *   username: '{PHONE_NUMBER}',
- *   otp: '{VERIFICATION_CODE}'
+ *   username: '{PHONE_NUMBER OR EMAIL}',
+ *   otp: '{VERIFICATION_CODE}',
+ *   realm: '{sms or email}' // OPTIONAL DEFAULTS TO SMS
  * };
  *
  * auth0.passwordless.signIn(data, function (err) {
@@ -101,11 +88,31 @@ var PasswordlessAuthenticator = function(options, oauth) {
  *   token_type: String
  * }
  *
+ * @example <caption>
+ *  LEGACY signIn using the `/oauth/ro` endpoint. When otp is not specified
+ *  password is required. Given the user credentials (`phone_number` and `code`),
+ *  it will do the authentication on the provider and return a JSON with
+ *  the `access_token` and `id_token`.
+ *
+ * https://auth0.com/docs/api/authentication#resource-owner
+ * </caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}',
+ *   password: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.passwordless.signIn(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
  * @param   {Object}    userData              User credentials object.
- * @param   {String}    userData.otp          The user's verification code.
- * @param   {String}    [userData.realm=sms]  Realm string: "sms" or "email".
  * @param   {String}    userData.username     The user's phone number if realm=sms, or the user's email if realm=email
- * @param   {String}    userData.password     [DEPRECATED] Password.
+ * @param   {String}    userData.otp        The user's verification code. Required
+ * @param   {String}    [userData.realm=sms]  Realm string: "sms" or "email".
+ * @param   {String}    [userData.password]     [DEPRECATED] Password required if using legacy /oauth/ro endpoint
  * @param   {String}    [userData.connection=sms] [DEPRECATED] Connection string: "sms" or "email".
  * @param   {Object}    [options]              Additional options.
  * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
