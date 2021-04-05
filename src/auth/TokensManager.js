@@ -4,7 +4,7 @@ var axios = require('axios');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 /**
- * @class
+ * @class TokensManager
  * Provides methods for getting token data and exchanging tokens.
  * @constructor
  * @memberOf module:auth
@@ -33,7 +33,7 @@ var TokensManager = function(options) {
 /**
  * Given an ID token get the user profile linked to it.
  *
- * @method
+ * @method   getInfo
  * @memberOf module:auth.TokensManager.prototype
  *
  * @example <caption>
@@ -88,7 +88,7 @@ TokensManager.prototype.getInfo = function(idToken, cb) {
  * Exchange the token of the logged in user with a token that is valid to call
  * the API (signed with the API secret).
  *
- * @method
+ * @method   getDelegationToken
  * @memberOf module:auth.TokensManager.prototype
  *
  * @example <caption>
@@ -177,7 +177,7 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
 /**
  * Proactively revoke an issued refresh token.
  *
- * @method
+ * @method   revokeRefreshToken
  * @memberOf module:auth.TokensManager.prototype
  *
  * @example <caption>

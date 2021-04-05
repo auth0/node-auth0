@@ -38,6 +38,7 @@ var ActionsManager = require('./ActionsManager');
 var ActionsVersionsManager = require('./ActionVersionsManager');
 var ActionBindingsManager = require('./ActionBindingsManager');
 var ActionExecutionsManager = require('./ActionExecutionsManager');
+var OrganizationsManager = require('./OrganizationsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -386,6 +387,13 @@ var ManagementClient = function(options) {
    * @type {ActionExecutionsManager}
    */
   this.actionExecutions = new ActionExecutionsManager(managerOptions);
+
+  /**
+   * Organizations Manager
+   *
+   * @type {OrganizationsManager}
+   */
+  this.organizations = new OrganizationsManager(managerOptions);
 };
 
 /**
@@ -3711,7 +3719,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getS
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getBrandingUniversalLoginTemplate', 'branding.getUniversalLoginTemplate');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getBrandingUniversalLoginTemplate',
+  'branding.getUniversalLoginTemplate'
+);
 
 /**
  * Get the new universal login template.
@@ -3732,7 +3744,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getBrandingUniversalLoginTemplate', 
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'setBrandingUniversalLoginTemplate', 'branding.setUniversalLoginTemplate');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'setBrandingUniversalLoginTemplate',
+  'branding.setUniversalLoginTemplate'
+);
 
 /**
  * Delete the new universal login template.
@@ -3753,7 +3769,11 @@ utils.wrapPropertyMethod(ManagementClient, 'setBrandingUniversalLoginTemplate', 
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteBrandingUniversalLoginTemplate', 'branding.deleteUniversalLoginTemplate');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'deleteBrandingUniversalLoginTemplate',
+  'branding.deleteUniversalLoginTemplate'
+);
 
 /**
  * Update the tenant migrations.
