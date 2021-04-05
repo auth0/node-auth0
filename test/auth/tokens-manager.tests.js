@@ -14,7 +14,8 @@ describe('TokensManager', function() {
       'Content-Type': 'application/json',
       'Test-Header': 'TEST'
     },
-    clientId: 'CLIENT_ID'
+    clientId: 'CLIENT_ID',
+    clientSecret: 'CLIENT_SECRET'
   };
 
   afterEach(function() {
@@ -34,7 +35,7 @@ describe('TokensManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['getInfo', 'getDelegationToken'];
+    var methods = ['getInfo', 'getDelegationToken', 'revokeRefreshToken'];
     var manager = new TokensManager(validOptions);
 
     methods.forEach(function(methodName) {
@@ -321,6 +322,205 @@ describe('TokensManager', function() {
         .reply(200);
 
       manager.getDelegationToken(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#revokeRefreshToken', function() {
+    var path = '/oauth/revoke';
+    var manager = new TokensManager(validOptions);
+
+    beforeEach(function() {
+      this.request = nock(BASE_URL)
+        .post(path)
+        .reply(200);
+    });
+
+    it('should require a token data object', function() {
+      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager);
+
+      expect(revokeRefreshToken).to.throw(ArgumentError, 'Missing token data object');
+    });
+
+    it('should require a token property in the token data object', function() {
+      var data = {};
+      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
+
+      expect(revokeRefreshToken).to.throw(ArgumentError, 'token property is required');
+    });
+
+    it('should require at least a target client ID', function() {
+      var manager = new TokensManager({
+        baseUrl: BASE_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          'Test-Header': 'TEST'
+        }
+      });
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
+
+      expect(revokeRefreshToken).to.throw(
+        ArgumentError,
+        'Neither token data client_id property or constructor clientId property has been set'
+      );
+    });
+
+    it('should accept a callback', function(done) {
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      manager.revokeRefreshToken(data, done.bind(null, null));
+    });
+
+    it('should return a promise when no callback is given', function() {
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+      var returnValue = manager.revokeRefreshToken(data);
+      expect(utilTypes.isPromise(returnValue)).ok;
+    });
+
+    it('should not return a promise when a callback is given', function() {
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+      var returnValue = manager.revokeRefreshToken(data, function() {});
+
+      expect(returnValue).to.equal(undefined);
+    });
+
+    it('should perform a POST request to ' + path, function() {});
+
+    it('should include the data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      var request = nock(BASE_URL)
+        .post(path, function(body) {
+          for (var property in data) {
+            if (body[property] !== data[property]) {
+              return false;
+            }
+          }
+
+          return true;
+        })
+        .reply();
+
+      manager.revokeRefreshToken(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should use the TokensManager instance client ID if none specified', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      var request = nock(BASE_URL)
+        .post(path, function(body) {
+          return body.client_id === validOptions.clientId;
+        })
+        .reply();
+
+      manager.revokeRefreshToken(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should let the user override the default client ID', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN',
+        client_id: 'OVERRIDEN_CLIENT_ID'
+      };
+
+      var request = nock(BASE_URL)
+        .post(path, function(body) {
+          return body.client_id === data.client_id;
+        })
+        .reply();
+
+      manager.revokeRefreshToken(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should use the TokensManager instance client secret if none specified', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      var request = nock(BASE_URL)
+        .post(path, function(body) {
+          return body.client_secret === validOptions.clientSecret;
+        })
+        .reply();
+
+      manager.revokeRefreshToken(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should let the user override the default client secret', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN',
+        client_secret: 'OVERRIDEN_CLIENT_SECRET'
+      };
+
+      var request = nock(BASE_URL)
+        .post(path, function(body) {
+          return body.client_secret === data.client_secret;
+        })
+        .reply();
+
+      manager.revokeRefreshToken(data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the headers specified in the instance options', function(done) {
+      nock.cleanAll();
+
+      var data = {
+        token: 'TEST_REFRESH_TOKEN'
+      };
+
+      var request = nock(BASE_URL)
+        .post(path)
+        .matchHeader('Test-Header', validOptions.headers['Test-Header'])
+        .reply(200);
+
+      manager.revokeRefreshToken(data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

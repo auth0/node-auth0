@@ -233,4 +233,244 @@ describe('BrandingManager', function() {
       });
     });
   });
+
+  describe('#getUniversalLoginTemplate', function() {
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/branding/templates/universal-login')
+        .reply(200);
+    });
+
+    afterEach(function() {
+      nock.cleanAll();
+    });
+
+    it('should accept a callback', function(done) {
+      this.branding.getUniversalLoginTemplate(function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.branding
+        .getUniversalLoginTemplate()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/branding/templates/universal-login')
+        .reply(500);
+
+      this.branding.getUniversalLoginTemplate().catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function(done) {
+      var data = { body: 'test' };
+
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/branding/templates/universal-login')
+        .reply(200, data);
+
+      this.branding.getUniversalLoginTemplate().then(function(response) {
+        expect(response.body).to.equal(data.body);
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/branding', function(done) {
+      var request = this.request;
+
+      this.branding.getUniversalLoginTemplate().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/branding/templates/universal-login')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.branding.getUniversalLoginTemplate().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#setUniversalLoginTemplate', function() {
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .put('/branding/templates/universal-login')
+        .reply(200);
+    });
+
+    afterEach(function() {
+      nock.cleanAll();
+    });
+
+    it('should accept a callback', function(done) {
+      this.branding.setUniversalLoginTemplate({}, {}, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.branding
+        .setUniversalLoginTemplate({}, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/branding/templates/universal-login')
+        .reply(500);
+
+      this.branding.setUniversalLoginTemplate({}, {}).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function(done) {
+      var data = { body: 'test' };
+
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/branding/templates/universal-login')
+        .reply(200, data);
+
+      this.branding.setUniversalLoginTemplate({}, data).then(function(response) {
+        expect(response.body).to.equal(data.body);
+
+        done();
+      });
+    });
+
+    it('should perform a PUT request to /api/v2/branding/templates/universal-login', function(done) {
+      var request = this.request;
+
+      this.branding.setUniversalLoginTemplate({}, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/branding/templates/universal-login')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.branding.setUniversalLoginTemplate({}, {}).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#deleteUniversalLoginTemplate', function() {
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .delete('/branding/templates/universal-login')
+        .reply(200);
+    });
+
+    afterEach(function() {
+      nock.cleanAll();
+    });
+
+    it('should accept a callback', function(done) {
+      this.branding.deleteUniversalLoginTemplate(function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.branding
+        .deleteUniversalLoginTemplate()
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/branding/templates/universal-login')
+        .reply(500);
+
+      this.branding.deleteUniversalLoginTemplate().catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function(done) {
+      var data = { body: 'test' };
+
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/branding/templates/universal-login')
+        .reply(200, data);
+
+      this.branding.deleteUniversalLoginTemplate().then(function(response) {
+        expect(response.body).to.equal(data.body);
+
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/branding/templates/universal-login', function(done) {
+      var request = this.request;
+
+      this.branding.deleteUniversalLoginTemplate().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .delete('/branding/templates/universal-login')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.branding.deleteUniversalLoginTemplate().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
 });

@@ -138,6 +138,16 @@ describe('ManagementTokenProvider', function() {
     expect(provider.options.cacheTTLInSeconds).to.be.equal(15);
   });
 
+  it('should set headers when passed into options', function() {
+    var config = Object.assign({}, defaultConfig);
+    config.headers = {
+      'User-Agent': 'node.js',
+      'Content-Type': 'application/json'
+    };
+    var provider = new ManagementTokenProvider(config);
+    expect(provider.options.headers).to.be.equal(config.headers);
+  });
+
   it('should handle network errors correctly', function(done) {
     var config = Object.assign({}, defaultConfig);
     config.domain = 'domain';
@@ -166,6 +176,41 @@ describe('ManagementTokenProvider', function() {
       done();
       nock.cleanAll();
     });
+  });
+  function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  it('should expire access token from cache by the expires_in setting', async function() {
+    this.timeout(15000); // buffer time to test an artificial delay of 10s
+
+    var config = Object.assign({}, defaultConfig);
+    config.domain = 'auth0-node-sdk-1.auth0.com';
+    var client = new ManagementTokenProvider(config);
+
+    nock('https://' + config.domain)
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'token',
+        expires_in: 10
+      });
+
+    const access_token = await client.getAccessToken();
+    expect(access_token).to.exist;
+    expect(access_token).to.be.equal('token');
+    await client.getAccessToken();
+    await timeout(10000);
+
+    nock('https://' + config.domain)
+      .post('/oauth/token')
+      .reply(200, {
+        access_token: 'token2',
+        expires_in: 10
+      });
+    const access_token2 = await client.getAccessToken();
+    expect(access_token2).to.exist;
+    expect(access_token2).to.be.equal('token2');
+
+    nock.cleanAll();
   });
 
   it('should return access token', function(done) {

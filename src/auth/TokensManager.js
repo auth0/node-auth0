@@ -4,15 +4,16 @@ var axios = require('axios');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 /**
- * @class
+ * @class TokensManager
  * Provides methods for getting token data and exchanging tokens.
  * @constructor
  * @memberOf module:auth
  *
- * @param  {Object}   options               Manager options.
- * @param  {String}   options.baseUrl       The auth0 account URL.
- * @param  {String}   [options.headers]     Default request headers.
- * @param  {String}   [options.clientId]    Default client ID.
+ * @param  {Object}   options                 Manager options.
+ * @param  {String}   options.baseUrl         The auth0 account URL.
+ * @param  {String}   [options.headers]       Default request headers.
+ * @param  {String}   [options.clientId]      Default client ID.
+ * @param  {String}   [options.clientSecret]  Default client Secret.
  */
 var TokensManager = function(options) {
   if (typeof options !== 'object') {
@@ -26,12 +27,13 @@ var TokensManager = function(options) {
   this.baseUrl = options.baseUrl;
   this.headers = options.headers || {};
   this.clientId = options.clientId || '';
+  this.clientSecret = options.clientSecret || '';
 };
 
 /**
  * Given an ID token get the user profile linked to it.
  *
- * @method
+ * @method   getInfo
  * @memberOf module:auth.TokensManager.prototype
  *
  * @example <caption>
@@ -86,7 +88,7 @@ TokensManager.prototype.getInfo = function(idToken, cb) {
  * Exchange the token of the logged in user with a token that is valid to call
  * the API (signed with the API secret).
  *
- * @method
+ * @method   getDelegationToken
  * @memberOf module:auth.TokensManager.prototype
  *
  * @example <caption>
@@ -159,6 +161,86 @@ TokensManager.prototype.getDelegationToken = function(data, cb) {
   var promise = axios({
     method: 'POST',
     url: this.baseUrl + '/delegation',
+    data: body,
+    headers: headers
+  }).then(({ data }) => data);
+
+  // Use callback if given.
+  if (cb instanceof Function) {
+    promise.then(cb.bind(null, null)).catch(cb);
+    return;
+  }
+
+  return promise;
+};
+
+/**
+ * Proactively revoke an issued refresh token.
+ *
+ * @method   revokeRefreshToken
+ * @memberOf module:auth.TokensManager.prototype
+ *
+ * @example <caption>
+ *   Given an existing refresh token, this endpoint will revoke it in order
+ *   to prevent unauthorized silently user authentication tokens refresh.
+ *   Find more information in the <a href="https://auth0.com/docs/api/authentication#revoke-refresh-token">API Docs</a>.
+ * </caption>
+ *
+ *  * var data = {
+ *   token: '{REFRESH_TOKEN}'
+ * };
+ *
+ * auth0.tokens.revokeRefreshToken(data, function (err, _) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Do stuff.
+ * });
+ *
+ * @param   {Object}    data                  Token data object.
+ * @param   {String}    data.token            User refresh token.
+ * @param   {String}    [data.client_id]      Target client ID.
+ * @param   {String}    [data.client_secret]  Target client secret.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+TokensManager.prototype.revokeRefreshToken = function(data, cb) {
+  if (!data) {
+    throw new ArgumentError('Missing token data object');
+  }
+
+  var hasToken = typeof data.token === 'string' && data.token.trim().length !== 0;
+
+  if (!hasToken) {
+    throw new ArgumentError('token property is required');
+  }
+
+  var hasClientId =
+    (data.client_id && typeof data.client_id === 'string' && data.client_id.trim().length !== 0) ||
+    this.clientId !== '';
+
+  if (!hasClientId) {
+    throw new ArgumentError(
+      'Neither token data client_id property or constructor clientId property has been set'
+    );
+  }
+
+  var body = extend(
+    {
+      client_id: this.clientId,
+      client_secret: this.clientSecret
+    },
+    data
+  );
+
+  var headers = this.headers;
+
+  // Perform the request.
+  var promise = axios({
+    method: 'POST',
+    url: this.baseUrl + '/oauth/revoke',
     data: body,
     headers: headers
   }).then(({ data }) => data);
