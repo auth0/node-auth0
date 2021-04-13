@@ -25,10 +25,10 @@ describe('ActionsManager', function() {
       'delete',
       'deploy',
       'test',
-      'getActionVersions',
-      'getActionVersion',
-      'createActionVersion',
-      'deployActionVersion',
+      'getVersions',
+      'getVersion',
+      'createVersion',
+      'deployVersion',
       'getAllTriggers',
       'testTrigger',
       'getTriggerBindings',
@@ -555,7 +555,7 @@ describe('ActionsManager', function() {
   });
 
   describe('action versions', function() {
-    describe('#getActionVersions', function() {
+    describe('#getVersions', function() {
       beforeEach(function() {
         nock.cleanAll();
 
@@ -571,7 +571,7 @@ describe('ActionsManager', function() {
       it('should accept a callback', function(done) {
         var params = { action_id: this.data.id };
 
-        this.actions.getActionVersions(params, done.bind(null, null));
+        this.actions.getVersions(params, done.bind(null, null));
       });
 
       it('should return a promise if no callback is given', function(done) {
@@ -584,7 +584,7 @@ describe('ActionsManager', function() {
       it('should perform a GET request', function(done) {
         var request = this.request;
 
-        this.actions.getActionVersions({ action_id: this.data.id }).then(function() {
+        this.actions.getVersions({ action_id: this.data.id }).then(function() {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -598,7 +598,7 @@ describe('ActionsManager', function() {
           .get('/actions/actions/' + this.data.id + '/versions')
           .reply(500);
 
-        this.actions.getActionVersions({ action_id: this.data.id }).catch(function(err) {
+        this.actions.getVersions({ action_id: this.data.id }).catch(function(err) {
           expect(err).to.exist;
 
           done();
@@ -613,7 +613,7 @@ describe('ActionsManager', function() {
           .matchHeader('Authorization', 'Bearer ' + this.token)
           .reply(200);
 
-        this.actions.getActionVersions({ action_id: this.data.id }).then(function() {
+        this.actions.getVersions({ action_id: this.data.id }).then(function() {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -621,7 +621,7 @@ describe('ActionsManager', function() {
       });
     });
 
-    describe('#getActionVersion', function() {
+    describe('#getVersion', function() {
       beforeEach(function() {
         nock.cleanAll();
 
@@ -638,7 +638,7 @@ describe('ActionsManager', function() {
       it('should accept a callback', function(done) {
         var params = { action_id: this.data.id, version_id: this.data.versionId };
 
-        this.actions.getActionVersions(params, done.bind(null, null));
+        this.actions.getVersions(params, done.bind(null, null));
       });
 
       it('should return a promise if no callback is given', function(done) {
@@ -652,7 +652,7 @@ describe('ActionsManager', function() {
         var request = this.request;
 
         this.actions
-          .getActionVersions({ action_id: this.data.id, version_id: this.data.versionId })
+          .getVersions({ action_id: this.data.id, version_id: this.data.versionId })
           .then(function() {
             expect(request.isDone()).to.be.true;
 
@@ -668,7 +668,7 @@ describe('ActionsManager', function() {
           .reply(500);
 
         this.actions
-          .getActionVersions({ action_id: this.data.id, version_id: this.data.versionId })
+          .getVersions({ action_id: this.data.id, version_id: this.data.versionId })
           .catch(function(err) {
             expect(err).to.exist;
 
@@ -685,7 +685,7 @@ describe('ActionsManager', function() {
           .reply(200);
 
         this.actions
-          .getActionVersions({ action_id: this.data.id, version_id: this.data.versionId })
+          .getVersions({ action_id: this.data.id, version_id: this.data.versionId })
           .then(function() {
             expect(request.isDone()).to.be.true;
 
@@ -694,7 +694,7 @@ describe('ActionsManager', function() {
       });
     });
 
-    describe('#createActionVersion', function() {
+    describe('#createVersion', function() {
       beforeEach(function() {
         nock.cleanAll();
 
@@ -710,12 +710,12 @@ describe('ActionsManager', function() {
       it('should accept a callback', function(done) {
         var params = { action_id: this.data.id };
 
-        this.actions.createActionVersion(params, done.bind(null, null));
+        this.actions.createVersion(params, done.bind(null, null));
       });
 
       it('should return a promise if no callback is given', function(done) {
         this.actions
-          .createActionVersion({ action_id: this.data.id }, {})
+          .createVersion({ action_id: this.data.id }, {})
           .then(done.bind(null, null))
           .catch(done.bind(null, null));
       });
@@ -723,7 +723,7 @@ describe('ActionsManager', function() {
       it('should perform a POST request', function(done) {
         var request = this.request;
 
-        this.actions.createActionVersion({ action_id: this.data.id }, {}).then(function() {
+        this.actions.createVersion({ action_id: this.data.id }, {}).then(function() {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -737,7 +737,7 @@ describe('ActionsManager', function() {
           .post('/actions/actions/' + this.data.id + '/versions')
           .reply(500);
 
-        this.actions.createActionVersion({ action_id: this.data.id }, {}).catch(function(err) {
+        this.actions.createVersion({ action_id: this.data.id }, {}).catch(function(err) {
           expect(err).to.exist;
 
           done();
@@ -752,7 +752,7 @@ describe('ActionsManager', function() {
           .matchHeader('Authorization', 'Bearer ' + this.token)
           .reply(200);
 
-        this.actions.createActionVersion({ action_id: this.data.id }, {}).then(function() {
+        this.actions.createVersion({ action_id: this.data.id }, {}).then(function() {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -760,7 +760,7 @@ describe('ActionsManager', function() {
       });
     });
 
-    describe('#deployActionVersion', function() {
+    describe('#deployVersion', function() {
       var action_id = 'action-id-1';
       var version_id = 'action-version-id-1';
 
@@ -771,17 +771,17 @@ describe('ActionsManager', function() {
       });
 
       it('should accept a callback', function(done) {
-        this.actions.deployActionVersion({ action_id, version_id }, done.bind(null, null));
+        this.actions.deployVersion({ action_id, version_id }, done.bind(null, null));
       });
 
       it('should return a promise when no callback is given', function(done) {
-        this.actions.deployActionVersion({ action_id, version_id }).then(done.bind(null, null));
+        this.actions.deployVersion({ action_id, version_id }).then(done.bind(null, null));
       });
 
       it('should perform a post request', function(done) {
         var request = this.request;
 
-        this.actions.deployActionVersion({ action_id, version_id }).then(function() {
+        this.actions.deployVersion({ action_id, version_id }).then(function() {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -795,7 +795,7 @@ describe('ActionsManager', function() {
           .post('/actions/actions/' + action_id + '/versions/' + version_id + '/deploy')
           .reply(500);
 
-        this.actions.deployActionVersion({ action_id, version_id }).catch(function(err) {
+        this.actions.deployVersion({ action_id, version_id }).catch(function(err) {
           expect(err).to.exist;
 
           done();

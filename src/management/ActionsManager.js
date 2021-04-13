@@ -462,7 +462,7 @@ ActionsManager.prototype.deploy = function(params, cb) {
 /**
  * Get all action versions
  *
- * @method    getAll
+ * @method    getVersions
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example <caption>
@@ -476,7 +476,7 @@ ActionsManager.prototype.deploy = function(params, cb) {
  *   page: 0
  * };
  *
- * management.actions.getActionVersions({ action_id: ACTION_ID }, function (err, actionVersions) {
+ * management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVersions) {
  *   console.log(actionVersions.length);
  * });
  *
@@ -488,7 +488,7 @@ ActionsManager.prototype.deploy = function(params, cb) {
  *
  * @return  {Promise|undefined}
  */
-ActionsManager.prototype.getActionVersions = function(params, cb) {
+ActionsManager.prototype.getVersions = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
@@ -501,12 +501,12 @@ ActionsManager.prototype.getActionVersions = function(params, cb) {
 /**
  * Get an Action Version.
  *
- * @method    getActionVersion
+ * @method    getVersion
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
  * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
- * management.actions.getActionVersion(params, function (err, actionVersion) {
+ * management.actions.getVersion(params, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -520,7 +520,7 @@ ActionsManager.prototype.getActionVersions = function(params, cb) {
  *
  * @return  {Promise|undefined}
  */
-ActionsManager.prototype.getActionVersion = function(params, cb) {
+ActionsManager.prototype.getVersion = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
@@ -536,7 +536,7 @@ ActionsManager.prototype.getActionVersion = function(params, cb) {
  * this operation is supported as a way of creating versions without
  * updating the action's code (which can be useful in some CI/CD scenarios).
  *
- * @method    createActionVersion
+ * @method    createVersion
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
@@ -554,7 +554,7 @@ ActionsManager.prototype.getActionVersion = function(params, cb) {
  *
  * @return  {Promise|undefined}
  */
-ActionsManager.prototype.createActionVersion = function(params, data, cb) {
+ActionsManager.prototype.createVersion = function(params, data, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
@@ -567,12 +567,12 @@ ActionsManager.prototype.createActionVersion = function(params, data, cb) {
 /**
  * deploy an Action Version to roll back to a previous version.
  *
- * @method    deployActionVersion
+ * @method    deployVersion
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
  * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
- * management.actions.deployActionVersion(params, function (err, actionVersion) {
+ * management.actions.deployVersion(params, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -586,7 +586,7 @@ ActionsManager.prototype.createActionVersion = function(params, data, cb) {
  *
  * @return  {Promise|undefined}
  */
-ActionsManager.prototype.deployActionVersion = function(params, cb) {
+ActionsManager.prototype.deployVersion = function(params, cb) {
   params = params || {};
 
   if (cb && cb instanceof Function) {
@@ -599,11 +599,11 @@ ActionsManager.prototype.deployActionVersion = function(params, cb) {
 /**
  * Get an execution by ID.
  *
- * @method    get
+ * @method    getExecution
  * @memberOf  module:management.ActionExecutionsManager.prototype
  *
  * @example
- * management.actionExecutions.get({ execution_id: EXECUTION_ID }, function (err, action) {
+ * management.actions.getExecution({ execution_id: EXECUTION_ID }, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
