@@ -57,12 +57,33 @@ var ActionsManager = function(options) {
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
+  var actionsDeployRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/deploy',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionsDeploy = new RetryRestClient(actionsDeployRestClient, options.retry);
+
+  var actionsTestRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/test',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionsTest = new RetryRestClient(actionsTestRestClient, options.retry);
+
   var triggersRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/triggers',
+    options.baseUrl + '/actions/triggers/:trigger_id',
     clientOptions,
     options.tokenProvider
   );
   this.triggers = new RetryRestClient(triggersRestClient, options.retry);
+
+  var triggerBindingsRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/triggers/:trigger_id/bindings',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.triggerBindings = new RetryRestClient(triggerBindingsRestClient, options.retry);
 
   var triggersTestRestClient = new Auth0RestClient(
     options.baseUrl + '/actions/triggers/:trigger_id/test',
@@ -70,6 +91,168 @@ var ActionsManager = function(options) {
     options.tokenProvider
   );
   this.triggersTest = new RetryRestClient(triggersTestRestClient, options.retry);
+
+  var executionsRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/executions/:execution_id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.executions = new RetryRestClient(executionsRestClient, options.retry);
+
+  var actionVersionRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/versions/:version_id',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionVersions = new RetryRestClient(actionVersionRestClient, options.retry);
+
+  var deployActionVersionRestClient = new Auth0RestClient(
+    options.baseUrl + '/actions/actions/:action_id/versions/:version_id/deploy',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.actionVersionDeploy = new RetryRestClient(deployActionVersionRestClient, options.retry);
+};
+
+/**
+ * Get all Triggers.
+ *
+ * @method    getAllTriggers
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.actions.getAllTriggers(params, function (err, actions) {
+ *   console.log(actions.length);
+ * });
+ *
+ * @param   {Object}    [params]               Actions parameters.
+ * @param   {Number}    [params.per_page]      Number of results per page.
+ * @param   {Number}    [params.page]          Page number, zero indexed.
+ * @param   {Function}  [cb]                   Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getAllTriggers = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.triggers.getAll(params, cb);
+  }
+
+  return this.triggers.getAll(params);
+};
+
+/**
+ * Update the actions bound to a trigger .
+ *
+ * @method    updateTriggerBindings
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var data = { bindings: [{ id_type: "action_id", id_value: ACTION_ID1},{id_type: "action_name", id_value: ACTION_NAME2}];
+ * var params = { trigger_id: TRIGGER_ID };
+ *
+ * // Using auth0 instance.
+ * management.actions.updateTriggerBindings(params, data, function (err, bindings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(bindings.length);  // 2
+ * });
+ *
+ * @param   {Object}    params                Actions Binding parameters.
+ * @param   {String}    params.trigger_id     Actions Trigger ID.
+ * @param   {Object}    data                  bindings array
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.updateTriggerBindings = function(params, data, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.triggerBindings.patch(params, data, cb);
+  }
+
+  return this.triggerBindings.patch(params, data);
+};
+
+/**
+ * test an Trigger.
+ *
+ * @method    testTrigger
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { trigger_id: TRIGGER_ID};
+ * auth0.actions.testTrigger(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.trigger_id     Trigger ID.
+ * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular trigger
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.testTrigger = function(params, payload, cb) {
+  params = params || {};
+  payload = payload || {};
+
+  if (cb && cb instanceof Function) {
+    return this.triggersTest.create(params, payload, cb);
+  }
+
+  return this.triggersTest.create(params, payload);
+};
+
+/**
+ * Get the actions bound to a trigger .
+ *
+ * @method    getTriggerBindings
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { trigger_id: TRIGGER_ID };
+ *
+ * // Using auth0 instance.
+ * management.actions.getTriggerBindings(params, function (err, bindings) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(bindings.length);  // 2
+ * });
+ *
+ * @param   {Object}    params                Actions Binding parameters.
+ * @param   {String}    params.trigger_id     Actions Trigger ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getTriggerBindings = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.triggerBindings.getAll(params, cb);
+  }
+
+  return this.triggerBindings.getAll(params);
 };
 
 /**
@@ -127,77 +310,6 @@ utils.wrapPropertyMethod(ActionsManager, 'create', 'resource.create');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ActionsManager, 'getAll', 'resource.getAll');
-
-/**
- * Get all Triggers.
- *
- * @method    getAllTriggers
- * @memberOf  module:management.ActionsManager.prototype
- *
- * @example <caption>
- *   This method takes an optional object as first argument that may be used to
- *   specify pagination settings. If pagination options are not present,
- *   the first page of a limited number of results will be returned.
- * </caption>
- * // Pagination settings.
- * var params = {
- *   per_page: 10,
- *   page: 0
- * };
- *
- * management.actions.getAllTriggers(params, function (err, actions) {
- *   console.log(actions.length);
- * });
- *
- * @param   {Object}    [params]               Actions parameters.
- * @param   {Number}    [params.per_page]      Number of results per page.
- * @param   {Number}    [params.page]          Page number, zero indexed.
- * @param   {Function}  [cb]                   Callback function.
- *
- * @return  {Promise|undefined}
- */
-ActionsManager.prototype.getAllTriggers = function(params, cb) {
-  params = params || {};
-
-  if (cb && cb instanceof Function) {
-    return this.triggers.getAll(params, cb);
-  }
-
-  return this.triggers.getAll(params);
-};
-
-/**
- * test an Trigger.
- *
- * @method    testTrigger
- * @memberOf  module:management.ActionsManager.prototype
- *
- * @example
- * var params = { trigger_id: TRIGGER_ID};
- * auth0.testTrigger(params, payload, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- 
- * });
- *
- * @param   {Object}    params                Action parameters.
- * @param   {String}    params.trigger_id     Trigger ID.
- * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular trigger
- * @param   {Function}  [cb]                  Callback function.
- *
- * @return  {Promise|undefined}
- */
-ActionsManager.prototype.testTrigger = function(params, payload, cb) {
-  params = params || {};
-  payload = payload || {};
-
-  if (cb && cb instanceof Function) {
-    return this.triggersTest.create(params, payload, cb);
-  }
-
-  return this.triggersTest.create(params, payload);
-};
 
 /**
  * Get an Auth0 action.
@@ -281,5 +393,238 @@ utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
+
+/**
+ * test an Action.
+ *
+ * @method    test
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID};
+ * management.actions.testAction(params, payload, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular trigger
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.test = function(params, payload, cb) {
+  params = params || {};
+  payload = payload || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionsTest.create(params, payload, cb);
+  }
+
+  return this.actionsTest.create(params, payload);
+};
+
+/**
+ * deploy an Action.
+ * The action must be in a state of 'built' before it can be deployed.
+ *
+ * @method    deploy
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID};
+ * mangement.actions.deploy(params, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.deploy = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionsDeploy.create(params, {}, cb);
+  }
+
+  return this.actionsDeploy.create(params, {});
+};
+
+/**
+ * Get all action versions
+ *
+ * @method    getVersions
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example <caption>
+ *   This method takes an optional object as first argument that may be used to
+ *   specify pagination settings. If pagination options are not present,
+ *   the first page of a limited number of results will be returned.
+ * </caption>
+ * // Pagination settings.
+ * var params = {
+ *   per_page: 10,
+ *   page: 0
+ * };
+ *
+ * management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVersions) {
+ *   console.log(actionVersions.length);
+ * });
+ *
+ * @param   {Object}    [params]               ActionVersions parameters.
+ * @param   {Number}    [params.per_page]      Number of results per page.
+ * @param   {Number}    [params.page]          Page number, zero indexed.
+ * @param   {String}    [params.action_id]     Action ID.
+ * @param   {Function}  [cb]                   Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getVersions = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersions.getAll(params, cb);
+  }
+
+  return this.actionVersions.getAll(params);
+};
+
+/**
+ * Get an Action Version.
+ *
+ * @method    getVersion
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+ * management.actions.getVersion(params, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.version_id     ActionVersion ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getVersion = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersions.get(params, cb);
+  }
+
+  return this.actionVersions.get(params);
+};
+
+/**
+ * Create an Action Version. In general, updating an action and then
+ * deploying it is the preferred way of creating an action version, but
+ * this operation is supported as a way of creating versions without
+ * updating the action's code (which can be useful in some CI/CD scenarios).
+ *
+ * @method    createVersion
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID };
+ * management.actions.createActionVersion(params, data, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {Object}    data                  ActionVersion parameters.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.createVersion = function(params, data, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersions.create(params, data, cb);
+  }
+
+  return this.actionVersions.create(params, data);
+};
+
+/**
+ * deploy an Action Version to roll back to a previous version.
+ *
+ * @method    deployVersion
+ * @memberOf  module:management.ActionsManager.prototype
+ *
+ * @example
+ * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+ * management.actions.deployVersion(params, function (err, actionVersion) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+
+ * });
+ *
+ * @param   {Object}    params                Action parameters.
+ * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.version_id     Action ID.
+ * @param   {Function}  [cb]                  Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.deployVersion = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.actionVersionDeploy.create(params, {}, cb);
+  }
+
+  return this.actionVersionDeploy.create(params, {});
+};
+
+/**
+ * Get an execution by ID.
+ *
+ * @method    getExecution
+ * @memberOf  module:management.ActionExecutionsManager.prototype
+ *
+ * @example
+ * management.actions.getExecution({ execution_id: EXECUTION_ID }, function (err, action) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   console.log(ActionExecution);
+ * });
+ *
+ * @param   {Object}    params                  Action Execution parameters.
+ * @param   {String}    params.execution_id     Action Execution ID.
+ * @param   {Function}  [cb]                    Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+ActionsManager.prototype.getExecution = function(params, cb) {
+  params = params || {};
+
+  if (cb && cb instanceof Function) {
+    return this.executions.get(params, cb);
+  }
+
+  return this.executions.get(params);
+};
 
 module.exports = ActionsManager;
