@@ -638,7 +638,7 @@ describe('ActionsManager', function() {
       it('should accept a callback', function(done) {
         var params = { action_id: this.data.id, version_id: this.data.versionId };
 
-        this.actions.getVersions(params, done.bind(null, null));
+        this.actions.getVersion(params, done.bind(null, null));
       });
 
       it('should return a promise if no callback is given', function(done) {
@@ -652,7 +652,7 @@ describe('ActionsManager', function() {
         var request = this.request;
 
         this.actions
-          .getVersions({ action_id: this.data.id, version_id: this.data.versionId })
+          .getVersion({ action_id: this.data.id, version_id: this.data.versionId })
           .then(function() {
             expect(request.isDone()).to.be.true;
 
@@ -668,7 +668,7 @@ describe('ActionsManager', function() {
           .reply(500);
 
         this.actions
-          .getVersions({ action_id: this.data.id, version_id: this.data.versionId })
+          .getVersion({ action_id: this.data.id, version_id: this.data.versionId })
           .catch(function(err) {
             expect(err).to.exist;
 
@@ -685,7 +685,7 @@ describe('ActionsManager', function() {
           .reply(200);
 
         this.actions
-          .getVersions({ action_id: this.data.id, version_id: this.data.versionId })
+          .getVersion({ action_id: this.data.id, version_id: this.data.versionId })
           .then(function() {
             expect(request.isDone()).to.be.true;
 
@@ -710,7 +710,7 @@ describe('ActionsManager', function() {
       it('should accept a callback', function(done) {
         var params = { action_id: this.data.id };
 
-        this.actions.createVersion(params, done.bind(null, null));
+        this.actions.createVersion(params, this.data, done.bind(null, null));
       });
 
       it('should return a promise if no callback is given', function(done) {
@@ -892,6 +892,7 @@ describe('ActionsManager', function() {
   });
 
   describe('triggers', () => {
+    const params = { per_page: 2 };
     describe('#getAllTriggers', function() {
       beforeEach(function() {
         this.request = nock(API_URL)
@@ -900,7 +901,7 @@ describe('ActionsManager', function() {
       });
 
       it('should accept a callback', function(done) {
-        this.actions.getAllTriggers(function() {
+        this.actions.getAllTriggers(params, function() {
           done();
         });
       });
