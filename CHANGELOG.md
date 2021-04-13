@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.34.2](https://github.com/auth0/node-auth0/tree/v2.34.2) (2021-04-12)
+
+**Fixed**
+
+- [SDK-2484] Encode user ids on patch/update/delete [\#608](https://github.com/auth0/node-auth0/pull/608) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.1...v2.34.2)
+
 ## [v2.34.1](https://github.com/auth0/node-auth0/tree/v2.34.1) (2021-04-01)
 
 **Fixed**
