@@ -2,7 +2,7 @@ var extend = require('util')._extend;
 var sanitizeArguments = require('../utils').sanitizeArguments;
 
 var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
+var RestClientProxy = require('../RestClientProxy');
 
 var SanitizedError = require('../errors').SanitizedError;
 var OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
@@ -57,7 +57,7 @@ var OAuthAuthenticator = function(options) {
     headers: options.headers
   };
 
-  this.oauth = new RestClient(options.baseUrl + '/oauth/:type', clientOptions);
+  this.oauth = new RestClientProxy(options.baseUrl + '/oauth/:type', clientOptions);
   this.oauthWithIDTokenValidation = new OAUthWithIDTokenValidation(this.oauth, options);
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;

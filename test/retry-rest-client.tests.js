@@ -3,14 +3,14 @@ var sinon = require('sinon');
 var nock = require('nock');
 
 var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
+var RestClientProxy = require('../src/RestClientProxy');
 var RetryRestClient = require('../src/RetryRestClient');
 
 var API_URL = 'https://tenant.auth0.com';
 
 describe('RetryRestClient', function() {
   before(function() {
-    this.restClient = new RestClient(API_URL);
+    this.restClient = new RestClientProxy(API_URL);
   });
 
   it('should raise an error when no RestClient is provided', function() {
@@ -30,7 +30,7 @@ describe('RetryRestClient', function() {
   });
 
   describe('instance', function() {
-    var client = new RetryRestClient(new RestClient(API_URL));
+    var client = new RetryRestClient(new RestClientProxy(API_URL));
     var methods = ['getAll', 'get', 'create', 'update', 'delete'];
 
     methods.forEach(function(method) {

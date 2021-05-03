@@ -1,4 +1,4 @@
-var RestClient = require('rest-facade').Client;
+var RestClientProxy = require('./RestClientProxy');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 var utils = require('./utils');
@@ -22,7 +22,7 @@ var Auth0RestClient = function(resourceUrl, options, provider) {
 
   this.options = options;
   this.provider = provider;
-  this.restClient = new RestClient(resourceUrl, options);
+  this.restClient = new RestClientProxy(resourceUrl, options);
 
   this.wrappedProvider = function(method, args) {
     if (!this.provider) {

@@ -1,7 +1,7 @@
 var extend = require('util')._extend;
 
 var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
+var RestClientProxy = require('../RestClientProxy');
 var sanitizeArguments = require('../utils').sanitizeArguments;
 
 function getParamsFromOptions(options) {
@@ -49,7 +49,7 @@ var PasswordlessAuthenticator = function(options, oauth) {
   };
 
   this.oauth = oauth;
-  this.passwordless = new RestClient(options.baseUrl + '/passwordless/start', clientOptions);
+  this.passwordless = new RestClientProxy(options.baseUrl + '/passwordless/start', clientOptions);
   this.clientId = options.clientId;
   this.clientSecret = options.clientSecret;
 };

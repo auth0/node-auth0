@@ -1,7 +1,7 @@
 var extend = require('util')._extend;
 
 var ArgumentError = require('rest-facade').ArgumentError;
-var RestClient = require('rest-facade').Client;
+var RestClientProxy = require('../RestClientProxy');
 
 /**
  * @class
@@ -35,7 +35,7 @@ var DatabaseAuthenticator = function(options, oauth) {
   };
 
   this.oauth = oauth;
-  this.dbConnections = new RestClient(options.baseUrl + '/dbconnections/:type', clientOptions);
+  this.dbConnections = new RestClientProxy(options.baseUrl + '/dbconnections/:type', clientOptions);
   this.clientId = options.clientId;
 };
 
