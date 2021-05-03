@@ -1,6 +1,7 @@
 var RestClient = require('rest-facade').Client;
 
 var RestClientProxy = function(restClient, options) {
+  options = options || {};
   if (RestClientProxy.getProxy()) {
     options.proxy = RestClientProxy.getProxy();
   }
