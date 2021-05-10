@@ -11,7 +11,9 @@ var RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ActionsManager
- * Auth0 Actions Provider.
+ * {@link https://auth0.com/docs/api/v2#!/Actions/get_actions Actions} provide a way to extend
+ * Auth0 flows with custom logic.
+ * See the {@link https://auth0.com/docs/actions Actions documentation} for more information.
  * @constructor
  * @memberOf module:management
  *
