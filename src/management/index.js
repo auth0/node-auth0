@@ -34,6 +34,7 @@ var HooksManager = require('./HooksManager');
 var BrandingManager = require('./BrandingManager');
 var MigrationsManager = require('./MigrationsManager');
 var PromptsManager = require('./PromptsManager');
+var ActionsManager = require('./ActionsManager');
 var OrganizationsManager = require('./OrganizationsManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
@@ -351,6 +352,14 @@ var ManagementClient = function(options) {
    * @type {PromptsManager}
    */
   this.prompts = new PromptsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * actions endpoint.
+   *
+   * @type {ActionsManager}
+   */
+  this.actions = new ActionsManager(managerOptions);
 
   /**
    * Organizations Manager
@@ -3683,7 +3692,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getBrandingSettings', 'branding.getS
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'getBrandingUniversalLoginTemplate', 'branding.getUniversalLoginTemplate');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'getBrandingUniversalLoginTemplate',
+  'branding.getUniversalLoginTemplate'
+);
 
 /**
  * Get the new universal login template.
@@ -3704,7 +3717,11 @@ utils.wrapPropertyMethod(ManagementClient, 'getBrandingUniversalLoginTemplate', 
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'setBrandingUniversalLoginTemplate', 'branding.setUniversalLoginTemplate');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'setBrandingUniversalLoginTemplate',
+  'branding.setUniversalLoginTemplate'
+);
 
 /**
  * Delete the new universal login template.
@@ -3725,7 +3742,11 @@ utils.wrapPropertyMethod(ManagementClient, 'setBrandingUniversalLoginTemplate', 
  *
  * @return    {Promise|undefined}
  */
-utils.wrapPropertyMethod(ManagementClient, 'deleteBrandingUniversalLoginTemplate', 'branding.deleteUniversalLoginTemplate');
+utils.wrapPropertyMethod(
+  ManagementClient,
+  'deleteBrandingUniversalLoginTemplate',
+  'branding.deleteUniversalLoginTemplate'
+);
 
 /**
  * Update the tenant migrations.
@@ -3781,11 +3802,7 @@ utils.wrapPropertyMethod(ManagementClient, 'getMigrations', 'migrations.getMigra
  *
  * @example
  * management.getPromptsSettings(function (err, settings) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(settings);
+ * *   console.log(settings);
  * });
  *
  * @param   {Function}  [cb]  Callback function.
@@ -3826,11 +3843,7 @@ utils.wrapPropertyMethod(ManagementClient, 'updatePromptsSettings', 'prompts.upd
  * var params = { prompt: PROMPT_NAME, language: LANGUAGE };
  *
  * management.prompts.getCustomTextByLanguage(params, function (err, customText) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log('CustomText', customText);
+ *  *   console.log('CustomText', customText);
  * });
  *
  * @param   {Object}    params            Data object.
@@ -3857,11 +3870,7 @@ utils.wrapPropertyMethod(
  * var params = { prompt: PROMPT_NAME, language: LANGUAGE, body: BODY_OBJECT };
  *
  * management.prompts.updateCustomTextByLanguage(params, function (err, customText) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log('CustomText', customText);
+ * *   console.log('CustomText', customText);
  * });
  *
  * @param   {Object}    params            Data object.
