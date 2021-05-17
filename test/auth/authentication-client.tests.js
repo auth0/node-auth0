@@ -242,19 +242,5 @@ describe('AuthenticationClient', function() {
         );
       this.client.verifyEmailCode({ email: '123', otp: 'code' }, this.callback);
     });
-    it('should call signIn with otp if provided', function() {
-      this.passwordlessMock
-        .expects('signIn')
-        .once()
-        .withExactArgs(
-          {
-            username: '123',
-            realm: 'email',
-            otp: 'code'
-          },
-          this.callback
-        );
-      this.client.verifyEmailCode({ username: '123', otp: 'code' }, this.callback);
-    });
   });
 });

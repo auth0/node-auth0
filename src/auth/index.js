@@ -207,7 +207,7 @@ AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
  * </caption>
  *
  * var data = {
- *   username: '{EMAIL}'
+ *   email: '{EMAIL}',
  *   otp: '{VERIFICATION_CODE}'
  * };
  *
@@ -236,7 +236,7 @@ AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
  */
 AuthenticationClient.prototype.verifyEmailCode = function(data, cb) {
   var translatedData = {
-    username: data.email || data.username,
+    username: data.email,
     realm: 'email',
     otp: data.otp
   };
