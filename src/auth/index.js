@@ -194,6 +194,57 @@ AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
 };
 
 /**
+ * Verify the given OTP which was sent on the given email.
+ *
+ * @method    verifyEmailCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user credentials (`email` and `otp`), authenticates
+ *   with the provider using the `/oauth/token` endpoint. Upon successful
+ *   authentication, returns a JSON object containing the `access_token` and
+ *   `id_token`.
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   otp: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.verifyEmailCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ *   The user data object has the following structure.
+ * </caption>
+ *
+ * {
+ *   id_token: String,
+ *   access_token: String,
+ *   token_type: String
+ * }
+ *
+ * @param   {Object}    data              Credentials object.
+ * @param   {String}    data.email        Email.
+ * @param   {String}    data.otp          Verification code.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.verifyEmailCode = function(data, cb) {
+  var translatedData = {
+    username: data.email,
+    realm: 'email',
+    otp: data.otp
+  };
+
+  return this.passwordless.signIn(translatedData, cb);
+};
+
+/**
  * Start passwordless flow sending an SMS.
  *
  * @method    requestSMSCode
