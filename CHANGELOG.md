@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.35.0](https://github.com/auth0/node-auth0/tree/v2.35.0) (2021-05-17)
+
+**Added**
+
+- Add method to verify OTP received via email [\#620](https://github.com/auth0/node-auth0/pull/620) ([alexesprit](https://github.com/alexesprit))
+- [actionsManager] Adding new Actions Managment APIs [\#570](https://github.com/auth0/node-auth0/pull/570) ([shushen](https://github.com/shushen))
+
+**Security**
+
+- [Security] Bump hosted-git-info from 2.8.8 to 2.8.9 [\#617](https://github.com/auth0/node-auth0/pull/617) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump lodash from 4.17.19 to 4.17.21 [\#616](https://github.com/auth0/node-auth0/pull/616) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump ssri from 6.0.1 to 6.0.2 [\#612](https://github.com/auth0/node-auth0/pull/612) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.2...v2.35.0)
+
 ## [v2.34.2](https://github.com/auth0/node-auth0/tree/v2.34.2) (2021-04-12)
 
 **Fixed**
