@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.35.0](https://github.com/auth0/node-auth0/tree/v2.35.0) (2021-05-17)
+
+**Added**
+
+- Add method to verify OTP received via email [\#620](https://github.com/auth0/node-auth0/pull/620) ([alexesprit](https://github.com/alexesprit))
+- [actionsManager] Adding new Actions Managment APIs [\#570](https://github.com/auth0/node-auth0/pull/570) ([shushen](https://github.com/shushen))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.2...v2.35.0)
+
 ## [v2.34.2](https://github.com/auth0/node-auth0/tree/v2.34.2) (2021-04-12)
 
 **Fixed**
