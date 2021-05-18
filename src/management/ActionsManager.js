@@ -53,21 +53,21 @@ var ActionsManager = function(options) {
    * @type {external:RestClient}
    */
   var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/actions/:action_id',
+    options.baseUrl + '/actions/actions/:id',
     clientOptions,
     options.tokenProvider
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
   var actionsDeployRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/actions/:action_id/deploy',
+    options.baseUrl + '/actions/actions/:id/deploy',
     clientOptions,
     options.tokenProvider
   );
   this.actionsDeploy = new RetryRestClient(actionsDeployRestClient, options.retry);
 
   var actionsTestRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/actions/:action_id/test',
+    options.baseUrl + '/actions/actions/:id/test',
     clientOptions,
     options.tokenProvider
   );
@@ -95,21 +95,21 @@ var ActionsManager = function(options) {
   this.triggersTest = new RetryRestClient(triggersTestRestClient, options.retry);
 
   var executionsRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/executions/:execution_id',
+    options.baseUrl + '/actions/executions/:id',
     clientOptions,
     options.tokenProvider
   );
   this.executions = new RetryRestClient(executionsRestClient, options.retry);
 
   var actionVersionRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/actions/:action_id/versions/:version_id',
+    options.baseUrl + '/actions/actions/:id/versions/:version_id',
     clientOptions,
     options.tokenProvider
   );
   this.actionVersions = new RetryRestClient(actionVersionRestClient, options.retry);
 
   var deployActionVersionRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/actions/:action_id/versions/:version_id/deploy',
+    options.baseUrl + '/actions/actions/:id/versions/:version_id/deploy',
     clientOptions,
     options.tokenProvider
   );
@@ -320,7 +320,7 @@ utils.wrapPropertyMethod(ActionsManager, 'getAll', 'resource.getAll');
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * management.actions.get({ action_id: ACTION_ID }, function (err, action) {
+ * management.actions.get({ id: ACTION_ID }, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -329,7 +329,7 @@ utils.wrapPropertyMethod(ActionsManager, 'getAll', 'resource.getAll');
  * });
  *
  * @param   {Object}    params               Action parameters.
- * @param   {String}    params.action_id     Action ID.
+ * @param   {String}    params.id     Action ID.
  * @param   {Function}  [cb]                 Callback function.
  *
  * @return  {Promise|undefined}
@@ -344,7 +344,7 @@ utils.wrapPropertyMethod(ActionsManager, 'get', 'resource.get');
  *
  * @example
  * var data = { name: 'new-name' };
- * var params = { action_id: ACTION_ID };
+ * var params = { id: ACTION_ID };
  *
  * // Using auth0 instance.
  * management.updateAction(params, data, function (err, action) {
@@ -365,7 +365,7 @@ utils.wrapPropertyMethod(ActionsManager, 'get', 'resource.get');
  * });
  *
  * @param   {Object}    params        Action parameters.
- * @param   {String}    params.action_id     Action ID.
+ * @param   {String}    params.id     Action ID.
  * @param   {Object}    data          Updated action data.
  * @param   {Function}  [cb]          Callback function.
  *
@@ -380,7 +380,7 @@ utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * management.actions.delete({ action_id: ACTION_ID }, function (err) {
+ * management.actions.delete({ id: ACTION_ID }, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -389,7 +389,7 @@ utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
  * });
  *
  * @param   {Object}    params        Action parameters.
- * @param   {String}    params.action_id     Action ID.
+ * @param   {String}    params.id     Action ID.
  * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
@@ -403,7 +403,7 @@ utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * var params = { action_id: ACTION_ID};
+ * var params = { id: ACTION_ID};
  * management.actions.testAction(params, payload, function (err) {
  *   if (err) {
  *     // Handle error.
@@ -412,7 +412,7 @@ utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
  * });
  *
  * @param   {Object}    params                Action parameters.
- * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.id      Action ID.
  * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular trigger
  * @param   {Function}  [cb]                  Callback function.
  *
@@ -437,7 +437,7 @@ ActionsManager.prototype.test = function(params, payload, cb) {
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * var params = { action_id: ACTION_ID};
+ * var params = { id: ACTION_ID};
  * mangement.actions.deploy(params, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
@@ -446,7 +446,7 @@ ActionsManager.prototype.test = function(params, payload, cb) {
  * });
  *
  * @param   {Object}    params                Action parameters.
- * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.id      Action ID.
  * @param   {Function}  [cb]                  Callback function.
  *
  * @return  {Promise|undefined}
@@ -478,14 +478,14 @@ ActionsManager.prototype.deploy = function(params, cb) {
  *   page: 0
  * };
  *
- * management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVersions) {
+ * management.actions.getVersions({ id: ACTION_ID }, function (err, actionVersions) {
  *   console.log(actionVersions.length);
  * });
  *
  * @param   {Object}    [params]               ActionVersions parameters.
  * @param   {Number}    [params.per_page]      Number of results per page.
  * @param   {Number}    [params.page]          Page number, zero indexed.
- * @param   {String}    [params.action_id]     Action ID.
+ * @param   {String}    [params.id]     Action ID.
  * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
@@ -507,7 +507,7 @@ ActionsManager.prototype.getVersions = function(params, cb) {
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+ * var params = { id: ACTION_ID, version_id: VERSION_ID };
  * management.actions.getVersion(params, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
@@ -516,7 +516,7 @@ ActionsManager.prototype.getVersions = function(params, cb) {
  * });
  *
  * @param   {Object}    params                Action parameters.
- * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.id      Action ID.
  * @param   {String}    params.version_id     ActionVersion ID.
  * @param   {Function}  [cb]                  Callback function.
  *
@@ -542,7 +542,7 @@ ActionsManager.prototype.getVersion = function(params, cb) {
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * var params = { action_id: ACTION_ID };
+ * var params = { id: ACTION_ID };
  * management.actions.createActionVersion(params, data, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
@@ -550,7 +550,7 @@ ActionsManager.prototype.getVersion = function(params, cb) {
  * });
  *
  * @param   {Object}    params                Action parameters.
- * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.id      Action ID.
  * @param   {Object}    data                  ActionVersion parameters.
  * @param   {Function}  [cb]                  Callback function.
  *
@@ -573,7 +573,7 @@ ActionsManager.prototype.createVersion = function(params, data, cb) {
  * @memberOf  module:management.ActionsManager.prototype
  *
  * @example
- * var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+ * var params = { id: ACTION_ID, version_id: VERSION_ID };
  * management.actions.deployVersion(params, function (err, actionVersion) {
  *   if (err) {
  *     // Handle error.
@@ -582,7 +582,7 @@ ActionsManager.prototype.createVersion = function(params, data, cb) {
  * });
  *
  * @param   {Object}    params                Action parameters.
- * @param   {String}    params.action_id      Action ID.
+ * @param   {String}    params.id      Action ID.
  * @param   {String}    params.version_id     Action ID.
  * @param   {Function}  [cb]                  Callback function.
  *
@@ -605,7 +605,7 @@ ActionsManager.prototype.deployVersion = function(params, cb) {
  * @memberOf  module:management.ActionExecutionsManager.prototype
  *
  * @example
- * management.actions.getExecution({ execution_id: EXECUTION_ID }, function (err, action) {
+ * management.actions.getExecution({ id: EXECUTION_ID }, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -614,7 +614,7 @@ ActionsManager.prototype.deployVersion = function(params, cb) {
  * });
  *
  * @param   {Object}    params                  Action Execution parameters.
- * @param   {String}    params.execution_id     Action Execution ID.
+ * @param   {String}    params.id     Action Execution ID.
  * @param   {Function}  [cb]                    Callback function.
  *
  * @return  {Promise|undefined}
