@@ -145,7 +145,7 @@ utils.wrapPropertyMethod(BrandingManager, 'getUniversalLoginTemplate', 'branding
  * @memberOf  module:management.BrandingManager.prototype
  *
  * @example
- * management.branding.setUniversalLoginTemplate({ }, { template: "a template" }, function (err) {
+ * management.branding.setUniversalLoginTemplate(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
