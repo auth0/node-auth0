@@ -77,7 +77,7 @@ var PromptsManager = function(options) {
  * @memberOf  module:management.PromptsManager.prototype
  *
  * @example
- * management.prompts.updateSettings(data, function (err, prompts) {
+ * management.prompts.updateSettings(params, data, function (err, prompts) {
  *   if (err) {
  *     // Handle error.
  *   }

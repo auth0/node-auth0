@@ -73,7 +73,7 @@ var BrandingManager = function(options) {
  * @memberOf  module:management.BrandingManager.prototype
  *
  * @example
- * management.branding.updateSettings(data, function (err, branding) {
+ * management.branding.updateSettings(params, data, function (err, branding) {
  *   if (err) {
  *     // Handle error.
  *   }
@@ -82,7 +82,7 @@ var BrandingManager = function(options) {
  *    console.log(branding);
  * });
  *
- * @param   {Object}    params            Branding parameters.
+ * @param   {Object}    params            Branding parameters (leavy empty).
  * @param   {Object}    data              Updated branding data.
  * @param   {Function}  [cb]              Callback function.
  *
@@ -145,7 +145,7 @@ utils.wrapPropertyMethod(BrandingManager, 'getUniversalLoginTemplate', 'branding
  * @memberOf  module:management.BrandingManager.prototype
  *
  * @example
- * management.branding.setUniversalLoginTemplate({ template: "a template" }, function (err) {
+ * management.branding.setUniversalLoginTemplate(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
