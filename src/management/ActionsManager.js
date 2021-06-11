@@ -95,7 +95,7 @@ var ActionsManager = function(options) {
   this.triggersTest = new RetryRestClient(triggersTestRestClient, options.retry);
 
   var executionsRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/executions/:id',
+    options.baseUrl + '/actions/executions/:execution_id',
     clientOptions,
     options.tokenProvider
   );
@@ -334,7 +334,20 @@ utils.wrapPropertyMethod(ActionsManager, 'getAll', 'resource.getAll');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsManager, 'get', 'resource.get');
+ActionsManager.prototype.get = function(params, cb) {
+  params = params || {};
+
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.resource.get(params, cb);
+  }
+
+  return this.resource.get(params);
+};
 
 /**
  * Update an existing action.
@@ -371,7 +384,20 @@ utils.wrapPropertyMethod(ActionsManager, 'get', 'resource.get');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
+ActionsManager.prototype.update = function(params, data, cb) {
+  params = params || {};
+
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.resource.patch(params, data, cb);
+  }
+
+  return this.resource.patch(params, data);
+};
 
 /**
  * Delete an existing action. Deleting an Action deletes all the action's versions
@@ -394,7 +420,20 @@ utils.wrapPropertyMethod(ActionsManager, 'update', 'resource.patch');
  *
  * @return  {Promise|undefined}
  */
-utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
+ActionsManager.prototype.delete = function(params, cb) {
+  params = params || {};
+
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
+
+  if (cb && cb instanceof Function) {
+    return this.resource.delete(params, cb);
+  }
+
+  return this.resource.delete(params);
+};
 
 /**
  * test an Action.
@@ -421,6 +460,11 @@ utils.wrapPropertyMethod(ActionsManager, 'delete', 'resource.delete');
 ActionsManager.prototype.test = function(params, payload, cb) {
   params = params || {};
   payload = payload || {};
+
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
 
   if (cb && cb instanceof Function) {
     return this.actionsTest.create(params, payload, cb);
@@ -453,6 +497,11 @@ ActionsManager.prototype.test = function(params, payload, cb) {
  */
 ActionsManager.prototype.deploy = function(params, cb) {
   params = params || {};
+
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
 
   if (cb && cb instanceof Function) {
     return this.actionsDeploy.create(params, {}, cb);
@@ -493,6 +542,11 @@ ActionsManager.prototype.deploy = function(params, cb) {
 ActionsManager.prototype.getVersions = function(params, cb) {
   params = params || {};
 
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
+
   if (cb && cb instanceof Function) {
     return this.actionVersions.getAll(params, cb);
   }
@@ -524,6 +578,11 @@ ActionsManager.prototype.getVersions = function(params, cb) {
  */
 ActionsManager.prototype.getVersion = function(params, cb) {
   params = params || {};
+
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
 
   if (cb && cb instanceof Function) {
     return this.actionVersions.get(params, cb);
@@ -559,6 +618,11 @@ ActionsManager.prototype.getVersion = function(params, cb) {
 ActionsManager.prototype.createVersion = function(params, data, cb) {
   params = params || {};
 
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
+
   if (cb && cb instanceof Function) {
     return this.actionVersions.create(params, data, cb);
   }
@@ -591,6 +655,11 @@ ActionsManager.prototype.createVersion = function(params, data, cb) {
 ActionsManager.prototype.deployVersion = function(params, cb) {
   params = params || {};
 
+  if (params.action_id) {
+    params.id = params.action_id;
+    delete params.action_id;
+  }
+
   if (cb && cb instanceof Function) {
     return this.actionVersionDeploy.create(params, {}, cb);
   }
@@ -605,7 +674,7 @@ ActionsManager.prototype.deployVersion = function(params, cb) {
  * @memberOf  module:management.ActionExecutionsManager.prototype
  *
  * @example
- * management.actions.getExecution({ id: EXECUTION_ID }, function (err, action) {
+ * management.actions.getExecution({ execution_id: EXECUTION_ID }, function (err, action) {
  *   if (err) {
  *     // Handle error.
  *   }
