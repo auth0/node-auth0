@@ -7,7 +7,7 @@ var API_URL = 'https://tenant.auth0.com';
 var ActionsManager = require(SRC_DIR + '/management/ActionsManager');
 var ArgumentError = require('rest-facade').ArgumentError;
 
-describe.only('ActionsManager', function() {
+describe('ActionsManager', function() {
   before(function() {
     this.token = 'TOKEN';
     this.actions = new ActionsManager({
