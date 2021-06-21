@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.35.1](https://github.com/auth0/node-auth0/tree/v2.35.1) (2021-06-21)
+
+**Fixed**
+
+- Update `setUniversalLoginTemplate` example to correctly reflect documentation [\#624](https://github.com/auth0/node-auth0/pull/624) ([mendhak](https://github.com/mendhak))
+- Use id instead of action_id as per the mgmt api. [\#622](https://github.com/auth0/node-auth0/pull/622) ([stevezau](https://github.com/stevezau))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.35.0...v2.35.1)
+
 ## [v2.35.0](https://github.com/auth0/node-auth0/tree/v2.35.0) (2021-05-17)
 
 **Added**
