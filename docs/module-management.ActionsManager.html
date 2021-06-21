@@ -764,7 +764,7 @@ updating the action's code (which can be useful in some CI/CD scenarios).</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line535">line 535</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line594">line 594</a>
     </li></ul></dd>
     
 
@@ -861,7 +861,7 @@ updating the action's code (which can be useful in some CI/CD scenarios).</p>
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -1007,7 +1007,7 @@ updating the action's code (which can be useful in some CI/CD scenarios).</p>
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = { action_id: ACTION_ID };
+    <pre class="prettyprint"><code>var params = { id: ACTION_ID };
 management.actions.createActionVersion(params, data, function (err, actionVersion) {
   if (err) {
     // Handle error.
@@ -1066,7 +1066,7 @@ management.actions.createActionVersion(params, data, function (err, actionVersio
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line376">line 376</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line402">line 402</a>
     </li></ul></dd>
     
 
@@ -1163,7 +1163,7 @@ management.actions.createActionVersion(params, data, function (err, actionVersio
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -1275,7 +1275,7 @@ management.actions.createActionVersion(params, data, function (err, actionVersio
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>management.actions.delete({ action_id: ACTION_ID }, function (err) {
+    <pre class="prettyprint"><code>management.actions.delete({ id: ACTION_ID }, function (err) {
   if (err) {
     // Handle error.
   }
@@ -1336,7 +1336,7 @@ The action must be in a state of 'built' before it can be deployed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line432">line 432</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line476">line 476</a>
     </li></ul></dd>
     
 
@@ -1433,7 +1433,7 @@ The action must be in a state of 'built' before it can be deployed.</p>
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -1545,7 +1545,7 @@ The action must be in a state of 'built' before it can be deployed.</p>
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = { action_id: ACTION_ID};
+    <pre class="prettyprint"><code>var params = { id: ACTION_ID};
 mangement.actions.deploy(params, function (err, actionVersion) {
   if (err) {
     // Handle error.
@@ -1604,7 +1604,7 @@ mangement.actions.deploy(params, function (err, actionVersion) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line569">line 569</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line633">line 633</a>
     </li></ul></dd>
     
 
@@ -1701,7 +1701,7 @@ mangement.actions.deploy(params, function (err, actionVersion) {
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -1839,7 +1839,7 @@ mangement.actions.deploy(params, function (err, actionVersion) {
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+    <pre class="prettyprint"><code>var params = { id: ACTION_ID, version_id: VERSION_ID };
 management.actions.deployVersion(params, function (err, actionVersion) {
   if (err) {
     // Handle error.
@@ -1995,7 +1995,7 @@ management.actions.deployVersion(params, function (err, actionVersion) {
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -2107,7 +2107,7 @@ management.actions.deployVersion(params, function (err, actionVersion) {
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>management.actions.get({ action_id: ACTION_ID }, function (err, action) {
+    <pre class="prettyprint"><code>management.actions.get({ id: ACTION_ID }, function (err, action) {
   if (err) {
     // Handle error.
   }
@@ -3167,7 +3167,7 @@ management.actions.getTriggerBindings(params, function (err, bindings) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line503">line 503</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line557">line 557</a>
     </li></ul></dd>
     
 
@@ -3264,7 +3264,7 @@ management.actions.getTriggerBindings(params, function (err, bindings) {
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -3402,7 +3402,7 @@ management.actions.getTriggerBindings(params, function (err, bindings) {
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = { action_id: ACTION_ID, version_id: VERSION_ID };
+    <pre class="prettyprint"><code>var params = { id: ACTION_ID, version_id: VERSION_ID };
 management.actions.getVersion(params, function (err, actionVersion) {
   if (err) {
     // Handle error.
@@ -3461,7 +3461,7 @@ management.actions.getVersion(params, function (err, actionVersion) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line464">line 464</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line513">line 513</a>
     </li></ul></dd>
     
 
@@ -3634,7 +3634,7 @@ management.actions.getVersion(params, function (err, actionVersion) {
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -3768,7 +3768,7 @@ var params = {
   page: 0
 };
 
-management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVersions) {
+management.actions.getVersions({ id: ACTION_ID }, function (err, actionVersions) {
   console.log(actionVersions.length);
 });</code></pre>
 
@@ -3824,7 +3824,7 @@ management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVe
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line399">line 399</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line438">line 438</a>
     </li></ul></dd>
     
 
@@ -3921,7 +3921,7 @@ management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVe
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -4067,7 +4067,7 @@ management.actions.getVersions({ action_id: ACTION_ID }, function (err, actionVe
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>var params = { action_id: ACTION_ID};
+    <pre class="prettyprint"><code>var params = { id: ACTION_ID};
 management.actions.testAction(params, payload, function (err) {
   if (err) {
     // Handle error.
@@ -4428,7 +4428,7 @@ auth0.actions.testTrigger(params, payload, function (err) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line339">line 339</a>
+        <a href="management_ActionsManager.js.html">management/ActionsManager.js</a>, <a href="management_ActionsManager.js.html#line352">line 352</a>
     </li></ul></dd>
     
 
@@ -4525,7 +4525,7 @@ auth0.actions.testTrigger(params, payload, function (err) {
 
         <tr>
             
-                <td class="name"><code>action_id</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -4672,7 +4672,7 @@ auth0.actions.testTrigger(params, payload, function (err) {
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>var data = { name: 'new-name' };
-var params = { action_id: ACTION_ID };
+var params = { id: ACTION_ID };
 
 // Using auth0 instance.
 management.updateAction(params, data, function (err, action) {
@@ -5020,7 +5020,7 @@ management.actions.updateTriggerBindings(params, data, function (err, bindings) 
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon May 17 2021 16:28:36 GMT-0700 (Pacific Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon Jun 21 2021 08:34:12 GMT-0700 (Pacific Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
