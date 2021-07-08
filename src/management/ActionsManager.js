@@ -403,7 +403,7 @@ ActionsManager.prototype.delete = function(params, cb) {
  *
  * @example
  * var params = { id: ACTION_ID};
- * management.actions.testAction(params, payload, function (err) {
+ * management.actions.test(params, payload, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
