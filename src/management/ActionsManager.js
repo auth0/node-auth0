@@ -87,13 +87,6 @@ var ActionsManager = function(options) {
   );
   this.triggerBindings = new RetryRestClient(triggerBindingsRestClient, options.retry);
 
-  var triggersTestRestClient = new Auth0RestClient(
-    options.baseUrl + '/actions/triggers/:trigger_id/test',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.triggersTest = new RetryRestClient(triggersTestRestClient, options.retry);
-
   var executionsRestClient = new Auth0RestClient(
     options.baseUrl + '/actions/executions/:execution_id',
     clientOptions,
@@ -188,39 +181,6 @@ ActionsManager.prototype.updateTriggerBindings = function(params, data, cb) {
   }
 
   return this.triggerBindings.patch(params, data);
-};
-
-/**
- * test an Trigger.
- *
- * @method    testTrigger
- * @memberOf  module:management.ActionsManager.prototype
- *
- * @example
- * var params = { trigger_id: TRIGGER_ID};
- * auth0.actions.testTrigger(params, payload, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
-
- * });
- *
- * @param   {Object}    params                Action parameters.
- * @param   {String}    params.trigger_id     Trigger ID.
- * @param   {Object}    payload               Payload represents the entire structure necessary to test a particular trigger
- * @param   {Function}  [cb]                  Callback function.
- *
- * @return  {Promise|undefined}
- */
-ActionsManager.prototype.testTrigger = function(params, payload, cb) {
-  params = params || {};
-  payload = payload || {};
-
-  if (cb && cb instanceof Function) {
-    return this.triggersTest.create(params, payload, cb);
-  }
-
-  return this.triggersTest.create(params, payload);
 };
 
 /**
@@ -443,7 +403,7 @@ ActionsManager.prototype.delete = function(params, cb) {
  *
  * @example
  * var params = { id: ACTION_ID};
- * management.actions.testAction(params, payload, function (err) {
+ * management.actions.test(params, payload, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
