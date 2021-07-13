@@ -37,7 +37,7 @@
     "jwks-rsa": "^1.12.1",
     "lru-memoizer": "^2.1.0",
     "rest-facade": "^1.13.0",
-    "retry": "^0.12.0"
+    "retry": "^0.13.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
