@@ -7,6 +7,7 @@ var generateClientInfo = utils.generateClientInfo;
 var ArgumentError = require('rest-facade').ArgumentError;
 
 // Managers.
+var ClientCredentialsManager = require('./ClientCredentialsManager');
 var ClientsManager = require('./ClientsManager');
 var ClientGrantsManager = require('./ClientGrantsManager');
 var GrantsManager = require('./GrantsManager');
@@ -161,6 +162,14 @@ var ManagementClient = function(options) {
    * @type {ClientsManager}
    */
   this.clients = new ClientsManager(managerOptions);
+
+  /**
+   * Simple abstraction for performing CRUD operations on the
+   * client credentials endpoint.
+   *
+   * @type {module:management.ClientCredentialsManager}
+   */
+  this.clientCredentials = new ClientCredentialsManager(managerOptions);
 
   /**
    * Simple abstraction for performing CRUD operations on the client grants
