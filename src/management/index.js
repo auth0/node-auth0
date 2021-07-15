@@ -4,6 +4,7 @@ const { jsonToBase64, generateClientInfo } = utils;
 const { ArgumentError } = require('rest-facade');
 
 // Managers.
+const ClientCredentialsManager = require('./ClientCredentialsManager');
 const ClientsManager = require('./ClientsManager');
 const ClientGrantsManager = require('./ClientGrantsManager');
 const GrantsManager = require('./GrantsManager');
@@ -155,6 +156,14 @@ class ManagementClient {
      * @type {ClientsManager}
      */
     this.clients = new ClientsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * client credentials endpoint.
+     *
+     * @type {module:management.ClientCredentialsManager}
+     */
+    this.clientCredentials = new ClientCredentialsManager(managerOptions);
 
     /**
      * Simple abstraction for performing CRUD operations on the client grants
