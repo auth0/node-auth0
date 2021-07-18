@@ -82,6 +82,8 @@ var LogsManager = function(options) {
  * @param   {String}    [params.fields]         A comma separated list of fields to include or exclude
  * @param   {Boolean}   [params.include_fields] true if the fields specified are to be included in the result, false otherwise.
  * @param   {Boolean}   [params.include_totals] true if a query summary must be included in the result, false otherwise. Default false
+ * @param   {String}    [params.from]           For checkpoint pagination, log event Id from which to start selection from.
+ * @param   {Number}    [params.take]           When using the `from` parameter, the number of entries to retrieve. Default 50, max 100.
  * @param   {Function}  [cb]                    Callback function.
  *
  * @return  {Promise|undefined}
