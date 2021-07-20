@@ -140,6 +140,8 @@ utils.wrapPropertyMethod(OrganizationsManager, 'create', 'organizations.create')
  * @param   {Object}    [params]          Organizations parameters.
  * @param   {Number}    [params.per_page] Number of results per page.
  * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {String}    [params.from]     For checkpoint pagination, the Id from which to start selection from.
+ * @param   {Number}    [params.take]     For checkpoint pagination, the number of entries to retrieve. Default 50.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}
@@ -455,6 +457,8 @@ OrganizationsManager.prototype.updateEnabledConnection = function(params, data, 
  * });
  *
  * @param   {String}    [params.id]   Organization ID
+ * @param   {String}    [params.from] For checkpoint pagination, the Id from which to start selection from.
+ * @param   {Number}    [params.take] For checkpoint pagination, the number of entries to retrieve. Default 50.
  * @param   {Function}  [cb]          Callback function.
  *
  * @return  {Promise|undefined}
