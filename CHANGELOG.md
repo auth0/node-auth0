@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.36.0](https://github.com/auth0/node-auth0/tree/v2.36.0) (2021-07-23)
+
+**Added**
+
+- [SDK-2666] Update endpoint methods to document allowance of 'from' and 'take' checkpoint pagination parameters [\#634](https://github.com/auth0/node-auth0/pull/634) ([evansims](https://github.com/evansims))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.35.1...v2.36.0)
+
 ## [v2.35.1](https://github.com/auth0/node-auth0/tree/v2.35.1) (2021-06-21)
 
 **Fixed**
