@@ -3,6 +3,7 @@
   "version": "2.35.1",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
+  "sideEffects": false,
   "files": [
     "src"
   ],
