@@ -187,6 +187,7 @@ PromptsManager.prototype.getCustomTextByLanguage = function(params, cb) {
  */
 PromptsManager.prototype.updateCustomTextByLanguage = function(params, cb) {
   params = params || {};
+  options = {};
 
   if (!params.prompt || typeof params.prompt !== 'string') {
     throw new ArgumentError('The prompt parameter must be a string');
@@ -200,11 +201,14 @@ PromptsManager.prototype.updateCustomTextByLanguage = function(params, cb) {
     throw new ArgumentError('The body parameter must be an object');
   }
 
+  options.prompt = params.prompt;
+  options.language = params.language;
+
   if (cb && cb instanceof Function) {
-    return this.customTextByLanguage.update(params, params.body, cb);
+    return this.customTextByLanguage.update(options, params.body, cb);
   }
 
-  return this.customTextByLanguage.update(params, params.body);
+  return this.customTextByLanguage.update(options, params.body);
 };
 
 module.exports = PromptsManager;

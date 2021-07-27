@@ -304,7 +304,7 @@ describe('PromptsManager', function() {
     var params = {
       prompt: 'test',
       language: 'english',
-      body: {}
+      body: { login: { title: 'Hello!' } }
     };
 
     beforeEach(function() {
@@ -365,7 +365,7 @@ describe('PromptsManager', function() {
       });
     });
 
-    it('shoushould perform a GET request to /api/v2/prompts/test/custom-text/english', function(done) {
+    it('should perform a PUT request to /api/v2/prompts/test/custom-text/english', function(done) {
       var request = this.request;
 
       this.prompts.updateCustomTextByLanguage(params).then(function() {
@@ -380,6 +380,23 @@ describe('PromptsManager', function() {
       var request = nock(API_URL)
         .put('/prompts/test/custom-text/english')
         .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.prompts.updateCustomTextByLanguage(params).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should send the payload to the body', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put(
+          '/prompts/test/custom-text/english',
+          body => body && body.login && body.login.title === 'Hello!'
+        )
         .reply(200);
 
       this.prompts.updateCustomTextByLanguage(params).then(function() {
