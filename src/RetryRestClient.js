@@ -15,7 +15,7 @@ var DEFAULT_OPTIONS = {
  * @param {Object}  restClient                   RestClient.
  * @param {Object}  [options]                    Options for the RetryRestClient.
  * @param {Object}  [options.enabled:true]       Enabled or Disable Retry Policy functionality.
- * @param {Number}  [options.maxRetries=10]      The maximum amount of times to retry the operation. Default is 10.
+ * @param {Number}  [options.maxRetries=3]       The maximum amount of times to retry the operation. Default is 3.
  * @param {*}       [options.*]                  Any options that are available in https://github.com/tim-kos/node-retry#retryoperationoptions
  */
 var RetryRestClient = function(restClient, options) {
