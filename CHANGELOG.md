@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.36.1](https://github.com/auth0/node-auth0/tree/v2.36.1) (2021-07-28)
+
+**Fixed**
+
+- Fix docs for rate limit default maxRetries [\#640](https://github.com/auth0/node-auth0/pull/640) ([jimmyjames](https://github.com/jimmyjames))
+- Fix updateCustomTextByLanguage [\#638](https://github.com/auth0/node-auth0/pull/638) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.0...v2.36.1)
+
 ## [v2.36.0](https://github.com/auth0/node-auth0/tree/v2.36.0) (2021-07-23)
 
 **Added**
