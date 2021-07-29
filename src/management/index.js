@@ -132,7 +132,6 @@ var ManagementClient = function(options) {
     }
 
     this.tokenProvider = new ManagementTokenProvider(config);
-    managerOptions.tokenProvider = this.tokenProvider;
   } else if (typeof options.token !== 'string' || options.token.length === 0) {
     throw new ArgumentError('Must provide a token');
   } else {
@@ -143,6 +142,8 @@ var ManagementClient = function(options) {
     };
     managerOptions.headers['Authorization'] = 'Bearer ' + options.token;
   }
+
+  managerOptions.tokenProvider = this.tokenProvider;
 
   if (options.telemetry !== false) {
     var clientInfo = options.clientInfo || generateClientInfo();
