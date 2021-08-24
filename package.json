@@ -40,6 +40,9 @@
     "rest-facade": "^1.13.0",
     "retry": "^0.13.1"
   },
+  "resolutions": {
+    "rest-facade/superagent-proxy/proxy-agent/pac-proxy-agent/pac-resolver": "^5.0.0"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
     "codecov": "^3.7.2",
