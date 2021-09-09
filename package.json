@@ -13,7 +13,6 @@
     "test:coverage": "codecov",
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 ./test/**/*.tests.js ./test/*.tests.js --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
-    "version": "node ./scripts/release.js",
     "precommit": "pretty-quick --staged"
   },
   "repository": {
