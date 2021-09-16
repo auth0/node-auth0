@@ -36,7 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.1",
     "lru-memoizer": "^2.1.4",
-    "rest-facade": "^1.13.0",
+    "rest-facade": "^1.13.1",
     "retry": "^0.13.1"
   },
   "devDependencies": {
