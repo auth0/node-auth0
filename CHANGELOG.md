@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.36.2](https://github.com/auth0/node-auth0/tree/v2.36.2) (2021-09-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.1...v2.36.2)
+
+**Security**
+
+- [Snyk] Security upgrade rest-facade from 1.13.0 to 1.13.1 [\#653](https://github.com/auth0/node-auth0/pull/653) ([snyk-bot](https://github.com/snyk-bot))
+- [Snyk] Security upgrade axios from 0.21.1 to 0.21.3 [\#649](https://github.com/auth0/node-auth0/pull/649) ([snyk-bot](https://github.com/snyk-bot))
+
 ## [v2.36.1](https://github.com/auth0/node-auth0/tree/v2.36.1) (2021-07-28)
 
 **Fixed**
