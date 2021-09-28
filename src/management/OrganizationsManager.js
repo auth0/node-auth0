@@ -264,7 +264,8 @@ utils.wrapPropertyMethod(OrganizationsManager, 'delete', 'organizations.delete')
  *   console.log(enabled_connections);
  * });
  *
- * @param   {String}    [organization_id]   Organization ID
+ * @param   {Object}    params        Organization parameters.
+ * @param   {String}    params.id     Organization ID.
  * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
@@ -289,7 +290,9 @@ OrganizationsManager.prototype.getEnabledConnections = function(params, callback
  *   console.log(enabled_connection);
  * });
  *
- * @param   {String}    [organization_id]   Organization ID
+ * @param   {Object}    params        Organization parameters.
+ * @param   {String}    params.id     Organization ID.
+ * @param   {String}    params.connection_id     Connection ID.
  * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
@@ -314,6 +317,7 @@ OrganizationsManager.prototype.getEnabledConnection = function(params, callback)
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {Object}    data                  enable connection data
  * @param   {String}    data.connection_id    connection ID to enable
@@ -355,7 +359,7 @@ OrganizationsManager.prototype.addEnabledConnection = function(params, data, cb)
  *     // Handle error.
  *   }
  * });
- *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.connection_id  ID of the Connection.
  * @param   {Function}  [cb]                  Callback function.
@@ -403,6 +407,7 @@ OrganizationsManager.prototype.removeEnabledConnection = function(params, cb) {
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.connection_id  ID of the Connection.
  * @param   {Object}    data                  Updated connection.
@@ -456,7 +461,8 @@ OrganizationsManager.prototype.updateEnabledConnection = function(params, data, 
  *   console.log(members);
  * });
  *
- * @param   {String}    [params.id]   Organization ID
+ * @param   {Object}    params        Organization parameters
+ * @param   {String}    params.id     Organization ID
  * @param   {String}    [params.from] For checkpoint pagination, the Id from which to start selection from.
  * @param   {Number}    [params.take] For checkpoint pagination, the number of entries to retrieve. Default 50.
  * @param   {Function}  [cb]          Callback function.
@@ -482,6 +488,7 @@ OrganizationsManager.prototype.getMembers = function(params, callback) {
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {Object}    data                  add members data
  * @param   {Array}     data.members          Array of user IDs
@@ -523,6 +530,7 @@ OrganizationsManager.prototype.addMembers = function(params, data, cb) {
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {Object}    data                  add members data
  * @param   {Array}     data.members          Array of user IDs
@@ -568,7 +576,8 @@ OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
  *   console.log(invites);
  * });
  *
- * @param   {String}    [params.id]   Organization ID
+ * @param   {Object}    params              Organization parameters
+ * @param   {String}    params.id           Organization ID
  * @param   {Function}  [cb]                Callback function.
  *
  * @return  {Promise|undefined}
@@ -593,8 +602,10 @@ OrganizationsManager.prototype.getInvitations = function(params, callback) {
  *   console.log(invite);
  * });
  *
- * @param   {String}    [organization_id]   Organization ID
- * @param   {Function}  [cb]                Callback function.
+ * @param   {Object}    params                 Organization parameters
+ * @param   {String}    params.organization_id Organization ID
+ * @param   {String}    params.invitation_id   Invitation ID
+ * @param   {Function}  [cb]                   Callback function.
  *
  * @return  {Promise|undefined}
  */
@@ -636,6 +647,7 @@ OrganizationsManager.prototype.getInvitation = function(params, callback) {
  *   }
  * });
  *
+ * @param   {Object}  params                        Organization parameters
  * @param   {String}  params.id                     ID of the Organization.
  * @param   {Array}   data                          Invitation data
  * @param   {Object}  data.inviter                  The person who is sending the invite.
@@ -686,6 +698,7 @@ OrganizationsManager.prototype.createInvitation = function(params, data, cb) {
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.invitation_id  Invitation ID
  * @param   {Function}  [cb]                  Callback function.
@@ -736,6 +749,7 @@ OrganizationsManager.prototype.deleteInvitation = function(params, cb) {
  *   console.log(roles);
  * });
  *
+ * @param   {Object}    params              Organization parameters
  * @param   {String}    params.id           ID of the Organization.
  * @param   {String}    params.user_id      ID of the user.
  * @param   {Function}  [cb]                Callback function.
@@ -762,6 +776,7 @@ OrganizationsManager.prototype.getMemberRoles = function(params, callback) {
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.user_id        ID of the user.
  * @param   {Object}    data                  Add member roles data.
@@ -811,6 +826,7 @@ OrganizationsManager.prototype.addMemberRoles = function(params, data, cb) {
  *   }
  * });
  *
+ * @param   {Object}    params                Organization parameters
  * @param   {String}    params.id             ID of the Organization.
  * @param   {String}    params.user_id        Id of the User
  * @param   {Object}    data                  Remove member roles data.
