@@ -603,7 +603,7 @@ OrganizationsManager.prototype.getInvitations = function(params, callback) {
  * });
  *
  * @param   {Object}    params                 Organization parameters
- * @param   {String}    params.organization_id Organization ID
+ * @param   {String}    params.id              Organization ID
  * @param   {String}    params.invitation_id   Invitation ID
  * @param   {Function}  [cb]                   Callback function.
  *
