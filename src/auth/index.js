@@ -595,6 +595,8 @@ utils.wrapPropertyMethod(
  * @param   {String}    userData.username     Username.
  * @param   {String}    userData.password     User password.
  * @param   {String}    [userData.realm]      Name of the realm to use to authenticate or the connection name
+ * @param   {Object}    [options]              Additional options.
+ * @param   {String}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
  *
  * @return  {Promise|undefined}
  */
