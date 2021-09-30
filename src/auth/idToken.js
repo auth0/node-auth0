@@ -79,6 +79,19 @@ var validate = function(token, options) {
     );
   }
 
+  // Organization
+  if (options.organization) {
+    if (!payload.org_id || typeof payload.org_id !== 'string') {
+      throw new Error('Organization Id (org_id) claim must be a string present in the ID token');
+    }
+
+    if (payload.org_id !== options.organization) {
+      throw new Error(
+        `Organization Id (org_id) claim value mismatch in the ID token; expected "${options.organization}", found "${payload.org_id}"'`
+      );
+    }
+  }
+
   // --Time validation (epoch)--
   var now = Math.floor(Date.now() / 1000);
   var leeway = options.leeway || DEFAULT_LEEWAY;

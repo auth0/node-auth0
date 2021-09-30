@@ -4,7 +4,6 @@ var util = require('util');
 var utils = require('../utils');
 var jsonToBase64 = utils.jsonToBase64;
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 
 // Authenticators.
 var OAuthAuthenticator = require('./OAuthAuthenticator');
@@ -56,7 +55,7 @@ var AuthenticationClient = function(options) {
   }
 
   var defaultHeaders = {
-    'User-agent': 'node.js/' + process.version.replace('v', ''),
+    'User-Agent': 'node.js/' + process.version.replace('v', ''),
     'Content-Type': 'application/json'
   };
 
@@ -64,7 +63,7 @@ var AuthenticationClient = function(options) {
     clientId: options.clientId,
     domain: options.domain,
     clientSecret: options.clientSecret,
-    headers: assign(defaultHeaders, options.headers || {}),
+    headers: Object.assign(defaultHeaders, options.headers || {}),
     baseUrl: util.format(BASE_URL_FORMAT, options.domain),
     supportedAlgorithms: options.supportedAlgorithms,
     __bypassIdTokenValidation: options.__bypassIdTokenValidation
@@ -195,6 +194,57 @@ AuthenticationClient.prototype.requestEmailCode = function(data, cb) {
 };
 
 /**
+ * Verify the given OTP which was sent on the given email.
+ *
+ * @method    verifyEmailCode
+ * @memberOf  module:auth.AuthenticationClient.prototype
+ *
+ * @example <caption>
+ *   Given the user credentials (`email` and `otp`), authenticates
+ *   with the provider using the `/oauth/token` endpoint. Upon successful
+ *   authentication, returns a JSON object containing the `access_token` and
+ *   `id_token`.
+ * </caption>
+ *
+ * var data = {
+ *   email: '{EMAIL}',
+ *   otp: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.verifyEmailCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ *   The user data object has the following structure.
+ * </caption>
+ *
+ * {
+ *   id_token: String,
+ *   access_token: String,
+ *   token_type: String
+ * }
+ *
+ * @param   {Object}    data              Credentials object.
+ * @param   {String}    data.email        Email.
+ * @param   {String}    data.otp          Verification code.
+ * @param   {Function}  [cb]              Method callback.
+ *
+ * @return  {Promise|undefined}
+ */
+AuthenticationClient.prototype.verifyEmailCode = function(data, cb) {
+  var translatedData = {
+    username: data.email,
+    realm: 'email',
+    otp: data.otp
+  };
+
+  return this.passwordless.signIn(translatedData, cb);
+};
+
+/**
  * Start passwordless flow sending an SMS.
  *
  * @method    requestSMSCode
@@ -239,9 +289,28 @@ AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
  * @memberOf  module:auth.AuthenticationClient.prototype
  *
  * @example <caption>
- *   Given the user credentials (`phone_number` and `code`), it will do the
- *   authentication on the provider and return a JSON with the `access_token`
- *   and `id_token`.
+ *   Given the user credentials (`phone_number` and `otp`), authenticates
+ *   with the provider using the `/oauth/token` endpoint. Upon successful
+ *   authentication, returns a JSON object containing the `access_token` and
+ *   `id_token`.
+ * </caption>
+ *
+ * var data = {
+ *   username: '{PHONE_NUMBER}'
+ *   otp: '{VERIFICATION_CODE}'
+ * };
+ *
+ * auth0.verifySMSCode(data, function (err) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ * });
+ *
+ * @example <caption>
+ *   Given the user credentials (`phone_number` and `password`), authenticates
+ *   with the provider using the deprecated `/oauth/ro` endpoint. Upon successful
+ *   authentication, returns a JSON object containing the `access_token` and
+ *   `id_token`.
  * </caption>
  *
  * var data = {
@@ -267,18 +336,22 @@ AuthenticationClient.prototype.requestSMSCode = function(data, cb) {
  *
  * @param   {Object}    data              Credentials object.
  * @param   {String}    data.username     Phone number.
- * @param   {String}    data.password     Verification code.
- * @param   {String}    data.target       Target client ID.
- * @param   {String}    data.grant_type   Grant type.
+ * @param   {String}    data.otp          Verification code. Use this instead of `password` to use the `/oauth/token` endpoint.
+ * @param   {String}    data.password     Verification code. Use this instead of `otp` to use the `/oauth/ro` endpoint.
  * @param   {Function}  [cb]              Method callback.
  *
  * @return  {Promise|undefined}
  */
 AuthenticationClient.prototype.verifySMSCode = function(data, cb) {
   var translatedData = {
-    username: data.phoneNumber || data.phone_number || data.username,
-    password: data.code || data.password
+    username: data.phoneNumber || data.phone_number || data.username
   };
+
+  if (data.otp) {
+    translatedData.otp = data.otp;
+  } else {
+    translatedData.password = data.code || data.password;
+  }
 
   return this.passwordless.signIn(translatedData, cb);
 };
@@ -510,7 +583,7 @@ utils.wrapPropertyMethod(
  *   scope: 'openid'  // Optional field.
  * };
  *
- * auth0.oauth.token(data, function (err, userData) {
+ * auth0.passwordGrant(data, function (err, userData) {
  *   if (err) {
  *     // Handle error.
  *   }

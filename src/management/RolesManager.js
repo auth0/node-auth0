@@ -335,22 +335,24 @@ RolesManager.prototype.removePermissions = function(params, data, cb) {
  *
  * @example
  * var params = {
- *   roleId: 'ROLE_ID'
+ *   roleId: 'ROLE_ID',
  *   per_page: 50,
  *   page: 0
  * };
  *
  * @example <caption>
- *   This method takes a roleId and returns all users within that role
+ *   This method takes a roleId and returns all users within that role. Supports offset (page, per_page) and checkpoint pagination (from, take). You must use checkpoint pagination to retrieve beyond the first 1000 records.
  * </caption>
  *
  * management.roles.getUsers(params, function (err, users) {
  *   console.log(users);
  * });
  *
- * @param   {String}    [roleId]           Id of the role
+ * @param   {String}    [roleId]          Id of the role
  * @param   {Number}    [params.per_page] Number of results per page.
  * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {String}    [params.from]     For checkpoint pagination, the Id from which to start selection from.
+ * @param   {Number}    [params.take]     For checkpoint pagination, the number of entries to retrieve. Default 50.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return  {Promise|undefined}

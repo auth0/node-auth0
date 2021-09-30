@@ -19,7 +19,7 @@ npm install auth0
 
 You can find this library documentation in this [page](https://auth0.github.io/node-auth0/).
 
-For more information about [auth0](https://auth0.com) check our [documentation page](https://docs.auth0.com/).
+For more information about [auth0](https://auth0.com) check our [documentation page](https://auth0.com/docs).
 
 ## Authentication API Client
 
@@ -118,6 +118,8 @@ management
     // Handle error.
   });
 ```
+## Typescript
+The types for this library are currently maintained by the community at [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/auth0).  The team is planning taking ownership of this library as discussed in https://github.com/auth0/node-auth0/issues/572. After the team has taken ownership we will remove this net from the Readme.
 
 ## What is Auth0?
 

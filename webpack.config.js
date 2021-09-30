@@ -1,15 +1,15 @@
 var Webpack = require('webpack');
-var pkg     = require('./package.json');
+var pkg = require('./package.json');
 
-var StringReplacePlugin = require("string-replace-webpack-plugin");
+var StringReplacePlugin = require('string-replace-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
   output: {
     path: './build',
-    filename: pkg.name+'-'+pkg.version+'.min.js',
+    filename: pkg.name + '-' + pkg.version + '.min.js',
     library: 'Auth0',
-    libraryTarget: 'umd',
+    libraryTarget: 'umd'
   },
   node: {
     Buffer: true,
@@ -27,10 +27,10 @@ module.exports = {
         loader: StringReplacePlugin.replace({
           replacements: [
             {
-              // Remove User-agent for browser version
-              pattern: /'User-agent': 'node\.js/gmi,
-              replacement: function (match, p1, offset, string) {
-                return "// 'User-agent': 'node.js";
+              // Remove User-Agent for browser version
+              pattern: /'User-Agent': 'node\.js/gim,
+              replacement: function(match, p1, offset, string) {
+                return "// 'User-Agent': 'node.js";
               }.bind(this)
             }
           ]
@@ -50,6 +50,6 @@ module.exports = {
   resolve: {
     modulesDirectories: ['node_modules'],
     root: __dirname,
-    alias: {},
+    alias: {}
   }
 };

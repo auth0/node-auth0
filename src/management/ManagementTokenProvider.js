@@ -1,5 +1,4 @@
 var ArgumentError = require('rest-facade').ArgumentError;
-var assign = Object.assign || require('object.assign');
 var AuthenticationClient = require('../auth');
 var memoizer = require('lru-memoizer');
 var es6Promisify = require('es6-promisify');
@@ -20,13 +19,15 @@ var DEFAULT_OPTIONS = { enableCache: true };
  * @param {String}  options.audience                Audience of the Management API.
  * @param {Boolean} [options.enableCache=true]      Enabled or Disable Cache
  * @param {Number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+ * @param {Object}  [options.headers]               Additional headers that will be added to the outgoing requests.
+ *
  */
 var ManagementTokenProvider = function(options) {
   if (!options || typeof options !== 'object') {
     throw new ArgumentError('Options must be an object');
   }
 
-  var params = assign({}, DEFAULT_OPTIONS, options);
+  var params = Object.assign({}, DEFAULT_OPTIONS, options);
 
   if (!params.domain || params.domain.length === 0) {
     throw new ArgumentError('Must provide a domain');
@@ -68,7 +69,8 @@ var ManagementTokenProvider = function(options) {
     clientId: this.options.clientId,
     clientSecret: this.options.clientSecret,
     telemetry: this.options.telemetry,
-    clientInfo: this.options.clientInfo
+    clientInfo: this.options.clientInfo,
+    headers: this.options.headers
   };
   this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 
@@ -93,8 +95,8 @@ var ManagementTokenProvider = function(options) {
           return options.cacheTTLInSeconds * 1000;
         }
 
-        // if the expires_in is lower than 10 seconds, do not subtract 10 additional seconds.
-        if (data.expires_in && data.expires_in < 10 /* seconds */) {
+        // if the expires_in is lower or equal to than 10 seconds, do not subtract 10 additional seconds.
+        if (data.expires_in && data.expires_in <= 10 /* seconds */) {
           return data.expires_in * 1000;
         } else if (data.expires_in) {
           // Subtract 10 seconds from expires_in to fetch a new one, before it expires.

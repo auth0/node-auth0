@@ -94,6 +94,63 @@ describe('Auth0RestClient', function() {
     });
   });
 
+  describe('`patch`', () => {
+    it('should encode params.id on `patch` requests', function(done) {
+      nock(API_URL)
+        .patch('/some-resource/auth0%7C1234%2F5678')
+        .reply(200);
+
+      var client = new Auth0RestClient(
+        API_URL + '/some-resource/:id',
+        { headers: {} },
+        this.providerMock
+      );
+      client.patch({ id: 'auth0|1234/5678' }, { data: 'udpate ' }, function(err, data) {
+        expect(err).to.be.null;
+        done();
+        nock.cleanAll();
+      });
+    });
+  });
+
+  describe('`update`', () => {
+    it('should encode params.id on `update` requests', function(done) {
+      nock(API_URL)
+        .put('/some-resource/auth0%7C1234%2F5678')
+        .reply(200);
+
+      var client = new Auth0RestClient(
+        API_URL + '/some-resource/:id',
+        { headers: {} },
+        this.providerMock
+      );
+      client.update({ id: 'auth0|1234/5678' }, { data: 'udpate ' }, function(err, data) {
+        expect(err).to.be.null;
+        done();
+        nock.cleanAll();
+      });
+    });
+  });
+
+  describe('`delete`', () => {
+    it('should encode params.id on `delete` requests', function(done) {
+      nock(API_URL)
+        .delete('/some-resource/auth0%7C1234%2F5678')
+        .reply(200);
+
+      var client = new Auth0RestClient(
+        API_URL + '/some-resource/:id',
+        { headers: {} },
+        this.providerMock
+      );
+      client.delete({ id: 'auth0|1234/5678' }, function(err, data) {
+        expect(err).to.be.null;
+        done();
+        nock.cleanAll();
+      });
+    });
+  });
+
   it('should return a promise if no callback is given', function(done) {
     nock(API_URL)
       .get('/some-resource')

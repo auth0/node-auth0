@@ -1,5 +1,151 @@
 # Change Log
 
+## [v2.36.2](https://github.com/auth0/node-auth0/tree/v2.36.2) (2021-09-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.1...v2.36.2)
+
+**Security**
+
+- [Snyk] Security upgrade rest-facade from 1.13.0 to 1.13.1 [\#653](https://github.com/auth0/node-auth0/pull/653) ([snyk-bot](https://github.com/snyk-bot))
+- [Snyk] Security upgrade axios from 0.21.1 to 0.21.3 [\#649](https://github.com/auth0/node-auth0/pull/649) ([snyk-bot](https://github.com/snyk-bot))
+
+## [v2.36.1](https://github.com/auth0/node-auth0/tree/v2.36.1) (2021-07-28)
+
+**Fixed**
+
+- Fix docs for rate limit default maxRetries [\#640](https://github.com/auth0/node-auth0/pull/640) ([jimmyjames](https://github.com/jimmyjames))
+- Fix updateCustomTextByLanguage [\#638](https://github.com/auth0/node-auth0/pull/638) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.0...v2.36.1)
+
+## [v2.36.0](https://github.com/auth0/node-auth0/tree/v2.36.0) (2021-07-23)
+
+**Added**
+
+- [SDK-2666] Update endpoint methods to document allowance of 'from' and 'take' checkpoint pagination parameters [\#634](https://github.com/auth0/node-auth0/pull/634) ([evansims](https://github.com/evansims))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.35.1...v2.36.0)
+
+## [v2.35.1](https://github.com/auth0/node-auth0/tree/v2.35.1) (2021-06-21)
+
+**Fixed**
+
+- Update `setUniversalLoginTemplate` example to correctly reflect documentation [\#624](https://github.com/auth0/node-auth0/pull/624) ([mendhak](https://github.com/mendhak))
+- Use id instead of action_id as per the mgmt api. [\#622](https://github.com/auth0/node-auth0/pull/622) ([stevezau](https://github.com/stevezau))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.35.0...v2.35.1)
+
+## [v2.35.0](https://github.com/auth0/node-auth0/tree/v2.35.0) (2021-05-17)
+
+**Added**
+
+- Add method to verify OTP received via email [\#620](https://github.com/auth0/node-auth0/pull/620) ([alexesprit](https://github.com/alexesprit))
+- [actionsManager] Adding new Actions Managment APIs [\#570](https://github.com/auth0/node-auth0/pull/570) ([shushen](https://github.com/shushen))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.2...v2.35.0)
+
+## [v2.34.2](https://github.com/auth0/node-auth0/tree/v2.34.2) (2021-04-12)
+
+**Fixed**
+
+- [SDK-2484] Encode user ids on patch/update/delete [\#608](https://github.com/auth0/node-auth0/pull/608) ([davidpatrick](https://github.com/davidpatrick))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.1...v2.34.2)
+
+## [v2.34.1](https://github.com/auth0/node-auth0/tree/v2.34.1) (2021-04-01)
+
+**Fixed**
+
+- Small fix to ManagementTokenProvider Cache [\#604](https://github.com/auth0/node-auth0/pull/604) ([davidpatrick](https://github.com/davidpatrick))
+
+**Security**
+
+- Bump y18n from 4.0.0 to 4.0.1 [\#602](https://github.com/auth0/node-auth0/pull/602) ([dependabot-preview](https://github.com/dependabot-preview))
+- Security upgrade jwks-rsa from 1.10.0 to 1.12.1 [\#601](https://github.com/auth0/node-auth0/pull/601) ([snyk-bot](https://github.com/snyk-bot))
+
+## [v2.34.0](https://github.com/auth0/node-auth0/tree/v2.34.0) (2021-03-24)
+
+**Added**
+
+- feat(orgs): Support Organization feature [\#592](https://github.com/auth0/node-auth0/pull/592) ([mcastany](https://github.com/mcastany))
+- Org idtoken validation support [\#597](https://github.com/auth0/node-auth0/pull/597) ([davidpatrick](https://github.com/davidpatrick))
+- Allow passwordless SMS code verification to use token endpoint [\#591](https://github.com/auth0/node-auth0/pull/591) ([jimmyjames](https://github.com/jimmyjames))
+
+**Changed**
+
+- Doc Updates [\#599](https://github.com/auth0/node-auth0/pull/599) ([davidpatrick](https://github.com/davidpatrick))
+- Update get role users docs [\#587](https://github.com/auth0/node-auth0/pull/587) ([jhiner](https://github.com/jhiner))
+- revokeRefreshToken method is missing in docs [\#584](https://github.com/auth0/node-auth0/issues/584)
+
+**Security**
+
+- [Security] Bump elliptic from 6.5.3 to 6.5.4 [\#589](https://github.com/auth0/node-auth0/pull/589) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.33.0...v2.34.0)
+
+## [v2.33.0](https://github.com/auth0/node-auth0/tree/v2.33.0) (2021-02-05)
+
+**Added**
+
+- feat: add revokeRefreshToken [\#579](https://github.com/auth0/node-auth0/pull/579) ([andreafspeziale](https://github.com/andreafspeziale))
+- ULP-2609/ULP-2914: add page templates support to /branding [\#574](https://github.com/auth0/node-auth0/pull/574) ([sebadoom](https://github.com/sebadoom))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.32.0...v2.33.0)
+
+## [v2.32.0](https://github.com/auth0/node-auth0/tree/v2.32.0) (2021-01-21)
+
+**Added**
+
+- Additional options on getByEmail [SDK-2268][\#577](https://github.com/auth0/node-auth0/pull/577) ([davidpatrick](https://github.com/davidpatrick))
+- [SDK-2261] Add forwardFor support to passwordless calls [\#576](https://github.com/auth0/node-auth0/pull/576) ([frederikprijck](https://github.com/frederikprijck))
+- Adding Support for Guardian factor settings endpoints [\#569](https://github.com/auth0/node-auth0/pull/569) ([JayHelton](https://github.com/JayHelton))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.1...v2.32.0)
+
+## [v2.31.1](https://github.com/auth0/node-auth0/tree/v2.31.1) (2021-01-05)
+
+**Fixed**
+
+- Expose getJobErrors to management client [\#563](https://github.com/auth0/node-auth0/pull/563) ([davidaubin19](https://github.com/davidaubin19))
+- Fix passing a custom User-Agent to Axios. [\#562](https://github.com/auth0/node-auth0/pull/562) ([djanowski](https://github.com/djanowski))
+- Expose assignUsersToRole to ManagementClient [\#561](https://github.com/auth0/node-auth0/pull/561) ([davidaubin19](https://github.com/davidaubin19))
+
+**Security**
+
+- [Security] Bump axios from 0.19.2 to 0.21.1 [\#565](https://github.com/auth0/node-auth0/pull/565) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.0...v2.31.1)
+
+## [v2.31.0](https://github.com/auth0/node-auth0/tree/v2.31.0) (2020-12-08)
+
+**Added**
+
+- Updated documentation on Link Users [\#558](https://github.com/auth0/node-auth0/pull/558) ([davidpatrick](https://github.com/davidpatrick))
+- Add support for new passwordless endpoint [\#556](https://github.com/auth0/node-auth0/pull/556) ([nbandarchi](https://github.com/nbandarchi))
+
+**Fixed**
+
+- Adds importUsersJob to ManagementClient [\#553](https://github.com/auth0/node-auth0/pull/553) ([mikemeerschaert](https://github.com/mikemeerschaert))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.30.0...v2.31.0)
+
+## [v2.30.0](https://github.com/auth0/node-auth0/tree/v2.30.0) (2020-10-22)
+
+**Added**
+
+- Provide headers on mgmt token fetch [\#543](https://github.com/auth0/node-auth0/pull/543) ([davidpatrick](https://github.com/davidpatrick))
+
+**Changed**
+
+- [SDK-1975] Use exponential backoff rather than rate limit headers [\#538](https://github.com/auth0/node-auth0/pull/538) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+**Fixed**
+
+- Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
+- Fix deprecation warning in importUserJobs [\#537](https://github.com/auth0/node-auth0/pull/537) ([JCQuintas](https://github.com/JCQuintas))
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.29.0...v2.30.0)
+
 ## [v2.29.0](https://github.com/auth0/node-auth0/tree/v2.29.0) (2020-09-23)
 
 **Added**

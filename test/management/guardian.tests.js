@@ -21,11 +21,13 @@ describe('GuardianManager', function() {
       'getGuardianEnrollment',
       'deleteGuardianEnrollment',
       'getFactors',
+      'getFactorSettings',
       'getFactorProvider',
       'updateFactorProvider',
       'getFactorTemplates',
       'updateFactorTemplates',
       'updateFactor',
+      'updateFactorSettings',
       'getPhoneFactorSelectedProvider',
       'updatePhoneFactorSelectedProvider',
       'getPhoneFactorMessageTypes',
@@ -339,6 +341,69 @@ describe('GuardianManager', function() {
         .reply(200);
 
       this.guardian.getFactors().then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getFactorSettings', function() {
+    beforeEach(function() {
+      this.params = { name: 'webauthn-roaming' };
+      this.data = {
+        userVerification: 'discouraged',
+        overrideRelyingParty: false
+      };
+      this.request = nock(API_URL)
+        .get('/guardian/factors/' + this.params.name + '/settings')
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.getFactorSettings(this.params, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .getFactorSettings(this.params)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/guardian/factors/webauthn-roaming/settings', function(done) {
+      var request = this.request;
+
+      this.guardian.getFactorSettings(this.params).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/factors/' + this.params.name + '/settings')
+        .reply(500);
+
+      this.guardian.getFactorSettings(this.params).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/guardian/factors/' + this.params.name + '/settings')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.getFactorSettings(this.params).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -704,6 +769,82 @@ describe('GuardianManager', function() {
         .reply(200);
 
       this.guardian.updateFactor(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateFactorSettings', function() {
+    beforeEach(function() {
+      this.params = { name: 'webauthn-roaming' };
+      this.data = {
+        userVerification: 'discouraged',
+        overrideRelyingParty: false
+      };
+    });
+
+    it('should accept a callback', function(done) {
+      this.guardian.updateFactorSettings({ id: 5 }, {}, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.guardian
+        .updateFactorSettings(this.params, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PUT request to /api/v2/guardian/factors/webauthn-roaming/settings', function(done) {
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/settings')
+        .reply(200, this.data);
+
+      this.guardian.updateFactorSettings(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/settings', this.data)
+        .reply(200);
+
+      this.guardian.updateFactorSettings(this.params, this.data).then(function() {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/settings')
+        .reply(500);
+
+      this.guardian.updateFactorSettings(this.params, this.data).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .put('/guardian/factors/' + this.params.name + '/settings')
+        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .reply(200);
+
+      this.guardian.updateFactorSettings(this.params, this.data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

@@ -150,7 +150,7 @@ describe('AuthenticationClient', function() {
         domain: 'auth0.com'
       });
 
-      var expected = { 'User-agent': 'node.js/' + process.version.replace('v', '') };
+      var expected = { 'User-Agent': 'node.js/' + process.version.replace('v', '') };
 
       expect(client.oauth.oauth.options.headers).to.contain(expected);
       expect(client.database.dbConnections.options.headers).to.contain(expected);
@@ -161,7 +161,7 @@ describe('AuthenticationClient', function() {
 
     it('should include additional headers when provided', function() {
       var customHeaders = {
-        'User-agent': 'my-user-agent',
+        'User-Agent': 'my-user-agent',
         'Another-header': 'test-header'
       };
 
@@ -185,6 +185,62 @@ describe('AuthenticationClient', function() {
 
     methods.forEach(function(method) {
       ensureMethod(client, method);
+    });
+  });
+
+  describe(`verifySMSCode`, () => {
+    before(function() {
+      this.client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
+      this.passwordlessMock = sinon.mock(this.client.passwordless);
+      this.callback = function() {};
+    });
+    it('should call signIn with otp if provided', function() {
+      this.passwordlessMock
+        .expects('signIn')
+        .once()
+        .withExactArgs(
+          {
+            username: '123',
+            otp: 'code'
+          },
+          this.callback
+        );
+      this.client.verifySMSCode({ phone_number: '123', otp: 'code' }, this.callback);
+    });
+    it('should call signIn with password if provided', function() {
+      this.passwordlessMock
+        .expects('signIn')
+        .once()
+        .withExactArgs(
+          {
+            username: '123',
+            password: 'code'
+          },
+          this.callback
+        );
+      this.client.verifySMSCode({ phone_number: '123', password: 'code' }, this.callback);
+    });
+  });
+
+  describe(`verifyEmailCode`, () => {
+    before(function() {
+      this.client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
+      this.passwordlessMock = sinon.mock(this.client.passwordless);
+      this.callback = function() {};
+    });
+    it('should call signIn with otp if provided', function() {
+      this.passwordlessMock
+        .expects('signIn')
+        .once()
+        .withExactArgs(
+          {
+            username: '123',
+            realm: 'email',
+            otp: 'code'
+          },
+          this.callback
+        );
+      this.client.verifyEmailCode({ email: '123', otp: 'code' }, this.callback);
     });
   });
 });
