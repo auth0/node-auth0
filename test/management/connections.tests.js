@@ -5,7 +5,6 @@ var SRC_DIR = '../../src';
 var API_URL = 'https://tenant.auth0.com';
 
 var ConnectionsManager = require(SRC_DIR + '/management/ConnectionsManager');
-var ManagementClient = require(SRC_DIR + '/management/index');
 var ArgumentError = require('rest-facade').ArgumentError;
 
 describe('ConnectionsManager', function() {
