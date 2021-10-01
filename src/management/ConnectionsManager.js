@@ -211,11 +211,11 @@ utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
  *   This methods takes the connection ID and returns the status when online, or an error when offline.
  * </caption>
  *
- * management.connections.checkStatus( {id : 'CONNECTION_ID'}, function (err) {
+ * management.connections.checkStatus( {id : 'CONNECTION_ID'}, function (err, status) {
  *   if (err) {
- *     console.log('OFFLINE');
+ *     console.log('OFFLINE', err);
  *   } else {
- *     console.log('ONLINE');
+ *     console.log('ONLINE', status);
  *   }
  * });
  *
