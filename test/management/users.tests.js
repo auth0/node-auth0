@@ -1,23 +1,22 @@
-var expect = require('chai').expect;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-var SRC_DIR = '../../src';
-var API_URL = 'https://tenants.auth0.com';
+const API_URL = 'https://tenants.auth0.com';
 
-var UsersManager = require(SRC_DIR + '/management/UsersManager');
-var ArgumentError = require('rest-facade').ArgumentError;
+const UsersManager = require(`../../src/management/UsersManager`);
+const { ArgumentError } = require('rest-facade');
 
-describe('UsersManager', function() {
-  before(function() {
+describe('UsersManager', () => {
+  before(function () {
     this.token = 'TOKEN';
     this.users = new UsersManager({
-      headers: { authorization: 'Bearer ' + this.token },
-      baseUrl: API_URL
+      headers: { authorization: `Bearer ${this.token}` },
+      baseUrl: API_URL,
     });
   });
 
-  describe('instance', function() {
-    var methods = [
+  describe('instance', () => {
+    const methods = [
       'get',
       'getAll',
       'create',
@@ -39,77 +38,70 @@ describe('UsersManager', function() {
       'getPermissions',
       'assignPermissions',
       'removePermissions',
-      'getUserOrganizations'
+      'getUserOrganizations',
     ];
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.users[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#constructor', function() {
-    it('should error when no options are provided', function() {
-      expect(UsersManager).to.throw(ArgumentError, 'Must provide manager options');
+  describe('#constructor', () => {
+    it('should error when no options are provided', () => {
+      expect(() => {
+        new UsersManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
-    it('should throw an error when no base URL is provided', function() {
-      var manager = UsersManager.bind(null, {});
-
-      expect(manager).to.throw(ArgumentError, 'Must provide a base URL for the API');
+    it('should throw an error when no base URL is provided', () => {
+      expect(() => {
+        new UsersManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
-    it('should throw an error when the base URL is invalid', function() {
-      var manager = UsersManager.bind(null, { baseUrl: '' });
-
-      expect(manager).to.throw(ArgumentError, 'The provided base URL is invalid');
+    it('should throw an error when the base URL is invalid', () => {
+      expect(() => {
+        new UsersManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
-  describe('#getAll', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/users')
-        .reply(200);
+  describe('#getAll', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).get('/users').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.users.getAll(function() {
+    it('should accept a callback', function (done) {
+      this.users.getAll(() => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.users
-        .getAll()
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.users.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users')
-        .reply(500);
+      nock(API_URL).get('/users').reply(500);
 
-      this.users.getAll().catch(function(err) {
+      this.users.getAll().catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/users')
-        .reply(200, data);
+      const data = [{ test: true }];
+      nock(API_URL).get('/users').reply(200, data);
 
-      this.users.getAll().then(function(users) {
+      this.users.getAll().then((users) => {
         expect(users).to.be.an.instanceOf(Array);
 
         expect(users.length).to.equal(data.length);
@@ -120,44 +112,41 @@ describe('UsersManager', function() {
       });
     });
 
-    it('should perform a GET request to /api/v2/users', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/users', function (done) {
+      const { request } = this;
 
-      this.users.getAll().then(function() {
+      this.users.getAll().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/users')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.getAll().then(function() {
+      this.users.getAll().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function(done) {
+    it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var params = {
+      const params = {
         include_fields: true,
-        fields: 'test'
+        fields: 'test',
       };
-      var request = nock(API_URL)
-        .get('/users')
-        .query(params)
-        .reply(200);
+      const request = nock(API_URL).get('/users').query(params).reply(200);
 
-      this.users.getAll(params).then(function() {
+      this.users.getAll(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -165,49 +154,40 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#getByEmail', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/users-by-email')
-        .reply(200);
+  describe('#getByEmail', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).get('/users-by-email').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.users.getByEmail('someone@example.com', function() {
+    it('should accept a callback', function (done) {
+      this.users.getByEmail('someone@example.com', () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.users
-        .getByEmail()
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.users.getByEmail().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users-by-email')
-        .reply(500);
+      nock(API_URL).get('/users-by-email').reply(500);
 
-      this.users.getByEmail().catch(function(err) {
+      this.users.getByEmail().catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/users-by-email')
-        .reply(200, data);
+      const data = [{ test: true }];
+      nock(API_URL).get('/users-by-email').reply(200, data);
 
-      this.users.getByEmail().then(function(users) {
+      this.users.getByEmail().then((users) => {
         expect(users).to.be.an.instanceOf(Array);
 
         expect(users.length).to.equal(data.length);
@@ -218,67 +198,61 @@ describe('UsersManager', function() {
       });
     });
 
-    it('should perform a GET request to /api/v2/users-by-email', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/users-by-email', function (done) {
+      const { request } = this;
 
-      this.users.getByEmail().then(function() {
+      this.users.getByEmail().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/users-by-email')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.getByEmail().then(function() {
+      this.users.getByEmail().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass an email in as a query string', function(done) {
+    it('should pass an email in as a query string', function (done) {
       nock.cleanAll();
 
-      var params = {
-        email: 'email@example.com'
-      };
-      var request = nock(API_URL)
-        .get('/users-by-email')
-        .query(params)
-        .reply(200);
-
-      this.users.getByEmail(params.email).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
-    it('should pass additional options into the query string', function(done) {
-      nock.cleanAll();
-
-      var additionalOptions = {
-        fields: 'user_id, email, email_verified',
-        include_fields: true
-      };
-      var params = {
+      const params = {
         email: 'email@example.com',
-        ...additionalOptions
+      };
+      const request = nock(API_URL).get('/users-by-email').query(params).reply(200);
+
+      this.users.getByEmail(params.email).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass additional options into the query string', function (done) {
+      nock.cleanAll();
+
+      const additionalOptions = {
+        fields: 'user_id, email, email_verified',
+        include_fields: true,
+      };
+      const params = {
+        email: 'email@example.com',
+        ...additionalOptions,
       };
 
-      var request = nock(API_URL)
-        .get('/users-by-email')
-        .query(params)
-        .reply(200);
+      const request = nock(API_URL).get('/users-by-email').query(params).reply(200);
 
-      this.users.getByEmail(params.email, additionalOptions).then(function() {
+      this.users.getByEmail(params.email, additionalOptions).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -286,67 +260,60 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#get', function() {
-    beforeEach(function() {
+  describe('#get', () => {
+    beforeEach(function () {
       this.data = {
         id: 5,
         name: 'Test rule',
         enabled: true,
         script: "function (user, contest, callback) { console.log('Test'); }",
-        stage: 'login_success'
+        stage: 'login_success',
       };
 
-      this.request = nock(API_URL)
-        .get('/users/' + this.data.id)
-        .reply(200, this.data);
+      this.request = nock(API_URL).get(`/users/${this.data.id}`).reply(200, this.data);
     });
 
-    it('should accept a callback', function(done) {
-      var params = { id: this.data.id };
+    it('should accept a callback', function (done) {
+      const params = { id: this.data.id };
 
       this.users.get(params, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.users
-        .get({ id: this.data.id })
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.users.get({ id: this.data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/users/5', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users/5', function (done) {
+      const { request } = this;
 
-      this.users.get({ id: this.data.id }).then(function() {
+      this.users.get({ id: this.data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + this.data.id)
-        .reply(500);
+      nock(API_URL).get(`/users/${this.data.id}`).reply(500);
 
-      this.users.get({ id: this.data.id }).catch(function(err) {
+      this.users.get({ id: this.data.id }).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + this.data.id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .get(`/users/${this.data.id}`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.get({ id: this.data.id }).then(function() {
+      this.users.get({ id: this.data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -354,81 +321,72 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#create', function() {
-    var data = {
+  describe('#create', () => {
+    const data = {
       id: 5,
       name: 'Test rule',
       enabled: true,
       script: "function (user, contest, callback) { console.log('Test'); }",
-      stage: 'login_success'
+      stage: 'login_success',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/users')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/users').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.users.create(data, function() {
+    it('should accept a callback', function (done) {
+      this.users.create(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.users
-        .create(data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.users.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users')
-        .reply(500);
+      nock(API_URL).post('/users').reply(500);
 
-      this.users.create(data).catch(function(err) {
+      this.users.create(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/users', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users', function (done) {
+      const { request } = this;
 
-      this.users.create(data).then(function() {
+      this.users.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users', data)
-        .reply(200);
+      const request = nock(API_URL).post('/users', data).reply(200);
 
-      this.users.create(data).then(function() {
+      this.users.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .post('/users')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.create(data).then(function() {
+      this.users.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -436,58 +394,49 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#update', function() {
-    beforeEach(function() {
+  describe('#update', () => {
+    beforeEach(function () {
       this.data = { id: 5 };
 
-      this.request = nock(API_URL)
-        .patch('/users/' + this.data.id)
-        .reply(200, this.data);
+      this.request = nock(API_URL).patch(`/users/${this.data.id}`).reply(200, this.data);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.update({ id: 5 }, {}, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.users
-        .update({ id: 5 }, {})
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.users.update({ id: 5 }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a PATCH request to /api/v2/users/5', function(done) {
-      var request = this.request;
+    it('should perform a PATCH request to /api/v2/users/5', function (done) {
+      const { request } = this;
 
-      this.users.update({ id: 5 }, {}).then(function() {
+      this.users.update({ id: 5 }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the new data in the body of the request', function(done) {
+    it('should include the new data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/users/' + this.data.id, this.data)
-        .reply(200);
+      const request = nock(API_URL).patch(`/users/${this.data.id}`, this.data).reply(200);
 
-      this.users.update({ id: 5 }, this.data).then(function() {
+      this.users.update({ id: 5 }, this.data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/users/' + this.data.id)
-        .reply(500);
+      nock(API_URL).patch(`/users/${this.data.id}`).reply(500);
 
-      this.users.update({ id: this.data.id }, this.data).catch(function(err) {
+      this.users.update({ id: this.data.id }, this.data).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -495,56 +444,52 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#delete', function() {
-    var id = 'USER_5';
+  describe('#delete', () => {
+    const id = 'USER_5';
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .delete('/users/' + id)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).delete(`/users/${id}`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.users.delete({ id: id }, done.bind(null, null));
+    it('should accept a callback', function (done) {
+      this.users.delete({ id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
-      this.users.delete({ id: id }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function (done) {
+      this.users.delete({ id }).then(done.bind(null, null));
     });
 
-    it('should perform a delete request to /users/' + id, function(done) {
-      var request = this.request;
+    it(`should perform a delete request to /users/${id}`, function (done) {
+      const { request } = this;
 
-      this.users.delete({ id: id }).then(function() {
+      this.users.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/users/' + id)
-        .reply(500);
+      nock(API_URL).delete(`/users/${id}`).reply(500);
 
-      this.users.delete({ id: id }).catch(function(err) {
+      this.users.delete({ id }).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/users/' + id)
-        .matchHeader('authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .delete(`/users/${id}`)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.delete({ id: id }).then(function() {
+      this.users.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -552,93 +497,84 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#link', function() {
-    var userId = 'USER_ID';
-    var data = {
+  describe('#link', () => {
+    const userId = 'USER_ID';
+    const data = {
       provider: 'twitter',
-      user_id: '191919191919191'
+      user_id: '191919191919191',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/users/' + userId + '/identities')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).post(`/users/${userId}/identities`).reply(200);
     });
 
-    it('should validate empty userId', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.link(null, data, function() {});
+    it('should validate empty userId', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.link(null, data, () => {});
       }).to.throw('The userId cannot be null or undefined');
     });
 
-    it('should validate non-string userId', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.link(123, data, function() {});
+    it('should validate non-string userId', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.link(123, data, () => {});
       }).to.throw('The userId has to be a string');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.link(userId, data, function() {
+    it('should accept a callback', function (done) {
+      this.users.link(userId, data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.users
-        .link(userId, data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.users.link(userId, data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + userId + '/identities')
-        .reply(500);
+      nock(API_URL).post(`/users/${userId}/identities`).reply(500);
 
-      this.users.link(userId, data).catch(function(err) {
+      this.users.link(userId, data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/users', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users', function (done) {
+      const { request } = this;
 
-      this.users.link(userId, data).then(function() {
+      this.users.link(userId, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + userId + '/identities', data)
-        .reply(200);
+      const request = nock(API_URL).post(`/users/${userId}/identities`, data).reply(200);
 
-      this.users.link(userId, data).then(function() {
+      this.users.link(userId, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + userId + '/identities')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .post(`/users/${userId}/identities`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.link(userId, data).then(function() {
+      this.users.link(userId, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -646,61 +582,57 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#unlink', function() {
-    var data = {
+  describe('#unlink', () => {
+    const data = {
       id: 'u1',
       user_id: 'u2',
-      provider: 'auth0'
+      provider: 'auth0',
     };
-    var url = '/users/' + data.id + '/identities/' + data.provider + '/' + data.user_id;
+    const url = `/users/${data.id}/identities/${data.provider}/${data.user_id}`;
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .delete(url)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).delete(url).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.unlink(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.unlink(data).then(done.bind(null, null));
     });
 
-    it('should perform a DELETE request to ' + url, function(done) {
-      var request = this.request;
+    it(`should perform a DELETE request to ${url}`, function (done) {
+      const { request } = this;
 
-      this.users.unlink(data).then(function() {
+      this.users.unlink(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete(url)
-        .reply(500);
+      nock(API_URL).delete(url).reply(500);
 
-      this.users.unlink(data).catch(function(err) {
+      this.users.unlink(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .delete(url)
-        .matchHeader('authorization', 'Bearer ' + this.token)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.unlink(data).then(function() {
+      this.users.unlink(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -708,60 +640,56 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#deleteMultifactorProvider', function() {
-    var data = {
+  describe('#deleteMultifactorProvider', () => {
+    const data = {
       id: 'u1',
-      provider: 'auth0'
+      provider: 'auth0',
     };
-    var url = '/users/' + data.id + '/multifactor/' + data.provider;
+    const url = `/users/${data.id}/multifactor/${data.provider}`;
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .delete(url)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).delete(url).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.deleteMultifactorProvider(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.deleteMultifactorProvider(data).then(done.bind(null, null));
     });
 
-    it('should perform a DELETE request to ' + url, function(done) {
-      var request = this.request;
+    it(`should perform a DELETE request to ${url}`, function (done) {
+      const { request } = this;
 
-      this.users.deleteMultifactorProvider(data).then(function() {
+      this.users.deleteMultifactorProvider(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete(url)
-        .reply(500);
+      nock(API_URL).delete(url).reply(500);
 
-      this.users.deleteMultifactorProvider(data).catch(function(err) {
+      this.users.deleteMultifactorProvider(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .delete(url)
-        .matchHeader('authorization', 'Bearer ' + this.token)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.deleteMultifactorProvider(data).then(function() {
+      this.users.deleteMultifactorProvider(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -769,52 +697,50 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#updateUserMetadata', function() {
-    beforeEach(function() {
+  describe('#updateUserMetadata', () => {
+    beforeEach(function () {
       this.data = {
         id: 5,
         foo: 'bar',
-        test: 'data'
+        test: 'data',
       };
 
-      this.request = nock(API_URL)
-        .patch('/users/' + this.data.id)
-        .reply(200, this.data);
+      this.request = nock(API_URL).patch(`/users/${this.data.id}`).reply(200, this.data);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.updateUserMetadata({ id: 5 }, {}, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .updateUserMetadata({ id: 5 }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should perform a PATCH request to /api/v2/users/5', function(done) {
-      var request = this.request;
+    it('should perform a PATCH request to /api/v2/users/5', function (done) {
+      const { request } = this;
 
-      this.users.updateUserMetadata({ id: 5 }, {}).then(function() {
+      this.users.updateUserMetadata({ id: 5 }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the metadata in the body of the request', function(done) {
+    it('should include the metadata in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/users/' + this.data.id, {
-          user_metadata: this.data
+      const request = nock(API_URL)
+        .patch(`/users/${this.data.id}`, {
+          user_metadata: this.data,
         })
         .reply(200);
 
       this.users
         .updateUserMetadata({ id: 5 }, this.data)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -822,14 +748,12 @@ describe('UsersManager', function() {
         .catch(done);
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/users/' + this.data.id)
-        .reply(500);
+      nock(API_URL).patch(`/users/${this.data.id}`).reply(500);
 
-      this.users.updateUserMetadata({ id: this.data.id }, this.data).catch(function(err) {
+      this.users.updateUserMetadata({ id: this.data.id }, this.data).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -837,74 +761,68 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#logs', function() {
-    var data = {
-      id: 'user_id'
+  describe('#logs', () => {
+    const data = {
+      id: 'user_id',
     };
-    var url = '/users/' + data.id + '/logs';
+    const url = `/users/${data.id}/logs`;
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get(url)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get(url).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.logs(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.logs(data).then(done.bind(null, null));
     });
 
-    it('should perform a GET request to ' + url, function(done) {
-      var request = this.request;
+    it(`should perform a GET request to ${url}`, function (done) {
+      const { request } = this;
 
-      this.users.logs(data).then(function() {
+      this.users.logs(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get(url)
-        .reply(500);
+      nock(API_URL).get(url).reply(500);
 
-      this.users.logs(data).catch(function(err) {
+      this.users.logs(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get(url)
-        .matchHeader('authorization', 'Bearer ' + this.token)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.logs(data).then(function() {
+      this.users.logs(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var response = [{ test: true }];
-      var request = nock(API_URL)
-        .get(url)
-        .reply(200, response);
+      const response = [{ test: true }];
+      nock(API_URL).get(url).reply(200, response);
 
-      this.users.logs(data).then(function(logs) {
+      this.users.logs(data).then((logs) => {
         expect(logs).to.be.an.instanceOf(Array);
 
         expect(logs.length).to.equal(response.length);
@@ -915,22 +833,19 @@ describe('UsersManager', function() {
       });
     });
 
-    it('should pass the parameters in the query-string', function(done) {
+    it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var params = {
+      const params = {
         page: 0,
-        per_page: 30
+        per_page: 30,
       };
-      var request = nock(API_URL)
-        .get(url)
-        .query(params)
-        .reply(200);
+      const request = nock(API_URL).get(url).query(params).reply(200);
 
       data.page = params.page;
       data.per_page = params.per_page;
 
-      this.users.logs(data).then(function() {
+      this.users.logs(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -938,58 +853,54 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#getGuardianEnrollments', function() {
-    var data = {
-      id: 5
+  describe('#getGuardianEnrollments', () => {
+    const data = {
+      id: 5,
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/users/' + data.id + '/enrollments')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/users/${data.id}/enrollments`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.getGuardianEnrollments(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.getGuardianEnrollments(data).then(done.bind(null, null));
     });
 
-    it('should perform a GET request to /api/v2/users/5/enrollments', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/users/5/enrollments', function (done) {
+      const { request } = this;
 
-      this.users.getGuardianEnrollments(data).then(function() {
+      this.users.getGuardianEnrollments(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/enrollments')
-        .reply(500);
+      nock(API_URL).get(`/users/${data.id}/enrollments`).reply(500);
 
-      this.users.getGuardianEnrollments(data).catch(function(err) {
+      this.users.getGuardianEnrollments(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/enrollments')
-        .matchHeader('authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/enrollments`)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.getGuardianEnrollments(data).then(function() {
+      this.users.getGuardianEnrollments(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -997,70 +908,66 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#regenerateRecoveryCode', function() {
-    var data = {
-      id: 'USER_ID'
+  describe('#regenerateRecoveryCode', () => {
+    const data = {
+      id: 'USER_ID',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/users/' + data.id + '/recovery-code-regeneration')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).post(`/users/${data.id}/recovery-code-regeneration`).reply(200);
     });
 
-    it('should validate empty userId', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.regenerateRecoveryCode(null, function() {});
+    it('should validate empty userId', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.regenerateRecoveryCode(null, () => {});
       }).to.throw('The userId cannot be null or undefined');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.regenerateRecoveryCode(data, function() {
+    it('should accept a callback', function (done) {
+      this.users.regenerateRecoveryCode(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .regenerateRecoveryCode(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + data.id + '/recovery-code-regeneration')
-        .reply(500);
+      nock(API_URL).post(`/users/${data.id}/recovery-code-regeneration`).reply(500);
 
-      this.users.regenerateRecoveryCode(data).catch(function(err) {
+      this.users.regenerateRecoveryCode(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/users/:id/recovery-code-regeneration', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users/:id/recovery-code-regeneration', function (done) {
+      const { request } = this;
 
-      this.users.regenerateRecoveryCode(data).then(function() {
+      this.users.regenerateRecoveryCode(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + data.id + '/recovery-code-regeneration')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .post(`/users/${data.id}/recovery-code-regeneration`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.regenerateRecoveryCode(data).then(function() {
+      this.users.regenerateRecoveryCode(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1068,70 +975,70 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#invalidateRememberBrowser', function() {
-    var data = {
-      id: 'USER_ID'
+  describe('#invalidateRememberBrowser', () => {
+    const data = {
+      id: 'USER_ID',
     };
 
-    beforeEach(function() {
+    beforeEach(function () {
       this.request = nock(API_URL)
-        .post('/users/' + data.id + '/multifactor/actions/invalidate-remember-browser')
+        .post(`/users/${data.id}/multifactor/actions/invalidate-remember-browser`)
         .reply(204);
     });
 
-    it('should validate empty userId', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.invalidateRememberBrowser(null, function() {});
+    it('should validate empty userId', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.invalidateRememberBrowser(null, () => {});
       }).to.throw('The userId cannot be null or undefined');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.invalidateRememberBrowser(data, function() {
+    it('should accept a callback', function (done) {
+      this.users.invalidateRememberBrowser(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .invalidateRememberBrowser(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + data.id + '/multifactor/actions/invalidate-remember-browser')
+      nock(API_URL)
+        .post(`/users/${data.id}/multifactor/actions/invalidate-remember-browser`)
         .reply(500);
 
-      this.users.invalidateRememberBrowser(data).catch(function(err) {
+      this.users.invalidateRememberBrowser(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/users/:id/multifactor/actions/invalidate-remember-browser', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users/:id/multifactor/actions/invalidate-remember-browser', function (done) {
+      const { request } = this;
 
-      this.users.invalidateRememberBrowser(data).then(function() {
+      this.users.invalidateRememberBrowser(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + data.id + '/multifactor/actions/invalidate-remember-browser')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .post(`/users/${data.id}/multifactor/actions/invalidate-remember-browser`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.invalidateRememberBrowser(data).then(function() {
+      this.users.invalidateRememberBrowser(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1139,58 +1046,54 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#getRoles', function() {
-    var data = {
-      id: 'user_id'
+  describe('#getRoles', () => {
+    const data = {
+      id: 'user_id',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/users/' + data.id + '/roles')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/users/${data.id}/roles`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.getRoles(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.getRoles(data).then(done.bind(null, null));
     });
 
-    it('should perform a GET request to /api/v2/users/user_id/roles', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/users/user_id/roles', function (done) {
+      const { request } = this;
 
-      this.users.getRoles(data).then(function() {
+      this.users.getRoles(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/roles')
-        .reply(500);
+      nock(API_URL).get(`/users/${data.id}/roles`).reply(500);
 
-      this.users.getRoles(data).catch(function(err) {
+      this.users.getRoles(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/roles')
-        .matchHeader('authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/roles`)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.getRoles(data).then(function() {
+      this.users.getRoles(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1198,92 +1101,86 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#assignRoles', function() {
-    beforeEach(function() {
+  describe('#assignRoles', () => {
+    beforeEach(function () {
       this.data = {
-        id: 'user_id'
+        id: 'user_id',
       };
       this.body = { roles: ['role1', 'role2', 'role3'] };
 
-      this.request = nock(API_URL)
-        .post('/users/' + this.data.id + '/roles')
-        .reply(200);
+      this.request = nock(API_URL).post(`/users/${this.data.id}/roles`).reply(200);
     });
 
-    it('should validate empty user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.assignRoles({ id: null }, _this.body, function() {});
+    it('should validate empty user_id', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.assignRoles({ id: null }, _this.body, () => {});
       }).to.throw('The user_id cannot be null or undefined');
     });
 
-    it('should validate non-string user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.assignRoles({ id: 127 }, _this.body, function() {});
+    it('should validate non-string user_id', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.assignRoles({ id: 127 }, _this.body, () => {});
       }).to.throw('The user_id has to be a string');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.assignRoles(this.data, {}, function() {
+    it('should accept a callback', function (done) {
+      this.users.assignRoles(this.data, {}, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .assignRoles(this.data, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/roles')
-        .reply(500);
+      nock(API_URL).post(`/users/${this.data.id}/roles`).reply(500);
 
-      this.users.assignRoles(this.data, {}).catch(function(err) {
+      this.users.assignRoles(this.data, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/users/user_id/roles', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users/user_id/roles', function (done) {
+      const { request } = this;
 
-      this.users.assignRoles(this.data, {}).then(function() {
+      this.users.assignRoles(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/roles', this.body)
-        .reply(200);
+      const request = nock(API_URL).post(`/users/${this.data.id}/roles`, this.body).reply(200);
 
-      this.users.assignRoles(this.data, this.body).then(function() {
+      this.users.assignRoles(this.data, this.body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/roles')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .post(`/users/${this.data.id}/roles`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.assignRoles(this.data, {}).then(function() {
+      this.users.assignRoles(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1291,92 +1188,86 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#removeRoles', function() {
-    beforeEach(function() {
+  describe('#removeRoles', () => {
+    beforeEach(function () {
       this.data = {
-        id: 'user_id'
+        id: 'user_id',
       };
       this.body = { roles: ['role1', 'role2', 'role3'] };
 
-      this.request = nock(API_URL)
-        .delete('/users/' + this.data.id + '/roles', {})
-        .reply(200);
+      this.request = nock(API_URL).delete(`/users/${this.data.id}/roles`, {}).reply(200);
     });
 
-    it('should validate empty user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.removeRoles({ id: null }, this.body, function() {});
+    it('should validate empty user_id', function () {
+      const _this = this;
+      expect(function () {
+        _this.users.removeRoles({ id: null }, this.body, () => {});
       }).to.throw('The user_id cannot be null or undefined');
     });
 
-    it('should validate non-string user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.removeRoles({ id: 123 }, _this.body, function() {});
+    it('should validate non-string user_id', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.removeRoles({ id: 123 }, _this.body, () => {});
       }).to.throw('The user_id has to be a string');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.removeRoles(this.data, {}, function() {
+    it('should accept a callback', function (done) {
+      this.users.removeRoles(this.data, {}, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .removeRoles(this.data, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/roles')
-        .reply(500);
+      nock(API_URL).post(`/users/${this.data.id}/roles`).reply(500);
 
-      this.users.removeRoles(this.data, {}).catch(function(err) {
+      this.users.removeRoles(this.data, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a DELETE request to /api/v2/users/user_id/roles', function(done) {
-      var request = this.request;
+    it('should perform a DELETE request to /api/v2/users/user_id/roles', function (done) {
+      const { request } = this;
 
-      this.users.removeRoles(this.data, {}).then(function() {
+      this.users.removeRoles(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/users/' + this.data.id + '/roles', this.body)
-        .reply(200);
+      const request = nock(API_URL).delete(`/users/${this.data.id}/roles`, this.body).reply(200);
 
-      this.users.removeRoles(this.data, this.body).then(function() {
+      this.users.removeRoles(this.data, this.body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/users/' + this.data.id + '/roles')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .delete(`/users/${this.data.id}/roles`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.removeRoles(this.data, {}).then(function() {
+      this.users.removeRoles(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1384,58 +1275,54 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#getPermissions', function() {
-    var data = {
-      id: 'user_id'
+  describe('#getPermissions', () => {
+    const data = {
+      id: 'user_id',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/users/' + data.id + '/permissions')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/users/${data.id}/permissions`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.getPermissions(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.getPermissions(data).then(done.bind(null, null));
     });
 
-    it('should perform a GET request to /api/v2/users/user_id/permissions', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/users/user_id/permissions', function (done) {
+      const { request } = this;
 
-      this.users.getPermissions(data).then(function() {
+      this.users.getPermissions(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/permissions')
-        .reply(500);
+      nock(API_URL).get(`/users/${data.id}/permissions`).reply(500);
 
-      this.users.getPermissions(data).catch(function(err) {
+      this.users.getPermissions(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/permissions')
-        .matchHeader('authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/permissions`)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.getPermissions(data).then(function() {
+      this.users.getPermissions(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1443,92 +1330,88 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#assignPermissions', function() {
-    beforeEach(function() {
+  describe('#assignPermissions', () => {
+    beforeEach(function () {
       this.data = {
-        id: 'user_id'
+        id: 'user_id',
       };
       this.body = { permission_name: 'My Permission', resource_server_identifier: 'test123' };
 
-      this.request = nock(API_URL)
-        .post('/users/' + this.data.id + '/permissions')
-        .reply(200);
+      this.request = nock(API_URL).post(`/users/${this.data.id}/permissions`).reply(200);
     });
 
-    it('should validate empty user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.assignPermissions({ id: null }, this.body, function() {});
+    it('should validate empty user_id', function () {
+      const _this = this;
+      expect(function () {
+        _this.users.assignPermissions({ id: null }, this.body, () => {});
       }).to.throw('The user_id cannot be null or undefined');
     });
 
-    it('should validate non-string user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.assignPermissions({ id: 123 }, _this.body, function() {});
+    it('should validate non-string user_id', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.assignPermissions({ id: 123 }, _this.body, () => {});
       }).to.throw('The user_id has to be a string');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.assignPermissions(this.data, {}, function() {
+    it('should accept a callback', function (done) {
+      this.users.assignPermissions(this.data, {}, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .assignPermissions(this.data, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/permissions')
-        .reply(500);
+      nock(API_URL).post(`/users/${this.data.id}/permissions`).reply(500);
 
-      this.users.assignPermissions(this.data, {}).catch(function(err) {
+      this.users.assignPermissions(this.data, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/users/user_id/permissions', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/users/user_id/permissions', function (done) {
+      const { request } = this;
 
-      this.users.assignPermissions(this.data, {}).then(function() {
+      this.users.assignPermissions(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/permissions', this.body)
+      const request = nock(API_URL)
+        .post(`/users/${this.data.id}/permissions`, this.body)
         .reply(200);
 
-      this.users.assignPermissions(this.data, this.body).then(function() {
+      this.users.assignPermissions(this.data, this.body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/permissions')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .post(`/users/${this.data.id}/permissions`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.assignPermissions(this.data, {}).then(function() {
+      this.users.assignPermissions(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1536,92 +1419,88 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#removePermissions', function() {
-    beforeEach(function() {
+  describe('#removePermissions', () => {
+    beforeEach(function () {
       this.data = {
-        id: 'user_id'
+        id: 'user_id',
       };
       this.body = { permission_name: 'My Permission', resource_server_identifier: 'test123' };
 
-      this.request = nock(API_URL)
-        .delete('/users/' + this.data.id + '/permissions', {})
-        .reply(200);
+      this.request = nock(API_URL).delete(`/users/${this.data.id}/permissions`, {}).reply(200);
     });
 
-    it('should validate empty user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.removePermissions({ id: null }, this.body, function() {});
+    it('should validate empty user_id', function () {
+      const _this = this;
+      expect(function () {
+        _this.users.removePermissions({ id: null }, this.body, () => {});
       }).to.throw('The user_id cannot be null or undefined');
     });
 
-    it('should validate non-string user_id', function() {
-      var _this = this;
-      expect(function() {
-        _this.users.removePermissions({ id: 123 }, _this.body, function() {});
+    it('should validate non-string user_id', function () {
+      const _this = this;
+      expect(() => {
+        _this.users.removePermissions({ id: 123 }, _this.body, () => {});
       }).to.throw('The user_id has to be a string');
     });
 
-    it('should accept a callback', function(done) {
-      this.users.removePermissions(this.data, {}, function() {
+    it('should accept a callback', function (done) {
+      this.users.removePermissions(this.data, {}, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.users
         .removePermissions(this.data, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/users/' + this.data.id + '/permissions')
-        .reply(500);
+      nock(API_URL).post(`/users/${this.data.id}/permissions`).reply(500);
 
-      this.users.removePermissions(this.data, {}).catch(function(err) {
+      this.users.removePermissions(this.data, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a DELETE request to /api/v2/users/user_id/permissions', function(done) {
-      var request = this.request;
+    it('should perform a DELETE request to /api/v2/users/user_id/permissions', function (done) {
+      const { request } = this;
 
-      this.users.removePermissions(this.data, {}).then(function() {
+      this.users.removePermissions(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/users/' + this.data.id + '/permissions', this.body)
+      const request = nock(API_URL)
+        .delete(`/users/${this.data.id}/permissions`, this.body)
         .reply(200);
 
-      this.users.removePermissions(this.data, this.body).then(function() {
+      this.users.removePermissions(this.data, this.body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/users/' + this.data.id + '/permissions')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .delete(`/users/${this.data.id}/permissions`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.removePermissions(this.data, {}).then(function() {
+      this.users.removePermissions(this.data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1629,58 +1508,54 @@ describe('UsersManager', function() {
     });
   });
 
-  describe('#getUserOrganizations', function() {
-    var data = {
-      id: 'user_id'
+  describe('#getUserOrganizations', () => {
+    const data = {
+      id: 'user_id',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/users/' + data.id + '/organizations')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/users/${data.id}/organizations`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.users.getUserOrganizations(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
+    it('should return a promise when no callback is given', function (done) {
       this.users.getUserOrganizations(data).then(done.bind(null, null));
     });
 
-    it('should perform a GET request to /api/v2/users/user_id/organizations', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/users/user_id/organizations', function (done) {
+      const { request } = this;
 
-      this.users.getUserOrganizations(data).then(function() {
+      this.users.getUserOrganizations(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/organizations')
-        .reply(500);
+      nock(API_URL).get(`/users/${data.id}/organizations`).reply(500);
 
-      this.users.getUserOrganizations(data).catch(function(err) {
+      this.users.getUserOrganizations(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function(done) {
+    it('should include the token in the authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/users/' + data.id + '/organizations')
-        .matchHeader('authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/organizations`)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.users.getUserOrganizations(data).then(function() {
+      this.users.getUserOrganizations(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

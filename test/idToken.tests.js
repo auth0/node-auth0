@@ -1,12 +1,12 @@
-var assert = require('assert');
-var expect = require('chai').expect;
-var jws = require('jws');
-var idToken = require('../src/auth/idToken');
+const assert = require('assert');
+const { expect } = require('chai');
+const jws = require('jws');
+const idToken = require('../src/auth/idToken');
 
-var secretHMAC = 'secret';
+const secretHMAC = 'secret';
 //openssl genrsa -out private.pem 2048
 //openssl rsa -in private.pem -pubout -out public.pem
-var privateKeyRSA = `-----BEGIN PRIVATE KEY-----
+const privateKeyRSA = `-----BEGIN PRIVATE KEY-----
 MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC4ZtdaIrd1BPIJ
 tfnF0TjIK5inQAXZ3XlCrUlJdP+XHwIRxdv1FsN12XyMYO/6ymLmo9ryoQeIrsXB
 XYqlET3zfAY+diwCb0HEsVvhisthwMU4gZQu6TYW2s9LnXZB5rVtcBK69hcSlA2k
@@ -37,17 +37,17 @@ rK0/Ikt5ybqUzKCMJZg2VKGTxg==
 
 //base date expressed in MS
 //expected values for a good id token payload
-var expectations = {
+const expectations = {
   clientId: 'tokens-test-123',
   clientIdAlt: 'external-test-999',
   issuer: 'https://tokens-test.auth0.com/',
   nonce: 'a1b2c3d4e5',
-  clock: Date.now()
+  clock: Date.now(),
 };
 
 //date helpers
-var TODAY_IN_SECONDS = Math.floor(expectations.clock / 1000);
-var ONE_DAY_IN_SECONDS = 3600 * 24;
+const TODAY_IN_SECONDS = Math.floor(expectations.clock / 1000);
+const ONE_DAY_IN_SECONDS = 3600 * 24;
 function yesterday() {
   return TODAY_IN_SECONDS - ONE_DAY_IN_SECONDS;
 }
@@ -55,7 +55,7 @@ function tomorrow() {
   return TODAY_IN_SECONDS + ONE_DAY_IN_SECONDS;
 }
 //good id token payload
-var payload = {
+const payload = {
   iss: expectations.issuer,
   sub: 'auth0|123456789',
   aud: [expectations.clientId, expectations.clientIdAlt],
@@ -64,21 +64,21 @@ var payload = {
   nonce: expectations.nonce,
   azp: expectations.clientId,
   org_id: 'test|org',
-  auth_time: TODAY_IN_SECONDS
+  auth_time: TODAY_IN_SECONDS,
 };
 
-var defaultOptions = {
+const defaultOptions = {
   issuer: expectations.issuer,
   audience: [expectations.clientId, expectations.clientIdAlt],
-  nonce: expectations.nonce
+  nonce: expectations.nonce,
 };
 
 function generateJWT(bodyOverrides, alg) {
-  var body = Object.assign({}, payload, bodyOverrides || {});
+  const body = Object.assign({}, payload, bodyOverrides || {});
   alg = alg || 'RS256';
-  var options = {
-    header: { alg: alg },
-    payload: body
+  const options = {
+    header: { alg },
+    payload: body,
   };
   if (alg === 'RS256') {
     options.privateKey = privateKeyRSA;
@@ -88,197 +88,197 @@ function generateJWT(bodyOverrides, alg) {
   return jws.sign(options);
 }
 
-describe('idToken.decode', function() {
-  it('should decode a valid token', function() {
-    var alg = 'RS256';
-    var token = generateJWT({ name: 'ÁÁutf8' }, alg);
-    var decoded = idToken.decode(token);
+describe('idToken.decode', () => {
+  it('should decode a valid token', () => {
+    const alg = 'RS256';
+    const token = generateJWT({ name: 'ÁÁutf8' }, alg);
+    const decoded = idToken.decode(token);
 
     assert.equal(decoded._raw, token);
     assert.equal(decoded.header.alg, alg);
 
-    Object.keys(payload).forEach(function(key) {
+    Object.keys(payload).forEach((key) => {
       assert.deepEqual(payload[key], decoded.payload[key]);
     });
   });
 
-  it('throws errors on invalid tokens', function() {
-    var IDTOKEN_ERROR_MESSAGE = 'ID token could not be decoded';
+  it('throws errors on invalid tokens', () => {
+    const IDTOKEN_ERROR_MESSAGE = 'ID token could not be decoded';
 
-    it('throws when there is more or less than 3 parts', function() {
+    it('throws when there is more or less than 3 parts', () => {
       assert.throws(idToken.decode('test'), IDTOKEN_ERROR_MESSAGE);
       assert.throws(idToken.decode('test.'), IDTOKEN_ERROR_MESSAGE);
       assert.throws(idToken.decode('test.test'), IDTOKEN_ERROR_MESSAGE);
       assert.throws(idToken.decode('test.test.test.test'), IDTOKEN_ERROR_MESSAGE);
     });
-    it('throws when there is no header', function() {
+    it('throws when there is no header', () => {
       assert.throws(idToken.decode('.test.test'), IDTOKEN_ERROR_MESSAGE);
     });
-    it('throws when there is no payload', function() {
+    it('throws when there is no payload', () => {
       assert.throws(idToken.decode('test..test'), IDTOKEN_ERROR_MESSAGE);
     });
-    it('throws when there is no signature', function() {
+    it('throws when there is no signature', () => {
       assert.throws(idToken.decode('test.test.'), IDTOKEN_ERROR_MESSAGE);
     });
   });
 });
 
-describe('idToken.validate', function() {
-  var expectedOptions;
+describe('idToken.validate', () => {
+  let expectedOptions;
 
-  beforeEach(function() {
+  beforeEach(() => {
     expectedOptions = Object.assign({}, defaultOptions);
     expectedOptions.audience = expectations.clientId;
     expectedOptions.maxAge = 123;
   });
 
-  it('should throw when no id token is present', function() {
-    expect(function() {
+  it('should throw when no id token is present', () => {
+    expect(() => {
       idToken.validate();
     }).to.throw('ID token is required but missing');
   });
-  it('should throw when no Issuer is present in the claim', function() {
-    expect(function() {
+  it('should throw when no Issuer is present in the claim', () => {
+    expect(() => {
       idToken.validate(generateJWT({ iss: undefined }));
     }).to.throw('Issuer (iss) claim must be a string present in the ID token');
   });
-  it('should throw when the expected issuer is not in the claim', function() {
-    expect(function() {
+  it('should throw when the expected issuer is not in the claim', () => {
+    expect(() => {
       idToken.validate(generateJWT({}), { issuer: 'ExpectedIssuer' });
     }).to.throw(
       'Issuer (iss) claim mismatch in the ID token; expected "ExpectedIssuer", found "https://tokens-test.auth0.com/"'
     );
   });
-  it('should throw when the claim has no Subject', function() {
-    expect(function() {
+  it('should throw when the claim has no Subject', () => {
+    expect(() => {
       idToken.validate(generateJWT({ sub: undefined }), defaultOptions);
     }).to.throw('Subject (sub) claim must be a string present in the ID token');
   });
-  it('should throw when the alg is neither rs256 or hs256', function() {
-    var token =
+  it('should throw when the alg is neither rs256 or hs256', () => {
+    const token =
       'eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwczovL3Rva2Vucy10ZXN0LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHwxMjM0NTY3ODkiLCJhdWQiOiJ0b2tlbnMtdGVzdC0xMjMifQ.cZ4qDwoKdKQx8DtD-F-xVKCxd3rz58wSJh3k28z5qnpzm4x3xRiyHCuUvtxmL2aPdBQ37Zt8Mt5drd9hZhNzFQ';
 
-    expect(function() {
+    expect(() => {
       idToken.validate(token, defaultOptions);
     }).to.throw(
       'Signature algorithm of "HS512" is not supported. Expected the ID token to be signed with "RS256" or "HS256".'
     );
   });
-  it('should throw when the audience is not a string or array', function() {
-    expect(function() {
+  it('should throw when the audience is not a string or array', () => {
+    expect(() => {
       idToken.validate(generateJWT({ aud: undefined }), defaultOptions);
     }).to.throw(
       'Audience (aud) claim must be a string or array of strings present in the ID token'
     );
   });
-  it('should throw when claim audience is a String and not expected audience', function() {
-    expect(function() {
+  it('should throw when claim audience is a String and not expected audience', () => {
+    expect(() => {
       idToken.validate(generateJWT({ aud: 'notExpected' }), expectedOptions);
     }).to.throw(
       'Audience (aud) claim mismatch in the ID token; expected "tokens-test-123" but found "notExpected"'
     );
   });
-  it('should throw when claim audience is an Array and not expected audience', function() {
-    expect(function() {
+  it('should throw when claim audience is an Array and not expected audience', () => {
+    expect(() => {
       idToken.validate(generateJWT({ aud: ['notExpected'] }), expectedOptions);
     }).to.throw(
       'Audience (aud) claim mismatch in the ID token; expected "tokens-test-123" but was not one of "notExpected"'
     );
   });
-  it('should throw when expected audience is not a String or Array', function() {
-    expect(function() {
+  it('should throw when expected audience is not a String or Array', () => {
+    expect(() => {
       idToken.validate(generateJWT({ aud: 10000 }), expectedOptions);
     }).to.throw(
       'Audience (aud) claim must be a string or array of strings present in the ID token'
     );
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({ aud: {} }), expectedOptions);
     }).to.throw(
       'Audience (aud) claim must be a string or array of strings present in the ID token'
     );
   });
-  it('should throw when azp claim not found when aud has multiple values', function() {
-    expect(function() {
+  it('should throw when azp claim not found when aud has multiple values', () => {
+    expect(() => {
       idToken.validate(generateJWT({ azp: undefined }), expectedOptions);
     }).to.throw(
       'Authorized Party (azp) claim must be a string present in the ID token when Audience (aud) claim has multiple values'
     );
   });
-  it('should throw when azp claim doesnt match the expected aud', function() {
+  it('should throw when azp claim doesnt match the expected aud', () => {
     expectedOptions.audience = expectations.clientIdAlt;
 
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({}), expectedOptions);
     }).to.throw(
       'Authorized Party (azp) claim mismatch in the ID token; expected "external-test-999", found "tokens-test-123"'
     );
   });
-  it('should throw when nonce is in options, but missing from claim', function() {
-    expect(function() {
+  it('should throw when nonce is in options, but missing from claim', () => {
+    expect(() => {
       idToken.validate(generateJWT({ nonce: undefined }), expectedOptions);
     }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
   });
-  it('should throw when nonce claim doesnt match nonce expected', function() {
+  it('should throw when nonce claim doesnt match nonce expected', () => {
     expectedOptions.nonce = 'noncey';
 
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({ nonce: 'notExpectedNonce' }), expectedOptions);
     }).to.throw(
       'Nonce (nonce) claim mismatch in the ID token; expected "noncey", found "notExpectedNonce"'
     );
   });
-  it('should throw when nonce claim is not a string', function() {
-    expect(function() {
+  it('should throw when nonce claim is not a string', () => {
+    expect(() => {
       idToken.validate(generateJWT({ nonce: 10000 }), expectedOptions);
     }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({ nonce: {} }), expectedOptions);
     }).to.throw('Nonce (nonce) claim must be a string present in the ID token');
   });
-  it('should throw when auth_time is not a number', function() {
-    expect(function() {
+  it('should throw when auth_time is not a number', () => {
+    expect(() => {
       idToken.validate(generateJWT({ auth_time: undefined }), expectedOptions);
     }).to.throw(
       'Authentication Time (auth_time) claim must be a number present in the ID token when Max Age (max_age) is specified'
     );
   });
-  it('should throw when exp is not a number', function() {
-    expect(function() {
+  it('should throw when exp is not a number', () => {
+    expect(() => {
       idToken.validate(generateJWT({ exp: 'not a number' }), expectedOptions);
     }).to.throw('Expiration Time (exp) claim must be a number present in the ID token');
   });
-  it('should throw when exp has passed', function() {
-    expect(function() {
+  it('should throw when exp has passed', () => {
+    expect(() => {
       idToken.validate(generateJWT({ exp: yesterday() }), expectedOptions);
     }).to.throw('is after expiration time');
   });
-  it('should throw when idtoken indicates too much time has passed', function() {
-    expect(function() {
+  it('should throw when idtoken indicates too much time has passed', () => {
+    expect(() => {
       idToken.validate(generateJWT({ auth_time: yesterday() }), expectedOptions);
     }).to.throw(
       'Authentication Time (auth_time) claim in the ID token indicates that too much time has passed since the last end-user authentication.'
     );
   });
-  it('should throw when organization is in options, but org_id missing from claim', function() {
+  it('should throw when organization is in options, but org_id missing from claim', () => {
     expectedOptions.organization = 'testorg';
 
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({ org_id: undefined }), expectedOptions);
     }).to.throw('Organization Id (org_id) claim must be a string present in the ID token');
   });
-  it('should throw when org claim doesnt match org expected', function() {
+  it('should throw when org claim doesnt match org expected', () => {
     expectedOptions.organization = 'testorg';
 
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({ org_id: 'notExpectedOrg' }), expectedOptions);
     }).to.throw(
       'Organization Id (org_id) claim value mismatch in the ID token; expected "testorg", found "notExpectedOrg'
     );
   });
-  it('should NOT throw when org_id matches expected organization', function() {
+  it('should NOT throw when org_id matches expected organization', () => {
     expectedOptions.organization = 'testorg';
 
-    expect(function() {
+    expect(() => {
       idToken.validate(generateJWT({ org_id: 'testorg' }), expectedOptions);
     }).not.to.throw();
   });

@@ -1,27 +1,24 @@
-var jwt = require('jsonwebtoken');
-var jwksClient = require('jwks-rsa');
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
+const { ArgumentError } = require('rest-facade');
+const validateIdToken = require('./idToken').validate;
 
-var ArgumentError = require('rest-facade').ArgumentError;
-var validateIdToken = require('./idToken').validate;
-
-var HS256_IGNORE_VALIDATION_MESSAGE =
+const HS256_IGNORE_VALIDATION_MESSAGE =
   'Validation of `id_token` requires a `clientSecret` when using the HS256 algorithm. To ensure tokens are validated, please switch the signing algorithm to RS256 or provide a `clientSecret` in the constructor.';
 
 /**
- * @class
  * Abstracts the `oauth.create` method with additional id_token validation
- * @constructor
- * @memberOf module:auth
  *
- * @param  {Object}              oauth                               An instance of @type {OAuthAuthenticator}
- * @param  {Object}              options                             Authenticator options.
- * @param  {String}              options.domain                      AuthenticationClient server domain
- * @param  {String}              [options.clientId]                  Default client ID.
- * @param  {String}              [options.clientSecret]              Default client Secret.
- * @param  {String}              [options.supportedAlgorithms]       Algorithms that your application expects to receive
- * @param  {Boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+ * @param  {object}              oauth                               An instance of @type {OAuthAuthenticator}
+ * @param  {object}              options                             Authenticator options.
+ * @param  {string}              options.domain                      AuthenticationClient server domain
+ * @param  {string}              [options.clientId]                  Default client ID.
+ * @param  {string}              [options.clientSecret]              Default client Secret.
+ * @param  {string}              [options.supportedAlgorithms]       Algorithms that your application expects to receive
+ * @param  {boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+ * @param  {Function}            [options.jwksClient]                Dependency injected `jwks-rsa`
  */
-var OAUthWithIDTokenValidation = function(oauth, options) {
+const OAUthWithIDTokenValidation = function (oauth, options) {
   if (!oauth) {
     throw new ArgumentError('Missing OAuthAuthenticator param');
   }
@@ -40,50 +37,48 @@ var OAUthWithIDTokenValidation = function(oauth, options) {
   this.clientSecret = options.clientSecret;
   this.domain = options.domain;
   this.supportedAlgorithms = options.supportedAlgorithms || ['HS256', 'RS256'];
-  this._jwksClient = jwksClient({
-    jwksUri: 'https://' + options.domain + '/.well-known/jwks.json'
+  this._jwksClient = (options.jwksClient || jwksClient)({
+    jwksUri: `https://${options.domain}/.well-known/jwks.json`,
   });
 };
 
 /**
  * Creates an oauth request and validates the id_token (if any)
  *
- * @method    create
- * @memberOf  module:auth.OAuthWithIDTokenValidation.prototype
- *
- * @param   {Object}    params            OAuth parameters that are passed through
- * @param   {Object}    data              Custom parameters sent to the OAuth endpoint
- * @param   {Function}  [callback]        Callback function
- *
- * @return  {Promise|undefined}
+ * @function    create
+ * @memberof  module:auth.OAuthWithIDTokenValidation.prototype
+ * @param   {object}    params            OAuth parameters that are passed through
+ * @param   {object}    data              Custom parameters sent to the OAuth endpoint
+ * @param   {Function}  [cb]              Callback function
+ * @returns  {Promise|undefined}
  */
-OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
+OAUthWithIDTokenValidation.prototype.create = function (params, data, cb) {
   const _this = this;
-  const createAndValidate = this.oauth.create(params, data).then(r => {
+  const createAndValidate = this.oauth.create(params, data).then((r) => {
     if (_this.__bypassIdTokenValidation) {
       return r;
     }
-    if (r.id_token) {
-      function getKey(header, callback) {
-        if (header.alg === 'HS256') {
-          if (!_this.clientSecret) {
-            return callback({ message: HS256_IGNORE_VALIDATION_MESSAGE });
-          }
-          return callback(null, Buffer.from(_this.clientSecret, 'base64'));
+    function getKey(header, callback) {
+      if (header.alg === 'HS256') {
+        if (!_this.clientSecret) {
+          return callback({ message: HS256_IGNORE_VALIDATION_MESSAGE });
         }
-        _this._jwksClient.getSigningKey(header.kid, function(err, key) {
-          if (err) {
-            return callback(err);
-          }
-          var signingKey = key.publicKey || key.rsaPublicKey;
-          return callback(null, signingKey);
-        });
+        return callback(null, Buffer.from(_this.clientSecret, 'base64'));
       }
+      _this._jwksClient.getSigningKey(header.kid, (err, key) => {
+        if (err) {
+          return callback(err);
+        }
+        const signingKey = key.publicKey || key.rsaPublicKey;
+        return callback(null, signingKey);
+      });
+    }
+    if (r.id_token) {
       return new Promise((res, rej) => {
-        var options = {
+        const options = {
           algorithms: this.supportedAlgorithms,
           audience: this.clientId,
-          issuer: 'https://' + this.domain + '/'
+          issuer: `https://${this.domain}/`,
         };
 
         if (data.organization) {
@@ -98,7 +93,7 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
           options.maxAge = data.maxAge;
         }
 
-        jwt.verify(r.id_token, getKey, options, function(err) {
+        jwt.verify(r.id_token, getKey, options, (err) => {
           if (err) {
             if (err.message && err.message.includes(HS256_IGNORE_VALIDATION_MESSAGE)) {
               console.warn(HS256_IGNORE_VALIDATION_MESSAGE);
@@ -122,7 +117,7 @@ OAUthWithIDTokenValidation.prototype.create = function(params, data, cb) {
   if (!cb) {
     return createAndValidate;
   }
-  createAndValidate.then(r => cb(null, r)).catch(e => cb(e));
+  createAndValidate.then((r) => cb(null, r)).catch((e) => cb(e));
 };
 
 module.exports = OAUthWithIDTokenValidation;

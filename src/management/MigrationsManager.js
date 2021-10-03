@@ -1,19 +1,18 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class
  * Abstracts interaction with the migrations endpoint.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var MigrationsManager = function(options) {
+const MigrationsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -26,10 +25,10 @@ var MigrationsManager = function(options) {
     throw new ArgumentError('The provided base URL is invalid');
   }
 
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -37,8 +36,8 @@ var MigrationsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/migrations',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/migrations`,
     clientOptions,
     options.tokenProvider
   );
@@ -48,23 +47,20 @@ var MigrationsManager = function(options) {
 /**
  * Update the tenant migrations.
  *
- * @method    updateMigrations
- * @memberOf  module:management.MigrationsManager.prototype
- *
+ * @function    updateMigrations
+ * @memberof  module:management.MigrationsManager.prototype
  * @example
  * management.migrations.updateMigrations(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
- *
- * @param   {Object}    data  The tenant migrations to be updated
- * @param   {Object}    data.flags  The tenant migrations flags to be updated
+ * @param   {object}    data  The tenant migrations to be updated
+ * @param   {object}    data.flags  The tenant migrations flags to be updated
  * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-MigrationsManager.prototype.updateMigrations = function(data, cb) {
+MigrationsManager.prototype.updateMigrations = function (data, cb) {
   if (cb && cb instanceof Function) {
     return this.resource.patch({}, data, cb);
   }
@@ -76,9 +72,8 @@ MigrationsManager.prototype.updateMigrations = function(data, cb) {
 /**
  * Get the tenant migrations.
  *
- * @method    getMigrations
- * @memberOf  module:management.MigrationsManager.prototype
- *
+ * @function    getMigrations
+ * @memberof  module:management.MigrationsManager.prototype
  * @example
  * management.migrations.getMigrations(function (err, migrations) {
  *   if (err) {
@@ -87,12 +82,11 @@ MigrationsManager.prototype.updateMigrations = function(data, cb) {
  *
  *   console.log(migrations.flags);
  * });
- *
+ * @param data
  * @param   {Function}  [cb]    Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-MigrationsManager.prototype.getMigrations = function(data, cb) {
+MigrationsManager.prototype.getMigrations = function (data, cb) {
   if (data instanceof Function && !cb) {
     cb = data;
     data = {};

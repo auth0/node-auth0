@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class CustomDomainsManager
@@ -12,15 +12,14 @@ var RetryRestClient = require('../RetryRestClient');
  * You can learn more about this in the
  * {@link https://auth0.com/docs/custom-domains CustomDomains} section of the
  * documentation.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var CustomDomainsManager = function(options) {
+const CustomDomainsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -36,12 +35,12 @@ var CustomDomainsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,8 +49,8 @@ var CustomDomainsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0CustomDomainsRestClient = new Auth0RestClient(
-    options.baseUrl + '/custom-domains/:id',
+  const auth0CustomDomainsRestClient = new Auth0RestClient(
+    `${options.baseUrl}/custom-domains/:id`,
     clientOptions,
     options.tokenProvider
   );
@@ -63,8 +62,8 @@ var CustomDomainsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0VerifyRestClient = new Auth0RestClient(
-    options.baseUrl + '/custom-domains/:id/verify',
+  const auth0VerifyRestClient = new Auth0RestClient(
+    `${options.baseUrl}/custom-domains/:id/verify`,
     clientOptions,
     options.tokenProvider
   );
@@ -74,9 +73,8 @@ var CustomDomainsManager = function(options) {
 /**
  * Create an Auth0 Custom Domain.
  *
- * @method    create
- * @memberOf  module:management.CustomDomainsManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.CustomDomainsManager.prototype
  * @example
  * management.customDomains.create(data, function (err) {
  *   if (err) {
@@ -85,35 +83,30 @@ var CustomDomainsManager = function(options) {
  *
  *   // CustomDomain created.
  * });
- *
- * @param   {Object}    data     The custom domain data object.
+ * @param   {object}    data     The custom domain data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(CustomDomainsManager, 'create', 'resource.create');
 
 /**
  * Get all Auth0 CustomDomains.
  *
- * @method    getAll
- * @memberOf  module:management.CustomDomainsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.CustomDomainsManager.prototype
  * @example
  * management.customDomains.getAll(function (err, customDomains) {
  *   console.log(customDomains.length);
  * });
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(CustomDomainsManager, 'getAll', 'resource.getAll');
 
 /**
  * Get a Custom Domain.
  *
- * @method    get
- * @memberOf  module:management.CustomDomainsManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.CustomDomainsManager.prototype
  * @example
  * management.customDomains.get({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
  *   if (err) {
@@ -122,21 +115,18 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'getAll', 'resource.getAll');
  *
  *   console.log(customDomain);
  * });
- *
- * @param   {Object}    params            Custom Domain parameters.
- * @param   {String}    params.id         Custom Domain ID.
+ * @param   {object}    params            Custom Domain parameters.
+ * @param   {string}    params.id         Custom Domain ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(CustomDomainsManager, 'get', 'resource.get');
 
 /**
  * Verify a Custom Domain.
  *
- * @method    verify
- * @memberOf  module:management.CustomDomainsManager.prototype
- *
+ * @function    verify
+ * @memberof  module:management.CustomDomainsManager.prototype
  * @example
  * management.customDomains.verify({ id: CUSTOM_DOMAIN_ID }, function (err, customDomain) {
  *   if (err) {
@@ -145,14 +135,12 @@ utils.wrapPropertyMethod(CustomDomainsManager, 'get', 'resource.get');
  *
  *   console.log(customDomain);
  * });
- *
- * @param   {Object}    params            Custom Domain parameters.
- * @param   {String}    params.id         Custom Domain ID.
+ * @param   {object}    params            Custom Domain parameters.
+ * @param   {string}    params.id         Custom Domain ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-CustomDomainsManager.prototype.verify = function(params, cb) {
+CustomDomainsManager.prototype.verify = function (params, cb) {
   if (!params || !params.id) {
     throw new ArgumentError('The custom domain id cannot be null or undefined');
   }
@@ -167,9 +155,8 @@ CustomDomainsManager.prototype.verify = function(params, cb) {
 /**
  * Delete a Custom Domain.
  *
- * @method    delete
- * @memberOf  module:management.CustomDomainsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.CustomDomainsManager.prototype
  * @example
  * management.customDomains.delete({ id: CUSTOM_DOMAIN_ID }, function (err) {
  *   if (err) {
@@ -178,12 +165,10 @@ CustomDomainsManager.prototype.verify = function(params, cb) {
  *
  *   // CustomDomain deleted.
  * });
- *
- * @param   {Object}    params            Custom Domain parameters.
- * @param   {String}    params.id         Custom Domain ID.
+ * @param   {object}    params            Custom Domain parameters.
+ * @param   {string}    params.id         Custom Domain ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(CustomDomainsManager, 'delete', 'resource.delete');
 

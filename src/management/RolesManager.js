@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -13,15 +14,14 @@ var RetryRestClient = require('../RetryRestClient');
  * @class RolesManager
  * The role class provides a simple abstraction for performing CRUD operations
  * on Auth0 RolesManager.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var RolesManager = function(options) {
+const RolesManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -37,11 +37,11 @@ var RolesManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,22 +50,22 @@ var RolesManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/roles/:id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/roles/:id`,
     clientOptions,
     options.tokenProvider
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
-  var permissionsInRoleClient = new Auth0RestClient(
-    options.baseUrl + '/roles/:id/permissions',
+  const permissionsInRoleClient = new Auth0RestClient(
+    `${options.baseUrl}/roles/:id/permissions`,
     clientOptions,
     options.tokenProvider
   );
   this.permissions = new RetryRestClient(permissionsInRoleClient, options.retry);
 
-  var usersInRoleClient = new Auth0RestClient(
-    options.baseUrl + '/roles/:id/users',
+  const usersInRoleClient = new Auth0RestClient(
+    `${options.baseUrl}/roles/:id/users`,
     clientOptions,
     options.tokenProvider
   );
@@ -75,9 +75,8 @@ var RolesManager = function(options) {
 /**
  * Create a new role.
  *
- * @method    create
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * management.roles.create(data, function (err) {
  *   if (err) {
@@ -86,20 +85,17 @@ var RolesManager = function(options) {
  *
  *   // Role created.
  * });
- *
- * @param   {Object}    data     Role data object.
+ * @param   {object}    data     Role data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RolesManager, 'create', 'resource.create');
 
 /**
  * Get all roles.
  *
- * @method    getAll
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.RolesManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings. If pagination options are not present,
@@ -115,22 +111,19 @@ utils.wrapPropertyMethod(RolesManager, 'create', 'resource.create');
  * management.roles.getAll(params, function (err, roles) {
  *   console.log(roles.length);
  * });
- *
- * @param   {Object}    [params]          Roles parameters.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {object}    [params]          Roles parameters.
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RolesManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 role.
  *
- * @method    get
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * management.roles.get({ id: ROLE_ID }, function (err, role) {
  *   if (err) {
@@ -139,21 +132,18 @@ utils.wrapPropertyMethod(RolesManager, 'getAll', 'resource.getAll');
  *
  *   console.log(role);
  * });
- *
- * @param   {Object}    params        Role parameters.
- * @param   {String}    params.id     Role ID.
+ * @param   {object}    params        Role parameters.
+ * @param   {string}    params.id     Role ID.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RolesManager, 'get', 'resource.get');
 
 /**
  * Update an existing role.
  *
- * @method    update
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * var data = { name: 'New name' };
  * var params = { id: ROLE_ID };
@@ -175,22 +165,19 @@ utils.wrapPropertyMethod(RolesManager, 'get', 'resource.get');
  *
  *   console.log(role.name);  // 'New name'
  * });
- *
- * @param   {Object}    params        Role parameters.
- * @param   {String}    params.id     Role ID.
- * @param   {Object}    data          Updated role data.
+ * @param   {object}    params        Role parameters.
+ * @param   {string}    params.id     Role ID.
+ * @param   {object}    data          Updated role data.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RolesManager, 'update', 'resource.patch');
 
 /**
  * Delete an existing role.
  *
- * @method    delete
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * management.roles.delete({ id: ROLE_ID }, function (err) {
  *   if (err) {
@@ -199,21 +186,20 @@ utils.wrapPropertyMethod(RolesManager, 'update', 'resource.patch');
  *
  *   // Role deleted.
  * });
- *
- * @param   {Object}    params        Role parameters.
- * @param   {String}    params.id     Role ID.
+ * @param   {object}    params        Role parameters.
+ * @param   {string}    params.id     Role ID.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RolesManager, 'delete', 'resource.delete');
 
 /**
  * Get Permissions in a Role
  *
- * @method    getPermissionsInRole
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    getPermissionsInRole
+ * @memberof  module:management.RolesManager.prototype
+ * @param params
+ * @param callback
  * @example
  * var params = {id : 'ROLE_ID'}
  * @example <caption>
@@ -223,22 +209,19 @@ utils.wrapPropertyMethod(RolesManager, 'delete', 'resource.delete');
  * management.roles.getPermissions( {id : 'ROLE_ID'}, function (err, permissions) {
  *   console.log(permissions);
  * });
- *
- * @param   {String}    [email]           Email address of user(s) to find
+ * @param   {string}    [email]           Email address of user(s) to find
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-RolesManager.prototype.getPermissions = function(params, callback) {
+RolesManager.prototype.getPermissions = function (params, callback) {
   return this.permissions.getAll(params, callback);
 };
 
 /**
  * Add permissions in a role
  *
- * @method    addPermissions
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    addPermissions
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * var params =  { id :'ROLE_ID'};
  * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
@@ -250,18 +233,16 @@ RolesManager.prototype.getPermissions = function(params, callback) {
  *
  *   // permissions added.
  * });
- *
- * @param   {String}    params.id                ID of the Role.
- * @param   {Object}    data                permissions data
- * @param   {String}    data.permissions    Array of permissions
- * @param   {String}    data.permissions.permission_name  Name of a permission
- * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {string}    params.id                ID of the Role.
+ * @param   {object}    data                permissions data
+ * @param   {string}    data.permissions    Array of permissions
+ * @param   {string}    data.permissions.permission_name  Name of a permission
+ * @param   {string}    data.permissions.resource_server_identifier  Identifier for a resource
  * @param   {Function}  [cb]                  Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 
-RolesManager.prototype.addPermissions = function(params, data, cb) {
+RolesManager.prototype.addPermissions = function (params, data, cb) {
   data = data || {};
   params = params || {};
 
@@ -283,9 +264,8 @@ RolesManager.prototype.addPermissions = function(params, data, cb) {
 /**
  * Remove permissions from a role
  *
- * @method    removePermissions
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    removePermissions
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * var params =  { id :'ROLE_ID'};
  * var data = { "permissions" : [{"permission_name" :"do:something" ,"resource_server_identifier" :"test123" }]};
@@ -297,18 +277,16 @@ RolesManager.prototype.addPermissions = function(params, data, cb) {
  *
  *   // permissions added.
  * });
- *
- * @param   {String}    params.id                ID of the Role.
- * @param   {Object}    data                permissions data
- * @param   {String}    data.permissions    Array of permissions
- * @param   {String}    data.permissions.permission_name  Name of a permission
- * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {string}    params.id                ID of the Role.
+ * @param   {object}    data                permissions data
+ * @param   {string}    data.permissions    Array of permissions
+ * @param   {string}    data.permissions.permission_name  Name of a permission
+ * @param   {string}    data.permissions.resource_server_identifier  Identifier for a resource
  * @param   {Function}  [cb]                  Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 
-RolesManager.prototype.removePermissions = function(params, data, cb) {
+RolesManager.prototype.removePermissions = function (params, data, cb) {
   data = data || {};
   params = params || {};
 
@@ -330,16 +308,16 @@ RolesManager.prototype.removePermissions = function(params, data, cb) {
 /**
  * Get Users in a Role
  *
- * @method    getUsers
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    getUsers
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * var params = {
  *   roleId: 'ROLE_ID',
  *   per_page: 50,
+ * @param params
+ * @param callback
  *   page: 0
  * };
- *
  * @example <caption>
  *   This method takes a roleId and returns all users within that role. Supports offset (page, per_page) and checkpoint pagination (from, take). You must use checkpoint pagination to retrieve beyond the first 1000 records.
  * </caption>
@@ -347,26 +325,23 @@ RolesManager.prototype.removePermissions = function(params, data, cb) {
  * management.roles.getUsers(params, function (err, users) {
  *   console.log(users);
  * });
- *
- * @param   {String}    [roleId]          Id of the role
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
- * @param   {String}    [params.from]     For checkpoint pagination, the Id from which to start selection from.
- * @param   {Number}    [params.take]     For checkpoint pagination, the number of entries to retrieve. Default 50.
+ * @param   {string}    [roleId]          Id of the role
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
+ * @param   {string}    [params.from]     For checkpoint pagination, the Id from which to start selection from.
+ * @param   {number}    [params.take]     For checkpoint pagination, the number of entries to retrieve. Default 50.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-RolesManager.prototype.getUsers = function(params, callback) {
+RolesManager.prototype.getUsers = function (params, callback) {
   return this.users.getAll(params, callback);
 };
 
 /**
  * Assign users to a role
  *
- * @method    assignUsers
- * @memberOf  module:management.RolesManager.prototype
- *
+ * @function    assignUsers
+ * @memberof  module:management.RolesManager.prototype
  * @example
  * var params =  { id :'ROLE_ID'};
  * var data = { "users" : ["userId1","userId2"]};
@@ -378,18 +353,16 @@ RolesManager.prototype.getUsers = function(params, callback) {
  *
  *   // permissions added.
  * });
- *
- * @param   {String}    params.id                ID of the Role.
- * @param   {Object}    data                permissions data
- * @param   {String}    data.permissions    Array of permissions
- * @param   {String}    data.permissions.permission_name  Name of a permission
- * @param   {String}    data.permissions.resource_server_identifier  Identifier for a resource
+ * @param   {string}    params.id                ID of the Role.
+ * @param   {object}    data                permissions data
+ * @param   {string}    data.permissions    Array of permissions
+ * @param   {string}    data.permissions.permission_name  Name of a permission
+ * @param   {string}    data.permissions.resource_server_identifier  Identifier for a resource
  * @param   {Function}  [cb]                  Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 
-RolesManager.prototype.assignUsers = function(params, data, cb) {
+RolesManager.prototype.assignUsers = function (params, data, cb) {
   data = data || {};
   params = params || {};
 

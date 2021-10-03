@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ResourceServersManager
@@ -12,16 +12,15 @@ var RetryRestClient = require('../RetryRestClient');
  * You can learn more about this in the
  * {@link https://auth0.com/docs/api-auth API Authorization} section of the
  * documentation.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
 
-var ResourceServersManager = function(options) {
+const ResourceServersManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide resource server options');
   }
@@ -37,11 +36,11 @@ var ResourceServersManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,8 +49,8 @@ var ResourceServersManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/resource-servers/:id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/resource-servers/:id`,
     clientOptions,
     options.tokenProvider
   );
@@ -61,9 +60,8 @@ var ResourceServersManager = function(options) {
 /**
  * Create an API (Resource Server).
  *
- * @method    create
- * @memberOf  module:management.ResourceServersManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.ResourceServersManager.prototype
  * @example
  * management.resourceServers.create(data, function (err) {
  *   if (err) {
@@ -72,20 +70,17 @@ var ResourceServersManager = function(options) {
  *
  *   // Resource Server created.
  * });
- *
- * @param   {Object}    data     Resource Server data object.
+ * @param   {object}    data     Resource Server data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
 
 /**
  * Get all resource servers.
  *
- * @method    getAll
- * @memberOf  module:management.ResourceServersManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.ResourceServersManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings. If pagination options are not present,
@@ -101,22 +96,19 @@ utils.wrapPropertyMethod(ResourceServersManager, 'create', 'resource.create');
  * management.resourceServers.getAll(params, function (err, resourceServers) {
  *   console.log(resourceServers.length);
  * });
- *
- * @param   {Object}    [params]          Resource Servers parameters.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {object}    [params]          Resource Servers parameters.
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
 
 /**
  * Get a Resource Server.
  *
- * @method    get
- * @memberOf  module:management.ResourceServersManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.ResourceServersManager.prototype
  * @example
  * management.resourceServers.get({ id: RESOURCE_SERVER_ID }, function (err, resourceServer) {
  *   if (err) {
@@ -125,21 +117,18 @@ utils.wrapPropertyMethod(ResourceServersManager, 'getAll', 'resource.getAll');
  *
  *   console.log(resourceServer);
  * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
+ * @param   {object}    params            Resource Server parameters.
+ * @param   {string}    params.id         Resource Server ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
 
 /**
  * Update an existing resource server.
  *
- * @method    update
- * @memberOf  module:management.ResourceServersManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.ResourceServersManager.prototype
  * @example
  * var data = { name: 'newResourceServerName' };
  * var params = { id: RESOURCE_SERVER_ID };
@@ -151,22 +140,19 @@ utils.wrapPropertyMethod(ResourceServersManager, 'get', 'resource.get');
  *
  *   console.log(resourceServer.name);  // 'newResourceServernName'
  * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
- * @param   {Object}    data              Updated Resource Server data.
+ * @param   {object}    params            Resource Server parameters.
+ * @param   {string}    params.id         Resource Server ID.
+ * @param   {object}    data              Updated Resource Server data.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
 
 /**
  * Delete an existing Resource Server.
  *
- * @method    delete
- * @memberOf  module:management.ResourceServersManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.ResourceServersManager.prototype
  * @example
  * management.resourceServers.delete({ id: RESOURCE_SERVER_ID }, function (err) {
  *   if (err) {
@@ -175,12 +161,10 @@ utils.wrapPropertyMethod(ResourceServersManager, 'update', 'resource.patch');
  *
  *   // Resource Server deleted.
  * });
- *
- * @param   {Object}    params            Resource Server parameters.
- * @param   {String}    params.id         Resource Server ID.
+ * @param   {object}    params            Resource Server parameters.
+ * @param   {string}    params.id         Resource Server ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ResourceServersManager, 'delete', 'resource.delete');
 

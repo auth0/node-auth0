@@ -1,104 +1,99 @@
-var expect = require('chai').expect;
-var extend = require('util')._extend;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-// Constants.
-var SRC_DIR = '../../src';
-var DOMAIN = 'tenant.auth0.com';
-var API_URL = 'https://' + DOMAIN;
-var CLIENT_ID = 'TEST_CLIENT_ID';
+const DOMAIN = 'tenant.auth0.com';
+const API_URL = `https://${DOMAIN}`;
+const CLIENT_ID = 'TEST_CLIENT_ID';
 
-var ArgumentError = require('rest-facade').ArgumentError;
-var Authenticator = require(SRC_DIR + '/auth/DatabaseAuthenticator');
-var OAuth = require(SRC_DIR + '/auth/OAuthAuthenticator');
+const { ArgumentError } = require('rest-facade');
+const DatabaseAuthenticator = require(`../../src/auth/DatabaseAuthenticator`);
+const OAuth = require(`../../src/auth/OAuthAuthenticator`);
 
-var validOptions = {
+const validOptions = {
   baseUrl: API_URL,
-  clientId: CLIENT_ID
+  clientId: CLIENT_ID,
 };
 
-describe('DatabaseAuthenticator', function() {
-  afterEach(function() {
+describe('DatabaseAuthenticator', () => {
+  afterEach(() => {
     nock.cleanAll();
   });
 
-  describe('#constructor', function() {
-    it('should require an options object', function() {
-      expect(Authenticator).to.throw(ArgumentError, 'Missing authenticator options');
+  describe('#constructor', () => {
+    it('should require an options object', () => {
+      expect(() => {
+        new DatabaseAuthenticator();
+      }).to.throw(ArgumentError, 'Missing authenticator options');
 
-      expect(Authenticator.bind(null, 1)).to.throw(
-        ArgumentError,
-        'The authenticator options must be an object'
-      );
+      expect(() => {
+        new DatabaseAuthenticator(1);
+      }).to.throw(ArgumentError, 'The authenticator options must be an object');
 
-      expect(Authenticator.bind(null, validOptions)).to.not.throw(ArgumentError);
+      expect(() => {
+        new DatabaseAuthenticator(validOptions);
+      }).to.not.throw(ArgumentError);
     });
   });
 
-  describe('instance', function() {
-    var methods = ['signIn', 'signUp', 'changePassword', 'requestChangePasswordEmail'];
-    var oauth = new OAuth(validOptions);
-    var authenticator = new Authenticator(validOptions, oauth);
+  describe('instance', () => {
+    const methods = ['signIn', 'signUp', 'changePassword', 'requestChangePasswordEmail'];
+    const oauth = new OAuth(validOptions);
+    const authenticator = new DatabaseAuthenticator(validOptions, oauth);
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, () => {
         expect(authenticator[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#signIn', function() {
-    var path = '/oauth/ro';
-    var userData = {
+  describe('#signIn', () => {
+    const path = '/oauth/ro';
+    const userData = {
       username: 'username',
-      password: 'pwd'
+      password: 'pwd',
     };
 
-    beforeEach(function() {
-      var oauth = new OAuth(validOptions);
-      this.authenticator = new Authenticator(validOptions, oauth);
-      this.request = nock(API_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      const oauth = new OAuth(validOptions);
+      this.authenticator = new DatabaseAuthenticator(validOptions, oauth);
+      this.request = nock(API_URL).post(path).reply(200);
     });
 
-    it('should require an object as first argument', function() {
+    it('should require an object as first argument', function () {
       expect(this.authenticator.signIn).to.throw(ArgumentError, 'Missing user data object');
     });
 
-    it('should require a username', function() {
-      var auth = this.authenticator;
-      var userData = { password: 'password' };
-      var signIn = auth.signIn.bind(auth, userData);
+    it('should require a username', function () {
+      const auth = this.authenticator;
+      const userData = { password: 'password' };
+      const signIn = auth.signIn.bind(auth, userData);
 
       expect(signIn).to.throw(ArgumentError, 'username field is required');
     });
 
-    it('should require a password', function() {
-      var auth = this.authenticator;
-      var userData = { username: 'username' };
-      var signIn = auth.signIn.bind(auth, userData);
+    it('should require a password', function () {
+      const auth = this.authenticator;
+      const userData = { username: 'username' };
+      const signIn = auth.signIn.bind(auth, userData);
 
       expect(signIn).to.throw(ArgumentError, 'password field is required');
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.authenticator.signIn(userData, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is provided', function(done) {
-      this.authenticator
-        .signIn(userData)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise when no callback is provided', function (done) {
+      this.authenticator.signIn(userData).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to ' + path, function(done) {
-      var request = this.request;
+    it(`should perform a POST request to ${path}`, function (done) {
+      const { request } = this;
 
       this.authenticator
         .signIn(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -106,12 +101,12 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the user data in the request', function(done) {
+    it('should include the user data in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          for (var property in userData) {
+      const request = nock(API_URL)
+        .post(path, (body) => {
+          for (const property in userData) {
             if (userData[property] !== body[property]) {
               return false;
             }
@@ -123,7 +118,7 @@ describe('DatabaseAuthenticator', function() {
 
       this.authenticator
         .signIn(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -131,18 +126,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the Auth0 client ID in the request', function(done) {
+    it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.client_id === CLIENT_ID;
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
       this.authenticator
         .signIn(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -150,18 +143,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use Username-Password-Authentication by default', function(done) {
+    it('should use Username-Password-Authentication by default', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.connection === 'Username-Password-Authentication';
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.connection === 'Username-Password-Authentication')
         .reply(200);
 
       this.authenticator
         .signIn(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -169,19 +160,17 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should allow the user to specify the connection', function(done) {
+    it('should allow the user to specify the connection', function (done) {
       nock.cleanAll();
 
-      var data = extend({ connection: 'TEST_CONNECTION' }, userData);
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.connection === 'TEST_CONNECTION';
-        })
+      const data = { connection: 'TEST_CONNECTION', ...userData };
+      const request = nock(API_URL)
+        .post(path, (body) => body.connection === 'TEST_CONNECTION')
         .reply(200);
 
       this.authenticator
         .signIn(data)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -189,18 +178,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use password as default grant type', function(done) {
+    it('should use password as default grant type', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.grant_type === 'password';
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.grant_type === 'password')
         .reply(200);
 
       this.authenticator
         .signIn(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -208,19 +195,17 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should allow the user to specify the grant type', function(done) {
+    it('should allow the user to specify the grant type', function (done) {
       nock.cleanAll();
 
-      var data = extend({ grant_type: 'TEST_GRANT' }, userData);
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.grant_type === 'TEST_GRANT';
-        })
+      const data = { grant_type: 'TEST_GRANT', ...userData };
+      const request = nock(API_URL)
+        .post(path, (body) => body.grant_type === 'TEST_GRANT')
         .reply(200);
 
       this.authenticator
         .signIn(data)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -228,18 +213,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should use the openid scope by default', function(done) {
+    it('should use the openid scope by default', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.scope === 'openid';
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.scope === 'openid')
         .reply(200);
 
       this.authenticator
         .signIn(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -248,66 +231,66 @@ describe('DatabaseAuthenticator', function() {
     });
   });
 
-  describe('#signUp', function() {
-    var path = '/dbconnections/signup';
-    var userData = {
+  describe('#signUp', () => {
+    const path = '/dbconnections/signup';
+    const userData = {
       email: 'test@domain.com',
       password: 'pwd',
-      connection: 'TEST_CONNECTION'
+      connection: 'TEST_CONNECTION',
     };
 
-    beforeEach(function() {
-      this.authenticator = new Authenticator(validOptions);
-      this.request = nock(API_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      this.authenticator = new DatabaseAuthenticator(validOptions);
+      this.request = nock(API_URL).post(path).reply(200);
     });
 
-    it('should require an object as first argument', function() {
-      expect(this.authenticator.signUp).to.throw(ArgumentError, 'Missing user data object');
+    it('should require an object as first argument', function () {
+      expect(() => {
+        this.authenticator.signUp();
+      }).to.throw(ArgumentError, 'Missing user data object');
     });
 
-    it('should require an email', function() {
-      var auth = this.authenticator;
-      var userData = { password: 'password' };
-      var signUp = auth.signUp.bind(auth, userData);
+    it('should require an email', function () {
+      const auth = this.authenticator;
+      const userData = { password: 'password' };
+      const signUp = auth.signUp.bind(auth, userData);
 
-      expect(signUp).to.throw(ArgumentError, 'email field is required');
+      expect(() => {
+        signUp();
+      }).to.throw(ArgumentError, 'email field is required');
     });
 
-    it('should require a password', function() {
-      var auth = this.authenticator;
-      var userData = { email: 'email@domain.com' };
-      var signUp = auth.signUp.bind(auth, userData);
+    it('should require a password', function () {
+      const auth = this.authenticator;
+      const userData = { email: 'email@domain.com' };
+      const signUp = auth.signUp.bind(auth, userData);
 
       expect(signUp).to.throw(ArgumentError, 'password field is required');
     });
 
-    it('should require a connection', function() {
-      var auth = this.authenticator;
-      var userData = { email: 'email@domain.com', password: 'test' };
-      var signUp = auth.signUp.bind(auth, userData);
+    it('should require a connection', function () {
+      const auth = this.authenticator;
+      const userData = { email: 'email@domain.com', password: 'test' };
 
-      expect(signUp).to.throw(ArgumentError, 'connection field is required');
+      expect(() => {
+        auth.signUp(userData);
+      }).to.throw(ArgumentError, 'connection field is required');
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.authenticator.signUp(userData, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is provided', function(done) {
-      this.authenticator
-        .signUp(userData)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise when no callback is provided', function (done) {
+      this.authenticator.signUp(userData).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to ' + path, function(done) {
-      var request = this.request;
+    it(`should perform a POST request to ${path}`, function (done) {
+      const { request } = this;
 
       this.authenticator
         .signUp(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -315,12 +298,12 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the user data in the request', function(done) {
+    it('should include the user data in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          for (var property in userData) {
+      const request = nock(API_URL)
+        .post(path, (body) => {
+          for (const property in userData) {
             if (userData[property] !== body[property]) {
               return false;
             }
@@ -332,7 +315,7 @@ describe('DatabaseAuthenticator', function() {
 
       this.authenticator
         .signUp(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -340,18 +323,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the Auth0 client ID in the request', function(done) {
+    it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.client_id === CLIENT_ID;
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
       this.authenticator
         .signUp(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -360,66 +341,69 @@ describe('DatabaseAuthenticator', function() {
     });
   });
 
-  describe('#changePassword', function() {
-    var path = '/dbconnections/change_password';
-    var userData = {
+  describe('#changePassword', () => {
+    const path = '/dbconnections/change_password';
+    const userData = {
       email: 'test@domain.com',
       password: 'newPwd',
-      connection: 'TEST_CONNECTION'
+      connection: 'TEST_CONNECTION',
     };
 
-    beforeEach(function() {
-      this.authenticator = new Authenticator(validOptions);
-      this.request = nock(API_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      this.authenticator = new DatabaseAuthenticator(validOptions);
+      this.request = nock(API_URL).post(path).reply(200);
     });
 
-    it('should require an object as first argument', function() {
-      expect(this.authenticator.changePassword).to.throw(ArgumentError, 'Missing user data object');
+    it('should require an object as first argument', function () {
+      expect(() => {
+        this.authenticator.changePassword();
+      }).to.throw(ArgumentError, 'Missing user data object');
     });
 
-    it('should require an email', function() {
-      var auth = this.authenticator;
-      var userData = { password: 'password' };
-      var changePassword = auth.changePassword.bind(auth, userData);
+    it('should require an email', function () {
+      const auth = this.authenticator;
+      const userData = { password: 'password' };
 
-      expect(changePassword).to.throw(ArgumentError, 'email field is required');
+      expect(() => {
+        auth.changePassword(userData);
+      }).to.throw(ArgumentError, 'email field is required');
     });
 
-    it('should require a password', function() {
-      var auth = this.authenticator;
-      var userData = { email: 'email@domain.com' };
-      var changePassword = auth.changePassword.bind(auth, userData);
+    it('should require a password', function () {
+      const auth = this.authenticator;
+      const userData = { email: 'email@domain.com' };
 
-      expect(changePassword).to.throw(ArgumentError, 'password field is required');
+      expect(() => {
+        auth.changePassword(userData);
+      }).to.throw(ArgumentError, 'password field is required');
     });
 
-    it('should require a connection', function() {
-      var auth = this.authenticator;
-      var userData = { email: 'email@domain.com', password: 'test' };
-      var changePassword = auth.changePassword.bind(auth, userData);
+    it('should require a connection', function () {
+      const auth = this.authenticator;
+      const userData = { email: 'email@domain.com', password: 'test' };
 
-      expect(changePassword).to.throw(ArgumentError, 'connection field is required');
+      expect(() => {
+        auth.changePassword(userData);
+      }).to.throw(ArgumentError, 'connection field is required');
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.authenticator.changePassword(userData, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is provided', function(done) {
+    it('should return a promise when no callback is provided', function (done) {
       this.authenticator
         .changePassword(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to ' + path, function(done) {
-      var request = this.request;
+    it(`should perform a POST request to ${path}`, function (done) {
+      const { request } = this;
 
       this.authenticator
         .changePassword(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -427,12 +411,12 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the user data in the request', function(done) {
+    it('should include the user data in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          for (var property in userData) {
+      const request = nock(API_URL)
+        .post(path, (body) => {
+          for (const property in userData) {
             if (userData[property] !== body[property]) {
               return false;
             }
@@ -444,7 +428,7 @@ describe('DatabaseAuthenticator', function() {
 
       this.authenticator
         .changePassword(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -452,18 +436,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the Auth0 client ID in the request', function(done) {
+    it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.client_id === CLIENT_ID;
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
       this.authenticator
         .changePassword(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -472,60 +454,56 @@ describe('DatabaseAuthenticator', function() {
     });
   });
 
-  describe('#requestChangePasswordEmail', function() {
-    var path = '/dbconnections/change_password';
-    var userData = {
+  describe('#requestChangePasswordEmail', () => {
+    const path = '/dbconnections/change_password';
+    const userData = {
       email: 'test@domain.com',
-      connection: 'TEST_CONNECTION'
+      connection: 'TEST_CONNECTION',
     };
 
-    beforeEach(function() {
-      this.authenticator = new Authenticator(validOptions);
-      this.request = nock(API_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      this.authenticator = new DatabaseAuthenticator(validOptions);
+      this.request = nock(API_URL).post(path).reply(200);
     });
 
-    it('should require an object as first argument', function() {
-      expect(this.authenticator.requestChangePasswordEmail).to.throw(
-        ArgumentError,
-        'Missing user data object'
-      );
+    it('should require an object as first argument', function () {
+      expect(() => {
+        this.authenticator.requestChangePasswordEmail();
+      }).to.throw(ArgumentError, 'Missing user data object');
     });
 
-    it('should require an email', function() {
-      var auth = this.authenticator;
-      var userData = {};
-      var requestChangePasswordEmail = auth.requestChangePasswordEmail.bind(auth, userData);
-
-      expect(requestChangePasswordEmail).to.throw(ArgumentError, 'email field is required');
+    it('should require an email', function () {
+      expect(() => {
+        this.authenticator.requestChangePasswordEmail({});
+      }).to.throw(ArgumentError, 'email field is required');
     });
 
-    it('should require a connection', function() {
-      var auth = this.authenticator;
-      var userData = { email: 'email@domain.com' };
-      var requestChangePasswordEmail = auth.requestChangePasswordEmail.bind(auth, userData);
+    it('should require a connection', function () {
+      const auth = this.authenticator;
+      const userData = { email: 'email@domain.com' };
 
-      expect(requestChangePasswordEmail).to.throw(ArgumentError, 'connection field is required');
+      expect(() => {
+        auth.requestChangePasswordEmail(userData);
+      }).to.throw(ArgumentError, 'connection field is required');
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', function (done) {
       this.authenticator.requestChangePasswordEmail(userData, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is provided', function(done) {
+    it('should return a promise when no callback is provided', function (done) {
       this.authenticator
         .requestChangePasswordEmail(userData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to ' + path, function(done) {
-      var request = this.request;
+    it(`should perform a POST request to ${path}`, function (done) {
+      const { request } = this;
 
       this.authenticator
         .requestChangePasswordEmail(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -533,12 +511,12 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the user data in the request', function(done) {
+    it('should include the user data in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          for (var property in userData) {
+      const request = nock(API_URL)
+        .post(path, (body) => {
+          for (const property in userData) {
             if (userData[property] !== body[property]) {
               return false;
             }
@@ -550,7 +528,7 @@ describe('DatabaseAuthenticator', function() {
 
       this.authenticator
         .requestChangePasswordEmail(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -558,18 +536,16 @@ describe('DatabaseAuthenticator', function() {
         .catch(done);
     });
 
-    it('should include the Auth0 client ID in the request', function(done) {
+    it('should include the Auth0 client ID in the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post(path, function(body) {
-          return body.client_id === CLIENT_ID;
-        })
+      const request = nock(API_URL)
+        .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
       this.authenticator
         .requestChangePasswordEmail(userData)
-        .then(function() {
+        .then(() => {
           expect(request.isDone()).to.be.true;
 
           done();

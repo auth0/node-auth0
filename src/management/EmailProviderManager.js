@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -12,15 +13,14 @@ var RetryRestClient = require('../RetryRestClient');
 /**
  * @class EmailProviderManager
  * Auth0 Email Provider.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var EmailProviderManager = function(options) {
+const EmailProviderManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -36,12 +36,12 @@ var EmailProviderManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,8 +50,8 @@ var EmailProviderManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/emails/provider',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/emails/provider`,
     clientOptions,
     options.tokenProvider
   );
@@ -61,9 +61,8 @@ var EmailProviderManager = function(options) {
 /**
  * Configure the email provider.
  *
- * @method    configure
- * @memberOf  module:management.EmailProviderManager.prototype
- *
+ * @function    configure
+ * @memberof  module:management.EmailProviderManager.prototype
  * @example
  * management.emailProvider.configure(data, function (err) {
  *   if (err) {
@@ -72,39 +71,34 @@ var EmailProviderManager = function(options) {
  *
  *   // Email provider configured.
  * });
- * @param   {Object}    data     The email provider data object.
+ * @param   {object}    data     The email provider data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'configure', 'resource.create');
 
 /**
  * Get the email provider.
  *
- * @method    get
- * @memberOf  module:management.EmailProviderManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.EmailProviderManager.prototype
  * @example
  * management.emailProvider.get(function (err, provider) {
  *   console.log(provider);
  * });
- *
  * @param   {Function}  [cb]    Callback function.
- * @param   {Object}    [params]          Clients parameters.
- * @param   {Number}    [params.fields] A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve: name, enabled, settings fields.
- * @param   {Number}    [params.include_fields]  true if the fields specified are to be excluded from the result, false otherwise (defaults to true)
-
- * @return  {Promise|undefined}
+ * @param   {object}    [params]          Clients parameters.
+ * @param   {number}    [params.fields] A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve: name, enabled, settings fields.
+ * @param   {number}    [params.include_fields]  true if the fields specified are to be excluded from the result, false otherwise (defaults to true)
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
 
 /**
  * Update the email provider.
  *
- * @method    update
- * @memberOf  module:management.EmailProviderManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.EmailProviderManager.prototype
  * @example
  * management.emailProvider.update(params, data, function (err, provider) {
  *   if (err) {
@@ -114,21 +108,18 @@ utils.wrapPropertyMethod(EmailProviderManager, 'get', 'resource.getAll');
  *   // Updated email provider.
  *   console.log(provider);
  * });
- *
- * @param   {Object}    params            Email provider parameters.
- * @param   {Object}    data              Updated email provider data.
+ * @param   {object}    params            Email provider parameters.
+ * @param   {object}    data              Updated email provider data.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
 
 /**
  * Delete email provider.
  *
- * @method    delete
- * @memberOf  module:management.EmailProviderManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.EmailProviderManager.prototype
  * @example
  * management.emailProvider.delete(function (err) {
  *   if (err) {
@@ -137,10 +128,8 @@ utils.wrapPropertyMethod(EmailProviderManager, 'update', 'resource.patch');
  *
  *   // Email provider configured.
  * });
- *
  * @param   {Function}  [cb]    Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailProviderManager, 'delete', 'resource.delete');
 

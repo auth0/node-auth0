@@ -1,22 +1,20 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 /**
  * @class GrantsManager
  * Auth0 Grants Manager.
  *
  * See {@link https://auth0.com/docs/api/v2#!/Grants Grants}
- *
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var GrantsManager = function(options) {
+const GrantsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -32,12 +30,12 @@ var GrantsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -46,8 +44,8 @@ var GrantsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/grants/:id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/grants/:id`,
     clientOptions,
     options.tokenProvider
   );
@@ -57,9 +55,8 @@ var GrantsManager = function(options) {
 /**
  * Get all Auth0 Grants.
  *
- * @method    getAll
- * @memberOf  module:management.GrantsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.GrantsManager.prototype
  * @example
  * var params = {
  *   per_page: 10,
@@ -73,26 +70,23 @@ var GrantsManager = function(options) {
  * management.getGrants(params, function (err, grants) {
  *   console.log(grants.length);
  * });
- *
- * @param   {Object}    params                Grants parameters.
- * @param   {Number}    params.per_page       Number of results per page.
- * @param   {Number}    params.page           Page number, zero indexed.
- * @param   {Boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
- * @param   {String}    params.user_id        The user_id of the grants to retrieve.
- * @param   {String}    params.client_id      The client_id of the grants to retrieve.
- * @param   {String}    params.audience       The audience of the grants to retrieve.
+ * @param   {object}    params                Grants parameters.
+ * @param   {number}    params.per_page       Number of results per page.
+ * @param   {number}    params.page           Page number, zero indexed.
+ * @param   {boolean}   params.include_totals true if a query summary must be included in the result, false otherwise. Default false;
+ * @param   {string}    params.user_id        The user_id of the grants to retrieve.
+ * @param   {string}    params.client_id      The client_id of the grants to retrieve.
+ * @param   {string}    params.audience       The audience of the grants to retrieve.
  * @param   {Function}  [cb]                  Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(GrantsManager, 'getAll', 'resource.getAll');
 
 /**
  * Delete an Auth0 grant.
  *
- * @method    delete
- * @memberOf  module:management.GrantsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.GrantsManager.prototype
  * @example
  * var params = {
  *    id: 'GRANT_ID',
@@ -106,13 +100,11 @@ utils.wrapPropertyMethod(GrantsManager, 'getAll', 'resource.getAll');
  *
  *   // Grant deleted.
  * });
- *
- * @param   {Object}    params         Grant parameters.
- * @param   {String}    params.id      Grant ID.
- * @param   {String}    params.user_id The user_id of the grants to delete.
+ * @param   {object}    params         Grant parameters.
+ * @param   {string}    params.id      Grant ID.
+ * @param   {string}    params.user_id The user_id of the grants to delete.
  * @param   {Function}  [cb]           Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(GrantsManager, 'delete', 'resource.delete');
 

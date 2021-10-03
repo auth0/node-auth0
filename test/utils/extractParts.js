@@ -1,15 +1,13 @@
-module.exports = function(body, boundary) {
-  var partRegexp = new RegExp(boundary + '[-]{2}|' + boundary, 'g');
-  var parts = {};
-  var name;
-  var value;
+module.exports = function (body, boundary) {
+  const partRegexp = new RegExp(`${boundary}[-]{2}|${boundary}`, 'g');
+  const parts = {};
 
-  body.split(partRegexp).forEach(function(part) {
+  body.split(partRegexp).forEach((part) => {
     // Ignore empty strings in the array.
     if (part.trim().length === 0) return;
 
-    name = part.match(/name="([^"]*)"/)[1];
-    value = part.split('"' + name + '"')[1];
+    const [, name] = part.match(/name="([^"]*)"/);
+    const [, value] = part.split(`"${name}"`);
 
     parts[name] = value.trim();
   });

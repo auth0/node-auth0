@@ -1,20 +1,19 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ConnectionsManager
  * Represents the relationship between Auth0 and an Identity provider.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var ConnectionsManager = function(options) {
+const ConnectionsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -30,11 +29,11 @@ var ConnectionsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -44,8 +43,8 @@ var ConnectionsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/connections/:id ',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/connections/:id `,
     clientOptions,
     options.tokenProvider
   );
@@ -58,8 +57,8 @@ var ConnectionsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var userAuth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/connections/:id/users',
+  const userAuth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/connections/:id/users`,
     clientOptions,
     options.tokenProvider
   );
@@ -69,9 +68,8 @@ var ConnectionsManager = function(options) {
 /**
  * Create a new connection.
  *
- * @method    create
- * @memberOf  module:management.ConnectionsManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.ConnectionsManager.prototype
  * @example
  * management.connections.create(data, function (err) {
  *   if (err) {
@@ -80,20 +78,17 @@ var ConnectionsManager = function(options) {
  *
  *   // Connection created.
  * });
- *
- * @param   {Object}    data     Connection data object.
+ * @param   {object}    data     Connection data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
 
 /**
  * Get all connections.
  *
- * @method    getAll
- * @memberOf  module:management.ConnectionsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.ConnectionsManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings. If pagination options are not present,
@@ -109,22 +104,19 @@ utils.wrapPropertyMethod(ConnectionsManager, 'create', 'resource.create');
  * management.connections.getAll(params, function (err, connections) {
  *   console.log(connections.length);
  * });
- *
- * @param   {Object}    [params]          Connections params.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {object}    [params]          Connections params.
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 connection.
  *
- * @method    get
- * @memberOf  module:management.ConnectionsManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.ConnectionsManager.prototype
  * @example
  * management.connections.get({ id: CONNECTION_ID }, function (err, connection) {
  *   if (err) {
@@ -133,21 +125,18 @@ utils.wrapPropertyMethod(ConnectionsManager, 'getAll', 'resource.getAll');
  *
  *   console.log(connection);
  * });
- *
- * @param   {Object}    params          Connection parameters.
- * @param   {String}    params.id       Connection ID.
+ * @param   {object}    params          Connection parameters.
+ * @param   {string}    params.id       Connection ID.
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
 
 /**
  * Update an existing connection.
  *
- * @method    update
- * @memberOf  module:management.ConnectionsManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.ConnectionsManager.prototype
  * @example
  * var data = { name: 'newConnectionName' };
  * var params = { id: CONNECTION_ID };
@@ -159,22 +148,19 @@ utils.wrapPropertyMethod(ConnectionsManager, 'get', 'resource.get');
  *
  *   console.log(connection.name);  // 'newConnectionName'
  * });
- *
- * @param   {Object}    params        Connection parameters.
- * @param   {String}    params.id     Connection ID.
- * @param   {Object}    data          Updated connection data.
+ * @param   {object}    params        Connection parameters.
+ * @param   {string}    params.id     Connection ID.
+ * @param   {object}    data          Updated connection data.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
 
 /**
  * Delete an existing connection.
  *
- * @method    delete
- * @memberOf  module:management.ConnectionsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.ConnectionsManager.prototype
  * @example
  * management.connections.delete({ id: CONNECTION_ID }, function (err) {
  *   if (err) {
@@ -183,21 +169,18 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  *
  *   // Connection deleted.
  * });
- *
- * @param   {Object}    params          Connection parameters.
- * @param   {String}    params.id       Connection ID.
+ * @param   {object}    params          Connection parameters.
+ * @param   {string}    params.id       Connection ID.
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
 
 /**
  * Delete a connection user by email.
  *
- * @method    delete
- * @memberOf  module:management.ConnectionsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.ConnectionsManager.prototype
  * @example
  * management.connections.deleteUserByEmail({ id: CONNECTION_ID, email:USER_EMAIL }, function (err) {
  *   if (err) {
@@ -206,15 +189,13 @@ utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
  *
  *   // User deleted.
  * });
- *
- * @param   {Object}    params          Connection parameters.
- * @param   {String}    params.id       Connection ID.
- * @param   {String}    params.email    User Email.
+ * @param   {object}    params          Connection parameters.
+ * @param   {string}    params.id       Connection ID.
+ * @param   {string}    params.email    User Email.
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-ConnectionsManager.prototype.deleteUserByEmail = function(params, cb) {
+ConnectionsManager.prototype.deleteUserByEmail = function (params, cb) {
   if (typeof params !== 'object' || typeof params.email !== 'string' || params.email.length < 1) {
     throw new ArgumentError('You must provide an email for the deleteUserByEmail method');
   }

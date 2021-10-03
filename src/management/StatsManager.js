@@ -1,9 +1,10 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -11,15 +12,14 @@ var RetryRestClient = require('../RetryRestClient');
 /**
  * @class
  * Abstracts interaction with the stats endpoint.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var StatsManager = function(options) {
+const StatsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -32,10 +32,10 @@ var StatsManager = function(options) {
     throw new ArgumentError('The provided base URL is invalid');
   }
 
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -44,8 +44,8 @@ var StatsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/stats/:type',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/stats/:type`,
     clientOptions,
     options.tokenProvider
   );
@@ -55,9 +55,8 @@ var StatsManager = function(options) {
 /**
  * Get the daily stats.
  *
- * @method    getDaily
- * @memberOf  module:management.StatsManager.prototype
- *
+ * @function    getDaily
+ * @memberof  module:management.StatsManager.prototype
  * @example
  * var params = {
  *   from: '{YYYYMMDD}',  // First day included in the stats.
@@ -71,15 +70,13 @@ var StatsManager = function(options) {
  *
  *   console.log(stats);
  * });
- *
- * @param   {Object}    params        Stats parameters.
- * @param   {String}    params.from   The first day in YYYYMMDD format.
- * @param   {String}    params.to     The last day in YYYYMMDD format.
+ * @param   {object}    params        Stats parameters.
+ * @param   {string}    params.from   The first day in YYYYMMDD format.
+ * @param   {string}    params.to     The last day in YYYYMMDD format.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-StatsManager.prototype.getDaily = function(params, cb) {
+StatsManager.prototype.getDaily = function (params, cb) {
   params = params || {};
   params.type = 'daily';
 
@@ -93,9 +90,8 @@ StatsManager.prototype.getDaily = function(params, cb) {
 /**
  * Get a the active users count.
  *
- * @method    getActiveUsersCount
- * @memberOf  module:management.StatsManager.prototype
- *
+ * @function    getActiveUsersCount
+ * @memberof  module:management.StatsManager.prototype
  * @example
  * management.stats.getActiveUsersCount(function (err, usersCount) {
  *   if (err) {
@@ -104,13 +100,11 @@ StatsManager.prototype.getDaily = function(params, cb) {
  *
  *   console.log(usersCount);
  * });
- *
  * @param   {Function}  [cb]  Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
-StatsManager.prototype.getActiveUsersCount = function(cb) {
-  var options = { type: 'active-users' };
+StatsManager.prototype.getActiveUsersCount = function (cb) {
+  const options = { type: 'active-users' };
 
   if (cb && cb instanceof Function) {
     return this.resource.get(options, cb);

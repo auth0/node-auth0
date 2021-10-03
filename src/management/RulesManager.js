@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -13,15 +14,14 @@ var RetryRestClient = require('../RetryRestClient');
  * @class RulesManager
  * The rule class provides a simple abstraction for performing CRUD operations
  * on Auth0 RulesManagers.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var RulesManager = function(options) {
+const RulesManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -37,11 +37,11 @@ var RulesManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,8 +50,8 @@ var RulesManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/rules/:id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/rules/:id`,
     clientOptions,
     options.tokenProvider
   );
@@ -61,9 +61,8 @@ var RulesManager = function(options) {
 /**
  * Create a new rule.
  *
- * @method    create
- * @memberOf  module:management.RulesManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.RulesManager.prototype
  * @example
  * management.rules.create(data, function (err) {
  *   if (err) {
@@ -72,20 +71,17 @@ var RulesManager = function(options) {
  *
  *   // Rule created.
  * });
- *
- * @param   {Object}    data     Rule data object.
+ * @param   {object}    data     Rule data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
 
 /**
  * Get all rules.
  *
- * @method    getAll
- * @memberOf  module:management.RulesManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.RulesManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings. If pagination options are not present,
@@ -101,22 +97,19 @@ utils.wrapPropertyMethod(RulesManager, 'create', 'resource.create');
  * management.rules.getAll(params, function (err, rules) {
  *   console.log(rules.length);
  * });
- *
- * @param   {Object}    [params]          Rules parameters.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {object}    [params]          Rules parameters.
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 rule.
  *
- * @method    get
- * @memberOf  module:management.RulesManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.RulesManager.prototype
  * @example
  * management.rules.get({ id: RULE_ID }, function (err, rule) {
  *   if (err) {
@@ -125,21 +118,18 @@ utils.wrapPropertyMethod(RulesManager, 'getAll', 'resource.getAll');
  *
  *   console.log(rule);
  * });
- *
- * @param   {Object}    params        Rule parameters.
- * @param   {String}    params.id     Rule ID.
+ * @param   {object}    params        Rule parameters.
+ * @param   {string}    params.id     Rule ID.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
 
 /**
  * Update an existing rule.
  *
- * @method    update
- * @memberOf  module:management.RulesManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.RulesManager.prototype
  * @example
  * var data = { name: 'New name' };
  * var params = { id: RULE_ID };
@@ -161,22 +151,19 @@ utils.wrapPropertyMethod(RulesManager, 'get', 'resource.get');
  *
  *   console.log(rule.name);  // 'New name'
  * });
- *
- * @param   {Object}    params        Rule parameters.
- * @param   {String}    params.id     Rule ID.
- * @param   {Object}    data          Updated rule data.
+ * @param   {object}    params        Rule parameters.
+ * @param   {string}    params.id     Rule ID.
+ * @param   {object}    data          Updated rule data.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
 
 /**
  * Delete an existing rule.
  *
- * @method    delete
- * @memberOf  module:management.RulesManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.RulesManager.prototype
  * @example
  * management.rules.delete({ id: RULE_ID }, function (err) {
  *   if (err) {
@@ -185,12 +172,10 @@ utils.wrapPropertyMethod(RulesManager, 'update', 'resource.patch');
  *
  *   // Rule deleted.
  * });
- *
- * @param   {Object}    params        Rule parameters.
- * @param   {String}    params.id     Rule ID.
+ * @param   {object}    params        Rule parameters.
+ * @param   {string}    params.id     Rule ID.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesManager, 'delete', 'resource.delete');
 

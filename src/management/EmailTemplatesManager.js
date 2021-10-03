@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -13,15 +14,14 @@ var RetryRestClient = require('../RetryRestClient');
  * @class EmailTemplatesManager
  * This class provides a simple abstraction for performing CRUD operations
  * on Auth0's Email Templates. {@see https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName}
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var EmailTemplatesManager = function(options) {
+const EmailTemplatesManager = function (options) {
   if (!options || 'object' !== typeof options) {
     throw new ArgumentError('Must provide manager options');
   }
@@ -33,11 +33,11 @@ var EmailTemplatesManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -46,8 +46,8 @@ var EmailTemplatesManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/email-templates/:name',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/email-templates/:name`,
     clientOptions,
     options.tokenProvider
   );
@@ -57,9 +57,8 @@ var EmailTemplatesManager = function(options) {
 /**
  * Create a new Email Template.
  *
- * @method    create
- * @memberOf  module:management.EmailTemplatesManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.EmailTemplatesManager.prototype
  * @example
  * management.emailTemplates.create(data, function (err) {
  *   if (err) {
@@ -68,20 +67,17 @@ var EmailTemplatesManager = function(options) {
  *
  *   // Email Template created.
  * });
- *
- * @param   {Object}    data     Email Template data object.
+ * @param   {object}    data     Email Template data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailTemplatesManager, 'create', 'resource.create');
 
 /**
  * Get an Auth0 Email Template.
  *
- * @method    get
- * @memberOf  module:management.EmailTemplatesManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.EmailTemplatesManager.prototype
  * @example
  * management.emailTemplates.get({ name: EMAIL_TEMPLATE_NAME }, function (err, emailTemplate) {
  *   if (err) {
@@ -90,21 +86,18 @@ utils.wrapPropertyMethod(EmailTemplatesManager, 'create', 'resource.create');
  *
  *   console.log(emailTemplate);
  * });
- *
- * @param   {Object}    params          Email Template parameters.
- * @param   {String}    params.name     Template Name
+ * @param   {object}    params          Email Template parameters.
+ * @param   {string}    params.name     Template Name
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailTemplatesManager, 'get', 'resource.get');
 
 /**
  * Update an existing Email Template.
  *
- * @method    update
- * @memberOf  module:management.EmailTemplatesManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.EmailTemplatesManager.prototype
  * @example
  * var data = { from: 'new@email.com' };
  * var params = { name: EMAIL_TEMPLATE_NAME };
@@ -116,13 +109,11 @@ utils.wrapPropertyMethod(EmailTemplatesManager, 'get', 'resource.get');
  *
  *   console.log(emailTemplate.from);  // 'new@email.com'
  * });
- *
- * @param   {Object}    params          Email Template parameters.
- * @param   {String}    params.name     Template Name
- * @param   {Object}    data            Updated Email Template data.
+ * @param   {object}    params          Email Template parameters.
+ * @param   {string}    params.name     Template Name
+ * @param   {object}    data            Updated Email Template data.
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(EmailTemplatesManager, 'update', 'resource.patch');
 

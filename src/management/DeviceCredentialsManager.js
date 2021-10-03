@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -12,15 +13,14 @@ var RetryRestClient = require('../RetryRestClient');
 /**
  * @class DeviceCredentialsManager
  * Manages Auth0 Device Credentials.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var DeviceCredentialsManager = function(options) {
+const DeviceCredentialsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -36,12 +36,12 @@ var DeviceCredentialsManager = function(options) {
   /**
    * Options object for the RestClient instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -51,8 +51,8 @@ var DeviceCredentialsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/device-credentials/:id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/device-credentials/:id`,
     clientOptions,
     options.tokenProvider
   );
@@ -62,9 +62,8 @@ var DeviceCredentialsManager = function(options) {
 /**
  * Create an Auth0 credential.
  *
- * @method    create
- * @memberOf  module:management.DeviceCredentialsManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.DeviceCredentialsManager.prototype
  * @example
  * management.deviceCredentials.create(data, function (err) {
  *   if (err) {
@@ -73,40 +72,34 @@ var DeviceCredentialsManager = function(options) {
  *
  *   // Credential created.
  * });
- *
- * @param   {Object}    data     The device credential data object.
+ * @param   {object}    data     The device credential data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'createPublicKey', 'resource.create');
 
 /**
  * Get all Auth0 credentials.
  *
- * @method  getAll
- * @memberOf  module:management.DeviceCredentialsManager.prototype
- *
+ * @function  getAll
+ * @memberof  module:management.DeviceCredentialsManager.prototype
  * @example
  * var params = {user_id: "USER_ID"};
  *
  * management.deviceCredentials.getAll(params, function (err, credentials) {
  *   console.log(credentials.length);
  * });
- *
- * @param   {Object}    params  Credential parameters.
+ * @param   {object}    params  Credential parameters.
  * @param   {Function}  [cb]    Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
 
 /**
  * Delete an Auth0 device credential.
  *
- * @method    delete
- * @memberOf  module:management.DeviceCredentialsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.DeviceCredentialsManager.prototype
  * @example
  * var params = { id: CREDENTIAL_ID };
  *
@@ -117,12 +110,10 @@ utils.wrapPropertyMethod(DeviceCredentialsManager, 'getAll', 'resource.getAll');
  *
  *   // Credential deleted.
  * });
- *
- * @param   {Object}    params          Credential parameters.
- * @param   {String}    params.id       Device credential ID.
+ * @param   {object}    params          Credential parameters.
+ * @param   {string}    params.id       Device credential ID.
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(DeviceCredentialsManager, 'delete', 'resource.delete');
 

@@ -1,22 +1,20 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 /**
  * @class ClientGrantsManager
  * Auth0 Client Grants Manager.
  *
  * See {@link https://auth0.com/docs/api/v2#!/Client_Grants Client Grants}
- *
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var ClientGrantsManager = function(options) {
+const ClientGrantsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -32,12 +30,12 @@ var ClientGrantsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -46,8 +44,8 @@ var ClientGrantsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/client-grants/:id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/client-grants/:id`,
     clientOptions,
     options.tokenProvider
   );
@@ -57,9 +55,8 @@ var ClientGrantsManager = function(options) {
 /**
  * Create an Auth0 client grant.
  *
- * @method    create
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.ClientGrantsManager.prototype
  * @example
  * management.clientGrants.create(data, function (err) {
  *   if (err) {
@@ -68,20 +65,17 @@ var ClientGrantsManager = function(options) {
  *
  *   // Client grant created.
  * });
- *
- * @param   {Object}    data     The client data object.
+ * @param   {object}    data     The client data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
 
 /**
  * Get all Auth0 Client Grants.
  *
- * @method    getAll
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.ClientGrantsManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings. If pagination options are not present,
@@ -98,22 +92,19 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
  * management.clientGrants.getAll(params, function (err, grants) {
  *   console.log(grants.length);
  * });
- *
- * @param   {Object}    [params]          Client Grants parameters.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {object}    [params]          Client Grants parameters.
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientGrantsManager, 'getAll', 'resource.getAll');
 
 /**
  * Update an Auth0 client grant.
  *
- * @method    update
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.ClientGrantsManager.prototype
  * @example
  * var data = {
  *   client_id: CLIENT_ID,
@@ -129,22 +120,19 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'getAll', 'resource.getAll');
  *
  *   console.log(grant.id);
  * });
- *
- * @param   {Object}    params     Client parameters.
- * @param   {String}    params.id  Client grant ID.
- * @param   {Object}    data       Updated client data.
+ * @param   {object}    params     Client parameters.
+ * @param   {string}    params.id  Client grant ID.
+ * @param   {object}    data       Updated client data.
  * @param   {Function}  [cb]       Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientGrantsManager, 'update', 'resource.patch');
 
 /**
  * Delete an Auth0 client grant.
  *
- * @method    delete
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.ClientGrantsManager.prototype
  * @example
  * management.clientGrants.delete({ id: GRANT_ID }, function (err) {
  *   if (err) {
@@ -153,12 +141,10 @@ utils.wrapPropertyMethod(ClientGrantsManager, 'update', 'resource.patch');
  *
  *   // Grant deleted.
  * });
- *
- * @param   {Object}    params     Client parameters.
- * @param   {String}    params.id  Client grant ID.
+ * @param   {object}    params     Client parameters.
+ * @param   {string}    params.id  Client grant ID.
  * @param   {Function}  [cb]       Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientGrantsManager, 'delete', 'resource.delete');
 

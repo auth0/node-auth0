@@ -1,7 +1,7 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class ClientsManager
@@ -12,15 +12,14 @@ var RetryRestClient = require('../RetryRestClient');
  * You can learn more about this in the
  * {@link https://auth0.com/docs/applications Applications} section of the
  * documentation.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var ClientsManager = function(options) {
+const ClientsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -36,12 +35,12 @@ var ClientsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,8 +49,8 @@ var ClientsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/clients/:client_id',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/clients/:client_id`,
     clientOptions,
     options.tokenProvider
   );
@@ -61,9 +60,8 @@ var ClientsManager = function(options) {
 /**
  * Create an Auth0 client.
  *
- * @method    create
- * @memberOf  module:management.ClientsManager.prototype
- *
+ * @function    create
+ * @memberof  module:management.ClientsManager.prototype
  * @example
  * management.clients.create(data, function (err) {
  *   if (err) {
@@ -72,20 +70,17 @@ var ClientsManager = function(options) {
  *
  *   // Client created.
  * });
- *
- * @param   {Object}    data     The client data object.
+ * @param   {object}    data     The client data object.
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
 
 /**
  * Get all Auth0 clients.
  *
- * @method    getAll
- * @memberOf  module:management.ClientsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.ClientsManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings. If pagination options are not present,
@@ -101,22 +96,19 @@ utils.wrapPropertyMethod(ClientsManager, 'create', 'resource.create');
  * management.clients.getAll(params, function (err, clients) {
  *   console.log(clients.length);
  * });
- *
- * @param   {Object}    [params]          Clients parameters.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
+ * @param   {object}    [params]          Clients parameters.
+ * @param   {number}    [params.per_page] Number of results per page.
+ * @param   {number}    [params.page]     Page number, zero indexed.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 client.
  *
- * @method    get
- * @memberOf  module:management.ClientsManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.ClientsManager.prototype
  * @example
  * management.clients.get({ client_id: CLIENT_ID }, function (err, client) {
  *   if (err) {
@@ -125,21 +117,18 @@ utils.wrapPropertyMethod(ClientsManager, 'getAll', 'resource.getAll');
  *
  *   console.log(client);
  * });
- *
- * @param   {Object}    params            Client parameters.
- * @param   {String}    params.client_id  Application client ID.
+ * @param   {object}    params            Client parameters.
+ * @param   {string}    params.client_id  Application client ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
 
 /**
  * Update an Auth0 client.
  *
- * @method    update
- * @memberOf  module:management.ClientsManager.prototype
- *
+ * @function    update
+ * @memberof  module:management.ClientsManager.prototype
  * @example
  * var data = { name: 'newClientName' };
  * var params = { client_id: CLIENT_ID };
@@ -151,22 +140,19 @@ utils.wrapPropertyMethod(ClientsManager, 'get', 'resource.get');
  *
  *   console.log(client.name);  // 'newClientName'
  * });
- *
- * @param   {Object}    params            Client parameters.
- * @param   {String}    params.client_id  Application client ID.
- * @param   {Object}    data              Updated client data.
+ * @param   {object}    params            Client parameters.
+ * @param   {string}    params.client_id  Application client ID.
+ * @param   {object}    data              Updated client data.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
 
 /**
  * Delete an Auth0 client.
  *
- * @method    delete
- * @memberOf  module:management.ClientsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.ClientsManager.prototype
  * @example
  * management.clients.delete({ client_id: CLIENT_ID }, function (err) {
  *   if (err) {
@@ -175,12 +161,10 @@ utils.wrapPropertyMethod(ClientsManager, 'update', 'resource.patch');
  *
  *   // Client deleted.
  * });
- *
- * @param   {Object}    params            Client parameters.
- * @param   {String}    params.client_id  Application client ID.
+ * @param   {object}    params            Client parameters.
+ * @param   {string}    params.client_id  Application client ID.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ClientsManager, 'delete', 'resource.delete');
 

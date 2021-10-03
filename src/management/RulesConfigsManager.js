@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -13,15 +14,14 @@ var RetryRestClient = require('../RetryRestClient');
  * @class RulesConfigsManager
  * The rules configs manager class provides a simple abstraction for performing CRUD operations
  * on Auth0 RulesConfigsManager.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var RulesConfigsManager = function(options) {
+const RulesConfigsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -37,11 +37,11 @@ var RulesConfigsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -50,8 +50,8 @@ var RulesConfigsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/rules-configs/:key',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/rules-configs/:key`,
     clientOptions,
     options.tokenProvider
   );
@@ -61,9 +61,8 @@ var RulesConfigsManager = function(options) {
 /**
  * Set a new rules config.
  *
- * @method    set
- * @memberOf  module:management.RulesConfigsManager.prototype
- *
+ * @function    set
+ * @memberof  module:management.RulesConfigsManager.prototype
  * @example
  * var params = { key: RULE_CONFIG_KEY };
  * var data =   { value: RULES_CONFIG_VALUE };
@@ -75,40 +74,34 @@ var RulesConfigsManager = function(options) {
  *
  *   // Rules Config set.
  * });
- *
- * @param   {Object}    params        Rule Config parameters.
- * @param   {String}    params.key    Rule Config key.
- * @param   {Object}    data          Rule Config Data parameters.
- * @param   {String}    data.value    Rule Config Data value.
+ * @param   {object}    params        Rule Config parameters.
+ * @param   {string}    params.key    Rule Config key.
+ * @param   {object}    data          Rule Config Data parameters.
+ * @param   {string}    data.value    Rule Config Data value.
  * @param   {Function}  [cb]    Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesConfigsManager, 'set', 'resource.update');
 
 /**
  * Get all rules configs.
  *
- * @method    getAll
- * @memberOf  module:management.RulesConfigsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.RulesConfigsManager.prototype
  * @example
  * management.rulesConfigs.getAll(function (err, rulesConfig) {
  *   console.log(rulesConfig.length);
  * });
- *
  * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesConfigsManager, 'getAll', 'resource.getAll');
 
 /**
  * Delete an existing rules config.
  *
- * @method    delete
- * @memberOf  module:management.RulesConfigsManager.prototype
- *
+ * @function    delete
+ * @memberof  module:management.RulesConfigsManager.prototype
  * @example
  * management.rulesConfigs.delete({ key: RULE_CONFIG_KEY }, function (err) {
  *   if (err) {
@@ -117,12 +110,10 @@ utils.wrapPropertyMethod(RulesConfigsManager, 'getAll', 'resource.getAll');
  *
  *   // Rules Config deleted.
  * });
- *
- * @param   {Object}    params        Rule Configs parameters.
- * @param   {String}    params.key    Rule Configs key.
+ * @param   {object}    params        Rule Configs parameters.
+ * @param   {string}    params.key    Rule Configs key.
  * @param   {Function}  [cb]          Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(RulesConfigsManager, 'delete', 'resource.delete');
 

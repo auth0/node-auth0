@@ -1,20 +1,19 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * @class LogsManager
  * Represents the relationship between Auth0 and an Identity provider.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var LogsManager = function(options) {
+const LogsManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide client options');
   }
@@ -30,11 +29,11 @@ var LogsManager = function(options) {
   /**
    * Options object for the Rest Client instance.
    *
-   * @type {Object}
+   * @type {object}
    */
-  var clientOptions = {
+  const clientOptions = {
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -44,8 +43,8 @@ var LogsManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/logs/:id ',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/logs/:id `,
     clientOptions,
     options.tokenProvider
   );
@@ -55,9 +54,8 @@ var LogsManager = function(options) {
 /**
  * Get all logs.
  *
- * @method    getAll
- * @memberOf  module:management.LogsManager.prototype
- *
+ * @function    getAll
+ * @memberof  module:management.LogsManager.prototype
  * @example <caption>
  *   This method takes an optional object as first argument that may be used to
  *   specify pagination settings and the search query. If pagination options are
@@ -73,29 +71,26 @@ var LogsManager = function(options) {
  * management.logs.getAll(params, function (err, logs) {
  *   console.log(logs.length);
  * });
- *
- * @param   {Object}    [params]                Logs params.
- * @param   {String}    [params.q]              Search Criteria using Query String Syntax
- * @param   {Number}    [params.page]           Page number. Zero based
- * @param   {Number}    [params.per_page]       The amount of entries per page
- * @param   {String}    [params.sort]           The field to use for sorting.
- * @param   {String}    [params.fields]         A comma separated list of fields to include or exclude
- * @param   {Boolean}   [params.include_fields] true if the fields specified are to be included in the result, false otherwise.
- * @param   {Boolean}   [params.include_totals] true if a query summary must be included in the result, false otherwise. Default false
- * @param   {String}    [params.from]           For checkpoint pagination, log event Id from which to start selection from.
- * @param   {Number}    [params.take]           When using the `from` parameter, the number of entries to retrieve. Default 50, max 100.
+ * @param   {object}    [params]                Logs params.
+ * @param   {string}    [params.q]              Search Criteria using Query String Syntax
+ * @param   {number}    [params.page]           Page number. Zero based
+ * @param   {number}    [params.per_page]       The amount of entries per page
+ * @param   {string}    [params.sort]           The field to use for sorting.
+ * @param   {string}    [params.fields]         A comma separated list of fields to include or exclude
+ * @param   {boolean}   [params.include_fields] true if the fields specified are to be included in the result, false otherwise.
+ * @param   {boolean}   [params.include_totals] true if a query summary must be included in the result, false otherwise. Default false
+ * @param   {string}    [params.from]           For checkpoint pagination, log event Id from which to start selection from.
+ * @param   {number}    [params.take]           When using the `from` parameter, the number of entries to retrieve. Default 50, max 100.
  * @param   {Function}  [cb]                    Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(LogsManager, 'getAll', 'resource.getAll');
 
 /**
  * Get an Auth0 log.
  *
- * @method    get
- * @memberOf  module:management.LogsManager.prototype
- *
+ * @function    get
+ * @memberof  module:management.LogsManager.prototype
  * @example
  * management.logs.get({ id: EVENT_ID }, function (err, log) {
  *   if (err) {
@@ -104,12 +99,10 @@ utils.wrapPropertyMethod(LogsManager, 'getAll', 'resource.getAll');
  *
  *   console.log(log);
  * });
- *
- * @param   {Object}    params          Log parameters.
- * @param   {String}    params.id       Log ID.
+ * @param   {object}    params          Log parameters.
+ * @param   {string}    params.id       Log ID.
  * @param   {Function}  [cb]            Callback function.
- *
- * @return  {Promise|undefined}
+ * @returns  {Promise|undefined}
  */
 utils.wrapPropertyMethod(LogsManager, 'get', 'resource.get');
 

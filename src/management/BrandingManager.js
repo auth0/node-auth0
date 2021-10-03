@@ -1,10 +1,11 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const utils = require('../utils');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -12,15 +13,14 @@ var RetryRestClient = require('../RetryRestClient');
 /**
  * @class BrandingManager
  * Manages settings related to branding.
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
+ * @class
+ * @memberof module:management
+ * @param {object} options            The client options.
+ * @param {string} options.baseUrl    The URL of the API.
+ * @param {object} [options.headers]  Headers to be included in all requests.
+ * @param {object} [options.retry]    Retry Policy Config
  */
-var BrandingManager = function(options) {
+const BrandingManager = function (options) {
   if (options === null || typeof options !== 'object') {
     throw new ArgumentError('Must provide manager options');
   }
@@ -33,10 +33,10 @@ var BrandingManager = function(options) {
     throw new ArgumentError('The provided base URL is invalid');
   }
 
-  var clientOptions = {
+  const clientOptions = {
     errorFormatter: { message: 'message', name: 'error' },
     headers: options.headers,
-    query: { repeatParams: false }
+    query: { repeatParams: false },
   };
 
   /**
@@ -45,8 +45,8 @@ var BrandingManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/branding',
+  const auth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/branding`,
     clientOptions,
     options.tokenProvider
   );
@@ -58,8 +58,8 @@ var BrandingManager = function(options) {
    *
    * @type {external:RestClient}
    */
-  var brandingTemplateAuth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/branding/templates/universal-login',
+  const brandingTemplateAuth0RestClient = new Auth0RestClient(
+    `${options.baseUrl}/branding/templates/universal-login`,
     clientOptions,
     options.tokenProvider
   );
@@ -69,9 +69,8 @@ var BrandingManager = function(options) {
 /**
  * Update the branding settings.
  *
- * @method    updateSettings
- * @memberOf  module:management.BrandingManager.prototype
- *
+ * @function    updateSettings
+ * @memberof  module:management.BrandingManager.prototype
  * @example
  * management.branding.updateSettings(params, data, function (err, branding) {
  *   if (err) {
@@ -81,21 +80,18 @@ var BrandingManager = function(options) {
  * // Updated branding
  *    console.log(branding);
  * });
- *
- * @param   {Object}    params            Branding parameters (leavy empty).
- * @param   {Object}    data              Updated branding data.
+ * @param   {object}    params            Branding parameters (leavy empty).
+ * @param   {object}    data              Updated branding data.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(BrandingManager, 'updateSettings', 'resource.patch');
 
 /**
  * Get the branding settings..
  *
- * @method    getSettings
- * @memberOf  module:management.BrandingManager.prototype
- *
+ * @function    getSettings
+ * @memberof  module:management.BrandingManager.prototype
  * @example
  * management.branding.getSettings(data, function (err, branding) {
  *   if (err) {
@@ -105,21 +101,18 @@ utils.wrapPropertyMethod(BrandingManager, 'updateSettings', 'resource.patch');
  * // Branding
  *    console.log(branding);
  * });
- *
- * @param   {Object}    params            Branding parameters.
- * @param   {Object}    data              Branding data.
+ * @param   {object}    params            Branding parameters.
+ * @param   {object}    data              Branding data.
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(BrandingManager, 'getSettings', 'resource.get');
 
 /**
  * Get the new universal login template.
  *
- * @method    getUniversalLoginTemplate
- * @memberOf  module:management.BrandingManager.prototype
- *
+ * @function    getUniversalLoginTemplate
+ * @memberof  module:management.BrandingManager.prototype
  * @example
  * management.branding.getUniversalLoginTemplate(data, function (err, template) {
  *   if (err) {
@@ -129,55 +122,51 @@ utils.wrapPropertyMethod(BrandingManager, 'getSettings', 'resource.get');
  * // Branding
  *    console.log(template);
  * });
- *
- * @param   {Object}    params            Branding parameters (leave empty).
- * @param   {Object}    data              Branding data (leave empty).
+ * @param   {object}    params            Branding parameters (leave empty).
+ * @param   {object}    data              Branding data (leave empty).
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(BrandingManager, 'getUniversalLoginTemplate', 'brandingTemplates.get');
 
 /**
  * Set the new universal login template.
  *
- * @method    setUniversalLoginTemplate
- * @memberOf  module:management.BrandingManager.prototype
- *
+ * @function    setUniversalLoginTemplate
+ * @memberof  module:management.BrandingManager.prototype
  * @example
  * management.branding.setUniversalLoginTemplate(params, data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
- *
- * @param   {Object}    params            Branding parameters (leavy empty).
- * @param   {Object}    data              Branding data (object with template field).
+ * @param   {object}    params            Branding parameters (leavy empty).
+ * @param   {object}    data              Branding data (object with template field).
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
 utils.wrapPropertyMethod(BrandingManager, 'setUniversalLoginTemplate', 'brandingTemplates.update');
 
 /**
  * Delete the new universal login template (revert to default).
  *
- * @method    deleteUniversalLoginTemplate
- * @memberOf  module:management.BrandingManager.prototype
- *
+ * @function    deleteUniversalLoginTemplate
+ * @memberof  module:management.BrandingManager.prototype
  * @example
  * management.branding.deleteUniversalLoginTemplate(data, function (err) {
  *   if (err) {
  *     // Handle error.
  *   }
  * });
- *
- * @param   {Object}    params            Branding parameters (leavy empty).
- * @param   {Object}    data              Branding data (leave empty).
+ * @param   {object}    params            Branding parameters (leavy empty).
+ * @param   {object}    data              Branding data (leave empty).
  * @param   {Function}  [cb]              Callback function.
- *
- * @return    {Promise|undefined}
+ * @returns    {Promise|undefined}
  */
-utils.wrapPropertyMethod(BrandingManager, 'deleteUniversalLoginTemplate', 'brandingTemplates.delete');
+utils.wrapPropertyMethod(
+  BrandingManager,
+  'deleteUniversalLoginTemplate',
+  'brandingTemplates.delete'
+);
 
 module.exports = BrandingManager;
