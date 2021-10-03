@@ -36,6 +36,7 @@ var MigrationsManager = require('./MigrationsManager');
 var PromptsManager = require('./PromptsManager');
 var ActionsManager = require('./ActionsManager');
 var OrganizationsManager = require('./OrganizationsManager');
+var AttackProtectionManager = require('./AttackProtectionManager');
 
 var BASE_URL_FORMAT = 'https://%s/api/v2';
 var MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
@@ -368,6 +369,13 @@ var ManagementClient = function(options) {
    * @type {OrganizationsManager}
    */
   this.organizations = new OrganizationsManager(managerOptions);
+
+  /**
+   * Attack Protection Manager
+   *
+   * @type {AttackProtectionManager}
+   */
+  this.attackProtection = new AttackProtectionManager(managerOptions);
 };
 
 /**
