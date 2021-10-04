@@ -17,7 +17,7 @@ describe('AttackProtectionManager', function() {
   });
 
   describe('instance', function() {
-    var methods = ['getBruteforceConfig', 'updateBruteforceConfig'];
+    var methods = ['getBruteForceConfig', 'updateBruteForceConfig'];
 
     methods.forEach(function(method) {
       it('should have a ' + method + ' method', function() {
@@ -44,7 +44,7 @@ describe('AttackProtectionManager', function() {
     });
   });
 
-  describe('#getBruteforceConfig', function() {
+  describe('#getBruteForceConfig', function() {
     var data = {
       enabled: true,
       shields: ['user_notification', 'block'],
@@ -60,14 +60,14 @@ describe('AttackProtectionManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.attackProtection.getBruteforceConfig({}, function() {
+      this.attackProtection.getBruteForceConfig({}, function() {
         done();
       });
     });
 
     it('should return a promise if no callback is given', function(done) {
       this.attackProtection
-        .getBruteforceConfig()
+        .getBruteForceConfig()
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -79,7 +79,7 @@ describe('AttackProtectionManager', function() {
         .get('/attack-protection/brute-force-protection')
         .reply(500);
 
-      this.attackProtection.getBruteforceConfig().catch(function(err) {
+      this.attackProtection.getBruteForceConfig().catch(function(err) {
         expect(err).to.exist;
 
         done();
@@ -87,8 +87,8 @@ describe('AttackProtectionManager', function() {
     });
 
     it('should pass the body of the response to the "then" handler', function(done) {
-      this.attackProtection.getBruteforceConfig().then(function(bruteforceConfig) {
-        expect(bruteforceConfig.max_attempts).to.equal(data.max_attempts);
+      this.attackProtection.getBruteForceConfig().then(function(bruteForceConfig) {
+        expect(bruteForceConfig).to.deep.equal(data);
 
         done();
       });
@@ -97,7 +97,7 @@ describe('AttackProtectionManager', function() {
     it('should perform a GET request to /api/v2/attack-protection/brute-force-protection', function(done) {
       var request = this.request;
 
-      this.attackProtection.getBruteforceConfig().then(function() {
+      this.attackProtection.getBruteForceConfig().then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -112,7 +112,7 @@ describe('AttackProtectionManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.attackProtection.getBruteforceConfig().then(function() {
+      this.attackProtection.getBruteForceConfig().then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -120,7 +120,7 @@ describe('AttackProtectionManager', function() {
     });
   });
 
-  describe('#updateBruteforceConfig', function() {
+  describe('#updateBruteForceConfig', function() {
     var data = {
       enabled: true,
       shields: ['user_notification', 'block'],
@@ -136,14 +136,14 @@ describe('AttackProtectionManager', function() {
     });
 
     it('should accept a callback', function(done) {
-      this.attackProtection.updateBruteforceConfig({}, data, function() {
+      this.attackProtection.updateBruteForceConfig({}, data, function() {
         done();
       });
     });
 
     it('should return a promise if no callback is given', function(done) {
       this.attackProtection
-        .updateBruteforceConfig({}, data)
+        .updateBruteForceConfig({}, data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -155,7 +155,7 @@ describe('AttackProtectionManager', function() {
         .patch('/attack-protection/brute-force-protection')
         .reply(500);
 
-      this.attackProtection.updateBruteforceConfig({}, data).catch(function(err) {
+      this.attackProtection.updateBruteForceConfig({}, data).catch(function(err) {
         expect(err).to.exist.to.be.an.instanceOf(Error);
 
         done();
@@ -165,7 +165,7 @@ describe('AttackProtectionManager', function() {
     it('should perform a PATCH request to /api/v2/attack-protection/brute-force-protection', function(done) {
       var request = this.request;
 
-      this.attackProtection.updateBruteforceConfig({}, {}).then(function() {
+      this.attackProtection.updateBruteForceConfig({}, {}).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -175,7 +175,7 @@ describe('AttackProtectionManager', function() {
     it('should pass the data in the body of the request', function(done) {
       var request = this.request;
 
-      this.attackProtection.updateBruteforceConfig({}, data).then(function() {
+      this.attackProtection.updateBruteForceConfig({}, data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -183,8 +183,8 @@ describe('AttackProtectionManager', function() {
     });
 
     it('should pass the body of the response to the "then" handler', function(done) {
-      this.attackProtection.updateBruteforceConfig({}, data).then(function(bruteforceConfig) {
-        expect(bruteforceConfig.max_attempts).to.equal(data.max_attempts);
+      this.attackProtection.updateBruteForceConfig({}, data).then(function(bruteForceConfig) {
+        expect(bruteForceConfig).to.deep.equal(data);
 
         done();
       });
@@ -198,7 +198,7 @@ describe('AttackProtectionManager', function() {
         .matchHeader('Authorization', 'Bearer ' + this.token)
         .reply(200);
 
-      this.attackProtection.updateBruteforceConfig({}, data).then(function() {
+      this.attackProtection.updateBruteForceConfig({}, data).then(function() {
         expect(request.isDone()).to.be.true;
 
         done();

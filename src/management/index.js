@@ -3908,8 +3908,8 @@ utils.wrapPropertyMethod(
 
 utils.wrapPropertyMethod(
   ManagementClient,
-  'getBruteforceConfig',
-  'attackProtection.getBruteforceConfig'
+  'getBruteForceConfig',
+  'attackProtection.getBruteForceConfig'
 );
 
 /**
@@ -3918,8 +3918,8 @@ utils.wrapPropertyMethod(
 
 utils.wrapPropertyMethod(
   ManagementClient,
-  'updateBruteforceConfig',
-  'attackProtection.updateBruteforceConfig'
+  'updateBruteForceConfig',
+  'attackProtection.updateBruteForceConfig'
 );
 
 module.exports = ManagementClient;

@@ -40,28 +40,28 @@ var AttackProtectionManager = function(options) {
     query: { repeatParams: false }
   };
 
-  var bruteforceProtection = new Auth0RestClient(
+  var bruteForceProtection = new Auth0RestClient(
     options.baseUrl + '/attack-protection/brute-force-protection',
     clientOptions,
     options.tokenProvider
   );
-  this.bruteforceProtection = new RetryRestClient(bruteforceProtection, options.retry);
+  this.bruteForceProtection = new RetryRestClient(bruteForceProtection, options.retry);
 };
 
 /**
  * Get the brute force configuration.
  *
- * @method    getBruteforceConfig
+ * @method    getBruteForceConfig
  * @memberOf  module:management.AttackProtectionManager.prototype
  *
  * @example
- * management.attackProtection.getBruteforceConfig(params, function (err, bruteforceConfig) {
+ * management.attackProtection.getBruteForceConfig(params, function (err, bruteForceConfig) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
  *    // Brute force config
- *    console.log(bruteforceConfig);
+ *    console.log(bruteForceConfig);
  * });
  *
  * @param   {Object}    params            Brute force params (leave empty).
@@ -71,24 +71,24 @@ var AttackProtectionManager = function(options) {
  */
 utils.wrapPropertyMethod(
   AttackProtectionManager,
-  'getBruteforceConfig',
-  'bruteforceProtection.get'
+  'getBruteForceConfig',
+  'bruteForceProtection.get'
 );
 
 /**
  * Update the brute force configuration.
  *
- * @method    updateBruteforceConfig
+ * @method    updateBruteForceConfig
  * @memberOf  module:management.BrandingManager.prototype
  *
  * @example
- * management.attackProtection.updateBruteforceConfig(params, data, function (err, bruteforceConfig) {
+ * management.attackProtection.updateBruteForceConfig(params, data, function (err, bruteForceConfig) {
  *   if (err) {
  *     // Handle error.
  *   }
  *
  * // Brute force config
- *    console.log(bruteforceConfig);
+ *    console.log(bruteForceConfig);
  * });
  *
  * @param   {Object}    params            Brute force params (leave empty).
@@ -99,8 +99,8 @@ utils.wrapPropertyMethod(
  */
 utils.wrapPropertyMethod(
   AttackProtectionManager,
-  'updateBruteforceConfig',
-  'bruteforceProtection.patch'
+  'updateBruteForceConfig',
+  'bruteForceProtection.patch'
 );
 
 module.exports = AttackProtectionManager;
