@@ -1,12 +1,13 @@
 const { expect } = require('chai');
 const nock = require('nock');
+const sinon = require('sinon');
 const { ArgumentError } = require('rest-facade');
 const { SanitizedError } = require('../../src/errors');
 
 const ManagementTokenProvider = require('../../src/management/ManagementTokenProvider');
 
 describe('ManagementTokenProvider', () => {
-  const defaultConfig = {
+  const defaultOptions = {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
     domain: 'auth0-node-sdk.auth0.com',
@@ -14,146 +15,151 @@ describe('ManagementTokenProvider', () => {
   };
 
   it('should expose an instance of ManagementTokenProvider', () => {
-    expect(new ManagementTokenProvider(defaultConfig)).to.exist.to.be.an.instanceOf(
+    expect(new ManagementTokenProvider(defaultOptions)).to.exist.to.be.an.instanceOf(
       ManagementTokenProvider
     );
   });
 
   it('should raise an error when no options object is provided', () => {
-    expect(ManagementTokenProvider).to.throw(ArgumentError, 'Options must be an object');
+    expect(() => {
+      new ManagementTokenProvider();
+    }).to.throw(ArgumentError, 'Options must be an object');
   });
 
   it('should raise an error when domain is not set', () => {
-    const config = Object.assign({}, defaultConfig);
-    delete config.domain;
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = Object.assign({}, defaultOptions);
+    delete options.domain;
 
-    expect(provider).to.throw(ArgumentError, 'Must provide a domain');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'Must provide a domain');
   });
 
   it('should raise an error when domain is not valid', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = '';
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, domain: '' };
 
-    expect(provider).to.throw(ArgumentError, 'Must provide a domain');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'Must provide a domain');
   });
 
   it('should raise an error when clientId is not set', () => {
-    const config = Object.assign({}, defaultConfig);
-    delete config.clientId;
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions };
+    delete options.clientId;
 
-    expect(provider).to.throw(ArgumentError, 'Must provide a clientId');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'Must provide a clientId');
   });
 
   it('should raise an error when clientId is not valid', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.clientId = '';
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, clientId: '' };
 
-    expect(provider).to.throw(ArgumentError, 'Must provide a clientId');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'Must provide a clientId');
   });
 
   it('should raise an error when clientSecret is not set', () => {
-    const config = Object.assign({}, defaultConfig);
-    delete config.clientSecret;
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = Object.assign({}, defaultOptions);
+    delete options.clientSecret;
 
-    expect(provider).to.throw(ArgumentError, 'Must provide a clientSecret');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
 
   it('should raise an error when clientSecret is not valid', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.clientSecret = '';
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, clientSecret: '' };
 
-    expect(provider).to.throw(ArgumentError, 'Must provide a clientSecret');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
 
   it('should raise an error when enableCache is not of type boolean', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.enableCache = 'string';
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, enableCache: 'string' };
 
-    expect(provider).to.throw(ArgumentError, 'enableCache must be a boolean');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'enableCache must be a boolean');
   });
 
   it('should raise an error when scope is not of type string', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.scope = ['foo', 'bar'];
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, scope: ['foo', 'bar'] };
 
-    expect(provider).to.throw(ArgumentError, 'scope must be a string');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'scope must be a string');
   });
 
   it('should set scope to read:users when passed as read:users', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.scope = 'read:users';
-    const provider = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.scope = 'read:users';
+    const provider = new ManagementTokenProvider(options);
     expect(provider.options.scope).to.be.equal('read:users');
   });
 
   it('should set enableCache to true when not specified', () => {
-    const config = Object.assign({}, defaultConfig);
-    delete config.enableCache;
-    const provider = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    delete options.enableCache;
+    const provider = new ManagementTokenProvider(options);
     expect(provider.options.enableCache).to.be.true;
   });
 
   it('should set enableCache to true when passed as true', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.enableCache = true;
-    const provider = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.enableCache = true;
+    const provider = new ManagementTokenProvider(options);
     expect(provider.options.enableCache).to.be.true;
   });
 
   it('should set enableCache to false when passed as false', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.enableCache = false;
-    const provider = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.enableCache = false;
+    const provider = new ManagementTokenProvider(options);
     expect(provider.options.enableCache).to.be.false;
   });
 
   it('should raise an error when the cacheTTLInSeconds is not of type number', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.cacheTTLInSeconds = 'string';
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, cacheTTLInSeconds: 'string' };
 
-    expect(provider).to.throw(ArgumentError, 'cacheTTLInSeconds must be a number');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'cacheTTLInSeconds must be a number');
   });
 
   it('should raise an error when the cacheTTLInSeconds is not a greater than 0', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.cacheTTLInSeconds = -1;
-    const provider = ManagementTokenProvider.bind(null, config);
+    const options = { ...defaultOptions, cacheTTLInSeconds: -1 };
 
-    expect(provider).to.throw(ArgumentError, 'cacheTTLInSeconds must be a greater than 0');
+    expect(() => {
+      new ManagementTokenProvider(options);
+    }).to.throw(ArgumentError, 'cacheTTLInSeconds must be a greater than 0');
   });
 
   it('should set cacheTTLInSeconds to 15 when passed as 15', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.cacheTTLInSeconds = 15;
-    const provider = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.cacheTTLInSeconds = 15;
+    const provider = new ManagementTokenProvider(options);
     expect(provider.options.cacheTTLInSeconds).to.be.equal(15);
   });
 
   it('should set headers when passed into options', () => {
-    const config = Object.assign({}, defaultConfig);
-    config.headers = {
+    const options = Object.assign({}, defaultOptions);
+    options.headers = {
       'User-Agent': 'node.js',
       'Content-Type': 'application/json',
     };
-    const provider = new ManagementTokenProvider(config);
-    expect(provider.options.headers).to.be.equal(config.headers);
+    const provider = new ManagementTokenProvider(options);
+    expect(provider.options.headers).to.be.equal(options.headers);
   });
 
   it('should handle network errors correctly', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'domain';
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'domain';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`).post('/oauth/token').reply(401);
+    nock(`https://${options.domain}`).post('/oauth/token').reply(401);
 
     client.getAccessToken().catch((err) => {
       expect(err).to.exist;
@@ -163,8 +169,8 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should handle unauthorized errors correctly', (done) => {
-    const client = new ManagementTokenProvider(defaultConfig);
-    nock(`https://${defaultConfig.domain}`).post('/oauth/token').reply(401);
+    const client = new ManagementTokenProvider(defaultOptions);
+    nock(`https://${defaultOptions.domain}`).post('/oauth/token').reply(401);
 
     client.getAccessToken().catch((err) => {
       expect(err).to.exist.to.be.an.instanceOf(SanitizedError);
@@ -173,44 +179,52 @@ describe('ManagementTokenProvider', () => {
       nock.cleanAll();
     });
   });
-  function timeout(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-  it('should expire access token from cache by the expires_in setting', async function () {
-    this.timeout(15000); // buffer time to test an artificial delay of 10s
 
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-1.auth0.com';
-    const client = new ManagementTokenProvider(config);
+  it('should expire access token from cache by the expires_in setting', async () => {
+    const clock = sinon.useFakeTimers();
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-1.auth0.com';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`).post('/oauth/token').reply(200, {
+    nock(`https://${options.domain}`).post('/oauth/token').reply(200, {
       access_token: 'token',
       expires_in: 10,
     });
 
-    const access_token = await client.getAccessToken();
+    let getAccessTokenPromise = client.getAccessToken();
+    await clock.runAllAsync();
+    await clock.runAllAsync();
+    await clock.runAllAsync();
+    const access_token = await getAccessTokenPromise;
     expect(access_token).to.exist;
     expect(access_token).to.be.equal('token');
-    await client.getAccessToken();
-    await timeout(10000);
+    getAccessTokenPromise = client.getAccessToken();
+    await clock.runAllAsync();
+    await getAccessTokenPromise;
+    await clock.tickAsync(10000 + 1); // + 1 ms so that the first mocked request can expire
 
-    nock(`https://${config.domain}`).post('/oauth/token').reply(200, {
+    nock(`https://${options.domain}`).post('/oauth/token').reply(200, {
       access_token: 'token2',
       expires_in: 10,
     });
-    const access_token2 = await client.getAccessToken();
+    getAccessTokenPromise = client.getAccessToken();
+    await clock.runAllAsync();
+    await clock.runAllAsync();
+    await clock.runAllAsync();
+    const access_token2 = await getAccessTokenPromise;
     expect(access_token2).to.exist;
     expect(access_token2).to.be.equal('token2');
 
     nock.cleanAll();
+    clock.restore();
   });
 
   it('should return access token', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-1.auth0.com';
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-1.auth0.com';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`).post('/oauth/token').reply(200, {
+    nock(`https://${options.domain}`).post('/oauth/token').reply(200, {
       access_token: 'token',
       expires_in: 3600,
     });
@@ -224,11 +238,11 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should contain correct body payload', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-2.auth0.com';
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-2.auth0.com';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token', (body) => {
         expect(body.client_id).to.equal('clientId');
         expect(body.client_secret).to.equal('clientSecret');
@@ -246,11 +260,11 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should return access token from the cache the second call', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-3.auth0.com';
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-3.auth0.com';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`).post('/oauth/token').once().reply(200, {
+    nock(`https://${options.domain}`).post('/oauth/token').once().reply(200, {
       access_token: 'access_token',
       expires_in: 3600,
     });
@@ -278,11 +292,11 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should request new access token when cache is expired', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-4.auth0.com';
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-4.auth0.com';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token')
       .reply(200, {
         access_token: 'access_token',
@@ -317,12 +331,12 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should return new access token on the second call when cache is disabled', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.enableCache = false;
-    config.domain = 'auth0-node-sdk-3.auth0.com';
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.enableCache = false;
+    options.domain = 'auth0-node-sdk-3.auth0.com';
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token')
       .reply(200, {
         access_token: 'access_token',
@@ -357,12 +371,12 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should return cached access token on the second call when cacheTTLInSeconds is not passed', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-5.auth0.com';
-    config.cacheTTLInSeconds = 10; // 1sec / 40 = 25ms;
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-5.auth0.com';
+    options.cacheTTLInSeconds = 10; // 1sec / 40 = 25ms;
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token')
       .reply(200, {
         access_token: 'access_token',
@@ -395,12 +409,12 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should return new access token on the second call when cacheTTLInSeconds is passed', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.domain = 'auth0-node-sdk-6.auth0.com';
-    config.cacheTTLInSeconds = 1 / 40; // 1sec / 40 = 25ms
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.domain = 'auth0-node-sdk-6.auth0.com';
+    options.cacheTTLInSeconds = 1 / 40; // 1sec / 40 = 25ms
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token')
       .reply(200, {
         access_token: 'access_token',
@@ -433,10 +447,10 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should pass the correct payload in the body of the oauth/token request with cache enabled', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token', (payload) => {
         expect(payload).to.exist;
         expect(payload.client_id).to.be.equal('clientId');
@@ -453,11 +467,11 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should pass the correct payload in the body of the oauth/token request with cache disabled', (done) => {
-    const config = Object.assign({}, defaultConfig);
-    config.enableCache = false;
-    const client = new ManagementTokenProvider(config);
+    const options = Object.assign({}, defaultOptions);
+    options.enableCache = false;
+    const client = new ManagementTokenProvider(options);
 
-    nock(`https://${config.domain}`)
+    nock(`https://${options.domain}`)
       .post('/oauth/token', (payload) => {
         expect(payload).to.exist;
         expect(payload.client_id).to.be.equal('clientId');

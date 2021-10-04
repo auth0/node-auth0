@@ -1,80 +1,76 @@
 const { ArgumentError } = require('rest-facade');
 const AuthenticationClient = require('../auth');
 const memoizer = require('lru-memoizer');
-const es6Promisify = require('es6-promisify');
-
-const DEFAULT_OPTIONS = { enableCache: true };
 
 /**
- * @class ManagementTokenProvider
  * Auth0 Management API Token Provider.
- * @class
- * @memberof module:management
- * @param {object}  options                         Options for the ManagementTokenProvider.
- * @param {string}  options.domain                  ManagementClient server domain.
- * @param {string}  options.clientId                Non Interactive Client Id.
- * @param {string}  options.clientSecret            Non Interactive Client Secret.
- * @param {string}  options.scope                   Non Interactive Client Scope.
- * @param {string}  options.audience                Audience of the Management API.
- * @param {boolean} [options.enableCache=true]      Enabled or Disable Cache
- * @param {number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
- * @param {object}  [options.headers]               Additional headers that will be added to the outgoing requests.
  */
-const ManagementTokenProvider = function (options) {
-  if (!options || typeof options !== 'object') {
-    throw new ArgumentError('Options must be an object');
-  }
-
-  const params = Object.assign({}, DEFAULT_OPTIONS, options);
-
-  if (!params.domain || params.domain.length === 0) {
-    throw new ArgumentError('Must provide a domain');
-  }
-
-  if (!params.clientId || params.clientId.length === 0) {
-    throw new ArgumentError('Must provide a clientId');
-  }
-
-  if (!params.clientSecret || params.clientSecret.length === 0) {
-    throw new ArgumentError('Must provide a clientSecret');
-  }
-
-  if (!params.audience || params.audience.length === 0) {
-    throw new ArgumentError('Must provide a audience');
-  }
-
-  if (typeof params.enableCache !== 'boolean') {
-    throw new ArgumentError('enableCache must be a boolean');
-  }
-
-  if (params.enableCache && params.cacheTTLInSeconds) {
-    if (typeof params.cacheTTLInSeconds !== 'number') {
-      throw new ArgumentError('cacheTTLInSeconds must be a number');
+class ManagementTokenProvider {
+  /**
+   * @param {object}  options                         Options for the ManagementTokenProvider.
+   * @param {string}  options.domain                  ManagementClient server domain.
+   * @param {string}  options.clientId                Non Interactive Client Id.
+   * @param {string}  options.clientSecret            Non Interactive Client Secret.
+   * @param {string}  options.scope                   Non Interactive Client Scope.
+   * @param {string}  options.audience                Audience of the Management API.
+   * @param {boolean} [options.enableCache=true]      Enabled or Disable Cache
+   * @param {number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
+   * @param {object}  [options.headers]               Additional headers that will be added to the outgoing requests.
+   */
+  constructor(options) {
+    if (!options || typeof options !== 'object') {
+      throw new ArgumentError('Options must be an object');
     }
 
-    if (params.cacheTTLInSeconds <= 0) {
-      throw new ArgumentError('cacheTTLInSeconds must be a greater than 0');
+    const params = { enableCache: true, ...options };
+
+    if (!params.domain || params.domain.length === 0) {
+      throw new ArgumentError('Must provide a domain');
     }
-  }
 
-  if (params.scope && typeof params.scope !== 'string') {
-    throw new ArgumentError('scope must be a string');
-  }
+    if (!params.clientId || params.clientId.length === 0) {
+      throw new ArgumentError('Must provide a clientId');
+    }
 
-  this.options = params;
-  const authenticationClientOptions = {
-    domain: this.options.domain,
-    clientId: this.options.clientId,
-    clientSecret: this.options.clientSecret,
-    telemetry: this.options.telemetry,
-    clientInfo: this.options.clientInfo,
-    headers: this.options.headers,
-  };
-  this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
+    if (!params.clientSecret || params.clientSecret.length === 0) {
+      throw new ArgumentError('Must provide a clientSecret');
+    }
 
-  const self = this;
-  this.getCachedAccessToken = es6Promisify.promisify(
-    memoizer({
+    if (!params.audience || params.audience.length === 0) {
+      throw new ArgumentError('Must provide a audience');
+    }
+
+    if (typeof params.enableCache !== 'boolean') {
+      throw new ArgumentError('enableCache must be a boolean');
+    }
+
+    if (params.enableCache && params.cacheTTLInSeconds) {
+      if (typeof params.cacheTTLInSeconds !== 'number') {
+        throw new ArgumentError('cacheTTLInSeconds must be a number');
+      }
+
+      if (params.cacheTTLInSeconds <= 0) {
+        throw new ArgumentError('cacheTTLInSeconds must be a greater than 0');
+      }
+    }
+
+    if (params.scope && typeof params.scope !== 'string') {
+      throw new ArgumentError('scope must be a string');
+    }
+
+    this.options = params;
+    const authenticationClientOptions = {
+      domain: this.options.domain,
+      clientId: this.options.clientId,
+      clientSecret: this.options.clientSecret,
+      telemetry: this.options.telemetry,
+      clientInfo: this.options.clientInfo,
+      headers: this.options.headers,
+    };
+    this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
+
+    const self = this;
+    this.getCachedAccessToken = memoizer({
       load(options, callback) {
         self
           .clientCredentialsGrant(options.domain, options.scope, options.audience)
@@ -103,34 +99,40 @@ const ManagementTokenProvider = function (options) {
         return 60 * 60 * 1000; //1h
       },
       max: 100,
-    })
-  );
-};
-
-/**
- * Returns the access_token.
- *
- * @function    getAccessToken
- * @memberof  module:management.ManagementTokenProvider.prototype
- * @returns {Promise}   Promise returning an access_token.
- */
-ManagementTokenProvider.prototype.getAccessToken = function () {
-  if (this.options.enableCache) {
-    return this.getCachedAccessToken(this.options).then((data) => data.access_token);
-  } else {
-    return this.clientCredentialsGrant(
-      this.options.domain,
-      this.options.scope,
-      this.options.audience
-    ).then((data) => data.access_token);
+    });
   }
-};
 
-ManagementTokenProvider.prototype.clientCredentialsGrant = function (domain, scope, audience) {
-  return this.authenticationClient.clientCredentialsGrant({
-    audience,
-    scope,
-  });
-};
+  /**
+   * Returns the access_token.
+   *
+   * @returns {Promise} Promise returning an access_token.
+   */
+  getAccessToken() {
+    if (this.options.enableCache) {
+      return new Promise((resolve, reject) => {
+        this.getCachedAccessToken(this.options, (error, data) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data.access_token);
+          }
+        });
+      });
+    } else {
+      return this.clientCredentialsGrant(
+        this.options.domain,
+        this.options.scope,
+        this.options.audience
+      ).then((data) => data.access_token);
+    }
+  }
+
+  clientCredentialsGrant(domain, scope, audience) {
+    return this.authenticationClient.clientCredentialsGrant({
+      audience,
+      scope,
+    });
+  }
+}
 
 module.exports = ManagementTokenProvider;
