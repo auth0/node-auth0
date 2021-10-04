@@ -56,7 +56,7 @@ describe('AttackProtectionManager', function() {
     beforeEach(function() {
       this.request = nock(API_URL)
         .get('/attack-protection/brute-force-protection')
-        .reply(200);
+        .reply(200, data);
     });
 
     it('should accept a callback', function(done) {
