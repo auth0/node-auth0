@@ -16,7 +16,8 @@
     "test:coverage": "codecov",
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 ./test/**/*.tests.js ./test/*.tests.js --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     "eslint-plugin-jsdoc": "^36.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.1.0",
     "husky": "^3.0.1",
     "jsdoc": "^3.6.3",
     "json-loader": "^0.5.7",

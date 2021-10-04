@@ -9,6 +9,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:jsdoc/recommended',
     'plugin:node/recommended',
+    'plugin:promise/recommended',
     'plugin:prettier/recommended',
   ],
   plugins: ['jsdoc'],
