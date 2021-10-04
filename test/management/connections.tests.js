@@ -27,19 +27,21 @@ describe('ConnectionsManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(ConnectionsManager).to.throw(ArgumentError, 'Must provide client options');
+      expect(() => {
+        new ConnectionsManager();
+      }).to.throw(ArgumentError, 'Must provide client options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const client = ConnectionsManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new ConnectionsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const client = ConnectionsManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new ConnectionsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
@@ -411,6 +413,51 @@ describe('ConnectionsManager', () => {
 
       this.connections.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#checkStatus', () => {
+    const params = { id: 5 };
+    const data = {
+      id: params.id,
+      name: 'Test connection',
+    };
+
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/connections/${data.id}/status`).reply(200);
+    });
+
+    it('should accept a callback', function (done) {
+      this.connections.checkStatus(params, () => {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function (done) {
+      this.connections.checkStatus(params).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should report success', function (done) {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/connections/${params.id}/status`).reply(200);
+
+      this.connections.checkStatus(params).then((response) => {
+        expect(response).to.exist;
+        done();
+      });
+    });
+
+    it('should report failure', function (done) {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/connections/${params.id}/status`).reply(500);
+
+      this.connections.checkStatus(params).catch((err) => {
+        expect(err).to.exist;
 
         done();
       });
