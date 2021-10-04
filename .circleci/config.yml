@@ -4,7 +4,7 @@ orbs:
 jobs:
   build-and-test:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     environment:
       LANG: en_US.UTF-8
     steps:
@@ -14,6 +14,9 @@ jobs:
           command: 'sudo npm update -g yarn'
       - ship/node-install-packages:
           pkg-manager: yarn
+      - run:
+          name: ESLint
+          command: yarn lint
       - run:
           name: Check
           command: yarn check
