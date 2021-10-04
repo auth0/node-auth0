@@ -51,6 +51,13 @@ var ConnectionsManager = function(options) {
   );
   this.resource = new RetryRestClient(auth0RestClient, options.retry);
 
+  var statusClient = new Auth0RestClient(
+    options.baseUrl + '/connections/:id/status',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.status = new RetryRestClient(statusClient, options.retry);
+
   /**
    * Provides an abstraction layer for consuming the
    * {@link https://auth0.com/docs/api/management/v2#!/Connections/delete_users_by_email
@@ -191,6 +198,34 @@ utils.wrapPropertyMethod(ConnectionsManager, 'update', 'resource.patch');
  * @return  {Promise|undefined}
  */
 utils.wrapPropertyMethod(ConnectionsManager, 'delete', 'resource.delete');
+
+/**
+ * Checks the status of an ad/ldap connection referenced by its ID.
+ *
+ * @method    checkStatus
+ * @memberOf  module:management.OrganizationsManager.prototype
+ *
+ * @example
+ * var params = {id : 'CONNECTION_ID'}
+ * @example <caption>
+ *   This methods takes the connection ID and returns the status when online, or an error when offline.
+ * </caption>
+ *
+ * management.connections.checkStatus( {id : 'CONNECTION_ID'}, function (err, status) {
+ *   if (err) {
+ *     console.log('OFFLINE', err);
+ *   } else {
+ *     console.log('ONLINE', status);
+ *   }
+ * });
+ *
+ * @param   {Object}    params              Connection parameters
+ * @param   {String}    params.id           ID of the Connection.
+ * @param   {Function}  [cb]                Callback function.
+ *
+ * @return  {Promise|undefined}
+ */
+utils.wrapPropertyMethod(ConnectionsManager, 'checkStatus', 'status.get');
 
 /**
  * Delete a connection user by email.

@@ -455,6 +455,60 @@ describe('ConnectionsManager', function() {
     });
   });
 
+  describe('#checkStatus', function() {
+    var params = { id: 5 };
+    var data = {
+      id: params.id,
+      name: 'Test connection'
+    };
+
+    beforeEach(function() {
+      this.request = nock(API_URL)
+        .get('/connections/' + data.id + '/status')
+        .reply(200);
+    });
+
+    it('should accept a callback', function(done) {
+      this.connections.checkStatus(params, function() {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', function(done) {
+      this.connections
+        .checkStatus(params)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should report success', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/connections/' + params.id + '/status')
+        .reply(200);
+
+      this.connections.checkStatus(params).then(function(response) {
+        expect(response).to.exist;
+        done();
+      });
+    });
+
+    it('should report failure', function(done) {
+      nock.cleanAll();
+
+      var request = nock(API_URL)
+        .get('/connections/' + params.id + '/status')
+        .reply(500);
+
+      this.connections.checkStatus(params).catch(function(err) {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+  });
+
   describe('#delete user', function() {
     var id = 5;
     var email = 'user@domain.com';
