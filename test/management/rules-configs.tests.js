@@ -67,35 +67,30 @@ describe('RulesConfigsManager', () => {
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', async function () {
       nock.cleanAll();
 
       const data = [{ key: 'dbconnectionstring' }];
       nock(API_URL).get('/rules-configs').reply(200, data);
 
-      this.rulesConfigs.getAll().then((rulesConfigs) => {
-        expect(rulesConfigs).to.be.an.instanceOf(Array);
+      const rulesConfigs = await this.rulesConfigs.getAll();
+      expect(rulesConfigs).to.be.an.instanceOf(Array);
 
-        expect(rulesConfigs.length).to.equal(data.length);
+      expect(rulesConfigs.length).to.equal(data.length);
 
-        expect(rulesConfigs[0].key).to.equal(data[0].key);
-
-        done();
-      });
+      expect(rulesConfigs[0].key).to.equal(data[0].key);
     });
 
-    it('should perform a GET request to rules-configs', function (done) {
+    it('should perform a GET request to rules-configs', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).get('/rules-configs').reply(200);
 
-      this.rulesConfigs.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.rulesConfigs.getAll();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -103,13 +98,11 @@ describe('RulesConfigsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.rulesConfigs.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.rulesConfigs.getAll();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', async function () {
       nock.cleanAll();
 
       const params = {
@@ -118,11 +111,8 @@ describe('RulesConfigsManager', () => {
       };
       const request = nock(API_URL).get('/rules-configs').query(params).reply(200);
 
-      this.rulesConfigs.getAll(params).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.rulesConfigs.getAll(params);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -157,38 +147,25 @@ describe('RulesConfigsManager', () => {
       });
     });
 
-    it('should perform a PUT request to /rules-configs/{KEY}', function (done) {
+    it('should perform a PUT request to /rules-configs/{KEY}', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).put(`/rules-configs/${this.params.key}`, this.data).reply(200);
 
-      this.rulesConfigs
-        .set(this.params, this.data)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch((err) => {
-          console.error(err);
-          expect.fail();
-          done();
-        });
+      await this.rulesConfigs.set(this.params, this.data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).put(`/rules-configs/${this.params.key}`, this.data).reply(200);
 
-      this.rulesConfigs.set(this.params, this.data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.rulesConfigs.set(this.params, this.data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -196,11 +173,8 @@ describe('RulesConfigsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.rulesConfigs.set(this.params, this.data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.rulesConfigs.set(this.params, this.data);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -215,18 +189,15 @@ describe('RulesConfigsManager', () => {
       this.rulesConfigs.delete({ key }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.rulesConfigs.delete({ key }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.rulesConfigs.delete({ key })).instanceOf(Promise);
     });
 
-    it(`should perform a delete request to /rules-configs/${key}`, function (done) {
+    it(`should perform a delete request to /rules-configs/${key}`, async function () {
       const { request } = this;
 
-      this.rulesConfigs.delete({ key }).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.rulesConfigs.delete({ key });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -241,7 +212,7 @@ describe('RulesConfigsManager', () => {
       });
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -249,11 +220,8 @@ describe('RulesConfigsManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.rulesConfigs.delete({ key }).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.rulesConfigs.delete({ key });
+      expect(request.isDone()).to.be.true;
     });
   });
 });

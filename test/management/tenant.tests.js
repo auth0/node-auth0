@@ -71,33 +71,28 @@ describe('TenantManager', () => {
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', async function () {
       nock.cleanAll();
 
       const data = [{ test: true }];
       nock(API_URL).get('/tenants/settings').reply(200, data);
 
-      this.tenant.getSettings().then((blacklistedTokens) => {
-        expect(blacklistedTokens).to.be.an.instanceOf(Array);
+      const blacklistedTokens = await this.tenant.getSettings();
+      expect(blacklistedTokens).to.be.an.instanceOf(Array);
 
-        expect(blacklistedTokens.length).to.equal(data.length);
+      expect(blacklistedTokens.length).to.equal(data.length);
 
-        expect(blacklistedTokens[0].test).to.equal(data[0].test);
-
-        done();
-      });
+      expect(blacklistedTokens[0].test).to.equal(data[0].test);
     });
 
-    it('should perform a GET request to /api/v2/tenants/settings', function (done) {
+    it('should perform a GET request to /api/v2/tenants/settings', async function () {
       const { request } = this;
 
-      this.tenant.getSettings().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tenant.getSettings();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -105,13 +100,11 @@ describe('TenantManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.tenant.getSettings().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tenant.getSettings();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -122,10 +115,8 @@ describe('TenantManager', () => {
         })
         .reply(200);
 
-      this.tenant.getSettings({ include_fields: true, fields: 'test' }).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tenant.getSettings({ include_fields: true, fields: 'test' });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -159,28 +150,23 @@ describe('TenantManager', () => {
       });
     });
 
-    it('should perform a PATCH request to /api/v2/tenants/settings', function (done) {
+    it('should perform a PATCH request to /api/v2/tenants/settings', async function () {
       const { request } = this;
 
-      this.tenant.updateSettings(data).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tenant.updateSettings(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).patch('/tenants/settings', data).reply(200);
 
-      this.tenant.updateSettings(data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.tenant.updateSettings(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -188,10 +174,8 @@ describe('TenantManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.tenant.updateSettings(data).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tenant.updateSettings(data);
+      expect(request.isDone()).to.be.true;
     });
   });
 });

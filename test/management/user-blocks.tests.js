@@ -68,20 +68,15 @@ describe('UserBlocksManager', () => {
       this.userBlocks.get({ id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.userBlocks.get({ id }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.userBlocks.get({ id })).instanceOf(Promise);
     });
 
-    it(`should perform a get request to /user-blocks/${id}`, function (done) {
+    it(`should perform a get request to /user-blocks/${id}`, async function () {
       const { request } = this;
 
-      this.userBlocks
-        .get({ id })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.get({ id });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -99,7 +94,7 @@ describe('UserBlocksManager', () => {
         .catch(done);
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -107,14 +102,8 @@ describe('UserBlocksManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.userBlocks
-        .get({ id })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.get({ id });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -141,21 +130,15 @@ describe('UserBlocksManager', () => {
       this.userBlocks.delete({ id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.userBlocks.delete({ id }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.userBlocks.delete({ id })).instanceOf(Promise);
     });
 
-    it(`should perform a delete request to /user-blocks/${id}`, function (done) {
+    it(`should perform a delete request to /user-blocks/${id}`, async function () {
       const { request } = this;
 
-      this.userBlocks
-        .delete({ id })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.delete({ id });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -173,7 +156,7 @@ describe('UserBlocksManager', () => {
         .catch(done);
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -181,14 +164,8 @@ describe('UserBlocksManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.userBlocks
-        .delete({ id })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.delete({ id });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -218,21 +195,15 @@ describe('UserBlocksManager', () => {
       this.userBlocks.getByIdentifier({ identifier }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.userBlocks.getByIdentifier({ identifier }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.userBlocks.getByIdentifier({ identifier })).instanceOf(Promise);
     });
 
-    it('should perform a get request to /user-blocks', function (done) {
+    it('should perform a get request to /user-blocks', async function () {
       const { request } = this;
 
-      this.userBlocks
-        .getByIdentifier({ identifier })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.getByIdentifier({ identifier });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -250,7 +221,7 @@ describe('UserBlocksManager', () => {
         .catch(done);
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -259,14 +230,8 @@ describe('UserBlocksManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.userBlocks
-        .getByIdentifier({ identifier })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.getByIdentifier({ identifier });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -296,21 +261,15 @@ describe('UserBlocksManager', () => {
       this.userBlocks.deleteByIdentifier({ identifier }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.userBlocks.deleteByIdentifier({ identifier }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.userBlocks.deleteByIdentifier({ identifier })).instanceOf(Promise);
     });
 
-    it('should perform a delete request to /user-blocks', function (done) {
+    it('should perform a delete request to /user-blocks', async function () {
       const { request } = this;
 
-      this.userBlocks
-        .deleteByIdentifier({ identifier })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.deleteByIdentifier({ identifier });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -328,7 +287,7 @@ describe('UserBlocksManager', () => {
         .catch(done);
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -337,14 +296,8 @@ describe('UserBlocksManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.userBlocks
-        .deleteByIdentifier({ identifier })
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.userBlocks.deleteByIdentifier({ identifier });
+      expect(request.isDone()).to.be.true;
     });
   });
 });

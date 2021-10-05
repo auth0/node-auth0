@@ -84,18 +84,18 @@ describe('Auth0RestClient', () => {
         nock.cleanAll();
       });
     });
-    it('should return a promise if no callback is provided', function (done) {
+    it('should return a promise if no callback is provided', async function () {
       nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
 
       const options = {
         headers: {},
       };
       const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
-      client.get().then((data) => {
-        expect(data).to.deep.equal({ data: 'value' });
-        done();
-        nock.cleanAll();
-      });
+      const returnValue = client.get();
+      expect(returnValue).instanceOf(Promise);
+      const data = await returnValue;
+      expect(data).to.deep.equal({ data: 'value' });
+      nock.cleanAll();
     });
   });
 
@@ -150,7 +150,7 @@ describe('Auth0RestClient', () => {
     });
   });
 
-  it('should return a promise if no callback is given', function (done) {
+  it('should return a promise if no callback is given', async function () {
     nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
 
     const options = {
@@ -158,11 +158,9 @@ describe('Auth0RestClient', () => {
     };
 
     const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
-    client.getAll().then((data) => {
-      expect(data).to.deep.equal({ data: 'value' });
-      done();
-      nock.cleanAll();
-    });
+    const data = await client.getAll();
+    expect(data).to.deep.equal({ data: 'value' });
+    nock.cleanAll();
   });
 
   it('should accept a callback and handle errors', (done) => {
@@ -186,7 +184,7 @@ describe('Auth0RestClient', () => {
     });
   });
 
-  it('should set access token as Authorization header in options object', function (done) {
+  it('should set access token as Authorization header in options object', async function () {
     nock(API_URL).get('/some-resource').reply(200);
 
     const options = {
@@ -194,11 +192,10 @@ describe('Auth0RestClient', () => {
     };
 
     const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
-    client.getAll().then(() => {
-      expect(client.restClient.options.headers['Authorization']).to.be.equal('Bearer access_token');
-      done();
-      nock.cleanAll();
-    });
+    await client.getAll();
+    expect(client.restClient.options.headers['Authorization']).to.be.equal('Bearer access_token');
+
+    nock.cleanAll();
   });
 
   it('should sanitize error when access token is in authorization header', function (done) {

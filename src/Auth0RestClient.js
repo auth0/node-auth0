@@ -45,7 +45,7 @@ class Auth0RestClient {
           if (callback) {
             return callback(err);
           }
-          return Promise.reject(err);
+          throw err;
         });
     };
   }

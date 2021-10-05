@@ -76,16 +76,14 @@ describe('TicketsManager', () => {
       });
     });
 
-    it('should perform a POST request to /api/v2tickets/email-verification', function (done) {
+    it('should perform a POST request to /api/v2tickets/email-verification', async function () {
       const { request } = this;
 
-      this.tickets.verifyEmail(data).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tickets.verifyEmail(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -93,13 +91,11 @@ describe('TicketsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.tickets.verifyEmail({}).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tickets.verifyEmail({});
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -109,11 +105,8 @@ describe('TicketsManager', () => {
         })
         .reply(200);
 
-      this.tickets.verifyEmail({ include_fields: true, fields: 'test' }).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.tickets.verifyEmail({ include_fields: true, fields: 'test' });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -151,28 +144,23 @@ describe('TicketsManager', () => {
       });
     });
 
-    it('should perform a POST request to /api/v2tickets/email-verification', function (done) {
+    it('should perform a POST request to /api/v2tickets/email-verification', async function () {
       const { request } = this;
 
-      this.tickets.changePassword(data).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tickets.changePassword(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).post('/tickets/password-change', data).reply(200);
 
-      this.tickets.changePassword(data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.tickets.changePassword(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -180,10 +168,8 @@ describe('TicketsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.tickets.changePassword(data).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.tickets.changePassword(data);
+      expect(request.isDone()).to.be.true;
     });
   });
 });

@@ -71,33 +71,28 @@ describe('StatsManager', () => {
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', async function () {
       nock.cleanAll();
 
       const data = [{ test: true }];
       nock(API_URL).get('/stats/daily').reply(200, data);
 
-      this.stats.getDaily().then((blacklistedTokens) => {
-        expect(blacklistedTokens).to.be.an.instanceOf(Array);
+      const blacklistedTokens = await this.stats.getDaily();
+      expect(blacklistedTokens).to.be.an.instanceOf(Array);
 
-        expect(blacklistedTokens.length).to.equal(data.length);
+      expect(blacklistedTokens.length).to.equal(data.length);
 
-        expect(blacklistedTokens[0].test).to.equal(data[0].test);
-
-        done();
-      });
+      expect(blacklistedTokens[0].test).to.equal(data[0].test);
     });
 
-    it('should perform a GET request to /api/v2/stats/daily', function (done) {
+    it('should perform a GET request to /api/v2/stats/daily', async function () {
       const { request } = this;
 
-      this.stats.getDaily().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.stats.getDaily();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -105,13 +100,11 @@ describe('StatsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.stats.getDaily().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.stats.getDaily();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -122,10 +115,8 @@ describe('StatsManager', () => {
         })
         .reply(200);
 
-      this.stats.getDaily({ include_fields: true, fields: 'test' }).then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.stats.getDaily({ include_fields: true, fields: 'test' });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -155,28 +146,23 @@ describe('StatsManager', () => {
       });
     });
 
-    it('should perform a GET request to /api/v2/stats/active-users', function (done) {
+    it('should perform a GET request to /api/v2/stats/active-users', async function () {
       const { request } = this;
 
-      this.stats.getActiveUsersCount().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.stats.getActiveUsersCount();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the token data in the body of the request', function (done) {
+    it('should pass the token data in the body of the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).get('/stats/active-users').reply(200);
 
-      this.stats.getActiveUsersCount().then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.stats.getActiveUsersCount();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -184,10 +170,8 @@ describe('StatsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.stats.getActiveUsersCount().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.stats.getActiveUsersCount();
+      expect(request.isDone()).to.be.true;
     });
   });
 });

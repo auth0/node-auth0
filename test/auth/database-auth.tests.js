@@ -84,24 +84,18 @@ describe('DatabaseAuthenticator', () => {
       this.authenticator.signIn(userData, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is provided', function (done) {
-      this.authenticator.signIn(userData).then(done.bind(null, null)).catch(done.bind(null, null));
+    it('should return a promise when no callback is provided', function () {
+      expect(this.authenticator.signIn(userData)).instanceOf(Promise);
     });
 
-    it(`should perform a POST request to ${path}`, function (done) {
+    it(`should perform a POST request to ${path}`, async function () {
       const { request } = this;
 
-      this.authenticator
-        .signIn(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -116,51 +110,33 @@ describe('DatabaseAuthenticator', () => {
         })
         .reply(200);
 
-      this.authenticator
-        .signIn(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
-      this.authenticator
-        .signIn(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should use Username-Password-Authentication by default', function (done) {
+    it('should use Username-Password-Authentication by default', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.connection === 'Username-Password-Authentication')
         .reply(200);
 
-      this.authenticator
-        .signIn(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should allow the user to specify the connection', function (done) {
+    it('should allow the user to specify the connection', async function () {
       nock.cleanAll();
 
       const data = { connection: 'TEST_CONNECTION', ...userData };
@@ -168,34 +144,22 @@ describe('DatabaseAuthenticator', () => {
         .post(path, (body) => body.connection === 'TEST_CONNECTION')
         .reply(200);
 
-      this.authenticator
-        .signIn(data)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should use password as default grant type', function (done) {
+    it('should use password as default grant type', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.grant_type === 'password')
         .reply(200);
 
-      this.authenticator
-        .signIn(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should allow the user to specify the grant type', function (done) {
+    it('should allow the user to specify the grant type', async function () {
       nock.cleanAll();
 
       const data = { grant_type: 'TEST_GRANT', ...userData };
@@ -203,31 +167,19 @@ describe('DatabaseAuthenticator', () => {
         .post(path, (body) => body.grant_type === 'TEST_GRANT')
         .reply(200);
 
-      this.authenticator
-        .signIn(data)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should use the openid scope by default', function (done) {
+    it('should use the openid scope by default', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.scope === 'openid')
         .reply(200);
 
-      this.authenticator
-        .signIn(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signIn(userData);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -285,20 +237,14 @@ describe('DatabaseAuthenticator', () => {
       this.authenticator.signUp(userData).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it(`should perform a POST request to ${path}`, function (done) {
+    it(`should perform a POST request to ${path}`, async function () {
       const { request } = this;
 
-      this.authenticator
-        .signUp(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signUp(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -313,31 +259,19 @@ describe('DatabaseAuthenticator', () => {
         })
         .reply(200);
 
-      this.authenticator
-        .signUp(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signUp(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
-      this.authenticator
-        .signUp(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.signUp(userData);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -398,20 +332,14 @@ describe('DatabaseAuthenticator', () => {
         .catch(done.bind(null, null));
     });
 
-    it(`should perform a POST request to ${path}`, function (done) {
+    it(`should perform a POST request to ${path}`, async function () {
       const { request } = this;
 
-      this.authenticator
-        .changePassword(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.changePassword(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -426,31 +354,19 @@ describe('DatabaseAuthenticator', () => {
         })
         .reply(200);
 
-      this.authenticator
-        .changePassword(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.changePassword(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
-      this.authenticator
-        .changePassword(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.changePassword(userData);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -498,20 +414,14 @@ describe('DatabaseAuthenticator', () => {
         .catch(done.bind(null, null));
     });
 
-    it(`should perform a POST request to ${path}`, function (done) {
+    it(`should perform a POST request to ${path}`, async function () {
       const { request } = this;
 
-      this.authenticator
-        .requestChangePasswordEmail(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.requestChangePasswordEmail(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the user data in the request', function (done) {
+    it('should include the user data in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -526,31 +436,19 @@ describe('DatabaseAuthenticator', () => {
         })
         .reply(200);
 
-      this.authenticator
-        .requestChangePasswordEmail(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.requestChangePasswordEmail(userData);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the Auth0 client ID in the request', function (done) {
+    it('should include the Auth0 client ID in the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
         .post(path, (body) => body.client_id === CLIENT_ID)
         .reply(200);
 
-      this.authenticator
-        .requestChangePasswordEmail(userData)
-        .then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        })
-        .catch(done);
+      await this.authenticator.requestChangePasswordEmail(userData);
+      expect(request.isDone()).to.be.true;
     });
   });
 });

@@ -70,7 +70,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Does nothing when there is no id_token', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({}));
+          return new Promise((resolve) => resolve({}));
         },
       };
       const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
@@ -79,7 +79,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Bypasses validation when options.__bypassIdTokenValidation is true', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({ id_token: 'foobar' }));
+          return new Promise((resolve) => resolve({ id_token: 'foobar' }));
         },
       };
       const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
@@ -90,7 +90,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Calls jwt.verify with token and algs', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({ id_token: 'foobar' }));
+          return new Promise((resolve) => resolve({ id_token: 'foobar' }));
         },
       };
       sinon.stub(jwt, 'verify').callsFake((idtoken, getKey, options) => {
@@ -111,7 +111,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Returns auth result when verify response is successful', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({ id_token: 'foobar' }));
+          return new Promise((resolve) => resolve({ id_token: 'foobar' }));
         },
       };
       sinon.stub(jwt, 'verify').callsFake((idtoken, getKey, options, callback) => {
@@ -133,7 +133,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Returns error when verify response is an error', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({ id_token: 'foobar' }));
+          return new Promise((resolve) => resolve({ id_token: 'foobar' }));
         },
       };
       sinon.stub(jwt, 'verify').callsFake((idtoken, getKey, options, callback) => {
@@ -148,7 +148,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Uses `clientSecret` as key when header.alg === HS256 and there is a user secret', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({ id_token: 'foobar' }));
+          return new Promise((resolve) => resolve({ id_token: 'foobar' }));
         },
       };
       sinon.stub(jwt, 'verify').callsFake((idtoken, getKey) => {
@@ -165,7 +165,7 @@ describe('OAUthWithIDTokenValidation', () => {
     it('Returns unvalidated response when header.alg === HS256 and there is no user secret', (done) => {
       const oauth = {
         create() {
-          return new Promise((res) => res({ id_token: 'foobar' }));
+          return new Promise((resolve) => resolve({ id_token: 'foobar' }));
         },
       };
       const OAUthWithIDTokenValidationProxy = proxyquire(
@@ -193,7 +193,7 @@ describe('OAUthWithIDTokenValidation', () => {
     describe('when header.alg !== HS256', () => {
       it('creates a jwksClient with the correct jwksUri', (done) => {
         const oauth = {
-          create: () => new Promise((res) => res({ id_token: 'foobar' })),
+          create: () => new Promise((resolve) => resolve({ id_token: 'foobar' })),
         };
 
         const jwksClientStub = sinon.spy(() => ({
@@ -220,7 +220,7 @@ describe('OAUthWithIDTokenValidation', () => {
       it('returns the error when available', (done) => {
         const oauth = {
           create() {
-            return new Promise((res) => res({ id_token: 'foobar' }));
+            return new Promise((resolve) => resolve({ id_token: 'foobar' }));
           },
         };
         const jwksClientStub = sinon.spy(() => ({
@@ -245,7 +245,7 @@ describe('OAUthWithIDTokenValidation', () => {
       it('uses the publicKey when available', (done) => {
         const oauth = {
           create() {
-            return new Promise((res) => res({ id_token: 'foobar' }));
+            return new Promise((resolve) => resolve({ id_token: 'foobar' }));
           },
         };
         const jwksClientStub = sinon.spy(() => ({
@@ -271,7 +271,7 @@ describe('OAUthWithIDTokenValidation', () => {
       it('uses the publicKey when both keys (publicKey and rsaPublicKey) available', (done) => {
         const oauth = {
           create() {
-            return new Promise((res) => res({ id_token: 'foobar' }));
+            return new Promise((resolve) => resolve({ id_token: 'foobar' }));
           },
         };
         const jwksClientStub = sinon.spy(() => ({
@@ -297,7 +297,7 @@ describe('OAUthWithIDTokenValidation', () => {
       it('uses the rsaPublicKey when there is no publicKey available', (done) => {
         const oauth = {
           create() {
-            return new Promise((res) => res({ id_token: 'foobar' }));
+            return new Promise((resolve) => resolve({ id_token: 'foobar' }));
           },
         };
         const jwksClientStub = sinon.spy(() => ({
@@ -325,8 +325,8 @@ describe('OAUthWithIDTokenValidation', () => {
       it('fails with a HS256 id_token and `options.supportedAlgorithms===RS256`', (done) => {
         const oauth = {
           create() {
-            return new Promise((res) =>
-              res({
+            return new Promise((resolve) =>
+              resolve({
                 id_token:
                   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuaWNrbmFtZSI6ImpvaG5mb28iLCJuYW1lIjoiam9obmZvb0BnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMzhmYTAwMjQyM2JkOGM5NDFjNmVkMDU4OGI2MGZmZWQ_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZqby5wbmciLCJ1cGRhdGVkX2F0IjoiMjAxOC0wOS0xMlQyMDo1MjoxMS4zMDZaIiwiZW1haWwiOiJqb2huZm9vQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmJydWNrZS5jbHViLyIsInN1YiI6ImF1dGgwfDVhMjA1NGZmNDUxNTc3MTFiZTgxODJmNCIsImF1ZCI6IkVxbjdHTUV3VzhDbmN1S2FhcFRuNWs5VEJ0MzRQdldmIiwiaWF0IjoxNTM2Nzg1NTMxLCJleHAiOjE1MzY4MjE1MzF9.mZGsJyJYyp_mkINcnV0JRJ6QPsTXUE8FrpRTruAIqhE',
               })
@@ -352,8 +352,8 @@ describe('OAUthWithIDTokenValidation', () => {
           });
           const oauth = {
             create() {
-              return new Promise((res) =>
-                res({
+              return new Promise((resolve) =>
+                resolve({
                   id_token: idtoken,
                 })
               );
@@ -387,8 +387,8 @@ describe('OAUthWithIDTokenValidation', () => {
           });
           const oauth = {
             create() {
-              return new Promise((res) =>
-                res({
+              return new Promise((resolve) =>
+                resolve({
                   id_token: idtoken,
                 })
               );
@@ -422,8 +422,8 @@ describe('OAUthWithIDTokenValidation', () => {
             });
             const oauth = {
               create() {
-                return new Promise((res) =>
-                  res({
+                return new Promise((resolve) =>
+                  resolve({
                     id_token: idtoken,
                   })
                 );
@@ -459,8 +459,8 @@ describe('OAUthWithIDTokenValidation', () => {
             });
             const oauth = {
               create() {
-                return new Promise((res) =>
-                  res({
+                return new Promise((resolve) =>
+                  resolve({
                     id_token: idtoken,
                   })
                 );

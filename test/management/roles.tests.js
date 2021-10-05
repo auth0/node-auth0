@@ -82,33 +82,28 @@ describe('RolesManager', () => {
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', async function () {
       nock.cleanAll();
 
       const data = [{ test: true }];
       nock(API_URL).get('/roles').reply(200, data);
 
-      this.roles.getAll().then((credentials) => {
-        expect(credentials).to.be.an.instanceOf(Array);
+      const credentials = await this.roles.getAll();
+      expect(credentials).to.be.an.instanceOf(Array);
 
-        expect(credentials.length).to.equal(data.length);
+      expect(credentials.length).to.equal(data.length);
 
-        expect(credentials[0].test).to.equal(data[0].test);
-
-        done();
-      });
+      expect(credentials[0].test).to.equal(data[0].test);
     });
 
-    it('should perform a GET request to /api/v2/roles', function (done) {
+    it('should perform a GET request to /api/v2/roles', async function () {
       const { request } = this;
 
-      this.roles.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.roles.getAll();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -116,13 +111,11 @@ describe('RolesManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.roles.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      await this.roles.getAll();
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', async function () {
       nock.cleanAll();
 
       const params = {
@@ -131,11 +124,8 @@ describe('RolesManager', () => {
       };
       const request = nock(API_URL).get('/roles').query(params).reply(200);
 
-      this.roles.getAll(params).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.getAll(params);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -160,14 +150,11 @@ describe('RolesManager', () => {
       this.roles.get({ id: this.data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/roles/rol_ID', function (done) {
+    it('should perform a POST request to /api/v2/roles/rol_ID', async function () {
       const { request } = this;
 
-      this.roles.get({ id: this.data.id }).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.get({ id: this.data.id });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -231,26 +218,20 @@ describe('RolesManager', () => {
       });
     });
 
-    it('should perform a POST request to /api/v2/roles', function (done) {
+    it('should perform a POST request to /api/v2/roles', async function () {
       const { request } = this;
 
-      this.roles.create(data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.create(data);
+      expect(request.isDone()).to.be.true;
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).post('/roles', data).reply(200);
 
-      this.roles.create(data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.create(data);
+      expect(request.isDone()).to.be.true;
     });
 
     it('should include the token in the Authorization header', function (done) {
@@ -297,16 +278,13 @@ describe('RolesManager', () => {
       });
     });
 
-    it('should include the new data in the body of the request', function (done) {
+    it('should include the new data in the body of the request', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL).patch(`/roles/${this.data.id}`, this.data).reply(200);
 
-      this.roles.update({ id: 'rol_ID' }, this.data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.update({ id: 'rol_ID' }, this.data);
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -333,18 +311,15 @@ describe('RolesManager', () => {
       this.roles.delete({ id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.roles.delete({ id }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.roles.delete({ id })).instanceOf(Promise);
     });
 
-    it(`should perform a delete request to /roles/${id}`, function (done) {
+    it(`should perform a delete request to /roles/${id}`, async function () {
       const { request } = this;
 
-      this.roles.delete({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.delete({ id });
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -359,7 +334,7 @@ describe('RolesManager', () => {
       });
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -367,11 +342,8 @@ describe('RolesManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.roles.delete({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.delete({ id });
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -388,18 +360,15 @@ describe('RolesManager', () => {
       this.roles.getPermissions(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.roles.getPermissions(data).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function () {
+      expect(this.roles.getPermissions(data)).instanceOf(Promise);
     });
 
-    it('should perform a GET request to /api/v2/roles/rol_ID/permissions', function (done) {
+    it('should perform a GET request to /api/v2/roles/rol_ID/permissions', async function () {
       const { request } = this;
 
-      this.roles.getPermissions(data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.getPermissions(data);
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -414,7 +383,7 @@ describe('RolesManager', () => {
       });
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', async function () {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -422,11 +391,8 @@ describe('RolesManager', () => {
         .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.roles.getPermissions(data).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.getPermissions(data);
+      expect(request.isDone()).to.be.true;
     });
   });
 
@@ -465,14 +431,11 @@ describe('RolesManager', () => {
       });
     });
 
-    it('should perform a POST request to /api/v2/roles/rol_ID/permissions', function (done) {
+    it('should perform a POST request to /api/v2/roles/rol_ID/permissions', async function () {
       const { request } = this;
 
-      this.roles.addPermissions(this.data, {}).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+      await this.roles.addPermissions(this.data, {});
+      expect(request.isDone()).to.be.true;
     });
 
     it('should pass the data in the body of the request', function (done) {

@@ -128,24 +128,26 @@ class JobsManager {
     const headers = { ...options.headers, ...form.getHeaders() };
     headers['Content-Type'] = 'multipart/form-data';
 
-    const promise = options.tokenProvider.getAccessToken().then((access_token) =>
-      axios
-        .post(url, form, { headers: { ...headers, Authorization: `Bearer ${access_token}` } })
-        .catch((err) => {
-          if (!err.response) {
-            return Promise.reject(err);
-          }
+    const promise = options.tokenProvider.getAccessToken().then((access_token) => {
+      try {
+        return axios.post(url, form, {
+          headers: { ...headers, Authorization: `Bearer ${access_token}` },
+        });
+      } catch (err) {
+        if (!err.response) {
+          throw err;
+        }
 
-          const res = err.response;
-          // `superagent` uses the error parameter in callback on http errors.
-          // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
-          const error = new Error(`${'cannot POST' + ' '}${url} (${res.status})`);
-          error.status = res.status;
-          error.method = 'POST';
-          error.text = res.data.message || res.statusText || error.message;
-          return Promise.reject(error);
-        })
-    );
+        const res = err.response;
+        // `superagent` uses the error parameter in callback on http errors.
+        // the following code is intended to keep that behaviour (https://github.com/visionmedia/superagent/blob/master/lib/node/response.js#L170)
+        const error = new Error(`${'cannot POST' + ' '}${url} (${res.status})`);
+        error.status = res.status;
+        error.method = 'POST';
+        error.text = res.data.message || res.statusText || error.message;
+        throw error;
+      }
+    });
 
     // Don't return a promise if a callback was given.
     if (cb && cb instanceof Function) {
