@@ -79,7 +79,7 @@ utils.wrapPropertyMethod(
  * Update the brute force configuration.
  *
  * @method    updateBruteForceConfig
- * @memberOf  module:management.BrandingManager.prototype
+ * @memberOf module:management.AttackProtectionManager.prototype
  *
  * @example
  * management.attackProtection.updateBruteForceConfig(params, data, function (err, bruteForceConfig) {
