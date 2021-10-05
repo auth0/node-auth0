@@ -27,19 +27,21 @@ describe('LogsManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(LogsManager).to.throw(ArgumentError, 'Must provide client options');
+      expect(() => {
+        new LogsManager();
+      }).to.throw(ArgumentError, 'Must provide client options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const client = LogsManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new LogsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const client = LogsManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new LogsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 

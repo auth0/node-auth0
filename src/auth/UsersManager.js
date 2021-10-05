@@ -29,8 +29,6 @@ class UsersManager {
   /**
    * Given an access token get the user profile linked to it.
    *
-   * @function    getInfo
-   * @memberof  module:auth.UsersManager.prototype
    * @example <caption>
    *   Get the user information based on the Auth0 access token (obtained during
    *   login). Find more information in the
@@ -82,8 +80,6 @@ class UsersManager {
   /**
    * Impersonate the user with the given user ID.
    *
-   * @function    impersonate
-   * @memberof  module:auth.UsersManager.prototype
    * @example <caption>
    *   Gets a link that can be used once to log in as a specific user. Useful for
    *   troubleshooting. Find more information in the

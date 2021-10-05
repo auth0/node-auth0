@@ -3,21 +3,12 @@ const Auth0RestClient = require('../Auth0RestClient');
 const RetryRestClient = require('../RetryRestClient');
 
 /**
- * Simple facade for consuming a REST API endpoint.
- *
- * @external RestClient
- * {@link https://github.com/ngonzalvez/rest-facade}
- */
-
-/**
  * {@link https://auth0.com/docs/api/v2#!/Actions/get_actions Actions} provide a way to extend
  * Auth0 flows with custom logic.
  * See the {@link https://auth0.com/docs/actions Actions documentation} for more information.
  */
 class ActionsManager {
   /**
-   * @class
-   * @memberof module:management
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
    * @param {object} [options.headers]  Headers to be included in all requests.
@@ -113,8 +104,6 @@ class ActionsManager {
   /**
    * Get all Triggers.
    *
-   * @function    getAllTriggers
-   * @memberof  module:management.ActionsManager.prototype
    * @example <caption>
    *   This method takes an optional object as first argument that may be used to
    *   specify pagination settings. If pagination options are not present,
@@ -148,8 +137,6 @@ class ActionsManager {
   /**
    * Update the actions bound to a trigger .
    *
-   * @function    updateTriggerBindings
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var data = { bindings: [{ id_type: "action_id", id_value: ACTION_ID1},{id_type: "action_name", id_value: ACTION_NAME2}];
    * var params = { trigger_id: TRIGGER_ID };
@@ -181,8 +168,6 @@ class ActionsManager {
   /**
    * Get the actions bound to a trigger .
    *
-   * @function    getTriggerBindings
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var params = { trigger_id: TRIGGER_ID };
    *
@@ -212,8 +197,6 @@ class ActionsManager {
   /**
    * Create a new Action.
    *
-   * @function    create
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * management.actions.create(data, function (err) {
    *   if (err) {
@@ -233,8 +216,6 @@ class ActionsManager {
   /**
    * Get all actions.
    *
-   * @function    getAll
-   * @memberof  module:management.ActionsManager.prototype
    * @example <caption>
    *   This method takes an optional object as first argument that may be used to
    *   specify pagination settings. If pagination options are not present,
@@ -266,8 +247,6 @@ class ActionsManager {
   /**
    * Get an Auth0 action.
    *
-   * @function    get
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * management.actions.get({ id: ACTION_ID }, function (err, action) {
    *   if (err) {
@@ -299,8 +278,6 @@ class ActionsManager {
   /**
    * Update an existing action.
    *
-   * @function    update
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var data = { name: 'new-name' };
    * var params = { id: ACTION_ID };
@@ -346,8 +323,6 @@ class ActionsManager {
   /**
    * Delete an existing action. Deleting an Action deletes all the action's versions
    *
-   * @function    delete
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * management.actions.delete({ id: ACTION_ID }, function (err) {
    *   if (err) {
@@ -379,8 +354,6 @@ class ActionsManager {
   /**
    * test an Action.
    *
-   * @function    test
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var params = { id: ACTION_ID};
    * management.actions.test(params, payload, function (err) {
@@ -414,8 +387,6 @@ class ActionsManager {
    * deploy an Action.
    * The action must be in a state of 'built' before it can be deployed.
    *
-   * @function    deploy
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var params = { id: ACTION_ID};
    * mangement.actions.deploy(params, function (err, actionVersion) {
@@ -446,8 +417,6 @@ class ActionsManager {
   /**
    * Get all action versions
    *
-   * @function    getVersions
-   * @memberof  module:management.ActionsManager.prototype
    * @example <caption>
    *   This method takes an optional object as first argument that may be used to
    *   specify pagination settings. If pagination options are not present,
@@ -487,8 +456,6 @@ class ActionsManager {
   /**
    * Get an Action Version.
    *
-   * @function    getVersion
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var params = { id: ACTION_ID, version_id: VERSION_ID };
    * management.actions.getVersion(params, function (err, actionVersion) {
@@ -523,8 +490,6 @@ class ActionsManager {
    * this operation is supported as a way of creating versions without
    * updating the action's code (which can be useful in some CI/CD scenarios).
    *
-   * @function    createVersion
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var params = { id: ACTION_ID };
    * management.actions.createActionVersion(params, data, function (err, actionVersion) {
@@ -556,8 +521,6 @@ class ActionsManager {
   /**
    * deploy an Action Version to roll back to a previous version.
    *
-   * @function    deployVersion
-   * @memberof  module:management.ActionsManager.prototype
    * @example
    * var params = { id: ACTION_ID, version_id: VERSION_ID };
    * management.actions.deployVersion(params, function (err, actionVersion) {
@@ -589,8 +552,6 @@ class ActionsManager {
   /**
    * Get an execution by ID.
    *
-   * @function    getExecution
-   * @memberof  module:management.ActionExecutionsManager.prototype
    * @example
    * management.actions.getExecution({ execution_id: EXECUTION_ID }, function (err, action) {
    *   if (err) {

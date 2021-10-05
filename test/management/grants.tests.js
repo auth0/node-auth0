@@ -33,19 +33,21 @@ describe('GrantsManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(GrantsManager).to.throw(ArgumentError, 'Must provide client options');
+      expect(() => {
+        new GrantsManager();
+      }).to.throw(ArgumentError, 'Must provide client options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const grants = GrantsManager.bind(null, {});
-
-      expect(grants).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new GrantsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const grants = GrantsManager.bind(null, { baseUrl: '' });
-
-      expect(grants).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new GrantsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 

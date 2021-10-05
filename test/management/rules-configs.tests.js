@@ -27,19 +27,21 @@ describe('RulesConfigsManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(RulesConfigsManager).to.throw(ArgumentError, 'Must provide manager options');
+      expect(() => {
+        new RulesConfigsManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const client = RulesConfigsManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new RulesConfigsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const client = RulesConfigsManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new RulesConfigsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 

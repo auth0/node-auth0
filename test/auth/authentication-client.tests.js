@@ -16,16 +16,15 @@ const { ensureProperty } = require('../utils');
 describe('AuthenticationClient', () => {
   describe('#constructor', () => {
     it('should raise an error when no options object is provided', () => {
-      expect(AuthenticationClient).to.throw(
-        ArgumentError,
-        'Authentication Client SDK options must be an object'
-      );
+      expect(() => {
+        new AuthenticationClient();
+      }).to.throw(ArgumentError, 'Authentication Client SDK options must be an object');
     });
 
     it('should raise an error when the domain is not valid', () => {
-      const client = AuthenticationClient.bind(null, { token: 'token', domain: '' });
-
-      expect(client).to.throw(ArgumentError, 'Must provide a domain');
+      expect(() => {
+        new AuthenticationClient({ token: 'token', domain: '' });
+      }).to.throw(ArgumentError, 'Must provide a domain');
     });
   });
 

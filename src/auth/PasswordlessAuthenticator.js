@@ -55,8 +55,6 @@ class PasswordlessAuthenticator {
   /**
    * Sign in with the given user credentials.
    *
-   * @function    signIn
-   * @memberof  module:auth.PasswordlessAuthenticator.prototype
    * @example <caption>
    * Once you have a verification code, use this endpoint to login
    * the user with their phone number/email and verification code.
@@ -159,8 +157,6 @@ class PasswordlessAuthenticator {
   /**
    * Start passwordless flow sending an email.
    *
-   * @function    sendEmail
-   * @memberof  module:auth.PasswordlessAuthenticator.prototype
    * @example <caption>
    *   Given the user `email` address, it will send an email with:
    *
@@ -235,8 +231,6 @@ class PasswordlessAuthenticator {
   /**
    * Start passwordless flow sending an SMS.
    *
-   * @function    sendSMS
-   * @memberof  module:auth.PasswordlessAuthenticator.prototype
    * @example <caption>
    *   Given the user `phone_number`, it will send a SMS message with a
    *   verification code. You can then authenticate with this user using the

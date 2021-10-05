@@ -795,7 +795,7 @@ class UsersManager {
    * });
    * @param   {object}    params       params object
    * @param   {string}    params.id    user_id
-   * @param   {string}    data         data object containing list of permission IDs
+   * @param   {object}    data         data object containing list of permission IDs
    * @param   {string}    data.permissions  Array of permission IDs
    * @param   {Function}  [cb]                  Callback function.
    * @returns  {Promise|undefined}

@@ -26,28 +26,6 @@ const generateClientInfo = () => ({
   },
 });
 
-/**
- * Simple wrapper that, given a class, a property name and a method name,
- * creates a new method in the class that is a wrapper for the given
- * property method.
- */
-
-const wrapPropertyMethod = (Parent, name, propertyMethod) => {
-  const path = propertyMethod.split('.');
-  if (path.length > 2) {
-    throw new Error('wrapPropertyMethod() only supports one level of nesting for propertyMethod');
-  }
-  const property = path.shift();
-  const method = path.pop();
-
-  Object.defineProperty(Parent.prototype, name, {
-    enumerable: false,
-    get() {
-      return this[property][method].bind(this[property]);
-    },
-  });
-};
-
 const containsUnsafeChars = (s) => {
   const safeChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*'(),%";
   return !!s.split('').find((c) => !safeChars.includes(c));
@@ -76,7 +54,6 @@ const sanitizeArguments = function (optionsCandidate, cbCandidate) {
 module.exports = {
   jsonToBase64,
   generateClientInfo,
-  wrapPropertyMethod,
   containsUnsafeChars,
   maybeDecode,
   sanitizeArguments,

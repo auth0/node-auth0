@@ -7,7 +7,6 @@ const RestClient = require('rest-facade').Client;
  */
 class DatabaseAuthenticator {
   /**
-   * @memberof module:auth
    * @param  {object}              options            Authenticator options.
    * @param  {string}              options.baseUrl    The auth0 account URL.
    * @param  {string}              [options.clientId] Default client ID.
@@ -40,8 +39,6 @@ class DatabaseAuthenticator {
   /**
    * Sign in using a database or active directory service.
    *
-   * @function    signIn
-   * @memberof  module:auth.DatabaseAuthenticator.prototype
    * @example <caption>
    *   Given the user credentials and the connection specified, it will do the
    *   authentication on the provider and return a JSON with the `access_token`
@@ -94,8 +91,6 @@ class DatabaseAuthenticator {
   /**
    * Sign up using a database or active directory service.
    *
-   * @function    signUp
-   * @memberof  module:auth.DatabaseAuthenticator.prototype
    * @example <caption>
    *   Given the user credentials, the connection specified and (optionally) the
    *   client ID, it will create a new user. Find more information in the
@@ -159,8 +154,6 @@ class DatabaseAuthenticator {
   /**
    * Change password using a database or active directory service.
    *
-   * @function    changePassword
-   * @memberof  module:auth.DatabaseAuthenticator.prototype
    * @example <caption>
    *   Given the user email, the connection specified and the new password to
    *   use, Auth0 will send a forgot password email. Once the user clicks on the
@@ -226,8 +219,6 @@ class DatabaseAuthenticator {
   /**
    * Request a change password email using a database or active directory service.
    *
-   * @function    requestChangePasswordEmail
-   * @memberof  module:auth.DatabaseAuthenticator.prototype
    * @example <caption>
    *   Given the user email, the connection specified, Auth0 will send a change
    *   password email. once the user clicks on the confirm password change link,

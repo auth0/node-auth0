@@ -61,11 +61,11 @@ describe('OAUthWithIDTokenValidation', () => {
         create(params, data) {
           expect(params).to.be.equal(PARAMS);
           expect(data).to.be.equal(DATA);
-          return new Promise((res) => res({}));
+          done();
         },
       };
       const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {});
-      oauthWithValidation.create(PARAMS, DATA, done);
+      oauthWithValidation.create(PARAMS, DATA);
     });
     it('Does nothing when there is no id_token', (done) => {
       const oauth = {

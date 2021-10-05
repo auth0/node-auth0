@@ -33,22 +33,21 @@ describe('ResourceServersManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(ResourceServersManager).to.throw(
-        ArgumentError,
-        'Must provide resource server options'
-      );
+      expect(() => {
+        new ResourceServersManager();
+      }).to.throw(ArgumentError, 'Must provide resource server options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const resourceServerManager = ResourceServersManager.bind(null, {});
-
-      expect(resourceServerManager).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new ResourceServersManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const resourceServerManager = ResourceServersManager.bind(null, { baseUrl: '' });
-
-      expect(resourceServerManager).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new ResourceServersManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 

@@ -55,5 +55,6 @@ module.exports = {
     'jsdoc/require-returns-description': 'off',
     'jsdoc/no-undefined-types': 'off',
     'jsdoc/require-param': 'off',
+    'jsdoc/check-param-names': 'off',
   },
 };

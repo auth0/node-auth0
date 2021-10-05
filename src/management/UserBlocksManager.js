@@ -3,13 +3,6 @@ const Auth0RestClient = require('../Auth0RestClient');
 const RetryRestClient = require('../RetryRestClient');
 
 /**
- * Simple facade for consuming a REST API endpoint.
- *
- * @external RestClient
- * @see https://github.com/ngonzalvez/rest-facade
- */
-
-/**
  * Abstracts interaction with the user-blocks endpoint.
  */
 class UserBlocksManager {
@@ -59,8 +52,6 @@ class UserBlocksManager {
   /**
    * Get user blocks by id.
    *
-   * @function    get
-   * @memberof  module:management.UserBlocksManager.prototype
    * @example
    * management.userBlocks.get({ id: USER_ID }, function (err, blocks) {
    *   if (err) {
@@ -85,8 +76,6 @@ class UserBlocksManager {
   /**
    * Unblock an user by its id.
    *
-   * @function    delete
-   * @memberof  module:management.UserBlocksManager.prototype
    * @example
    * management.userBlocks.delete({ id: USER_ID }, function (err) {
    *   if (err) {
@@ -111,8 +100,6 @@ class UserBlocksManager {
   /**
    * Get user blocks by identifier.
    *
-   * @function    getByIdentifier
-   * @memberof  module:management.UserBlocksManager.prototype
    * @example
    * management.userBlocks.getByIdentifier({ identifier: USER_ID }, function (err, blocks) {
    *   if (err) {
@@ -137,8 +124,6 @@ class UserBlocksManager {
   /**
    * Unblock an user by identifier.
    *
-   * @function    deleteByIdentifier
-   * @memberof  module:management.UserBlocksManager.prototype
    * @example
    * management.userBlocks.deleteByIdentifier({ identifier: USER_ID }, function (err) {
    *   if (err) {

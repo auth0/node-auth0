@@ -2,7 +2,7 @@
  * Simple facade for consuming a REST API endpoint.
  *
  * @external RestClient
- * @see https://github.com/ngonzalvez/rest-facade
+ * {@link https://github.com/ngonzalvez/rest-facade}
  */
 
 module.exports = {

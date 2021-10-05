@@ -74,8 +74,6 @@ class ConnectionsManager {
   /**
    * Create a new connection.
    *
-   * @function    create
-   * @memberof  module:management.ConnectionsManager.prototype
    * @example
    * management.connections.create(data, function (err) {
    *   if (err) {
@@ -95,8 +93,6 @@ class ConnectionsManager {
   /**
    * Get all connections.
    *
-   * @function    getAll
-   * @memberof  module:management.ConnectionsManager.prototype
    * @example <caption>
    *   This method takes an optional object as first argument that may be used to
    *   specify pagination settings. If pagination options are not present,
@@ -125,8 +121,6 @@ class ConnectionsManager {
   /**
    * Get an Auth0 connection.
    *
-   * @function    get
-   * @memberof  module:management.ConnectionsManager.prototype
    * @example
    * management.connections.get({ id: CONNECTION_ID }, function (err, connection) {
    *   if (err) {
@@ -147,8 +141,6 @@ class ConnectionsManager {
   /**
    * Update an existing connection.
    *
-   * @function    update
-   * @memberof  module:management.ConnectionsManager.prototype
    * @example
    * var data = { name: 'newConnectionName' };
    * var params = { id: CONNECTION_ID };
@@ -173,8 +165,6 @@ class ConnectionsManager {
   /**
    * Delete an existing connection.
    *
-   * @function    delete
-   * @memberof  module:management.ConnectionsManager.prototype
    * @example
    * management.connections.delete({ id: CONNECTION_ID }, function (err) {
    *   if (err) {
@@ -195,8 +185,6 @@ class ConnectionsManager {
   /**
    * Checks the status of an ad/ldap connection referenced by its ID.
    *
-   * @function    checkStatus
-   * @memberOf  module:management.OrganizationsManager.prototype
    * @example
    * var params = {id : 'CONNECTION_ID'}
    * @example <caption>
@@ -222,8 +210,6 @@ class ConnectionsManager {
   /**
    * Delete a connection user by email.
    *
-   * @function    delete
-   * @memberof  module:management.ConnectionsManager.prototype
    * @example
    * management.connections.deleteUserByEmail({ id: CONNECTION_ID, email:USER_EMAIL }, function (err) {
    *   if (err) {

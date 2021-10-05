@@ -9,8 +9,9 @@ const RetryRestClient = require('../src/RetryRestClient');
 const API_URL = 'https://tenant.auth0.com';
 
 describe('RetryRestClient', () => {
-  before(function () {
-    this.restClient = new RestClient(API_URL);
+  let restClient;
+  before(() => {
+    restClient = new RestClient(API_URL);
   });
 
   it('should raise an error when no RestClient is provided', () => {
@@ -44,10 +45,10 @@ describe('RetryRestClient', () => {
     });
   });
 
-  it('should pass data to callback when provided', function (done) {
+  it('should pass data to callback when provided', (done) => {
     nock(API_URL).get('/').reply(200, { success: true });
 
-    const client = new RetryRestClient(this.restClient);
+    const client = new RetryRestClient(restClient);
     client.getAll((err, data) => {
       expect(err).to.null;
       expect(data.success).to.be.true;
@@ -55,20 +56,18 @@ describe('RetryRestClient', () => {
     });
   });
 
-  it('should return promise for successful request when no callback is provided', function (done) {
+  it('should return promise for successful request when no callback is provided', async () => {
     nock(API_URL).get('/').reply(200, { success: true });
 
-    const client = new RetryRestClient(this.restClient);
-    client.getAll().then((data) => {
-      expect(data.success).to.be.true;
-      done();
-    });
+    const client = new RetryRestClient(restClient);
+    const data = await client.getAll();
+    expect(data.success).to.be.true;
   });
 
-  it('should pass err to callback when provided', function (done) {
+  it('should pass err to callback when provided', (done) => {
     nock(API_URL).get('/').reply(500);
 
-    const client = new RetryRestClient(this.restClient);
+    const client = new RetryRestClient(restClient);
     client.getAll((err) => {
       expect(err).to.not.null;
       expect(err.statusCode).to.be.equal(500);
@@ -76,45 +75,42 @@ describe('RetryRestClient', () => {
     });
   });
 
-  it('should return promise for failed request when no callback is provided', function (done) {
+  it('should return promise for failed request when no callback is provided', async () => {
     nock(API_URL).get('/').reply(500);
 
-    const client = new RetryRestClient(this.restClient);
-    client.getAll().catch((err) => {
+    const client = new RetryRestClient(restClient);
+    try {
+      await client.getAll();
+    } catch (err) {
       expect(err).to.not.null;
       expect(err.statusCode).to.be.equal(500);
-      done();
-    });
+    }
   });
 
-  it('should retry once when an error is returned', function (done) {
-    const self = this;
+  it('should retry once when an error is returned', async () => {
     let timesCalled = 0;
     const restClientSpy = {
       getAll(...args) {
         timesCalled += 1;
-        return self.restClient.getAll(args);
+        return restClient.getAll(args);
       },
     };
 
     nock(API_URL).get('/').reply(429, { success: false }).get('/').reply(200, { success: true });
 
     const client = new RetryRestClient(restClientSpy);
-    client.getAll().then((data) => {
-      expect(data.success).to.be.true;
-      expect(timesCalled).to.be.equal(2);
-      done();
-    });
+    const data = await client.getAll();
+    expect(data.success).to.be.true;
+    expect(timesCalled).to.be.equal(2);
   });
 
-  it('should try 4 times when request fails 3 times', function (done) {
-    const self = this;
+  it('should try 4 times when request fails 3 times', async () => {
     const clock = sinon.useFakeTimers();
     let timesCalled = 0;
     const restClientSpy = {
       getAll(...args) {
         timesCalled += 1;
-        return self.restClient.getAll(...args).finally(() => {
+        return restClient.getAll(...args).finally(() => {
           clock.runAllAsync();
         });
       },
@@ -128,22 +124,19 @@ describe('RetryRestClient', () => {
       .reply(200, { success: true });
 
     const client = new RetryRestClient(restClientSpy);
-    client.getAll().then((data) => {
-      clock.restore();
-      expect(data.success).to.be.true;
-      expect(timesCalled).to.be.equal(4);
-      done();
-    });
+    const data = await client.getAll();
+    clock.restore();
+    expect(data.success).to.be.true;
+    expect(timesCalled).to.be.equal(4);
   });
 
-  it('should retry 2 times and fail when maxRetries is exceeded', function (done) {
-    const self = this;
+  it('should retry 2 times and fail when maxRetries is exceeded', async () => {
     const clock = sinon.useFakeTimers();
     let timesCalled = 0;
     const restClientSpy = {
       getAll(...args) {
         timesCalled += 1;
-        return self.restClient.getAll(...args).finally(() => {
+        return restClient.getAll(...args).finally(() => {
           clock.runAllAsync();
         });
       },
@@ -152,27 +145,28 @@ describe('RetryRestClient', () => {
     nock(API_URL).get('/').times(4).reply(429, { success: false });
 
     const client = new RetryRestClient(restClientSpy, { maxRetries: 3 });
-    client.getAll().catch((err) => {
+    try {
+      await client.getAll();
+    } catch (err) {
       clock.restore();
       expect(err).to.not.null;
       expect(timesCalled).to.be.equal(4); // Initial call + 3 retires.
-      done();
-    });
+    }
   });
 
-  it('should not retry when status code is not 429', function (done) {
+  it('should not retry when status code is not 429', async () => {
     nock(API_URL).get('/').reply(500);
 
-    const client = new RetryRestClient(this.restClient);
-    client.getAll().catch((err) => {
+    const client = new RetryRestClient(restClient);
+    try {
+      await client.getAll();
+    } catch (err) {
       expect(err).to.not.null;
       expect(err.statusCode).to.be.equal(500);
-      done();
-    });
+    }
   });
 
-  it('should delay the retry using exponential backoff and succeed after retry', function (done) {
-    const self = this;
+  it('should delay the retry using exponential backoff and succeed after retry', async () => {
     const clock = sinon.useFakeTimers();
     const backoffs = [];
     let prev = 0;
@@ -181,7 +175,7 @@ describe('RetryRestClient', () => {
         const now = new Date().getTime();
         backoffs.push(now - prev);
         prev = now;
-        return self.restClient.getAll(...args).finally(() => {
+        return restClient.getAll(...args).finally(() => {
           clock.runAllAsync();
         });
       },
@@ -196,42 +190,40 @@ describe('RetryRestClient', () => {
 
     const client = new RetryRestClient(restClientSpy, { maxRetries: 10 });
 
-    client.getAll().then((data) => {
-      clock.restore();
-      expect(data.success).to.be.true;
-      expect(backoffs.length).to.be.equal(10);
+    const data = await client.getAll();
+    clock.restore();
+    expect(data.success).to.be.true;
+    expect(backoffs.length).to.be.equal(10);
 
-      expect(backoffs.shift()).to.be.equal(0, 'first request should happen immediately');
-      for (let i = 0; i < backoffs.length; i++) {
-        expect(backoffs[i] / 1000).to.be.within(
-          Math.pow(2, i),
-          2 * Math.pow(2, i),
-          `attempt ${i + 1} in secs`
-        );
-      }
-      done();
-    });
+    expect(backoffs.shift()).to.be.equal(0, 'first request should happen immediately');
+    for (let i = 0; i < backoffs.length; i++) {
+      expect(backoffs[i] / 1000).to.be.within(
+        Math.pow(2, i),
+        2 * Math.pow(2, i),
+        `attempt ${i + 1} in secs`
+      );
+    }
   });
 
-  it('should not retry when retry functionality is disabled', function (done) {
-    const self = this;
+  it('should not retry when retry functionality is disabled', async () => {
     let timesCalled = 0;
     const restClientSpy = {
       getAll(...args) {
         timesCalled += 1;
-        return self.restClient.getAll(...args);
+        return restClient.getAll(...args);
       },
     };
 
     nock(API_URL).get('/').reply(429, { success: false });
 
     const client = new RetryRestClient(restClientSpy, { enabled: false });
-    client.getAll().catch((err) => {
+    try {
+      await client.getAll();
+    } catch (err) {
       expect(err).to.not.null;
       expect(err.statusCode).to.be.equal(429);
       expect(timesCalled).to.be.equal(1);
-      done();
-    });
+    }
   });
 
   it('should remove callback from arguments object if data is passed', (done) => {

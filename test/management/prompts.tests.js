@@ -27,19 +27,21 @@ describe('PromptsManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(PromptsManager).to.throw(ArgumentError, 'Must provide manager options');
+      expect(() => {
+        new PromptsManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const client = PromptsManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new PromptsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const client = PromptsManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new PromptsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 

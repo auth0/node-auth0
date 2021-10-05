@@ -37,19 +37,21 @@ describe('EmailTemplatesManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(EmailTemplatesManager).to.throw(ArgumentError, 'Must provide manager options');
+      expect(() => {
+        new EmailTemplatesManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const client = EmailTemplatesManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
+      expect(() => {
+        new EmailTemplatesManager({});
+      }).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const client = EmailTemplatesManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
+      expect(() => {
+        new EmailTemplatesManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'Must provide a valid string as base URL for the API');
     });
   });
 

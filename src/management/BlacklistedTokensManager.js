@@ -54,8 +54,6 @@ class BlacklistedTokensManager {
   /**
    * Blacklist a new token.
    *
-   * @function    add
-   * @memberof  module:management.BlacklistedTokensManager.prototype
    * @example
    * var token = {
    *  aud: 'aud',
@@ -82,8 +80,6 @@ class BlacklistedTokensManager {
   /**
    * Get all blacklisted tokens.
    *
-   * @function    getAll
-   * @memberof  module:management.BlacklistedTokensManager.prototype
    * @example
    * management.blacklistedTokens.getAll(function (err, tokens) {
    *   console.log(tokens.length);

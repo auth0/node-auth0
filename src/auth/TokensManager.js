@@ -30,8 +30,6 @@ class TokensManager {
   /**
    * Given an ID token get the user profile linked to it.
    *
-   * @function   getInfo
-   * @memberof module:auth.TokensManager.prototype
    * @example <caption>
    *   Validates a JSON Web Token (signature and expiration) and returns the user
    *   information associated with the user id (sub property) of the token. Find
@@ -82,8 +80,6 @@ class TokensManager {
    * Exchange the token of the logged in user with a token that is valid to call
    * the API (signed with the API secret).
    *
-   * @function   getDelegationToken
-   * @memberof module:auth.TokensManager.prototype
    * @example <caption>
    *   Given an existing token, this endpoint will generate a new token signed
    *   with the target client secret. This is used to flow the identity of the
@@ -170,8 +166,6 @@ class TokensManager {
   /**
    * Proactively revoke an issued refresh token.
    *
-   * @function   revokeRefreshToken
-   * @memberof module:auth.TokensManager.prototype
    * @example <caption>
    *   Given an existing refresh token, this endpoint will revoke it in order
    *   to prevent unauthorized silently user authentication tokens refresh.

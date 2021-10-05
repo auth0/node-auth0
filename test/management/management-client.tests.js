@@ -56,50 +56,54 @@ describe('ManagementClient', () => {
   });
 
   it('should raise an error when no options object is provided', () => {
-    expect(ManagementClient).to.throw(
-      ArgumentError,
-      'Management API SDK options must be an object'
-    );
+    expect(() => {
+      new ManagementClient();
+    }).to.throw(ArgumentError, 'Management API SDK options must be an object');
   });
 
   it('should raise an error when the domain is not set', () => {
-    const config = Object.assign({}, withTokenConfig);
-    delete config.domain;
-    const client = ManagementClient.bind(null, config);
+    const options = Object.assign({}, withTokenConfig);
+    delete options.domain;
 
-    expect(client).to.throw(ArgumentError, 'Must provide a domain');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a domain');
   });
 
   it('should raise an error when the domain is not valid', () => {
-    const config = Object.assign({}, withTokenConfig);
-    config.domain = '';
-    const client = ManagementClient.bind(null, config);
+    const options = Object.assign({}, withTokenConfig);
+    options.domain = '';
 
-    expect(client).to.throw(ArgumentError, 'Must provide a domain');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a domain');
   });
 
   it('should raise an error when the token is not valid', () => {
-    const config = Object.assign({}, withTokenConfig);
-    config.token = '';
-    const client = ManagementClient.bind(null, config);
+    const options = Object.assign({}, withTokenConfig);
+    options.token = '';
 
-    expect(client).to.throw(ArgumentError, 'Must provide a token');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a token');
   });
 
   it('should raise an error when the token and clientId are not set', () => {
-    const config = Object.assign({}, withTokenProviderConfig);
-    delete config.clientId;
-    const client = ManagementClient.bind(null, config);
+    const options = Object.assign({}, withTokenProviderConfig);
+    delete options.clientId;
 
-    expect(client).to.throw(ArgumentError, 'Must provide a clientId');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a clientId');
   });
 
   it('should raise an error when the token and clientSecret are not set', () => {
-    const config = Object.assign({}, withTokenProviderConfig);
-    delete config.clientSecret;
-    const client = ManagementClient.bind(null, config);
+    const options = Object.assign({}, withTokenProviderConfig);
+    delete options.clientSecret;
 
-    expect(client).to.throw(ArgumentError, 'Must provide a clientSecret');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
 
   describe('getAccessToken', () => {

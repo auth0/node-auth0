@@ -154,30 +154,32 @@ describe('ManagementTokenProvider', () => {
     expect(provider.options.headers).to.be.equal(options.headers);
   });
 
-  it('should handle network errors correctly', (done) => {
+  it('should handle network errors correctly', async () => {
     const options = Object.assign({}, defaultOptions);
     options.domain = 'domain';
     const client = new ManagementTokenProvider(options);
 
     nock(`https://${options.domain}`).post('/oauth/token').reply(401);
 
-    client.getAccessToken().catch((err) => {
+    try {
+      await client.getAccessToken();
+    } catch (err) {
       expect(err).to.exist;
-      done();
       nock.cleanAll();
-    });
+    }
   });
 
-  it('should handle unauthorized errors correctly', (done) => {
+  it('should handle unauthorized errors correctly', async () => {
     const client = new ManagementTokenProvider(defaultOptions);
     nock(`https://${defaultOptions.domain}`).post('/oauth/token').reply(401);
 
-    client.getAccessToken().catch((err) => {
+    try {
+      await client.getAccessToken();
+    } catch (err) {
       expect(err).to.exist.to.be.an.instanceOf(SanitizedError);
       expect(err.statusCode).to.be.equal(401);
-      done();
       nock.cleanAll();
-    });
+    }
   });
 
   it('should expire access token from cache by the expires_in setting', async () => {
@@ -219,7 +221,7 @@ describe('ManagementTokenProvider', () => {
     clock.restore();
   });
 
-  it('should return access token', (done) => {
+  it('should return access token', async () => {
     const options = Object.assign({}, defaultOptions);
     options.domain = 'auth0-node-sdk-1.auth0.com';
     const client = new ManagementTokenProvider(options);
@@ -229,12 +231,9 @@ describe('ManagementTokenProvider', () => {
       expires_in: 3600,
     });
 
-    client.getAccessToken().then((access_token) => {
-      expect(access_token).to.exist;
-      expect(access_token).to.be.equal('token');
-      done();
-      nock.cleanAll();
-    });
+    const accessToken = await client.getAccessToken();
+    expect(accessToken).to.exist;
+    expect(accessToken).to.be.equal('token');
   });
 
   it('should contain correct body payload', (done) => {
@@ -247,19 +246,18 @@ describe('ManagementTokenProvider', () => {
         expect(body.client_id).to.equal('clientId');
         expect(body.client_secret).to.equal('clientSecret');
         expect(body.grant_type).to.equal('client_credentials');
+        nock.cleanAll();
+        done();
         return true;
       })
       .reply((uri, requestBody, cb) =>
         cb(null, [200, { access_token: 'token', expires_in: 3600 }])
       );
 
-    client.getAccessToken().then(() => {
-      done();
-      nock.cleanAll();
-    });
+    client.getAccessToken();
   });
 
-  it('should return access token from the cache the second call', (done) => {
+  it('should return access token from the cache the second call', async () => {
     const options = Object.assign({}, defaultOptions);
     options.domain = 'auth0-node-sdk-3.auth0.com';
     const client = new ManagementTokenProvider(options);
@@ -269,26 +267,24 @@ describe('ManagementTokenProvider', () => {
       expires_in: 3600,
     });
 
-    client.getAccessToken().then((access_token) => {
-      expect(access_token).to.exist;
-      expect(access_token).to.be.equal('access_token');
+    const clock = sinon.useFakeTimers();
+    let getAccessTokenPromise = client.getAccessToken();
+    await clock.runAllAsync();
+    await clock.runAllAsync();
+    await clock.runAllAsync();
+    const accessToken = await getAccessTokenPromise;
+    expect(accessToken).to.exist;
+    expect(accessToken).to.be.equal('access_token');
 
-      setTimeout(() => {
-        client
-          .getAccessToken()
-          .then((access_token) => {
-            expect(access_token).to.exist;
-            expect(access_token).to.be.equal('access_token');
-            done();
-            nock.cleanAll();
-          })
-          .catch(() => {
-            expect.fail();
-            done();
-            nock.cleanAll();
-          });
-      }, 40);
-    });
+    clock.tick(40);
+
+    getAccessTokenPromise = client.getAccessToken();
+    await clock.runAllAsync();
+    const accessToken2 = await getAccessTokenPromise;
+    expect(accessToken2).to.exist;
+    expect(accessToken2).to.be.equal('access_token');
+    nock.cleanAll();
+    clock.restore();
   });
 
   it('should request new access token when cache is expired', (done) => {

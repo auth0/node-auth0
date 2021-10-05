@@ -26,7 +26,6 @@ function getParamsFromOptions(options) {
  */
 class OAuthAuthenticator {
   /**
-   * @memberof module:auth
    * @param  {object}              options                             Authenticator options.
    * @param  {string}              options.baseUrl                     The Auth0 account URL.
    * @param  {string}              options.domain                      AuthenticationClient server domain
@@ -63,8 +62,6 @@ class OAuthAuthenticator {
   /**
    * Sign in using a username and password.
    *
-   * @function    signIn
-   * @memberof  module:auth.OAuthAuthenticator.prototype
    * @example <caption>
    *   Given the user's credentials and the connection specified, it
    *   will return a JSON with the access_token and id_token.
@@ -134,8 +131,6 @@ class OAuthAuthenticator {
   /**
    * Sign in using a username and password
    *
-   * @function    passwordGrant
-   * @memberof  module:auth.OAuthAuthenticator.prototype
    * @example <caption>
    *   Given the user's credentials perform the OAuth password grant
    *   or Password Realm grant if a realm is provided,
@@ -212,8 +207,6 @@ class OAuthAuthenticator {
   /**
    * Exchange a refresh token
    *
-   * @function    refreshToken
-   * @memberof  module:auth.OAuthAuthenticator.prototype
    * @example <caption>
    *   Given a refresh token from a previous authentication request
    *   it will return a JSON with the access_token and id_token if
@@ -269,8 +262,6 @@ class OAuthAuthenticator {
   /**
    * Sign in using a social provider access token.
    *
-   * @function    socialSignIn
-   * @memberof  module:auth.OAuthAuthenticator.prototype
    * @param   {object}    data                User credentials object.
    * @param   {string}    data.access_token   User access token.
    * @param   {string}    data.connection     Identity provider.
@@ -335,8 +326,6 @@ class OAuthAuthenticator {
   /**
    * Sign in using an authorization code
    *
-   * @function    authorizationCodeGrant
-   * @memberof  module:auth.OAuthAuthenticator.prototype
    * @example <caption>
    *   Given the code returned in the URL params after the redirect
    *   from successful authentication, exchange the code for auth0

@@ -42,19 +42,21 @@ describe('GuardianManager', () => {
 
   describe('#constructor', () => {
     it('should error when no options are provided', () => {
-      expect(GuardianManager).to.throw(ArgumentError, 'Must provide manager options');
+      expect(() => {
+        new GuardianManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', () => {
-      const manager = GuardianManager.bind(null, {});
-
-      expect(manager).to.throw(ArgumentError, 'Must provide a base URL for the API');
+      expect(() => {
+        new GuardianManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
-      const manager = GuardianManager.bind(null, { baseUrl: '' });
-
-      expect(manager).to.throw(ArgumentError, 'The provided base URL is invalid');
+      expect(() => {
+        new GuardianManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 

@@ -48,8 +48,6 @@ class TenantManager {
   /**
    * Update the tenant settings.
    *
-   * @function    updateSettings
-   * @memberof  module:management.TenantManager.prototype
    * @example
    * management.tenant.updateSettings(data, function (err) {
    *   if (err) {
@@ -72,8 +70,6 @@ class TenantManager {
   /**
    * Get the tenant settings..
    *
-   * @function    getSettings
-   * @memberof  module:management.TenantManager.prototype
    * @example
    * management.tenant.getSettings({ include_fields: true, fields: 'friendly_name' }, function (err, settings) {
    *   if (err) {
