@@ -128,9 +128,9 @@ class JobsManager {
     const headers = { ...options.headers, ...form.getHeaders() };
     headers['Content-Type'] = 'multipart/form-data';
 
-    const promise = options.tokenProvider.getAccessToken().then((access_token) => {
+    const promise = options.tokenProvider.getAccessToken().then(async (access_token) => {
       try {
-        return axios.post(url, form, {
+        return await axios.post(url, form, {
           headers: { ...headers, Authorization: `Bearer ${access_token}` },
         });
       } catch (err) {
