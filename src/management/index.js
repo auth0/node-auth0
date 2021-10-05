@@ -3902,24 +3902,4 @@ utils.wrapPropertyMethod(
   'prompts.updateCustomTextByLanguage'
 );
 
-/**
- * Get Brute force configuration
- */
-
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'getBruteForceConfig',
-  'attackProtection.getBruteForceConfig'
-);
-
-/**
- * Update Brute force configuration
- */
-
-utils.wrapPropertyMethod(
-  ManagementClient,
-  'updateBruteForceConfig',
-  'attackProtection.updateBruteForceConfig'
-);
-
 module.exports = ManagementClient;
