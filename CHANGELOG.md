@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.37.0](https://github.com/auth0/node-auth0/tree/v2.37.0) (2021-10-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.2...v2.37.0)
+
+**Added**
+
+- Add support for checking connection status [\#662](https://github.com/auth0/node-auth0/pull/662) ([frederikprijck](https://github.com/frederikprijck))
+
+**Fixed**
+
+- Fix undefined tokenProvider when access token is provided. [\#642](https://github.com/auth0/node-auth0/pull/642) ([Gilighost](https://github.com/Gilighost))
+
 ## [v2.36.2](https://github.com/auth0/node-auth0/tree/v2.36.2) (2021-09-20)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.1...v2.36.2)
