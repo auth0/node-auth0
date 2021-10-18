@@ -21,6 +21,10 @@ You can find this library documentation in this [page](https://auth0.github.io/n
 
 For more information about [auth0](https://auth0.com) check our [documentation page](https://auth0.com/docs).
 
+## Node version support
+
+This SDK is tested on the latest Node versions 8, 10, 12 and 14.
+
 ## Authentication API Client
 
 This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
@@ -118,8 +122,10 @@ management
     // Handle error.
   });
 ```
+
 ## Typescript
-The types for this library are currently maintained by the community at [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/auth0).  The team is planning taking ownership of this library as discussed in https://github.com/auth0/node-auth0/issues/572. After the team has taken ownership we will remove this net from the Readme.
+
+The types for this library are currently maintained by the community at [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/auth0). The team is planning taking ownership of this library as discussed in https://github.com/auth0/node-auth0/issues/572. After the team has taken ownership we will remove this net from the Readme.
 
 ## What is Auth0?
 
@@ -161,6 +167,5 @@ This project is licensed under the MIT license. See the [LICENSE](LICENSE) file 
 [license-url]: #license
 [downloads-image]: https://img.shields.io/npm/dm/auth0.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/auth0
-
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0?ref=badge_large)
