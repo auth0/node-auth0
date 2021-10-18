@@ -1,32 +1,47 @@
 version: 2.1
 orbs:
-  ship: auth0/ship@0.2.0
+  ship: auth0/ship@0.3.1
 jobs:
   build-and-test:
+    parameters:
+      node-version:
+        type: string
+        default: "12"
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:<< parameters.node-version >>
     environment:
       LANG: en_US.UTF-8
     steps:
       - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-          name: Update Yarn
-          command: 'sudo npm update -g yarn'
-      - ship/node-install-packages:
-          pkg-manager: yarn
-      - run:
-          name: Check
-          command: yarn check
+          name: Install Dependencies
+          command: yarn install --ignore-engines
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - run:
           name: Tests
           command: yarn test:ci
-      - run:
-          name: Generate Coverage
-          command: yarn test:coverage
+      - when:
+          condition:
+            equal: [ "12", << parameters.node-version >> ]
+          steps:
+            - run:
+                name: Generate Coverage
+                command: yarn test:coverage
+
 workflows:
   build-test-report:
     jobs:
-      - build-and-test
+      - build-and-test:
+          matrix:
+            parameters:
+              node-version: ["8", "10", "12", "14"]
       - ship/node-publish:
           pkg-manager: yarn
           requires:
