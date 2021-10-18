@@ -8,6 +8,16 @@ var RetryRestClient = require('../src/RetryRestClient');
 
 var API_URL = 'https://tenant.auth0.com';
 
+Promise.prototype.finally =
+  Promise.prototype.finally ||
+  function(fn) {
+    const onFinally = callback => Promise.resolve(fn()).then(callback);
+    return this.then(
+      result => onFinally(() => result),
+      reason => onFinally(() => Promise.reject(reason))
+    );
+  };
+
 describe('RetryRestClient', function() {
   before(function() {
     this.restClient = new RestClient(API_URL);
