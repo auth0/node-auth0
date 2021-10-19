@@ -21,6 +21,10 @@ You can find this library documentation in this [page](https://auth0.github.io/n
 
 For more information about [auth0](https://auth0.com) check our [documentation page](https://auth0.com/docs).
 
+## Node version support
+
+This SDK is tested on the latest Node versions 8, 10, 12 and 14.
+
 ## Authentication API Client
 
 This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
@@ -32,7 +36,7 @@ var AuthenticationClient = require('auth0').AuthenticationClient;
 
 var auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{OPTIONAL_CLIENT_ID}'
+  clientId: '{OPTIONAL_CLIENT_ID}',
 });
 ```
 
@@ -47,7 +51,7 @@ var ManagementClient = require('auth0').ManagementClient;
 
 var management = new ManagementClient({
   token: '{YOUR_API_V2_TOKEN}',
-  domain: '{YOUR_ACCOUNT}.auth0.com'
+  domain: '{YOUR_ACCOUNT}.auth0.com',
 });
 ```
 
@@ -62,7 +66,7 @@ var auth0 = new ManagementClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
   clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
-  scope: 'read:users update:users'
+  scope: 'read:users update:users',
 });
 ```
 
@@ -76,15 +80,15 @@ var AuthenticationClient = require('auth0').AuthenticationClient;
 var auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{CLIENT_ID}',
-  clientSecret: '{CLIENT_SECRET}'
+  clientSecret: '{CLIENT_SECRET}',
 });
 
 auth0.clientCredentialsGrant(
   {
     audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
-    scope: '{MANAGEMENT_API_SCOPES}'
+    scope: '{MANAGEMENT_API_SCOPES}',
   },
-  function(err, response) {
+  function (err, response) {
     if (err) {
       // Handle error.
     }
@@ -101,7 +105,7 @@ Be aware that all methods can be used with promises or callbacks. However, when 
 
 ```js
 // Using callbacks.
-management.getUsers(function(err, users) {
+management.getUsers(function (err, users) {
   if (err) {
     // handle error.
   }
@@ -111,15 +115,17 @@ management.getUsers(function(err, users) {
 // Using promises.
 management
   .getUsers()
-  .then(function(users) {
+  .then(function (users) {
     console.log(users);
   })
-  .catch(function(err) {
+  .catch(function (err) {
     // Handle error.
   });
 ```
+
 ## Typescript
-The types for this library are currently maintained by the community at [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/auth0).  The team is planning taking ownership of this library as discussed in https://github.com/auth0/node-auth0/issues/572. After the team has taken ownership we will remove this net from the Readme.
+
+The types for this library are currently maintained by the community at [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/auth0). The team is planning taking ownership of this library as discussed in https://github.com/auth0/node-auth0/issues/572. After the team has taken ownership we will remove this net from the Readme.
 
 ## What is Auth0?
 
@@ -161,6 +167,5 @@ This project is licensed under the MIT license. See the [LICENSE](LICENSE) file 
 [license-url]: #license
 [downloads-image]: https://img.shields.io/npm/dm/auth0.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/auth0
-
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0?ref=badge_large)

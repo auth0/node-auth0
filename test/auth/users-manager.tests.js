@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const nock = require('nock');
-const utilTypes = require('util').types;
+
+const isPromise = (thing) => thing && typeof thing.then === 'function';
 
 const BASE_URL = 'https://tenant.auth0.com';
 const CLIENT_ID = 'TEST_CLIENT_ID';
@@ -85,7 +86,7 @@ describe('UsersManager', () => {
     it('should return a promise when no callback is provided', () => {
       const returnValue = manager.getInfo('ACCESS_TOKEN');
 
-      expect(utilTypes.isPromise(returnValue)).ok;
+      expect(isPromise(returnValue)).ok;
     });
 
     it(`should perform a GET request to ${path}`, function (done) {
@@ -220,7 +221,7 @@ describe('UsersManager', () => {
       };
       const returnValue = manager.impersonate(USER_ID, settings);
 
-      expect(utilTypes.isPromise(returnValue)).ok;
+      expect(isPromise(returnValue)).ok;
     });
 
     it(`should perform a POST request to ${path}`, function (done) {

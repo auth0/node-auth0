@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const nock = require('nock');
-const utilTypes = require('util').types;
+
+const isPromise = (thing) => thing && typeof thing.then === 'function';
 
 const BASE_URL = 'https://tenant.auth0.com';
 
@@ -79,7 +80,7 @@ describe('TokensManager', () => {
 
     it('should return a promise when no callback is provided', () => {
       const returnValue = manager.getInfo('VALID_TOKEN');
-      expect(utilTypes.isPromise(returnValue)).ok;
+      expect(isPromise(returnValue)).ok;
     });
 
     it('should not return a promise when a callback is provided', () => {
@@ -209,7 +210,7 @@ describe('TokensManager', () => {
         grant_type: 'SAMPLE_GRANT_TYPE',
       };
       const returnValue = manager.getDelegationToken(data);
-      expect(utilTypes.isPromise(returnValue)).ok;
+      expect(isPromise(returnValue)).ok;
     });
 
     it('should not return a promise when a callback is given', () => {
@@ -376,7 +377,7 @@ describe('TokensManager', () => {
         token: 'TEST_REFRESH_TOKEN',
       };
       const returnValue = manager.revokeRefreshToken(data);
-      expect(utilTypes.isPromise(returnValue)).ok;
+      expect(isPromise(returnValue)).ok;
     });
 
     it('should not return a promise when a callback is given', () => {
