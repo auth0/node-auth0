@@ -44,7 +44,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["8", "10", "12", "14"]
+              node-version: ["8", "10", "12", "14", "16"]
       - ship/node-publish:
           pkg-manager: yarn
           requires:
