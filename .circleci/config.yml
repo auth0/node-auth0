@@ -4,7 +4,7 @@ orbs:
 jobs:
   build-and-test:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:10
     environment:
       LANG: en_US.UTF-8
     steps:
