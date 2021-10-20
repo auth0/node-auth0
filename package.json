@@ -57,7 +57,7 @@
     "json-loader": "^0.5.7",
     "jws": "^3.2.2",
     "minami": "^1.2.3",
-    "mocha": "^9.1.2",
+    "mocha": "^8.4.0",
     "mocha-junit-reporter": "^2.0.0",
     "nock": "^10.0.6",
     "nyc": "^14.1.1",
