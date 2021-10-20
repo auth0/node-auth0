@@ -301,10 +301,18 @@ describe('AttackProtectionManager', function() {
     describe('#updateSuspiciousIpThrottlingConfig', function() {
       var data = {
         enabled: true,
-        shields: ['user_notification', 'block'],
-        mode: 'count_per_identifier_and_ip',
-        allowlist: ['1.1.2.2'],
-        max_attempts: 100
+        shields: ['admin_notification', 'block'],
+        allowlist: ['1.1.1.0'],
+        stage: {
+          'pre-login': {
+            max_attempts: 1,
+            rate: 864000
+          },
+          'pre-user-registration': {
+            max_attempts: 1,
+            rate: 864000
+          }
+        }
       };
 
       beforeEach(function() {
