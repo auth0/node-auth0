@@ -60,9 +60,6 @@ jobs:
           paths:
             - ~/.cache/yarn
       - run:
-          name: ESLint
-          command: yarn lint
-      - run:
           name: Tests
           command: yarn test:ci
       - when:
