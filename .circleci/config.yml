@@ -24,9 +24,18 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-      - run:
-          name: ESLint
-          command: yarn lint
+      - when:
+          condition:
+            # ESLint has dropped support for version 8 and 10.
+            and:
+              - not:
+                  equal: [ "8", << parameters.node-version >> ]
+              - not:
+                  equal: [ "10", << parameters.node-version >> ]
+          steps:
+            - run:
+                name: ESLint
+                command: yarn lint
       - run:
           name: Tests
           command: yarn test:ci
@@ -37,49 +46,17 @@ jobs:
             - run:
                 name: Generate Coverage
                 command: yarn test:coverage
-  build-and-test-no-lint:
-    parameters:
-      node-version:
-        type: string
-        default: "8"
-    docker:
-      - image: circleci/node:<< parameters.node-version >>
-    environment:
-      LANG: en_US.UTF-8
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install Dependencies
-          command: yarn install --ignore-engines
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
-      - run:
-          name: Tests
-          command: yarn test:ci
 workflows:
   build-test-report:
     jobs:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["12", "14", "16"]
-
-        # ESLint has dropped support for version 8 and 10.
-      - build-and-test-no-lint:
-          matrix:
-            parameters:
-              node-version: ["8", "10"]
+              node-version: ["8", "10", "12", "14", "16"]
       - ship/node-publish:
           pkg-manager: yarn
           requires:
             - build-and-test
-            - build-and-test-no-lint
           context:
             - publish-npm
             - publish-gh
