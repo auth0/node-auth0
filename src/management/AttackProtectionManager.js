@@ -46,6 +46,13 @@ var AttackProtectionManager = function(options) {
     options.tokenProvider
   );
   this.bruteForceProtection = new RetryRestClient(bruteForceProtection, options.retry);
+
+  var suspiciousIpThrottling = new Auth0RestClient(
+    options.baseUrl + '/attack-protection/suspicious-ip-throttling',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.suspiciousIpThrottling = new RetryRestClient(suspiciousIpThrottling, options.retry);
 };
 
 /**
@@ -60,11 +67,11 @@ var AttackProtectionManager = function(options) {
  *     // Handle error.
  *   }
  *
- *    // Brute force config
- *    console.log(bruteForceConfig);
+ *   // Brute force config
+ *   console.log(bruteForceConfig);
  * });
  *
- * @param   {Object}    params            Brute force params (leave empty).
+ * @param   {Object}    params            Brute force parameters (leave empty).
  * @param   {Function}  [cb]              Callback function.
  *
  * @return    {Promise|undefined}
@@ -87,12 +94,12 @@ utils.wrapPropertyMethod(
  *     // Handle error.
  *   }
  *
- * // Brute force config
- *    console.log(bruteForceConfig);
+ *   // Brute force config
+ *   console.log(bruteForceConfig);
  * });
  *
- * @param   {Object}    params            Brute force params (leave empty).
- * @param   {Object}    data              Updated brute force config.
+ * @param   {Object}    params            Brute force parameters (leave empty).
+ * @param   {Object}    data              Updated brute force configuration.
  * @param   {Function}  [cb]              Callback function.
  *
  * @return    {Promise|undefined}
@@ -101,6 +108,61 @@ utils.wrapPropertyMethod(
   AttackProtectionManager,
   'updateBruteForceConfig',
   'bruteForceProtection.patch'
+);
+
+/**
+ * Get the suspicious IP throttling configuration.
+ *
+ * @method    getSuspiciousIpThrottlingConfig
+ * @memberOf  module:management.AttackProtectionManager.prototype
+ *
+ * @example
+ * management.attackProtection.getSuspiciousIpThrottlingConfig(params, function (err, suspiciousIpThrottlingConfig) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Access suspicious IP throttling configuration
+ *   console.log(suspiciousIpThrottlingConfig);
+ * });
+ *
+ * @param   {Object}    params            Suspicious IP throttling parameters (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  AttackProtectionManager,
+  'getSuspiciousIpThrottlingConfig',
+  'suspiciousIpThrottling.get'
+);
+
+/**
+ * Update the suspicious IP throttling configuration.
+ *
+ * @method    updateSuspiciousIpThrottlingConfig
+ * @memberOf  module:management.AttackProtectionManager.prototype
+ *
+ * @example
+ * management.attackProtection.updateSuspiciousIpThrottlingConfig(params, data, function (err, suspiciousIpThrottlingConfig) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Access suspicious IP throttling configuration
+ *   console.log(suspiciousIpThrottlingConfig);
+ * });
+ *
+ * @param   {Object}    params            Suspicious IP throttling parameters (leave empty).
+ * @param   {Object}    data              Updated suspicious IP throttling configuration.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  AttackProtectionManager,
+  'updateSuspiciousIpThrottlingConfig',
+  'suspiciousIpThrottling.patch'
 );
 
 module.exports = AttackProtectionManager;
