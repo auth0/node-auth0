@@ -37,7 +37,7 @@ jobs:
             - run:
                 name: Generate Coverage
                 command: yarn test:coverage
-  build-and-test-no-lint:
+  build-no-test-no-lint:
     parameters:
       node-version:
         type: string
@@ -59,16 +59,6 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-      - run:
-          name: Tests
-          command: yarn test:ci
-      - when:
-          condition:
-            equal: [ "12", << parameters.node-version >> ]
-          steps:
-            - run:
-                name: Generate Coverage
-                command: yarn test:coverage
 workflows:
   build-test-report:
     jobs:
@@ -77,8 +67,8 @@ workflows:
             parameters:
               node-version: ["12", "14", "16"]
 
-        # ESLint has dropped support for version 8 and 10.
-      - build-and-test-no-lint:
+        # ESLint & mocha has dropped support for version 8 and 10.
+      - build-no-test-no-lint:
           matrix:
             parameters:
               node-version: ["8", "10"]
