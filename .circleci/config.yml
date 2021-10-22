@@ -36,9 +36,23 @@ jobs:
             - run:
                 name: ESLint
                 command: yarn lint
-      - run:
-          name: Tests
-          command: yarn test:ci
+      - when:
+          condition:
+            # mocha@>=6 doesn't support node 8 so we use mocha@6 with npx to run the tests
+            equal: ["8", << parameters.node-version >>]
+          steps:
+            - run:
+                name: Tests
+                command: npx mocha@6 --reporter spec ./test/**/*.tests.js
+      - when:
+          condition:
+            and:
+              - not:
+                  equal: ["8", << parameters.node-version >>]
+          steps:
+            - run:
+                name: Tests
+                command: yarn test:ci
       - when:
           condition:
             equal: [ "12", << parameters.node-version >> ]
