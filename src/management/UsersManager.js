@@ -191,7 +191,6 @@ class UsersManager {
    *
    * @example <caption>
    *   This method takes an optional object as first argument that may be used to
-   * @param {...any} args
    *   specify pagination settings and the search query. If pagination options are
    *   not present, the first page of a limited number of results will be returned.
    * </caption>
@@ -243,7 +242,6 @@ class UsersManager {
    * Get a user by its id.
    *
    * @example
-   * @param {...any} args
    * management.users.get({ id: USER_ID }, function (err, user) {
    *   console.log(user);
    * });
@@ -261,7 +259,6 @@ class UsersManager {
    *
    * @example
    * var params = { id: USER_ID };
-   * @param {...any} args
    *
    * management.users.update(params, data, function (err, user) {
    *   if (err) {
@@ -824,7 +821,6 @@ class UsersManager {
    * Get a list of organizations for a user.
    *
    * @example
-   * @param {...any} args
    * management.users.getUserOrganizations({ id: USER_ID }, function (err, orgs) {
    *   console.log(orgs);
    * });

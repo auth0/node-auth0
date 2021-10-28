@@ -43,7 +43,7 @@ jobs:
           steps:
             - run:
                 name: Tests
-                command: npx mocha@6 --reporter spec ./test/**/*.tests.js
+                command: "npx mocha@6 --reporter spec './test/**/*.tests.js'"
       - when:
           condition:
             and:

@@ -298,8 +298,6 @@ class RolesManager {
    * var params = {
    *   roleId: 'ROLE_ID',
    *   per_page: 50,
-   * @param params
-   * @param callback
    *   page: 0
    * };
    * @example <caption>
