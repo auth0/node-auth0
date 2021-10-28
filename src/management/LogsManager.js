@@ -43,7 +43,7 @@ class LogsManager {
      * @type {external:RestClient}
      */
     const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/logs/:id `,
+      `${options.baseUrl}/logs/:id`,
       clientOptions,
       options.tokenProvider
     );

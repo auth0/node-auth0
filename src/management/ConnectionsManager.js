@@ -43,7 +43,7 @@ class ConnectionsManager {
      * @type {external:RestClient}
      */
     const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/connections/:id `,
+      `${options.baseUrl}/connections/:id`,
       clientOptions,
       options.tokenProvider
     );
