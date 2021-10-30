@@ -1,6 +1,7 @@
 const { ArgumentError } = require('rest-facade');
 const AuthenticationClient = require('../auth');
 const memoizer = require('lru-memoizer');
+const util = require('util');
 
 /**
  * Auth0 Management API Token Provider.
@@ -70,36 +71,38 @@ class ManagementTokenProvider {
     this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 
     const self = this;
-    this.getCachedAccessToken = memoizer({
-      load(options, callback) {
-        self
-          .clientCredentialsGrant(options.domain, options.scope, options.audience)
-          .then((data) => {
-            callback(null, data);
-          })
-          .catch((err) => {
-            callback(err);
-          });
-      },
-      hash(options) {
-        return `${options.domain}-${options.clientId}-${options.scope}`;
-      },
-      itemMaxAge(options, data) {
-        if (options.cacheTTLInSeconds) {
-          return options.cacheTTLInSeconds * 1000;
-        }
+    this.getCachedAccessToken = util.promisify(
+      memoizer({
+        load(options, callback) {
+          self
+            .clientCredentialsGrant(options.domain, options.scope, options.audience)
+            .then((data) => {
+              callback(null, data);
+            })
+            .catch((err) => {
+              callback(err);
+            });
+        },
+        hash(options) {
+          return `${options.domain}-${options.clientId}-${options.scope}`;
+        },
+        itemMaxAge(options, data) {
+          if (options.cacheTTLInSeconds) {
+            return options.cacheTTLInSeconds * 1000;
+          }
 
-        // if the expires_in is lower or equal to than 10 seconds, do not subtract 10 additional seconds.
-        if (data.expires_in && data.expires_in <= 10 /* seconds */) {
-          return data.expires_in * 1000;
-        } else if (data.expires_in) {
-          // Subtract 10 seconds from expires_in to fetch a new one, before it expires.
-          return data.expires_in * 1000 - 10000 /* milliseconds */;
-        }
-        return 60 * 60 * 1000; //1h
-      },
-      max: 100,
-    });
+          // if the expires_in is lower or equal to than 10 seconds, do not subtract 10 additional seconds.
+          if (data.expires_in && data.expires_in <= 10 /* seconds */) {
+            return data.expires_in * 1000;
+          } else if (data.expires_in) {
+            // Subtract 10 seconds from expires_in to fetch a new one, before it expires.
+            return data.expires_in * 1000 - 10000 /* milliseconds */;
+          }
+          return 60 * 60 * 1000; //1h
+        },
+        max: 100,
+      })
+    );
   }
 
   /**
@@ -107,23 +110,17 @@ class ManagementTokenProvider {
    *
    * @returns {Promise} Promise returning an access_token.
    */
-  getAccessToken() {
+  async getAccessToken() {
     if (this.options.enableCache) {
-      return new Promise((resolve, reject) => {
-        this.getCachedAccessToken(this.options, (error, data) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(data.access_token);
-          }
-        });
-      });
+      const data = await this.getCachedAccessToken(this.options);
+      return data.access_token;
     } else {
-      return this.clientCredentialsGrant(
+      const data = await this.clientCredentialsGrant(
         this.options.domain,
         this.options.scope,
         this.options.audience
-      ).then((data) => data.access_token);
+      );
+      return data.access_token;
     }
   }
 
