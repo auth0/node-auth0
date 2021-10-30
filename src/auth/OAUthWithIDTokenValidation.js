@@ -18,7 +18,6 @@ class OAUthWithIDTokenValidation {
    * @param  {string}              [options.clientSecret]              Default client Secret.
    * @param  {string}              [options.supportedAlgorithms]       Algorithms that your application expects to receive
    * @param  {boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
-   * @param  {Function}            [options.jwksClient]                Dependency injected `jwks-rsa`
    */
   constructor(oauth, options) {
     if (!oauth) {
@@ -39,7 +38,7 @@ class OAUthWithIDTokenValidation {
     this.clientSecret = options.clientSecret;
     this.domain = options.domain;
     this.supportedAlgorithms = options.supportedAlgorithms || ['HS256', 'RS256'];
-    this._jwksClient = (options.jwksClient || jwksClient)({
+    this._jwksClient = jwksClient({
       jwksUri: `https://${options.domain}/.well-known/jwks.json`,
     });
   }

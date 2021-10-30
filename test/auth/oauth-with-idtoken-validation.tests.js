@@ -1,7 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 const pem = require('pem');
@@ -130,6 +129,7 @@ describe('OAUthWithIDTokenValidation', () => {
         done();
       });
     });
+
     it('Returns error when verify response is an error', (done) => {
       const oauth = {
         create() {
@@ -145,6 +145,7 @@ describe('OAUthWithIDTokenValidation', () => {
         done();
       });
     });
+
     it('Uses `clientSecret` as key when header.alg === HS256 and there is a user secret', (done) => {
       const oauth = {
         create() {
@@ -190,6 +191,7 @@ describe('OAUthWithIDTokenValidation', () => {
         done();
       });
     });
+
     describe('when header.alg !== HS256', () => {
       it('creates a jwksClient with the correct jwksUri', (done) => {
         const oauth = {
@@ -201,6 +203,14 @@ describe('OAUthWithIDTokenValidation', () => {
             cb(null, { publicKey: 'publicKey' });
           },
         }));
+        jwksClientStub.prototype = {};
+
+        const OAUthWithIDTokenValidationProxy = proxyquire(
+          '../../src/auth/OAUthWithIDTokenValidation',
+          {
+            'jwks-rsa': jwksClientStub,
+          }
+        );
 
         sinon.stub(jwt, 'verify').callsFake((idtoken, getKey) => {
           getKey({ alg: 'RS256' }, () => {
@@ -210,13 +220,13 @@ describe('OAUthWithIDTokenValidation', () => {
             done();
           });
         });
-        const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
           domain: DOMAIN,
           clientSecret: CLIENT_SECRET,
-          jwksClient: jwksClientStub,
         });
         oauthWithValidation.create(PARAMS, DATA);
       });
+
       it('returns the error when available', (done) => {
         const oauth = {
           create() {
@@ -228,6 +238,14 @@ describe('OAUthWithIDTokenValidation', () => {
             cb({ the: 'error' });
           },
         }));
+        jwksClientStub.prototype = {};
+
+        const OAUthWithIDTokenValidationProxy = proxyquire(
+          '../../src/auth/OAUthWithIDTokenValidation',
+          {
+            'jwks-rsa': jwksClientStub,
+          }
+        );
 
         sinon.stub(jwt, 'verify').callsFake((idtoken, getKey) => {
           getKey({ kid: 'kid', alg: 'RS256' }, (err) => {
@@ -235,13 +253,13 @@ describe('OAUthWithIDTokenValidation', () => {
             done();
           });
         });
-        const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
           domain: DOMAIN,
           clientSecret: CLIENT_SECRET,
-          jwksClient: jwksClientStub,
         });
         oauthWithValidation.create(PARAMS, DATA);
       });
+
       it('uses the publicKey when available', (done) => {
         const oauth = {
           create() {
@@ -254,6 +272,13 @@ describe('OAUthWithIDTokenValidation', () => {
             cb(null, { publicKey: 'publicKey' });
           },
         }));
+        jwksClientStub.prototype = {};
+        const OAUthWithIDTokenValidationProxy = proxyquire(
+          '../../src/auth/OAUthWithIDTokenValidation',
+          {
+            'jwks-rsa': jwksClientStub,
+          }
+        );
 
         sinon.stub(jwt, 'verify').callsFake((idtoken, getKey) => {
           getKey({ kid: 'kid', alg: 'RS256' }, (err, key) => {
@@ -261,13 +286,13 @@ describe('OAUthWithIDTokenValidation', () => {
             done();
           });
         });
-        const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
           domain: DOMAIN,
           clientSecret: CLIENT_SECRET,
-          jwksClient: jwksClientStub,
         });
         oauthWithValidation.create(PARAMS, DATA);
       });
+
       it('uses the publicKey when both keys (publicKey and rsaPublicKey) available', (done) => {
         const oauth = {
           create() {
@@ -280,6 +305,13 @@ describe('OAUthWithIDTokenValidation', () => {
             cb(null, { publicKey: 'publicKey', rsaPublicKey: 'rsaPublicKey' });
           },
         }));
+        jwksClientStub.prototype = {};
+        const OAUthWithIDTokenValidationProxy = proxyquire(
+          '../../src/auth/OAUthWithIDTokenValidation',
+          {
+            'jwks-rsa': jwksClientStub,
+          }
+        );
 
         sinon.stub(jwt, 'verify').callsFake((idtoken, getKey) => {
           getKey({ kid: 'kid', alg: 'RS256' }, (err, key) => {
@@ -287,13 +319,13 @@ describe('OAUthWithIDTokenValidation', () => {
             done();
           });
         });
-        const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
           domain: DOMAIN,
           clientSecret: CLIENT_SECRET,
-          jwksClient: jwksClientStub,
         });
         oauthWithValidation.create(PARAMS, DATA);
       });
+
       it('uses the rsaPublicKey when there is no publicKey available', (done) => {
         const oauth = {
           create() {
@@ -306,6 +338,13 @@ describe('OAUthWithIDTokenValidation', () => {
             cb(null, { rsaPublicKey: 'rsaPublicKey' });
           },
         }));
+        jwksClientStub.prototype = {};
+        const OAUthWithIDTokenValidationProxy = proxyquire(
+          '../../src/auth/OAUthWithIDTokenValidation',
+          {
+            'jwks-rsa': jwksClientStub,
+          }
+        );
 
         sinon.stub(jwt, 'verify').callsFake((idtoken, getKey) => {
           getKey({ kid: 'kid', alg: 'RS256' }, (err, key) => {
@@ -313,14 +352,14 @@ describe('OAUthWithIDTokenValidation', () => {
             done();
           });
         });
-        const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+        const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
           domain: DOMAIN,
           clientSecret: CLIENT_SECRET,
-          jwksClient: jwksClientStub,
         });
         oauthWithValidation.create(PARAMS, DATA);
       });
     });
+
     describe('#integration', () => {
       it('fails with a HS256 id_token and `options.supportedAlgorithms===RS256`', (done) => {
         const oauth = {
@@ -342,6 +381,7 @@ describe('OAUthWithIDTokenValidation', () => {
           done();
         });
       });
+
       it('fails with a RS256 id_token and `options.supportedAlgorithms===HS256`', (done) => {
         createCertificate((c) => {
           const idtoken = jwt.sign({ foo: 'bar' }, c.serviceKey, {
@@ -364,12 +404,18 @@ describe('OAUthWithIDTokenValidation', () => {
               cb(null, { publicKey: c.publicKey });
             },
           }));
+          jwksClientStub.prototype = {};
+          const OAUthWithIDTokenValidationProxy = proxyquire(
+            '../../src/auth/OAUthWithIDTokenValidation',
+            {
+              'jwks-rsa': jwksClientStub,
+            }
+          );
 
-          const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
             clientSecret: CLIENT_SECRET,
             domain: 'auth.brucke.club',
             supportedAlgorithms: ['HS256'],
-            jwksClient: jwksClientStub,
           });
           oauthWithValidation.create(PARAMS, DATA, (e) => {
             expect(e.message).to.eq('invalid algorithm');
@@ -377,6 +423,7 @@ describe('OAUthWithIDTokenValidation', () => {
           });
         });
       });
+
       it('fails when `token.exp` is expired', (done) => {
         createCertificate((c) => {
           const idtoken = jwt.sign({ foo: 'bar' }, c.serviceKey, {
@@ -399,12 +446,18 @@ describe('OAUthWithIDTokenValidation', () => {
               cb(null, { publicKey: c.publicKey });
             },
           }));
+          jwksClientStub.prototype = {};
+          const OAUthWithIDTokenValidationProxy = proxyquire(
+            '../../src/auth/OAUthWithIDTokenValidation',
+            {
+              'jwks-rsa': jwksClientStub,
+            }
+          );
 
-          const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+          const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
             clientSecret: CLIENT_SECRET,
             domain: 'auth.brucke.club',
             supportedAlgorithms: ['RS256'],
-            jwksClient: jwksClientStub,
           });
           oauthWithValidation.create(PARAMS, DATA, (e) => {
             expect(e.message).to.eq('jwt expired');
@@ -412,6 +465,7 @@ describe('OAUthWithIDTokenValidation', () => {
           });
         });
       });
+
       describe('when using a valid certificate to generate an invalid id_token', () => {
         it('fails when `token.aud` is invalid', (done) => {
           createCertificate((c) => {
@@ -434,13 +488,19 @@ describe('OAUthWithIDTokenValidation', () => {
                 cb(null, { publicKey: c.publicKey });
               },
             }));
+            jwksClientStub.prototype = {};
+            const OAUthWithIDTokenValidationProxy = proxyquire(
+              '../../src/auth/OAUthWithIDTokenValidation',
+              {
+                'jwks-rsa': jwksClientStub,
+              }
+            );
 
-            const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+            const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
               clientId: 'foobar',
               clientSecret: CLIENT_SECRET,
               domain: 'brucke.auth0.com',
               supportedAlgorithms: ['RS256'],
-              jwksClient: jwksClientStub,
             });
             oauthWithValidation.create(PARAMS, DATA, (e) => {
               expect(e.message).to.eq('jwt audience invalid. expected: foobar');
@@ -448,6 +508,7 @@ describe('OAUthWithIDTokenValidation', () => {
             });
           });
         });
+
         it('fails when `token.iss` is invalid', (done) => {
           const TEST_AUDIENCE = 'foobar';
           createCertificate((c) => {
@@ -471,13 +532,19 @@ describe('OAUthWithIDTokenValidation', () => {
                 cb(null, { publicKey: c.publicKey });
               },
             }));
+            jwksClientStub.prototype = {};
+            const OAUthWithIDTokenValidationProxy = proxyquire(
+              '../../src/auth/OAUthWithIDTokenValidation',
+              {
+                'jwks-rsa': jwksClientStub,
+              }
+            );
 
-            const oauthWithValidation = new OAUthWithIDTokenValidation(oauth, {
+            const oauthWithValidation = new OAUthWithIDTokenValidationProxy(oauth, {
               clientId: 'foobar',
               clientSecret: CLIENT_SECRET,
               domain: 'brucke.auth0.com',
               supportedAlgorithms: ['RS256'],
-              jwksClient: jwksClientStub,
             });
             oauthWithValidation.create(PARAMS, DATA, (e) => {
               expect(e.message).to.eq('jwt issuer invalid. expected: https://brucke.auth0.com/');
