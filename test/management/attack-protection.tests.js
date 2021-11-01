@@ -10,6 +10,7 @@ var ArgumentError = require('rest-facade').ArgumentError;
 describe('AttackProtectionManager', function() {
   var bruteForcePath = '/attack-protection/brute-force-protection';
   var suspiciousIpPath = '/attack-protection/suspicious-ip-throttling';
+  var breachedPasswordDetectionPath = '/attack-protection/breached-password-detection';
 
   before(function() {
     this.token = 'TOKEN';
@@ -387,6 +388,182 @@ describe('AttackProtectionManager', function() {
           .reply(200);
 
         this.attackProtection.updateSuspiciousIpThrottlingConfig({}, data).then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+    });
+  });
+
+  describe('Breached Password Detection', function() {
+    describe('#getBreachedPasswordDetectionConfig', function() {
+      var data = {
+        enabled: true,
+        shields: ['block', 'user_notification', 'admin_notification'],
+        admin_notification_frequency: ['immediately']
+      };
+
+      beforeEach(function() {
+        this.request = nock(API_URL)
+          .get(breachedPasswordDetectionPath)
+          .reply(200, data);
+      });
+
+      it('should accept a callback', function(done) {
+        this.attackProtection.getBreachedPasswordDetectionConfig({}, function() {
+          done();
+        });
+      });
+
+      it('should return a promise if no callback is given', function(done) {
+        this.attackProtection
+          .getBreachedPasswordDetectionConfig()
+          .then(done.bind(null, null))
+          .catch(done.bind(null, null));
+      });
+
+      it('should pass any errors to the promise catch handler', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .get(breachedPasswordDetectionPath)
+          .reply(500);
+
+        this.attackProtection.getBreachedPasswordDetectionConfig().catch(function(err) {
+          expect(err).to.exist;
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function(done) {
+        this.attackProtection
+          .getBreachedPasswordDetectionConfig()
+          .then(function(breachedPasswordDetectionConfig) {
+            expect(breachedPasswordDetectionConfig).to.deep.equal(data);
+
+            done();
+          });
+      });
+
+      it('should perform a GET request to /api/v2/attack-protection/brute-force-protection', function(done) {
+        var request = this.request;
+
+        this.attackProtection.getBreachedPasswordDetectionConfig().then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .get(breachedPasswordDetectionPath)
+          .matchHeader('Authorization', 'Bearer ' + this.token)
+          .reply(200);
+
+        this.attackProtection.getBreachedPasswordDetectionConfig().then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+    });
+
+    describe('#updateBreachedPasswordDetectionConfig', function() {
+      var data = {
+        enabled: true,
+        shields: ['admin_notification', 'block'],
+        allowlist: ['1.1.1.0'],
+        stage: {
+          'pre-login': {
+            max_attempts: 1,
+            rate: 864000
+          },
+          'pre-user-registration': {
+            max_attempts: 1,
+            rate: 864000
+          }
+        }
+      };
+
+      beforeEach(function() {
+        this.request = nock(API_URL)
+          .patch(breachedPasswordDetectionPath)
+          .reply(200, data);
+      });
+
+      it('should accept a callback', function(done) {
+        this.attackProtection.updateBreachedPasswordDetectionConfig({}, data, function() {
+          done();
+        });
+      });
+
+      it('should return a promise if no callback is given', function(done) {
+        this.attackProtection
+          .updateBreachedPasswordDetectionConfig({}, data)
+          .then(done.bind(null, null))
+          .catch(done.bind(null, null));
+      });
+
+      it('should pass any errors to the promise catch handler', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .patch(breachedPasswordDetectionPath)
+          .reply(500);
+
+        this.attackProtection.updateBreachedPasswordDetectionConfig({}, data).catch(function(err) {
+          expect(err).to.exist.to.be.an.instanceOf(Error);
+
+          done();
+        });
+      });
+
+      it('should perform a PATCH request to /api/v2' + breachedPasswordDetectionPath, function(
+        done
+      ) {
+        var request = this.request;
+
+        this.attackProtection.updateBreachedPasswordDetectionConfig({}, {}).then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+
+      it('should pass the data in the body of the request', function(done) {
+        var request = this.request;
+
+        this.attackProtection.updateBreachedPasswordDetectionConfig({}, data).then(function() {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function(done) {
+        this.attackProtection
+          .updateBreachedPasswordDetectionConfig({}, data)
+          .then(function(breachedPasswordDetectionConfig) {
+            expect(breachedPasswordDetectionConfig).to.deep.equal(data);
+
+            done();
+          });
+      });
+
+      it('should include the token in the Authorization header', function(done) {
+        nock.cleanAll();
+
+        var request = nock(API_URL)
+          .patch(breachedPasswordDetectionPath)
+          .matchHeader('Authorization', 'Bearer ' + this.token)
+          .reply(200);
+
+        this.attackProtection.updateBreachedPasswordDetectionConfig({}, data).then(function() {
           expect(request.isDone()).to.be.true;
 
           done();
