@@ -167,7 +167,7 @@ describe('AttackProtectionManager', function() {
         });
       });
 
-      it('should perform a PATCH request to /api/v2/attack-protection/brute-force-protection', function(done) {
+      it('should perform a PATCH request to /api/v2' + bruteForcePath, function(done) {
         var request = this.request;
 
         this.attackProtection.updateBruteForceConfig({}, {}).then(function() {
@@ -273,7 +273,7 @@ describe('AttackProtectionManager', function() {
           });
       });
 
-      it('should perform a GET request to /api/v2/attack-protection/brute-force-protection', function(done) {
+      it('should perform a GET request to /api/v2' + suspiciousIpPath, function(done) {
         var request = this.request;
 
         this.attackProtection.getSuspiciousIpThrottlingConfig().then(function() {
@@ -447,7 +447,7 @@ describe('AttackProtectionManager', function() {
           });
       });
 
-      it('should perform a GET request to /api/v2/attack-protection/brute-force-protection', function(done) {
+      it('should perform a GET request to /api/v2' + breachedPasswordDetectionPath, function(done) {
         var request = this.request;
 
         this.attackProtection.getBreachedPasswordDetectionConfig().then(function() {
