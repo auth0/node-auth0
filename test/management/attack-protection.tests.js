@@ -49,15 +49,15 @@ describe('AttackProtectionManager', function() {
   });
 
   describe('Brute Force Protection', function() {
-    describe('#getBruteForceConfig', function() {
-      var data = {
-        enabled: true,
-        shields: ['user_notification', 'block'],
-        mode: 'count_per_identifier_and_ip',
-        allowlist: ['1.1.2.2'],
-        max_attempts: 100
-      };
+    var data = {
+      enabled: true,
+      shields: ['user_notification', 'block'],
+      mode: 'count_per_identifier_and_ip',
+      allowlist: ['1.1.2.2'],
+      max_attempts: 100
+    };
 
+    describe('#getBruteForceConfig', function() {
       beforeEach(function() {
         this.request = nock(API_URL)
           .get(bruteForcePath)
@@ -126,14 +126,6 @@ describe('AttackProtectionManager', function() {
     });
 
     describe('#updateBruteForceConfig', function() {
-      var data = {
-        enabled: true,
-        shields: ['user_notification', 'block'],
-        mode: 'count_per_identifier_and_ip',
-        allowlist: ['1.1.2.2'],
-        max_attempts: 100
-      };
-
       beforeEach(function() {
         this.request = nock(API_URL)
           .patch(bruteForcePath)
@@ -213,23 +205,23 @@ describe('AttackProtectionManager', function() {
   });
 
   describe('Suspicious IP Throttling', function() {
-    describe('#getSuspiciousIpThrottlingConfig', function() {
-      var data = {
-        enabled: true,
-        shields: ['admin_notification', 'block'],
-        allowlist: ['1.1.1.0'],
-        stage: {
-          'pre-login': {
-            max_attempts: 1,
-            rate: 864000
-          },
-          'pre-user-registration': {
-            max_attempts: 1,
-            rate: 864000
-          }
+    var data = {
+      enabled: true,
+      shields: ['admin_notification', 'block'],
+      allowlist: ['1.1.1.0'],
+      stage: {
+        'pre-login': {
+          max_attempts: 1,
+          rate: 864000
+        },
+        'pre-user-registration': {
+          max_attempts: 1,
+          rate: 864000
         }
-      };
+      }
+    };
 
+    describe('#getSuspiciousIpThrottlingConfig', function() {
       beforeEach(function() {
         this.request = nock(API_URL)
           .get(suspiciousIpPath)
@@ -300,22 +292,6 @@ describe('AttackProtectionManager', function() {
     });
 
     describe('#updateSuspiciousIpThrottlingConfig', function() {
-      var data = {
-        enabled: true,
-        shields: ['admin_notification', 'block'],
-        allowlist: ['1.1.1.0'],
-        stage: {
-          'pre-login': {
-            max_attempts: 1,
-            rate: 864000
-          },
-          'pre-user-registration': {
-            max_attempts: 1,
-            rate: 864000
-          }
-        }
-      };
-
       beforeEach(function() {
         this.request = nock(API_URL)
           .patch(suspiciousIpPath)
@@ -397,13 +373,13 @@ describe('AttackProtectionManager', function() {
   });
 
   describe('Breached Password Detection', function() {
-    describe('#getBreachedPasswordDetectionConfig', function() {
-      var data = {
-        enabled: true,
-        shields: ['block', 'user_notification', 'admin_notification'],
-        admin_notification_frequency: ['immediately']
-      };
+    var data = {
+      enabled: true,
+      shields: ['block', 'user_notification', 'admin_notification'],
+      admin_notification_frequency: ['immediately']
+    };
 
+    describe('#getBreachedPasswordDetectionConfig', function() {
       beforeEach(function() {
         this.request = nock(API_URL)
           .get(breachedPasswordDetectionPath)
@@ -474,22 +450,6 @@ describe('AttackProtectionManager', function() {
     });
 
     describe('#updateBreachedPasswordDetectionConfig', function() {
-      var data = {
-        enabled: true,
-        shields: ['admin_notification', 'block'],
-        allowlist: ['1.1.1.0'],
-        stage: {
-          'pre-login': {
-            max_attempts: 1,
-            rate: 864000
-          },
-          'pre-user-registration': {
-            max_attempts: 1,
-            rate: 864000
-          }
-        }
-      };
-
       beforeEach(function() {
         this.request = nock(API_URL)
           .patch(breachedPasswordDetectionPath)
