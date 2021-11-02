@@ -53,10 +53,17 @@ var AttackProtectionManager = function(options) {
     options.tokenProvider
   );
   this.suspiciousIpThrottling = new RetryRestClient(suspiciousIpThrottling, options.retry);
+
+  var breachedPasswordDetection = new Auth0RestClient(
+    options.baseUrl + '/attack-protection/breached-password-detection',
+    clientOptions,
+    options.tokenProvider
+  );
+  this.breachedPasswordDetection = new RetryRestClient(breachedPasswordDetection, options.retry);
 };
 
 /**
- * Get the brute force configuration.
+ * Get the Brute Force Protection configuration.
  *
  * @method    getBruteForceConfig
  * @memberOf  module:management.AttackProtectionManager.prototype
@@ -83,7 +90,7 @@ utils.wrapPropertyMethod(
 );
 
 /**
- * Update the brute force configuration.
+ * Update the Brute Force Protection configuration.
  *
  * @method    updateBruteForceConfig
  * @memberOf module:management.AttackProtectionManager.prototype
@@ -111,7 +118,7 @@ utils.wrapPropertyMethod(
 );
 
 /**
- * Get the suspicious IP throttling configuration.
+ * Get the Suspicious IP Throttling configuration.
  *
  * @method    getSuspiciousIpThrottlingConfig
  * @memberOf  module:management.AttackProtectionManager.prototype
@@ -138,7 +145,7 @@ utils.wrapPropertyMethod(
 );
 
 /**
- * Update the suspicious IP throttling configuration.
+ * Update the Suspicious IP Throttling configuration.
  *
  * @method    updateSuspiciousIpThrottlingConfig
  * @memberOf  module:management.AttackProtectionManager.prototype
@@ -163,6 +170,61 @@ utils.wrapPropertyMethod(
   AttackProtectionManager,
   'updateSuspiciousIpThrottlingConfig',
   'suspiciousIpThrottling.patch'
+);
+
+/**
+ * Get the Breached Password Detection configuration.
+ *
+ * @method    getBreachedPasswordDetectionConfig
+ * @memberOf  module:management.AttackProtectionManager.prototype
+ *
+ * @example
+ * management.attackProtection.getBreachedPasswordDetectionConfig(params, function (err, breachedPasswordDetectionConfig) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Access breached password detection configuration
+ *   console.log(breachedPasswordDetectionConfig);
+ * });
+ *
+ * @param   {Object}    params            Breached password detection parameters (leave empty).
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  AttackProtectionManager,
+  'getBreachedPasswordDetectionConfig',
+  'breachedPasswordDetection.get'
+);
+
+/**
+ * Update the breached password detection configuration.
+ *
+ * @method    updateBreachedPasswordDetectionConfig
+ * @memberOf  module:management.AttackProtectionManager.prototype
+ *
+ * @example
+ * management.attackProtection.updateBreachedPasswordDetectionConfig(params, data, function (err, breachedPasswordDetectionConfig) {
+ *   if (err) {
+ *     // Handle error.
+ *   }
+ *
+ *   // Access breached password detection configuration
+ *   console.log(breachedPasswordDetectionConfig);
+ * });
+ *
+ * @param   {Object}    params            Breached password detection parameters (leave empty).
+ * @param   {Object}    data              Updated breached password detection configuration.
+ * @param   {Function}  [cb]              Callback function.
+ *
+ * @return    {Promise|undefined}
+ */
+utils.wrapPropertyMethod(
+  AttackProtectionManager,
+  'updateBreachedPasswordDetectionConfig',
+  'breachedPasswordDetection.patch'
 );
 
 module.exports = AttackProtectionManager;
