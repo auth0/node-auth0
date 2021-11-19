@@ -27,7 +27,7 @@ var DEFAULT_LEEWAY = 60; //default clock-skew, in seconds
  * Validator for ID Tokens following OIDC spec.
  * @param token the string token to verify
  * @param options the options required to run this verification
- * @returns A promise containing the decoded token payload, or throws an exception if validation failed
+ * @returns The decoded token payload, or throws an exception if validation failed
  */
 var validate = function(token, options) {
   if (!token) {
