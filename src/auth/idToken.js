@@ -30,7 +30,7 @@ const DEFAULT_LEEWAY = 60; //default clock-skew, in seconds
  *
  * @param {string} token the string token to verify
  * @param {object} options the options required to run this verification
- * @returns {Promise<object>} A promise containing the decoded token payload, or throws an exception if validation failed
+ * @returns {object} The decoded token payload, or throws an exception if validation failed
  */
 const validate = function (token, options) {
   if (!token) {
