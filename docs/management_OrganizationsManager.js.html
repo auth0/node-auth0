@@ -621,8 +621,6 @@ OrganizationsManager.prototype.removeMembers = function(params, data, cb) {
  * @param   {String}    params.id           Organization ID
  * @param   {Number}    [params.per_page]   Number of results per page.
  * @param   {Number}    [params.page]       Page number, zero indexed.
- * @param   {String}    [params.from]       For checkpoint pagination, the Id from which to start selection from.
- * @param   {Number}    [params.take]       For checkpoint pagination, the number of entries to retrieve. Default 50.
  * @param   {String}    [params.fields]     Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
  * @param   {Boolean}   [params.include_fields]     Whether specified fields are to be included (true) or excluded (false). Defaults to true.
  * @param   {String}    [params.sort]      Field to sort by. Use field:order where order is 1 for ascending and -1 for descending Defaults to created_at:-1.
