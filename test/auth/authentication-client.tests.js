@@ -1,90 +1,87 @@
-var expect = require('chai').expect;
-var sinon = require('sinon');
-var proxyquire = require('proxyquire');
+const { expect } = require('chai');
+const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 
-var ArgumentError = require('rest-facade').ArgumentError;
+const { ArgumentError } = require('rest-facade');
 
-var AuthenticationClient = require('../../src/auth');
-var OAuthAuthenticator = require('../../src/auth/OAuthAuthenticator');
-var DatabaseAuthenticator = require('../../src/auth/DatabaseAuthenticator');
-var PasswordlessAuthenticator = require('../../src/auth/PasswordlessAuthenticator');
-var UsersManager = require('../../src/auth/UsersManager');
-var TokensManager = require('../../src/auth/TokensManager');
+const AuthenticationClient = require('../../src/auth');
+const OAuthAuthenticator = require('../../src/auth/OAuthAuthenticator');
+const DatabaseAuthenticator = require('../../src/auth/DatabaseAuthenticator');
+const PasswordlessAuthenticator = require('../../src/auth/PasswordlessAuthenticator');
+const UsersManager = require('../../src/auth/UsersManager');
+const TokensManager = require('../../src/auth/TokensManager');
 
-var ensureProperty = require('../utils').ensureProperty;
+const { ensureProperty } = require('../utils');
 
-describe('AuthenticationClient', function() {
-  describe('#constructor', function() {
-    it('should raise an error when no options object is provided', function() {
-      expect(AuthenticationClient).to.throw(
-        ArgumentError,
-        'Authentication Client SDK options must be an object'
-      );
+describe('AuthenticationClient', () => {
+  describe('#constructor', () => {
+    it('should raise an error when no options object is provided', () => {
+      expect(() => {
+        new AuthenticationClient();
+      }).to.throw(ArgumentError, 'Authentication Client SDK options must be an object');
     });
 
-    it('should raise an error when the domain is not valid', function() {
-      var client = AuthenticationClient.bind(null, { token: 'token', domain: '' });
-
-      expect(client).to.throw(ArgumentError, 'Must provide a domain');
+    it('should raise an error when the domain is not valid', () => {
+      expect(() => {
+        new AuthenticationClient({ token: 'token', domain: '' });
+      }).to.throw(ArgumentError, 'Must provide a domain');
     });
   });
 
-  describe('instance properties', function() {
-    var properties = {
+  describe('instance properties', () => {
+    const properties = {
       OAuthAuthenticator: {
         name: 'oauth',
-        cls: OAuthAuthenticator
+        cls: OAuthAuthenticator,
       },
       DatabaseAuthenticator: {
         name: 'database',
-        cls: DatabaseAuthenticator
+        cls: DatabaseAuthenticator,
       },
       PasswordlessAuthenticator: {
         name: 'passwordless',
-        cls: PasswordlessAuthenticator
+        cls: PasswordlessAuthenticator,
       },
       UsersManager: {
         name: 'users',
-        cls: UsersManager
+        cls: UsersManager,
       },
       TokensManager: {
         name: 'tokens',
-        cls: TokensManager
-      }
+        cls: TokensManager,
+      },
     };
-    var options = {
+    const options = {
       clientId: 'CLIENT_ID',
-      domain: 'tenant.auth0.com'
+      domain: 'tenant.auth0.com',
     };
-    var client = new AuthenticationClient(options);
+    const client = new AuthenticationClient(options);
 
     // Tests common to all properties.
-    for (var name in properties) {
-      var property = properties[name];
+    for (const name in properties) {
+      const property = properties[name];
 
       it(
-        'should expose an instance of ' + name,
+        `should expose an instance of ${name}`,
         ensureProperty(client, property.name, property.cls)
       );
     }
   });
 
-  describe('client info', function() {
-    it('should configure instances with default telemetry header', function() {
-      var utilsStub = {
-        generateClientInfo: sinon.spy(function() {
-          return { name: 'test-sdk', version: 'ver-123' };
-        })
+  describe('client info', () => {
+    it('should configure instances with default telemetry header', () => {
+      const utilsStub = {
+        generateClientInfo: sinon.spy(() => ({ name: 'test-sdk', version: 'ver-123' })),
       };
-      var AuthenticationClientProxy = proxyquire('../../src/auth/', {
-        '../utils': utilsStub
+      const AuthenticationClientProxy = proxyquire('../../src/auth/', {
+        '../utils': utilsStub,
       });
 
-      var client = new AuthenticationClientProxy({ token: 'token', domain: 'auth0.com' });
+      const client = new AuthenticationClientProxy({ token: 'token', domain: 'auth0.com' });
 
-      var requestHeaders = {
+      const requestHeaders = {
         'Auth0-Client': 'eyJuYW1lIjoidGVzdC1zZGsiLCJ2ZXJzaW9uIjoidmVyLTEyMyJ9',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       expect(client.oauth.oauth.options.headers).to.contain(requestHeaders);
       expect(client.database.dbConnections.options.headers).to.contain(requestHeaders);
@@ -93,18 +90,18 @@ describe('AuthenticationClient', function() {
       expect(client.tokens.headers).to.contain(requestHeaders);
     });
 
-    it('should configure instances with custom telemetry header', function() {
-      var customTelemetry = { name: 'custom', version: 'beta-01', env: { node: 'v10' } };
-      var client = new AuthenticationClient({
+    it('should configure instances with custom telemetry header', () => {
+      const customTelemetry = { name: 'custom', version: 'beta-01', env: { node: 'v10' } };
+      const client = new AuthenticationClient({
         token: 'token',
         domain: 'auth0.com',
-        clientInfo: customTelemetry
+        clientInfo: customTelemetry,
       });
 
-      var requestHeaders = {
+      const requestHeaders = {
         'Auth0-Client':
           'eyJuYW1lIjoiY3VzdG9tIiwidmVyc2lvbiI6ImJldGEtMDEiLCJlbnYiOnsibm9kZSI6InYxMCJ9fQ',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
       expect(client.oauth.oauth.options.headers).to.contain(requestHeaders);
       expect(client.database.dbConnections.options.headers).to.contain(requestHeaders);
@@ -113,12 +110,12 @@ describe('AuthenticationClient', function() {
       expect(client.tokens.headers).to.contain(requestHeaders);
     });
 
-    it('should configure instances without telemetry when "name" property is empty', function() {
-      var customTelemetry = { name: '', version: 'beta-01', env: { node: 'v10' } };
-      var client = new AuthenticationClient({
+    it('should configure instances without telemetry when "name" property is empty', () => {
+      const customTelemetry = { name: '', version: 'beta-01', env: { node: 'v10' } };
+      const client = new AuthenticationClient({
         token: 'token',
         domain: 'auth0.com',
-        clientInfo: customTelemetry
+        clientInfo: customTelemetry,
       });
 
       expect(client.oauth.oauth.options.headers).to.not.have.property('Auth0-Client');
@@ -128,11 +125,11 @@ describe('AuthenticationClient', function() {
       expect(client.tokens.headers).to.not.have.property('Auth0-Client');
     });
 
-    it('should configure instances without telemetry header when disabled', function() {
-      var client = new AuthenticationClient({
+    it('should configure instances without telemetry header when disabled', () => {
+      const client = new AuthenticationClient({
         token: 'token',
         domain: 'auth0.com',
-        telemetry: false
+        telemetry: false,
       });
 
       expect(client.oauth.oauth.options.headers).to.not.have.property('Auth0-Client');
@@ -143,14 +140,14 @@ describe('AuthenticationClient', function() {
     });
   });
 
-  describe('user agent', function() {
-    it('should use the node version when the user agent option is not provided', function() {
-      var client = new AuthenticationClient({
+  describe('user agent', () => {
+    it('should use the node version when the user agent option is not provided', () => {
+      const client = new AuthenticationClient({
         token: 'token',
-        domain: 'auth0.com'
+        domain: 'auth0.com',
       });
 
-      var expected = { 'User-Agent': 'node.js/' + process.version.replace('v', '') };
+      const expected = { 'User-Agent': `node.js/${process.version.replace('v', '')}` };
 
       expect(client.oauth.oauth.options.headers).to.contain(expected);
       expect(client.database.dbConnections.options.headers).to.contain(expected);
@@ -159,16 +156,16 @@ describe('AuthenticationClient', function() {
       expect(client.tokens.headers).to.contain(expected);
     });
 
-    it('should include additional headers when provided', function() {
-      var customHeaders = {
+    it('should include additional headers when provided', () => {
+      const customHeaders = {
         'User-Agent': 'my-user-agent',
-        'Another-header': 'test-header'
+        'Another-header': 'test-header',
       };
 
-      var client = new AuthenticationClient({
+      const client = new AuthenticationClient({
         token: 'token',
         domain: 'auth0.com',
-        headers: customHeaders
+        headers: customHeaders,
       });
 
       expect(client.oauth.oauth.options.headers).to.contain(customHeaders);
@@ -179,67 +176,49 @@ describe('AuthenticationClient', function() {
     });
   });
 
-  describe('instance methods', function() {
-    var methods = [];
-    var client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
-
-    methods.forEach(function(method) {
-      ensureMethod(client, method);
-    });
-  });
-
   describe(`verifySMSCode`, () => {
-    before(function() {
+    before(function () {
       this.client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
       this.passwordlessMock = sinon.mock(this.client.passwordless);
-      this.callback = function() {};
+      this.callback = function () {};
     });
-    it('should call signIn with otp if provided', function() {
-      this.passwordlessMock
-        .expects('signIn')
-        .once()
-        .withExactArgs(
-          {
-            username: '123',
-            otp: 'code'
-          },
-          this.callback
-        );
+    it('should call signIn with otp if provided', function () {
+      this.passwordlessMock.expects('signIn').once().withExactArgs(
+        {
+          username: '123',
+          otp: 'code',
+        },
+        this.callback
+      );
       this.client.verifySMSCode({ phone_number: '123', otp: 'code' }, this.callback);
     });
-    it('should call signIn with password if provided', function() {
-      this.passwordlessMock
-        .expects('signIn')
-        .once()
-        .withExactArgs(
-          {
-            username: '123',
-            password: 'code'
-          },
-          this.callback
-        );
+    it('should call signIn with password if provided', function () {
+      this.passwordlessMock.expects('signIn').once().withExactArgs(
+        {
+          username: '123',
+          password: 'code',
+        },
+        this.callback
+      );
       this.client.verifySMSCode({ phone_number: '123', password: 'code' }, this.callback);
     });
   });
 
   describe(`verifyEmailCode`, () => {
-    before(function() {
+    before(function () {
       this.client = new AuthenticationClient({ token: 'token', domain: 'auth0.com' });
       this.passwordlessMock = sinon.mock(this.client.passwordless);
-      this.callback = function() {};
+      this.callback = function () {};
     });
-    it('should call signIn with otp if provided', function() {
-      this.passwordlessMock
-        .expects('signIn')
-        .once()
-        .withExactArgs(
-          {
-            username: '123',
-            realm: 'email',
-            otp: 'code'
-          },
-          this.callback
-        );
+    it('should call signIn with otp if provided', function () {
+      this.passwordlessMock.expects('signIn').once().withExactArgs(
+        {
+          username: '123',
+          realm: 'email',
+          otp: 'code',
+        },
+        this.callback
+      );
       this.client.verifyEmailCode({ email: '123', otp: 'code' }, this.callback);
     });
   });

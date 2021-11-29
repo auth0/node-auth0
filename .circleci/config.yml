@@ -24,9 +24,35 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-      - run:
-          name: Tests
-          command: yarn test:ci
+      - when:
+          condition:
+            # ESLint has dropped support for version 8 and 10.
+            and:
+              - not:
+                  equal: [ "8", << parameters.node-version >> ]
+              - not:
+                  equal: [ "10", << parameters.node-version >> ]
+          steps:
+            - run:
+                name: ESLint
+                command: yarn lint
+      - when:
+          condition:
+            # mocha@>=6 doesn't support node 8 so we use mocha@6 with npx to run the tests
+            equal: ["8", << parameters.node-version >>]
+          steps:
+            - run:
+                name: Tests
+                command: "npx mocha@6 --reporter spec './test/**/*.tests.js'"
+      - when:
+          condition:
+            and:
+              - not:
+                  equal: ["8", << parameters.node-version >>]
+          steps:
+            - run:
+                name: Tests
+                command: yarn test:ci
       - when:
           condition:
             equal: [ "12", << parameters.node-version >> ]
@@ -34,14 +60,13 @@ jobs:
             - run:
                 name: Generate Coverage
                 command: yarn test:coverage
-
 workflows:
   build-test-report:
     jobs:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["8", "10", "12", "14"]
+              node-version: ["8", "10", "12", "14", "16"]
       - ship/node-publish:
           pkg-manager: yarn
           requires:

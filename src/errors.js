@@ -1,17 +1,26 @@
-var util = require('util');
+const util = require('util');
 
-/**
- * @module errors
- */
-var errors = (module.exports = {});
+const errors = (module.exports = {});
+
+const sanitizeErrors = function (collection) {
+  if (!collection) {
+    return;
+  }
+
+  Object.keys(collection).forEach((key) => {
+    if (key.toLowerCase().match('password|secret|authorization')) {
+      collection[key] = '[REDACTED]';
+    }
+  });
+};
 
 /**
  * Given a response request error, sanitize sensitive data.
  *
- * @method    sanitizeErrorRequestData
- * @memberOf  module:errors
+ * @param {Error} error Error object
+ * @returns {Error}
  */
-errors.sanitizeErrorRequestData = function(error) {
+errors.sanitizeErrorRequestData = function (error) {
   if (
     !error.response ||
     !error.response.request ||
@@ -26,26 +35,17 @@ errors.sanitizeErrorRequestData = function(error) {
   return error;
 };
 
-var sanitizeErrors = function(collection) {
-  if (!collection) {
-    return;
-  }
-
-  Object.keys(collection).forEach(function(key) {
-    if (key.toLowerCase().match('password|secret|authorization')) {
-      collection[key] = '[REDACTED]';
-    }
-  });
-};
-
 /**
  * Given an Api Error, modify the original error and sanitize
  * sensitive information using sanitizeErrorRequestData
  *
- * @method    SanitizedError
- * @memberOf  module:errors
+ * @param {string} name New error name
+ * @param {string} message New error message
+ * @param {number} status New error status
+ * @param {any} requestInfo Request info to be attached on the error
+ * @param {any} originalError Original error to be attached on the error
  */
-var SanitizedError = function(name, message, status, requestInfo, originalError) {
+const SanitizedError = function (name, message, status, requestInfo, originalError) {
   this.name = name || this.constructor.name || this.constructor.prototype.name || '';
   this.message = message || '';
   this.statusCode = status || (originalError && originalError.code);

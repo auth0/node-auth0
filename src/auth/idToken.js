@@ -1,13 +1,15 @@
-var urlDecodeB64 = function(data) {
+const urlDecodeB64 = function (data) {
   return Buffer.from(data, 'base64').toString('utf8');
 };
 
 /**
  * Decodes a string token into the 3 parts, throws if the format is invalid
- * @param token
+ *
+ * @param {string} token token
+ * @returns {object}
  */
-var decode = function(token) {
-  var parts = token.split('.');
+const decode = function (token) {
+  const parts = token.split('.');
 
   if (parts.length !== 3) {
     throw new Error('ID token could not be decoded');
@@ -17,34 +19,35 @@ var decode = function(token) {
     _raw: token,
     header: JSON.parse(urlDecodeB64(parts[0])),
     payload: JSON.parse(urlDecodeB64(parts[1])),
-    signature: parts[2]
+    signature: parts[2],
   };
 };
 
-var DEFAULT_LEEWAY = 60; //default clock-skew, in seconds
+const DEFAULT_LEEWAY = 60; //default clock-skew, in seconds
 
 /**
  * Validator for ID Tokens following OIDC spec.
- * @param token the string token to verify
- * @param options the options required to run this verification
- * @returns A promise containing the decoded token payload, or throws an exception if validation failed
+ *
+ * @param {string} token the string token to verify
+ * @param {object} options the options required to run this verification
+ * @returns {object} The decoded token payload, or throws an exception if validation failed
  */
-var validate = function(token, options) {
+const validate = function (token, options) {
   if (!token) {
     throw new Error('ID token is required but missing');
   }
 
-  var decodedToken = decode(token);
+  const decodedToken = decode(token);
 
   // Check algorithm
-  var header = decodedToken.header;
+  const { header } = decodedToken;
   if (header.alg !== 'RS256' && header.alg !== 'HS256') {
     throw new Error(
       `Signature algorithm of "${header.alg}" is not supported. Expected the ID token to be signed with "RS256" or "HS256".`
     );
   }
 
-  var payload = decodedToken.payload;
+  const { payload } = decodedToken;
 
   // Issuer
   if (!payload.iss || typeof payload.iss !== 'string') {
@@ -93,14 +96,14 @@ var validate = function(token, options) {
   }
 
   // --Time validation (epoch)--
-  var now = Math.floor(Date.now() / 1000);
-  var leeway = options.leeway || DEFAULT_LEEWAY;
+  const now = Math.floor(Date.now() / 1000);
+  const leeway = options.leeway || DEFAULT_LEEWAY;
 
   // Expires at
   if (!payload.exp || typeof payload.exp !== 'number') {
     throw new Error('Expiration Time (exp) claim must be a number present in the ID token');
   }
-  var expTime = payload.exp + leeway;
+  const expTime = payload.exp + leeway;
 
   if (now > expTime) {
     throw new Error(
@@ -147,7 +150,7 @@ var validate = function(token, options) {
       );
     }
 
-    var authValidUntil = payload.auth_time + options.maxAge + leeway;
+    const authValidUntil = payload.auth_time + options.maxAge + leeway;
     if (now > authValidUntil) {
       throw new Error(
         `Authentication Time (auth_time) claim in the ID token indicates that too much time has passed since the last end-user authentication. Currrent time (${now}) is after last auth at ${authValidUntil}`
@@ -159,6 +162,6 @@ var validate = function(token, options) {
 };
 
 module.exports = {
-  decode: decode,
-  validate: validate
+  decode,
+  validate,
 };
