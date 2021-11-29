@@ -1,110 +1,102 @@
-var path = require('path');
-var expect = require('chai').expect;
-var nock = require('nock');
-var extractParts = require('../utils').extractParts;
-var fs = require('fs');
+const path = require('path');
+const { expect } = require('chai');
+const nock = require('nock');
+const { extractParts } = require('../utils');
+const fs = require('fs');
 
-var SRC_DIR = '../../src';
-var API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com';
 
-var JobsManager = require(SRC_DIR + '/management/JobsManager');
-var ArgumentError = require('rest-facade').ArgumentError;
+const JobsManager = require(`../../src/management/JobsManager`);
+const { ArgumentError } = require('rest-facade');
 
-var token = 'TOKEN';
+const token = 'TOKEN';
 
-describe('JobsManager', function() {
-  before(function() {
+describe('JobsManager', () => {
+  before(function () {
     this.id = 'testJob';
     this.jobs = new JobsManager({
       tokenProvider: {
-        getAccessToken: function() {
+        getAccessToken() {
           return Promise.resolve(token);
-        }
+        },
       },
       headers: {},
-      baseUrl: API_URL
+      baseUrl: API_URL,
     });
   });
 
-  describe('instance', function() {
-    var methods = ['verifyEmail', 'importUsers', 'exportUsers', 'get'];
+  describe('instance', () => {
+    const methods = ['verifyEmail', 'importUsers', 'exportUsers', 'get'];
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.jobs[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#constructor', function() {
-    it('should error when no options are provided', function() {
-      expect(JobsManager).to.throw(ArgumentError, 'Must provide client options');
+  describe('#constructor', () => {
+    it('should error when no options are provided', () => {
+      expect(() => {
+        new JobsManager();
+      }).to.throw(ArgumentError, 'Must provide client options');
     });
 
-    it('should throw an error when no base URL is provided', function() {
-      var client = JobsManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+    it('should throw an error when no base URL is provided', () => {
+      expect(() => {
+        new JobsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
-    it('should throw an error when the base URL is invalid', function() {
-      var client = JobsManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+    it('should throw an error when the base URL is invalid', () => {
+      expect(() => {
+        new JobsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
-  describe('#get', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .reply(200);
+  describe('#get', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/jobs/${this.id}`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.jobs.get({ id: this.id }, function() {
+    it('should accept a callback', function (done) {
+      this.jobs.get({ id: this.id }, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.jobs
-        .get({ id: this.id })
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.jobs.get({ id: this.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .reply(500);
+      nock(API_URL).get(`/jobs/${this.id}`).reply(500);
 
-      this.jobs.get({ id: this.id }).catch(function(err) {
+      this.jobs.get({ id: this.id }).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should throw an ArgumentError if an invalid id is passed', function(done) {
+    it('should throw an ArgumentError if an invalid id is passed', function (done) {
       try {
-        this.jobs.errors({ id: 12345 }, function() {});
+        this.jobs.errors({ id: 12345 }, () => {});
       } catch (err) {
         expect(err).to.exist;
         done();
       }
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .reply(200, data);
+      const data = [{ test: true }];
+      nock(API_URL).get(`/jobs/${this.id}`).reply(200, data);
 
-      this.jobs.get({ id: this.id }).then(function(blacklistedTokens) {
+      this.jobs.get({ id: this.id }).then((blacklistedTokens) => {
         expect(blacklistedTokens).to.be.an.instanceOf(Array);
 
         expect(blacklistedTokens.length).to.equal(data.length);
@@ -115,42 +107,42 @@ describe('JobsManager', function() {
       });
     });
 
-    it('should perform a GET request to /api/v2/jobs', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/jobs', function (done) {
+      const { request } = this;
 
-      this.jobs.get({ id: this.id }).then(function() {
+      this.jobs.get({ id: this.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
-        .matchHeader('Authorization', 'Bearer ' + token)
+      const request = nock(API_URL)
+        .get(`/jobs/${this.id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.jobs.get({ id: this.id }).then(function() {
+      this.jobs.get({ id: this.id }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function(done) {
+    it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
+      const request = nock(API_URL)
+        .get(`/jobs/${this.id}`)
         .query({
           include_fields: true,
-          fields: 'test'
+          fields: 'test',
         })
         .reply(200);
 
-      this.jobs.get({ id: this.id, include_fields: true, fields: 'test' }).then(function() {
+      this.jobs.get({ id: this.id, include_fields: true, fields: 'test' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -158,57 +150,48 @@ describe('JobsManager', function() {
   });
 
   // Error retrieval tests
-  describe('#errors', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/jobs/' + this.id + '/errors')
-        .reply(200);
+  describe('#errors', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/jobs/${this.id}/errors`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.jobs.errors({ id: this.id }, function() {
+    it('should accept a callback', function (done) {
+      this.jobs.errors({ id: this.id }, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.jobs
-        .errors({ id: this.id })
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.jobs.errors({ id: this.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id + '/errors')
-        .reply(500);
+      nock(API_URL).get(`/jobs/${this.id}/errors`).reply(500);
 
-      this.jobs.errors({ id: this.id }).catch(function(err) {
+      this.jobs.errors({ id: this.id }).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should throw an ArgumentError if an invalid id is passed', function(done) {
+    it('should throw an ArgumentError if an invalid id is passed', function (done) {
       try {
-        this.jobs.errors({ id: null }, function() {});
+        this.jobs.errors({ id: null }, () => {});
       } catch (err) {
         expect(err).to.exist;
         done();
       }
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id + '/errors')
-        .reply(200, data);
+      const data = [{ test: true }];
+      nock(API_URL).get(`/jobs/${this.id}/errors`).reply(200, data);
 
-      this.jobs.errors({ id: this.id }).then(function(blacklistedTokens) {
+      this.jobs.errors({ id: this.id }).then((blacklistedTokens) => {
         expect(blacklistedTokens).to.be.an.instanceOf(Array);
 
         expect(blacklistedTokens.length).to.equal(data.length);
@@ -219,42 +202,42 @@ describe('JobsManager', function() {
       });
     });
 
-    it('should perform a GET request to /api/v2/jobs/:id/errors', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/jobs/:id/errors', function (done) {
+      const { request } = this;
 
-      this.jobs.errors({ id: this.id }).then(function() {
+      this.jobs.errors({ id: this.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id + '/errors')
-        .matchHeader('Authorization', 'Bearer ' + token)
+      const request = nock(API_URL)
+        .get(`/jobs/${this.id}/errors`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.jobs.errors({ id: this.id }).then(function() {
+      this.jobs.errors({ id: this.id }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function(done) {
+    it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/jobs/' + this.id)
+      const request = nock(API_URL)
+        .get(`/jobs/${this.id}`)
         .query({
           include_fields: true,
-          fields: 'test'
+          fields: 'test',
         })
         .reply(200);
 
-      this.jobs.get({ id: this.id, include_fields: true, fields: 'test' }).then(function() {
+      this.jobs.get({ id: this.id, include_fields: true, fields: 'test' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -263,34 +246,29 @@ describe('JobsManager', function() {
 
   const usersFilePath = path.join(__dirname, '../data/users.json');
 
-  describe('#importUsers', function() {
-    var data = {
+  describe('#importUsers', () => {
+    const data = {
       users: usersFilePath,
-      connection_id: 'con_test'
+      connection_id: 'con_test',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/jobs/users-imports').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.jobs.importUsers(data, function() {
+    it('should accept a callback', function (done) {
+      this.jobs.importUsers(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.jobs
-        .importUsers(data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.jobs.importUsers(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should have the payload in response.data', function(done) {
+    it('should have the payload in response.data', function (done) {
       nock.cleanAll();
-      var payload = {
+      const payload = {
         status: 'pending',
         type: 'users_import',
         created_at: '',
@@ -298,42 +276,36 @@ describe('JobsManager', function() {
         connection_id: 'con_0000000000000001',
         upsert: false,
         external_id: '',
-        send_completion_email: true
+        send_completion_email: true,
       };
-      var request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .reply(200, payload);
+      nock(API_URL).post('/jobs/users-imports').reply(200, payload);
 
       this.jobs
         .importUsers(data)
-        .then(response => {
+        .then((response) => {
           expect(response.data).to.deep.equal(payload);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
-    it('should pass request errors to the promise catch handler', function(done) {
+    it('should pass request errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .replyWithError('printer on fire');
+      nock(API_URL).post('/jobs/users-imports').replyWithError('printer on fire');
 
-      this.jobs.importUsers(data).catch(function(err) {
+      this.jobs.importUsers(data).catch((err) => {
         expect(err.message).to.equal('printer on fire');
         done();
       });
     });
 
-    it('should pass HTTP errors to the promise catch handler', function(done) {
+    it('should pass HTTP errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .reply(500);
+      nock(API_URL).post('/jobs/users-imports').reply(500);
 
-      this.jobs.importUsers(data).catch(function(err) {
+      this.jobs.importUsers(data).catch((err) => {
         expect(err.message).to.equal(
           'cannot POST https://tenant.auth0.com/jobs/users-imports (500)'
         );
@@ -341,23 +313,21 @@ describe('JobsManager', function() {
       });
     });
 
-    it('should pass rest-api json error messages to the promise catch handler', function(done) {
+    it('should pass rest-api json error messages to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      nock(API_URL)
         .post('/jobs/users-imports')
-        .reply((uri, requestBody) => {
-          return [
-            429,
-            {
-              statusCode: 429,
-              error: 'Too Many Requests',
-              message: 'There are 4 active import users jobs'
-            }
-          ];
-        });
+        .reply(() => [
+          429,
+          {
+            statusCode: 429,
+            error: 'Too Many Requests',
+            message: 'There are 4 active import users jobs',
+          },
+        ]);
 
-      this.jobs.importUsers(data).catch(function(err) {
+      this.jobs.importUsers(data).catch((err) => {
         expect(err.message).to.equal(
           'cannot POST https://tenant.auth0.com/jobs/users-imports (429)'
         );
@@ -366,60 +336,52 @@ describe('JobsManager', function() {
       });
     });
 
-    it('should perform a POST request to /api/v2/jobs/users-imports', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/jobs/users-imports', function (done) {
+      const { request } = this;
 
-      this.jobs.importUsers(data).then(function() {
+      this.jobs.importUsers(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should be a multipart request', function(done) {
+    it('should be a multipart request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Content-Type', function(header) {
-          return header.indexOf('multipart/form-data') === 0;
-        })
+        .matchHeader('Content-Type', (header) => header.indexOf('multipart/form-data') === 0)
         .reply(200);
 
-      this.jobs.importUsers(data).then(function() {
+      this.jobs.importUsers(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should have four parts: connection_id, users file, upsert and send_completion_email', function(done) {
+    it('should have four parts: connection_id, users file, upsert and send_completion_email', function (done) {
       nock.cleanAll();
-      var boundary = null;
+      let boundary = null;
 
-      var request = nock(API_URL)
-        .matchHeader('Content-Type', function(header) {
-          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+      const request = nock(API_URL)
+        .matchHeader('Content-Type', (header) => {
+          boundary = `--${header.match(/boundary=([^\n]*)/)[1]}`;
 
           return true;
         })
-        .post('/jobs/users-imports', function(body) {
-          var parts = extractParts(body, boundary);
+        .post('/jobs/users-imports', (body) => {
+          const parts = extractParts(body, boundary);
 
           // Validate the connection id.
-          expect(parts.connection_id)
-            .to.exist.to.be.a('string')
-            .to.equal(data.connection_id);
+          expect(parts.connection_id).to.exist.to.be.a('string').to.equal(data.connection_id);
 
           // Validate the upsert param - default is false
-          expect(parts.upsert)
-            .to.exist.to.be.a('string')
-            .to.equal('false');
+          expect(parts.upsert).to.exist.to.be.a('string').to.equal('false');
 
           // Validate the send_completion_email param - default is true
-          expect(parts.send_completion_email)
-            .to.exist.to.be.a('string')
-            .to.equal('true');
+          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('true');
 
           // Validate the content type of the users JSON.
           expect(parts.users)
@@ -435,80 +397,76 @@ describe('JobsManager', function() {
         })
         .reply(200);
 
-      this.jobs.importUsers(data).then(function() {
+      this.jobs.importUsers(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should set upsert parameter correctly', function(done) {
+    it('should set upsert parameter correctly', function (done) {
       nock.cleanAll();
-      var boundary = null;
+      let boundary = null;
 
-      var request = nock(API_URL)
-        .matchHeader('Content-Type', function(header) {
-          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+      const request = nock(API_URL)
+        .matchHeader('Content-Type', (header) => {
+          boundary = `--${header.match(/boundary=([^\n]*)/)[1]}`;
 
           return true;
         })
-        .post('/jobs/users-imports', function(body) {
-          var parts = extractParts(body, boundary);
+        .post('/jobs/users-imports', (body) => {
+          const parts = extractParts(body, boundary);
 
           // Validate the upsert param
-          expect(parts.upsert)
-            .to.exist.to.be.a('string')
-            .to.equal('true');
+          expect(parts.upsert).to.exist.to.be.a('string').to.equal('true');
 
           return true;
         })
         .reply(200);
 
-      this.jobs.importUsers(Object.assign({ upsert: true }, data)).then(function() {
+      this.jobs.importUsers(Object.assign({ upsert: true }, data)).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should set send_completion_email parameter correctly', function(done) {
+    it('should set send_completion_email parameter correctly', function (done) {
       nock.cleanAll();
-      var boundary = null;
+      let boundary = null;
 
-      var request = nock(API_URL)
-        .matchHeader('Content-Type', function(header) {
-          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+      const request = nock(API_URL)
+        .matchHeader('Content-Type', (header) => {
+          boundary = `--${header.match(/boundary=([^\n]*)/)[1]}`;
 
           return true;
         })
-        .post('/jobs/users-imports', function(body) {
-          var parts = extractParts(body, boundary);
+        .post('/jobs/users-imports', (body) => {
+          const parts = extractParts(body, boundary);
 
           // Validate the upsert param
-          expect(parts.send_completion_email)
-            .to.exist.to.be.a('string')
-            .to.equal('false');
+          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('false');
 
           return true;
         })
         .reply(200);
 
-      this.jobs.importUsers(Object.assign({ send_completion_email: false }, data)).then(function() {
+      this.jobs.importUsers(Object.assign({ send_completion_email: false }, data)).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Authorization', 'Bearer ' + token)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.jobs.importUsers(data).then(function() {
+      this.jobs.importUsers(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -516,30 +474,28 @@ describe('JobsManager', function() {
     });
   });
 
-  describe('#importUsers with JSON data', function() {
-    var data = {
+  describe('#importUsers with JSON data', () => {
+    const data = {
       users_json: fs.readFileSync(usersFilePath, 'utf8'),
-      connection_id: 'con_test'
+      connection_id: 'con_test',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/jobs/users-imports').reply(200);
     });
 
-    it('should correctly include user JSON', function(done) {
+    it('should correctly include user JSON', function (done) {
       nock.cleanAll();
-      var boundary = null;
+      let boundary = null;
 
-      var request = nock(API_URL)
-        .matchHeader('Content-Type', function(header) {
-          boundary = '--' + header.match(/boundary=([^\n]*)/)[1];
+      const request = nock(API_URL)
+        .matchHeader('Content-Type', (header) => {
+          boundary = `--${header.match(/boundary=([^\n]*)/)[1]}`;
 
           return true;
         })
-        .post('/jobs/users-imports', function(body) {
-          var parts = extractParts(body, boundary);
+        .post('/jobs/users-imports', (body) => {
+          const parts = extractParts(body, boundary);
 
           // Validate the content type of the users JSON.
           expect(parts.users)
@@ -555,7 +511,7 @@ describe('JobsManager', function() {
         })
         .reply(200);
 
-      this.jobs.importUsers(data).then(function() {
+      this.jobs.importUsers(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -563,35 +519,30 @@ describe('JobsManager', function() {
     });
   });
 
-  describe('#importUsersJob', function() {
-    var data = {
+  describe('#importUsersJob', () => {
+    const data = {
       users: usersFilePath,
-      connection_id: 'con_test'
+      connection_id: 'con_test',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/jobs/users-imports').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.jobs.importUsersJob(data, function() {
+    it('should accept a callback', function (done) {
+      this.jobs.importUsersJob(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.jobs
-        .importUsersJob(data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.jobs.importUsersJob(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should extract data from the response', function(done) {
+    it('should extract data from the response', function (done) {
       nock.cleanAll();
 
-      var payload = {
+      const payload = {
         status: 'pending',
         type: 'users_import',
         created_at: '',
@@ -599,169 +550,152 @@ describe('JobsManager', function() {
         connection_id: 'con_0000000000000001',
         upsert: false,
         external_id: '',
-        send_completion_email: true
+        send_completion_email: true,
       };
-      var request = nock(API_URL)
-        .post('/jobs/users-imports')
-        .reply(200, payload);
+      nock(API_URL).post('/jobs/users-imports').reply(200, payload);
 
       this.jobs
         .importUsersJob(data)
-        .then(response => {
+        .then((response) => {
           expect(response).to.deep.equal(payload);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
   });
 
-  describe('#exportUsers', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/jobs/users-exports')
-        .reply(200);
+  describe('#exportUsers', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/jobs/users-exports').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.jobs.exportUsers({ format: 'csv' }, function() {
+    it('should accept a callback', function (done) {
+      this.jobs.exportUsers({ format: 'csv' }, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.jobs
         .exportUsers({ format: 'csv' })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
-      nock(API_URL)
-        .post('/jobs/users-exports')
-        .reply(500);
+      nock(API_URL).post('/jobs/users-exports').reply(500);
 
-      this.jobs.exportUsers({ format: 'csv' }).catch(function(err) {
+      this.jobs.exportUsers({ format: 'csv' }).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = {
+      const data = {
         type: 'users_export',
         status: 'pending',
         format: 'csv',
         created_at: '',
-        id: 'job_0000000000000001'
+        id: 'job_0000000000000001',
       };
-      nock(API_URL)
-        .post('/jobs/users-exports')
-        .reply(200, data);
+      nock(API_URL).post('/jobs/users-exports').reply(200, data);
 
-      this.jobs.exportUsers({ format: 'csv' }).then(function(response) {
+      this.jobs.exportUsers({ format: 'csv' }).then((response) => {
         expect(response).to.be.an.instanceOf(Object);
         expect(response.status).to.equal('pending');
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/jobs/users-exports', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/jobs/users-exports', function (done) {
+      const { request } = this;
 
-      this.jobs.exportUsers({ format: 'csv' }).then(function() {
+      this.jobs.exportUsers({ format: 'csv' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .post('/jobs/users-exports')
-        .matchHeader('Authorization', 'Bearer ' + token)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.jobs.exportUsers({ format: 'csv' }).then(function() {
+      this.jobs.exportUsers({ format: 'csv' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
   });
 
-  describe('#verifyEmail', function() {
-    var data = {
-      user_id: 'github|12345'
+  describe('#verifyEmail', () => {
+    const data = {
+      user_id: 'github|12345',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/jobs/verification-email')
-        .reply(200, data);
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/jobs/verification-email').reply(200, data);
     });
 
-    it('should accept a callback', function(done) {
-      this.jobs.verifyEmail(data, function() {
+    it('should accept a callback', function (done) {
+      this.jobs.verifyEmail(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.jobs
-        .verifyEmail(data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.jobs.verifyEmail(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/jobs/verification-email')
-        .reply(500);
+      nock(API_URL).post('/jobs/verification-email').reply(500);
 
-      this.jobs.verifyEmail(data).catch(function(err) {
+      this.jobs.verifyEmail(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/jobs/verification-email', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/jobs/verification-email', function (done) {
+      const { request } = this;
 
-      this.jobs.verifyEmail(data).then(function() {
+      this.jobs.verifyEmail(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/jobs/verification-email', data)
-        .reply(200);
+      const request = nock(API_URL).post('/jobs/verification-email', data).reply(200);
 
-      this.jobs.verifyEmail(data).then(function() {
+      this.jobs.verifyEmail(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .post('/jobs/verification-email')
-        .matchHeader('Authorization', 'Bearer ' + token)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.jobs.verifyEmail(data).then(function() {
+      this.jobs.verifyEmail(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

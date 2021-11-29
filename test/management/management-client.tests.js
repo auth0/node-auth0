@@ -1,133 +1,137 @@
-var expect = require('chai').expect;
-var nock = require('nock');
-var sinon = require('sinon');
-var proxyquire = require('proxyquire');
+const { expect } = require('chai');
+const nock = require('nock');
+const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 
-var ManagementClient = require('../../src/management');
+const ManagementClient = require('../../src/management');
 
-var ArgumentError = require('rest-facade').ArgumentError;
-var UsersManager = require('../../src/management/UsersManager');
-var UserBlocksManager = require('../../src/management/UserBlocksManager');
-var BlacklistedTokensManager = require('../../src/management/BlacklistedTokensManager');
-var ClientsManager = require('../../src/management/ClientsManager');
-var ClientGrantsManager = require('../../src/management/ClientGrantsManager');
-var GrantsManager = require('../../src/management/GrantsManager');
-var ConnectionsManager = require('../../src/management/ConnectionsManager');
-var DeviceCredentialsManager = require('../../src/management/DeviceCredentialsManager');
-var EmailProviderManager = require('../../src/management/EmailProviderManager');
-var EmailTemplatesManager = require('../../src/management/EmailTemplatesManager');
-var JobsManager = require('../../src/management/JobsManager');
-var RulesManager = require('../../src/management/RulesManager');
-var StatsManager = require('../../src/management/StatsManager');
-var RulesConfigsManager = require('../../src/management/RulesConfigsManager');
-var TenantManager = require('../../src/management/TenantManager');
+const { ArgumentError } = require('rest-facade');
+const UsersManager = require('../../src/management/UsersManager');
+const UserBlocksManager = require('../../src/management/UserBlocksManager');
+const BlacklistedTokensManager = require('../../src/management/BlacklistedTokensManager');
+const ClientsManager = require('../../src/management/ClientsManager');
+const ClientGrantsManager = require('../../src/management/ClientGrantsManager');
+const GrantsManager = require('../../src/management/GrantsManager');
+const ConnectionsManager = require('../../src/management/ConnectionsManager');
+const DeviceCredentialsManager = require('../../src/management/DeviceCredentialsManager');
+const EmailProviderManager = require('../../src/management/EmailProviderManager');
+const EmailTemplatesManager = require('../../src/management/EmailTemplatesManager');
+const JobsManager = require('../../src/management/JobsManager');
+const RulesManager = require('../../src/management/RulesManager');
+const StatsManager = require('../../src/management/StatsManager');
+const RulesConfigsManager = require('../../src/management/RulesConfigsManager');
+const TenantManager = require('../../src/management/TenantManager');
 
-describe('ManagementClient', function() {
-  var withTokenProviderConfig = {
+describe('ManagementClient', () => {
+  const withTokenProviderConfig = {
     clientId: 'clientId',
     clientSecret: 'clientSecret',
     domain: 'auth0-node-sdk.auth0.com',
     tokenProvider: {
-      enableCache: false
-    }
+      enableCache: false,
+    },
   };
 
-  var withTokenConfig = {
+  const withTokenConfig = {
     domain: 'auth0-node-sdk.auth0.com',
-    token: 'fake-token'
+    token: 'fake-token',
   };
 
-  it('should expose an instance of ManagementClient when withTokenConfig is passed', function() {
+  it('should expose an instance of ManagementClient when withTokenConfig is passed', () => {
     expect(new ManagementClient(withTokenConfig)).to.exist.to.be.an.instanceOf(ManagementClient);
   });
 
-  it('should expose an instance of ManagementClient when withTokenProviderConfig is passed', function() {
+  it('should expose an instance of ManagementClient when withTokenProviderConfig is passed', () => {
     expect(new ManagementClient(withTokenProviderConfig)).to.exist.to.be.an.instanceOf(
       ManagementClient
     );
   });
 
-  it('should expose an instance of ManagementClient when withTokenProviderConfig and audience is passed', function() {
-    var config = Object.assign(
+  it('should expose an instance of ManagementClient when withTokenProviderConfig and audience is passed', () => {
+    const config = Object.assign(
       { audience: 'https://auth0-node-sdk.auth0.com/api/v2/' },
       withTokenConfig
     );
     expect(new ManagementClient(config)).to.exist.to.be.an.instanceOf(ManagementClient);
   });
 
-  it('should raise an error when no options object is provided', function() {
-    expect(ManagementClient).to.throw(
-      ArgumentError,
-      'Management API SDK options must be an object'
-    );
+  it('should raise an error when no options object is provided', () => {
+    expect(() => {
+      new ManagementClient();
+    }).to.throw(ArgumentError, 'Management API SDK options must be an object');
   });
 
-  it('should raise an error when the domain is not set', function() {
-    var config = Object.assign({}, withTokenConfig);
-    delete config.domain;
-    var client = ManagementClient.bind(null, config);
+  it('should raise an error when the domain is not set', () => {
+    const options = Object.assign({}, withTokenConfig);
+    delete options.domain;
 
-    expect(client).to.throw(ArgumentError, 'Must provide a domain');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a domain');
   });
 
-  it('should raise an error when the domain is not valid', function() {
-    var config = Object.assign({}, withTokenConfig);
-    config.domain = '';
-    var client = ManagementClient.bind(null, config);
+  it('should raise an error when the domain is not valid', () => {
+    const options = Object.assign({}, withTokenConfig);
+    options.domain = '';
 
-    expect(client).to.throw(ArgumentError, 'Must provide a domain');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a domain');
   });
 
-  it('should raise an error when the token is not valid', function() {
-    var config = Object.assign({}, withTokenConfig);
-    config.token = '';
-    var client = ManagementClient.bind(null, config);
+  it('should raise an error when the token is not valid', () => {
+    const options = Object.assign({}, withTokenConfig);
+    options.token = '';
 
-    expect(client).to.throw(ArgumentError, 'Must provide a token');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a token');
   });
 
-  it('should raise an error when the token and clientId are not set', function() {
-    var config = Object.assign({}, withTokenProviderConfig);
-    delete config.clientId;
-    var client = ManagementClient.bind(null, config);
+  it('should raise an error when the token and clientId are not set', () => {
+    const options = Object.assign({}, withTokenProviderConfig);
+    delete options.clientId;
 
-    expect(client).to.throw(ArgumentError, 'Must provide a clientId');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a clientId');
   });
 
-  it('should raise an error when the token and clientSecret are not set', function() {
-    var config = Object.assign({}, withTokenProviderConfig);
-    delete config.clientSecret;
-    var client = ManagementClient.bind(null, config);
+  it('should raise an error when the token and clientSecret are not set', () => {
+    const options = Object.assign({}, withTokenProviderConfig);
+    delete options.clientSecret;
 
-    expect(client).to.throw(ArgumentError, 'Must provide a clientSecret');
+    expect(() => {
+      new ManagementClient(options);
+    }).to.throw(ArgumentError, 'Must provide a clientSecret');
   });
 
-  describe('getAccessToken', function() {
-    it('should return token provided in config', function(done) {
-      var config = Object.assign({}, withTokenConfig);
-      var client = new ManagementClient(config);
+  describe('getAccessToken', () => {
+    it('should return token provided in config', (done) => {
+      const config = Object.assign({}, withTokenConfig);
+      const client = new ManagementClient(config);
 
-      client.getAccessToken().then(function(accessToken) {
+      client.getAccessToken().then((accessToken) => {
         expect(accessToken).to.equal(withTokenConfig.token);
         done();
       });
     });
-    it('should return token from provider', function(done) {
-      var config = Object.assign({}, withTokenProviderConfig);
-      var client = new ManagementClient(config);
+    it('should return token from provider', (done) => {
+      const config = Object.assign({}, withTokenProviderConfig);
+      const client = new ManagementClient(config);
 
-      nock('https://' + config.domain)
-        .post('/oauth/token', function(body) {
+      nock(`https://${config.domain}`)
+        .post('/oauth/token', (body) => {
           expect(body.client_id).to.equal(config.clientId);
           expect(body.client_secret).to.equal(config.clientSecret);
           expect(body.grant_type).to.equal('client_credentials');
           return true;
         })
-        .reply(function(uri, requestBody, cb) {
-          return cb(null, [200, { access_token: 'token', expires_in: 3600 }]);
-        });
+        .reply((uri, requestBody, cb) =>
+          cb(null, [200, { access_token: 'token', expires_in: 3600 }])
+        );
 
-      client.getAccessToken().then(function(data) {
+      client.getAccessToken().then((data) => {
         expect(data).to.equal('token');
         done();
         nock.cleanAll();
@@ -135,119 +139,117 @@ describe('ManagementClient', function() {
     });
   });
 
-  describe('instance properties', function() {
-    var manager;
-    var managers = {
+  describe('instance properties', () => {
+    let manager;
+    const managers = {
       UsersManager: {
         property: 'users',
-        cls: UsersManager
+        cls: UsersManager,
       },
       UserBlocksManager: {
         property: 'userBlocks',
-        cls: UserBlocksManager
+        cls: UserBlocksManager,
       },
       BlacklistedTokensManager: {
         property: 'blacklistedTokens',
-        cls: BlacklistedTokensManager
+        cls: BlacklistedTokensManager,
       },
       ClientsManager: {
         property: 'clients',
-        cls: ClientsManager
+        cls: ClientsManager,
       },
       ClientGrantsManager: {
         property: 'clientGrants',
-        cls: ClientGrantsManager
+        cls: ClientGrantsManager,
       },
       GrantsManager: {
         property: 'grants',
-        cls: GrantsManager
+        cls: GrantsManager,
       },
       ConnectionsManager: {
         property: 'connections',
-        cls: ConnectionsManager
+        cls: ConnectionsManager,
       },
       DeviceCredentialsManager: {
         property: 'deviceCredentials',
-        cls: DeviceCredentialsManager
+        cls: DeviceCredentialsManager,
       },
       EmailProviderManager: {
         property: 'emailProvider',
-        cls: EmailProviderManager
+        cls: EmailProviderManager,
       },
       EmailTemplatesManager: {
         property: 'emailTemplates',
-        cls: EmailTemplatesManager
+        cls: EmailTemplatesManager,
       },
       JobsManager: {
         property: 'jobs',
-        cls: JobsManager
+        cls: JobsManager,
       },
       RulesManager: {
         property: 'rules',
-        cls: RulesManager
+        cls: RulesManager,
       },
       StatsManager: {
         property: 'stats',
-        cls: StatsManager
+        cls: StatsManager,
       },
       TenantManager: {
         property: 'tenant',
-        cls: TenantManager
+        cls: TenantManager,
       },
       RulesConfigsManager: {
         property: 'rulesConfigs',
-        cls: RulesConfigsManager
-      }
+        cls: RulesConfigsManager,
+      },
     };
 
-    describe('user agent', function() {
-      for (var name in managers) {
+    describe('user agent', () => {
+      for (const name in managers) {
         manager = managers[name];
 
-        it(manager + ' should use the node version by default', function() {
-          var client = new ManagementClient(withTokenConfig);
+        it(`${manager} should use the node version by default`, () => {
+          const client = new ManagementClient(withTokenConfig);
 
           expect(
             client[manager.property].resource.restClient.restClient.options.headers
           ).to.contain({
-            'User-Agent': 'node.js/' + process.version.replace('v', '')
+            'User-Agent': `node.js/${process.version.replace('v', '')}`,
           });
         });
 
-        it(manager + ' should include additional headers when provided', function() {
-          var customHeaders = {
+        it(`${manager} should include additional headers when provided`, () => {
+          const customHeaders = {
             'User-Agent': 'my-user-agent',
-            'Another-header': 'test-header'
+            'Another-header': 'test-header',
           };
 
-          var options = Object.assign({ headers: customHeaders }, withTokenConfig);
-          var client = new ManagementClient(options);
+          const options = Object.assign({ headers: customHeaders }, withTokenConfig);
+          const client = new ManagementClient(options);
 
           expect(
             client[manager.property].resource.restClient.restClient.options.headers
           ).to.contain({
             'User-Agent': 'my-user-agent',
-            'Another-header': 'test-header'
+            'Another-header': 'test-header',
           });
         });
       }
     });
 
-    describe('client info', function() {
-      it('should configure instances with default telemetry header', function() {
-        var utilsStub = {
-          generateClientInfo: sinon.spy(function() {
-            return { name: 'test-sdk', version: 'ver-123' };
-          })
+    describe('client info', () => {
+      it('should configure instances with default telemetry header', () => {
+        const utilsStub = {
+          generateClientInfo: sinon.spy(() => ({ name: 'test-sdk', version: 'ver-123' })),
         };
-        var ManagementClientProxy = proxyquire('../../src/management/', {
-          '../utils': utilsStub
+        const ManagementClientProxy = proxyquire('../../src/management/', {
+          '../utils': utilsStub,
         });
-        var client = new ManagementClientProxy(withTokenConfig);
+        const client = new ManagementClientProxy(withTokenConfig);
 
-        var requestHeaders = {
+        const requestHeaders = {
           'Auth0-Client': 'eyJuYW1lIjoidGVzdC1zZGsiLCJ2ZXJzaW9uIjoidmVyLTEyMyJ9',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         expect(client.clients.resource.restClient.restClient.options.headers).to.contain(
@@ -384,18 +386,18 @@ describe('ManagementClient', function() {
         expect(client.roles.users.restClient.restClient.options.headers).to.contain(requestHeaders);
       });
 
-      it('should configure instances with custom telemetry header', function() {
-        var customTelemetry = { name: 'custom', version: 'beta-01', env: { node: 'v10' } };
-        var client = new ManagementClient({
+      it('should configure instances with custom telemetry header', () => {
+        const customTelemetry = { name: 'custom', version: 'beta-01', env: { node: 'v10' } };
+        const client = new ManagementClient({
           token: 'token',
           domain: 'auth0.com',
-          clientInfo: customTelemetry
+          clientInfo: customTelemetry,
         });
 
-        var requestHeaders = {
+        const requestHeaders = {
           'Auth0-Client':
             'eyJuYW1lIjoiY3VzdG9tIiwidmVyc2lvbiI6ImJldGEtMDEiLCJlbnYiOnsibm9kZSI6InYxMCJ9fQ',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
 
         expect(client.clients.resource.restClient.restClient.options.headers).to.contain(
@@ -532,12 +534,12 @@ describe('ManagementClient', function() {
         expect(client.roles.users.restClient.restClient.options.headers).to.contain(requestHeaders);
       });
 
-      it('should configure instances without telemetry when "name" property is empty', function() {
-        var customTelemetry = { name: '', version: 'beta-01', env: { node: 'v10' } };
-        var client = new ManagementClient({
+      it('should configure instances without telemetry when "name" property is empty', () => {
+        const customTelemetry = { name: '', version: 'beta-01', env: { node: 'v10' } };
+        const client = new ManagementClient({
           token: 'token',
           domain: 'auth0.com',
-          clientInfo: customTelemetry
+          clientInfo: customTelemetry,
         });
 
         expect(client.clients.resource.restClient.restClient.options.headers).to.not.have.property(
@@ -682,11 +684,11 @@ describe('ManagementClient', function() {
         );
       });
 
-      it('should configure instances without telemetry header when disabled', function() {
-        var client = new ManagementClient({
+      it('should configure instances without telemetry header when disabled', () => {
+        const client = new ManagementClient({
           token: 'token',
           domain: 'auth0.com',
-          telemetry: false
+          telemetry: false,
         });
 
         expect(client.clients.resource.restClient.restClient.options.headers).to.not.have.property(
@@ -832,23 +834,23 @@ describe('ManagementClient', function() {
       });
     });
 
-    before(function() {
-      var config = Object.assign({}, withTokenConfig);
+    before(function () {
+      const config = Object.assign({}, withTokenConfig);
       this.client = new ManagementClient(config);
     });
 
     // Tests common to all managers.
-    for (var name in managers) {
+    for (const name in managers) {
       manager = managers[name];
 
-      it('should expose an instance of ' + name, function() {
+      it(`should expose an instance of ${name}`, function () {
         expect(this.client[manager.property]).to.exist.to.be.an.instanceOf(manager.cls);
       });
     }
   });
 
-  describe('instance methods', function() {
-    var methods = [
+  describe('instance methods', () => {
+    const methods = [
       'getConnections',
       'createConnection',
       'getConnection',
@@ -918,16 +920,16 @@ describe('ManagementClient', function() {
       'unblockUserByIdentifier',
       'getAccessToken',
       'getPromptsSettings',
-      'updatePromptsSettings'
+      'updatePromptsSettings',
     ];
 
-    before(function() {
-      var config = Object.assign({}, withTokenConfig);
+    before(function () {
+      const config = Object.assign({}, withTokenConfig);
       this.client = new ManagementClient(config);
     });
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.client[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });

@@ -1,101 +1,90 @@
-var expect = require('chai').expect;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-var SRC_DIR = '../../src';
-var API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com';
 
-var ResourceServersManager = require(SRC_DIR + '/management/ResourceServersManager');
-var ArgumentError = require('rest-facade').ArgumentError;
+const ResourceServersManager = require(`../../src/management/ResourceServersManager`);
+const { ArgumentError } = require('rest-facade');
 
-describe('ResourceServersManager', function() {
-  before(function() {
+describe('ResourceServersManager', () => {
+  before(function () {
     this.token = 'TOKEN';
     this.resourceServers = new ResourceServersManager({
       headers: {
-        authorization: 'Bearer ' + this.token
+        authorization: `Bearer ${this.token}`,
       },
-      baseUrl: API_URL
+      baseUrl: API_URL,
     });
   });
 
-  afterEach(function() {
+  afterEach(() => {
     nock.cleanAll();
   });
 
-  describe('instance', function() {
-    var methods = ['get', 'create', 'update', 'delete'];
+  describe('instance', () => {
+    const methods = ['get', 'create', 'update', 'delete'];
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.resourceServers[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#constructor', function() {
-    it('should error when no options are provided', function() {
-      expect(ResourceServersManager).to.throw(
-        ArgumentError,
-        'Must provide resource server options'
-      );
+  describe('#constructor', () => {
+    it('should error when no options are provided', () => {
+      expect(() => {
+        new ResourceServersManager();
+      }).to.throw(ArgumentError, 'Must provide resource server options');
     });
 
-    it('should throw an error when no base URL is provided', function() {
-      var resourceServerManager = ResourceServersManager.bind(null, {});
-
-      expect(resourceServerManager).to.throw(ArgumentError, 'Must provide a base URL for the API');
+    it('should throw an error when no base URL is provided', () => {
+      expect(() => {
+        new ResourceServersManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
-    it('should throw an error when the base URL is invalid', function() {
-      var resourceServerManager = ResourceServersManager.bind(null, { baseUrl: '' });
-
-      expect(resourceServerManager).to.throw(ArgumentError, 'The provided base URL is invalid');
+    it('should throw an error when the base URL is invalid', () => {
+      expect(() => {
+        new ResourceServersManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
-  describe('#getAll', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/resource-servers')
-        .reply(200);
+  describe('#getAll', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).get('/resource-servers').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.resourceServers.getAll(function() {
+    it('should accept a callback', function (done) {
+      this.resourceServers.getAll(() => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.resourceServers
-        .getAll()
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.resourceServers.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/resource-servers')
-        .reply(500);
+      nock(API_URL).get('/resource-servers').reply(500);
 
-      this.resourceServers.getAll().catch(function(err) {
+      this.resourceServers.getAll().catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = [{ test: true }];
-      var request = nock(API_URL)
-        .get('/resource-servers')
-        .reply(200, data);
+      const data = [{ test: true }];
+      nock(API_URL).get('/resource-servers').reply(200, data);
 
-      this.resourceServers.getAll().then(function(resourceServers) {
+      this.resourceServers.getAll().then((resourceServers) => {
         expect(resourceServers).to.be.an.instanceOf(Array);
 
         expect(resourceServers.length).to.equal(data.length);
@@ -106,104 +95,95 @@ describe('ResourceServersManager', function() {
       });
     });
 
-    it('should perform a GET request to /api/v2/resource-servers', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/resource-servers', function (done) {
+      const { request } = this;
 
-      this.resourceServers.getAll().then(function() {
+      this.resourceServers.getAll().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/resource-servers')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.resourceServers.getAll().then(function() {
+      this.resourceServers.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
   });
 
-  describe('#get', function() {
-    var params = { id: 5 };
-    var data = {
+  describe('#get', () => {
+    const params = { id: 5 };
+    const data = {
       id: params.id,
-      name: 'Test Resource Server'
+      name: 'Test Resource Server',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/resource-servers/' + data.id)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get(`/resource-servers/${data.id}`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.resourceServers.get(params, function() {
+    it('should accept a callback', function (done) {
+      this.resourceServers.get(params, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.resourceServers
-        .get(params)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.resourceServers.get(params).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/resource-servers/' + params.id)
-        .reply(500);
+      nock(API_URL).get(`/resource-servers/${params.id}`).reply(500);
 
-      this.resourceServers.get().catch(function(err) {
+      this.resourceServers.get().catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/resource-servers/' + params.id)
-        .reply(200, data);
+      nock(API_URL).get(`/resource-servers/${params.id}`).reply(200, data);
 
-      this.resourceServers.get(params).then(function(connection) {
+      this.resourceServers.get(params).then((connection) => {
         expect(connection.id).to.equal(data.id);
 
         done();
       });
     });
 
-    it('should perform a GET request to /api/v2/resource-servers/:id', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/resource-servers/:id', function (done) {
+      const { request } = this;
 
-      this.resourceServers.get(params).then(function() {
+      this.resourceServers.get(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/resource-servers')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.resourceServers.get().then(function() {
+      this.resourceServers.get().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -211,78 +191,69 @@ describe('ResourceServersManager', function() {
     });
   });
 
-  describe('#create', function() {
-    var data = {
+  describe('#create', () => {
+    const data = {
       name: 'Acme Backend API',
-      options: {}
+      options: {},
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .post('/resource-servers')
-        .reply(200, data);
+    beforeEach(function () {
+      this.request = nock(API_URL).post('/resource-servers').reply(200, data);
     });
 
-    it('should accept a callback', function(done) {
-      this.resourceServers.create(data, function() {
+    it('should accept a callback', function (done) {
+      this.resourceServers.create(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.resourceServers
-        .create(data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.resourceServers.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/resource-servers')
-        .reply(500);
+      nock(API_URL).post('/resource-servers').reply(500);
 
-      this.resourceServers.create(data).catch(function(err) {
+      this.resourceServers.create(data).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/resource-servers', function(done) {
-      var request = this.request;
+    it('should perform a POST request to /api/v2/resource-servers', function (done) {
+      const { request } = this;
 
-      this.resourceServers.create(data).then(function() {
+      this.resourceServers.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .post('/resource-servers', data)
-        .reply(200);
+      const request = nock(API_URL).post('/resource-servers', data).reply(200);
 
-      this.resourceServers.create(data).then(function() {
+      this.resourceServers.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .post('/resource-servers')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.resourceServers.create(data).then(function() {
+      this.resourceServers.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -290,80 +261,74 @@ describe('ResourceServersManager', function() {
     });
   });
 
-  describe('#update', function() {
-    var params = { id: 5 };
-    var data = {
+  describe('#update', () => {
+    const params = { id: 5 };
+    const data = {
       id: 5,
       name: 'Acme Backend API',
-      options: {}
+      options: {},
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .patch('/resource-servers/' + data.id)
-        .reply(200, data);
+    beforeEach(function () {
+      this.request = nock(API_URL).patch(`/resource-servers/${data.id}`).reply(200, data);
     });
 
-    it('should accept a callback', function(done) {
-      this.resourceServers.update(params, data, function() {
+    it('should accept a callback', function (done) {
+      this.resourceServers.update(params, data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.resourceServers
         .update(params, data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/resource-servers/' + data.id)
-        .reply(500);
+      nock(API_URL).patch(`/resource-servers/${data.id}`).reply(500);
 
-      this.resourceServers.update(params, data).catch(function(err) {
+      this.resourceServers.update(params, data).catch((err) => {
         expect(err).to.exist.to.be.an.instanceOf(Error);
 
         done();
       });
     });
 
-    it('should perform a PATCH request to /api/v2/resource-servers/:id', function(done) {
-      var request = this.request;
+    it('should perform a PATCH request to /api/v2/resource-servers/:id', function (done) {
+      const { request } = this;
 
-      this.resourceServers.update(params, data).then(function() {
+      this.resourceServers.update(params, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/resource-servers/' + data.id, data)
-        .reply(200);
+      const request = nock(API_URL).patch(`/resource-servers/${data.id}`, data).reply(200);
 
-      this.resourceServers.update(params, data).then(function() {
+      this.resourceServers.update(params, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/resource-servers/' + data.id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .patch(`/resource-servers/${data.id}`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.resourceServers.update(params, data).then(function() {
+      this.resourceServers.update(params, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -371,56 +336,52 @@ describe('ResourceServersManager', function() {
     });
   });
 
-  describe('#delete', function() {
-    var id = 5;
+  describe('#delete', () => {
+    const id = 5;
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .delete('/resource-servers/' + id)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).delete(`/resource-servers/${id}`).reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.resourceServers.delete({ id: id }, done.bind(null, null));
+    it('should accept a callback', function (done) {
+      this.resourceServers.delete({ id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function(done) {
-      this.resourceServers.delete({ id: id }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', function (done) {
+      this.resourceServers.delete({ id }).then(done.bind(null, null));
     });
 
-    it('should perform a DELETE request to /resource-servers/' + id, function(done) {
-      var request = this.request;
+    it(`should perform a DELETE request to /resource-servers/${id}`, function (done) {
+      const { request } = this;
 
-      this.resourceServers.delete({ id: id }).then(function() {
+      this.resourceServers.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/resource-servers/' + id)
-        .reply(500);
+      nock(API_URL).delete(`/resource-servers/${id}`).reply(500);
 
-      this.resourceServers.delete({ id: id }).catch(function(err) {
+      this.resourceServers.delete({ id }).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .delete('/resource-servers/' + id)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+      const request = nock(API_URL)
+        .delete(`/resource-servers/${id}`)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.resourceServers.delete({ id: id }).then(function() {
+      this.resourceServers.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
