@@ -1,140 +1,129 @@
-var expect = require('chai').expect;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-var SRC_DIR = '../../src';
-var API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com';
 
-var PromptsManager = require(SRC_DIR + '/management/PromptsManager');
-var ArgumentError = require('rest-facade').ArgumentError;
+const PromptsManager = require(`../../src/management/PromptsManager`);
+const { ArgumentError } = require('rest-facade');
 
-describe('PromptsManager', function() {
-  before(function() {
+describe('PromptsManager', () => {
+  before(function () {
     this.token = 'TOKEN';
     this.prompts = new PromptsManager({
-      headers: { authorization: 'Bearer ' + this.token },
-      baseUrl: API_URL
+      headers: { authorization: `Bearer ${this.token}` },
+      baseUrl: API_URL,
     });
   });
 
-  describe('instance', function() {
-    var methods = ['getSettings', 'updateSettings'];
+  describe('instance', () => {
+    const methods = ['getSettings', 'updateSettings'];
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.prompts[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#constructor', function() {
-    it('should error when no options are provided', function() {
-      expect(PromptsManager).to.throw(ArgumentError, 'Must provide manager options');
+  describe('#constructor', () => {
+    it('should error when no options are provided', () => {
+      expect(() => {
+        new PromptsManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
-    it('should throw an error when no base URL is provided', function() {
-      var client = PromptsManager.bind(null, {});
-
-      expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
+    it('should throw an error when no base URL is provided', () => {
+      expect(() => {
+        new PromptsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
-    it('should throw an error when the base URL is invalid', function() {
-      var client = PromptsManager.bind(null, { baseUrl: '' });
-
-      expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
+    it('should throw an error when the base URL is invalid', () => {
+      expect(() => {
+        new PromptsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
-  describe('#getSettings', function() {
-    var data = {
-      universal_login_experience: ''
+  describe('#getSettings', () => {
+    const data = {
+      universal_login_experience: '',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/prompts')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get('/prompts').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.prompts.getSettings(function() {
+    it('should accept a callback', function (done) {
+      this.prompts.getSettings(() => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.prompts
-        .getSettings()
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.prompts.getSettings().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/prompts')
-        .reply(500);
+      nock(API_URL).get('/prompts').reply(500);
 
-      this.prompts.getSettings().catch(function(err) {
+      this.prompts.getSettings().catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/prompts')
-        .reply(200, data);
+      nock(API_URL).get('/prompts').reply(200, data);
 
-      this.prompts.getSettings().then(function(provider) {
+      this.prompts.getSettings().then((provider) => {
         expect(provider.id).to.equal(data.id);
 
         done();
       });
     });
 
-    it('should perform a GET request to /api/v2/prompts', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/prompts', function (done) {
+      const { request } = this;
 
-      this.prompts.getSettings().then(function() {
+      this.prompts.getSettings().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/prompts')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.prompts.getSettings().then(function() {
+      this.prompts.getSettings().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function(done) {
+    it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var params = {
+      const params = {
         include_fields: true,
-        fields: 'test'
+        fields: 'test',
       };
 
-      var request = nock(API_URL)
-        .get('/prompts')
-        .query(params)
-        .reply(200);
+      const request = nock(API_URL).get('/prompts').query(params).reply(200);
 
-      this.prompts.getSettings(params).then(function() {
+      this.prompts.getSettings(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -142,77 +131,71 @@ describe('PromptsManager', function() {
     });
   });
 
-  describe('#updateSettings', function() {
-    var data = {
-      universal_login_experience: 'new'
+  describe('#updateSettings', () => {
+    const data = {
+      universal_login_experience: 'new',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .patch('/prompts')
-        .reply(200, data);
+    beforeEach(function () {
+      this.request = nock(API_URL).patch('/prompts').reply(200, data);
     });
 
-    it('should accept a callback', function(done) {
-      this.prompts.updateSettings({}, data, function() {
+    it('should accept a callback', function (done) {
+      this.prompts.updateSettings({}, data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.prompts
         .updateSettings({}, data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/prompts/' + data.id)
-        .reply(500);
+      nock(API_URL).patch(`/prompts/${data.id}`).reply(500);
 
-      this.prompts.updateSettings({}, data).catch(function(err) {
+      this.prompts.updateSettings({}, data).catch((err) => {
         expect(err).to.exist.to.be.an.instanceOf(Error);
 
         done();
       });
     });
 
-    it('should perform a PATCH request to /api/v2/prompts', function(done) {
-      var request = this.request;
+    it('should perform a PATCH request to /api/v2/prompts', function (done) {
+      const { request } = this;
 
-      this.prompts.updateSettings({}, data).then(function() {
+      this.prompts.updateSettings({}, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/prompts', data)
-        .reply(200);
+      const request = nock(API_URL).patch('/prompts', data).reply(200);
 
-      this.prompts.updateSettings({}, data).then(function() {
+      this.prompts.updateSettings({}, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .patch('/prompts')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.prompts.updateSettings({}, data).then(function() {
+      this.prompts.updateSettings({}, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -220,78 +203,73 @@ describe('PromptsManager', function() {
     });
   });
 
-  describe('#getCustomTextByLanguage', function() {
-    var data = {};
-    var params = {
+  describe('#getCustomTextByLanguage', () => {
+    const params = {
       prompt: 'test',
-      language: 'english'
+      language: 'english',
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/prompts/test/custom-text/english')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).get('/prompts/test/custom-text/english').reply(200);
     });
 
-    it('should validate empty prompt parameter', function() {
-      var _this = this;
-      expect(function() {
-        _this.prompts.getCustomTextByLanguage({}, _this.body, function() {});
+    it('should validate empty prompt parameter', function () {
+      const _this = this;
+      expect(() => {
+        _this.prompts.getCustomTextByLanguage({}, _this.body, () => {});
       }).to.throw('The prompt parameter must be a string');
     });
 
-    it('should validate empty language parameter', function() {
-      var _this = this;
-      expect(function() {
-        _this.prompts.getCustomTextByLanguage({ prompt: 'test' }, _this.body, function() {});
+    it('should validate empty language parameter', function () {
+      const _this = this;
+      expect(() => {
+        _this.prompts.getCustomTextByLanguage({ prompt: 'test' }, _this.body, () => {});
       }).to.throw('The language parameter must be a string');
     });
 
-    it('should accept a callback', function(done) {
-      this.prompts.getCustomTextByLanguage(params, function() {
+    it('should accept a callback', function (done) {
+      this.prompts.getCustomTextByLanguage(params, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.prompts
         .getCustomTextByLanguage(params)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/prompts/test/custom-text/english')
-        .reply(500);
+      nock(API_URL).get('/prompts/test/custom-text/english').reply(500);
 
-      this.prompts.getCustomTextByLanguage(params).catch(function(err) {
+      this.prompts.getCustomTextByLanguage(params).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a GET request to /api/v2/prompts/test/custom-text/english', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/prompts/test/custom-text/english', function (done) {
+      const { request } = this;
 
-      this.prompts.getCustomTextByLanguage(params).then(function() {
+      this.prompts.getCustomTextByLanguage(params).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/prompts/test/custom-text/english')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.prompts.getCustomTextByLanguage(params).then(function() {
+      this.prompts.getCustomTextByLanguage(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -299,107 +277,107 @@ describe('PromptsManager', function() {
     });
   });
 
-  describe('#updateCustomTextByLanguage', function() {
-    var data = {};
-    var params = {
+  describe('#updateCustomTextByLanguage', () => {
+    const params = {
       prompt: 'test',
       language: 'english',
-      body: { login: { title: 'Hello!' } }
+      body: { login: { title: 'Hello!' } },
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .put('/prompts/test/custom-text/english')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).put('/prompts/test/custom-text/english').reply(200);
     });
 
-    it('should validate empty prompt parameter', function() {
-      var _this = this;
-      expect(function() {
-        _this.prompts.updateCustomTextByLanguage({}, _this.body, function() {});
+    it('should validate empty prompt parameter', function () {
+      const _this = this;
+      expect(() => {
+        _this.prompts.updateCustomTextByLanguage({}, _this.body, () => {});
       }).to.throw('The prompt parameter must be a string');
     });
 
-    it('should validate empty language parameter', function() {
-      var _this = this;
-      expect(function() {
-        _this.prompts.updateCustomTextByLanguage({ prompt: 'test' }, _this.body, function() {});
+    it('should validate empty language parameter', function () {
+      const _this = this;
+      expect(() => {
+        _this.prompts.updateCustomTextByLanguage({ prompt: 'test' }, _this.body, () => {});
       }).to.throw('The language parameter must be a string');
     });
 
-    it('should validate empty body parameter', function() {
-      var _this = this;
-      expect(function() {
+    it('should validate empty body parameter', function () {
+      const _this = this;
+      expect(() => {
         _this.prompts.updateCustomTextByLanguage(
           { prompt: 'test', language: 'english' },
           _this.body,
-          function() {}
+          () => {}
         );
       }).to.throw('The body parameter must be an object');
     });
 
-    it('should accept a callback', function(done) {
-      this.prompts.updateCustomTextByLanguage(params, function() {
+    it('should accept a callback', function (done) {
+      this.prompts.updateCustomTextByLanguage(params, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.prompts
         .updateCustomTextByLanguage(params)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .put('/prompts/test/custom-text/english')
-        .reply(500);
+      nock(API_URL).put('/prompts/test/custom-text/english').reply(500);
 
-      this.prompts.updateCustomTextByLanguage(params).catch(function(err) {
+      this.prompts.updateCustomTextByLanguage(params).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should perform a PUT request to /api/v2/prompts/test/custom-text/english', function(done) {
-      var request = this.request;
+    it('should perform a PUT request to /api/v2/prompts/test/custom-text/english', function (done) {
+      const { request } = this;
 
-      this.prompts.updateCustomTextByLanguage(params).then(function() {
-        expect(request.isDone()).to.be.true;
-        done();
-      });
+      this.prompts
+        .updateCustomTextByLanguage(params)
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+          done();
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .put('/prompts/test/custom-text/english')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.prompts.updateCustomTextByLanguage(params).then(function() {
+      this.prompts.updateCustomTextByLanguage(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should send the payload to the body', function(done) {
+    it('should send the payload to the body', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .put(
           '/prompts/test/custom-text/english',
-          body => body && body.login && body.login.title === 'Hello!'
+          (body) => body && body.login && body.login.title === 'Hello!'
         )
         .reply(200);
 
-      this.prompts.updateCustomTextByLanguage(params).then(function() {
+      this.prompts.updateCustomTextByLanguage(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

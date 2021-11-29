@@ -36,7 +36,7 @@ var AuthenticationClient = require('auth0').AuthenticationClient;
 
 var auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{OPTIONAL_CLIENT_ID}'
+  clientId: '{OPTIONAL_CLIENT_ID}',
 });
 ```
 
@@ -51,7 +51,7 @@ var ManagementClient = require('auth0').ManagementClient;
 
 var management = new ManagementClient({
   token: '{YOUR_API_V2_TOKEN}',
-  domain: '{YOUR_ACCOUNT}.auth0.com'
+  domain: '{YOUR_ACCOUNT}.auth0.com',
 });
 ```
 
@@ -66,7 +66,7 @@ var auth0 = new ManagementClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
   clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
-  scope: 'read:users update:users'
+  scope: 'read:users update:users',
 });
 ```
 
@@ -80,15 +80,15 @@ var AuthenticationClient = require('auth0').AuthenticationClient;
 var auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{CLIENT_ID}',
-  clientSecret: '{CLIENT_SECRET}'
+  clientSecret: '{CLIENT_SECRET}',
 });
 
 auth0.clientCredentialsGrant(
   {
     audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
-    scope: '{MANAGEMENT_API_SCOPES}'
+    scope: '{MANAGEMENT_API_SCOPES}',
   },
-  function(err, response) {
+  function (err, response) {
     if (err) {
       // Handle error.
     }
@@ -105,7 +105,7 @@ Be aware that all methods can be used with promises or callbacks. However, when 
 
 ```js
 // Using callbacks.
-management.getUsers(function(err, users) {
+management.getUsers(function (err, users) {
   if (err) {
     // handle error.
   }
@@ -115,10 +115,10 @@ management.getUsers(function(err, users) {
 // Using promises.
 management
   .getUsers()
-  .then(function(users) {
+  .then(function (users) {
     console.log(users);
   })
-  .catch(function(err) {
+  .catch(function (err) {
     // Handle error.
   });
 ```

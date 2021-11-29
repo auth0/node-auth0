@@ -1,165 +1,152 @@
-var ArgumentError = require('rest-facade').ArgumentError;
-var utils = require('../utils');
-var Auth0RestClient = require('../Auth0RestClient');
-var RetryRestClient = require('../RetryRestClient');
+const { ArgumentError } = require('rest-facade');
+const Auth0RestClient = require('../Auth0RestClient');
+const RetryRestClient = require('../RetryRestClient');
+
 /**
- * @class ClientGrantsManager
  * Auth0 Client Grants Manager.
  *
  * See {@link https://auth0.com/docs/api/v2#!/Client_Grants Client Grants}
- *
- * @constructor
- * @memberOf module:management
- *
- * @param {Object} options            The client options.
- * @param {String} options.baseUrl    The URL of the API.
- * @param {Object} [options.headers]  Headers to be included in all requests.
- * @param {Object} [options.retry]    Retry Policy Config
  */
-var ClientGrantsManager = function(options) {
-  if (options === null || typeof options !== 'object') {
-    throw new ArgumentError('Must provide client options');
-  }
+class ClientGrantsManager {
+  /**
+   * @param {object} options            The client options.
+   * @param {string} options.baseUrl    The URL of the API.
+   * @param {object} [options.headers]  Headers to be included in all requests.
+   * @param {object} [options.retry]    Retry Policy Config
+   */
+  constructor(options) {
+    if (options === null || typeof options !== 'object') {
+      throw new ArgumentError('Must provide client options');
+    }
 
-  if (options.baseUrl === null || options.baseUrl === undefined) {
-    throw new ArgumentError('Must provide a base URL for the API');
-  }
+    if (options.baseUrl === null || options.baseUrl === undefined) {
+      throw new ArgumentError('Must provide a base URL for the API');
+    }
 
-  if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-    throw new ArgumentError('The provided base URL is invalid');
+    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
+      throw new ArgumentError('The provided base URL is invalid');
+    }
+
+    /**
+     * Options object for the Rest Client instance.
+     *
+     * @type {object}
+     */
+    const clientOptions = {
+      errorFormatter: { message: 'message', name: 'error' },
+      headers: options.headers,
+      query: { repeatParams: false },
+    };
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/v2#!/Client_Grants Auth0 Client Grants endpoint}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RestClient = new Auth0RestClient(
+      `${options.baseUrl}/client-grants/:id`,
+      clientOptions,
+      options.tokenProvider
+    );
+    this.resource = new RetryRestClient(auth0RestClient, options.retry);
   }
 
   /**
-   * Options object for the Rest Client instance.
+   * Create an Auth0 client grant.
    *
-   * @type {Object}
+   * @example
+   * management.clientGrants.create(data, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   // Client grant created.
+   * });
+   * @param   {object}    data     The client data object.
+   * @param   {Function}  [cb]     Callback function.
+   * @returns  {Promise|undefined}
    */
-  var clientOptions = {
-    errorFormatter: { message: 'message', name: 'error' },
-    headers: options.headers,
-    query: { repeatParams: false }
-  };
+  create(...args) {
+    return this.resource.create(...args);
+  }
 
   /**
-   * Provides an abstraction layer for consuming the
-   * {@link https://auth0.com/docs/api/v2#!/Client_Grants Auth0 Client Grants endpoint}.
+   * Get all Auth0 Client Grants.
    *
-   * @type {external:RestClient}
+   * @example <caption>
+   *   This method takes an optional object as first argument that may be used to
+   *   specify pagination settings. If pagination options are not present,
+   *   the first page of a limited number of results will be returned.
+   * </caption>
+   *
+   * // Pagination settings.
+   * var params = {
+   *   per_page: 10,
+   *   page: 0
+   * };
+   *
+   *
+   * management.clientGrants.getAll(params, function (err, grants) {
+   *   console.log(grants.length);
+   * });
+   * @param   {object}    [params]          Client Grants parameters.
+   * @param   {number}    [params.per_page] Number of results per page.
+   * @param   {number}    [params.page]     Page number, zero indexed.
+   * @param   {Function}  [cb]              Callback function.
+   * @returns  {Promise|undefined}
    */
-  var auth0RestClient = new Auth0RestClient(
-    options.baseUrl + '/client-grants/:id',
-    clientOptions,
-    options.tokenProvider
-  );
-  this.resource = new RetryRestClient(auth0RestClient, options.retry);
-};
+  getAll(...args) {
+    return this.resource.getAll(...args);
+  }
 
-/**
- * Create an Auth0 client grant.
- *
- * @method    create
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
- * @example
- * management.clientGrants.create(data, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Client grant created.
- * });
- *
- * @param   {Object}    data     The client data object.
- * @param   {Function}  [cb]     Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ClientGrantsManager, 'create', 'resource.create');
+  /**
+   * Update an Auth0 client grant.
+   *
+   * @example
+   * var data = {
+   *   client_id: CLIENT_ID,
+   *   audience: AUDIENCE,
+   *   scope: []
+   * };
+   * var params = { id: CLIENT_GRANT_ID };
+   *
+   * management.clientGrants.update(params, data, function (err, grant) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   console.log(grant.id);
+   * });
+   * @param   {object}    params     Client parameters.
+   * @param   {string}    params.id  Client grant ID.
+   * @param   {object}    data       Updated client data.
+   * @param   {Function}  [cb]       Callback function.
+   * @returns    {Promise|undefined}
+   */
+  update(...args) {
+    return this.resource.patch(...args);
+  }
 
-/**
- * Get all Auth0 Client Grants.
- *
- * @method    getAll
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
- * @example <caption>
- *   This method takes an optional object as first argument that may be used to
- *   specify pagination settings. If pagination options are not present,
- *   the first page of a limited number of results will be returned.
- * </caption>
- *
- * // Pagination settings.
- * var params = {
- *   per_page: 10,
- *   page: 0
- * };
- *
- *
- * management.clientGrants.getAll(params, function (err, grants) {
- *   console.log(grants.length);
- * });
- *
- * @param   {Object}    [params]          Client Grants parameters.
- * @param   {Number}    [params.per_page] Number of results per page.
- * @param   {Number}    [params.page]     Page number, zero indexed.
- * @param   {Function}  [cb]              Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ClientGrantsManager, 'getAll', 'resource.getAll');
-
-/**
- * Update an Auth0 client grant.
- *
- * @method    update
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
- * @example
- * var data = {
- *   client_id: CLIENT_ID,
- *   audience: AUDIENCE,
- *   scope: []
- * };
- * var params = { id: CLIENT_GRANT_ID };
- *
- * management.clientGrants.update(params, data, function (err, grant) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   console.log(grant.id);
- * });
- *
- * @param   {Object}    params     Client parameters.
- * @param   {String}    params.id  Client grant ID.
- * @param   {Object}    data       Updated client data.
- * @param   {Function}  [cb]       Callback function.
- *
- * @return    {Promise|undefined}
- */
-utils.wrapPropertyMethod(ClientGrantsManager, 'update', 'resource.patch');
-
-/**
- * Delete an Auth0 client grant.
- *
- * @method    delete
- * @memberOf  module:management.ClientGrantsManager.prototype
- *
- * @example
- * management.clientGrants.delete({ id: GRANT_ID }, function (err) {
- *   if (err) {
- *     // Handle error.
- *   }
- *
- *   // Grant deleted.
- * });
- *
- * @param   {Object}    params     Client parameters.
- * @param   {String}    params.id  Client grant ID.
- * @param   {Function}  [cb]       Callback function.
- *
- * @return  {Promise|undefined}
- */
-utils.wrapPropertyMethod(ClientGrantsManager, 'delete', 'resource.delete');
+  /**
+   * Delete an Auth0 client grant.
+   *
+   * @example
+   * management.clientGrants.delete({ id: GRANT_ID }, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   // Grant deleted.
+   * });
+   * @param   {object}    params     Client parameters.
+   * @param   {string}    params.id  Client grant ID.
+   * @param   {Function}  [cb]       Callback function.
+   * @returns  {Promise|undefined}
+   */
+  delete(...args) {
+    return this.resource.delete(...args);
+  }
+}
 
 module.exports = ClientGrantsManager;

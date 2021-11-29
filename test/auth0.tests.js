@@ -1,16 +1,15 @@
-var expect = require('chai').expect;
+const { expect } = require('chai');
 
-var auth0 = require('../src');
-var AuthenticationClient = require('../src/auth');
-var ManagementClient = require('../src/management');
-var ManagementTokenProvider = require('../src/management/ManagementTokenProvider');
+const auth0 = require('../src');
+const AuthenticationClient = require('../src/auth');
+const ManagementClient = require('../src/management');
 
-describe('Auth0 module', function() {
-  it('should expose the AuthenticationClient', function() {
+describe('Auth0 module', () => {
+  it('should expose the AuthenticationClient', () => {
     expect(auth0.AuthenticationClient).to.equal(AuthenticationClient);
   });
 
-  it('should expose the ManagementClient', function() {
+  it('should expose the ManagementClient', () => {
     expect(auth0.ManagementClient).to.equal(ManagementClient);
   });
 });

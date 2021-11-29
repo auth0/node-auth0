@@ -1,91 +1,83 @@
-var expect = require('chai').expect;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-var SRC_DIR = '../../src';
-var API_URL = 'https://tenants.auth0.com';
+const API_URL = 'https://tenants.auth0.com';
 
-var MigrationsManager = require(SRC_DIR + '/management/MigrationsManager');
-var ArgumentError = require('rest-facade').ArgumentError;
+const MigrationsManager = require(`../../src/management/MigrationsManager`);
+const { ArgumentError } = require('rest-facade');
 
-describe('MigrationsManager', function() {
-  before(function() {
+describe('MigrationsManager', () => {
+  before(function () {
     this.token = 'TOKEN';
     this.migrations = new MigrationsManager({
-      headers: { authorization: 'Bearer ' + this.token },
-      baseUrl: API_URL
+      headers: { authorization: `Bearer ${this.token}` },
+      baseUrl: API_URL,
     });
   });
 
-  describe('instance', function() {
-    var methods = ['updateMigrations', 'getMigrations'];
+  describe('instance', () => {
+    const methods = ['updateMigrations', 'getMigrations'];
 
-    methods.forEach(function(method) {
-      it('should have a ' + method + ' method', function() {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.migrations[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#constructor', function() {
-    it('should error when no options are provided', function() {
-      expect(MigrationsManager).to.throw(ArgumentError, 'Must provide manager options');
+  describe('#constructor', () => {
+    it('should error when no options are provided', () => {
+      expect(() => {
+        new MigrationsManager();
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
-    it('should throw an error when no base URL is provided', function() {
-      var manager = MigrationsManager.bind(null, {});
-
-      expect(manager).to.throw(ArgumentError, 'Must provide a base URL for the API');
+    it('should throw an error when no base URL is provided', () => {
+      expect(() => {
+        new MigrationsManager({});
+      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
-    it('should throw an error when the base URL is invalid', function() {
-      var manager = MigrationsManager.bind(null, { baseUrl: '' });
-
-      expect(manager).to.throw(ArgumentError, 'The provided base URL is invalid');
+    it('should throw an error when the base URL is invalid', () => {
+      expect(() => {
+        new MigrationsManager({ baseUrl: '' });
+      }).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
-  describe('#getMigrations', function() {
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .get('/migrations')
-        .reply(200);
+  describe('#getMigrations', () => {
+    beforeEach(function () {
+      this.request = nock(API_URL).get('/migrations').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.migrations.getMigrations(function() {
+    it('should accept a callback', function (done) {
+      this.migrations.getMigrations(() => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
-      this.migrations
-        .getMigrations()
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', function (done) {
+      this.migrations.getMigrations().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .get('/migrations')
-        .reply(500);
+      nock(API_URL).get('/migrations').reply(500);
 
-      this.migrations.getMigrations().catch(function(err) {
+      this.migrations.getMigrations().catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var data = { flags: { migration_flag: true } };
-      var request = nock(API_URL)
-        .get('/migrations')
-        .reply(200, data);
+      const data = { flags: { migration_flag: true } };
+      nock(API_URL).get('/migrations').reply(200, data);
 
-      this.migrations.getMigrations().then(function(migrations) {
+      this.migrations.getMigrations().then((migrations) => {
         expect(migrations).to.be.an('object');
 
         expect(migrations).to.have.nested.property('flags.migration_flag', true);
@@ -94,117 +86,109 @@ describe('MigrationsManager', function() {
       });
     });
 
-    it('should perform a GET request to /api/v2/migrations', function(done) {
-      var request = this.request;
+    it('should perform a GET request to /api/v2/migrations', function (done) {
+      const { request } = this;
 
-      this.migrations.getMigrations().then(function() {
+      this.migrations.getMigrations().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/migrations')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.migrations.getMigrations().then(function() {
+      this.migrations.getMigrations().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function(done) {
+    it('should pass the parameters in the query-string', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .get('/migrations')
         .query({
-          any: 'test'
+          any: 'test',
         })
         .reply(200);
 
-      this.migrations.getMigrations({ any: 'test' }).then(function() {
+      this.migrations.getMigrations({ any: 'test' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
   });
 
-  describe('#updateMigrations', function() {
-    var data = {
+  describe('#updateMigrations', () => {
+    const data = {
       flags: {
-        migration: false
-      }
+        migration: false,
+      },
     };
 
-    beforeEach(function() {
-      this.request = nock(API_URL)
-        .patch('/migrations')
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(API_URL).patch('/migrations').reply(200);
     });
 
-    it('should accept a callback', function(done) {
-      this.migrations.updateMigrations(data, function() {
+    it('should accept a callback', function (done) {
+      this.migrations.updateMigrations(data, () => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function(done) {
+    it('should return a promise if no callback is given', function (done) {
       this.migrations
         .updateMigrations(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function(done) {
+    it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/migrations')
-        .reply(500);
+      nock(API_URL).patch('/migrations').reply(500);
 
-      this.migrations.updateMigrations(data).catch(function(err) {
+      this.migrations.updateMigrations(data).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should perform a PATCH request to /api/v2migrations', function(done) {
-      var request = this.request;
+    it('should perform a PATCH request to /api/v2migrations', function (done) {
+      const { request } = this;
 
-      this.migrations.updateMigrations(data).then(function() {
+      this.migrations.updateMigrations(data).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function(done) {
+    it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
-        .patch('/migrations', data)
-        .reply(200);
+      const request = nock(API_URL).patch('/migrations', data).reply(200);
 
-      this.migrations.updateMigrations(data).then(function() {
+      this.migrations.updateMigrations(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function(done) {
+    it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      var result = { flags: { migration_flag: true } };
-      var request = nock(API_URL)
-        .patch('/migrations')
-        .reply(200, result);
+      const result = { flags: { migration_flag: true } };
+      nock(API_URL).patch('/migrations').reply(200, result);
 
-      this.migrations.updateMigrations(data).then(function(migrations) {
+      this.migrations.updateMigrations(data).then((migrations) => {
         expect(migrations).to.be.an('object');
 
         expect(migrations).to.have.nested.property('flags.migration_flag', true);
@@ -213,15 +197,15 @@ describe('MigrationsManager', function() {
       });
     });
 
-    it('should include the token in the Authorization header', function(done) {
+    it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
-      var request = nock(API_URL)
+      const request = nock(API_URL)
         .patch('/migrations')
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.migrations.updateMigrations(data).then(function() {
+      this.migrations.updateMigrations(data).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });

@@ -1,26 +1,26 @@
-var Webpack = require('webpack');
-var pkg = require('./package.json');
+const Webpack = require('webpack');
+const pkg = require('./package.json');
 
-var StringReplacePlugin = require('string-replace-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
   output: {
     path: './build',
-    filename: pkg.name + '-' + pkg.version + '.min.js',
+    filename: `${pkg.name}-${pkg.version}.min.js`,
     library: 'Auth0',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
   },
   node: {
     Buffer: true,
     process: true,
-    url: true
+    url: true,
   },
   module: {
     loaders: [
       {
         test: /\.json$/,
-        loader: 'json'
+        loader: 'json',
       },
       {
         test: /\.js$/,
@@ -29,27 +29,25 @@ module.exports = {
             {
               // Remove User-Agent for browser version
               pattern: /'User-Agent': 'node\.js/gim,
-              replacement: function(match, p1, offset, string) {
-                return "// 'User-Agent': 'node.js";
-              }.bind(this)
-            }
-          ]
-        })
-      }
-    ]
+              replacement: () => "// 'User-Agent': 'node.js",
+            },
+          ],
+        }),
+      },
+    ],
   },
   plugins: [
     new StringReplacePlugin(),
     new Webpack.optimize.DedupePlugin(),
     new Webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
-      }
-    })
+        warnings: false,
+      },
+    }),
   ],
   resolve: {
     modulesDirectories: ['node_modules'],
     root: __dirname,
-    alias: {}
-  }
+    alias: {},
+  },
 };

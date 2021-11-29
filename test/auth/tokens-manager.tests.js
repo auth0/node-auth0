@@ -1,129 +1,127 @@
-var expect = require('chai').expect;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-const isPromise = thing => thing && typeof thing.then === 'function';
+const isPromise = (thing) => thing && typeof thing.then === 'function';
 
-var BASE_URL = 'https://tenant.auth0.com';
+const BASE_URL = 'https://tenant.auth0.com';
 
-var ArgumentError = require('rest-facade').ArgumentError;
-var TokensManager = require('../../src/auth/TokensManager');
+const { ArgumentError } = require('rest-facade');
+const TokensManager = require('../../src/auth/TokensManager');
 
-describe('TokensManager', function() {
-  var validOptions = {
+describe('TokensManager', () => {
+  const validOptions = {
     baseUrl: BASE_URL,
     headers: {
       'Content-Type': 'application/json',
-      'Test-Header': 'TEST'
+      'Test-Header': 'TEST',
     },
     clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET'
+    clientSecret: 'CLIENT_SECRET',
   };
 
-  afterEach(function() {
+  afterEach(() => {
     nock.cleanAll();
   });
 
-  describe('#constructor', function() {
-    it('should require an options object', function() {
-      expect(TokensManager).to.throw(ArgumentError, 'Missing tokens manager options');
+  describe('#constructor', () => {
+    it('should require an options object', () => {
+      expect(() => {
+        new TokensManager();
+      }).to.throw(ArgumentError, 'Missing tokens manager options');
     });
 
-    it('should require a base URL', function() {
-      var manager = TokensManager.bind(null, {});
-
-      expect(manager).to.throw(ArgumentError, 'baseUrl field is required');
+    it('should require a base URL', () => {
+      expect(() => {
+        new TokensManager({});
+      }).to.throw(ArgumentError, 'baseUrl field is required');
     });
   });
 
-  describe('instance', function() {
-    var methods = ['getInfo', 'getDelegationToken', 'revokeRefreshToken'];
-    var manager = new TokensManager(validOptions);
+  describe('instance', () => {
+    const methods = ['getInfo', 'getDelegationToken', 'revokeRefreshToken'];
+    const manager = new TokensManager(validOptions);
 
-    methods.forEach(function(methodName) {
-      it('should have a ' + methodName + ' method', function() {
+    methods.forEach((methodName) => {
+      it(`should have a ${methodName} method`, () => {
         expect(manager[methodName]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#getInfo', function() {
-    var manager = new TokensManager(validOptions);
-    var path = '/tokeninfo';
+  describe('#getInfo', () => {
+    const manager = new TokensManager(validOptions);
+    const path = '/tokeninfo';
 
-    beforeEach(function() {
-      this.request = nock(BASE_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(BASE_URL).post(path).reply(200);
     });
 
-    it('should require an ID token', function() {
-      var getInfo = manager.getInfo.bind(manager);
+    it('should require an ID token', () => {
+      const getInfo = manager.getInfo.bind(manager);
 
       expect(getInfo).to.throw(ArgumentError, 'An ID token is required');
     });
 
-    it('should throw an error when the token is invalid', function() {
-      var getInfo = manager.getInfo.bind(manager, '');
+    it('should throw an error when the token is invalid', () => {
+      const getInfo = manager.getInfo.bind(manager, '');
 
       expect(getInfo).to.throw(ArgumentError, 'The ID token is not valid');
     });
 
-    it('should not throw errors when the token is valid', function() {
-      var getInfo = manager.getInfo.bind(manager, 'VALID_TOKEN');
+    it('should not throw errors when the token is valid', () => {
+      const getInfo = manager.getInfo.bind(manager, 'VALID_TOKEN');
 
       expect(getInfo).to.not.throw(ArgumentError);
     });
 
-    it('should accept a callback', function(done) {
+    it('should accept a callback', (done) => {
       manager.getInfo('VALID_TOKEN', done.bind(null, null));
     });
 
-    it('should return a promise when no callback is provided', function() {
-      var returnValue = manager.getInfo('VALID_TOKEN');
+    it('should return a promise when no callback is provided', () => {
+      const returnValue = manager.getInfo('VALID_TOKEN');
       expect(isPromise(returnValue)).ok;
     });
 
-    it('should not return a promise when a callback is provided', function() {
-      var returnValue = manager.getInfo('VALID_TOKEN', function() {});
+    it('should not return a promise when a callback is provided', () => {
+      const returnValue = manager.getInfo('VALID_TOKEN', () => {});
 
       expect(returnValue).to.be.undefined;
     });
 
-    it('should perform a POST request to ' + path, function(done) {
-      var request = this.request;
+    it(`should perform a POST request to ${path}`, function (done) {
+      const { request } = this;
 
-      manager.getInfo('VALID_TOKEN').then(function() {
+      manager.getInfo('VALID_TOKEN').then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the headers specified in the instance options', function(done) {
+    it('should include the headers specified in the instance options', (done) => {
       nock.cleanAll();
 
-      var request = nock(BASE_URL)
+      const request = nock(BASE_URL)
         .post(path)
         .matchHeader('Content-Type', validOptions.headers['Content-Type'])
         .reply(200);
 
-      manager.getInfo('VALID_TOKEN').then(function() {
+      manager.getInfo('VALID_TOKEN').then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should send the ID token in the body of the request', function(done) {
+    it('should send the ID token in the body of the request', (done) => {
       nock.cleanAll();
 
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.id_token === 'VALID_TOKEN';
-        })
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.id_token === 'VALID_TOKEN')
         .reply(200);
 
-      manager.getInfo('VALID_TOKEN').then(function() {
+      manager.getInfo('VALID_TOKEN').then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -131,25 +129,23 @@ describe('TokensManager', function() {
     });
   });
 
-  describe('#getDelegationToken', function() {
-    var path = '/delegation';
-    var manager = new TokensManager(validOptions);
+  describe('#getDelegationToken', () => {
+    const path = '/delegation';
+    const manager = new TokensManager(validOptions);
 
-    beforeEach(function() {
-      this.request = nock(BASE_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(BASE_URL).post(path).reply(200);
     });
 
-    it('should require a data object', function() {
-      var getDelegationToken = manager.getDelegationToken.bind(manager);
+    it('should require a data object', () => {
+      const getDelegationToken = manager.getDelegationToken.bind(manager);
 
       expect(getDelegationToken).to.throw(ArgumentError, 'Missing token data object');
     });
 
-    it('should require an ID token or refresh token', function() {
-      var data = {};
-      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+    it('should require an ID token or refresh token', () => {
+      const data = {};
+      const getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(
         ArgumentError,
@@ -157,9 +153,9 @@ describe('TokensManager', function() {
       );
     });
 
-    it('should not accept an ID token and a refresh token simulatenously', function() {
-      var data = { id_token: 'foo', refresh_token: 'bar' };
-      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+    it('should not accept an ID token and a refresh token simulatenously', () => {
+      const data = { id_token: 'foo', refresh_token: 'bar' };
+      const getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(
         ArgumentError,
@@ -167,83 +163,83 @@ describe('TokensManager', function() {
       );
     });
 
-    it('should require a target client', function() {
-      var data = { id_token: 'TEST_ID_TOKEN' };
-      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+    it('should require a target client', () => {
+      const data = { id_token: 'TEST_ID_TOKEN' };
+      const getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(ArgumentError, 'target field is required');
     });
 
-    it('should require an API type', function() {
-      var data = {
+    it('should require an API type', () => {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
-        target: 'TEST_TARGET'
+        target: 'TEST_TARGET',
       };
-      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+      const getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(ArgumentError, 'api_type field is required');
     });
 
-    it('should require an grant type', function() {
-      var data = {
+    it('should require an grant type', () => {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
-        api_type: 'aws'
+        api_type: 'aws',
       };
-      var getDelegationToken = manager.getDelegationToken.bind(manager, data);
+      const getDelegationToken = manager.getDelegationToken.bind(manager, data);
 
       expect(getDelegationToken).to.throw(ArgumentError, 'grant_type field is required');
     });
 
-    it('should accept a callback', function(done) {
-      var data = {
+    it('should accept a callback', (done) => {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
         api_type: 'aws',
-        grant_type: 'SAMPLE_GRANT_TYPE'
+        grant_type: 'SAMPLE_GRANT_TYPE',
       };
 
       manager.getDelegationToken(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function() {
-      var data = {
+    it('should return a promise when no callback is given', () => {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
         api_type: 'aws',
-        grant_type: 'SAMPLE_GRANT_TYPE'
+        grant_type: 'SAMPLE_GRANT_TYPE',
       };
-      var returnValue = manager.getDelegationToken(data);
+      const returnValue = manager.getDelegationToken(data);
       expect(isPromise(returnValue)).ok;
     });
 
-    it('should not return a promise when a callback is given', function() {
-      var data = {
+    it('should not return a promise when a callback is given', () => {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
         api_type: 'aws',
-        grant_type: 'SAMPLE_GRANT_TYPE'
+        grant_type: 'SAMPLE_GRANT_TYPE',
       };
-      var returnValue = manager.getDelegationToken(data, function() {});
+      const returnValue = manager.getDelegationToken(data, () => {});
 
       expect(returnValue).to.equal(undefined);
     });
 
-    it('should perform a POST request to ' + path, function() {});
+    it(`should perform a POST request to ${path}`, () => {});
 
-    it('should include the data in the body of the request', function(done) {
+    it('should include the data in the body of the request', (done) => {
       nock.cleanAll();
 
-      var data = {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
         api_type: 'aws',
-        grant_type: 'SAMPLE_GRANT_TYPE'
+        grant_type: 'SAMPLE_GRANT_TYPE',
       };
 
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          for (var property in data) {
+      const request = nock(BASE_URL)
+        .post(path, (body) => {
+          for (const property in data) {
             if (body[property] !== data[property]) {
               return false;
             }
@@ -253,76 +249,72 @@ describe('TokensManager', function() {
         })
         .reply();
 
-      manager.getDelegationToken(data).then(function() {
+      manager.getDelegationToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should use the instance client ID if none specified', function(done) {
+    it('should use the instance client ID if none specified', (done) => {
       nock.cleanAll();
 
-      var data = {
-        id_token: 'TEST_ID_TOKEN',
-        target: 'TEST_TARGET',
-        api_type: 'aws',
-        grant_type: 'SAMPLE_GRANT_TYPE'
-      };
-
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.client_id === validOptions.clientId;
-        })
-        .reply();
-
-      manager.getDelegationToken(data).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
-    it('should let the user override the default client ID', function(done) {
-      nock.cleanAll();
-
-      var data = {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
         api_type: 'aws',
         grant_type: 'SAMPLE_GRANT_TYPE',
-        client_id: 'OVERRIDEN_CLIENT_ID'
       };
 
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.client_id === data.client_id;
-        })
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.client_id === validOptions.clientId)
         .reply();
 
-      manager.getDelegationToken(data).then(function() {
+      manager.getDelegationToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the headers specified in the instance options', function(done) {
+    it('should let the user override the default client ID', (done) => {
       nock.cleanAll();
 
-      var data = {
+      const data = {
         id_token: 'TEST_ID_TOKEN',
         target: 'TEST_TARGET',
         api_type: 'aws',
-        grant_type: 'SAMPLE_GRANT_TYPE'
+        grant_type: 'SAMPLE_GRANT_TYPE',
+        client_id: 'OVERRIDEN_CLIENT_ID',
       };
 
-      var request = nock(BASE_URL)
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.client_id === data.client_id)
+        .reply();
+
+      manager.getDelegationToken(data).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the headers specified in the instance options', (done) => {
+      nock.cleanAll();
+
+      const data = {
+        id_token: 'TEST_ID_TOKEN',
+        target: 'TEST_TARGET',
+        api_type: 'aws',
+        grant_type: 'SAMPLE_GRANT_TYPE',
+      };
+
+      const request = nock(BASE_URL)
         .post(path)
         .matchHeader('Test-Header', validOptions.headers['Test-Header'])
         .reply(200);
 
-      manager.getDelegationToken(data).then(function() {
+      manager.getDelegationToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -330,43 +322,41 @@ describe('TokensManager', function() {
     });
   });
 
-  describe('#revokeRefreshToken', function() {
-    var path = '/oauth/revoke';
-    var manager = new TokensManager(validOptions);
+  describe('#revokeRefreshToken', () => {
+    const path = '/oauth/revoke';
+    const manager = new TokensManager(validOptions);
 
-    beforeEach(function() {
-      this.request = nock(BASE_URL)
-        .post(path)
-        .reply(200);
+    beforeEach(function () {
+      this.request = nock(BASE_URL).post(path).reply(200);
     });
 
-    it('should require a token data object', function() {
-      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager);
+    it('should require a token data object', () => {
+      const revokeRefreshToken = manager.revokeRefreshToken.bind(manager);
 
       expect(revokeRefreshToken).to.throw(ArgumentError, 'Missing token data object');
     });
 
-    it('should require a token property in the token data object', function() {
-      var data = {};
-      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
+    it('should require a token property in the token data object', () => {
+      const data = {};
+      const revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
 
       expect(revokeRefreshToken).to.throw(ArgumentError, 'token property is required');
     });
 
-    it('should require at least a target client ID', function() {
-      var manager = new TokensManager({
+    it('should require at least a target client ID', () => {
+      const manager = new TokensManager({
         baseUrl: BASE_URL,
         headers: {
           'Content-Type': 'application/json',
-          'Test-Header': 'TEST'
-        }
+          'Test-Header': 'TEST',
+        },
       });
 
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
       };
 
-      var revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
+      const revokeRefreshToken = manager.revokeRefreshToken.bind(manager, data);
 
       expect(revokeRefreshToken).to.throw(
         ArgumentError,
@@ -374,43 +364,43 @@ describe('TokensManager', function() {
       );
     });
 
-    it('should accept a callback', function(done) {
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
+    it('should accept a callback', (done) => {
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
       };
 
       manager.revokeRefreshToken(data, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function() {
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
+    it('should return a promise when no callback is given', () => {
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
       };
-      var returnValue = manager.revokeRefreshToken(data);
+      const returnValue = manager.revokeRefreshToken(data);
       expect(isPromise(returnValue)).ok;
     });
 
-    it('should not return a promise when a callback is given', function() {
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
+    it('should not return a promise when a callback is given', () => {
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
       };
-      var returnValue = manager.revokeRefreshToken(data, function() {});
+      const returnValue = manager.revokeRefreshToken(data, () => {});
 
       expect(returnValue).to.equal(undefined);
     });
 
-    it('should perform a POST request to ' + path, function() {});
+    it(`should perform a POST request to ${path}`, () => {});
 
-    it('should include the data in the body of the request', function(done) {
+    it('should include the data in the body of the request', (done) => {
       nock.cleanAll();
 
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
       };
 
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          for (var property in data) {
+      const request = nock(BASE_URL)
+        .post(path, (body) => {
+          for (const property in data) {
             if (body[property] !== data[property]) {
               return false;
             }
@@ -420,108 +410,100 @@ describe('TokensManager', function() {
         })
         .reply();
 
-      manager.revokeRefreshToken(data).then(function() {
+      manager.revokeRefreshToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should use the TokensManager instance client ID if none specified', function(done) {
+    it('should use the TokensManager instance client ID if none specified', (done) => {
       nock.cleanAll();
 
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
-      };
-
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.client_id === validOptions.clientId;
-        })
-        .reply();
-
-      manager.revokeRefreshToken(data).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
-    it('should let the user override the default client ID', function(done) {
-      nock.cleanAll();
-
-      var data = {
+      const data = {
         token: 'TEST_REFRESH_TOKEN',
-        client_id: 'OVERRIDEN_CLIENT_ID'
       };
 
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.client_id === data.client_id;
-        })
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.client_id === validOptions.clientId)
         .reply();
 
-      manager.revokeRefreshToken(data).then(function() {
+      manager.revokeRefreshToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should use the TokensManager instance client secret if none specified', function(done) {
+    it('should let the user override the default client ID', (done) => {
       nock.cleanAll();
 
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
-      };
-
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.client_secret === validOptions.clientSecret;
-        })
-        .reply();
-
-      manager.revokeRefreshToken(data).then(function() {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
-    });
-
-    it('should let the user override the default client secret', function(done) {
-      nock.cleanAll();
-
-      var data = {
+      const data = {
         token: 'TEST_REFRESH_TOKEN',
-        client_secret: 'OVERRIDEN_CLIENT_SECRET'
+        client_id: 'OVERRIDEN_CLIENT_ID',
       };
 
-      var request = nock(BASE_URL)
-        .post(path, function(body) {
-          return body.client_secret === data.client_secret;
-        })
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.client_id === data.client_id)
         .reply();
 
-      manager.revokeRefreshToken(data).then(function() {
+      manager.revokeRefreshToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the headers specified in the instance options', function(done) {
+    it('should use the TokensManager instance client secret if none specified', (done) => {
       nock.cleanAll();
 
-      var data = {
-        token: 'TEST_REFRESH_TOKEN'
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
       };
 
-      var request = nock(BASE_URL)
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.client_secret === validOptions.clientSecret)
+        .reply();
+
+      manager.revokeRefreshToken(data).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should let the user override the default client secret', (done) => {
+      nock.cleanAll();
+
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
+        client_secret: 'OVERRIDEN_CLIENT_SECRET',
+      };
+
+      const request = nock(BASE_URL)
+        .post(path, (body) => body.client_secret === data.client_secret)
+        .reply();
+
+      manager.revokeRefreshToken(data).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the headers specified in the instance options', (done) => {
+      nock.cleanAll();
+
+      const data = {
+        token: 'TEST_REFRESH_TOKEN',
+      };
+
+      const request = nock(BASE_URL)
         .post(path)
         .matchHeader('Test-Header', validOptions.headers['Test-Header'])
         .reply(200);
 
-      manager.revokeRefreshToken(data).then(function() {
+      manager.revokeRefreshToken(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
