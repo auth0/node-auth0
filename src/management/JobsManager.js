@@ -324,7 +324,7 @@ class JobsManager {
    * 	user_id: '{USER_ID}'
    * };
    *
-   * management.jobs.verifyEmail(function (err) {
+   * management.jobs.verifyEmail(params, function (err) {
    *   if (err) {
    *     // Handle error.
    *   }
