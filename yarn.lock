@@ -4304,10 +4304,10 @@ resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1:
     is-core-module "^2.2.0"
     path-parse "^1.0.6"
 
-rest-facade@^1.13.1:
-  version "1.16.2"
-  resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.16.2.tgz#480e5998f0acd2dd4883d0940139a3db78818c73"
-  integrity sha512-Vs038wYpPhdIQ7wBr2460jmyY6WXkPSKyVAYOIIbjGI8lnG/6q4fI+v/MEPRpDrNur1DRAopQU5vQ3uNm3RiKQ==
+rest-facade@^1.16.3:
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.16.3.tgz#e4d4b44a4f6a4268f30f02e1f544dd49b040499e"
+  integrity sha512-9BQTPLiwg23XZwcWi0ys1wTizfc//0b2G3U6vBWcgqh56ozs2K6CD+Jw4DYcw3AqdPQN7jj8nzRUcUXFVGzb0Q==
   dependencies:
     change-case "^2.3.0"
     deepmerge "^3.2.0"
