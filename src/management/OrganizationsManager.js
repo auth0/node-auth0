@@ -225,12 +225,10 @@ class OrganizationsManager {
   /**
    * Get Enabled Connections in a Organization
    *
-   * @example
-   * @param callback
-   * var params = {id : 'ORGANIZATION_ID'}
    * @example <caption>
    *   This method takes an organization ID and returns the enabled connections in an Organization
    * </caption>
+   * var params = {id : 'ORGANIZATION_ID'}
    *
    * management.organizations.getEnabledConnections( {id : 'ORGANIZATION_ID'}, function (err, enabled_connections) {
    *   console.log(enabled_connections);
@@ -247,12 +245,10 @@ class OrganizationsManager {
   /**
    * Get Enabled Connection in a Organization
    *
-   * @example
-   * var params = {id : 'ORGANIZATION_ID', connection_id: 'CONNECTION_ID'}
-   * @param callback
    * @example <caption>
    *   This methods takes the organization ID and connection ID and returns the enabled connection
    * </caption>
+   * var params = {id : 'ORGANIZATION_ID', connection_id: 'CONNECTION_ID'}
    *
    * management.organizations.getEnabledConnections( {id : 'ORGANIZATION_ID', connection_id: 'CONNECTION_ID'}, function (err, enabled_connection) {
    *   console.log(enabled_connection);
@@ -260,7 +256,7 @@ class OrganizationsManager {
    * @param   {object}    params        Organization parameters.
    * @param   {string}    params.id     Organization ID.
    * @param   {string}    params.connection_id     Connection ID.
-   * @param   {Function}  [cb]                Callback function.
+   * @param   {Function}  [callback]                Callback function.
    * @returns  {Promise|undefined}
    */
   getEnabledConnection(params, callback) {
@@ -400,12 +396,11 @@ class OrganizationsManager {
   /**
    * Get Members in a Organization
    *
-   * @example
-   * var params = {id : 'ORGANIZATION_ID'}
    * @example <caption>
-   * @param callback
    *   This method takes an organization ID and returns the members in an Organization
    * </caption>
+   *
+   *  var params = {id : 'ORGANIZATION_ID'}
    *
    * management.organizations.getMembers( {id : 'ORGANIZATION_ID'}, function (err, members) {
    *   console.log(members);

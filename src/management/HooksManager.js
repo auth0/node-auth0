@@ -181,12 +181,11 @@ class HooksManager {
   /**
    * Get Hook secrets
    *
-   * @example
-   * @param callback
-   * var params = {id : 'HOOK_ID'}
    * @example <caption>
    *   This method takes a first argument as the hookId and returns the secrets for the hook. The secret values will be hidden.
    * </caption>
+   *
+   * var params = {id : 'HOOK_ID'}
    *
    * management.hooks.getSecrets( {id : 'HOOK_ID'}, function (err, secrets) {
    *   console.log(secrets);
