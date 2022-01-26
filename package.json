@@ -34,12 +34,12 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
-    "axios": "^0.22.0",
+    "axios": "^0.24.0",
     "form-data": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.1",
     "lru-memoizer": "^2.1.4",
-    "rest-facade": "^1.13.1",
+    "rest-facade": "^1.16.3",
     "retry": "^0.13.1"
   },
   "devDependencies": {
