@@ -671,6 +671,16 @@ describe('RolesManager', () => {
       });
     });
 
+    it('should perform a POST request to /api/v2/roles/rol_ID/users with a callback', function (done) {
+      const { request } = this;
+
+      this.roles.assignUsers(this.data, {}, () => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 

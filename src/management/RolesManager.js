@@ -355,7 +355,7 @@ class RolesManager {
     }
 
     if (cb && cb instanceof Function) {
-      return this.permissions.create(params, data, cb);
+      return this.users.create(params, data, cb);
     }
 
     return this.users.create(params, data);
