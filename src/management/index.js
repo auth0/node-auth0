@@ -231,7 +231,7 @@ class ManagementClient {
      * Simple abstraction for performing CRUD operations on the
      * blacklisted tokens endpoint.
      *
-     * @type {BlacklistedtokensManager}
+     * @type {BlacklistedTokensManager}
      */
     this.blacklistedTokens = new BlacklistedTokensManager(managerOptions);
 
@@ -328,7 +328,7 @@ class ManagementClient {
      * Simple abstraction for performing CRUD operations on the
      * branding endpoint.
      *
-     * @type {HooksManager}
+     * @type {BrandingManager}
      */
     this.branding = new BrandingManager(managerOptions);
 
@@ -1287,7 +1287,7 @@ class ManagementClient {
    * @returns  {Promise|undefined}
    */
   assignRolestoUser(...args) {
-    return this.roles.assignRoles(...args);
+    return this.users.assignRoles(...args);
   }
 
   /**

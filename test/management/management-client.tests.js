@@ -933,5 +933,12 @@ describe('ManagementClient', () => {
         expect(this.client[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
+
+    it('should assign roles to a user', function () {
+      sinon.stub(this.client.users, 'assignRoles');
+      this.client.assignRolestoUser();
+      expect(this.client.users.assignRoles.called).ok;
+      this.client.users.assignRoles.reset();
+    });
   });
 });
