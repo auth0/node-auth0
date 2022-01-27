@@ -104,6 +104,7 @@ class PasswordlessAuthenticator {
    * @param   {object}    userData              User credentials object.
    * @param   {string}    userData.username     The user's phone number if realm=sms, or the user's email if realm=email
    * @param   {string}    userData.otp        The user's verification code. Required
+   * @param   {string}    [userData.audience]     API Identifier of the API for which you want to get an Access Token.
    * @param   {string}    [userData.realm=sms]  Realm string: "sms" or "email".
    * @param   {string}    [userData.password]     [DEPRECATED] Password required if using legacy /oauth/ro endpoint
    * @param   {string}    [userData.connection=sms] [DEPRECATED] Connection string: "sms" or "email".

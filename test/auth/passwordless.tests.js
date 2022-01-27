@@ -465,6 +465,29 @@ describe('PasswordlessAuthenticator', () => {
           })
           .catch(done);
       });
+
+      it('should make it possible to use audience property', function (done) {
+        nock.cleanAll();
+
+        const request = nock(API_URL)
+          .post(path, (body) => body.audience === 'TEST_AUDIENCE')
+          .reply(200);
+
+        this.authenticator
+          .signIn(
+            {
+              ...userData,
+              audience: 'TEST_AUDIENCE',
+            },
+            options
+          )
+          .then(() => {
+            expect(request.isDone()).to.be.true;
+
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 
