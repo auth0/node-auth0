@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.38.1](https://github.com/auth0/node-auth0/tree/v2.38.1) (2022-01-27)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.38.0...v2.38.1)
+
+**Fixed**
+
+- Fix wrong property in `assignRolestoUser` [\#700](https://github.com/auth0/node-auth0/pull/700) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- signIn method should provide using audience prop in userData [\#699](https://github.com/auth0/node-auth0/pull/699) ([maxism](https://github.com/maxism))
+
 ## [v2.38.0](https://github.com/auth0/node-auth0/tree/v2.38.0) (2022-01-26)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.37.0...v2.38.0)
