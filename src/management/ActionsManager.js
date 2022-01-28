@@ -531,6 +531,7 @@ class ActionsManager {
    * @param   {object}    params                Action parameters.
    * @param   {string}    params.id      Action ID.
    * @param   {string}    params.version_id     Action ID.
+   * @param   {boolean}   params.update_draft   Update draft
    * @param   {Function}  [cb]                  Callback function.
    * @returns  {Promise|undefined}
    */
@@ -542,11 +543,18 @@ class ActionsManager {
       delete params.action_id;
     }
 
-    if (cb && cb instanceof Function) {
-      return this.actionVersionDeploy.create(params, {}, cb);
+    const body = {};
+
+    if (params.update_draft) {
+      body.update_draft = params.update_draft;
+      delete params.update_draft;
     }
 
-    return this.actionVersionDeploy.create(params, {});
+    if (cb && cb instanceof Function) {
+      return this.actionVersionDeploy.create(params, body, cb);
+    }
+
+    return this.actionVersionDeploy.create(params, body);
   }
 
   /**
