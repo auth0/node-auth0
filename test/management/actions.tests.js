@@ -734,7 +734,7 @@ describe('ActionsManager', () => {
       it('should perform a post request', function (done) {
         const { request } = this;
 
-        this.actions.deployVersion({ action_id, version_id }).then(() => {
+        this.actions.deployVersion({ action_id, version_id, update_draft: true }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
