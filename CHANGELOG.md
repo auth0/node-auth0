@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.39.0](https://github.com/auth0/node-auth0/tree/v2.39.0) (2022-01-31)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.38.1...v2.39.0)
+
+**Added**
+
+- feat: update draft deploy [\#702](https://github.com/auth0/node-auth0/pull/702) ([TwelveNights](https://github.com/TwelveNights))
+
 ## [v2.38.1](https://github.com/auth0/node-auth0/tree/v2.38.1) (2022-01-27)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.38.0...v2.38.1)
