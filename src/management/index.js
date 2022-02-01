@@ -10,6 +10,7 @@ const GrantsManager = require('./GrantsManager');
 const UsersManager = require('./UsersManager');
 const UserBlocksManager = require('./UserBlocksManager');
 const ConnectionsManager = require('./ConnectionsManager');
+const AttackProtectionManager = require('./AttackProtectionManager');
 const BlacklistedTokensManager = require('./BlacklistedTokensManager');
 const RulesManager = require('./RulesManager');
 const DeviceCredentialsManager = require('./DeviceCredentialsManager');
@@ -360,6 +361,13 @@ class ManagementClient {
      * @type {OrganizationsManager}
      */
     this.organizations = new OrganizationsManager(managerOptions);
+
+    /**
+     * Attack Protection Manager
+     *
+     * @type {AttackProtectionManager}
+     */
+    this.attackProtection = new AttackProtectionManager(managerOptions);
   }
 
   /**
