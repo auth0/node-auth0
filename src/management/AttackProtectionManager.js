@@ -1,9 +1,10 @@
-const ArgumentError = require('rest-facade').ArgumentError;
+const { ArgumentError } = require('rest-facade');
 const Auth0RestClient = require('../Auth0RestClient');
 const RetryRestClient = require('../RetryRestClient');
 
 /**
  * Simple facade for consuming a REST API endpoint.
+ *
  * @external RestClient
  * @see https://github.com/ngonzalvez/rest-facade
  */
@@ -12,13 +13,12 @@ class AttackProtectionManager {
   /**
    * @class
    * Abstracts interaction with the attack-protection endpoints.
-   * @constructor
-   *
-   * @param {Object} options                 The client options.
-   * @param {String} options.baseUrl         The URL of the API.
-   * @param {Object} [options.headers]       Headers to be included in all requests.
-   * @param {Object} [options.retry]         Retry Policy Config
-   * @param {Object} [options.tokenProvider] Management API Token Provider
+   * @class
+   * @param {object} options                 The client options.
+   * @param {string} options.baseUrl         The URL of the API.
+   * @param {object} [options.headers]       Headers to be included in all requests.
+   * @param {object} [options.retry]         Retry Policy Config
+   * @param {object} [options.tokenProvider] Management API Token Provider
    */
   constructor(options) {
     if (options === null || typeof options !== 'object') {
@@ -73,11 +73,9 @@ class AttackProtectionManager {
    *   // Brute force config
    *   console.log(bruteForceConfig);
    * });
-   *
-   * @param   {Object}    params            Brute force parameters (leave empty).
+   * @param   {object}    params            Brute force parameters (leave empty).
    * @param   {Function}  [cb]              Callback function.
-   *
-   * @return    {Promise|undefined}
+   * @returns    {Promise|undefined}
    */
   getBruteForceConfig(...args) {
     return this.bruteForceProtection.get(...args);
@@ -95,12 +93,10 @@ class AttackProtectionManager {
    *   // Brute force config
    *   console.log(bruteForceConfig);
    * });
-   *
-   * @param   {Object}    params            Brute force parameters (leave empty).
-   * @param   {Object}    data              Updated brute force configuration.
+   * @param   {object}    params            Brute force parameters (leave empty).
+   * @param   {object}    data              Updated brute force configuration.
    * @param   {Function}  [cb]              Callback function.
-   *
-   * @return    {Promise|undefined}
+   * @returns    {Promise|undefined}
    */
   updateBruteForceConfig(...args) {
     return this.bruteForceProtection.patch(...args);
@@ -118,11 +114,9 @@ class AttackProtectionManager {
    *   // Access suspicious IP throttling configuration
    *   console.log(suspiciousIpThrottlingConfig);
    * });
-   *
-   * @param   {Object}    params            Suspicious IP throttling parameters (leave empty).
+   * @param   {object}    params            Suspicious IP throttling parameters (leave empty).
    * @param   {Function}  [cb]              Callback function.
-   *
-   * @return    {Promise|undefined}
+   * @returns    {Promise|undefined}
    */
   getSuspiciousIpThrottlingConfig(...args) {
     return this.suspiciousIpThrottling.get(...args);
@@ -140,12 +134,10 @@ class AttackProtectionManager {
    *   // Access suspicious IP throttling configuration
    *   console.log(suspiciousIpThrottlingConfig);
    * });
-   *
-   * @param   {Object}    params            Suspicious IP throttling parameters (leave empty).
-   * @param   {Object}    data              Updated suspicious IP throttling configuration.
+   * @param   {object}    params            Suspicious IP throttling parameters (leave empty).
+   * @param   {object}    data              Updated suspicious IP throttling configuration.
    * @param   {Function}  [cb]              Callback function.
-   *
-   * @return    {Promise|undefined}
+   * @returns    {Promise|undefined}
    */
   updateSuspiciousIpThrottlingConfig(...args) {
     return this.suspiciousIpThrottling.patch(...args);
@@ -163,11 +155,9 @@ class AttackProtectionManager {
    *   // Access breached password detection configuration
    *   console.log(breachedPasswordDetectionConfig);
    * });
-   *
-   * @param   {Object}    params            Breached password detection parameters (leave empty).
+   * @param   {object}    params            Breached password detection parameters (leave empty).
    * @param   {Function}  [cb]              Callback function.
-   *
-   * @return    {Promise|undefined}
+   * @returns    {Promise|undefined}
    */
   getBreachedPasswordDetectionConfig(...args) {
     return this.breachedPasswordDetection.get(...args);
@@ -185,12 +175,10 @@ class AttackProtectionManager {
    *   // Access breached password detection configuration
    *   console.log(breachedPasswordDetectionConfig);
    * });
-   *
-   * @param   {Object}    params            Breached password detection parameters (leave empty).
-   * @param   {Object}    data              Updated breached password detection configuration.
+   * @param   {object}    params            Breached password detection parameters (leave empty).
+   * @param   {object}    data              Updated breached password detection configuration.
    * @param   {Function}  [cb]              Callback function.
-   *
-   * @return    {Promise|undefined}
+   * @returns    {Promise|undefined}
    */
   updateBreachedPasswordDetectionConfig(...args) {
     return this.breachedPasswordDetection.patch(...args);
