@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.40.0](https://github.com/auth0/node-auth0/tree/v2.40.0) (2022-02-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.39.0...v2.40.0)
+
+**Added**
+
+- [CAUTH-1270]: feat(attack protection): add three features (bf, sipt, bpd) [\#705](https://github.com/auth0/node-auth0/pull/705) ([sdwvit](https://github.com/sdwvit))
+
 ## [v2.39.0](https://github.com/auth0/node-auth0/tree/v2.39.0) (2022-01-31)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.38.1...v2.39.0)
