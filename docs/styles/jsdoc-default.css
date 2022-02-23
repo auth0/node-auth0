@@ -120,7 +120,7 @@ blockquote {
 #main {
   float: right;
   min-width: 360px;
-  width: calc(100% - 250px);
+  width: calc(100% - 400px);
   padding: 0 30px 20px 30px;
 }
 
@@ -222,7 +222,7 @@ section {
 nav {
   float: left;
   display: block;
-  width: 250px;
+  width: 400px;
   background: #fff;
   overflow: auto;
   position: fixed;
@@ -286,7 +286,7 @@ nav li {
 /** Footer **/
 footer {
   color: hsl(0, 0%, 28%);
-  margin-left: 250px;
+  margin-left: 400px;
   display: block;
   padding: 30px;
   font-style: italic;
