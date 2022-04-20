@@ -3226,10 +3226,10 @@ class ManagementClient {
   }
 
   /**
-   * Get the new universal login template.
+   * Set the new universal login template.
    *
    * @example
-   * management.setBrandingUniversalLoginTemplate({ template: "a template" }, function (err, template) {
+   * management.setBrandingUniversalLoginTemplate({}, { template: "a template" }, function (err, template) {
    *   if (err) {
    *     // Handle error.
    *   }
