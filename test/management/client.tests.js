@@ -289,6 +289,7 @@ describe('ClientsManager', () => {
       });
     });
   });
+
   describe('#rotateSecret', () => {
     const client_id = 5;
 
