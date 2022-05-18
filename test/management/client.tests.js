@@ -289,4 +289,58 @@ describe('ClientsManager', () => {
       });
     });
   });
+  describe('#rotateSecret', () => {
+    const client_id = 5;
+
+    beforeEach(function () {
+      this.request = nock(API_URL)
+        .post(`/clients/${client_id}/rotate-secret`)
+        .reply(200, this.data);
+    });
+
+    it('should accept a callback', function (done) {
+      this.clients.rotateClientSecret({ client_id }, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', function (done) {
+      this.clients
+        .rotateClientSecret({ client_id }, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a POST request to /api/v2/clients/5/rotate-secret', function (done) {
+      const { request } = this;
+
+      this.clients.rotateClientSecret({ client_id }).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(200);
+
+      this.clients.rotateClientSecret({ client_id }).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', function (done) {
+      nock.cleanAll();
+
+      nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(500);
+
+      this.clients.rotateClientSecret({ client_id }).catch((err) => {
+        expect(err).to.exist;
+
+        done();
+      });
+    });
+  });
 });
