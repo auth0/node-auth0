@@ -198,6 +198,11 @@ class ClientsManager {
   rotateClientSecret(params, cb) {
     const query = params || {};
 
+    // Require a client ID.
+    if (!params.client_id) {
+      throw new ArgumentError('The client_id cannot be null or undefined');
+    }
+
     if (cb && cb instanceof Function) {
       return this.rotateSecretResource.create(query, {}, cb);
     }
