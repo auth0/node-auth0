@@ -31,7 +31,7 @@ describe('ClientsManager', () => {
     const methods = ['getAll', 'get', 'create', 'update', 'delete'];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
+      it(`should have a ${method} method`, () => {
         expect(clients[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
@@ -62,17 +62,17 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).get('/clients').reply(200);
     });
 
-    it('should accept a callback', function (done) {
+    it('should accept a callback', (done) => {
       clients.getAll(() => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       clients.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).get('/clients').reply(500);
@@ -83,7 +83,7 @@ describe('ClientsManager', () => {
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
       const data = [{ test: true }];
@@ -123,7 +123,7 @@ describe('ClientsManager', () => {
       });
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -148,11 +148,11 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).post('/clients').reply(201, data);
     });
 
-    it('should accept a callback', function (done) {
+    it('should accept a callback', (done) => {
       clients.create(data, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       clients.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
@@ -181,7 +181,7 @@ describe('ClientsManager', () => {
       });
     });
 
-    it('should include the new client data in the request body', function (done) {
+    it('should include the new client data in the request body', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL).post('/clients', data).reply(201, data);
@@ -233,11 +233,11 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).patch(`/clients/${this.data.id}`).reply(200, this.data);
     });
 
-    it('should accept a callback', function (done) {
+    it('should accept a callback', (done) => {
       clients.update({ client_id: 5 }, {}, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       clients.update({ client_id: 5 }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
@@ -271,11 +271,11 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).delete(`/clients/${id}`).reply(200);
     });
 
-    it('should accept a callback', function (done) {
+    it('should accept a callback', (done) => {
       clients.delete({ client_id: id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
+    it('should return a promise when no callback is given', (done) => {
       clients.delete({ client_id: id }).then(done.bind(null, null));
     });
 
@@ -299,11 +299,11 @@ describe('ClientsManager', () => {
         .reply(200, this.data);
     });
 
-    it('should accept a callback', function (done) {
+    it('should accept a callback', (done) => {
       clients.rotateClientSecret({ client_id }, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       clients
         .rotateClientSecret({ client_id }, {})
         .then(done.bind(null, null))
@@ -326,7 +326,7 @@ describe('ClientsManager', () => {
       }).to.throw(ArgumentError, 'The client_id cannot be null or undefined');
     });
 
-    it('should include the new data in the body of the request', function (done) {
+    it('should include the new data in the body of the request', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(200);
@@ -338,7 +338,7 @@ describe('ClientsManager', () => {
       });
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(500);
