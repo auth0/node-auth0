@@ -294,9 +294,7 @@ describe('ClientsManager', () => {
     const client_id = 5;
 
     beforeEach(function () {
-      this.request = nock(API_URL)
-        .post(`/clients/${client_id}/rotate-secret`)
-        .reply(200, this.data);
+      this.request = nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(200);
     });
 
     it('should accept a callback', (done) => {
