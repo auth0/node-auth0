@@ -6,10 +6,16 @@ const API_URL = 'https://tenant.auth0.com';
 const ClientsManager = require(`../../src/management/ClientsManager`);
 const { ArgumentError } = require('rest-facade');
 
+/**
+ * @type {ClientsManager}
+ */
+
+let clients;
+
 describe('ClientsManager', () => {
   before(function () {
     this.token = 'TOKEN';
-    this.clients = new ClientsManager({
+    clients = new ClientsManager({
       headers: {
         authorization: `Bearer ${this.token}`,
       },
@@ -25,8 +31,8 @@ describe('ClientsManager', () => {
     const methods = ['getAll', 'get', 'create', 'update', 'delete'];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect(this.clients[method]).to.exist.to.be.an.instanceOf(Function);
+      it(`should have a ${method} method`, () => {
+        expect(clients[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
@@ -56,34 +62,34 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).get('/clients').reply(200);
     });
 
-    it('should accept a callback', function (done) {
-      this.clients.getAll(() => {
+    it('should accept a callback', (done) => {
+      clients.getAll(() => {
         done();
       });
     });
 
-    it('should return a promise if no callback is given', function (done) {
-      this.clients.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
+    it('should return a promise if no callback is given', (done) => {
+      clients.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).get('/clients').reply(500);
 
-      this.clients.getAll().catch((err) => {
+      clients.getAll().catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
       const data = [{ test: true }];
       nock(API_URL).get('/clients').reply(200, data);
 
-      this.clients.getAll().then((clients) => {
+      clients.getAll().then((clients) => {
         expect(clients).to.be.an.instanceOf(Array);
 
         expect(clients.length).to.equal(data.length);
@@ -97,7 +103,7 @@ describe('ClientsManager', () => {
     it('should perform a GET request to /api/v2/clients', function (done) {
       const { request } = this;
 
-      this.clients.getAll().then(() => {
+      clients.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -111,13 +117,13 @@ describe('ClientsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.clients.getAll().then(() => {
+      clients.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -128,7 +134,7 @@ describe('ClientsManager', () => {
         })
         .reply(200);
 
-      this.clients.getAll({ include_fields: true, fields: 'test' }).then(() => {
+      clients.getAll({ include_fields: true, fields: 'test' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -142,18 +148,18 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).post('/clients').reply(201, data);
     });
 
-    it('should accept a callback', function (done) {
-      this.clients.create(data, done.bind(null, null));
+    it('should accept a callback', (done) => {
+      clients.create(data, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function (done) {
-      this.clients.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
+    it('should return a promise if no callback is given', (done) => {
+      clients.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/clients', function (done) {
       const { request } = this;
 
-      this.clients.create(data).then(() => {
+      clients.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -168,19 +174,19 @@ describe('ClientsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(201, data);
 
-      this.clients.create(data).then(() => {
+      clients.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should include the new client data in the request body', function (done) {
+    it('should include the new client data in the request body', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL).post('/clients', data).reply(201, data);
 
-      this.clients.create(data).then(() => {
+      clients.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -202,20 +208,17 @@ describe('ClientsManager', () => {
     it('should accept a callback', function (done) {
       const params = { id: this.data.id };
 
-      this.clients.get(params, done.bind(null, null));
+      clients.get(params, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.clients
-        .get({ id: this.data.id })
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      clients.get({ id: this.data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/clients/5', function (done) {
       const { request } = this;
 
-      this.clients.get({ client_id: this.data.id }).then(() => {
+      clients.get({ client_id: this.data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -230,21 +233,18 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).patch(`/clients/${this.data.id}`).reply(200, this.data);
     });
 
-    it('should accept a callback', function (done) {
-      this.clients.update({ client_id: 5 }, {}, done.bind(null, null));
+    it('should accept a callback', (done) => {
+      clients.update({ client_id: 5 }, {}, done.bind(null, null));
     });
 
-    it('should return a promise if no callback is given', function (done) {
-      this.clients
-        .update({ client_id: 5 }, {})
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+    it('should return a promise if no callback is given', (done) => {
+      clients.update({ client_id: 5 }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a PATCH request to /api/v2/clients/5', function (done) {
       const { request } = this;
 
-      this.clients.update({ client_id: 5 }, {}).then(() => {
+      clients.update({ client_id: 5 }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -256,7 +256,7 @@ describe('ClientsManager', () => {
 
       const request = nock(API_URL).patch(`/clients/${this.data.id}`, this.data).reply(200);
 
-      this.clients.update({ client_id: 5 }, this.data).then(() => {
+      clients.update({ client_id: 5 }, this.data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -271,19 +271,78 @@ describe('ClientsManager', () => {
       this.request = nock(API_URL).delete(`/clients/${id}`).reply(200);
     });
 
-    it('should accept a callback', function (done) {
-      this.clients.delete({ client_id: id }, done.bind(null, null));
+    it('should accept a callback', (done) => {
+      clients.delete({ client_id: id }, done.bind(null, null));
     });
 
-    it('should return a promise when no callback is given', function (done) {
-      this.clients.delete({ client_id: id }).then(done.bind(null, null));
+    it('should return a promise when no callback is given', (done) => {
+      clients.delete({ client_id: id }).then(done.bind(null, null));
     });
 
     it(`should perform a DELETE request to /clients/${id}`, function (done) {
       const { request } = this;
 
-      this.clients.delete({ client_id: id }).then(() => {
+      clients.delete({ client_id: id }).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+  });
+
+  describe('#rotateSecret', () => {
+    const client_id = 5;
+
+    beforeEach(function () {
+      this.request = nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(200);
+    });
+
+    it('should accept a callback', (done) => {
+      clients.rotateClientSecret({ client_id }, done.bind(null, null));
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      clients
+        .rotateClientSecret({ client_id }, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a POST request to /api/v2/clients/5/rotate-secret', function (done) {
+      const { request } = this;
+
+      clients.rotateClientSecret({ client_id }).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should return an error when client_id is not sent', () => {
+      expect(() => {
+        clients.rotateClientSecret({});
+      }).to.throw(ArgumentError, 'The client_id cannot be null or undefined');
+    });
+
+    it('should include the new data in the body of the request', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(200);
+
+      clients.rotateClientSecret({ client_id }).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`/clients/${client_id}/rotate-secret`).reply(500);
+
+      clients.rotateClientSecret({ client_id }).catch((err) => {
+        expect(err).to.exist;
 
         done();
       });
