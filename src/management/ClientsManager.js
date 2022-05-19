@@ -54,6 +54,19 @@ class ClientsManager {
       options.tokenProvider
     );
     this.resource = new RetryRestClient(auth0RestClient, options.retry);
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/management/v2#!/Clients/post_rotate_secret Auth0 Clients Rotate a client secret}.
+     *
+     * @type {external:RestClient}
+     */
+    const auth0RotateSecretClient = new Auth0RestClient(
+      `${options.baseUrl}/clients/:client_id/rotate-secret`,
+      clientOptions,
+      options.tokenProvider
+    );
+    this.rotateSecretResource = new RetryRestClient(auth0RotateSecretClient, options.retry);
   }
 
   /**
@@ -165,6 +178,36 @@ class ClientsManager {
    */
   delete(...args) {
     return this.resource.delete(...args);
+  }
+
+  /**
+   * Rotate a client secret
+   *
+   * @example
+   * management.clients.rotateClientSecret({ client_id: CLIENT_ID }, function (err, user) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   // Client secret rotated.
+   * });
+   * @param   {object}    params              params object
+   * @param   {string}    params.client_id    Application client ID.
+   * @returns  {Promise|undefined}
+   */
+  rotateClientSecret(params, cb) {
+    const query = params || {};
+
+    // Require a client ID.
+    if (!params.client_id) {
+      throw new ArgumentError('The client_id cannot be null or undefined');
+    }
+
+    if (cb && cb instanceof Function) {
+      return this.rotateSecretResource.create(query, {}, cb);
+    }
+
+    return this.rotateSecretResource.create(query, {});
   }
 }
 
