@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.41.0](https://github.com/auth0/node-auth0/tree/v2.41.0) (2022-05-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.40.0...v2.41.0)
+
+**Added**
+
+- Added ClientsManager.rotateClientSecret method [\#721](https://github.com/auth0/node-auth0/pull/721) ([sbmelvin](https://github.com/sbmelvin))
+
 ## [v2.40.0](https://github.com/auth0/node-auth0/tree/v2.40.0) (2022-02-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.39.0...v2.40.0)
