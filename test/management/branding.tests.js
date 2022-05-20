@@ -1,5 +1,8 @@
 const { expect } = require('chai');
+const fs = require('fs');
+const path = require('path');
 const nock = require('nock');
+const util = require('util');
 
 const API_URL = 'https://tenant.auth0.com';
 
@@ -7,16 +10,27 @@ const BrandingManager = require(`../../src/management/BrandingManager`);
 const { ArgumentError } = require('rest-facade');
 
 describe('BrandingManager', () => {
+  let branding, token;
+
   before(function () {
     this.token = 'TOKEN';
     this.branding = new BrandingManager({
       headers: { authorization: `Bearer ${this.token}` },
       baseUrl: API_URL,
     });
+    ({ branding, token } = this);
   });
 
   describe('instance', () => {
-    const methods = ['getSettings', 'updateSettings'];
+    const methods = [
+      'getSettings',
+      'updateSettings',
+      'getTheme',
+      'getDefaultTheme',
+      'createTheme',
+      'updateTheme',
+      'deleteTheme',
+    ];
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
@@ -436,6 +450,300 @@ describe('BrandingManager', () => {
 
         done();
       });
+    });
+  });
+
+  describe('#getTheme', () => {
+    beforeEach(() => {});
+
+    it('should accept a callback', (done) => {
+      nock(API_URL).get('/branding/themes/themeid1').reply(200);
+
+      branding.getTheme({ id: 'themeid1' }, () => {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      nock(API_URL).get('/branding/themes/themeid1').reply(200);
+
+      const promise = branding.getTheme({ id: 'themeid1' });
+      expect(promise.then).to.exist;
+      expect(promise.catch).to.exist;
+      await promise;
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock(API_URL).get('/branding/themes/themeid1').reply(404);
+
+      try {
+        await branding.getTheme({ id: 'themeid1' });
+      } catch (err) {
+        expect(err.statusCode).to.eq(404);
+        expect(err).to.exist;
+      }
+    });
+
+    it('should pass the body of the response to the "then" handler', async () => {
+      const data = JSON.parse(
+        await util.promisify(fs.readFile)(path.join(__dirname, '../data/theme.json'))
+      );
+      nock(API_URL).get('/branding/themes/themeid1').reply(200, data);
+
+      const theme = await branding.getTheme({ id: 'themeid1' });
+      expect(theme.themeId).to.equal(data.themeId);
+    });
+
+    it('should perform a GET request to /api/v2/branding/themes/:theme_id', async () => {
+      const request = nock(API_URL).get('/branding/themes/themeid1').reply(200);
+
+      await branding.getTheme({ id: 'themeid1' });
+      expect(request.isDone()).to.be.true;
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      const request = nock(API_URL)
+        .get('/branding/themes/themeid1')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, { id: 1 });
+
+      await branding.getTheme({ id: 'themeid1' });
+      expect(request.isDone()).to.be.true;
+    });
+  });
+
+  describe('#getDefaultTheme', () => {
+    beforeEach(() => {});
+
+    it('should accept a callback', (done) => {
+      nock(API_URL).get('/branding/themes/default').reply(200);
+
+      branding.getDefaultTheme(() => {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      nock(API_URL).get('/branding/themes/default').reply(200);
+
+      const promise = branding.getDefaultTheme();
+      expect(promise.then).to.exist;
+      expect(promise.catch).to.exist;
+      await promise;
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock(API_URL).get('/branding/themes/default').reply(404);
+
+      try {
+        await branding.getDefaultTheme();
+      } catch (err) {
+        expect(err.statusCode).to.eq(404);
+        expect(err).to.exist;
+      }
+    });
+
+    it('should pass the body of the response to the "then" handler', async () => {
+      const data = JSON.parse(
+        await util.promisify(fs.readFile)(path.join(__dirname, '../data/theme.json'))
+      );
+      nock(API_URL).get('/branding/themes/default').reply(200, data);
+
+      const theme = await branding.getDefaultTheme();
+      expect(theme.themeId).to.equal(data.themeId);
+    });
+
+    it('should perform a GET request to /api/v2/branding/themes/default', async () => {
+      const request = nock(API_URL).get('/branding/themes/default').reply(200);
+
+      await branding.getDefaultTheme();
+      expect(request.isDone()).to.be.true;
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      const request = nock(API_URL)
+        .get('/branding/themes/default')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, { id: 1 });
+
+      await branding.getDefaultTheme();
+      expect(request.isDone()).to.be.true;
+    });
+  });
+
+  describe('#createTheme', () => {
+    let data;
+    beforeEach(async () => {
+      data = JSON.parse(
+        await util.promisify(fs.readFile)(path.join(__dirname, '../data/theme.json'))
+      );
+    });
+
+    it('should accept a callback', (done) => {
+      nock(API_URL).post(`/branding/themes`, data).reply(201);
+
+      branding.createTheme(data, () => {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      nock(API_URL).post(`/branding/themes`, data).reply(201);
+
+      const promise = branding.createTheme(data);
+      expect(promise.then).to.exist;
+      expect(promise.catch).to.exist;
+      await promise;
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock(API_URL).post(`/branding/themes`, data).reply(409);
+
+      try {
+        await branding.createTheme(data);
+      } catch (err) {
+        expect(err.statusCode).to.eq(409);
+        expect(err).to.exist;
+      }
+    });
+
+    it('should pass the body of the response to the "then" handler', async () => {
+      nock(API_URL).post(`/branding/themes`, data).reply(201, data);
+
+      const theme = await branding.createTheme(data);
+      expect(theme.themeId).to.equal(data.themeId);
+    });
+
+    it('should perform a POST request to /branding/themes', async () => {
+      const request = nock(API_URL).post(`/branding/themes`, data).reply(201, data);
+
+      await branding.createTheme(data);
+      expect(request.isDone()).to.be.true;
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      const request = nock(API_URL)
+        .post('/branding/themes', data)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(201, data);
+
+      await branding.createTheme(data);
+      expect(request.isDone()).to.be.true;
+    });
+  });
+
+  describe('#updateTheme', () => {
+    let data, themeId, params;
+    beforeEach(async () => {
+      ({ themeId, ...data } = JSON.parse(
+        await util.promisify(fs.readFile)(path.join(__dirname, '../data/theme.json'))
+      ));
+      params = { id: themeId };
+    });
+
+    it('should accept a callback', (done) => {
+      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200);
+
+      branding.updateTheme(params, data, () => {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200);
+
+      const promise = branding.updateTheme(params, data);
+      expect(promise.then).to.exist;
+      expect(promise.catch).to.exist;
+      await promise;
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(404);
+
+      try {
+        await branding.updateTheme(params, data);
+      } catch (err) {
+        expect(err.statusCode).to.eq(404);
+        expect(err).to.exist;
+      }
+    });
+
+    it('should pass the body of the response to the "then" handler', async () => {
+      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
+
+      const theme = await branding.updateTheme(params, data);
+      expect(theme.themeId).to.equal(data.themeId);
+    });
+
+    it('should perform a PATCH request to /api/v2/branding/themes/:theme_id', async () => {
+      const request = nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
+
+      await branding.updateTheme(params, data);
+      expect(request.isDone()).to.be.true;
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      const request = nock(API_URL)
+        .patch(`/branding/themes/${themeId}`, data)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
+
+      await branding.updateTheme(params, data);
+      expect(request.isDone()).to.be.true;
+    });
+  });
+
+  describe('#deleteTheme', () => {
+    let themeId, params;
+    beforeEach(async () => {
+      themeId = 'themeid1';
+      params = { id: themeId };
+    });
+
+    it('should accept a callback', (done) => {
+      nock(API_URL).delete(`/branding/themes/${themeId}`).reply(204);
+
+      branding.deleteTheme(params, () => {
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      nock(API_URL).delete(`/branding/themes/${themeId}`).reply(204);
+
+      const promise = branding.deleteTheme(params);
+      expect(promise.then).to.exist;
+      expect(promise.catch).to.exist;
+      await promise;
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock(API_URL).delete(`/branding/themes/${themeId}`).reply(404);
+
+      try {
+        await branding.deleteTheme(params);
+      } catch (err) {
+        expect(err.statusCode).to.eq(404);
+        expect(err).to.exist;
+      }
+    });
+
+    it('should perform a PATCH request to /api/v2/branding/themes/:theme_id', async () => {
+      const request = nock(API_URL).delete(`/branding/themes/${themeId}`).reply(204);
+
+      await branding.deleteTheme(params);
+      expect(request.isDone()).to.be.true;
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      const request = nock(API_URL)
+        .delete(`/branding/themes/${themeId}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(204);
+
+      await branding.deleteTheme(params);
+      expect(request.isDone()).to.be.true;
     });
   });
 });
