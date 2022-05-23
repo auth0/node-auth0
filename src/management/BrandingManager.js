@@ -56,6 +56,19 @@ class BrandingManager {
       options.tokenProvider
     );
     this.brandingTemplates = new RetryRestClient(brandingTemplateAuth0RestClient, options.retry);
+
+    /**
+     * Provides an abstraction layer for consuming the
+     * {@link https://auth0.com/docs/api/management/v2#!/Branding/get_branding_theme Branding theme endpoint}.
+     *
+     * @type {external:RestClient}
+     */
+    const brandingThemesAuth0RestClient = new Auth0RestClient(
+      `${options.baseUrl}/branding/themes/:id`,
+      clientOptions,
+      options.tokenProvider
+    );
+    this.brandingThemes = new RetryRestClient(brandingThemesAuth0RestClient, options.retry);
   }
 
   /**
@@ -155,6 +168,115 @@ class BrandingManager {
    */
   deleteUniversalLoginTemplate(...args) {
     return this.brandingTemplates.delete(...args);
+  }
+
+  /**
+   * Get the new universal login theme by id.
+   *
+   * @example
+   * var params = { id: THEME_ID };
+   *
+   * management.branding.getTheme(params, function (err, theme) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *    // Theme
+   *    console.log(theme);
+   * });
+   * @param   {object}    params            Theme params
+   * @param   {object}    params.id         Theme identifier.
+   * @param   {Function}  [cb]              Callback function.
+   * @returns    {Promise|undefined}
+   */
+  getTheme(...args) {
+    return this.brandingThemes.get(...args);
+  }
+
+  /**
+   * Get the default new universal login theme.
+   *
+   * @example
+   * management.branding.getDefaultTheme(function (err, theme) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *    // Theme
+   *    console.log(theme);
+   * });
+   * @param   {Function}  [cb]              Callback function.
+   * @returns    {Promise|undefined}
+   */
+  getDefaultTheme(...args) {
+    return this.brandingThemes.get(...[{ id: 'default' }].concat(args));
+  }
+
+  /**
+   * Create a new theme.
+   *
+   * @example
+   * management.branding.createTheme(data, function (err, theme) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   // Theme created.
+   *   console.log(theme);
+   * });
+   * @param   {object}    data     theme data object.
+   * @param   {Function}  [cb]     Callback function.
+   * @returns  {Promise|undefined}
+   */
+  createTheme(...args) {
+    return this.brandingThemes.create(...args);
+  }
+
+  /**
+   * Update a theme.
+   *
+   * @example
+   * var data = THEME_OBJ;
+   * var params = { id: THEME_ID };
+   *
+   * management.branding.updateTheme(params, data, function (err, theme) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   // Theme updated.
+   *   console.log(theme);
+   * });
+   * @param   {object}    params            Theme parameters.
+   * @param   {object}    params.id         Theme identifier.
+   * @param   {object}    data              Updated theme data.
+   * @param   {Function}  [cb]              Callback function.
+   * @returns    {Promise|undefined}
+   */
+  updateTheme(...args) {
+    return this.brandingThemes.patch(...args);
+  }
+
+  /**
+   * Delete a theme.
+   *
+   * @example
+   * var params = { id: THEME_ID };
+   *
+   * management.branding.deleteTheme(params, function (err) {
+   *   if (err) {
+   *     // Handle error.
+   *   }
+   *
+   *   // Theme deleted.
+   * });
+   * @param   {object}    params            Theme parameters.
+   * @param   {object}    params.id         Theme identifier.
+   * @param   {Function}  [cb]              Callback function.
+   * @returns    {Promise|undefined}
+   */
+  deleteTheme(...args) {
+    return this.brandingThemes.delete(...args);
   }
 }
 
