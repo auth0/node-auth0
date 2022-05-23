@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.42.0](https://github.com/auth0/node-auth0/tree/v2.42.0) (2022-05-23)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.41.0...v2.42.0)
+
+**Added**
+
+- chore: add branding theme routes [\#725](https://github.com/auth0/node-auth0/pull/725) ([alejofernandez](https://github.com/alejofernandez))
+
 ## [v2.41.0](https://github.com/auth0/node-auth0/tree/v2.41.0) (2022-05-20)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.40.0...v2.41.0)
