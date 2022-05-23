@@ -216,7 +216,7 @@ class BrandingManager {
    * Create a new theme.
    *
    * @example
-   * management.branding.createThene(data, function (err, theme) {
+   * management.branding.createTheme(data, function (err, theme) {
    *   if (err) {
    *     // Handle error.
    *   }
