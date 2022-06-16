@@ -223,7 +223,7 @@ describe('OAuthAuthenticator', () => {
 
       const request = nock(API_URL)
         .post(path, function () {
-          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+          return this.headers['auth0-forwarded-for'] === options.forwardedFor;
         })
         .reply(200);
 
@@ -408,7 +408,7 @@ describe('OAuthAuthenticator', () => {
 
       const request = nock(API_URL)
         .post(path, function () {
-          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+          return this.headers['auth0-forwarded-for'] === options.forwardedFor;
         })
         .reply(200);
 

@@ -409,7 +409,7 @@ describe('UsersManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/users/5', async () => {
-      usersManager.update({ id: 5 }, {});
+      await usersManager.update({ id: 5 }, {});
       expect(scope.isDone()).to.be.true;
     });
 
