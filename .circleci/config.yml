@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   ship: auth0/ship@0.3.1
+  codecov: codecov/codecov@3
 jobs:
   build-and-test:
     parameters:
@@ -57,9 +58,7 @@ jobs:
           condition:
             equal: [ "12", << parameters.node-version >> ]
           steps:
-            - run:
-                name: Generate Coverage
-                command: yarn test:coverage
+            - codecov/upload
 workflows:
   build-test-report:
     jobs:
