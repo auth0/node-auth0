@@ -10,7 +10,6 @@
   "scripts": {
     "test": "mocha --reporter spec './test/**/*.tests.js'",
     "test:ci": "nyc npm run test -- --forbid-only --reporter mocha-junit-reporter",
-    "test:coverage": "codecov",
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 './test/**/*.tests.js' './test/*.tests.js' --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
     "precommit": "pretty-quick --staged",
@@ -44,7 +43,6 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "codecov": "^3.7.2",
     "cross-env": "^5.2.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
