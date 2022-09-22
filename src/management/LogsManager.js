@@ -1,11 +1,9 @@
-const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Represents the relationship between Auth0 and an Identity provider.
  */
-class LogsManager {
+class LogsManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -13,27 +11,7 @@ class LogsManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide client options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    /**
-     * Options object for the Rest Client instance.
-     *
-     * @type {object}
-     */
-    const clientOptions = {
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for performing CRUD operations on
@@ -42,12 +20,7 @@ class LogsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/logs/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.resource = new RetryRestClient(auth0RestClient, options.retry);
+    this.resource = this._getRestClient('/logs/:id');
   }
 
   /**

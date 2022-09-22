@@ -1,6 +1,5 @@
 const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Auth0 Clients Manager.
@@ -11,7 +10,7 @@ const RetryRestClient = require('../RetryRestClient');
  * {@link https://auth0.com/docs/applications Applications} section of the
  * documentation.
  */
-class ClientsManager {
+class ClientsManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -19,28 +18,7 @@ class ClientsManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide client options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    /**
-     * Options object for the Rest Client instance.
-     *
-     * @type {object}
-     */
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for consuming the
@@ -48,12 +26,7 @@ class ClientsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/clients/:client_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.resource = new RetryRestClient(auth0RestClient, options.retry);
+    this.resource = this._getRestClient('/clients/:client_id');
 
     /**
      * Provides an abstraction layer for consuming the
@@ -61,12 +34,7 @@ class ClientsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RotateSecretClient = new Auth0RestClient(
-      `${options.baseUrl}/clients/:client_id/rotate-secret`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.rotateSecretResource = new RetryRestClient(auth0RotateSecretClient, options.retry);
+    this.rotateSecretResource = this._getRestClient('/clients/:client_id/rotate-secret');
   }
 
   /**

@@ -1,11 +1,10 @@
 const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Abstracts interaction with the user-blocks endpoint.
  */
-class UserBlocksManager {
+class UserBlocksManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -13,40 +12,11 @@ class UserBlocksManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide manager options');
-    }
+    super(options);
 
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
+    this.userBlocksById = this._getRestClient('/user-blocks/:id');
 
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
-
-    const userBlocksByIdResource = new Auth0RestClient(
-      `${options.baseUrl}/user-blocks/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.userBlocksById = new RetryRestClient(userBlocksByIdResource, options.retry);
-
-    const userBlocksByIdentifierResource = new Auth0RestClient(
-      `${options.baseUrl}/user-blocks`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.userBlocksByIdentifier = new RetryRestClient(
-      userBlocksByIdentifierResource,
-      options.retry
-    );
+    this.userBlocksByIdentifier = this._getRestClient('/user-blocks');
   }
 
   /**
