@@ -24,30 +24,57 @@ class Auth0RestClient {
     this.options = options;
     this.provider = provider;
     this.restClient = new RestClient(resourceUrl, options);
+  }
 
-    this.wrappedProvider = function (method, args) {
-      if (!this.provider) {
-        return this.restClient[method](...args);
-      }
+  _request(method, args) {
+    let callback;
+    if (
+      (args && args[args.length - 1] instanceof Function) ||
+      typeof args[args.length - 1] === 'undefined'
+    ) {
+      callback = args.pop();
+    }
+    if (!args || !args.length) {
+      args = [{}];
+    }
+    return new Promise((resolve, reject) => {
+      this.restClient[method](
+        ...[
+          ...args,
+          function (err, body /*, headers */) {
+            // TODO: add logic to check this.options and apply headers
+            if (err) {
+              (callback && callback(err)) || reject(err);
+            }
+            (callback && callback(null, body)) || resolve(body);
+          },
+        ]
+      );
+    });
+  }
 
-      let callback;
-      if (args && args[args.length - 1] instanceof Function) {
-        callback = args[args.length - 1];
-      }
+  wrappedProvider(method, args) {
+    if (!this.provider) {
+      return this._request(method, args);
+    }
 
-      return this.provider
-        .getAccessToken()
-        .then((access_token) => {
-          this.restClient.options.headers['Authorization'] = `Bearer ${access_token}`;
-          return this.restClient[method](...args);
-        })
-        .catch((err) => {
-          if (callback) {
-            return callback(err);
-          }
-          throw err;
-        });
-    };
+    let callback;
+    if (args && args[args.length - 1] instanceof Function) {
+      callback = args[args.length - 1];
+    }
+
+    return this.provider
+      .getAccessToken()
+      .then((access_token) => {
+        this.restClient.options.headers['Authorization'] = `Bearer ${access_token}`;
+        return this._request(method, args);
+      })
+      .catch((err) => {
+        if (callback) {
+          return callback(err);
+        }
+        throw err;
+      });
   }
 
   getAll(...args) {
