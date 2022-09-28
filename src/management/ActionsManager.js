@@ -1,13 +1,11 @@
-const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * {@link https://auth0.com/docs/api/v2#!/Actions/get_actions Actions} provide a way to extend
  * Auth0 flows with custom logic.
  * See the {@link https://auth0.com/docs/actions Actions documentation} for more information.
  */
-class ActionsManager {
+class ActionsManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -15,28 +13,7 @@ class ActionsManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide client options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    /**
-     * Options object for the Rest Client instance.
-     *
-     * @type {object}
-     */
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for consuming the
@@ -44,61 +21,23 @@ class ActionsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/actions/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.resource = new RetryRestClient(auth0RestClient, options.retry);
+    this.resource = this._getRestClient('/actions/actions/:id');
 
-    const actionsDeployRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/actions/:id/deploy`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.actionsDeploy = new RetryRestClient(actionsDeployRestClient, options.retry);
+    this.actionsDeploy = this._getRestClient('/actions/actions/:id/deploy');
 
-    const actionsTestRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/actions/:id/test`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.actionsTest = new RetryRestClient(actionsTestRestClient, options.retry);
+    this.actionsTest = this._getRestClient('/actions/actions/:id/test');
 
-    const triggersRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/triggers/:trigger_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.triggers = new RetryRestClient(triggersRestClient, options.retry);
+    this.triggers = this._getRestClient('/actions/triggers/:trigger_id');
 
-    const triggerBindingsRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/triggers/:trigger_id/bindings`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.triggerBindings = new RetryRestClient(triggerBindingsRestClient, options.retry);
+    this.triggerBindings = this._getRestClient('/actions/triggers/:trigger_id/bindings');
 
-    const executionsRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/executions/:execution_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.executions = new RetryRestClient(executionsRestClient, options.retry);
+    this.executions = this._getRestClient('/actions/executions/:execution_id');
 
-    const actionVersionRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/actions/:id/versions/:version_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.actionVersions = new RetryRestClient(actionVersionRestClient, options.retry);
+    this.actionVersions = this._getRestClient('/actions/actions/:id/versions/:version_id');
 
-    const deployActionVersionRestClient = new Auth0RestClient(
-      `${options.baseUrl}/actions/actions/:id/versions/:version_id/deploy`,
-      clientOptions,
-      options.tokenProvider
+    this.actionVersionDeploy = this._getRestClient(
+      '/actions/actions/:id/versions/:version_id/deploy'
     );
-    this.actionVersionDeploy = new RetryRestClient(deployActionVersionRestClient, options.retry);
   }
 
   /**

@@ -1,11 +1,9 @@
-const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Abstracts interaction with the Guardian endpoint.
  */
-class GuardianManager {
+class GuardianManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -13,127 +11,64 @@ class GuardianManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide manager options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for retrieving Guardian enrollments.
      *
      * @type {external:RestClient}
      */
-    const guardianEnrollmentsAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/enrollments/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.enrollments = new RetryRestClient(guardianEnrollmentsAuth0RestClient, options.retry);
+    this.enrollments = this._getRestClient('/guardian/enrollments/:id');
 
     /**
      * Provides an abstraction layer for retrieving Guardian tickets.
      *
      * @type {external:RestClient}
      */
-    const guardianTicketsAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/enrollments/ticket`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.tickets = new RetryRestClient(guardianTicketsAuth0RestClient, options.retry);
+    this.tickets = this._getRestClient('/guardian/enrollments/ticket');
 
     /**
      * Provides an abstraction layer for retrieving Guardian factors.
      *
      * @type {external:RestClient}
      */
-    const guardianFactorsAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/factors/:name`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.factors = new RetryRestClient(guardianFactorsAuth0RestClient, options.retry);
+    this.factors = this._getRestClient('/guardian/factors/:name');
 
     /**
      * Provides an abstraction layer for configuring Factor settings
      *
      * @type {external:RestClient}
      */
-    const guardianFactorSettingsAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/factors/:name/settings`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.factorSettings = new RetryRestClient(guardianFactorSettingsAuth0RestClient, options.retry);
+    this.factorSettings = this._getRestClient('/guardian/factors/:name/settings');
 
     /**
      * Provides an abstraction layer for retrieving Guardian factor templates.
      *
      * @type {external:RestClient}
      */
-    const guardianFactorsTemplatesAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/factors/:name/templates`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.factorsTemplates = new RetryRestClient(
-      guardianFactorsTemplatesAuth0RestClient,
-      options.retry
-    );
+    this.factorsTemplates = this._getRestClient('/guardian/factors/:name/templates');
 
     /**
      * Provides an abstraction layer for retrieving Guardian factor providers.
      *
      * @type {external:RestClient}
      */
-    const guardianFactorsProvidersAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/factors/:name/providers/:provider`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.factorsProviders = new RetryRestClient(
-      guardianFactorsProvidersAuth0RestClient,
-      options.retry
-    );
+    this.factorsProviders = this._getRestClient('/guardian/factors/:name/providers/:provider');
 
     /**
      * Provides an abstraction layer for retrieving Guardian policies.
      *
      * @type {external:RestClient}
      */
-    const guardianPoliciesAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/policies`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.policies = new RetryRestClient(guardianPoliciesAuth0RestClient, options.retry);
+    this.policies = this._getRestClient('/guardian/policies');
 
     /**
      * Provides an abstraction layer for retrieving Guardian phone factor selected provider.
      *
      * @type {external:RestClient}
      */
-    const guardianFactorsPhoneSelectedProviderAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/factors/sms/selected-provider`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.factorsPhoneSelectedProvider = new RetryRestClient(
-      guardianFactorsPhoneSelectedProviderAuth0RestClient,
-      options.retry
+    this.factorsPhoneSelectedProvider = this._getRestClient(
+      '/guardian/factors/sms/selected-provider'
     );
 
     /**
@@ -141,15 +76,7 @@ class GuardianManager {
      *
      * @type {external:RestClient}
      */
-    const guardianFactorsPhoneMessageTypesAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/guardian/factors/phone/message-types`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.factorsPhoneMessageTypes = new RetryRestClient(
-      guardianFactorsPhoneMessageTypesAuth0RestClient,
-      options.retry
-    );
+    this.factorsPhoneMessageTypes = this._getRestClient('/guardian/factors/phone/message-types');
   }
 
   /**

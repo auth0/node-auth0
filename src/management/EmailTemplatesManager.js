@@ -1,12 +1,10 @@
-const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * This class provides a simple abstraction for performing CRUD operations
  * on Auth0's Email Templates. {@link https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName}
  */
-class EmailTemplatesManager {
+class EmailTemplatesManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -14,23 +12,7 @@ class EmailTemplatesManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (!options || 'object' !== typeof options) {
-      throw new ArgumentError('Must provide manager options');
-    }
-
-    if (!options.baseUrl || 'string' !== typeof options.baseUrl) {
-      throw new ArgumentError('Must provide a valid string as base URL for the API');
-    }
-
-    /**
-     * Options object for the Rest Client instance.
-     *
-     * @type {object}
-     */
-    const clientOptions = {
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for performing CRUD operations on
@@ -38,12 +20,7 @@ class EmailTemplatesManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/email-templates/:name`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.resource = new RetryRestClient(auth0RestClient, options.retry);
+    this.resource = this._getRestClient('/email-templates/:name');
   }
 
   /**

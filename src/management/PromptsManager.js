@@ -1,11 +1,10 @@
 const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Manages settings related to prompts.
  */
-class PromptsManager {
+class PromptsManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -13,23 +12,7 @@ class PromptsManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide manager options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for consuming the
@@ -37,12 +20,7 @@ class PromptsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/prompts`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.resource = new RetryRestClient(auth0RestClient, options.retry);
+    this.resource = this._getRestClient('/prompts');
 
     /**
      * Retrieve custom text for a specific prompt and language.
@@ -51,15 +29,7 @@ class PromptsManager {
      *
      * @type {external:RestClient}
      */
-    const customTextByLanguageAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/prompts/:prompt/custom-text/:language`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.customTextByLanguage = new RetryRestClient(
-      customTextByLanguageAuth0RestClient,
-      options.retry
-    );
+    this.customTextByLanguage = this._getRestClient('/prompts/:prompt/custom-text/:language');
   }
 
   /**
