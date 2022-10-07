@@ -25,6 +25,7 @@ class BaseManager {
       errorFormatter: { message: 'message', name: 'error' },
       headers: options.headers,
       query: { repeatParams: false },
+      includeResponseHeaders: options.includeResponseHeaders,
     };
 
     const usersAuth0RestClient = new Auth0RestClient(
