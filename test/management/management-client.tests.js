@@ -945,13 +945,11 @@ describe('ManagementClient', () => {
       const config = Object.assign({}, withTokenConfig, { includeResponseHeaders: true });
       this.client = new ManagementClient(config);
 
-      nock('https://auth0-node-sdk.auth0.com')
-        .get(`/api/v2/users`)
-        .reply(200, { data: 'value' }, { foo: 'bar' });
+      nock('https://auth0-node-sdk.auth0.com').get(`/api/v2/users`).reply(200, { data: 'value' });
 
       const { data, headers } = await this.client.users.getAll();
       expect(data).to.deep.equal({ data: 'value' });
-      expect(headers).to.deep.equal({ foo: 'bar', 'content-type': 'application/json' });
+      expect(headers).to.deep.equal({ 'content-type': 'application/json' });
       nock.cleanAll();
     });
 
@@ -959,13 +957,11 @@ describe('ManagementClient', () => {
       const config = Object.assign({}, withTokenConfig, { includeResponseHeaders: true });
       this.client = new ManagementClient(config);
 
-      nock('https://auth0-node-sdk.auth0.com')
-        .get(`/api/v2/users`)
-        .reply(200, { data: 'value' }, { foo: 'bar' });
+      nock('https://auth0-node-sdk.auth0.com').get(`/api/v2/users`).reply(200, { data: 'value' });
 
       const { data, headers } = await this.client.getUsers();
       expect(data).to.deep.equal({ data: 'value' });
-      expect(headers).to.deep.equal({ foo: 'bar', 'content-type': 'application/json' });
+      expect(headers).to.deep.equal({ 'content-type': 'application/json' });
       nock.cleanAll();
     });
   });

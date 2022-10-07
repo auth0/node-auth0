@@ -230,7 +230,7 @@ describe('Auth0RestClient', () => {
   });
 
   it('should include response headers in promise response', async function () {
-    nock(API_URL).get('/some-resource').reply(200, { data: 'value' }, { foo: 'bar' });
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
 
     const options = {
       includeResponseHeaders: true,
@@ -240,12 +240,12 @@ describe('Auth0RestClient', () => {
     const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
     const { data, headers } = await client.getAll();
     expect(data).to.deep.equal({ data: 'value' });
-    expect(headers).to.deep.equal({ foo: 'bar', 'content-type': 'application/json' });
+    expect(headers).to.deep.equal({ 'content-type': 'application/json' });
     nock.cleanAll();
   });
 
   it('should include response headers in callback response', function (done) {
-    nock(API_URL).get('/some-resource').reply(200, { data: 'value' }, { foo: 'bar' });
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
 
     const options = {
       includeResponseHeaders: true,
@@ -255,7 +255,7 @@ describe('Auth0RestClient', () => {
     const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
     client.getAll((err, { data, headers }) => {
       expect(data).to.deep.equal({ data: 'value' });
-      expect(headers).to.deep.equal({ foo: 'bar', 'content-type': 'application/json' });
+      expect(headers).to.deep.equal({ 'content-type': 'application/json' });
       nock.cleanAll();
       done();
     });
