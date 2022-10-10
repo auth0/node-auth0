@@ -97,6 +97,8 @@ class ClientsManager extends BaseManager {
    * });
    * @param   {object}    params            Client parameters.
    * @param   {string}    params.client_id  Application client ID.
+   * @param   {string}    params.fields     Comma-separated list of fields to include or exclude (based on value provided for include_fields).
+   * @param   {string}    params.include_fields  Whether specified fields are to be included (true) or excluded (false).
    * @param   {Function}  [cb]              Callback function.
    * @returns  {Promise|undefined}
    */
