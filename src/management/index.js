@@ -90,6 +90,7 @@ class ManagementClient {
    * @param   {boolean} [options.retry.enabled=true]                Enabled or Disable Retry Policy functionality.
    * @param   {number}  [options.retry.maxRetries=10]               Retry failed requests X times.
    * @param   {object}  [options.headers]                           Additional headers that will be added to the outgoing requests.
+   * @param   {object}  [options.includeResponseHeaders]            Include the response headers in the payload in the format `{ data, headers }`.
    */
   constructor(options) {
     if (!options || typeof options !== 'object') {
@@ -147,6 +148,7 @@ class ManagementClient {
     }
 
     managerOptions.retry = options.retry;
+    managerOptions.includeResponseHeaders = options.includeResponseHeaders;
 
     /**
      * Simple abstraction for performing CRUD operations on the
