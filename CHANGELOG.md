@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.43.0](https://github.com/auth0/node-auth0/tree/v2.43.0) (2022-10-10)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.42.0...v2.43.0)
+
+**Added**
+
+- Add option to include response headers in the result [\#744](https://github.com/auth0/node-auth0/pull/744) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v2.42.0](https://github.com/auth0/node-auth0/tree/v2.42.0) (2022-05-23)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.41.0...v2.42.0)
