@@ -24,6 +24,7 @@ class BaseManager {
     const clientOptions = {
       errorFormatter: { message: 'message', name: 'error' },
       headers: options.headers,
+      proxy: options.proxy,
       query: { repeatParams: false },
       includeResponseHeaders: options.includeResponseHeaders,
     };

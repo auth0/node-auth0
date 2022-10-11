@@ -1,8 +1,10 @@
 const { expect } = require('chai');
 const nock = require('nock');
+const sinon = require('sinon');
 
-const { ArgumentError } = require('rest-facade');
+const { ArgumentError, Client } = require('rest-facade');
 const Auth0RestClient = require('../src/Auth0RestClient');
+const proxyquire = require('proxyquire');
 
 const API_URL = 'https://tenant.auth0.com';
 
@@ -258,6 +260,34 @@ describe('Auth0RestClient', () => {
       expect(headers).to.deep.equal({ 'content-type': 'application/json' });
       nock.cleanAll();
       done();
+    });
+  });
+
+  it('should make request with proxy', async function () {
+    const spy = sinon.spy();
+    class MockClient extends Client {
+      constructor(...args) {
+        spy(...args);
+        super(...args);
+      }
+    }
+    const RestClient = proxyquire('../src/Auth0RestClient', {
+      'rest-facade': {
+        Client: MockClient,
+      },
+    });
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
+
+    const options = {
+      headers: {},
+      proxy: 'http://proxy',
+    };
+
+    const client = new RestClient(`${API_URL}/some-resource`, options, this.providerMock);
+    const data = await client.getAll();
+    expect(data).to.deep.equal({ data: 'value' });
+    sinon.assert.calledWithMatch(spy, 'https://tenant.auth0.com/some-resource', {
+      proxy: 'http://proxy',
     });
   });
 });
