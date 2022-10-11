@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.44.0](https://github.com/auth0/node-auth0/tree/v2.44.0) (2022-10-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.43.0...v2.44.0)
+
+**Added**
+
+- [SDK-3653] Add proxy support to Management Client [\#747](https://github.com/auth0/node-auth0/pull/747) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v2.43.0](https://github.com/auth0/node-auth0/tree/v2.43.0) (2022-10-10)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.42.0...v2.43.0)
