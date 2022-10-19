@@ -8,11 +8,11 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 [![License](https://img.shields.io/:license-mit-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 ![CircleCI](https://img.shields.io/circleci/build/github/auth0/node-auth0)
 
-:books: [Documentation](#documentation) - :rocket: [Getting Started](#getting-started) - :computer: [API Reference](#api-reference) - :speech_balloon: [Feedback](#feedback)
+📚 [Documentation](#documentation) - 🚀 [Getting Started](#getting-started) - 💻 [API Reference](#api-reference) - 💬 [Feedback](#feedback)
 
 ## Documentation
 
-- [FAQs](./FAQ.md) - frequently asked questions about node-auth0.
+- [FAQs](https://github.com/auth0/node-auth0/blob/master/FAQ.md) - frequently asked questions about node-auth0.
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
 
 ## Getting Started
@@ -50,7 +50,7 @@ var auth0 = new AuthenticationClient({
 
 #### Management API Client
 
-> Note: When using at browser you should use `telemetry: false`.
+> Note: When using the ManagementClient in a browser you should set `telemetry: false`.
 
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
@@ -65,7 +65,7 @@ var management = new ManagementClient({
 });
 ```
 
-For other examples see the [EXAMPLES.md](./EXAMPLES.md) document.
+For other examples see the [EXAMPLES.md](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md) document.
 
 ## API Reference
 
@@ -93,14 +93,14 @@ Please do not report security vulnerabilities on the public GitHub issue tracker
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./auth0_dark_mode.png" width="150">
-    <source media="(prefers-color-scheme: light)" srcset="./auth0_light_mode.png" width="150">
-    <img alt="Auth0 Logo" src="./auth0_light_mode.png" width="150">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_dark_mode.png" width="150">
+    <source media="(prefers-color-scheme: light)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
+    <img alt="Auth0 Logo" src="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
   </picture>
 </p>
 <p align="center">
   Auth0 is an easy to implement, adaptable authentication and authorization platform. To learn more checkout <a href="https://auth0.com/why-auth0">Why Auth0?</a>
 </p>
 <p align="center">
-  This project is licensed under the MIT license. See the <a href="./LICENSE"> LICENSE</a> file for more info.
+  This project is licensed under the MIT license. See the <a href="https://github.com/auth0/node-auth0/blob/master/LICENSE"> LICENSE</a> file for more info.
 </p>
