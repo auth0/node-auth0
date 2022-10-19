@@ -4,7 +4,7 @@ Node.js client library for the [Auth0](https://auth0.com) platform.
 
 ![Release](https://img.shields.io/npm/v/auth0)
 [![Codecov](https://img.shields.io/codecov/c/github/auth0/node-auth0)](https://codecov.io/gh/auth0/node-auth0)
-![Downloads](https://img.shields.io/npm/dw/@auth0/auth0-spa-js)
+![Downloads](https://img.shields.io/npm/dw/auth0)
 [![License](https://img.shields.io/:license-mit-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 ![CircleCI](https://img.shields.io/circleci/build/github/auth0/node-auth0)
 
@@ -83,7 +83,7 @@ We appreciate feedback and contribution to this repo! Before you get started, pl
 
 ### Raise an issue
 
-To provide feedback or report a bug, please [raise an issue on our issue tracker](https://github.com/auth0/auth0-spa-js/issues).
+To provide feedback or report a bug, please [raise an issue on our issue tracker](https://github.com/auth0/node-auth0/issues).
 
 ### Vulnerability Reporting
 
