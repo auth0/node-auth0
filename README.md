@@ -1,6 +1,4 @@
-# node-auth0
-
-Node.js client library for the [Auth0](https://auth0.com) platform.
+![Node.js client library for Auth0](https://cdn.auth0.com/website/sdks/banner/node-auth0-banner.png)
 
 ![Release](https://img.shields.io/npm/v/auth0)
 [![Codecov](https://img.shields.io/codecov/c/github/auth0/node-auth0)](https://codecov.io/gh/auth0/node-auth0)
