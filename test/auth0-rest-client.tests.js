@@ -186,6 +186,29 @@ describe('Auth0RestClient', () => {
     });
   });
 
+  it('should accept a callback and handle errors with response headers', (done) => {
+    const providerMock = {
+      async getAccessToken() {
+        return 'fake-token';
+      },
+    };
+
+    const errorBody = { error: 'message' };
+    nock(API_URL).get('/some-resource').reply(500, errorBody);
+
+    const options = {
+      headers: {},
+      includeResponseHeaders: true,
+    };
+    const client = new Auth0RestClient(`${API_URL}/some-resource`, options, providerMock);
+    client.getAll((err) => {
+      expect(err).to.not.null;
+      expect(err.message).to.be.equal(JSON.stringify(errorBody));
+      done();
+      nock.cleanAll();
+    });
+  });
+
   it('should set access token as Authorization header in options object', async function () {
     nock(API_URL).get('/some-resource').reply(200);
 
