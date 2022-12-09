@@ -73,9 +73,12 @@ class Auth0RestClient {
       this.restClient[method](...args, (err, data, headers) => {
         const payload = { data, headers };
         if (err) {
-          (callback && callback(err)) || reject(err);
+          if (callback) callback(err);
+          else reject(err);
+          return;
         }
-        (callback && callback(null, payload)) || resolve(payload);
+        if (callback) callback(null, payload);
+        else resolve(payload);
       });
     });
   }
