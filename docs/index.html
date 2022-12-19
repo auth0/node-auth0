@@ -49,23 +49,30 @@
 
 
     <section class="readme">
-        <article><h1>node-auth0</h1>
-<p><a href="https://circleci.com/gh/auth0/node-auth0"><img src="https://img.shields.io/circleci/project/github/auth0/node-auth0.svg?branch=master&amp;style=flat-square" alt="Build Status"></a>
-<a href="https://npmjs.org/package/auth0"><img src="https://img.shields.io/npm/v/auth0.svg?style=flat-square" alt="NPM version"></a>
-<a href="https://codecov.io/github/auth0/node-auth0?branch=master"><img src="https://img.shields.io/codecov/c/github/auth0/node-auth0.svg?style=flat-square" alt="Coverage"></a>
-<a href="#license"><img src="https://img.shields.io/npm/l/auth0.svg?style=flat-square" alt="License"></a>
-<a href="https://npmjs.org/package/auth0"><img src="https://img.shields.io/npm/dm/auth0.svg?style=flat-square" alt="Downloads"></a>
-<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0?ref=badge_shield"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0.svg?type=shield" alt="FOSSA Status"></a></p>
-<p>Node.js client library for the <a href="https://auth0.com">Auth0</a> platform.</p>
-<h2>Installation</h2>
+        <article><p><img src="https://cdn.auth0.com/website/sdks/banner/node-auth0-banner.png" alt="Node.js client library for Auth0"></p>
+<p><img src="https://img.shields.io/npm/v/auth0" alt="Release">
+<a href="https://codecov.io/gh/auth0/node-auth0"><img src="https://img.shields.io/codecov/c/github/auth0/node-auth0" alt="Codecov"></a>
+<img src="https://img.shields.io/npm/dw/auth0" alt="Downloads">
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg?style=flat" alt="License"></a>
+<img src="https://img.shields.io/circleci/build/github/auth0/node-auth0" alt="CircleCI"></p>
+<p>📚 <a href="#documentation">Documentation</a> - 🚀 <a href="#getting-started">Getting Started</a> - 💻 <a href="#api-reference">API Reference</a> - 💬 <a href="#feedback">Feedback</a></p>
+<h2>Documentation</h2>
+<ul>
+<li><a href="https://github.com/auth0/node-auth0/blob/master/FAQ.md">FAQs</a> - frequently asked questions about node-auth0.</li>
+<li><a href="https://auth0.com/docs">Docs Site</a> - explore our docs site and learn more about Auth0</li>
+</ul>
+<h2>Getting Started</h2>
+<h3>Requirements</h3>
+<p>This library supports the following tooling versions:</p>
+<ul>
+<li>Node.js: <code>&gt;=8.3.0</code></li>
+</ul>
+<h3>Installation</h3>
+<p>Using <a href="https://npmjs.org">npm</a> in your project directory run the following command:</p>
 <pre class="prettyprint source lang-bash"><code>npm install auth0
 </code></pre>
-<h2>Documentation</h2>
-<p>You can find this library documentation in this <a href="https://auth0.github.io/node-auth0/">page</a>.</p>
-<p>For more information about <a href="https://auth0.com">auth0</a> check our <a href="https://auth0.com/docs">documentation page</a>.</p>
-<h2>Node version support</h2>
-<p>This SDK is tested on the latest Node versions 8, 10, 12 and 14.</p>
-<h2>Authentication API Client</h2>
+<h3>Configure the SDK</h3>
+<h4>Authentication API Client</h4>
 <p>This client must be used to access Auth0's <a href="https://auth0.com/docs/api/authentication">Authentication API</a>.</p>
 <p>The <strong>AuthenticationClient</strong> constructor takes an <em>optional</em> client ID, if specified it will be used as default value for all endpoints that accept a client ID.</p>
 <pre class="prettyprint source lang-js"><code>var AuthenticationClient = require('auth0').AuthenticationClient;
@@ -75,7 +82,10 @@ var auth0 = new AuthenticationClient({
   clientId: '{OPTIONAL_CLIENT_ID}',
 });
 </code></pre>
-<h2>Management API Client</h2>
+<h4>Management API Client</h4>
+<blockquote>
+<p>Note: When using the ManagementClient in a browser you should set <code>telemetry: false</code>.</p>
+</blockquote>
 <p>The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.</p>
 <p>Initialize your client class with an API v2 token and a domain.</p>
 <pre class="prettyprint source lang-js"><code>var ManagementClient = require('auth0').ManagementClient;
@@ -85,100 +95,37 @@ var management = new ManagementClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
 });
 </code></pre>
-<blockquote>
-<p>Note: When using at browser you should use <code>telemetry: false</code>.</p>
-</blockquote>
-<p>To obtain <strong>automatically</strong> a Management API token via the ManagementClient, you can specify the parameters <code>clientId</code>, <code>clientSecret</code> (use a Non Interactive Client) and optionally <code>scope</code>.
-Behind the scenes the Client Credentials Grant is used to obtain the <code>access_token</code> and is by default cached for the duration of the returned <code>expires_in</code> value.</p>
-<pre class="prettyprint source lang-js"><code>var ManagementClient = require('auth0').ManagementClient;
-var auth0 = new ManagementClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
-  clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
-  scope: 'read:users update:users',
-});
-</code></pre>
-<blockquote>
-<p>Make sure your ClientId is allowed to request tokens from Management API in <a href="https://manage.auth0.com/#/apis">Auth0 Dashboard</a></p>
-</blockquote>
-<p>To obtain a Management API token from your node backend, you can use Client Credentials Grant using your registered Auth0 Non Interactive Clients</p>
-<pre class="prettyprint source lang-js"><code>var AuthenticationClient = require('auth0').AuthenticationClient;
-
-var auth0 = new AuthenticationClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{CLIENT_ID}',
-  clientSecret: '{CLIENT_SECRET}',
-});
-
-auth0.clientCredentialsGrant(
-  {
-    audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
-    scope: '{MANAGEMENT_API_SCOPES}',
-  },
-  function (err, response) {
-    if (err) {
-      // Handle error.
-    }
-    console.log(response.access_token);
-  }
-);
-</code></pre>
-<p>Also you can request a token when the user authenticates using any of our client side SDKs, e.g. <a href="https://github.com/auth0/auth0.js">auth0.js</a>.</p>
-<h2>Promises and callbacks</h2>
-<p>Be aware that all methods can be used with promises or callbacks. However, when a callback is provided no promise will be returned.</p>
-<pre class="prettyprint source lang-js"><code>// Using callbacks.
-management.getUsers(function (err, users) {
-  if (err) {
-    // handle error.
-  }
-  console.log(users);
-});
-
-// Using promises.
-management
-  .getUsers()
-  .then(function (users) {
-    console.log(users);
-  })
-  .catch(function (err) {
-    // Handle error.
-  });
-</code></pre>
-<h2>Typescript</h2>
-<p>The types for this library are currently maintained by the community at <a href="https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/auth0">Definitely Typed</a>. The team is planning taking ownership of this library as discussed in https://github.com/auth0/node-auth0/issues/572. After the team has taken ownership we will remove this net from the Readme.</p>
-<h2>Troubleshooting</h2>
-<h3>Getting <code>Error: Can't resolve 'superagent-proxy'</code> when bundling with Webpack</h3>
-<p>We have a dependency on <code>rest-facade</code> which <code>require</code>s but doesn't include <code>superagent-proxy</code>. This SDK doesn't support proxies, so this dependency is not required. To workaround this you can add the following to your <code>webpack.config.js</code>:</p>
-<pre class="prettyprint source"><code>resolve: {
-  alias: {
-    'superagent-proxy': false
-  }
-}
-</code></pre>
-<p>Or install <code>superagent-proxy</code> yourself.</p>
-<h2>What is Auth0?</h2>
-<p>Auth0 helps you to:</p>
+<p>For other examples see the <a href="https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md">EXAMPLES.md</a> document.</p>
+<h2>API Reference</h2>
 <ul>
-<li>Add authentication with <a href="https://docs.auth0.com/identityproviders">multiple authentication sources</a>, either social like <strong>Google, Facebook, Microsoft Account, LinkedIn, GitHub, Twitter, Box, Salesforce, amont others</strong>, or enterprise identity systems like <strong>Windows Azure AD, Google Apps, Active Directory, ADFS or any SAML Identity Provider</strong>.</li>
-<li>Add authentication through more traditional <strong><a href="https://docs.auth0.com/mysql-connection-tutorial">username/password databases</a></strong>.</li>
-<li>Add support for <strong><a href="https://docs.auth0.com/link-accounts">linking different user accounts</a></strong> with the same user.</li>
-<li>Support for generating signed <a href="https://docs.auth0.com/jwt">Json Web Tokens</a> to call your APIs and <strong>flow the user identity</strong> securely.</li>
-<li>Analytics of how, when and where users are logging in.</li>
-<li>Pull data from other sources and add it to the user profile, through <a href="https://docs.auth0.com/rules">JavaScript rules</a>.</li>
+<li><a href="https://auth0.github.io/node-auth0/AuthenticationClient.html">AuthenticationClient</a></li>
+<li><a href="https://auth0.github.io/node-auth0/ManagementClient.html">ManagementClient</a></li>
 </ul>
-<h2>Create a free Auth0 Account</h2>
-<ol>
-<li>Go to <a href="https://auth0.com">Auth0</a> and click &quot;Try Auth0 for Free&quot;.</li>
-<li>Use Google, GitHub or Microsoft Account to login.</li>
-</ol>
-<h2>Issue Reporting</h2>
-<p>If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The <a href="https://auth0.com/whitehat">Responsible Disclosure Program</a> details the procedure for disclosing security issues.</p>
-<h2>Author</h2>
-<p><a href="https://auth0.com">Auth0</a></p>
-<h2>License</h2>
-<p>This project is licensed under the MIT license. See the <a href="LICENSE">LICENSE</a> file for more info.</p>
-<!-- Vaaaaarrrrsss -->
-<p><a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0?ref=badge_large"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fauth0%2Fnode-auth0.svg?type=large" alt="FOSSA Status"></a></p></article>
+<h2>Feedback</h2>
+<h3>Contributing</h3>
+<p>We appreciate feedback and contribution to this repo! Before you get started, please see the following:</p>
+<ul>
+<li><a href="https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md">Auth0's general contribution guidelines</a></li>
+<li><a href="https://github.com/auth0/open-source-template/blob/master/CODE-OF-CONDUCT.md">Auth0's code of conduct guidelines</a></li>
+</ul>
+<h3>Raise an issue</h3>
+<p>To provide feedback or report a bug, please <a href="https://github.com/auth0/node-auth0/issues">raise an issue on our issue tracker</a>.</p>
+<h3>Vulnerability Reporting</h3>
+<p>Please do not report security vulnerabilities on the public GitHub issue tracker. The <a href="https://auth0.com/whitehat">Responsible Disclosure Program</a> details the procedure for disclosing security issues.</p>
+<h2>What is Auth0?</h2>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_dark_mode.png" width="150">
+    <source media="(prefers-color-scheme: light)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
+    <img alt="Auth0 Logo" src="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
+  </picture>
+</p>
+<p align="center">
+  Auth0 is an easy to implement, adaptable authentication and authorization platform. To learn more checkout <a href="https://auth0.com/why-auth0">Why Auth0?</a>
+</p>
+<p align="center">
+  This project is licensed under the MIT license. See the <a href="https://github.com/auth0/node-auth0/blob/master/LICENSE"> LICENSE</a> file for more info.
+</p></article>
     </section>
 
 
@@ -191,7 +138,7 @@ management
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Tue Oct 11 2022 14:00:04 GMT+0100 (British Summer Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Fri Dec 09 2022 10:40:49 GMT+0000 (Greenwich Mean Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

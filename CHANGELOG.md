@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.44.1](https://github.com/auth0/node-auth0/tree/v2.44.1) (2022-12-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.44.0...v2.44.1)
+
+**Fixed**
+
+- Prevent calling the callback more than once [\#759](https://github.com/auth0/node-auth0/pull/759) ([snocorp](https://github.com/snocorp))
+
 ## [v2.44.0](https://github.com/auth0/node-auth0/tree/v2.44.0) (2022-10-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.43.0...v2.44.0)
