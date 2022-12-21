@@ -29,7 +29,6 @@ const createClientAssertionJWT = ({
   };
   return jwt.sign(payload, clientAssertionSigningKey, {
     algorithm: clientAssertionSigningAlg || 'RS256',
-    // header: { kid: 'kid' },
   });
 };
 
