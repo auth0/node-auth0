@@ -1,5 +1,15 @@
 # Change Log
 
+## [v3.0.0](https://github.com/auth0/node-auth0/tree/v3.0.0) (2022-12-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.44.1...v3.0.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Update jsonwebtoken [\#766](https://github.com/auth0/node-auth0/pull/766) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+This release drops support for Node versions <14.
+
 ## [v2.44.1](https://github.com/auth0/node-auth0/tree/v2.44.1) (2022-12-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.44.0...v2.44.1)
