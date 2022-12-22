@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
-const pem = require('pem');
+const crypto = require('crypto');
 
 // Constants.
 const DOMAIN = 'tenant.auth0.com';
@@ -15,17 +15,14 @@ const PARAMS = { params: true };
 const DATA = { data: true };
 
 const createCertificate = function (cb) {
-  pem.createCertificate({ days: 1, selfSigned: true }, (err, keys) => {
-    if (err) {
-      throw err;
-    }
-    pem.getPublicKey(keys.certificate, (e, p) => {
-      if (e) {
-        throw e;
-      }
-      cb({ serviceKey: keys.serviceKey, certificate: keys.certificate, publicKey: p.publicKey });
-    });
+  const { publicKey: pubRsaKey, privateKey: privRsaKey } = crypto.generateKeyPairSync('rsa', {
+    modulusLength: 2048,
   });
+
+  const publicKey = pubRsaKey.export({ type: 'spki', format: 'pem' });
+  const serviceKey = privRsaKey.export({ type: 'pkcs8', format: 'pem' });
+
+  cb({ serviceKey, publicKey });
 };
 
 describe('OAUthWithIDTokenValidation', () => {
