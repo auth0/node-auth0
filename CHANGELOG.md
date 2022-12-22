@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.0.1](https://github.com/auth0/node-auth0/tree/v3.0.1) (2022-12-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.0.0...v3.0.1)
+
+**Fixed**
+
+- bump jwks-rsa [\#769](https://github.com/auth0/node-auth0/pull/769) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v3.0.0](https://github.com/auth0/node-auth0/tree/v3.0.0) (2022-12-22)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.44.1...v3.0.0)
