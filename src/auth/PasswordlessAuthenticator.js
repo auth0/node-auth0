@@ -1,6 +1,7 @@
 const { ArgumentError } = require('rest-facade');
 const RestClient = require('rest-facade').Client;
 const { sanitizeArguments } = require('../utils');
+const { addClientAuthentication } = require('./clientAuthentication');
 
 function getParamsFromOptions(options) {
   const params = {};
@@ -23,8 +24,11 @@ class PasswordlessAuthenticator {
   /**
    * @param  {object}              options            Authenticator options.
    * @param  {string}              options.baseUrl    The auth0 account URL.
+   * @param  {string}              [options.domain] Required if using clientAssertionSigningKey.
    * @param  {string}              [options.clientId] Default client ID.
    * @param  {string}              [options.clientSecret] Default client secret.
+   * @param  {string}              [options.clientAssertionSigningKey] Private key used to sign the client assertion JWT.
+   * @param  {string}              [options.clientAssertionSigningAlg] Default 'RS256'.
    * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
    */
   constructor(options, oauth) {
@@ -48,8 +52,22 @@ class PasswordlessAuthenticator {
 
     this.oauth = oauth;
     this.passwordless = new RestClient(`${options.baseUrl}/passwordless/start`, clientOptions);
+    this.domain = options.domain;
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
+    this.clientAssertionSigningKey = options.clientAssertionSigningKey;
+    this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
+  }
+
+  _addClientAuthentication(payload, required) {
+    return addClientAuthentication({
+      payload,
+      required,
+      domain: this.domain,
+      clientSecret: this.clientSecret,
+      clientAssertionSigningKey: this.clientAssertionSigningKey,
+      clientAssertionSigningAlg: this.clientAssertionSigningAlg,
+    });
   }
 
   /**
@@ -120,11 +138,10 @@ class PasswordlessAuthenticator {
       throw new ArgumentError('Missing user data object');
     }
 
-    const data = {
+    const data = this._addClientAuthentication({
       client_id: this.clientId,
-      client_secret: this.clientSecret,
       ...userData,
-    };
+    });
 
     if (typeof data.username !== 'string' || data.username.trim().length === 0) {
       throw new ArgumentError('username field (phone number) is required');
@@ -200,11 +217,10 @@ class PasswordlessAuthenticator {
    */
   sendEmail(userData, options, cb) {
     const { options: sanitizedOptions, cb: sanitizedCb } = sanitizeArguments(options, cb);
-    const data = {
+    const data = this._addClientAuthentication({
       client_id: this.clientId,
-      client_secret: this.clientSecret,
       ...userData,
-    };
+    });
     const params = getParamsFromOptions(sanitizedOptions);
 
     // Don't let the user override the connection nor the grant type.
@@ -257,11 +273,10 @@ class PasswordlessAuthenticator {
    */
   sendSMS(userData, options, cb) {
     const { options: sanitizedOptions, cb: sanitizedCb } = sanitizeArguments(options, cb);
-    const data = {
+    const data = this._addClientAuthentication({
       client_id: this.clientId,
-      client_secret: this.clientSecret,
       ...userData,
-    };
+    });
     const params = getParamsFromOptions(sanitizedOptions);
 
     // Don't let the user override the connection nor the grant type.
