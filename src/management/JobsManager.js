@@ -3,13 +3,12 @@ const FormData = require('form-data');
 const fs = require('fs');
 
 const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Abstract the creation as well as the retrieval of async jobs.
  */
-class JobsManager {
+class JobsManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -17,23 +16,7 @@ class JobsManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide client options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     this.options = options;
 
@@ -43,12 +26,7 @@ class JobsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/jobs/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.jobs = new RetryRestClient(auth0RestClient, options.retry);
+    this.jobs = this._getRestClient('/jobs/:id');
 
     /**
      * Provides an abstraction layer for consuming the
@@ -56,12 +34,7 @@ class JobsManager {
      *
      * @type {external:RestClient}
      */
-    const jobErrorsRestClient = new Auth0RestClient(
-      `${options.baseUrl}/jobs/:id/errors`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.jobErrors = new RetryRestClient(jobErrorsRestClient, options.retry);
+    this.jobErrors = this._getRestClient('/jobs/:id/errors');
 
     /**
      * Provides an abstraction layer for consuming the
@@ -69,12 +42,7 @@ class JobsManager {
      *
      * @type {external:RestClient}
      */
-    const usersExportsRestClient = new Auth0RestClient(
-      `${options.baseUrl}/jobs/users-exports`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.usersExports = new RetryRestClient(usersExportsRestClient, options.retry);
+    this.usersExports = this._getRestClient('/jobs/users-exports');
   }
 
   /**

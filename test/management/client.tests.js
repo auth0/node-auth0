@@ -41,7 +41,7 @@ describe('ClientsManager', () => {
     it('should error when no options are provided', () => {
       expect(() => {
         new ClientsManager();
-      }).to.throw(ArgumentError, 'Must provide client options');
+      }).to.throw(ArgumentError, 'Must provide manager options');
     });
 
     it('should throw an error when no base URL is provided', () => {

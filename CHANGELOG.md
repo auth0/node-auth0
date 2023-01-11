@@ -1,5 +1,47 @@
 # Change Log
 
+## [v3.0.1](https://github.com/auth0/node-auth0/tree/v3.0.1) (2022-12-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.0.0...v3.0.1)
+
+**Fixed**
+
+- bump jwks-rsa [\#769](https://github.com/auth0/node-auth0/pull/769) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+## [v3.0.0](https://github.com/auth0/node-auth0/tree/v3.0.0) (2022-12-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.44.1...v3.0.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Update jsonwebtoken [\#766](https://github.com/auth0/node-auth0/pull/766) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+This release drops support for Node versions <14.
+
+## [v2.44.1](https://github.com/auth0/node-auth0/tree/v2.44.1) (2022-12-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.44.0...v2.44.1)
+
+**Fixed**
+
+- Prevent calling the callback more than once [\#759](https://github.com/auth0/node-auth0/pull/759) ([snocorp](https://github.com/snocorp))
+
+## [v2.44.0](https://github.com/auth0/node-auth0/tree/v2.44.0) (2022-10-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.43.0...v2.44.0)
+
+**Added**
+
+- [SDK-3653] Add proxy support to Management Client [\#747](https://github.com/auth0/node-auth0/pull/747) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+## [v2.43.0](https://github.com/auth0/node-auth0/tree/v2.43.0) (2022-10-10)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v2.42.0...v2.43.0)
+
+**Added**
+
+- Add option to include response headers in the result [\#744](https://github.com/auth0/node-auth0/pull/744) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v2.42.0](https://github.com/auth0/node-auth0/tree/v2.42.0) (2022-05-23)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.41.0...v2.42.0)

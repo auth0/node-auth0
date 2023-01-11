@@ -1,12 +1,12 @@
 const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
+
 const { sanitizeArguments } = require('../utils');
 
 /**
  * Abstracts interaction with the users endpoint.
  */
-class UsersManager {
+class UsersManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -14,30 +14,9 @@ class UsersManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide manager options');
-    }
+    super(options);
 
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
-
-    const usersAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.users = new RetryRestClient(usersAuth0RestClient, options.retry);
+    this.users = this._getRestClient('/users/:id');
 
     /**
      * Provides an abstraction layer for consuming the
@@ -46,89 +25,50 @@ class UsersManager {
      *
      * @type {external:RestClient}
      */
-    const multifactorAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/multifactor/:provider`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.multifactor = new RetryRestClient(multifactorAuth0RestClient, options.retry);
+    this.multifactor = this._getRestClient('/users/:id/multifactor/:provider');
 
     /**
      * Provides a simple abstraction layer for linking user accounts.
      *
      * @type {external:RestClient}
      */
-    const identitiesAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/identities/:provider/:user_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.identities = new RetryRestClient(identitiesAuth0RestClient, options.retry);
+    this.identities = this._getRestClient('/users/:id/identities/:provider/:user_id');
 
     /**
      * Provides a simple abstraction layer for user logs
      *
      * @type {external:RestClient}
      */
-    const userLogsAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/logs`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.userLogs = new RetryRestClient(userLogsAuth0RestClient, options.retry);
+    this.userLogs = this._getRestClient('/users/:id/logs');
 
     /**
      * Provides an abstraction layer for retrieving Guardian enrollments.
      *
      * @type {external:RestClient}
      */
-    const enrollmentsAuth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/enrollments`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.enrollments = new RetryRestClient(enrollmentsAuth0RestClient, options.retry);
+    this.enrollments = this._getRestClient('/users/:id/enrollments');
 
     /**
      * Provides an abstraction layer for the new "users-by-email" API
      *
      * @type {external:RestClient}
      */
-    const usersByEmailClient = new Auth0RestClient(
-      `${options.baseUrl}/users-by-email`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.usersByEmail = new RetryRestClient(usersByEmailClient, options.retry);
+    this.usersByEmail = this._getRestClient('/users-by-email');
 
     /**
      * Provides an abstraction layer for regenerating Guardian recovery codes.
      *
      * @type {external:RestClient}
      */
-    const recoveryCodeRegenerationAuth0RestClients = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/recovery-code-regeneration`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.recoveryCodeRegenerations = new RetryRestClient(
-      recoveryCodeRegenerationAuth0RestClients,
-      options.retry
-    );
+    this.recoveryCodeRegenerations = this._getRestClient('/users/:id/recovery-code-regeneration');
 
     /**
      * Provides an abstraction layer for invalidating all remembered browsers for MFA.
      *
      * @type {external:RestClient}
      */
-    const invalidateRememberBrowserAuth0RestClients = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/multifactor/actions/invalidate-remember-browser`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.invalidateRememberBrowsers = new RetryRestClient(
-      invalidateRememberBrowserAuth0RestClients,
-      options.retry
+    this.invalidateRememberBrowsers = this._getRestClient(
+      '/users/:id/multifactor/actions/invalidate-remember-browser'
     );
 
     /**
@@ -136,31 +76,16 @@ class UsersManager {
      *
      * @type {external:RestClient}
      */
-    const userRolesClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/roles`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.roles = new RetryRestClient(userRolesClient, options.retry);
+    this.roles = this._getRestClient('/users/:id/roles');
 
     /**
      * Provides an abstraction layer for CRD on permissions directly on a user
      *
      * @type {external:RestClient}
      */
-    const userPermissionsClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/permissions`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.permissions = new RetryRestClient(userPermissionsClient, options.retry);
+    this.permissions = this._getRestClient('/users/:id/permissions');
 
-    const organizationsClient = new Auth0RestClient(
-      `${options.baseUrl}/users/:id/organizations`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.organizations = new RetryRestClient(organizationsClient, options.retry);
+    this.organizations = this._getRestClient('/users/:id/organizations');
   }
 
   /**

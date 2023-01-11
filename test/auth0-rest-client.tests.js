@@ -1,8 +1,10 @@
 const { expect } = require('chai');
 const nock = require('nock');
+const sinon = require('sinon');
 
-const { ArgumentError } = require('rest-facade');
+const { ArgumentError, Client } = require('rest-facade');
 const Auth0RestClient = require('../src/Auth0RestClient');
+const proxyquire = require('proxyquire');
 
 const API_URL = 'https://tenant.auth0.com';
 
@@ -184,6 +186,29 @@ describe('Auth0RestClient', () => {
     });
   });
 
+  it('should accept a callback and handle errors with response headers', (done) => {
+    const providerMock = {
+      async getAccessToken() {
+        return 'fake-token';
+      },
+    };
+
+    const errorBody = { error: 'message' };
+    nock(API_URL).get('/some-resource').reply(500, errorBody);
+
+    const options = {
+      headers: {},
+      includeResponseHeaders: true,
+    };
+    const client = new Auth0RestClient(`${API_URL}/some-resource`, options, providerMock);
+    client.getAll((err) => {
+      expect(err).to.not.null;
+      expect(err.message).to.be.equal(JSON.stringify(errorBody));
+      done();
+      nock.cleanAll();
+    });
+  });
+
   it('should set access token as Authorization header in options object', async function () {
     nock(API_URL).get('/some-resource').reply(200);
 
@@ -226,6 +251,66 @@ describe('Auth0RestClient', () => {
       expect(err).to.not.null;
       expect(err.message).to.be.equal('Some Error');
       done();
+    });
+  });
+
+  it('should include response headers in promise response', async function () {
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
+
+    const options = {
+      includeResponseHeaders: true,
+      headers: {},
+    };
+
+    const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
+    const { data, headers } = await client.getAll();
+    expect(data).to.deep.equal({ data: 'value' });
+    expect(headers).to.deep.equal({ 'content-type': 'application/json' });
+    nock.cleanAll();
+  });
+
+  it('should include response headers in callback response', function (done) {
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
+
+    const options = {
+      includeResponseHeaders: true,
+      headers: {},
+    };
+
+    const client = new Auth0RestClient(`${API_URL}/some-resource`, options, this.providerMock);
+    client.getAll((err, { data, headers }) => {
+      expect(data).to.deep.equal({ data: 'value' });
+      expect(headers).to.deep.equal({ 'content-type': 'application/json' });
+      nock.cleanAll();
+      done();
+    });
+  });
+
+  it('should make request with proxy', async function () {
+    const spy = sinon.spy();
+    class MockClient extends Client {
+      constructor(...args) {
+        spy(...args);
+        super(...args);
+      }
+    }
+    const RestClient = proxyquire('../src/Auth0RestClient', {
+      'rest-facade': {
+        Client: MockClient,
+      },
+    });
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
+
+    const options = {
+      headers: {},
+      proxy: 'http://proxy',
+    };
+
+    const client = new RestClient(`${API_URL}/some-resource`, options, this.providerMock);
+    const data = await client.getAll();
+    expect(data).to.deep.equal({ data: 'value' });
+    sinon.assert.calledWithMatch(spy, 'https://tenant.auth0.com/some-resource', {
+      proxy: 'http://proxy',
     });
   });
 });

@@ -1,6 +1,4 @@
-const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * Simple facade for consuming a REST API endpoint.
@@ -9,7 +7,7 @@ const RetryRestClient = require('../RetryRestClient');
  * @see https://github.com/ngonzalvez/rest-facade
  */
 
-class AttackProtectionManager {
+class AttackProtectionManager extends BaseManager {
   /**
    * @class
    * Abstracts interaction with the attack-protection endpoints.
@@ -21,44 +19,17 @@ class AttackProtectionManager {
    * @param {object} [options.tokenProvider] Management API Token Provider
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide manager options');
-    }
+    super(options);
 
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
+    this.bruteForceProtection = this._getRestClient('/attack-protection/brute-force-protection');
 
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    const clientOptions = {
-      errorFormatter: { message: 'message', name: 'error' },
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
-
-    const bruteForceProtection = new Auth0RestClient(
-      `${options.baseUrl}/attack-protection/brute-force-protection`,
-      clientOptions,
-      options.tokenProvider
+    this.suspiciousIpThrottling = this._getRestClient(
+      '/attack-protection/suspicious-ip-throttling'
     );
-    this.bruteForceProtection = new RetryRestClient(bruteForceProtection, options.retry);
 
-    const suspiciousIpThrottling = new Auth0RestClient(
-      `${options.baseUrl}/attack-protection/suspicious-ip-throttling`,
-      clientOptions,
-      options.tokenProvider
+    this.breachedPasswordDetection = this._getRestClient(
+      '/attack-protection/breached-password-detection'
     );
-    this.suspiciousIpThrottling = new RetryRestClient(suspiciousIpThrottling, options.retry);
-
-    const breachedPasswordDetection = new Auth0RestClient(
-      `${options.baseUrl}/attack-protection/breached-password-detection`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.breachedPasswordDetection = new RetryRestClient(breachedPasswordDetection, options.retry);
   }
 
   /**

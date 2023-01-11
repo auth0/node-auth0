@@ -27,7 +27,7 @@ class Auth0RestClient {
 
     this.wrappedProvider = function (method, args) {
       if (!this.provider) {
-        return this.restClient[method](...args);
+        return this._request(method, args);
       }
 
       let callback;
@@ -39,7 +39,7 @@ class Auth0RestClient {
         .getAccessToken()
         .then((access_token) => {
           this.restClient.options.headers['Authorization'] = `Bearer ${access_token}`;
-          return this.restClient[method](...args);
+          return this._request(method, args);
         })
         .catch((err) => {
           if (callback) {
@@ -48,6 +48,39 @@ class Auth0RestClient {
           throw err;
         });
     };
+  }
+
+  _request(method, args) {
+    if (!this.options.includeResponseHeaders) {
+      return this.restClient[method](...args);
+    }
+
+    let callback;
+    // Handle the case where the promise variant is called without any args
+    // client.get() -> client.get({}, callback)
+    if (!args || !args.length) {
+      args = [{}];
+    }
+    // Handle the case where an undefined placeholder is defined for callback
+    // client.get(params, undefined) -> client.get(params, callback)
+    if (typeof args[args.length - 1] === 'undefined') {
+      args.pop();
+    }
+    if (typeof args[args.length - 1] === 'function') {
+      callback = args.pop();
+    }
+    return new Promise((resolve, reject) => {
+      this.restClient[method](...args, (err, data, headers) => {
+        const payload = { data, headers };
+        if (err) {
+          if (callback) callback(err);
+          else reject(err);
+          return;
+        }
+        if (callback) callback(null, payload);
+        else resolve(payload);
+      });
+    });
   }
 
   getAll(...args) {

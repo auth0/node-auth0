@@ -426,7 +426,7 @@ describe('GuardianManager', () => {
       nock.cleanAll();
 
       nock(API_URL)
-        .get(`guardian/factors/${this.params.name}/providers/${this.params.provider}`)
+        .get(`/guardian/factors/${this.params.name}/providers/${this.params.provider}`)
         .reply(500);
 
       this.guardian.getFactorProvider(this.params).catch((err) => {

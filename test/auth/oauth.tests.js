@@ -223,7 +223,7 @@ describe('OAuthAuthenticator', () => {
 
       const request = nock(API_URL)
         .post(path, function () {
-          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+          return this.headers['auth0-forwarded-for'] === options.forwardedFor;
         })
         .reply(200);
 
@@ -408,7 +408,7 @@ describe('OAuthAuthenticator', () => {
 
       const request = nock(API_URL)
         .post(path, function () {
-          return this.getHeader('auth0-forwarded-for') === options.forwardedFor;
+          return this.headers['auth0-forwarded-for'] === options.forwardedFor;
         })
         .reply(200);
 
@@ -675,19 +675,19 @@ describe('OAuthAuthenticator', () => {
     });
 
     it('should require the client_id', () => {
-      const authenticator = new Authenticator({});
+      const authenticator = new Authenticator({ clientSecret: 'foo' });
       expect(() => {
         authenticator.clientCredentialsGrant({});
       }).to.throw(ArgumentError, 'client_id field is required');
     });
 
-    it('should require the client_secret', () => {
+    it('should require the client_secret or client_assertion', () => {
       const authenticator = new Authenticator({
         clientId: CLIENT_ID,
       });
       expect(() => {
         authenticator.clientCredentialsGrant({});
-      }).to.throw(ArgumentError, 'client_secret field is required');
+      }).to.throw(ArgumentError, 'The client_secret or client_assertion field is required.');
     });
 
     it('should accept a callback', function (done) {

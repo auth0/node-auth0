@@ -1,12 +1,11 @@
 const { ArgumentError } = require('rest-facade');
-const Auth0RestClient = require('../Auth0RestClient');
-const RetryRestClient = require('../RetryRestClient');
+const BaseManager = require('./BaseManager');
 
 /**
  * The organizations class provides a simple abstraction for performing CRUD operations
  * on Auth0 OrganizationsManager.
  */
-class OrganizationsManager {
+class OrganizationsManager extends BaseManager {
   /**
    * @param {object} options            The client options.
    * @param {string} options.baseUrl    The URL of the API.
@@ -14,27 +13,7 @@ class OrganizationsManager {
    * @param {object} [options.retry]    Retry Policy Config
    */
   constructor(options) {
-    if (options === null || typeof options !== 'object') {
-      throw new ArgumentError('Must provide manager options');
-    }
-
-    if (options.baseUrl === null || options.baseUrl === undefined) {
-      throw new ArgumentError('Must provide a base URL for the API');
-    }
-
-    if ('string' !== typeof options.baseUrl || options.baseUrl.length === 0) {
-      throw new ArgumentError('The provided base URL is invalid');
-    }
-
-    /**
-     * Options object for the Rest Client instance.
-     *
-     * @type {object}
-     */
-    const clientOptions = {
-      headers: options.headers,
-      query: { repeatParams: false },
-    };
+    super(options);
 
     /**
      * Provides an abstraction layer for performing CRUD operations on
@@ -42,47 +21,17 @@ class OrganizationsManager {
      *
      * @type {external:RestClient}
      */
-    const auth0RestClient = new Auth0RestClient(
-      `${options.baseUrl}/organizations/:id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.organizations = new RetryRestClient(auth0RestClient, options.retry);
+    this.organizations = this._getRestClient('/organizations/:id');
 
-    const connectionsInRoleClient = new Auth0RestClient(
-      `${options.baseUrl}/organizations/:id/enabled_connections/:connection_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.connections = new RetryRestClient(connectionsInRoleClient, options.retry);
+    this.connections = this._getRestClient('/organizations/:id/enabled_connections/:connection_id');
 
-    const membersClient = new Auth0RestClient(
-      `${options.baseUrl}/organizations/:id/members/:user_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.members = new RetryRestClient(membersClient, options.retry);
+    this.members = this._getRestClient('/organizations/:id/members/:user_id');
 
-    const invitationClient = new Auth0RestClient(
-      `${options.baseUrl}/organizations/:id/invitations/:invitation_id`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.invitations = new RetryRestClient(invitationClient, options.retry);
+    this.invitations = this._getRestClient('/organizations/:id/invitations/:invitation_id');
 
-    const rolesClient = new Auth0RestClient(
-      `${options.baseUrl}/organizations/:id/members/:user_id/roles`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.roles = new RetryRestClient(rolesClient, options.retry);
+    this.roles = this._getRestClient('/organizations/:id/members/:user_id/roles');
 
-    const organizationByNameClient = new Auth0RestClient(
-      `${options.baseUrl}/organizations/name/:name`,
-      clientOptions,
-      options.tokenProvider
-    );
-    this.organizationsByName = new RetryRestClient(organizationByNameClient, options.retry);
+    this.organizationsByName = this._getRestClient('/organizations/name/:name');
   }
 
   /**

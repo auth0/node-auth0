@@ -183,7 +183,7 @@ describe('ManagementTokenProvider', () => {
   });
 
   it('should expire access token from cache by the expires_in setting', async () => {
-    const clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers({ toFake: ['Date'] });
     const options = Object.assign({}, defaultOptions);
     options.domain = 'auth0-node-sdk-1.auth0.com';
     const client = new ManagementTokenProvider(options);
@@ -193,29 +193,18 @@ describe('ManagementTokenProvider', () => {
       expires_in: 10,
     });
 
-    let getAccessTokenPromise = client.getAccessToken();
-    await clock.runAllAsync();
-    await clock.runAllAsync();
-    await clock.runAllAsync();
-    const access_token = await getAccessTokenPromise;
-    expect(access_token).to.exist;
-    expect(access_token).to.be.equal('token');
-    getAccessTokenPromise = client.getAccessToken();
-    await clock.runAllAsync();
-    await getAccessTokenPromise;
+    const accessToken = await client.getAccessToken();
+    expect(accessToken).to.exist;
+    expect(accessToken).to.be.equal('token');
     await clock.tickAsync(10000 + 1); // + 1 ms so that the first mocked request can expire
 
     nock(`https://${options.domain}`).post('/oauth/token').reply(200, {
       access_token: 'token2',
       expires_in: 10,
     });
-    getAccessTokenPromise = client.getAccessToken();
-    await clock.runAllAsync();
-    await clock.runAllAsync();
-    await clock.runAllAsync();
-    const access_token2 = await getAccessTokenPromise;
-    expect(access_token2).to.exist;
-    expect(access_token2).to.be.equal('token2');
+    const accessToken2 = await client.getAccessToken();
+    expect(accessToken2).to.exist;
+    expect(accessToken2).to.be.equal('token2');
 
     nock.cleanAll();
     clock.restore();
@@ -267,20 +256,15 @@ describe('ManagementTokenProvider', () => {
       expires_in: 3600,
     });
 
-    const clock = sinon.useFakeTimers();
-    let getAccessTokenPromise = client.getAccessToken();
-    await clock.runAllAsync();
-    await clock.runAllAsync();
-    await clock.runAllAsync();
-    const accessToken = await getAccessTokenPromise;
+    const clock = sinon.useFakeTimers({ toFake: ['Date'] });
+    const accessToken = await client.getAccessToken();
     expect(accessToken).to.exist;
     expect(accessToken).to.be.equal('access_token');
 
     clock.tick(40);
 
-    getAccessTokenPromise = client.getAccessToken();
+    const accessToken2 = await client.getAccessToken();
     await clock.runAllAsync();
-    const accessToken2 = await getAccessTokenPromise;
     expect(accessToken2).to.exist;
     expect(accessToken2).to.be.equal('access_token');
     nock.cleanAll();
