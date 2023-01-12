@@ -3,6 +3,7 @@ const { ArgumentError } = require('rest-facade');
 const RestClient = require('rest-facade').Client;
 const { SanitizedError } = require('../errors');
 const OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
+const { addClientAuthentication } = require('./clientAuthentication');
 
 function getParamsFromOptions(options) {
   const params = {};
@@ -31,6 +32,8 @@ class OAuthAuthenticator {
    * @param  {string}              options.domain                      AuthenticationClient server domain
    * @param  {string}              [options.clientId]                  Default client ID.
    * @param  {string}              [options.clientSecret]              Default client Secret.
+   * @param  {string}              [options.clientAssertionSigningKey] Private key used to sign the client assertion JWT.
+   * @param  {string}              [options.clientAssertionSigningAlg] Default 'RS256'.
    * @param  {boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
    */
   constructor(options) {
@@ -55,8 +58,22 @@ class OAuthAuthenticator {
 
     this.oauth = new RestClient(`${options.baseUrl}/oauth/:type`, clientOptions);
     this.oauthWithIDTokenValidation = new OAUthWithIDTokenValidation(this.oauth, options);
+    this.domain = options.domain;
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
+    this.clientAssertionSigningKey = options.clientAssertionSigningKey;
+    this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
+  }
+
+  _addClientAuthentication(payload, required) {
+    return addClientAuthentication({
+      payload,
+      required,
+      domain: this.domain,
+      clientSecret: this.clientSecret,
+      clientAssertionSigningKey: this.clientAssertionSigningKey,
+      clientAssertionSigningAlg: this.clientAssertionSigningAlg,
+    });
   }
 
   /**
@@ -173,12 +190,11 @@ class OAuthAuthenticator {
       throw new ArgumentError('Missing user data object');
     }
 
-    const data = {
+    const data = this._addClientAuthentication({
       client_id: this.clientId,
-      client_secret: this.clientSecret,
       grant_type: 'password',
       ...userData,
-    };
+    });
 
     if (typeof data.username !== 'string' || data.username.split().length === 0) {
       throw new ArgumentError('username field is required');
@@ -238,12 +254,11 @@ class OAuthAuthenticator {
       throw new ArgumentError('Missing data object');
     }
 
-    data = {
+    data = this._addClientAuthentication({
       client_id: this.clientId,
-      client_secret: this.clientSecret,
       grant_type: 'refresh_token',
       ...data,
-    };
+    });
 
     if (typeof data.refresh_token !== 'string' || data.refresh_token.split().length === 0) {
       throw new ArgumentError('refresh_token is required');
@@ -297,19 +312,17 @@ class OAuthAuthenticator {
       throw new ArgumentError('Missing options object');
     }
 
-    const data = {
-      grant_type: 'client_credentials',
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-      ...options,
-    };
+    const data = this._addClientAuthentication(
+      {
+        grant_type: 'client_credentials',
+        client_id: this.clientId,
+        ...options,
+      },
+      true
+    );
 
     if (!data.client_id || data.client_id.trim().length === 0) {
       throw new ArgumentError('client_id field is required');
-    }
-
-    if (!data.client_secret || data.client_secret.trim().length === 0) {
-      throw new ArgumentError('client_secret field is required');
     }
 
     const params = {
@@ -361,12 +374,11 @@ class OAuthAuthenticator {
       throw new ArgumentError('Missing options object');
     }
 
-    const data = {
+    const data = this._addClientAuthentication({
       grant_type: 'authorization_code',
       client_id: this.clientId,
-      client_secret: this.clientSecret,
       ...options,
-    };
+    });
 
     if (!data.code || data.code.trim().length === 0) {
       throw new ArgumentError('code field is required');

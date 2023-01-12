@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { ArgumentError } = require('rest-facade');
+const { addClientAuthentication } = require('./clientAuthentication');
 
 /**
  * Provides methods for getting token data and exchanging tokens.
@@ -9,8 +10,11 @@ class TokensManager {
    * @param  {object}   options                 Manager options.
    * @param  {string}   options.baseUrl         The auth0 account URL.
    * @param  {string}   [options.headers]       Default request headers.
+   * @param  {string}   [options.domain]  Required if using clientAssertionSigningKey.
    * @param  {string}   [options.clientId]      Default client ID.
    * @param  {string}   [options.clientSecret]  Default client Secret.
+   * @param  {string}   [options.clientAssertionSigningKey]  Private key used to sign the client assertion JWT.
+   * @param  {string}   [options.clientAssertionSigningAlg]  Default 'RS256'.
    */
   constructor(options) {
     if (typeof options !== 'object') {
@@ -23,8 +27,11 @@ class TokensManager {
 
     this.baseUrl = options.baseUrl;
     this.headers = options.headers || {};
+    this.domain = options.domain;
     this.clientId = options.clientId || '';
     this.clientSecret = options.clientSecret || '';
+    this.clientAssertionSigningKey = options.clientAssertionSigningKey;
+    this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
   }
 
   /**
@@ -213,11 +220,16 @@ class TokensManager {
       );
     }
 
-    const body = {
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-      ...data,
-    };
+    const body = addClientAuthentication({
+      payload: {
+        client_id: this.clientId,
+        ...data,
+      },
+      domain: this.domain,
+      clientSecret: this.clientSecret,
+      clientAssertionSigningKey: this.clientAssertionSigningKey,
+      clientAssertionSigningAlg: this.clientAssertionSigningAlg,
+    });
 
     const { headers } = this;
 

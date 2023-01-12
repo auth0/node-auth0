@@ -4,6 +4,7 @@ const { jsonToBase64, generateClientInfo } = utils;
 const { ArgumentError } = require('rest-facade');
 
 // Managers.
+const ClientCredentialsManager = require('./ClientCredentialsManager');
 const ClientsManager = require('./ClientsManager');
 const ClientGrantsManager = require('./ClientGrantsManager');
 const GrantsManager = require('./GrantsManager');
@@ -73,16 +74,32 @@ const MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  *    cacheTTLInSeconds: 10
  *  }
  * });
+ * @example <caption>
+ *   Initialize your client class, by using a Non Interactive Client to fetch an access_token
+ *   via the Client Credentials Grant, providing a Private Key using the private_key_jwt token
+ *   endpoint auth method.
+ * </caption>
+ *
+ * var ManagementClient = require('auth0').ManagementClient;
+ * var auth0 = new ManagementClient({
+ *   domain: '{YOUR_ACCOUNT}.auth0.com',
+ *   clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
+ *   clientAssertionSigningKey: fs.readFileSync('private-key.pem'),
+ *   scope: "read:users write:users"
+ * });
  */
 class ManagementClient {
   /**
    * @param   {object}  options                                   Options for the ManagementClient SDK.
    *          If a token is provided only the domain is required, other parameters are ignored.
-   *          If no token is provided domain, clientId, clientSecret and scopes are required
+   *          If no token is provided domain, clientId, clientSecret (or clientAssertionSigningKey)
+   *          and scopes are required
    * @param   {string}  options.domain                              ManagementClient server domain.
    * @param   {string}  [options.token]                             API access token.
    * @param   {string}  [options.clientId]                          Management API Non Interactive Client Id.
    * @param   {string}  [options.clientSecret]                      Management API Non Interactive Client Secret.
+   * @param   {string}  [options.clientAssertionSigningKey]         Private key used to sign the client assertion JWT.
+   * @param   {string}  [options.clientAssertionSigningAlg]         Default 'RS256'.
    * @param   {string}  [options.audience]                          Management API Audience. By default is your domain's, e.g. the domain is `tenant.auth0.com` and the audience is `http://tenant.auth0.com/api/v2/`
    * @param   {string}  [options.scope]                             Management API Scopes.
    * @param   {boolean} [options.tokenProvider.enableCache=true]    Enabled or Disable Cache.
@@ -159,6 +176,14 @@ class ManagementClient {
      * @type {ClientsManager}
      */
     this.clients = new ClientsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * client credentials endpoint.
+     *
+     * @type {module:management.ClientCredentialsManager}
+     */
+    this.clientCredentials = new ClientCredentialsManager(managerOptions);
 
     /**
      * Simple abstraction for performing CRUD operations on the client grants
