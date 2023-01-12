@@ -1,50 +1,53 @@
-var expect = require('chai').expect;
-var nock = require('nock');
+const { expect } = require('chai');
+const nock = require('nock');
 
-var SRC_DIR = '../../src';
-var API_URL = 'https://tenant.auth0.com';
+const SRC_DIR = '../../src';
+const API_URL = 'https://tenant.auth0.com';
 
-var ClientCredentialsManager = require(SRC_DIR + '/management/ClientCredentialsManager');
-var ArgumentError = require('rest-facade').ArgumentError;
+const ClientCredentialsManager = require(`${SRC_DIR}/management/ClientCredentialsManager`);
+const { ArgumentError } = require('rest-facade');
 
-describe('ClientsCredentialsManager', function () {
+describe('ClientsCredentialsManager', () => {
   before(function () {
     this.token = 'TOKEN';
     this.clientCredentials = new ClientCredentialsManager({
-      headers: { authorization: 'Bearer ' + this.token },
+      headers: { authorization: `Bearer ${this.token}` },
       baseUrl: API_URL,
     });
   });
 
-  describe('instance', function () {
-    var methods = ['getAll', 'getByID', 'create', 'delete'];
+  describe('instance', () => {
+    const methods = ['getAll', 'get', 'create', 'delete'];
 
-    methods.forEach(function (method) {
-      it('should have a ' + method + ' method', function () {
+    methods.forEach((method) => {
+      it(`should have a ${method} method`, function () {
         expect(this.clientCredentials[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
-  describe('#constructor', function () {
-    it('should error when no options are provided', function () {
-      expect(ClientCredentialsManager).to.throw(ArgumentError, 'Must provide manager options');
+  describe('#constructor', () => {
+    it('should error when no options are provided', () => {
+      expect(() => new ClientCredentialsManager()).to.throw(
+        ArgumentError,
+        'Must provide manager options'
+      );
     });
 
-    it('should throw an error when no base URL is provided', function () {
-      var client = ClientCredentialsManager.bind(null, {});
+    it('should throw an error when no base URL is provided', () => {
+      const client = () => new ClientCredentialsManager({});
 
       expect(client).to.throw(ArgumentError, 'Must provide a base URL for the API');
     });
 
-    it('should throw an error when the base URL is invalid', function () {
-      var client = ClientCredentialsManager.bind(null, { baseUrl: '' });
+    it('should throw an error when the base URL is invalid', () => {
+      const client = () => new ClientCredentialsManager({ baseUrl: '' });
 
       expect(client).to.throw(ArgumentError, 'The provided base URL is invalid');
     });
   });
 
-  describe('#create', function () {
+  describe('#create', () => {
     const FAKE_CLIENT_ID = 'cli_1234';
     const PATH = `/clients/${FAKE_CLIENT_ID}/credentials`;
     const options = { client_id: FAKE_CLIENT_ID };
@@ -73,16 +76,16 @@ describe('ClientsCredentialsManager', function () {
 
       nock(API_URL).post(PATH).reply(500);
 
-      this.clientCredentials.create(options, data).catch(function (err) {
+      this.clientCredentials.create(options, data).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
     it(`should perform POST request to ${PATH}`, function (done) {
-      const request = this.request;
+      const { request } = this;
 
-      this.clientCredentials.create(options, data).then(function () {
+      this.clientCredentials.create(options, data).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -93,10 +96,10 @@ describe('ClientsCredentialsManager', function () {
 
       const request = nock(API_URL)
         .post(PATH)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.clientCredentials.create(options, data).then(function () {
+      this.clientCredentials.create(options, data).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -107,14 +110,14 @@ describe('ClientsCredentialsManager', function () {
 
       const request = nock(API_URL).post(PATH, data).reply(200);
 
-      this.clientCredentials.create(options, data).then(function () {
+      this.clientCredentials.create(options, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
   });
-  describe('#getAll', function () {
+  describe('#getAll', () => {
     const FAKE_CLIENT_ID = 'cli_1234';
     const PATH = `/clients/${FAKE_CLIENT_ID}/credentials`;
     const options = { client_id: FAKE_CLIENT_ID };
@@ -139,7 +142,7 @@ describe('ClientsCredentialsManager', function () {
 
       nock(API_URL).get(PATH).reply(500);
 
-      this.clientCredentials.getAll(options).catch(function (err) {
+      this.clientCredentials.getAll(options).catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -151,7 +154,7 @@ describe('ClientsCredentialsManager', function () {
       const data = [{ test: true }];
       nock(API_URL).get(PATH).reply(200, data);
 
-      this.clientCredentials.getAll(options).then(function (credentials) {
+      this.clientCredentials.getAll(options).then((credentials) => {
         expect(credentials).to.be.an.instanceOf(Array);
         expect(credentials.length).to.equal(data.length);
         expect(credentials[0].test).to.equal(data[0].test);
@@ -160,9 +163,9 @@ describe('ClientsCredentialsManager', function () {
     });
 
     it(`should perform GET request to ${PATH}`, function (done) {
-      const request = this.request;
+      const { request } = this;
 
-      this.clientCredentials.getAll(options).then(function () {
+      this.clientCredentials.getAll(options).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -173,10 +176,10 @@ describe('ClientsCredentialsManager', function () {
 
       const request = nock(API_URL)
         .get(PATH)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.clientCredentials.getAll(options).then(function () {
+      this.clientCredentials.getAll(options).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -194,13 +197,13 @@ describe('ClientsCredentialsManager', function () {
 
       const combinedOptions = Object.assign({}, params, options);
 
-      this.clientCredentials.getAll(combinedOptions).then(function () {
+      this.clientCredentials.getAll(combinedOptions).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
   });
-  describe('#getByID', function () {
+  describe('#get', () => {
     const FAKE_CLIENT_ID = 'cli_1234';
     const FAKE_CREDENTIAL_ID = 'cre_1234';
     const PATH = `/clients/${FAKE_CLIENT_ID}/credentials/${FAKE_CREDENTIAL_ID}`;
@@ -211,14 +214,11 @@ describe('ClientsCredentialsManager', function () {
     });
 
     it('should accept a callback', function (done) {
-      this.clientCredentials.getByID(options, done);
+      this.clientCredentials.get(options, done);
     });
 
     it('should return a promise when no callback is given', function (done) {
-      this.clientCredentials
-        .getByID(options)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      this.clientCredentials.get(options).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the "catch" handler', function (done) {
@@ -226,7 +226,7 @@ describe('ClientsCredentialsManager', function () {
 
       nock(API_URL).get(PATH).reply(500);
 
-      this.clientCredentials.getByID(options).catch(function (err) {
+      this.clientCredentials.get(options).catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -238,7 +238,7 @@ describe('ClientsCredentialsManager', function () {
       const data = [{ test: true }];
       nock(API_URL).get(PATH).reply(200, data);
 
-      this.clientCredentials.getByID(options).then(function (credentials) {
+      this.clientCredentials.get(options).then((credentials) => {
         expect(credentials).to.be.an.instanceOf(Array);
         expect(credentials.length).to.equal(data.length);
         expect(credentials[0].test).to.equal(data[0].test);
@@ -247,9 +247,9 @@ describe('ClientsCredentialsManager', function () {
     });
 
     it(`should perform GET request to ${PATH}`, function (done) {
-      const request = this.request;
+      const { request } = this;
 
-      this.clientCredentials.getByID(options).then(function () {
+      this.clientCredentials.get(options).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -260,10 +260,10 @@ describe('ClientsCredentialsManager', function () {
 
       const request = nock(API_URL)
         .get(PATH)
-        .matchHeader('Authorization', 'Bearer ' + this.token)
+        .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.clientCredentials.getByID(options).then(function () {
+      this.clientCredentials.get(options).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -281,14 +281,14 @@ describe('ClientsCredentialsManager', function () {
 
       const combinedOptions = Object.assign({}, params, options);
 
-      this.clientCredentials.getByID(combinedOptions).then(function () {
+      this.clientCredentials.get(combinedOptions).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
     });
   });
 
-  describe('#delete', function () {
+  describe('#delete', () => {
     const FAKE_CLIENT_ID = 'cli_1234';
     const FAKE_CREDENTIAL_ID = 'cre_1234';
     const PATH = `/clients/${FAKE_CLIENT_ID}/credentials/${FAKE_CREDENTIAL_ID}`;
@@ -310,9 +310,9 @@ describe('ClientsCredentialsManager', function () {
     });
 
     it(`should perform DELETE request to ${PATH}`, function (done) {
-      const request = this.request;
+      const { request } = this;
 
-      this.clientCredentials.delete(options).then(function () {
+      this.clientCredentials.delete(options).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -323,7 +323,7 @@ describe('ClientsCredentialsManager', function () {
 
       nock(API_URL).delete(PATH).reply(500);
 
-      this.clientCredentials.delete(options).catch(function (err) {
+      this.clientCredentials.delete(options).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -335,10 +335,10 @@ describe('ClientsCredentialsManager', function () {
 
       const request = nock(API_URL)
         .delete(PATH)
-        .matchHeader('authorization', 'Bearer ' + this.token)
+        .matchHeader('authorization', `Bearer ${this.token}`)
         .reply(200);
 
-      this.clientCredentials.delete(options).then(function () {
+      this.clientCredentials.delete(options).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

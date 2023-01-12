@@ -74,7 +74,6 @@ const MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  *    cacheTTLInSeconds: 10
  *  }
  * });
- *
  * @example <caption>
  *   Initialize your client class, by using a Non Interactive Client to fetch an access_token
  *   via the Client Credentials Grant, providing a Private Key using the private_key_jwt token
