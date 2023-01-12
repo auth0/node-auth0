@@ -4,6 +4,7 @@ const { jsonToBase64, generateClientInfo } = utils;
 const { ArgumentError } = require('rest-facade');
 
 // Managers.
+const ClientCredentialsManager = require('./ClientCredentialsManager');
 const ClientsManager = require('./ClientsManager');
 const ClientGrantsManager = require('./ClientGrantsManager');
 const GrantsManager = require('./GrantsManager');
@@ -73,7 +74,6 @@ const MANAGEMENT_API_AUD_FORMAT = 'https://%s/api/v2/';
  *    cacheTTLInSeconds: 10
  *  }
  * });
- *
  * @example <caption>
  *   Initialize your client class, by using a Non Interactive Client to fetch an access_token
  *   via the Client Credentials Grant, providing a Private Key using the private_key_jwt token
@@ -176,6 +176,14 @@ class ManagementClient {
      * @type {ClientsManager}
      */
     this.clients = new ClientsManager(managerOptions);
+
+    /**
+     * Simple abstraction for performing CRUD operations on the
+     * client credentials endpoint.
+     *
+     * @type {module:management.ClientCredentialsManager}
+     */
+    this.clientCredentials = new ClientCredentialsManager(managerOptions);
 
     /**
      * Simple abstraction for performing CRUD operations on the client grants
