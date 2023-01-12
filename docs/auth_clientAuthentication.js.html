@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>utils.js - Documentation</title>
+    <title>auth/clientAuthentication.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -30,7 +30,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">utils.js</h1>
+    <h1 class="page-title">auth/clientAuthentication.js</h1>
     
 
     
@@ -40,66 +40,92 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const pkg = require('../package.json');
+            <pre class="prettyprint source linenums"><code>const { ArgumentError } = require('rest-facade');
+const jwt = require('jsonwebtoken');
+const uuid = require('uuid');
 
 /**
- * Given a JSON string, convert it to its base64 representation.
+ * Create a JWT signed with the clientAssertionSigningKey
+ * for use on clients with token endpoint auth method of private_key_jwt.
  *
- * @param {object} json Json data
- * @returns {string}
+ * @param {string} domain The domain of the Authorization Server (can be a custom domain).
+ * @param {string} clientId The Client ID.
+ * @param {string} clientAssertionSigningKey A private key in PEM format to sign the client assertion JWT.
+ * @param {string} clientAssertionSigningAlg The alg to use to sign the JWT (default RS256)
+ * @returns {string} A JWT.
  */
-const jsonToBase64 = (json) => {
-  const bytes = Buffer.from(JSON.stringify(json));
-
-  return bytes.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-};
-
-/**
- * Return an object with information about the current client.
- *
- * @function    generateClientInfo
- * @returns {object}   Object containing client information.
- */
-const generateClientInfo = () => ({
-  name: 'node-auth0',
-  version: pkg.version,
-  env: {
-    node: process.version.replace('v', ''),
-  },
-});
-
-const containsUnsafeChars = (s) => {
-  const safeChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*'(),%";
-  return !!s.split('').find((c) => !safeChars.includes(c));
-};
-
-const maybeDecode = (url) => {
-  if (containsUnsafeChars(url)) {
-    return encodeURIComponent(url);
-  }
-  return url;
-};
-
-const sanitizeArguments = function (optionsCandidate, cbCandidate) {
-  if (optionsCandidate instanceof Function) {
-    return {
-      cb: optionsCandidate,
-      options: undefined,
-    };
-  }
-  return {
-    cb: cbCandidate,
-    options: optionsCandidate,
+const createClientAssertionJWT = ({
+  clientId,
+  clientAssertionSigningKey,
+  clientAssertionSigningAlg,
+  domain,
+}) => {
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    iss: clientId,
+    sub: clientId,
+    aud: `https://${domain}/`,
+    iat: now,
+    exp: now + 180,
+    jti: uuid.v4(),
   };
+  return jwt.sign(payload, clientAssertionSigningKey, {
+    algorithm: clientAssertionSigningAlg || 'RS256',
+  });
 };
 
-module.exports = {
-  jsonToBase64,
-  generateClientInfo,
-  containsUnsafeChars,
-  maybeDecode,
-  sanitizeArguments,
+/**
+ * Adds client authentication, if available, to the payload of the following requests:
+ * - /oauth/token
+ * - /oauth/revoke
+ * - /mfa/associate
+ * - /mfa/challenge
+ * - /passwordless/start
+ *
+ * Adds `client_secret` for Client Secret Post token endpoint auth method (the SDK doesn't use Client Secret Basic)
+ * Adds `client_assertion` and `client_assertion_type` for Private Key JWT token endpoint auth method.
+ *
+ * If `clientAssertionSigningKey` is provided it takes precedent over `clientSecret` .
+ *
+ * @param {object} payload The body of the request to be authenticated.
+ * @param {string} domain The domain of the Authorization Server (can be a custom domain).
+ * @param {boolean} [required] True if client authentication is required.
+ * @param {string} [clientAssertionSigningKey] A private key in PEM format to sign the client assertion JWT.
+ * @param {string} clientAssertionSigningAlg The alg to use to sign the JWT (default RS256)
+ * @param {string} [clientSecret] The client secret.
+ * @returns {object} The payload with additional fields for client authentication.
+ */
+const addClientAuthentication = ({
+  payload,
+  domain,
+  required,
+  clientAssertionSigningKey,
+  clientAssertionSigningAlg,
+  clientSecret,
+}) => {
+  const clientId = payload.client_id;
+  if (clientAssertionSigningKey &amp;&amp; !payload.client_assertion) {
+    payload.client_assertion = createClientAssertionJWT({
+      clientId,
+      clientAssertionSigningKey,
+      clientAssertionSigningAlg,
+      domain,
+    });
+    payload.client_assertion_type = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+  } else if (clientSecret &amp;&amp; !payload.client_secret) {
+    payload.client_secret = clientSecret;
+  }
+  if (
+    required &amp;&amp;
+    (!payload.client_secret || payload.client_secret.trim().length === 0) &amp;&amp;
+    (!payload.client_assertion || payload.client_assertion.trim().length === 0)
+  ) {
+    throw new ArgumentError('The client_secret or client_assertion field is required.');
+  }
+  return payload;
 };
+
+module.exports.addClientAuthentication = addClientAuthentication;
 </code></pre>
         </article>
     </section>
