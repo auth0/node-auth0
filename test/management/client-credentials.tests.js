@@ -218,7 +218,10 @@ describe('ClientsCredentialsManager', () => {
     });
 
     it('should return a promise when no callback is given', function (done) {
-      this.clientCredentials.get(options).then(done.bind(null, null)).catch(done.bind(null, null));
+      this.clientCredentials
+        .get(options)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
     });
 
     it('should pass any errors to the "catch" handler', function (done) {
