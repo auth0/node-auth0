@@ -1,5 +1,8 @@
 const { expect } = require('chai');
 const nock = require('nock');
+const sinon = require('sinon');
+const { Client } = require('rest-facade');
+const proxyquire = require('proxyquire');
 
 const DOMAIN = 'tenant.auth0.com';
 const API_URL = `https://${DOMAIN}`;
@@ -181,6 +184,41 @@ describe('DatabaseAuthenticator', () => {
       await this.authenticator.signIn(userData);
       expect(request.isDone()).to.be.true;
     });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/DatabaseAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator(
+        {
+          ...validOptions,
+          proxy: 'http://proxy',
+        },
+        new OAuth(validOptions)
+      );
+
+      return authenticator.signIn(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
+    });
   });
 
   describe('#signUp', () => {
@@ -272,6 +310,38 @@ describe('DatabaseAuthenticator', () => {
 
       await this.authenticator.signUp(userData);
       expect(request.isDone()).to.be.true;
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/DatabaseAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator(
+        { ...validOptions, proxy: 'http://proxy' },
+        new OAuth(validOptions)
+      );
+
+      return authenticator.signUp(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
     });
   });
 
@@ -368,6 +438,38 @@ describe('DatabaseAuthenticator', () => {
       await this.authenticator.changePassword(userData);
       expect(request.isDone()).to.be.true;
     });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/DatabaseAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator(
+        { ...validOptions, proxy: 'http://proxy' },
+        new OAuth(validOptions)
+      );
+
+      return authenticator.changePassword(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
+    });
   });
 
   describe('#requestChangePasswordEmail', () => {
@@ -449,6 +551,38 @@ describe('DatabaseAuthenticator', () => {
 
       await this.authenticator.requestChangePasswordEmail(userData);
       expect(request.isDone()).to.be.true;
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/DatabaseAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator(
+        { ...validOptions, proxy: 'http://proxy' },
+        new OAuth(validOptions)
+      );
+
+      return authenticator.requestChangePasswordEmail(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
     });
   });
 });

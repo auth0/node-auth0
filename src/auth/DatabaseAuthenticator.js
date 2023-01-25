@@ -10,6 +10,7 @@ class DatabaseAuthenticator {
    * @param  {object}              options            Authenticator options.
    * @param  {string}              options.baseUrl    The auth0 account URL.
    * @param  {string}              [options.clientId] Default client ID.
+   * @param   {string}             [options.proxy]    Add the `superagent-proxy` dependency and specify a proxy url eg 'https://myproxy.com:1234'
    * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
    */
   constructor(options, oauth) {
@@ -29,6 +30,7 @@ class DatabaseAuthenticator {
     const clientOptions = {
       errorFormatter: { message: 'message', name: 'error' },
       headers: options.headers,
+      proxy: options.proxy,
     };
 
     this.oauth = oauth;

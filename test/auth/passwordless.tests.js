@@ -1,5 +1,8 @@
 const { expect } = require('chai');
 const nock = require('nock');
+const sinon = require('sinon');
+const { Client } = require('rest-facade');
+const proxyquire = require('proxyquire');
 
 const DOMAIN = 'tenant.auth0.com';
 const API_URL = `https://${DOMAIN}`;
@@ -254,6 +257,38 @@ describe('PasswordlessAuthenticator', () => {
           })
           .catch(done);
       });
+
+      it('should make request with proxy', async () => {
+        nock.cleanAll();
+
+        const spy = sinon.spy();
+
+        class MockClient extends Client {
+          constructor(...args) {
+            spy(...args);
+            super(...args);
+          }
+        }
+        const MockAuthenticator = proxyquire(`../../src/auth/PasswordlessAuthenticator`, {
+          'rest-facade': {
+            Client: MockClient,
+          },
+        });
+
+        const request = nock(API_URL).post(path).reply(200);
+
+        const authenticator = new MockAuthenticator(
+          { ...validOptions, proxy: 'http://proxy' },
+          new OAuth(validOptions)
+        );
+
+        return authenticator.signIn(userData, options).then(() => {
+          sinon.assert.calledWithMatch(spy, API_URL, {
+            proxy: 'http://proxy',
+          });
+          expect(request.isDone()).to.be.true;
+        });
+      });
     });
 
     describe('/oauth/token', () => {
@@ -488,6 +523,38 @@ describe('PasswordlessAuthenticator', () => {
           })
           .catch(done);
       });
+
+      it('should make request with proxy', async () => {
+        nock.cleanAll();
+
+        const spy = sinon.spy();
+
+        class MockClient extends Client {
+          constructor(...args) {
+            spy(...args);
+            super(...args);
+          }
+        }
+        const MockAuthenticator = proxyquire(`../../src/auth/PasswordlessAuthenticator`, {
+          'rest-facade': {
+            Client: MockClient,
+          },
+        });
+
+        const request = nock(API_URL).post(path).reply(200);
+
+        const authenticator = new MockAuthenticator(
+          { ...validOptions, proxy: 'http://proxy' },
+          new OAuth(validOptions)
+        );
+
+        return authenticator.signIn(userData, options).then(() => {
+          sinon.assert.calledWithMatch(spy, API_URL, {
+            proxy: 'http://proxy',
+          });
+          expect(request.isDone()).to.be.true;
+        });
+      });
     });
   });
 
@@ -668,6 +735,38 @@ describe('PasswordlessAuthenticator', () => {
         })
         .catch(done);
     });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/PasswordlessAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator(
+        { ...validOptions, proxy: 'http://proxy' },
+        new OAuth(validOptions)
+      );
+
+      return authenticator.sendEmail(userData, options).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
+    });
   });
 
   describe('#sendSMS', () => {
@@ -815,6 +914,38 @@ describe('PasswordlessAuthenticator', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/PasswordlessAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator(
+        { ...validOptions, proxy: 'http://proxy' },
+        new OAuth(validOptions)
+      );
+
+      return authenticator.sendSMS(userData, options).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
     });
   });
 });
