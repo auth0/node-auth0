@@ -29,6 +29,7 @@ class PasswordlessAuthenticator {
    * @param  {string}              [options.clientSecret] Default client secret.
    * @param  {string}              [options.clientAssertionSigningKey] Private key used to sign the client assertion JWT.
    * @param  {string}              [options.clientAssertionSigningAlg] Default 'RS256'.
+   * @param   {string}             [options.proxy]    Add the `superagent-proxy` dependency and specify a proxy url eg 'https://myproxy.com:1234'
    * @param  {OAuthAuthenticator}  oauth              OAuthAuthenticator instance.
    */
   constructor(options, oauth) {
@@ -48,6 +49,7 @@ class PasswordlessAuthenticator {
     const clientOptions = {
       errorFormatter: { message: 'message', name: 'error' },
       headers: options.headers,
+      proxy: options.proxy,
     };
 
     this.oauth = oauth;

@@ -1,6 +1,8 @@
 const { expect } = require('chai');
 const nock = require('nock');
 const sinon = require('sinon');
+const { Client } = require('rest-facade');
+const proxyquire = require('proxyquire');
 
 const DOMAIN = 'tenant.auth0.com';
 const API_URL = `https://${DOMAIN}`;
@@ -246,6 +248,35 @@ describe('OAuthAuthenticator', () => {
         })
         .catch(done);
     });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/OAuthAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator({ ...validOptions, proxy: 'http://proxy' });
+
+      return authenticator.signIn(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
+    });
   });
 
   describe('#passwordGrant', () => {
@@ -431,6 +462,35 @@ describe('OAuthAuthenticator', () => {
         })
         .catch(done);
     });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/OAuthAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator({ ...validOptions, proxy: 'http://proxy' });
+
+      return authenticator.passwordGrant(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
+    });
   });
 
   describe('#refreshToken', () => {
@@ -528,6 +588,35 @@ describe('OAuthAuthenticator', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/OAuthAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator({ ...validOptions, proxy: 'http://proxy' });
+
+      return authenticator.refreshToken(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
     });
   });
 
@@ -651,6 +740,35 @@ describe('OAuthAuthenticator', () => {
         expect(request.isDone()).to.be.true;
 
         done();
+      });
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/OAuthAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator({ ...validOptions, proxy: 'http://proxy' });
+
+      return authenticator.socialSignIn(userData).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
       });
     });
   });
@@ -783,6 +901,35 @@ describe('OAuthAuthenticator', () => {
       return this.authenticator.clientCredentialsGrant(options).catch((err) => {
         const originalRequestData = err.originalError.response.request._data;
         expect(originalRequestData.client_secret).to.not.equal(CLIENT_SECRET);
+      });
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/OAuthAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator({ ...validOptions, proxy: 'http://proxy' });
+
+      return authenticator.clientCredentialsGrant(options).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
       });
     });
   });
@@ -928,6 +1075,35 @@ describe('OAuthAuthenticator', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('should make request with proxy', async () => {
+      nock.cleanAll();
+
+      const spy = sinon.spy();
+
+      class MockClient extends Client {
+        constructor(...args) {
+          spy(...args);
+          super(...args);
+        }
+      }
+      const MockAuthenticator = proxyquire(`../../src/auth/OAuthAuthenticator`, {
+        'rest-facade': {
+          Client: MockClient,
+        },
+      });
+
+      const request = nock(API_URL).post(path).reply(200);
+
+      const authenticator = new MockAuthenticator({ ...validOptions, proxy: 'http://proxy' });
+
+      return authenticator.authorizationCodeGrant(data).then(() => {
+        sinon.assert.calledWithMatch(spy, API_URL, {
+          proxy: 'http://proxy',
+        });
+        expect(request.isDone()).to.be.true;
+      });
     });
   });
 });

@@ -35,6 +35,7 @@ class OAuthAuthenticator {
    * @param  {string}              [options.clientAssertionSigningKey] Private key used to sign the client assertion JWT.
    * @param  {string}              [options.clientAssertionSigningAlg] Default 'RS256'.
    * @param  {boolean}             [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
+   * @param   {string}             [options.proxy]                     Add the `superagent-proxy` dependency and specify a proxy url eg 'https://myproxy.com:1234'
    */
   constructor(options) {
     if (!options) {
@@ -54,6 +55,7 @@ class OAuthAuthenticator {
       errorCustomizer: SanitizedError,
       errorFormatter: { message: 'message', name: 'error' },
       headers: options.headers,
+      proxy: options.proxy,
     };
 
     this.oauth = new RestClient(`${options.baseUrl}/oauth/:type`, clientOptions);
