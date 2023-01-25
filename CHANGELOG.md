@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.1.2](https://github.com/auth0/node-auth0/tree/v3.1.2) (2023-01-25)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.1.1...v3.1.2)
+
+**Fixed**
+
+- Add support for proxy in AuthenticationClient [\#779](https://github.com/auth0/node-auth0/pull/779) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.1.1](https://github.com/auth0/node-auth0/tree/v3.1.1) (2023-01-12)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.1.0...v3.1.1)
