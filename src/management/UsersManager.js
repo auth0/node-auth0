@@ -85,6 +85,13 @@ class UsersManager extends BaseManager {
      */
     this.permissions = this._getRestClient('/users/:id/permissions');
 
+    /**
+     * For CRUD on user's authenticators
+     *
+     * @type {external:RestClient}
+     */
+    this.authenticators = this._getRestClient('/users/:id/authenticators');
+
     this.organizations = this._getRestClient('/users/:id/organizations');
   }
 
@@ -740,6 +747,24 @@ class UsersManager extends BaseManager {
     }
 
     return this.permissions.delete(query, data);
+  }
+
+  deleteAllAuthenticators(params, cb) {
+    const query = params || {};
+
+    // Require a user ID.
+    if (!query.id) {
+      throw new ArgumentError('The user_id cannot be null or undefined');
+    }
+    if (typeof query.id !== 'string') {
+      throw new ArgumentError('The user_id has to be a string');
+    }
+
+    if (cb && cb instanceof Function) {
+      return this.authenticators.delete(query, cb);
+    }
+
+    return this.authenticators.delete(query);
   }
 
   /**
