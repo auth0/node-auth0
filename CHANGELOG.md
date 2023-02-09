@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.2.0](https://github.com/auth0/node-auth0/tree/v3.2.0) (2023-02-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.1.2...v3.2.0)
+
+**Added**
+
+- Add DELETE /api/v2/users/{id}/authenticators [\#785](https://github.com/auth0/node-auth0/pull/785) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v3.1.2](https://github.com/auth0/node-auth0/tree/v3.1.2) (2023-01-25)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.1.1...v3.1.2)
