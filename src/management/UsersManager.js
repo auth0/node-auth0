@@ -761,7 +761,7 @@ class UsersManager extends BaseManager {
     }
 
     if (cb && cb instanceof Function) {
-      return this.permissions.delete(query, cb);
+      return this.authenticators.delete(query, cb);
     }
 
     return this.authenticators.delete(query);
