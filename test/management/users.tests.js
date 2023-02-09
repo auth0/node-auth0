@@ -1514,8 +1514,8 @@ describe('UsersManager', () => {
     });
 
     it('should accept a callback', (done) => {
-      usersManager.deleteAllAuthenticators(params, () => {
-        expect(scope.isDone()).to.be.true;
+      usersManager.deleteAllAuthenticators(params, (err) => {
+        expect(err).to.be.null;
         done();
       });
     });
