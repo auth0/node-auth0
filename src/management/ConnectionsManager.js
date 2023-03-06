@@ -72,10 +72,15 @@ class ConnectionsManager extends BaseManager {
    * management.connections.getAll(params, function (err, connections) {
    *   console.log(connections.length);
    * });
-   * @param   {object}    [params]          Connections params.
-   * @param   {number}    [params.per_page] Number of results per page.
-   * @param   {number}    [params.page]     Page number, zero indexed.
-   * @param   {Function}  [cb]              Callback function.
+   * @param   {object}    [params]                Connections params.
+   * @param   {number}    [params.per_page]       Number of results per page.
+   * @param   {number}    [params.page]           Page number, zero indexed.
+   * @param   {string[]}  [params.fields]         List of fields to include or exclude
+   * @param   {boolean}   [params.include_fields] true if the fields specified are to be included in the result, false otherwise. Default true
+   * @param   {boolean}   [params.include_totals] true if a query summary must be included in the result, false otherwise. Default false
+   * @param   {string}    [params.strategy]       Provide strategies to only retrieve connections with such strategies 
+   * @param   {string}    [params.name]           Provide the name of the connection to retrieve
+   * @param   {Function}  [cb]                    Callback function.
    * @returns  {Promise|undefined}
    */
   getAll(...args) {
