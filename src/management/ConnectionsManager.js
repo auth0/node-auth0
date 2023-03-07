@@ -78,7 +78,7 @@ class ConnectionsManager extends BaseManager {
    * @param   {string[]}  [params.fields]         List of fields to include or exclude
    * @param   {boolean}   [params.include_fields] true if the fields specified are to be included in the result, false otherwise. Default true
    * @param   {boolean}   [params.include_totals] true if a query summary must be included in the result, false otherwise. Default false
-   * @param   {string}    [params.strategy]       Provide strategies to only retrieve connections with such strategies 
+   * @param   {string}    [params.strategy]       Provide strategies to only retrieve connections with such strategies
    * @param   {string}    [params.name]           Provide the name of the connection to retrieve
    * @param   {Function}  [cb]                    Callback function.
    * @returns  {Promise|undefined}
