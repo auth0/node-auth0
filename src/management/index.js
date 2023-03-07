@@ -92,8 +92,8 @@ class ManagementClient {
   /**
    * @param   {object}  options                                   Options for the ManagementClient SDK.
    *          If a token is provided only the domain is required, other parameters are ignored.
-   *          If no token is provided domain, clientId, clientSecret (or clientAssertionSigningKey)
-   *          and scopes are required
+   *          If no token is provided domain, clientId and clientSecret (or clientAssertionSigningKey)
+   *          are required.
    * @param   {string}  options.domain                              ManagementClient server domain.
    * @param   {string}  [options.token]                             API access token.
    * @param   {string}  [options.clientId]                          Management API Non Interactive Client Id.
