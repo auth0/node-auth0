@@ -1,5 +1,14 @@
 # Change Log
 
+## [v3.3.0](https://github.com/auth0/node-auth0/tree/v3.3.0) (2023-03-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.2.0...v3.3.0)
+
+**Added**
+
+- [SDK-4013] Add API2 Factor Management Endpoints [\#791](https://github.com/auth0/node-auth0/pull/791) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- ESM support [\#784](https://github.com/auth0/node-auth0/pull/784) ([btakita](https://github.com/btakita))
+
 ## [v3.2.0](https://github.com/auth0/node-auth0/tree/v3.2.0) (2023-02-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.1.2...v3.2.0)
