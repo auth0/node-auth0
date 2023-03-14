@@ -1473,6 +1473,117 @@ class ManagementClient {
   }
 
   /**
+   * Get a list of a user's authentication methods.
+   *
+   * @example
+   * management.getAuthenticationMethods({ id: USER_ID }, function (err, authenticationMethods) {
+   *   console.log(authenticationMethods);
+   * });
+   * @param   {object}    data      The user data object.
+   * @param   {string}    data.id   The user id.
+   * @param   {Function}  [cb]      Callback function.
+   * @returns  {Promise|undefined}
+   */
+  getAuthenticationMethods(...args) {
+    return this.users.getAuthenticationMethods(...args);
+  }
+
+  /**
+   * Get a user's authentication method by ID.
+   *
+   * @example
+   * management.getAuthenticationMethods({ id: USER_ID, authentication_method_id: AUTHENTICATION_METHOD_ID }, function (err, authenticationMethod) {
+   *   console.log(authenticationMethod);
+   * });
+   * @param   {object}    data                          The user data object.
+   * @param   {string}    data.id                       The user id.
+   * @param   {string}    data.authentication_method_id The authentication method id.
+   * @param   {Function}  [cb]                          Callback function.
+   * @returns  {Promise|undefined}
+   */
+  getAuthenticationMethodById(...args) {
+    return this.users.getAuthenticationMethodById(...args);
+  }
+
+  /**
+   * Creates an authentication method for a given user.
+   *
+   * @example
+   * management.createAuthenticationMethod({ id: USER_ID }, { type: "sms", phone_number: USER_PHONE_NUMBER }, function (err, createdAuthenticationMethod) {
+   *   console.log(createdAuthenticationMethod);
+   * });
+   * @param   {object}    params                        The user data object.
+   * @param   {string}    params.id                     The user id.
+   * @param   {string}    data                          Authentication method data.
+   * @param   {Function}  [cb]                          Callback function.
+   * @returns  {Promise|undefined}
+   */
+  createAuthenticationMethod(...args) {
+    return this.users.createAuthenticationMethod(...args);
+  }
+
+  /**
+   * Updates all authentication methods for a user by replacing them with the given ones.
+   *
+   * @example
+   * management.updateAuthenticationMethods({ id: USER_ID }, [{ type: "sms", phone_number: USER_PHONE_NUMBER }], function (err) {});
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {object}    data                            Updated authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  updateAuthenticationMethods(...args) {
+    return this.users.authenticationMethods.update(...args);
+  }
+
+  /**
+   * Updates a user's authentication method by ID.
+   *
+   * @example
+   * management.updateAuthenticationMethodById({ id: USER_ID, authentication_method_id: AUTHENTICATION_METHOD_ID }, { type: "sms", phone_number: USER_PHONE_NUMBER }, function (err) {});
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {string}    params.authentication_method_id The authentication method id.
+   * @param   {object}    data                            Updated authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  updateAuthenticationMethodById(...args) {
+    return this.users.updateAuthenticationMethodById.update(...args);
+  }
+
+  /**
+   * Deletes all authentication methods for the given user.
+   *
+   * management.deleteAuthenticationMethods({ id: USER_ID }, function (err) {});
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  deleteAuthenticationMethods(...args) {
+    return this.users.authenticationMethods.delete(...args);
+  }
+
+  /**
+   * Deletes a user's authentication method by ID.
+   *
+   * management.deleteAuthenticationMethodById({ id: USER_ID, authentication_method_id: AUTHENTICATION_METHOD_ID }, function (err) {});
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {string}    params.authentication_method_id The authentication method id.
+   * @param   {object}    data                            Updated authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  deleteAuthenticationMethodById(...args) {
+    return this.users.authenticationMethods.delete(...args);
+  }
+
+  /**
    * Generate new Guardian recovery code.
    *
    * @example

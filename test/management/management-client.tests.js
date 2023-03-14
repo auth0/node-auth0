@@ -921,6 +921,12 @@ describe('ManagementClient', () => {
       'getAccessToken',
       'getPromptsSettings',
       'updatePromptsSettings',
+      'getAuthenticationMethods',
+      'getAuthenticationMethodById',
+      'updateAuthenticationMethods',
+      'updateAuthenticationMethodById',
+      'deleteAuthenticationMethods',
+      'deleteAuthenticationMethodById',
     ];
 
     before(function () {
