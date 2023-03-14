@@ -1605,4 +1605,153 @@ describe('UsersManager', () => {
       expect(request.isDone()).to.be.true;
     });
   });
+
+  describe('#getAuthenticationMethods', () => {
+    const params = {
+      id: 'user_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).get(`/users/${params.id}/authentication-methods`).reply(200);
+    });
+
+    it('should perform a GET request to /api/v2/users/{user}/authentication-methods', async () => {
+      await usersManager.getAuthenticationMethods(params);
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
+  describe('#getAuthenticationMethodById', () => {
+    const params = {
+      id: 'user_id',
+      authentication_method_id: 'authentication_method_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL)
+        .get(`/users/${params.id}/authentication-methods/${params.authentication_method_id}`)
+        .reply(200);
+    });
+
+    it('should perform a GET request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {
+      await usersManager.getAuthenticationMethodById(params);
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
+  describe('#createAuthenticationMethod', () => {
+    const params = {
+      id: 'user_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).post(`/users/${params.id}/authentication-methods`).reply(200);
+    });
+
+    it('should perform a POST request to /api/v2/users/{id}/authentication-methods', async () => {
+      await usersManager.createAuthenticationMethod(params, {});
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
+  describe('#updateAuthenticationMethods', () => {
+    const params = {
+      id: 'user_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).put(`/users/${params.id}/authentication-methods`).reply(200);
+    });
+
+    it('should perform a PUT request to /api/v2/users/{user}/authentication-methods', async () => {
+      await usersManager.updateAuthenticationMethods(params, {});
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
+  describe('#updateAuthenticationMethodById', () => {
+    const params = {
+      id: 'user_id',
+      authentication_method_id: 'authentication_method_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL)
+        .patch(`/users/${params.id}/authentication-methods/${params.authentication_method_id}`)
+        .reply(200);
+    });
+
+    it('should perform a PATCH request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {
+      await usersManager.updateAuthenticationMethodById(params, {});
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
+  describe('#deleteAuthenticationMethods', () => {
+    const params = {
+      id: 'user_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).delete(`/users/${params.id}/authentication-methods`).reply(200);
+    });
+
+    it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods', async () => {
+      await usersManager.deleteAuthenticationMethods(params);
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
+  describe('#deleteAuthenticationMethodById', () => {
+    const params = {
+      id: 'user_id',
+      authentication_method_id: 'authentication_method_id',
+    };
+
+    /**
+     * @type {nock}
+     */
+    let scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL)
+        .delete(`/users/${params.id}/authentication-methods/${params.authentication_method_id}`)
+        .reply(200);
+    });
+
+    it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {
+      await usersManager.deleteAuthenticationMethodById(params);
+      expect(scope.isDone()).to.be.true;
+    });
+  });
 });
