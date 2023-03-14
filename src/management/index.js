@@ -95,7 +95,7 @@ class ManagementClient {
    *          If no token is provided domain, clientId and clientSecret (or clientAssertionSigningKey)
    *          are required.
    * @param   {string}  options.domain                              ManagementClient server domain.
-   * @param   {string|() => Promise<string>}  [options.token]       API access token.
+   * @param   {string|Function}  [options.token]       API access token.
    * @param   {string}  [options.clientId]                          Management API Non Interactive Client Id.
    * @param   {string}  [options.clientSecret]                      Management API Non Interactive Client Secret.
    * @param   {string}  [options.clientAssertionSigningKey]         Private key used to sign the client assertion JWT.
@@ -152,12 +152,11 @@ class ManagementClient {
     } else {
       this.tokenProvider = {
         getAccessToken() {
-          return typeof options.token !== 'string'
+          return typeof options.token === 'function'
             ? options.token()
             : Promise.resolve(options.token);
         },
       };
-      managerOptions.headers['Authorization'] = `Bearer ${options.token}`;
     }
 
     managerOptions.tokenProvider = this.tokenProvider;
