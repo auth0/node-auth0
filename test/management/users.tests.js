@@ -1489,6 +1489,71 @@ describe('UsersManager', () => {
     });
   });
 
+  describe('#deleteAllAuthenticators', () => {
+    let params;
+    let scope;
+
+    beforeEach(() => {
+      params = {
+        id: 'user_id',
+      };
+
+      scope = nock(API_URL).delete(`/users/${params.id}/authenticators`).reply(200);
+    });
+
+    it('should validate empty user_id', () => {
+      expect(() => {
+        usersManager.deleteAllAuthenticators({ id: null }, () => {});
+      }).to.throw('The user_id cannot be null or undefined');
+    });
+
+    it('should validate non-string user_id', () => {
+      expect(() => {
+        usersManager.deleteAllAuthenticators({ id: 123 }, () => {});
+      }).to.throw('The user_id has to be a string');
+    });
+
+    it('should accept a callback', (done) => {
+      usersManager.deleteAllAuthenticators(params, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    it('should return a promise if no callback is given', () => {
+      expect(usersManager.deleteAllAuthenticators(params, {})).instanceOf(Promise);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`/users/${params.id}/authenticators`).reply(500);
+
+      try {
+        await usersManager.deleteAllAuthenticators(params, {});
+      } catch (err) {
+        expect(err).to.exist;
+      }
+    });
+
+    it('should perform a DELETE request to /api/v2/users/user_id/authenticators', async () => {
+      await usersManager.deleteAllAuthenticators(params, {});
+      expect(scope.isDone()).to.be.true;
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/users/${params.id}/authenticators`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200);
+
+      await usersManager.deleteAllAuthenticators(params, {});
+      expect(request.isDone()).to.be.true;
+    });
+  });
+
   describe('#getUserOrganizations', () => {
     const data = {
       id: 'user_id',
