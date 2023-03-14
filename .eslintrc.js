@@ -5,6 +5,7 @@ module.exports = {
     es2017: true,
     mocha: true,
   },
+  ignorePatterns: ['**/*.mjs'],
   extends: [
     'eslint:recommended',
     'plugin:jsdoc/recommended',
