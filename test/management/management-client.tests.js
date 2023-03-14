@@ -37,8 +37,19 @@ describe('ManagementClient', () => {
     token: 'fake-token',
   };
 
+  const withTokenFunctionConfig = {
+    domain: 'auth0-node-sdk.auth0.com',
+    token: () => Promise.resolve('fake-token'),
+  };
+
   it('should expose an instance of ManagementClient when withTokenConfig is passed', () => {
     expect(new ManagementClient(withTokenConfig)).to.exist.to.be.an.instanceOf(ManagementClient);
+  });
+
+  it('should expose an instance of ManagementClient when withTokenFunctionConfig is passed', () => {
+    expect(new ManagementClient(withTokenFunctionConfig)).to.exist.to.be.an.instanceOf(
+      ManagementClient
+    );
   });
 
   it('should expose an instance of ManagementClient when withTokenProviderConfig is passed', () => {
