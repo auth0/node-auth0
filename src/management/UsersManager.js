@@ -93,6 +93,10 @@ class UsersManager extends BaseManager {
     this.authenticators = this._getRestClient('/users/:id/authenticators');
 
     this.organizations = this._getRestClient('/users/:id/organizations');
+
+    this.authenticationMethods = this._getRestClient(
+      '/users/:id/authentication-methods/:authentication_method_id'
+    );
   }
 
   /**
@@ -781,6 +785,97 @@ class UsersManager extends BaseManager {
    */
   getUserOrganizations(...args) {
     return this.organizations.getAll(...args);
+  }
+
+  /**
+   * Gets a list of authentication methods.
+   *
+   * @param   {object}    params      The user data object.
+   * @param   {string}    params.id   The user id.
+   * @param   {Function}  [cb]        Callback function.
+   * @returns  {Promise|undefined}
+   */
+  getAuthenticationMethods(...args) {
+    return this.authenticationMethods.getAll(...args);
+  }
+
+  /**
+   * Gets an authentication method by ID.
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {string}    params.authentication_method_id The authentication method id.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  getAuthenticationMethodById(...args) {
+    return this.authenticationMethods.get(...args);
+  }
+
+  /**
+   * Creates an authentication method for a given user.
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {object}    data                            Authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  createAuthenticationMethod(...args) {
+    return this.authenticationMethods.create(...args);
+  }
+
+  /**
+   * Updates all authentication methods for a user by replacing them with the given ones.
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {object}    data                            Updated authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  updateAuthenticationMethods(...args) {
+    return this.authenticationMethods.update(...args);
+  }
+
+  /**
+   * Updates an authentication method.
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {string}    params.authentication_method_id The authentication method id.
+   * @param   {object}    data                            Updated authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  updateAuthenticationMethodById(...args) {
+    return this.authenticationMethods.patch(...args);
+  }
+
+  /**
+   * Deletes all authentication methods for the given user.
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  deleteAuthenticationMethods(...args) {
+    return this.authenticationMethods.delete(...args);
+  }
+
+  /**
+   * Deletes an authentication method by ID.
+   *
+   * @param   {object}    params                          The user data object.
+   * @param   {string}    params.id                       The user id.
+   * @param   {string}    params.authentication_method_id The authentication method id.
+   * @param   {object}    data                            Updated authentication method data.
+   * @param   {Function}  [cb]                            Callback function.
+   * @returns  {Promise|undefined}
+   */
+  deleteAuthenticationMethodById(...args) {
+    return this.authenticationMethods.delete(...args);
   }
 }
 
