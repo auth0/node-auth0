@@ -37,8 +37,19 @@ describe('ManagementClient', () => {
     token: 'fake-token',
   };
 
+  const withTokenFunctionConfig = {
+    domain: 'auth0-node-sdk.auth0.com',
+    token: () => Promise.resolve('fake-function-token'),
+  };
+
   it('should expose an instance of ManagementClient when withTokenConfig is passed', () => {
     expect(new ManagementClient(withTokenConfig)).to.exist.to.be.an.instanceOf(ManagementClient);
+  });
+
+  it('should expose an instance of ManagementClient when withTokenFunctionConfig is passed', () => {
+    expect(new ManagementClient(withTokenFunctionConfig)).to.exist.to.be.an.instanceOf(
+      ManagementClient
+    );
   });
 
   it('should expose an instance of ManagementClient when withTokenProviderConfig is passed', () => {
@@ -962,6 +973,23 @@ describe('ManagementClient', () => {
       const { data, headers } = await this.client.getUsers();
       expect(data).to.deep.equal({ data: 'value' });
       expect(headers).to.deep.equal({ 'content-type': 'application/json' });
+      nock.cleanAll();
+    });
+
+    it('should include the header Authorization with the token returned by the injected function', async function () {
+      const config = Object.assign({}, withTokenFunctionConfig);
+      this.client = new ManagementClient(config);
+
+      nock('https://auth0-node-sdk.auth0.com', {
+        reqheaders: {
+          Authorization: (value) => value === 'Bearer fake-function-token',
+        },
+      })
+        .get(`/api/v2/users`)
+        .reply(200, { data: 'value' });
+
+      const { data } = await this.client.getUsers();
+      expect(data).to.deep.equal('value');
       nock.cleanAll();
     });
   });
