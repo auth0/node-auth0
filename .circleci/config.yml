@@ -29,6 +29,9 @@ jobs:
           name: ESLint
           command: yarn lint
       - run:
+          name: Build
+          command: yarn build
+      - run:
           name: Tests
           command: yarn test:ci
       - when:

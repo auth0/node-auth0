@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "allowJs": true,
+    "target": "ES2017",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationDir": "./dist/typings",
+    "moduleResolution": "node"
+  },
+  "exclude": ["./test", "./dist/typings"],
+  "include": ["./src"]
+}
