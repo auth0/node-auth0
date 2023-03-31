@@ -4,6 +4,12 @@
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "module": "src/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./src/index.js",
+      "import": "./src/index.mjs"
+    }
+  },
   "sideEffects": false,
   "files": [
     "src"
