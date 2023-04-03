@@ -1,5 +1,5 @@
-const { ArgumentError } = require('rest-facade');
-const RestClient = require('rest-facade').Client;
+import restFacade from 'rest-facade';
+const { ArgumentError, Client: RestClient } = restFacade;
 
 /**
  * Abstracts the sign-in, sign-up and change-password processes for Database &
@@ -279,4 +279,4 @@ class DatabaseAuthenticator {
   }
 }
 
-module.exports = DatabaseAuthenticator;
+export default DatabaseAuthenticator;

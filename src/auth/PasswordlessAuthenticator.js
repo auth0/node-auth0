@@ -1,7 +1,8 @@
-const { ArgumentError } = require('rest-facade');
-const RestClient = require('rest-facade').Client;
-const { sanitizeArguments } = require('../utils');
-const { addClientAuthentication } = require('./clientAuthentication');
+/* eslint-disable sort-imports */
+import restFacade from 'rest-facade';
+const { ArgumentError, Client: RestClient } = restFacade;
+import { sanitizeArguments } from '../utils';
+import { addClientAuthentication } from './clientAuthentication';
 
 function getParamsFromOptions(options) {
   const params = {};
@@ -300,4 +301,4 @@ class PasswordlessAuthenticator {
   }
 }
 
-module.exports = PasswordlessAuthenticator;
+export default PasswordlessAuthenticator;

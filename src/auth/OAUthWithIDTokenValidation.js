@@ -1,7 +1,10 @@
-const jwt = require('jsonwebtoken');
-const jwksClient = require('jwks-rsa');
-const { ArgumentError } = require('rest-facade');
-const validateIdToken = require('./idToken').validate;
+/* eslint-disable sort-imports */
+import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
+import restFacade from 'rest-facade';
+const { ArgumentError } = restFacade;
+
+import { validate as validateIdToken } from './idToken';
 
 const HS256_IGNORE_VALIDATION_MESSAGE =
   'Validation of `id_token` requires a `clientSecret` when using the HS256 algorithm. To ensure tokens are validated, please switch the signing algorithm to RS256 or provide a `clientSecret` in the constructor.';
@@ -121,4 +124,4 @@ class OAUthWithIDTokenValidation {
   }
 }
 
-module.exports = OAUthWithIDTokenValidation;
+export default OAUthWithIDTokenValidation;

@@ -5,7 +5,5 @@
  * {@link https://github.com/ngonzalvez/rest-facade}
  */
 
-module.exports = {
-  ManagementClient: require('./management'),
-  AuthenticationClient: require('./auth'),
-};
+export { ManagementClient } from './management';
+export { AuthenticationClient } from './auth';

@@ -1,6 +1,6 @@
-const axios = require('axios');
-
-const { ArgumentError } = require('rest-facade');
+import axios from 'axios';
+import restFacade from 'rest-facade';
+const { ArgumentError } = restFacade;
 
 /**
  * Provides methods for getting user information and impersonating users.
@@ -158,4 +158,4 @@ class UsersManager {
   }
 }
 
-module.exports = UsersManager;
+export default UsersManager;

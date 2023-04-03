@@ -1,6 +1,8 @@
-const axios = require('axios');
-const { ArgumentError } = require('rest-facade');
-const { addClientAuthentication } = require('./clientAuthentication');
+/* eslint-disable sort-imports */
+import axios from 'axios';
+import restFacade from 'rest-facade';
+const { ArgumentError } = restFacade;
+import { addClientAuthentication } from './clientAuthentication';
 
 /**
  * Provides methods for getting token data and exchanging tokens.
@@ -251,4 +253,4 @@ class TokensManager {
   }
 }
 
-module.exports = TokensManager;
+export default TokensManager;

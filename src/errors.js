@@ -1,6 +1,4 @@
-const util = require('util');
-
-const errors = (module.exports = {});
+import util from 'util';
 
 const sanitizeErrors = function (collection) {
   if (!collection) {
@@ -20,7 +18,7 @@ const sanitizeErrors = function (collection) {
  * @param {Error} error Error object
  * @returns {Error}
  */
-errors.sanitizeErrorRequestData = function (error) {
+export const sanitizeErrorRequestData = function (error) {
   if (
     !error.response ||
     !error.response.request ||
@@ -38,23 +36,29 @@ errors.sanitizeErrorRequestData = function (error) {
 /**
  * Given an Api Error, modify the original error and sanitize
  * sensitive information using sanitizeErrorRequestData
- *
- * @param {string} name New error name
- * @param {string} message New error message
- * @param {number} status New error status
- * @param {any} requestInfo Request info to be attached on the error
- * @param {any} originalError Original error to be attached on the error
  */
-const SanitizedError = function (name, message, status, requestInfo, originalError) {
-  this.name = name || this.constructor.name || this.constructor.prototype.name || '';
-  this.message = message || '';
-  this.statusCode = status || (originalError && originalError.code);
-  this.requestInfo = Object.assign({}, requestInfo);
-  this.originalError = errors.sanitizeErrorRequestData(originalError);
+export class SanitizedError extends Error {
+  /**
+   * Given an Api Error, modify the original error and sanitize
+   * sensitive information using sanitizeErrorRequestData
+   *
+   * @param {string} name New error name
+   * @param {string} message New error message
+   * @param {number} status New error status
+   * @param {any} requestInfo Request info to be attached on the error
+   * @param {any} originalError Original error to be attached on the error
+   *
+   */
+  constructor(name, message, status, requestInfo, originalError) {
+    super(message || '');
 
-  Error.captureStackTrace(this, this.constructor);
-};
+    this.name = name || this.constructor.name || this.constructor.prototype.name || '';
+    this.statusCode = status || (originalError && originalError.code);
+    this.requestInfo = Object.assign({}, requestInfo);
+    this.originalError = sanitizeErrorRequestData(originalError);
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
 
 util.inherits(SanitizedError, Error);
-
-errors.SanitizedError = SanitizedError;

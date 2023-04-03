@@ -1,16 +1,16 @@
-const util = require('util');
-const utils = require('../utils');
-const { jsonToBase64 } = utils;
-const { ArgumentError } = require('rest-facade');
-
+/* eslint-disable sort-imports */
+import util from 'util';
+import { jsonToBase64, generateClientInfo } from '../utils';
+import restFacade from 'rest-facade';
+const { ArgumentError } = restFacade;
 // Authenticators.
-const OAuthAuthenticator = require('./OAuthAuthenticator');
-const DatabaseAuthenticator = require('./DatabaseAuthenticator');
-const PasswordlessAuthenticator = require('./PasswordlessAuthenticator');
+import DatabaseAuthenticator from './DatabaseAuthenticator';
+import OAuthAuthenticator from './OAuthAuthenticator';
+import PasswordlessAuthenticator from './PasswordlessAuthenticator';
 
 // Managers
-const UsersManager = require('./UsersManager');
-const TokensManager = require('./TokensManager');
+import TokensManager from './TokensManager';
+import UsersManager from './UsersManager';
 
 const BASE_URL_FORMAT = 'https://%s';
 
@@ -31,7 +31,7 @@ const BASE_URL_FORMAT = 'https://%s';
  *   clientId: '{OPTIONAL_CLIENT_ID}'
  * });
  */
-class AuthenticationClient {
+export class AuthenticationClient {
   /**
    * @param   {object}  options                           Options for the Authentication Client SDK.
    * @param   {string}  options.domain                    AuthenticationClient server domain.
@@ -72,7 +72,7 @@ class AuthenticationClient {
     };
 
     if (options.telemetry !== false) {
-      const clientInfo = options.clientInfo || utils.generateClientInfo();
+      const clientInfo = options.clientInfo || generateClientInfo();
       if ('string' === typeof clientInfo.name && clientInfo.name) {
         const telemetry = jsonToBase64(clientInfo);
         managerOptions.headers['Auth0-Client'] = telemetry;
@@ -570,4 +570,4 @@ class AuthenticationClient {
   }
 }
 
-module.exports = AuthenticationClient;
+export default AuthenticationClient;

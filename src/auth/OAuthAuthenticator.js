@@ -1,9 +1,10 @@
-const { sanitizeArguments } = require('../utils');
-const { ArgumentError } = require('rest-facade');
-const RestClient = require('rest-facade').Client;
-const { SanitizedError } = require('../errors');
-const OAUthWithIDTokenValidation = require('./OAUthWithIDTokenValidation');
-const { addClientAuthentication } = require('./clientAuthentication');
+/* eslint-disable sort-imports */
+import { sanitizeArguments } from '../utils';
+import restFacade from 'rest-facade';
+const { ArgumentError, Client: RestClient } = restFacade;
+import { SanitizedError } from '../errors';
+import OAUthWithIDTokenValidation from './OAUthWithIDTokenValidation';
+import { addClientAuthentication } from './clientAuthentication';
 
 function getParamsFromOptions(options) {
   const params = {};
@@ -402,4 +403,4 @@ class OAuthAuthenticator {
   }
 }
 
-module.exports = OAuthAuthenticator;
+export default OAuthAuthenticator;

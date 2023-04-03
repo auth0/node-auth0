@@ -1,18 +1,21 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
+import fetch, { RequestInfo as NFRequestInfo, RequestInit as NFRequestInit } from 'node-fetch';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const ActionsManager = require(`../../src/management/ActionsManager`);
-const { ArgumentError } = require('rest-facade');
+import { ActionsManager, Configuration } from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
 
+const { expect } = chai;
 describe('ActionsManager', () => {
   before(function () {
     this.token = 'TOKEN';
-    this.actions = new ActionsManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: this.token,
     });
+    this.actions = client.actions;
   });
 
   describe('instance', () => {
@@ -26,7 +29,6 @@ describe('ActionsManager', () => {
       'test',
       'getVersions',
       'getVersion',
-      'createVersion',
       'deployVersion',
       'getAllTriggers',
       'getTriggerBindings',
@@ -41,35 +43,46 @@ describe('ActionsManager', () => {
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new ActionsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new ActionsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new ActionsManager(
+          new Configuration({
+            fetchApi: (url: RequestInfo, init: RequestInit) => {
+              return fetch(
+                url as NFRequestInfo,
+                init as NFRequestInit
+              ) as unknown as Promise<Response>;
+            },
+            middleware: [],
+          } as any)
+        );
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new ActionsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+        new ActionsManager(
+          new Configuration({
+            baseUrl: '',
+            fetchApi: (url: RequestInfo, init: RequestInit) => {
+              return fetch(
+                url as NFRequestInfo,
+                init as NFRequestInit
+              ) as unknown as Promise<Response>;
+            },
+            middleware: [],
+          })
+        );
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#actions', () => {
     describe('#getAll', () => {
       beforeEach(function () {
-        this.request = nock(API_URL).get('/actions/actions').reply(200);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.getAll(() => {
-          done();
-        });
+        this.request = nock(API_URL)
+          .get('/actions/actions')
+          .reply(200, [{ test: true }]);
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -106,7 +119,6 @@ describe('ActionsManager', () => {
 
       it('should perform a GET request', function (done) {
         const { request } = this;
-
         this.actions.getAll().then(() => {
           expect(request.isDone()).to.be.true;
           done();
@@ -119,7 +131,7 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .get('/actions/actions')
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
         this.actions.getAll().then(() => {
           expect(request.isDone()).to.be.true;
@@ -131,10 +143,10 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const params = {
-          include_fields: true,
-          fields: 'test',
+          triggerId: 'post-login',
+          actionName: 'test',
         };
-        const request = nock(API_URL).get('/actions/actions').query(params).reply(200);
+        const request = nock(API_URL).get('/actions/actions').query(params).reply(200, {});
 
         this.actions.getAll(params).then(() => {
           expect(request.isDone()).to.be.true;
@@ -164,18 +176,6 @@ describe('ActionsManager', () => {
         this.request = nock(API_URL).get(`/actions/actions/${this.data.id}`).reply(200, this.data);
       });
 
-      it('should accept a callback', function (done) {
-        const params = { id: this.data.id };
-
-        this.actions.get(params, done.bind(null, null));
-      });
-
-      it('should be backwards compatible with action_id', function (done) {
-        const params = { action_id: this.data.id };
-
-        this.actions.get(params, done.bind(null, null));
-      });
-
       it('should return a promise if no callback is given', function (done) {
         this.actions
           .get({ id: this.data.id })
@@ -196,7 +196,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/actions${this.data.id}`).reply(500);
+        nock(API_URL).get(`/actions/actions/${this.data.id}`).reply(500);
 
         this.actions.get({ id: this.data.id }).catch((err) => {
           expect(err).to.exist;
@@ -211,7 +211,7 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .get(`/actions/actions/${this.data.id}`)
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
         this.actions.get({ id: this.data.id }).then(() => {
           expect(request.isDone()).to.be.true;
@@ -233,13 +233,7 @@ describe('ActionsManager', () => {
       };
 
       beforeEach(function () {
-        this.request = nock(API_URL).post('/actions/actions').reply(201);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.create(data, () => {
-          done();
-        });
+        this.request = nock(API_URL).post('/actions/actions').reply(201, {});
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -269,7 +263,7 @@ describe('ActionsManager', () => {
       it('should pass the data in the body of the request', function (done) {
         nock.cleanAll();
 
-        const request = nock(API_URL).post('/actions/actions', data).reply(200);
+        const request = nock(API_URL).post('/actions/actions', data).reply(200, {});
 
         this.actions.create(data).then(() => {
           expect(request.isDone()).to.be.true;
@@ -283,7 +277,7 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .post('/actions/actions')
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
         this.actions.create(data).then(() => {
           expect(request.isDone()).to.be.true;
@@ -300,14 +294,6 @@ describe('ActionsManager', () => {
         this.request = nock(API_URL)
           .patch(`/actions/actions/${this.data.id}`, { name: 'my-new-action-name' })
           .reply(200, this.data);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.update(
-          { id: 'ACTION_ID' },
-          { name: 'my-new-action-name' },
-          done.bind(null, null)
-        );
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -332,7 +318,7 @@ describe('ActionsManager', () => {
 
         const request = nock(API_URL)
           .patch(`/actions/actions/${this.data.id}`, { name: 'my-new-action-name' })
-          .reply(200);
+          .reply(200, {});
 
         this.actions.update({ id: 'ACTION_ID' }, { name: 'my-new-action-name' }).then(() => {
           expect(request.isDone()).to.be.true;
@@ -358,21 +344,17 @@ describe('ActionsManager', () => {
       const action_id = 'action-id-1';
 
       beforeEach(function () {
-        this.request = nock(API_URL).post(`/actions/actions/${action_id}/deploy`).reply(200);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.deploy({ action_id }, done.bind(null, null));
+        this.request = nock(API_URL).post(`/actions/actions/${action_id}/deploy`).reply(200, {});
       });
 
       it('should return a promise when no callback is given', function (done) {
-        this.actions.deploy({ action_id }).then(done.bind(null, null));
+        this.actions.deploy({ id: action_id }).then(done.bind(null, null));
       });
 
-      it(`should perform a post request${action_id}`, function (done) {
+      it(`should perform a post request`, function (done) {
         const { request } = this;
 
-        this.actions.deploy({ action_id }).then(() => {
+        this.actions.deploy({ id: action_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -384,7 +366,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL).post(`/actions/actions/${action_id}/deploy`).reply(500);
 
-        this.actions.deploy({ action_id }).catch((err) => {
+        this.actions.deploy({ id: action_id }).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -397,9 +379,9 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .post(`/actions/actions/${action_id}/deploy`)
           .matchHeader('authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.deploy({ action_id }).then(() => {
+        this.actions.deploy({ id: action_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -412,21 +394,17 @@ describe('ActionsManager', () => {
       const payload = { event: {} };
 
       beforeEach(function () {
-        this.request = nock(API_URL).post(`/actions/actions/${action_id}/test`).reply(200);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.test({ action_id }, { payload }, done.bind(null, null));
+        this.request = nock(API_URL).post(`/actions/actions/${action_id}/test`).reply(200, {});
       });
 
       it('should return a promise when no callback is given', function (done) {
-        this.actions.test({ action_id }, { payload }).then(done.bind(null, null));
+        this.actions.test({ id: action_id }, { payload }).then(done.bind(null, null));
       });
 
       it(`should perform a post request${action_id}`, function (done) {
         const { request } = this;
 
-        this.actions.test({ action_id }, { payload }).then(() => {
+        this.actions.test({ id: action_id }, { payload }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -438,7 +416,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL).post(`/actions/actions/${action_id}/test`).reply(500);
 
-        this.actions.test({ action_id }, { payload }).catch((err) => {
+        this.actions.test({ id: action_id }, { payload }).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -451,9 +429,9 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .post(`/actions/actions/${action_id}/test`)
           .matchHeader('authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.test({ action_id }, { payload }).then(() => {
+        this.actions.test({ id: action_id }, { payload }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -468,18 +446,14 @@ describe('ActionsManager', () => {
         this.request = nock(API_URL).delete(`/actions/actions/${action_id}`).reply(200);
       });
 
-      it('should accept a callback', function (done) {
-        this.actions.delete({ action_id }, done.bind(null, null));
-      });
-
       it('should return a promise when no callback is given', function (done) {
-        this.actions.delete({ action_id }).then(done.bind(null, null));
+        this.actions.delete({ id: action_id }).then(done.bind(null, null));
       });
 
       it(`should perform a delete request${action_id}`, function (done) {
         const { request } = this;
 
-        this.actions.delete({ action_id }).then(() => {
+        this.actions.delete({ id: action_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -491,7 +465,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL).delete(`/actions/actions/${action_id}`).reply(500);
 
-        this.actions.delete({ action_id }).catch((err) => {
+        this.actions.delete({ id: action_id }).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -504,9 +478,9 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .delete(`/actions/actions/${action_id}`)
           .matchHeader('authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.delete({ action_id }).then(() => {
+        this.actions.delete({ id: action_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -529,15 +503,9 @@ describe('ActionsManager', () => {
           .reply(200, this.data);
       });
 
-      it('should accept a callback', function (done) {
-        const params = { id: this.data.id };
-
-        this.actions.getVersions(params, done.bind(null, null));
-      });
-
       it('should return a promise if no callback is given', function (done) {
         this.actions
-          .get({ id: this.data.id })
+          .getVersion({ actionId: this.data.id })
           .then(done.bind(null, null))
           .catch(done.bind(null, null));
       });
@@ -545,7 +513,7 @@ describe('ActionsManager', () => {
       it('should perform a GET request', function (done) {
         const { request } = this;
 
-        this.actions.getVersions({ id: this.data.id }).then(() => {
+        this.actions.getVersions({ actionId: this.data.id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -557,7 +525,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL).get(`/actions/actions/${this.data.id}/versions`).reply(500);
 
-        this.actions.getVersions({ id: this.data.id }).catch((err) => {
+        this.actions.getVersions({ actionId: this.data.id }).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -570,9 +538,9 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .get(`/actions/actions/${this.data.id}/versions`)
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.getVersions({ id: this.data.id }).then(() => {
+        this.actions.getVersions({ actionId: this.data.id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -594,12 +562,6 @@ describe('ActionsManager', () => {
           .reply(200, this.data);
       });
 
-      it('should accept a callback', function (done) {
-        const params = { id: this.data.id, version_id: this.data.versionId };
-
-        this.actions.getVersion(params, done.bind(null, null));
-      });
-
       it('should return a promise if no callback is given', function (done) {
         this.actions
           .get({ id: this.data.id, version_id: this.data.versionId })
@@ -610,7 +572,7 @@ describe('ActionsManager', () => {
       it('should perform a GET request', function (done) {
         const { request } = this;
 
-        this.actions.getVersion({ id: this.data.id, version_id: this.data.versionId }).then(() => {
+        this.actions.getVersion({ actionId: this.data.id, id: this.data.versionId }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -625,7 +587,7 @@ describe('ActionsManager', () => {
           .reply(500);
 
         this.actions
-          .getVersion({ id: this.data.id, version_id: this.data.versionId })
+          .getVersion({ actionId: this.data.id, id: this.data.versionId })
           .catch((err) => {
             expect(err).to.exist;
 
@@ -639,73 +601,9 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .get(`/actions/actions/${this.data.id}/versions/${this.data.versionId}`)
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.getVersion({ id: this.data.id, version_id: this.data.versionId }).then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        });
-      });
-    });
-
-    describe('#createVersion', () => {
-      beforeEach(function () {
-        nock.cleanAll();
-
-        this.data = {
-          id: '0d565aa1-d8ce-4802-83e7-82e3d2040222',
-        };
-
-        this.request = nock(API_URL)
-          .post(`/actions/actions/${this.data.id}/versions`)
-          .reply(200, this.data);
-      });
-
-      it('should accept a callback', function (done) {
-        const params = { id: this.data.id };
-
-        this.actions.createVersion(params, this.data, done.bind(null, null));
-      });
-
-      it('should return a promise if no callback is given', function (done) {
-        this.actions
-          .createVersion({ id: this.data.id }, {})
-          .then(done.bind(null, null))
-          .catch(done.bind(null, null));
-      });
-
-      it('should perform a POST request', function (done) {
-        const { request } = this;
-
-        this.actions.createVersion({ id: this.data.id }, {}).then(() => {
-          expect(request.isDone()).to.be.true;
-
-          done();
-        });
-      });
-
-      it('should pass any errors to the promise catch handler', function (done) {
-        nock.cleanAll();
-
-        nock(API_URL).post(`/actions/actions/${this.data.id}/versions`).reply(500);
-
-        this.actions.createVersion({ id: this.data.id }, {}).catch((err) => {
-          expect(err).to.exist;
-
-          done();
-        });
-      });
-
-      it('should include the token in the Authorization header', function (done) {
-        nock.cleanAll();
-
-        const request = nock(API_URL)
-          .post(`/actions/actions/${this.data.id}/versions`)
-          .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
-
-        this.actions.createVersion({ id: this.data.id }, {}).then(() => {
+        this.actions.getVersion({ actionId: this.data.id, id: this.data.versionId }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -720,25 +618,25 @@ describe('ActionsManager', () => {
       beforeEach(function () {
         this.request = nock(API_URL)
           .post(`/actions/actions/${action_id}/versions/${version_id}/deploy`)
-          .reply(200);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.deployVersion({ action_id, version_id }, done.bind(null, null));
+          .reply(200, {});
       });
 
       it('should return a promise when no callback is given', function (done) {
-        this.actions.deployVersion({ action_id, version_id }).then(done.bind(null, null));
+        this.actions
+          .deployVersion({ actionId: action_id, id: version_id })
+          .then(done.bind(null, null));
       });
 
       it('should perform a post request', function (done) {
         const { request } = this;
 
-        this.actions.deployVersion({ action_id, version_id, update_draft: true }).then(() => {
-          expect(request.isDone()).to.be.true;
+        this.actions
+          .deployVersion({ actionId: action_id, id: version_id }, { update_draft: true })
+          .then(() => {
+            expect(request.isDone()).to.be.true;
 
-          done();
-        });
+            done();
+          });
       });
 
       it('should pass any errors to the promise catch handler', function (done) {
@@ -748,7 +646,7 @@ describe('ActionsManager', () => {
           .post(`/actions/actions/${action_id}/versions/${version_id}/deploy`)
           .reply(500);
 
-        this.actions.deployVersion({ action_id, version_id }).catch((err) => {
+        this.actions.deployVersion({ actionId: action_id, id: version_id }).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -759,11 +657,11 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const request = nock(API_URL)
-          .post(`/actions/actions/${action_id}/deploy`)
+          .post(`/actions/actions/${action_id}/versions/${version_id}/deploy`)
           .matchHeader('authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.deploy({ action_id }).then(() => {
+        this.actions.deployVersion({ actionId: action_id, id: version_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -780,18 +678,14 @@ describe('ActionsManager', () => {
           name: 'Execution',
         };
 
-        this.request = nock(API_URL).get(`/actions/executions/${this.data.id}`).reply(200);
-      });
-
-      it('should accept a callback', function (done) {
-        const params = { execution_id: this.data.id };
-
-        this.actions.getExecution(params, done.bind(null, null));
+        this.request = nock(API_URL)
+          .get(`/actions/executions/${this.data.id}`)
+          .reply(200, this.data);
       });
 
       it('should return a promise if no callback is given', function (done) {
         this.actions
-          .getExecution({ execution_id: this.data.id })
+          .getExecution({ id: this.data.id })
           .then(done.bind(null, null))
           .catch(done.bind(null, null));
       });
@@ -800,7 +694,7 @@ describe('ActionsManager', () => {
         const { request } = this;
 
         this.actions
-          .getExecution({ execution_id: this.data.id })
+          .getExecution({ id: this.data.id })
           .then(() => {
             expect(request.isDone()).to.be.true;
 
@@ -816,7 +710,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL).get(`/actions/executions/${this.data.id}`).reply(500);
 
-        this.actions.getExecution({ execution_id: this.data.id }).catch((err) => {
+        this.actions.getExecution({ id: this.data.id }).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -829,9 +723,9 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .get(`/actions/executions/${this.data.id}`)
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
-        this.actions.getExecution({ execution_id: this.data.id }).then(() => {
+        this.actions.getExecution({ id: this.data.id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -844,13 +738,7 @@ describe('ActionsManager', () => {
     const params = { per_page: 2 };
     describe('#getAllTriggers', () => {
       beforeEach(function () {
-        this.request = nock(API_URL).get('/actions/triggers').reply(200);
-      });
-
-      it('should accept a callback', function (done) {
-        this.actions.getAllTriggers(params, () => {
-          done();
-        });
+        this.request = nock(API_URL).get('/actions/triggers').reply(200, {});
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -900,26 +788,10 @@ describe('ActionsManager', () => {
         const request = nock(API_URL)
           .get('/actions/triggers')
           .matchHeader('Authorization', `Bearer ${this.token}`)
-          .reply(200);
+          .reply(200, {});
 
         this.actions.getAllTriggers().then(() => {
           expect(request.isDone()).to.be.true;
-          done();
-        });
-      });
-
-      it('should pass the parameters in the query-string', function (done) {
-        nock.cleanAll();
-
-        const params = {
-          include_fields: true,
-          fields: 'test',
-        };
-        const request = nock(API_URL).get('/actions/triggers').query(params).reply(200);
-
-        this.actions.getAllTriggers(params).then(() => {
-          expect(request.isDone()).to.be.true;
-
           done();
         });
       });
@@ -936,13 +808,9 @@ describe('ActionsManager', () => {
           .reply(200, this.data);
       });
 
-      it('should accept a callback', function (done) {
-        this.actions.updateTriggerBindings({ trigger_id }, this.data, done.bind(null, null));
-      });
-
       it('should return a promise if no callback is given', function (done) {
         this.actions
-          .updateTriggerBindings({ trigger_id }, this.data)
+          .updateTriggerBindings({ triggerId: trigger_id }, this.data)
           .then(done.bind(null, null))
           .catch(done.bind(null, null));
       });
@@ -950,7 +818,7 @@ describe('ActionsManager', () => {
       it('should perform a PATCH request', function (done) {
         const { request } = this;
 
-        this.actions.updateTriggerBindings({ trigger_id }, this.data).then(() => {
+        this.actions.updateTriggerBindings({ triggerId: trigger_id }, this.data).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -960,9 +828,11 @@ describe('ActionsManager', () => {
       it('should include the new data in the body of the request', function (done) {
         nock.cleanAll();
 
-        const request = nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(200);
+        const request = nock(API_URL)
+          .patch(`/actions/triggers/${trigger_id}/bindings`)
+          .reply(200, {});
 
-        this.actions.updateTriggerBindings({ trigger_id }, this.data).then(() => {
+        this.actions.updateTriggerBindings({ triggerId: trigger_id }, this.data).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -974,7 +844,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(500);
 
-        this.actions.updateTriggerBindings({ trigger_id }, this.data).catch((err) => {
+        this.actions.updateTriggerBindings({ triggerId: trigger_id }, this.data).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -993,13 +863,9 @@ describe('ActionsManager', () => {
           .reply(200, this.data);
       });
 
-      it('should accept a callback', function (done) {
-        this.actions.getTriggerBindings({ trigger_id }, done.bind(null, null));
-      });
-
       it('should return a promise if no callback is given', function (done) {
         this.actions
-          .getTriggerBindings({ trigger_id })
+          .getTriggerBindings({ triggerId: trigger_id })
           .then(done.bind(null, null))
           .catch(done.bind(null, null));
       });
@@ -1007,7 +873,7 @@ describe('ActionsManager', () => {
       it('should perform a GET request', function (done) {
         const { request } = this;
 
-        this.actions.getTriggerBindings({ trigger_id }).then(() => {
+        this.actions.getTriggerBindings({ triggerId: trigger_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -1017,9 +883,11 @@ describe('ActionsManager', () => {
       it('should include the new data in the body of the request', function (done) {
         nock.cleanAll();
 
-        const request = nock(API_URL).get(`/actions/triggers/${trigger_id}/bindings`).reply(200);
+        const request = nock(API_URL)
+          .get(`/actions/triggers/${trigger_id}/bindings`)
+          .reply(200, {});
 
-        this.actions.getTriggerBindings({ trigger_id }).then(() => {
+        this.actions.getTriggerBindings({ triggerId: trigger_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();

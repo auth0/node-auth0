@@ -1,6 +1,8 @@
-const { ArgumentError } = require('rest-facade');
-const jwt = require('jsonwebtoken');
-const uuid = require('uuid');
+/* eslint-disable sort-imports */
+import restFacade from 'rest-facade';
+const { ArgumentError } = restFacade;
+import jwt from 'jsonwebtoken';
+import { v4 as uuid } from 'uuid';
 
 /**
  * Create a JWT signed with the clientAssertionSigningKey
@@ -53,7 +55,7 @@ const createClientAssertionJWT = ({
  * @param {string} [clientSecret] The client secret.
  * @returns {object} The payload with additional fields for client authentication.
  */
-const addClientAuthentication = ({
+export const addClientAuthentication = ({
   payload,
   domain,
   required,
@@ -82,5 +84,3 @@ const addClientAuthentication = ({
   }
   return payload;
 };
-
-module.exports.addClientAuthentication = addClientAuthentication;

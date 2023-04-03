@@ -8,7 +8,7 @@ const urlDecodeB64 = function (data) {
  * @param {string} token token
  * @returns {object}
  */
-const decode = function (token) {
+export const decode = function (token) {
   const parts = token.split('.');
 
   if (parts.length !== 3) {
@@ -32,7 +32,7 @@ const DEFAULT_LEEWAY = 60; //default clock-skew, in seconds
  * @param {object} options the options required to run this verification
  * @returns {object} The decoded token payload, or throws an exception if validation failed
  */
-const validate = function (token, options) {
+export const validate = function (token, options) {
   if (!token) {
     throw new Error('ID token is required but missing');
   }
@@ -159,9 +159,4 @@ const validate = function (token, options) {
   }
 
   return decodedToken;
-};
-
-module.exports = {
-  decode,
-  validate,
 };

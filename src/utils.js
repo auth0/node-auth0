@@ -1,12 +1,11 @@
-const pkg = require('../package.json');
-
+import pkg from '../package.json' assert { type: 'json' };
 /**
  * Given a JSON string, convert it to its base64 representation.
  *
  * @param {object} json Json data
  * @returns {string}
  */
-const jsonToBase64 = (json) => {
+export const jsonToBase64 = (json) => {
   const bytes = Buffer.from(JSON.stringify(json));
 
   return bytes.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -18,7 +17,7 @@ const jsonToBase64 = (json) => {
  * @function    generateClientInfo
  * @returns {object}   Object containing client information.
  */
-const generateClientInfo = () => ({
+export const generateClientInfo = () => ({
   name: 'node-auth0',
   version: pkg.version,
   env: {
@@ -26,19 +25,19 @@ const generateClientInfo = () => ({
   },
 });
 
-const containsUnsafeChars = (s) => {
+export const containsUnsafeChars = (s) => {
   const safeChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*'(),%";
   return !!s.split('').find((c) => !safeChars.includes(c));
 };
 
-const maybeDecode = (url) => {
+export const maybeDecode = (url) => {
   if (containsUnsafeChars(url)) {
     return encodeURIComponent(url);
   }
   return url;
 };
 
-const sanitizeArguments = function (optionsCandidate, cbCandidate) {
+export const sanitizeArguments = function (optionsCandidate, cbCandidate) {
   if (optionsCandidate instanceof Function) {
     return {
       cb: optionsCandidate,
@@ -49,12 +48,4 @@ const sanitizeArguments = function (optionsCandidate, cbCandidate) {
     cb: cbCandidate,
     options: optionsCandidate,
   };
-};
-
-module.exports = {
-  jsonToBase64,
-  generateClientInfo,
-  containsUnsafeChars,
-  maybeDecode,
-  sanitizeArguments,
 };
