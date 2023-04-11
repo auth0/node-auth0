@@ -1,50 +1,57 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type { PromptsSettings, PromptsSettingsUpdate } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface GetCustomTextByLanguageRequest {
+  /**
+   * Name of the prompt.
+   * @type {GetCustomTextByLanguagePromptEnum}
+   */
   prompt: GetCustomTextByLanguagePromptEnum;
+  /**
+   * Language to update.
+   * @type {GetCustomTextByLanguageLanguageEnum}
+   */
   language: GetCustomTextByLanguageLanguageEnum;
 }
 
 export interface PutCustomTextByLanguageRequest {
+  /**
+   * Name of the prompt.
+   * @type {PutCustomTextByLanguagePromptEnum}
+   */
   prompt: PutCustomTextByLanguagePromptEnum;
+  /**
+   * Language to update.
+   * @type {PutCustomTextByLanguageLanguageEnum}
+   */
   language: PutCustomTextByLanguageLanguageEnum;
 }
 
 /**
  *
  */
-export class PromptsManager extends runtime.BaseAPI {
+export class PromptsManager extends BaseAPI {
   /**
    * Retrieve custom text for a specific prompt and language.
    * Get custom text for a prompt
    * @throws {RequiredError}
-   * @memberof PromptsManager
    */
   async getCustomTextByLanguageRaw(
     requestParameters: GetCustomTextByLanguageRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<{ [key: string]: any }>> {
-    if (requestParameters.prompt === null || requestParameters.prompt === undefined) {
-      throw new runtime.RequiredError(
-        'prompt',
-        'Required parameter requestParameters.prompt was null or undefined when calling getCustomTextByLanguage.'
-      );
-    }
-    if (requestParameters.language === null || requestParameters.language === undefined) {
-      throw new runtime.RequiredError(
-        'language',
-        'Required parameter requestParameters.language was null or undefined when calling getCustomTextByLanguage.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'language']);
 
     const response = await this.request(
       {
         path: `/prompts/{prompt}/custom-text/{language}`
-          .replace(`{${'prompt'}}`, encodeURIComponent(String(requestParameters.prompt)))
-          .replace(`{${'language'}}`, encodeURIComponent(String(requestParameters.language))),
+          .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
+          .replace('{language}', encodeURIComponent(String(requestParameters.language))),
         method: 'GET',
       },
       initOverrides
@@ -59,7 +66,7 @@ export class PromptsManager extends runtime.BaseAPI {
    */
   async getCustomTextByLanguage(
     requestParameters: GetCustomTextByLanguageRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<{ [key: string]: any }> {
     const response = await this.getCustomTextByLanguageRaw(requestParameters, initOverrides);
     return await response.value();
@@ -69,11 +76,8 @@ export class PromptsManager extends runtime.BaseAPI {
    * Retrieve prompts settings.
    * Get prompts settings
    * @throws {RequiredError}
-   * @memberof PromptsManager
    */
-  async getRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PromptsSettings>> {
+  async getRaw(initOverrides?: InitOverrides): Promise<ApiResponse<PromptsSettings>> {
     const response = await this.request(
       {
         path: `/prompts`,
@@ -89,7 +93,7 @@ export class PromptsManager extends runtime.BaseAPI {
    * Retrieve prompts settings.
    * Get prompts settings
    */
-  async get(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PromptsSettings> {
+  async get(initOverrides?: InitOverrides): Promise<PromptsSettings> {
     const response = await this.getRaw(initOverrides);
     return await response.value();
   }
@@ -98,12 +102,11 @@ export class PromptsManager extends runtime.BaseAPI {
    * Update prompts settings.
    * Update prompts settings
    * @throws {RequiredError}
-   * @memberof PromptsManager
    */
   async updateRaw(
     bodyParameters: PromptsSettingsUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PromptsSettings>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PromptsSettings>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -127,7 +130,7 @@ export class PromptsManager extends runtime.BaseAPI {
    */
   async update(
     bodyParameters: PromptsSettingsUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PromptsSettings> {
     const response = await this.updateRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -137,25 +140,13 @@ export class PromptsManager extends runtime.BaseAPI {
    * Set custom text for a specific prompt. Existing texts will be overwritten.
    * Set custom text for a specific prompt
    * @throws {RequiredError}
-   * @memberof PromptsManager
    */
   async updateCustomTextByLanguageRaw(
     requestParameters: PutCustomTextByLanguageRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.prompt === null || requestParameters.prompt === undefined) {
-      throw new runtime.RequiredError(
-        'prompt',
-        'Required parameter requestParameters.prompt was null or undefined when calling updateCustomTextByLanguage.'
-      );
-    }
-    if (requestParameters.language === null || requestParameters.language === undefined) {
-      throw new runtime.RequiredError(
-        'language',
-        'Required parameter requestParameters.language was null or undefined when calling updateCustomTextByLanguage.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'language']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -164,8 +155,8 @@ export class PromptsManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/prompts/{prompt}/custom-text/{language}`
-          .replace(`{${'prompt'}}`, encodeURIComponent(String(requestParameters.prompt)))
-          .replace(`{${'language'}}`, encodeURIComponent(String(requestParameters.language))),
+          .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
+          .replace('{language}', encodeURIComponent(String(requestParameters.language))),
         method: 'PUT',
         headers: headerParameters,
         body: bodyParameters,
@@ -183,7 +174,7 @@ export class PromptsManager extends runtime.BaseAPI {
   async updateCustomTextByLanguage(
     requestParameters: PutCustomTextByLanguageRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.updateCustomTextByLanguageRaw(requestParameters, bodyParameters, initOverrides);
   }

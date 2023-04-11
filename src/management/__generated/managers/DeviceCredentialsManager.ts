@@ -1,52 +1,85 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   DeviceCredentialCreate,
   GetDeviceCredentials200Response,
   PostDeviceCredentials201Response,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteDeviceCredentialsByIdRequest {
+  /**
+   * ID of the credential to delete.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetDeviceCredentialsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   * @type {number}
+   */
   page?: number;
+  /**
+   * Number of results per page.  There is a maximum of 1000 results allowed from this endpoint.
+   * @type {number}
+   */
   per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   * @type {boolean}
+   */
   include_totals?: boolean;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   * @type {string}
+   */
   fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   * @type {boolean}
+   */
   include_fields?: boolean;
+  /**
+   * user_id of the devices to retrieve.
+   * @type {string}
+   */
   user_id?: string;
+  /**
+   * client_id of the devices to retrieve.
+   * @type {string}
+   */
   client_id?: string;
+  /**
+   * Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested
+   * @type {GetDeviceCredentialsTypeEnum}
+   */
   type?: GetDeviceCredentialsTypeEnum;
 }
 
 /**
  *
  */
-export class DeviceCredentialsManager extends runtime.BaseAPI {
+export class DeviceCredentialsManager extends BaseAPI {
   /**
    * Delete a device credential.
    * Delete a device credential
    * @throws {RequiredError}
-   * @memberof DeviceCredentialsManager
    */
   async deleteRaw(
     requestParameters: DeleteDeviceCredentialsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling delete.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/device-credentials/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -63,54 +96,58 @@ export class DeviceCredentialsManager extends runtime.BaseAPI {
    */
   async delete(
     requestParameters: DeleteDeviceCredentialsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.<br/><br/>Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.<br/>Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.<br/>
+   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.
+   *
+   * Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.
+   * Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.
+   *
    * Retrieve device credentials
    * @throws {RequiredError}
-   * @memberof DeviceCredentialsManager
    */
   async getAllRaw(
     requestParameters: GetDeviceCredentialsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetDeviceCredentials200Response>> {
-    const queryParameters: any = {};
-
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
-
-    if (requestParameters.include_totals !== undefined) {
-      queryParameters['include_totals'] = requestParameters.include_totals;
-    }
-
-    if (requestParameters.fields !== undefined) {
-      queryParameters['fields'] = requestParameters.fields;
-    }
-
-    if (requestParameters.include_fields !== undefined) {
-      queryParameters['include_fields'] = requestParameters.include_fields;
-    }
-
-    if (requestParameters.user_id !== undefined) {
-      queryParameters['user_id'] = requestParameters.user_id;
-    }
-
-    if (requestParameters.client_id !== undefined) {
-      queryParameters['client_id'] = requestParameters.client_id;
-    }
-
-    if (requestParameters.type !== undefined) {
-      queryParameters['type'] = requestParameters.type;
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetDeviceCredentials200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+      {
+        key: 'user_id',
+        config: {},
+      },
+      {
+        key: 'client_id',
+        config: {},
+      },
+      {
+        key: 'type',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -130,22 +167,25 @@ export class DeviceCredentialsManager extends runtime.BaseAPI {
    */
   async getAll(
     requestParameters: GetDeviceCredentialsRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetDeviceCredentials200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.<br/><br/>Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.<br/>Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.<br/>
+   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.
+   *
+   * Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.
+   * Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.
+   *
    * Create a device public key credential
    * @throws {RequiredError}
-   * @memberof DeviceCredentialsManager
    */
   async createPublicKeyRaw(
     bodyParameters: DeviceCredentialCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostDeviceCredentials201Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostDeviceCredentials201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -169,7 +209,7 @@ export class DeviceCredentialsManager extends runtime.BaseAPI {
    */
   async createPublicKey(
     bodyParameters: DeviceCredentialCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostDeviceCredentials201Response> {
     const response = await this.createPublicKeyRaw(bodyParameters, initOverrides);
     return await response.value();

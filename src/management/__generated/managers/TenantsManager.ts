@@ -1,27 +1,37 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type { TenantSettings, TenantSettingsUpdate } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface TenantSettingsRouteRequest {
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   * @type {string}
+   */
   fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   * @type {boolean}
+   */
   include_fields?: boolean;
 }
 
 /**
  *
  */
-export class TenantsManager extends runtime.BaseAPI {
+export class TenantsManager extends BaseAPI {
   /**
    * Update settings for a tenant.
    * Update tenant settings
    * @throws {RequiredError}
-   * @memberof TenantsManager
    */
   async updateSettingsRaw(
     bodyParameters: TenantSettingsUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TenantSettings>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TenantSettings>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -45,7 +55,7 @@ export class TenantsManager extends runtime.BaseAPI {
    */
   async updateSettings(
     bodyParameters: TenantSettingsUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<TenantSettings> {
     const response = await this.updateSettingsRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -55,21 +65,21 @@ export class TenantsManager extends runtime.BaseAPI {
    * Retrieve tenant settings. A list of fields to include or exclude may also be specified.
    * Get tenant settings
    * @throws {RequiredError}
-   * @memberof TenantsManager
    */
   async getSettingsRaw(
     requestParameters: TenantSettingsRouteRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TenantSettings>> {
-    const queryParameters: any = {};
-
-    if (requestParameters.fields !== undefined) {
-      queryParameters['fields'] = requestParameters.fields;
-    }
-
-    if (requestParameters.include_fields !== undefined) {
-      queryParameters['include_fields'] = requestParameters.include_fields;
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TenantSettings>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -89,7 +99,7 @@ export class TenantsManager extends runtime.BaseAPI {
    */
   async getSettings(
     requestParameters: TenantSettingsRouteRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<TenantSettings> {
     const response = await this.getSettingsRaw(requestParameters, initOverrides);
     return await response.value();

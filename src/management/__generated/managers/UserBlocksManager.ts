@@ -1,51 +1,75 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type { UserBlock } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteUserBlocksRequest {
+  /**
+   * Should be any of a username, phone number, or email.
+   * @type {string}
+   */
   identifier: string;
 }
 
 export interface DeleteUserBlocksByIdRequest {
+  /**
+   * The user_id of the user to update.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetUserBlocksRequest {
+  /**
+   * Should be any of a username, phone number, or email.
+   * @type {string}
+   */
   identifier: string;
+  /**
+   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
+   * @type {boolean}
+   */
   consider_brute_force_enablement?: boolean;
 }
 
 export interface GetUserBlocksByIdRequest {
+  /**
+   * user_id of the user blocks to retrieve.
+   * @type {string}
+   */
   id: string;
+  /**
+   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
+   * @type {boolean}
+   */
   consider_brute_force_enablement?: boolean;
 }
 
 /**
  *
  */
-export class UserBlocksManager extends runtime.BaseAPI {
+export class UserBlocksManager extends BaseAPI {
   /**
-   * Unblock a user blocked due to an excessive amount of incorrectly-provided credentials.<br/>
+   * Unblock a user blocked due to an excessive amount of incorrectly-provided credentials.
+   *
    * Unblock by identifier
    * @throws {RequiredError}
-   * @memberof UserBlocksManager
    */
   async deleteAllRaw(
     requestParameters: DeleteUserBlocksRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.identifier === null || requestParameters.identifier === undefined) {
-      throw new runtime.RequiredError(
-        'identifier',
-        'Required parameter requestParameters.identifier was null or undefined when calling deleteAll.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['identifier']);
 
-    if (requestParameters.identifier !== undefined) {
-      queryParameters['identifier'] = requestParameters.identifier;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'identifier',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -65,34 +89,28 @@ export class UserBlocksManager extends runtime.BaseAPI {
    */
   async deleteAll(
     requestParameters: DeleteUserBlocksRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteAllRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Unblock a user that was blocked due to an excessive amount of incorrectly provided credentials.<br/><br/>Note: This endpoint does not unblock users that were <a href=\"https://auth0.com/docs/user-profile#block-and-unblock-a-user\">blocked by admins</a>.<br/>
+   * Unblock a user that was blocked due to an excessive amount of incorrectly provided credentials.
+   *
+   * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by admins</a>.
+   *
    * Unblock a user
    * @throws {RequiredError}
-   * @memberof UserBlocksManager
    */
   async deleteRaw(
     requestParameters: DeleteUserBlocksByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling delete.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
-        path: `/user-blocks/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
-        ),
+        path: `/user-blocks/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'DELETE',
       },
       initOverrides
@@ -107,37 +125,33 @@ export class UserBlocksManager extends runtime.BaseAPI {
    */
   async delete(
     requestParameters: DeleteUserBlocksByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Retrieve a list of blocked IP addresses for a given identifier (e.g., username, phone number or email).<br/>
+   * Retrieve a list of blocked IP addresses for a given identifier (e.g., username, phone number or email).
+   *
    * Get blocks by identifier
    * @throws {RequiredError}
-   * @memberof UserBlocksManager
    */
   async getAllRaw(
     requestParameters: GetUserBlocksRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<UserBlock>> {
-    if (requestParameters.identifier === null || requestParameters.identifier === undefined) {
-      throw new runtime.RequiredError(
-        'identifier',
-        'Required parameter requestParameters.identifier was null or undefined when calling getAll.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<UserBlock>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['identifier']);
 
-    if (requestParameters.identifier !== undefined) {
-      queryParameters['identifier'] = requestParameters.identifier;
-    }
-
-    if (requestParameters.consider_brute_force_enablement !== undefined) {
-      queryParameters['consider_brute_force_enablement'] =
-        requestParameters.consider_brute_force_enablement;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'identifier',
+        config: {},
+      },
+      {
+        key: 'consider_brute_force_enablement',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -157,41 +171,35 @@ export class UserBlocksManager extends runtime.BaseAPI {
    */
   async getAll(
     requestParameters: GetUserBlocksRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<UserBlock> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve a list of blocked IP addresses for the login identifiers (email, username, phone number, etc) associated with the specified user.<br/><br/>
-   * Get a user\'s blocks
+   * Retrieve a list of blocked IP addresses for the login identifiers (email, username, phone number, etc) associated with the specified user.
+   *
+   *
+   * Get a user's blocks
    * @throws {RequiredError}
-   * @memberof UserBlocksManager
    */
   async getRaw(
     requestParameters: GetUserBlocksByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<UserBlock>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling get.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<UserBlock>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
-    if (requestParameters.consider_brute_force_enablement !== undefined) {
-      queryParameters['consider_brute_force_enablement'] =
-        requestParameters.consider_brute_force_enablement;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'consider_brute_force_enablement',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
-        path: `/user-blocks/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
-        ),
+        path: `/user-blocks/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'GET',
         query: queryParameters,
       },
@@ -207,7 +215,7 @@ export class UserBlocksManager extends runtime.BaseAPI {
    */
   async get(
     requestParameters: GetUserBlocksByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<UserBlock> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();

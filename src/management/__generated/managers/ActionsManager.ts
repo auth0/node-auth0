@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   GetActionVersions200Response,
   GetActionVersions200ResponseVersionsInner,
@@ -18,96 +17,194 @@ import type {
   PostTestActionRequest,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteActionRequest {
+  /**
+   * The ID of the action to delete.
+   * @type {string}
+   */
   id: string;
+  /**
+   * Force action deletion detaching bindings
+   * @type {boolean}
+   */
   force?: boolean;
 }
 
 export interface GetActionRequest {
+  /**
+   * The ID of the action to retrieve.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetActionVersionRequest {
+  /**
+   * The ID of the action.
+   * @type {string}
+   */
   actionId: string;
+  /**
+   * The ID of the action version.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetActionVersionsRequest {
+  /**
+   * The ID of the action.
+   * @type {string}
+   */
   actionId: string;
+  /**
+   * Use this field to request a specific page of the list results.
+   * @type {number}
+   */
   page?: number;
+  /**
+   * This field specify the maximum number of results to be returned by the server. 20 by default
+   * @type {number}
+   */
   per_page?: number;
 }
 
 export interface GetActionsRequest {
+  /**
+   * An actions extensibility point.
+   * @type {GetActionsTriggerIdEnum}
+   */
   triggerId?: GetActionsTriggerIdEnum;
+  /**
+   * The name of the action to retrieve.
+   * @type {string}
+   */
   actionName?: string;
+  /**
+   * Optional filter to only retrieve actions that are deployed.
+   * @type {boolean}
+   */
   deployed?: boolean;
+  /**
+   * Use this field to request a specific page of the list results.
+   * @type {number}
+   */
   page?: number;
+  /**
+   * The maximum number of results to be returned by the server in single response. 20 by default
+   * @type {number}
+   */
   per_page?: number;
+  /**
+   * Optional. When true, return only installed actions. When false, return only custom actions. Returns all actions by default.
+   * @type {boolean}
+   */
   installed?: boolean;
 }
 
 export interface GetBindingsRequest {
+  /**
+   * An actions extensibility point.
+   * @type {GetBindingsTriggerIdEnum}
+   */
   triggerId: GetBindingsTriggerIdEnum;
+  /**
+   * Use this field to request a specific page of the list results.
+   * @type {number}
+   */
   page?: number;
+  /**
+   * The maximum number of results to be returned in a single request. 20 by default
+   * @type {number}
+   */
   per_page?: number;
 }
 
 export interface GetExecutionRequest {
+  /**
+   * The ID of the execution to retrieve.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface PatchActionOperationRequest {
+  /**
+   * The id of the action to update.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface PatchBindingsOperationRequest {
+  /**
+   * An actions extensibility point.
+   * @type {PatchBindingsOperationTriggerIdEnum}
+   */
   triggerId: PatchBindingsOperationTriggerIdEnum;
 }
 
 export interface PostDeployActionRequest {
+  /**
+   * The ID of an action.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface PostDeployDraftVersionOperationRequest {
+  /**
+   * The ID of an action version.
+   * @type {string}
+   */
   id: string;
+  /**
+   * The ID of an action.
+   * @type {string}
+   */
   actionId: string;
 }
 
 export interface PostTestActionOperationRequest {
+  /**
+   * The id of the action to test.
+   * @type {string}
+   */
   id: string;
 }
 
 /**
  *
  */
-export class ActionsManager extends runtime.BaseAPI {
+export class ActionsManager extends BaseAPI {
   /**
-   * Deletes an action and all of its associated versions. An action must be unbound from all triggers<br/>before it can be deleted.<br/>
+   * Deletes an action and all of its associated versions. An action must be unbound from all triggers
+   * before it can be deleted.
+   *
    * Delete an action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async deleteRaw(
     requestParameters: DeleteActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling delete.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
-    if (requestParameters.force !== undefined) {
-      queryParameters['force'] = requestParameters.force;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'force',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
         path: `/actions/actions/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -125,32 +222,27 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async delete(
     requestParameters: DeleteActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Retrieve an action by its ID.<br/>
+   * Retrieve an action by its ID.
+   *
    * Get an action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getRaw(
     requestParameters: GetActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActions200ResponseActionsInner>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling get.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/actions/actions/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
@@ -167,40 +259,30 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async get(
     requestParameters: GetActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActions200ResponseActionsInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve a specific version of an action. An action version is created whenever<br/>an action is deployed. An action version is immutable, once created.<br/>
+   * Retrieve a specific version of an action. An action version is created whenever
+   * an action is deployed. An action version is immutable, once created.
+   *
    * Get a specific version of an action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getVersionRaw(
     requestParameters: GetActionVersionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActionVersions200ResponseVersionsInner>> {
-    if (requestParameters.actionId === null || requestParameters.actionId === undefined) {
-      throw new runtime.RequiredError(
-        'actionId',
-        'Required parameter requestParameters.actionId was null or undefined when calling getVersion.'
-      );
-    }
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling getVersion.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActionVersions200ResponseVersionsInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['actionId', 'id']);
 
     const response = await this.request(
       {
         path: `/actions/actions/{actionId}/versions/{id}`
-          .replace(`{${'actionId'}}`, encodeURIComponent(String(requestParameters.actionId)))
-          .replace(`{${'id'}}`, encodeURIComponent(String(requestParameters.id))),
+          .replace('{actionId}', encodeURIComponent(String(requestParameters.actionId)))
+          .replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'GET',
       },
       initOverrides
@@ -215,42 +297,40 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async getVersion(
     requestParameters: GetActionVersionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActionVersions200ResponseVersionsInner> {
     const response = await this.getVersionRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve all of an action\'s versions. An action version is created whenever<br/>an action is deployed. An action version is immutable, once created.<br/>
-   * Get an action\'s versions
+   * Retrieve all of an action's versions. An action version is created whenever
+   * an action is deployed. An action version is immutable, once created.
+   *
+   * Get an action's versions
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getVersionsRaw(
     requestParameters: GetActionVersionsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActionVersions200Response>> {
-    if (requestParameters.actionId === null || requestParameters.actionId === undefined) {
-      throw new runtime.RequiredError(
-        'actionId',
-        'Required parameter requestParameters.actionId was null or undefined when calling getVersions.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActionVersions200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['actionId']);
 
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
         path: `/actions/actions/{actionId}/versions`.replace(
-          `{${'actionId'}}`,
+          '{actionId}',
           encodeURIComponent(String(requestParameters.actionId))
         ),
         method: 'GET',
@@ -268,47 +348,48 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async getVersions(
     requestParameters: GetActionVersionsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActionVersions200Response> {
     const response = await this.getVersionsRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve all actions.<br/>
+   * Retrieve all actions.
+   *
    * Get actions
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getAllRaw(
     requestParameters: GetActionsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActions200Response>> {
-    const queryParameters: any = {};
-
-    if (requestParameters.triggerId !== undefined) {
-      queryParameters['triggerId'] = requestParameters.triggerId;
-    }
-
-    if (requestParameters.actionName !== undefined) {
-      queryParameters['actionName'] = requestParameters.actionName;
-    }
-
-    if (requestParameters.deployed !== undefined) {
-      queryParameters['deployed'] = requestParameters.deployed;
-    }
-
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
-
-    if (requestParameters.installed !== undefined) {
-      queryParameters['installed'] = requestParameters.installed;
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActions200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'triggerId',
+        config: {},
+      },
+      {
+        key: 'actionName',
+        config: {},
+      },
+      {
+        key: 'deployed',
+        config: {},
+      },
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'installed',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -328,42 +409,41 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async getAll(
     requestParameters: GetActionsRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActions200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve the actions that are bound to a trigger. Once an action is created and deployed, it must be<br/>attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions returned<br/>reflects the order in which they will be executed during the appropriate flow.<br/>
+   * Retrieve the actions that are bound to a trigger. Once an action is created and deployed, it must be
+   * attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions returned
+   * reflects the order in which they will be executed during the appropriate flow.
+   *
    * Get trigger bindings
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getTriggerBindingsRaw(
     requestParameters: GetBindingsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetBindings200Response>> {
-    if (requestParameters.triggerId === null || requestParameters.triggerId === undefined) {
-      throw new runtime.RequiredError(
-        'triggerId',
-        'Required parameter requestParameters.triggerId was null or undefined when calling getTriggerBindings.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetBindings200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['triggerId']);
 
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
         path: `/actions/triggers/{triggerId}/bindings`.replace(
-          `{${'triggerId'}}`,
+          '{triggerId}',
           encodeURIComponent(String(requestParameters.triggerId))
         ),
         method: 'GET',
@@ -381,33 +461,29 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async getTriggerBindings(
     requestParameters: GetBindingsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetBindings200Response> {
     const response = await this.getTriggerBindingsRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve information about a specific execution of a trigger. Relevant execution IDs will be included in tenant logs<br/>generated as part of that authentication flow. Executions will only be stored for 10 days after their creation.<br/>
+   * Retrieve information about a specific execution of a trigger. Relevant execution IDs will be included in tenant logs
+   * generated as part of that authentication flow. Executions will only be stored for 10 days after their creation.
+   *
    * Get an execution
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getExecutionRaw(
     requestParameters: GetExecutionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetExecution200Response>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling getExecution.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetExecution200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/actions/executions/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
@@ -424,21 +500,22 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async getExecution(
     requestParameters: GetExecutionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetExecution200Response> {
     const response = await this.getExecutionRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve the set of triggers currently available within actions. A trigger is an extensibility point to which actions <br/>can be bound.<br/>
+   * Retrieve the set of triggers currently available within actions. A trigger is an extensibility point to which actions
+   * can be bound.
+   *
    * Get triggers
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async getAllTriggersRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetTriggers200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetTriggers200Response>> {
     const response = await this.request(
       {
         path: `/actions/triggers`,
@@ -454,30 +531,24 @@ export class ActionsManager extends runtime.BaseAPI {
    * Retrieve the set of triggers currently available within actions. A trigger is an extensibility point to which actions <br/>can be bound.<br/>
    * Get triggers
    */
-  async getAllTriggers(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<GetTriggers200Response> {
+  async getAllTriggers(initOverrides?: InitOverrides): Promise<GetTriggers200Response> {
     const response = await this.getAllTriggersRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Update an existing action. If this action is currently bound to a trigger, updating it will <strong>not</strong> affect<br/>any user flows until the action is deployed.<br/>
+   * Update an existing action. If this action is currently bound to a trigger, updating it will <strong>not</strong> affect
+   * any user flows until the action is deployed.
+   *
    * Update an action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async updateRaw(
     requestParameters: PatchActionOperationRequest,
     bodyParameters: PatchActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActions200ResponseActionsInner>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling update.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -486,7 +557,7 @@ export class ActionsManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/actions/actions/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'PATCH',
@@ -506,29 +577,26 @@ export class ActionsManager extends runtime.BaseAPI {
   async update(
     requestParameters: PatchActionOperationRequest,
     bodyParameters: PatchActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActions200ResponseActionsInner> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Update the actions that are bound (i.e. attached) to a trigger. Once an action is created and deployed, it must be<br/>attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The order in which the actions are<br/>provided will determine the order in which they are executed.<br/>
+   * Update the actions that are bound (i.e. attached) to a trigger. Once an action is created and deployed, it must be
+   * attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The order in which the actions are
+   * provided will determine the order in which they are executed.
+   *
    * Update trigger bindings
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async updateTriggerBindingsRaw(
     requestParameters: PatchBindingsOperationRequest,
     bodyParameters: PatchBindingsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PatchBindings200Response>> {
-    if (requestParameters.triggerId === null || requestParameters.triggerId === undefined) {
-      throw new runtime.RequiredError(
-        'triggerId',
-        'Required parameter requestParameters.triggerId was null or undefined when calling updateTriggerBindings.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PatchBindings200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['triggerId']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -537,7 +605,7 @@ export class ActionsManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/actions/triggers/{triggerId}/bindings`.replace(
-          `{${'triggerId'}}`,
+          '{triggerId}',
           encodeURIComponent(String(requestParameters.triggerId))
         ),
         method: 'PATCH',
@@ -557,7 +625,7 @@ export class ActionsManager extends runtime.BaseAPI {
   async updateTriggerBindings(
     requestParameters: PatchBindingsOperationRequest,
     bodyParameters: PatchBindingsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PatchBindings200Response> {
     const response = await this.updateTriggerBindingsRaw(
       requestParameters,
@@ -568,15 +636,16 @@ export class ActionsManager extends runtime.BaseAPI {
   }
 
   /**
-   * Create an action. Once an action is created, it must be deployed, and then<br/>bound to a trigger before it will be executed as part of a flow.<br/>
+   * Create an action. Once an action is created, it must be deployed, and then
+   * bound to a trigger before it will be executed as part of a flow.
+   *
    * Create an action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async createRaw(
     bodyParameters: PostActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActions200ResponseActionsInner>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -600,33 +669,29 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async create(
     bodyParameters: PostActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActions200ResponseActionsInner> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Deploy an action. Deploying an action will create a new immutable version of the action. If the action is<br/>currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately. Otherwise, the action will only be executed as a part of a flow once it is bound to that flow.<br/>
+   * Deploy an action. Deploying an action will create a new immutable version of the action. If the action is
+   * currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately. Otherwise, the action will only be executed as a part of a flow once it is bound to that flow.
+   *
    * Deploy an action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async deployRaw(
     requestParameters: PostDeployActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActionVersions200ResponseVersionsInner>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling deploy.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActionVersions200ResponseVersionsInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/actions/actions/{id}/deploy`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'POST',
@@ -643,35 +708,26 @@ export class ActionsManager extends runtime.BaseAPI {
    */
   async deploy(
     requestParameters: PostDeployActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActionVersions200ResponseVersionsInner> {
     const response = await this.deployRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Performs the equivalent of a roll-back of an action to an earlier, specified version. Creates a new, deployed<br/>action version that is identical to the specified version. If this action is currently bound to a trigger, the<br/>system will begin executing the newly-created version immediately.<br/>
+   * Performs the equivalent of a roll-back of an action to an earlier, specified version. Creates a new, deployed
+   * action version that is identical to the specified version. If this action is currently bound to a trigger, the
+   * system will begin executing the newly-created version immediately.
+   *
    * Roll back to a previous action version
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async deployVersionRaw(
     requestParameters: PostDeployDraftVersionOperationRequest,
     bodyParameters: PostDeployDraftVersionRequest | null,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetActionVersions200ResponseVersionsInner>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling deployVersion.'
-      );
-    }
-    if (requestParameters.actionId === null || requestParameters.actionId === undefined) {
-      throw new runtime.RequiredError(
-        'actionId',
-        'Required parameter requestParameters.actionId was null or undefined when calling deployVersion.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetActionVersions200ResponseVersionsInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'actionId']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -680,8 +736,8 @@ export class ActionsManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/actions/actions/{actionId}/versions/{id}/deploy`
-          .replace(`{${'id'}}`, encodeURIComponent(String(requestParameters.id)))
-          .replace(`{${'actionId'}}`, encodeURIComponent(String(requestParameters.actionId))),
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace('{actionId}', encodeURIComponent(String(requestParameters.actionId))),
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
@@ -699,29 +755,24 @@ export class ActionsManager extends runtime.BaseAPI {
   async deployVersion(
     requestParameters: PostDeployDraftVersionOperationRequest,
     bodyParameters: PostDeployDraftVersionRequest | null,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetActionVersions200ResponseVersionsInner> {
     const response = await this.deployVersionRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Test an action. After updating an action, it can be tested prior to being deployed to ensure it behaves as expected.<br/>
+   * Test an action. After updating an action, it can be tested prior to being deployed to ensure it behaves as expected.
+   *
    * Test an Action
    * @throws {RequiredError}
-   * @memberof ActionsManager
    */
   async testRaw(
     requestParameters: PostTestActionOperationRequest,
     bodyParameters: PostTestActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostTestAction200Response>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling test.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostTestAction200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -730,7 +781,7 @@ export class ActionsManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/actions/actions/{id}/test`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'POST',
@@ -750,7 +801,7 @@ export class ActionsManager extends runtime.BaseAPI {
   async test(
     requestParameters: PostTestActionOperationRequest,
     bodyParameters: PostTestActionRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostTestAction200Response> {
     const response = await this.testRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();

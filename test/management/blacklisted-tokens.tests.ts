@@ -1,18 +1,21 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const BlacklistedTokensManager = require(`../../src/management/BlacklistedTokensManager`);
-const { ArgumentError } = require('rest-facade');
+import { BlacklistsManager, Configuration } from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('BlacklistedTokensManager', () => {
   before(function () {
     this.token = 'TOKEN';
-    this.blacklistedTokens = new BlacklistedTokensManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: this.token,
     });
+    this.blacklistedTokens = client.blacklists;
   });
 
   describe('instance', () => {
@@ -26,34 +29,24 @@ describe('BlacklistedTokensManager', () => {
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new BlacklistedTokensManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new BlacklistedTokensManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new BlacklistsManager(new Configuration({} as any));
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new BlacklistedTokensManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+        new BlacklistsManager(new Configuration({ baseUrl: '' }));
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
     beforeEach(function () {
-      this.request = nock(API_URL).get('/blacklists/tokens').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.blacklistedTokens.getAll(() => {
-        done();
-      });
+      this.request = nock(API_URL)
+        .get('/blacklists/tokens')
+        .reply(200, [{ aud: 'abc', jti: '123' }]);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -74,7 +67,7 @@ describe('BlacklistedTokensManager', () => {
     it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      const data = [{ test: true }];
+      const data = [{ aud: 'abc', jti: '123' }];
       nock(API_URL).get('/blacklists/tokens').reply(200, data);
 
       this.blacklistedTokens.getAll().then((blacklistedTokens) => {
@@ -82,7 +75,7 @@ describe('BlacklistedTokensManager', () => {
 
         expect(blacklistedTokens.length).to.equal(data.length);
 
-        expect(blacklistedTokens[0].test).to.equal(data[0].test);
+        expect(blacklistedTokens[0].aud).to.equal(data[0].aud);
 
         done();
       });
@@ -103,7 +96,7 @@ describe('BlacklistedTokensManager', () => {
       const request = nock(API_URL)
         .get('/blacklists/tokens')
         .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .reply(200, [{ aud: 'abc', jti: '123' }]);
 
       this.blacklistedTokens.getAll().then(() => {
         expect(request.isDone()).to.be.true;
@@ -117,12 +110,11 @@ describe('BlacklistedTokensManager', () => {
       const request = nock(API_URL)
         .get('/blacklists/tokens')
         .query({
-          include_fields: true,
-          fields: 'test',
+          aud: 'abc',
         })
-        .reply(200);
+        .reply(200, [{ aud: 'abc', jti: '123' }]);
 
-      this.blacklistedTokens.getAll({ include_fields: true, fields: 'test' }).then(() => {
+      this.blacklistedTokens.getAll({ aud: 'abc' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -136,13 +128,7 @@ describe('BlacklistedTokensManager', () => {
     };
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/blacklists/tokens').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.blacklistedTokens.add(tokenData, () => {
-        done();
-      });
+      this.request = nock(API_URL).post('/blacklists/tokens').reply(200, tokenData);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -190,7 +176,7 @@ describe('BlacklistedTokensManager', () => {
       const request = nock(API_URL)
         .post('/blacklists/tokens')
         .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .reply(200, tokenData);
 
       this.blacklistedTokens.add(tokenData).then(() => {
         expect(request.isDone()).to.be.true;

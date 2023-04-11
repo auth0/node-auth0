@@ -1,49 +1,58 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   EmailTemplateUpdate,
   GetEmailTemplatesByTemplateName200Response,
   PostEmailTemplatesRequest,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface GetEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * @type {GetEmailTemplatesByTemplateNameTemplateNameEnum}
+   */
   templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
 }
 
 export interface PatchEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * @type {PatchEmailTemplatesByTemplateNameTemplateNameEnum}
+   */
   templateName: PatchEmailTemplatesByTemplateNameTemplateNameEnum;
 }
 
 export interface PutEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * @type {PutEmailTemplatesByTemplateNameTemplateNameEnum}
+   */
   templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
 }
 
 /**
  *
  */
-export class EmailTemplatesManager extends runtime.BaseAPI {
+export class EmailTemplatesManager extends BaseAPI {
   /**
    * Retrieve an email template by pre-defined name. These names are `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, and `user_invitation`. The names `change_password`, and `password_reset` are also supported for legacy scenarios.
    * Get an email template
    * @throws {RequiredError}
-   * @memberof EmailTemplatesManager
    */
   async getRaw(
     requestParameters: GetEmailTemplatesByTemplateNameRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
-    if (requestParameters.templateName === null || requestParameters.templateName === undefined) {
-      throw new runtime.RequiredError(
-        'templateName',
-        'Required parameter requestParameters.templateName was null or undefined when calling get.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['templateName']);
 
     const response = await this.request(
       {
         path: `/email-templates/{templateName}`.replace(
-          `{${'templateName'}}`,
+          '{templateName}',
           encodeURIComponent(String(requestParameters.templateName))
         ),
         method: 'GET',
@@ -60,7 +69,7 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
    */
   async get(
     requestParameters: GetEmailTemplatesByTemplateNameRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetEmailTemplatesByTemplateName200Response> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -70,19 +79,13 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
    * Modify an email template.
    * Patch an email template
    * @throws {RequiredError}
-   * @memberof EmailTemplatesManager
    */
   async updateRaw(
     requestParameters: PatchEmailTemplatesByTemplateNameRequest,
     bodyParameters: GetEmailTemplatesByTemplateName200Response,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
-    if (requestParameters.templateName === null || requestParameters.templateName === undefined) {
-      throw new runtime.RequiredError(
-        'templateName',
-        'Required parameter requestParameters.templateName was null or undefined when calling update.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['templateName']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -91,7 +94,7 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/email-templates/{templateName}`.replace(
-          `{${'templateName'}}`,
+          '{templateName}',
           encodeURIComponent(String(requestParameters.templateName))
         ),
         method: 'PATCH',
@@ -111,7 +114,7 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
   async update(
     requestParameters: PatchEmailTemplatesByTemplateNameRequest,
     bodyParameters: GetEmailTemplatesByTemplateName200Response,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetEmailTemplatesByTemplateName200Response> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -121,12 +124,11 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
    * Create an email template.
    * Create an email template
    * @throws {RequiredError}
-   * @memberof EmailTemplatesManager
    */
   async createRaw(
     bodyParameters: PostEmailTemplatesRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostEmailTemplatesRequest>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostEmailTemplatesRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -150,7 +152,7 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
    */
   async create(
     bodyParameters: PostEmailTemplatesRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostEmailTemplatesRequest> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -160,19 +162,13 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
    * Update an email template.
    * Update an email template
    * @throws {RequiredError}
-   * @memberof EmailTemplatesManager
    */
   async putRaw(
     requestParameters: PutEmailTemplatesByTemplateNameRequest,
     bodyParameters: EmailTemplateUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostEmailTemplatesRequest>> {
-    if (requestParameters.templateName === null || requestParameters.templateName === undefined) {
-      throw new runtime.RequiredError(
-        'templateName',
-        'Required parameter requestParameters.templateName was null or undefined when calling put.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostEmailTemplatesRequest>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['templateName']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -181,7 +177,7 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/email-templates/{templateName}`.replace(
-          `{${'templateName'}}`,
+          '{templateName}',
           encodeURIComponent(String(requestParameters.templateName))
         ),
         method: 'PUT',
@@ -201,7 +197,7 @@ export class EmailTemplatesManager extends runtime.BaseAPI {
   async put(
     requestParameters: PutEmailTemplatesByTemplateNameRequest,
     bodyParameters: EmailTemplateUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostEmailTemplatesRequest> {
     const response = await this.putRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();

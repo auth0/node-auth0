@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   GetResourceServers200Response,
   PostResourceServersRequest,
@@ -8,51 +7,81 @@ import type {
   ResourceServerUpdate,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteResourceServersByIdRequest {
+  /**
+   * ID or the audience of the resource server to delete.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetResourceServersRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   * @type {number}
+   */
   page?: number;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   * @type {number}
+   */
   per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   * @type {boolean}
+   */
   include_totals?: boolean;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   * @type {boolean}
+   */
   include_fields?: boolean;
 }
 
 export interface GetResourceServersByIdRequest {
+  /**
+   * ID or audience of the resource server to retrieve.
+   * @type {string}
+   */
   id: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   * @type {boolean}
+   */
   include_fields?: boolean;
 }
 
 export interface PatchResourceServersByIdRequest {
+  /**
+   * ID or audience of the resource server to update.
+   * @type {string}
+   */
   id: string;
 }
 
 /**
  *
  */
-export class ResourceServersManager extends runtime.BaseAPI {
+export class ResourceServersManager extends BaseAPI {
   /**
    * Delete an existing API (also known as a resource server).
    * Delete a resource server
    * @throws {RequiredError}
-   * @memberof ResourceServersManager
    */
   async deleteRaw(
     requestParameters: DeleteResourceServersByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling delete.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/resource-servers/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -69,38 +98,38 @@ export class ResourceServersManager extends runtime.BaseAPI {
    */
   async delete(
     requestParameters: DeleteResourceServersByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Retrieve <a href=\"https://auth0.com/docs/apis\">APIs</a> (also known as resource servers) that you can consume from your authorized applications.
+   * Retrieve <a href="https://auth0.com/docs/apis">APIs</a> (also known as resource servers) that you can consume from your authorized applications.
    * Get resource servers
    * @throws {RequiredError}
-   * @memberof ResourceServersManager
    */
   async getAllRaw(
     requestParameters: GetResourceServersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetResourceServers200Response>> {
-    const queryParameters: any = {};
-
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
-
-    if (requestParameters.include_totals !== undefined) {
-      queryParameters['include_totals'] = requestParameters.include_totals;
-    }
-
-    if (requestParameters.include_fields !== undefined) {
-      queryParameters['include_fields'] = requestParameters.include_fields;
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetResourceServers200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -120,38 +149,34 @@ export class ResourceServersManager extends runtime.BaseAPI {
    */
   async getAll(
     requestParameters: GetResourceServersRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetResourceServers200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve an <a href=\"https://auth0.com/docs/apis\">API</a> (also known as resource server).
+   * Retrieve an <a href="https://auth0.com/docs/apis">API</a> (also known as resource server).
    * Get a resource server
    * @throws {RequiredError}
-   * @memberof ResourceServersManager
    */
   async getRaw(
     requestParameters: GetResourceServersByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<ResourceServer>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling get.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<ResourceServer>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
-    if (requestParameters.include_fields !== undefined) {
-      queryParameters['include_fields'] = requestParameters.include_fields;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'include_fields',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
         path: `/resource-servers/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
@@ -169,7 +194,7 @@ export class ResourceServersManager extends runtime.BaseAPI {
    */
   async get(
     requestParameters: GetResourceServersByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<ResourceServer> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -179,19 +204,13 @@ export class ResourceServersManager extends runtime.BaseAPI {
    * Update an existing API (also known as a resource server).
    * Update a resource server
    * @throws {RequiredError}
-   * @memberof ResourceServersManager
    */
   async updateRaw(
     requestParameters: PatchResourceServersByIdRequest,
     bodyParameters: ResourceServerUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling update.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -200,7 +219,7 @@ export class ResourceServersManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/resource-servers/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'PATCH',
@@ -220,7 +239,7 @@ export class ResourceServersManager extends runtime.BaseAPI {
   async update(
     requestParameters: PatchResourceServersByIdRequest,
     bodyParameters: ResourceServerUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.updateRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -229,12 +248,11 @@ export class ResourceServersManager extends runtime.BaseAPI {
    * Create a new API (also known as a resource server).
    * Create a resource server
    * @throws {RequiredError}
-   * @memberof ResourceServersManager
    */
   async createRaw(
     bodyParameters: PostResourceServersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -258,7 +276,7 @@ export class ResourceServersManager extends runtime.BaseAPI {
    */
   async create(
     bodyParameters: PostResourceServersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.createRaw(bodyParameters, initOverrides);
   }

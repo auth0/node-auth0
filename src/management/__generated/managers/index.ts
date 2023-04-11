@@ -1,5 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
 export * from './ActionsManager';
 export * from './AnomalyManager';
 export * from './AttackProtectionManager';

@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   PostEmailVerification201Response,
   PostEmailVerificationRequest,
@@ -8,20 +7,23 @@ import type {
   PostPasswordChangeRequest,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 /**
  *
  */
-export class TicketsManager extends runtime.BaseAPI {
+export class TicketsManager extends BaseAPI {
   /**
-   * Create a <a href=\"https://auth0.com/docs/email/custom#verification-email\">ticket to verify a user\'s email address</a>.
+   * Create a <a href="https://auth0.com/docs/email/custom#verification-email">ticket to verify a user's email address</a>.
    * Create an email verification ticket
    * @throws {RequiredError}
-   * @memberof TicketsManager
    */
   async verifyEmailRaw(
     bodyParameters: PostEmailVerificationRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostEmailVerification201Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostEmailVerification201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -45,22 +47,21 @@ export class TicketsManager extends runtime.BaseAPI {
    */
   async verifyEmail(
     bodyParameters: PostEmailVerificationRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostEmailVerification201Response> {
     const response = await this.verifyEmailRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Create a <a href=\"https://auth0.com/docs/connections/database/password-change\">password change ticket</a> for a user.
+   * Create a <a href="https://auth0.com/docs/connections/database/password-change">password change ticket</a> for a user.
    * Create a password change ticket
    * @throws {RequiredError}
-   * @memberof TicketsManager
    */
   async changePasswordRaw(
     bodyParameters: PostPasswordChangeRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostPasswordChange201Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostPasswordChange201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -84,7 +85,7 @@ export class TicketsManager extends runtime.BaseAPI {
    */
   async changePassword(
     bodyParameters: PostPasswordChangeRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostPasswordChange201Response> {
     const response = await this.changePasswordRaw(bodyParameters, initOverrides);
     return await response.value();

@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   Enrollment,
   EnrollmentCreate,
@@ -25,43 +24,53 @@ import type {
   TwilioFactorProvider,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteEnrollmentsByIdRequest {
+  /**
+   * ID of the enrollment to be deleted.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetEnrollmentsByIdRequest {
+  /**
+   * ID of the enrollment to be retrieve.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface PutFactorsByNameOperationRequest {
+  /**
+   * Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
+   * @type {PutFactorsByNameOperationNameEnum}
+   */
   name: PutFactorsByNameOperationNameEnum;
 }
 
 /**
  *
  */
-export class GuardianManager extends runtime.BaseAPI {
+export class GuardianManager extends BaseAPI {
   /**
    * Delete an enrollment to allow the user to enroll with multi-factor authentication again.
    * Delete a multi-factor authentication enrollment
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async deleteGuardianEnrollmentRaw(
     requestParameters: DeleteEnrollmentsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling deleteGuardianEnrollment.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/guardian/enrollments/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -78,7 +87,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async deleteGuardianEnrollment(
     requestParameters: DeleteEnrollmentsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteGuardianEnrollmentRaw(requestParameters, initOverrides);
   }
@@ -86,11 +95,10 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Retrieve APNS push notification configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPushNotificationProviderAPNSRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetApns200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetApns200Response>> {
     const response = await this.request(
       {
         path: `/guardian/factors/push-notification/providers/apns`,
@@ -106,33 +114,29 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve APNS push notification configuration
    */
   async getPushNotificationProviderAPNS(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetApns200Response> {
     const response = await this.getPushNotificationProviderAPNSRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve an enrollment (including its status and type).<br/><br/>Note: Phone numbers are partially obfuscated.
+   * Retrieve an enrollment (including its status and type).
+   *
+   * Note: Phone numbers are partially obfuscated.
    * Retrieve a multi-factor authentication enrollment
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getGuardianEnrollmentRaw(
     requestParameters: GetEnrollmentsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Enrollment>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling getGuardianEnrollment.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Enrollment>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/guardian/enrollments/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
@@ -149,7 +153,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async getGuardianEnrollment(
     requestParameters: GetEnrollmentsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Enrollment> {
     const response = await this.getGuardianEnrollmentRaw(requestParameters, initOverrides);
     return await response.value();
@@ -159,11 +163,10 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve phone enrollment and verification templates (subscription required).
    * Retrieve Enrollment and Verification Phone Templates
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPhoneFactorTemplatesRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TemplateMessages>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TemplateMessages>> {
     const response = await this.request(
       {
         path: `/guardian/factors/phone/templates`,
@@ -179,22 +182,21 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve phone enrollment and verification templates (subscription required).
    * Retrieve Enrollment and Verification Phone Templates
    */
-  async getPhoneFactorTemplates(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<TemplateMessages> {
+  async getPhoneFactorTemplates(initOverrides?: InitOverrides): Promise<TemplateMessages> {
     const response = await this.getPhoneFactorTemplatesRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve SMS enrollment and verification templates (subscription required). <br/><br/>    A new endpoint is available to retrieve enrollment and verification templates related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_templates\'>phone templates</a>). It has the same payload as this one. Please use it instead.
+   * Retrieve SMS enrollment and verification templates (subscription required).
+   *
+   *     A new endpoint is available to retrieve enrollment and verification templates related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_templates'>phone templates</a>). It has the same payload as this one. Please use it instead.
    * Retrieve SMS Enrollment and Verification Templates
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getSmsFactorTemplatesRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TemplateMessages>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TemplateMessages>> {
     const response = await this.request(
       {
         path: `/guardian/factors/sms/templates`,
@@ -210,22 +212,17 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve SMS enrollment and verification templates (subscription required). <br/><br/>    A new endpoint is available to retrieve enrollment and verification templates related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_templates\'>phone templates</a>). It has the same payload as this one. Please use it instead.
    * Retrieve SMS Enrollment and Verification Templates
    */
-  async getSmsFactorTemplates(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<TemplateMessages> {
+  async getSmsFactorTemplates(initOverrides?: InitOverrides): Promise<TemplateMessages> {
     const response = await this.getSmsFactorTemplatesRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve all <a href=\"https://auth0.com/docs/multifactor-authentication\">multi-factor authentication</a> configurations.
+   * Retrieve all <a href="https://auth0.com/docs/multifactor-authentication">multi-factor authentication</a> configurations.
    * Retrieve Factors and their Status
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
-  async getFactorsRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<Factor>>> {
+  async getFactorsRaw(initOverrides?: InitOverrides): Promise<ApiResponse<Array<Factor>>> {
     const response = await this.request(
       {
         path: `/guardian/factors`,
@@ -241,9 +238,7 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve all <a href=\"https://auth0.com/docs/multifactor-authentication\">multi-factor authentication</a> configurations.
    * Retrieve Factors and their Status
    */
-  async getFactors(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Array<Factor>> {
+  async getFactors(initOverrides?: InitOverrides): Promise<Array<Factor>> {
     const response = await this.getFactorsRaw(initOverrides);
     return await response.value();
   }
@@ -251,11 +246,10 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Retrieve the Enabled Phone Factors
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPhoneFactorMessageTypesRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetMessageTypes200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetMessageTypes200Response>> {
     const response = await this.request(
       {
         path: `/guardian/factors/phone/message-types`,
@@ -271,7 +265,7 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve the Enabled Phone Factors
    */
   async getPhoneFactorMessageTypes(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetMessageTypes200Response> {
     const response = await this.getPhoneFactorMessageTypesRaw(initOverrides);
     return await response.value();
@@ -280,11 +274,10 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Retrieve phone configuration (one of auth0|twilio|phone-message-hook)
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPhoneFactorSelectedProviderRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetPhoneProviders200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const response = await this.request(
       {
         path: `/guardian/factors/phone/selected-provider`,
@@ -300,21 +293,20 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve phone configuration (one of auth0|twilio|phone-message-hook)
    */
   async getPhoneFactorSelectedProvider(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.getPhoneFactorSelectedProviderRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio phone provider configuration</a> (subscription required).
+   * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio phone provider configuration</a> (subscription required).
    * Retrieve Twilio phone configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPhoneFactorProviderTwilioRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TwilioFactorProvider>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TwilioFactorProvider>> {
     const response = await this.request(
       {
         path: `/guardian/factors/phone/providers/twilio`,
@@ -330,9 +322,7 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio phone provider configuration</a> (subscription required).
    * Retrieve Twilio phone configuration
    */
-  async getPhoneFactorProviderTwilio(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<TwilioFactorProvider> {
+  async getPhoneFactorProviderTwilio(initOverrides?: InitOverrides): Promise<TwilioFactorProvider> {
     const response = await this.getPhoneFactorProviderTwilioRaw(initOverrides);
     return await response.value();
   }
@@ -340,11 +330,10 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Retrieve push notification provider
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPushNotificationSelectedProviderRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetPnProviders200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetPnProviders200Response>> {
     const response = await this.request(
       {
         path: `/guardian/factors/push-notification/selected-provider`,
@@ -360,21 +349,22 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve push notification provider
    */
   async getPushNotificationSelectedProvider(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetPnProviders200Response> {
     const response = await this.getPushNotificationSelectedProviderRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Gets the MFA policies for the tenant.<br/><br/>The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul><br/>Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href=\"https://auth0.com/docs/mfa/adaptive-mfa\">full documentation</a>.<br/>
+   * Gets the MFA policies for the tenant.
+   *
+   * The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul>
+   * Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href="https://auth0.com/docs/mfa/adaptive-mfa">full documentation</a>.
+   *
    * Get the Multi-factor Authentication policies
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
-  async getPoliciesRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<string>>> {
+  async getPoliciesRaw(initOverrides?: InitOverrides): Promise<ApiResponse<Array<string>>> {
     const response = await this.request(
       {
         path: `/guardian/policies`,
@@ -390,22 +380,19 @@ export class GuardianManager extends runtime.BaseAPI {
    * Gets the MFA policies for the tenant.<br/><br/>The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul><br/>Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href=\"https://auth0.com/docs/mfa/adaptive-mfa\">full documentation</a>.<br/>
    * Get the Multi-factor Authentication policies
    */
-  async getPolicies(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Array<string>> {
+  async getPolicies(initOverrides?: InitOverrides): Promise<Array<string>> {
     const response = await this.getPoliciesRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * A new endpoint is available to retrieve the configuration related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_selected_provider\'>phone configuration</a>). It has the same payload as this one. Please use it instead.
+   * A new endpoint is available to retrieve the configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_selected_provider'>phone configuration</a>). It has the same payload as this one. Please use it instead.
    * Retrieve SMS configuration (one of auth0|twilio|phone-message-hook)
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getSmsSelectedProviderRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetPhoneProviders200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const response = await this.request(
       {
         path: `/guardian/factors/sms/selected-provider`,
@@ -422,21 +409,22 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve SMS configuration (one of auth0|twilio|phone-message-hook)
    */
   async getSmsSelectedProvider(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.getSmsSelectedProviderRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio SMS provider configuration</a> (subscription required).<br/><br/>    A new endpoint is available to retrieve the Twilio configuration related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_twilio\'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
+   * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio SMS provider configuration</a> (subscription required).
+   *
+   *     A new endpoint is available to retrieve the Twilio configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_twilio'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
    * Retrieve Twilio SMS configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getSmsFactorProviderTwilioRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TwilioFactorProvider>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TwilioFactorProvider>> {
     const response = await this.request(
       {
         path: `/guardian/factors/sms/providers/twilio`,
@@ -452,22 +440,19 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio SMS provider configuration</a> (subscription required).<br/><br/>    A new endpoint is available to retrieve the Twilio configuration related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_twilio\'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
    * Retrieve Twilio SMS configuration
    */
-  async getSmsFactorProviderTwilio(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<TwilioFactorProvider> {
+  async getSmsFactorProviderTwilio(initOverrides?: InitOverrides): Promise<TwilioFactorProvider> {
     const response = await this.getSmsFactorProviderTwilioRaw(initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/developer/sns-configuration\">AWS SNS push notification provider configuration</a> (subscription required).
+   * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
    * Retrieve AWS SNS push notification configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async getPushNotificationProviderSNSRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<SnsFactorProvider>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<SnsFactorProvider>> {
     const response = await this.request(
       {
         path: `/guardian/factors/push-notification/providers/sns`,
@@ -483,9 +468,7 @@ export class GuardianManager extends runtime.BaseAPI {
    * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/developer/sns-configuration\">AWS SNS push notification provider configuration</a> (subscription required).
    * Retrieve AWS SNS push notification configuration
    */
-  async getPushNotificationProviderSNS(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<SnsFactorProvider> {
+  async getPushNotificationProviderSNS(initOverrides?: InitOverrides): Promise<SnsFactorProvider> {
     const response = await this.getPushNotificationProviderSNSRaw(initOverrides);
     return await response.value();
   }
@@ -493,12 +476,11 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Updates APNs provider configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePushNotificationProviderAPNSRaw(
     bodyParameters: PutApnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutApns200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutApns200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -521,7 +503,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePushNotificationProviderAPNS(
     bodyParameters: PutApnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutApns200Response> {
     const response = await this.updatePushNotificationProviderAPNSRaw(
       bodyParameters,
@@ -533,12 +515,11 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Updates FCM provider configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePushNotificationProviderFCMRaw(
     bodyParameters: PutFcmRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<{ [key: string]: any }>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -561,22 +542,21 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePushNotificationProviderFCM(
     bodyParameters: PutFcmRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<{ [key: string]: any }> {
     const response = await this.updatePushNotificationProviderFCMRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Configure the <a href=\"https://auth0.com/docs/multifactor-authentication/developer/sns-configuration\">AWS SNS push notification provider configuration</a> (subscription required).
+   * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
    * Update SNS configuration for push notifications
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePushNotificationProviderSNSRaw(
     bodyParameters: PutSnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutSnsRequest>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutSnsRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -600,7 +580,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePushNotificationProviderSNS(
     bodyParameters: PutSnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutSnsRequest> {
     const response = await this.updatePushNotificationProviderSNSRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -610,12 +590,11 @@ export class GuardianManager extends runtime.BaseAPI {
    * Generate an email with a link to start the multi-factor authentication enrollment process (subscription required).
    * Create a multi-factor authentication enrollment ticket
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async createEnrollmentTicketRaw(
     bodyParameters: EnrollmentCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostTicket200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PostTicket200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -639,7 +618,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async createEnrollmentTicket(
     bodyParameters: EnrollmentCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PostTicket200Response> {
     const response = await this.createEnrollmentTicketRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -648,12 +627,11 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Updates APNs provider configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setPushNotificationProviderAPNSRaw(
     bodyParameters: PutApnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutApns200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutApns200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -676,7 +654,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setPushNotificationProviderAPNS(
     bodyParameters: PutApnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutApns200Response> {
     const response = await this.setPushNotificationProviderAPNSRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -686,12 +664,11 @@ export class GuardianManager extends runtime.BaseAPI {
    * Customize the messages sent to complete phone enrollment and verification (subscription required).
    * Update Enrollment and Verification Phone Templates
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setPhoneFactorTemplatesRaw(
     bodyParameters: TemplateMessages,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TemplateMessages>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TemplateMessages>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -715,22 +692,23 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setPhoneFactorTemplates(
     bodyParameters: TemplateMessages,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<TemplateMessages> {
     const response = await this.setPhoneFactorTemplatesRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Customize the messages sent to complete SMS enrollment and verification (subscription required).<br/>    <br/>    A new endpoint is available to update enrollment and verification templates related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_templates\'>phone templates</a>). It has the same payload as this one. Please use it instead.
+   * Customize the messages sent to complete SMS enrollment and verification (subscription required).
+   *
+   *     A new endpoint is available to update enrollment and verification templates related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_templates'>phone templates</a>). It has the same payload as this one. Please use it instead.
    * Update SMS Enrollment and Verification Templates
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setSmsFactorTemplatesRaw(
     bodyParameters: TemplateMessages,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<TemplateMessages>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<TemplateMessages>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -754,7 +732,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setSmsFactorTemplates(
     bodyParameters: TemplateMessages,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<TemplateMessages> {
     const response = await this.setSmsFactorTemplatesRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -764,19 +742,13 @@ export class GuardianManager extends runtime.BaseAPI {
    * Update a multi-factor authentication factor (subscription required).
    * Update a Multi-factor Authentication Factor
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updateFactorRaw(
     requestParameters: PutFactorsByNameOperationRequest,
     bodyParameters: PutFactorsByNameRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutFactorsByName200Response>> {
-    if (requestParameters.name === null || requestParameters.name === undefined) {
-      throw new runtime.RequiredError(
-        'name',
-        'Required parameter requestParameters.name was null or undefined when calling updateFactor.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutFactorsByName200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['name']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -785,7 +757,7 @@ export class GuardianManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/guardian/factors/{name}`.replace(
-          `{${'name'}}`,
+          '{name}',
           encodeURIComponent(String(requestParameters.name))
         ),
         method: 'PUT',
@@ -805,7 +777,7 @@ export class GuardianManager extends runtime.BaseAPI {
   async updateFactor(
     requestParameters: PutFactorsByNameOperationRequest,
     bodyParameters: PutFactorsByNameRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutFactorsByName200Response> {
     const response = await this.updateFactorRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -814,12 +786,11 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Updates FCM provider configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setPushNotificationProviderFCMRaw(
     bodyParameters: PutFcmRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<{ [key: string]: any }>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -842,7 +813,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setPushNotificationProviderFCM(
     bodyParameters: PutFcmRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<{ [key: string]: any }> {
     const response = await this.setPushNotificationProviderFCMRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -852,12 +823,11 @@ export class GuardianManager extends runtime.BaseAPI {
    * Update enabled phone factors for multi-factor authentication
    * Update the Enabled Phone Factors
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePhoneFactorMessageTypesRaw(
     bodyParameters: PutMessageTypesRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetMessageTypes200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetMessageTypes200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -881,7 +851,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePhoneFactorMessageTypes(
     bodyParameters: PutMessageTypesRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetMessageTypes200Response> {
     const response = await this.updatePhoneFactorMessageTypesRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -890,12 +860,11 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Update phone configuration (one of auth0|twilio|phone-message-hook)
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePhoneFactorSelectedProviderRaw(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetPhoneProviders200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -918,7 +887,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePhoneFactorSelectedProvider(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.updatePhoneFactorSelectedProviderRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -927,12 +896,11 @@ export class GuardianManager extends runtime.BaseAPI {
   /**
    * Update Push Notification configuration (one of direct|sns|guardian)
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setPushNotificationSelectedProviderRaw(
     bodyParameters: PutPnProvidersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetPnProviders200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetPnProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -955,7 +923,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setPushNotificationSelectedProvider(
     bodyParameters: PutPnProvidersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetPnProviders200Response> {
     const response = await this.setPushNotificationSelectedProviderRaw(
       bodyParameters,
@@ -965,15 +933,19 @@ export class GuardianManager extends runtime.BaseAPI {
   }
 
   /**
-   * Sets the MFA policies for the tenant.<br/><br/>The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul> Pass an empty array to remove all MFA policies.<br/>Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href=\"https://auth0.com/docs/mfa/adaptive-mfa\">full documentation</a>.<br/><br/>
+   * Sets the MFA policies for the tenant.
+   *
+   * The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul> Pass an empty array to remove all MFA policies.
+   * Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href="https://auth0.com/docs/mfa/adaptive-mfa">full documentation</a>.
+   *
+   *
    * Set the Multi-factor Authentication policies
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePoliciesRaw(
     bodyParameters: Array<string>,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<string>>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Array<string>>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -997,22 +969,21 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePolicies(
     bodyParameters: Array<string>,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Array<string>> {
     const response = await this.updatePoliciesRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * A new endpoint is available to update the configuration related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_selected_provider\'>phone configuration</a>). It has the same payload as this one. Please use it instead.
+   * A new endpoint is available to update the configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_selected_provider'>phone configuration</a>). It has the same payload as this one. Please use it instead.
    * Update SMS configuration (one of auth0|twilio|phone-message-hook)
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setSmsSelectedProviderRaw(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetPhoneProviders200Response>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -1036,22 +1007,23 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setSmsSelectedProvider(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.setSmsSelectedProviderRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Configure the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio SMS provider configuration</a> (subscription required).<br/>    <br/>    A new endpoint is available to update the Twilio configuration related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_twilio\'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
+   * Configure the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio SMS provider configuration</a> (subscription required).
+   *
+   *     A new endpoint is available to update the Twilio configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_twilio'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
    * Update Twilio SMS configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setSmsFactorProviderTwilioRaw(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutTwilioRequest>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutTwilioRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -1075,22 +1047,21 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setSmsFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutTwilioRequest> {
     const response = await this.setSmsFactorProviderTwilioRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Configure the <a href=\"https://auth0.com/docs/multifactor-authentication/developer/sns-configuration\">AWS SNS push notification provider configuration</a> (subscription required).
+   * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
    * Update AWS SNS push notification configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async setPushNotificationProviderSNSRaw(
     bodyParameters: PutSnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutSnsRequest>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutSnsRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -1114,22 +1085,21 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async setPushNotificationProviderSNS(
     bodyParameters: PutSnsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutSnsRequest> {
     const response = await this.setPushNotificationProviderSNSRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Configure the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio phone provider configuration</a> (subscription required).
+   * Configure the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio phone provider configuration</a> (subscription required).
    * Update Twilio phone configuration
    * @throws {RequiredError}
-   * @memberof GuardianManager
    */
   async updatePhoneFactorProviderTwilioRaw(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutTwilioRequest>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutTwilioRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -1153,7 +1123,7 @@ export class GuardianManager extends runtime.BaseAPI {
    */
   async updatePhoneFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutTwilioRequest> {
     const response = await this.updatePhoneFactorProviderTwilioRaw(bodyParameters, initOverrides);
     return await response.value();

@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   Connection,
   ConnectionCreate,
@@ -8,66 +7,122 @@ import type {
   GetConnections200Response,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteConnectionsByIdRequest {
+  /**
+   * The id of the connection to delete
+   * @type {string}
+   */
   id: string;
 }
 
 export interface DeleteUsersByEmailRequest {
+  /**
+   * The id of the connection (currently only database connections are supported)
+   * @type {string}
+   */
   id: string;
+  /**
+   * The email of the user to delete
+   * @type {string}
+   */
   email: string;
 }
 
 export interface GetConnectionsRequest {
+  /**
+   * The amount of entries per page. Default: no paging is used, all connections are returned
+   * @type {number}
+   */
   per_page?: number;
+  /**
+   * The page number. Zero based
+   * @type {number}
+   */
   page?: number;
+  /**
+   * true if a query summary must be included in the result, false otherwise. Default <code>false</code>.
+   * @type {boolean}
+   */
   include_totals?: boolean;
+  /**
+   * Provide strategies to only retrieve connections with such strategies
+   * @type {Array<GetConnectionsStrategyEnum>}
+   */
   strategy?: Array<GetConnectionsStrategyEnum>;
+  /**
+   * Provide the name of the connection to retrieve
+   * @type {string}
+   */
   name?: string;
+  /**
+   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
+   * @type {string}
+   */
   fields?: string;
+  /**
+   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
+   * @type {boolean}
+   */
   include_fields?: boolean;
 }
 
 export interface GetConnectionsByIdRequest {
+  /**
+   * The id of the connection to retrieve
+   * @type {string}
+   */
   id: string;
+  /**
+   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
+   * @type {string}
+   */
   fields?: string;
+  /**
+   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
+   * @type {boolean}
+   */
   include_fields?: boolean;
 }
 
 export interface GetStatusRequest {
+  /**
+   * ID of the connection to check
+   * @type {string}
+   */
   id: string;
 }
 
 export interface PatchConnectionsByIdRequest {
+  /**
+   * The id of the connection to retrieve
+   * @type {string}
+   */
   id: string;
 }
 
 /**
  *
  */
-export class ConnectionsManager extends runtime.BaseAPI {
+export class ConnectionsManager extends BaseAPI {
   /**
-   * Deletes a connection and all its users.<br/>
+   * Deletes a connection and all its users.
+   *
    * Delete a connection
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async deleteRaw(
     requestParameters: DeleteConnectionsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling delete.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
-        path: `/connections/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
-        ),
+        path: `/connections/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'DELETE',
       },
       initOverrides
@@ -82,43 +137,34 @@ export class ConnectionsManager extends runtime.BaseAPI {
    */
   async delete(
     requestParameters: DeleteConnectionsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Deletes a specified connection user by its email (you cannot delete all users from specific connection). Currently, only Database Connections are supported.<br/>
+   * Deletes a specified connection user by its email (you cannot delete all users from specific connection). Currently, only Database Connections are supported.
+   *
    * Delete a connection user
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async deleteUserByEmailRaw(
     requestParameters: DeleteUsersByEmailRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling deleteUserByEmail.'
-      );
-    }
-    if (requestParameters.email === null || requestParameters.email === undefined) {
-      throw new runtime.RequiredError(
-        'email',
-        'Required parameter requestParameters.email was null or undefined when calling deleteUserByEmail.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'email']);
 
-    if (requestParameters.email !== undefined) {
-      queryParameters['email'] = requestParameters.email;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'email',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
         path: `/connections/{id}/users`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -136,50 +182,55 @@ export class ConnectionsManager extends runtime.BaseAPI {
    */
   async deleteUserByEmail(
     requestParameters: DeleteUsersByEmailRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteUserByEmailRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Retrieves every connection matching the specified strategy. All connections are retrieved if no strategy is being specified. Accepts a list of fields to include or exclude in the resulting list of connection objects.<br/>
+   * Retrieves every connection matching the specified strategy. All connections are retrieved if no strategy is being specified. Accepts a list of fields to include or exclude in the resulting list of connection objects.
+   *
    * Get all connections
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async getAllRaw(
     requestParameters: GetConnectionsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetConnections200Response>> {
-    const queryParameters: any = {};
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
-
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.include_totals !== undefined) {
-      queryParameters['include_totals'] = requestParameters.include_totals;
-    }
-
-    if (requestParameters.strategy) {
-      queryParameters['strategy'] = requestParameters.strategy;
-    }
-
-    if (requestParameters.name !== undefined) {
-      queryParameters['name'] = requestParameters.name;
-    }
-
-    if (requestParameters.fields !== undefined) {
-      queryParameters['fields'] = requestParameters.fields;
-    }
-
-    if (requestParameters.include_fields !== undefined) {
-      queryParameters['include_fields'] = requestParameters.include_fields;
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetConnections200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'strategy',
+        config: {
+          isArray: true,
+          isCollectionFormatMulti: true,
+          collectionFormat: multi,
+        },
+      },
+      {
+        key: 'name',
+        config: {},
+      },
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -199,44 +250,38 @@ export class ConnectionsManager extends runtime.BaseAPI {
    */
   async getAll(
     requestParameters: GetConnectionsRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetConnections200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Retrieves a connection by its <code>ID</code>.<br/>
+   * Retrieves a connection by its <code>ID</code>.
+   *
    * Get a connection
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async getRaw(
     requestParameters: GetConnectionsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Connection>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling get.'
-      );
-    }
-    const queryParameters: any = {};
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Connection>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
-    if (requestParameters.fields !== undefined) {
-      queryParameters['fields'] = requestParameters.fields;
-    }
-
-    if (requestParameters.include_fields !== undefined) {
-      queryParameters['include_fields'] = requestParameters.include_fields;
-    }
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
-        path: `/connections/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
-        ),
+        path: `/connections/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'GET',
         query: queryParameters,
       },
@@ -252,7 +297,7 @@ export class ConnectionsManager extends runtime.BaseAPI {
    */
   async get(
     requestParameters: GetConnectionsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Connection> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -262,23 +307,17 @@ export class ConnectionsManager extends runtime.BaseAPI {
    * Retrieves the status of an ad/ldap connection referenced by its <code>ID</code>. <code>200 OK</code> http status code response is returned  when the connection is online, otherwise a <code>404</code> status code is returned along with an error message
    * Check connection status
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async checkStatusRaw(
     requestParameters: GetStatusRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling checkStatus.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/connections/{id}/status`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
@@ -295,28 +334,23 @@ export class ConnectionsManager extends runtime.BaseAPI {
    */
   async checkStatus(
     requestParameters: GetStatusRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.checkStatusRaw(requestParameters, initOverrides);
   }
 
   /**
-   * <b>Note:</b> if you use the options parameter, the whole options object will be overridden, so ensure that all parameters are present<br/>
+   * <b>Note:</b> if you use the options parameter, the whole options object will be overridden, so ensure that all parameters are present
+   *
    * Update a connection
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async updateRaw(
     requestParameters: PatchConnectionsByIdRequest,
     bodyParameters: ConnectionUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Connection>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling update.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Connection>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -324,10 +358,7 @@ export class ConnectionsManager extends runtime.BaseAPI {
 
     const response = await this.request(
       {
-        path: `/connections/{id}`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
-        ),
+        path: `/connections/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'PATCH',
         headers: headerParameters,
         body: bodyParameters,
@@ -345,22 +376,25 @@ export class ConnectionsManager extends runtime.BaseAPI {
   async update(
     requestParameters: PatchConnectionsByIdRequest,
     bodyParameters: ConnectionUpdate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Connection> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Creates a new connection according to the JSON object received in <code>body</code>.<br/> The samples on the right show all available attributes. Mandatory attributes are <code>name</code> and <code>strategy</code>.<br/> Valid Strategy names are: <code>ad</code>, <code>adfs</code>, <code>amazon</code>, <code>apple</code>, <code>dropbox</code>, <code>bitbucket</code>, <code>aol</code>, <code>auth0-oidc</code>, <code>auth0</code>, <code>baidu</code>, <code>bitly</code>, <code>box</code>, <code>custom</code>, <code>daccount</code>, <code>dwolla</code>, <code>email</code>, <code>evernote-sandbox</code>, <code>evernote</code>, <code>exact</code>, <code>facebook</code>, <code>fitbit</code>, <code>flickr</code>, <code>github</code>, <code>google-apps</code>, <code>google-oauth2</code>, <code>instagram</code>, <code>ip</code>, <code>line</code>, <code>linkedin</code>, <code>miicard</code>, <code>oauth1</code>, <code>oauth2</code>, <code>office365</code>, <code>oidc</code>, <code>okta</code>, <code>paypal</code>, <code>paypal-sandbox</code>, <code>pingfederate</code>, <code>planningcenter</code>, <code>renren</code>, <code>salesforce-community</code>, <code>salesforce-sandbox</code>, <code>salesforce</code>, <code>samlp</code>, <code>sharepoint</code>, <code>shopify</code>, <code>sms</code>, <code>soundcloud</code>, <code>thecity-sandbox</code>, <code>thecity</code>, <code>thirtysevensignals</code>, <code>twitter</code>, <code>untappd</code>, <code>vkontakte</code>, <code>waad</code>, <code>weibo</code>, <code>windowslive</code>, <code>wordpress</code>, <code>yahoo</code>, <code>yammer</code>, <code>yandex</code><br/><br/><div class=\"alert alert-warning\">Connections created via this endpoint may redirect users to log in, receive and store user identities, and update user root profiles</div>
+   * Creates a new connection according to the JSON object received in <code>body</code>.
+   *  The samples on the right show all available attributes. Mandatory attributes are <code>name</code> and <code>strategy</code>.
+   *  Valid Strategy names are: <code>ad</code>, <code>adfs</code>, <code>amazon</code>, <code>apple</code>, <code>dropbox</code>, <code>bitbucket</code>, <code>aol</code>, <code>auth0-oidc</code>, <code>auth0</code>, <code>baidu</code>, <code>bitly</code>, <code>box</code>, <code>custom</code>, <code>daccount</code>, <code>dwolla</code>, <code>email</code>, <code>evernote-sandbox</code>, <code>evernote</code>, <code>exact</code>, <code>facebook</code>, <code>fitbit</code>, <code>flickr</code>, <code>github</code>, <code>google-apps</code>, <code>google-oauth2</code>, <code>instagram</code>, <code>ip</code>, <code>line</code>, <code>linkedin</code>, <code>miicard</code>, <code>oauth1</code>, <code>oauth2</code>, <code>office365</code>, <code>oidc</code>, <code>okta</code>, <code>paypal</code>, <code>paypal-sandbox</code>, <code>pingfederate</code>, <code>planningcenter</code>, <code>renren</code>, <code>salesforce-community</code>, <code>salesforce-sandbox</code>, <code>salesforce</code>, <code>samlp</code>, <code>sharepoint</code>, <code>shopify</code>, <code>sms</code>, <code>soundcloud</code>, <code>thecity-sandbox</code>, <code>thecity</code>, <code>thirtysevensignals</code>, <code>twitter</code>, <code>untappd</code>, <code>vkontakte</code>, <code>waad</code>, <code>weibo</code>, <code>windowslive</code>, <code>wordpress</code>, <code>yahoo</code>, <code>yammer</code>, <code>yandex</code>
+   *
+   * <div class="alert alert-warning">Connections created via this endpoint may redirect users to log in, receive and store user identities, and update user root profiles</div>
    * Create a connection
    * @throws {RequiredError}
-   * @memberof ConnectionsManager
    */
   async createRaw(
     bodyParameters: ConnectionCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Connection>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Connection>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -384,7 +418,7 @@ export class ConnectionsManager extends runtime.BaseAPI {
    */
   async create(
     bodyParameters: ConnectionCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Connection> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();

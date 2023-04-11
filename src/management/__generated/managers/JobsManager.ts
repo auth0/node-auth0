@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   GetErrors200Response,
   Job,
@@ -8,49 +7,72 @@ import type {
   PostVerificationEmailRequest,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface GetErrorsRequest {
+  /**
+   * ID of the job.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetJobsByIdRequest {
+  /**
+   * ID of the job.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface PostUsersImportsData {
+  /**
+   *
+   * @type {Blob}
+   */
   users: Blob;
+  /**
+   * connection_id of the connection to which users will be imported.
+   * @type {string}
+   */
   connection_id: string;
+  /**
+   * Whether to update users if they already exist (true) or to ignore them (false).
+   * @type {boolean}
+   */
   upsert?: boolean;
+  /**
+   * Customer-defined ID.
+   * @type {string}
+   */
   external_id?: string;
+  /**
+   * Whether to send a completion email to all tenant owners when the job is finished (true) or not (false).
+   * @type {boolean}
+   */
   send_completion_email?: boolean;
 }
 
 /**
  *
  */
-export class JobsManager extends runtime.BaseAPI {
+export class JobsManager extends BaseAPI {
   /**
    * Retrieve error details of a failed job.
    * Get job error details
    * @throws {RequiredError}
-   * @memberof JobsManager
    */
   async getErrorsRaw(
     requestParameters: GetErrorsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetErrors200Response>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling getErrors.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetErrors200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
-        path: `/jobs/{id}/errors`.replace(
-          `{${'id'}}`,
-          encodeURIComponent(String(requestParameters.id))
-        ),
+        path: `/jobs/{id}/errors`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'GET',
       },
       initOverrides
@@ -65,7 +87,7 @@ export class JobsManager extends runtime.BaseAPI {
    */
   async getErrors(
     requestParameters: GetErrorsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetErrors200Response> {
     const response = await this.getErrorsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -75,22 +97,16 @@ export class JobsManager extends runtime.BaseAPI {
    * Retrieves a job. Useful to check its status.
    * Get a job
    * @throws {RequiredError}
-   * @memberof JobsManager
    */
   async getRaw(
     requestParameters: GetJobsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Job>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling get.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Job>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
-        path: `/jobs/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(requestParameters.id))),
+        path: `/jobs/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'GET',
       },
       initOverrides
@@ -103,10 +119,7 @@ export class JobsManager extends runtime.BaseAPI {
    * Retrieves a job. Useful to check its status.
    * Get a job
    */
-  async get(
-    requestParameters: GetJobsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Job> {
+  async get(requestParameters: GetJobsByIdRequest, initOverrides?: InitOverrides): Promise<Job> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
   }
@@ -115,12 +128,11 @@ export class JobsManager extends runtime.BaseAPI {
    * Export all users to a file via a long-running job.
    * Create export users job
    * @throws {RequiredError}
-   * @memberof JobsManager
    */
   async exportUsersRaw(
     bodyParameters: PostUsersExportsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Job>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Job>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -144,22 +156,21 @@ export class JobsManager extends runtime.BaseAPI {
    */
   async exportUsers(
     bodyParameters: PostUsersExportsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Job> {
     const response = await this.exportUsersRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Import users from a <a href=\"https://manage.local.dev.auth0.com/docs/users/references/bulk-import-database-schema-examples\">formatted file</a> into a connection via a long-running job.
+   * Import users from a <a href="https://manage.local.dev.auth0.com/docs/users/references/bulk-import-database-schema-examples">formatted file</a> into a connection via a long-running job.
    * Create import users job
    * @throws {RequiredError}
-   * @memberof JobsManager
    */
   async importUsersRaw(
     bodyParameters: PostUsersImportsData,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Job>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Job>> {
     const consumes: runtime.Consume[] = [{ contentType: 'multipart/form-data' }];
     // @ts-ignore: canConsumeForm may be unused
     const canConsumeForm = runtime.canConsumeForm(consumes);
@@ -167,7 +178,7 @@ export class JobsManager extends runtime.BaseAPI {
     let formParams: { append(param: string, value: any): any };
     let useForm = false;
     // use FormData to transmit files using content-type "multipart/form-data"
-    useForm = canConsumeForm;
+    useForm = runtime.canConsumeForm;
     if (useForm) {
       formParams = new FormData();
     } else {
@@ -212,22 +223,23 @@ export class JobsManager extends runtime.BaseAPI {
    */
   async importUsers(
     bodyParameters: PostUsersImportsData,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Job> {
     const response = await this.importUsersRaw(bodyParameters, initOverrides);
     return await response.value();
   }
 
   /**
-   * Send an email to the specified user that asks them to click a link to <a href=\"https://auth0.com/docs/email/custom#verification-email\">verify their email address</a>.<br/><br/>Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
+   * Send an email to the specified user that asks them to click a link to <a href="https://auth0.com/docs/email/custom#verification-email">verify their email address</a>.
+   *
+   * Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
    * Send an email address verification email
    * @throws {RequiredError}
-   * @memberof JobsManager
    */
   async verifyEmailRaw(
     bodyParameters: PostVerificationEmailRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Job>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Job>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -251,7 +263,7 @@ export class JobsManager extends runtime.BaseAPI {
    */
   async verifyEmail(
     bodyParameters: PostVerificationEmailRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<Job> {
     const response = await this.verifyEmailRaw(bodyParameters, initOverrides);
     return await response.value();

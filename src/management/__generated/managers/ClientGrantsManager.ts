@@ -1,6 +1,5 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   ClientGrant,
   ClientGrantCreate,
@@ -8,47 +7,73 @@ import type {
   PatchClientGrantsByIdRequest,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface DeleteClientGrantsByIdRequest {
+  /**
+   * ID of the client grant to delete.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetClientGrantsRequest {
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   * @type {number}
+   */
   per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   * @type {number}
+   */
   page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   * @type {boolean}
+   */
   include_totals?: boolean;
+  /**
+   * Optional filter on audience.
+   * @type {string}
+   */
   audience?: string;
+  /**
+   * Optional filter on client_id.
+   * @type {string}
+   */
   client_id?: string;
 }
 
 export interface PatchClientGrantsByIdOperationRequest {
+  /**
+   * ID of the client grant to update.
+   * @type {string}
+   */
   id: string;
 }
 
 /**
  *
  */
-export class ClientGrantsManager extends runtime.BaseAPI {
+export class ClientGrantsManager extends BaseAPI {
   /**
    * Delete a client grant.
    * Delete client grant
    * @throws {RequiredError}
-   * @memberof ClientGrantsManager
    */
   async deleteRaw(
     requestParameters: DeleteClientGrantsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling delete.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/client-grants/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -65,42 +90,43 @@ export class ClientGrantsManager extends runtime.BaseAPI {
    */
   async delete(
     requestParameters: DeleteClientGrantsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Retrieve <a href=\"https://auth0.com/docs/api-auth/grant/client-credentials\">client grants</a>.<br/>
+   * Retrieve <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>.
+   *
    * Get client grants
    * @throws {RequiredError}
-   * @memberof ClientGrantsManager
    */
   async getAllRaw(
     requestParameters: GetClientGrantsRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetClientGrants200Response>> {
-    const queryParameters: any = {};
-
-    if (requestParameters.per_page !== undefined) {
-      queryParameters['per_page'] = requestParameters.per_page;
-    }
-
-    if (requestParameters.page !== undefined) {
-      queryParameters['page'] = requestParameters.page;
-    }
-
-    if (requestParameters.include_totals !== undefined) {
-      queryParameters['include_totals'] = requestParameters.include_totals;
-    }
-
-    if (requestParameters.audience !== undefined) {
-      queryParameters['audience'] = requestParameters.audience;
-    }
-
-    if (requestParameters.client_id !== undefined) {
-      queryParameters['client_id'] = requestParameters.client_id;
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetClientGrants200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'audience',
+        config: {},
+      },
+      {
+        key: 'client_id',
+        config: {},
+      },
+    ]);
 
     const response = await this.request(
       {
@@ -120,7 +146,7 @@ export class ClientGrantsManager extends runtime.BaseAPI {
    */
   async getAll(
     requestParameters: GetClientGrantsRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetClientGrants200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -130,19 +156,13 @@ export class ClientGrantsManager extends runtime.BaseAPI {
    * Update a client grant.
    * Update client grant
    * @throws {RequiredError}
-   * @memberof ClientGrantsManager
    */
   async updateRaw(
     requestParameters: PatchClientGrantsByIdOperationRequest,
     bodyParameters: PatchClientGrantsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<ClientGrant>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling update.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<ClientGrant>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -151,7 +171,7 @@ export class ClientGrantsManager extends runtime.BaseAPI {
     const response = await this.request(
       {
         path: `/client-grants/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'PATCH',
@@ -171,7 +191,7 @@ export class ClientGrantsManager extends runtime.BaseAPI {
   async update(
     requestParameters: PatchClientGrantsByIdOperationRequest,
     bodyParameters: PatchClientGrantsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<ClientGrant> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -181,12 +201,11 @@ export class ClientGrantsManager extends runtime.BaseAPI {
    * Create a client grant.
    * Create client grant
    * @throws {RequiredError}
-   * @memberof ClientGrantsManager
    */
   async createRaw(
     bodyParameters: ClientGrantCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -208,10 +227,7 @@ export class ClientGrantsManager extends runtime.BaseAPI {
    * Create a client grant.
    * Create client grant
    */
-  async create(
-    bodyParameters: ClientGrantCreate,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
+  async create(bodyParameters: ClientGrantCreate, initOverrides?: InitOverrides): Promise<void> {
     await this.createRaw(bodyParameters, initOverrides);
   }
 }

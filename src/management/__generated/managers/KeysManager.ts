@@ -1,45 +1,50 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
 import type {
   GetSigningKeys200ResponseInner,
   PostSigningKeys201Response,
   PutSigningKeys200Response,
 } from '../models';
 
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
+
 export interface GetSigningKeyRequest {
+  /**
+   * Key id of the key to retrieve
+   * @type {string}
+   */
   kid: string;
 }
 
 export interface PutSigningKeysRequest {
+  /**
+   * Key id of the key to revoke
+   * @type {string}
+   */
   kid: string;
 }
 
 /**
  *
  */
-export class KeysManager extends runtime.BaseAPI {
+export class KeysManager extends BaseAPI {
   /**
    * Get an Application Signing Key by its key id
    * Get an Application Signing Key by its key id
    * @throws {RequiredError}
-   * @memberof KeysManager
    */
   async getRaw(
     requestParameters: GetSigningKeyRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<GetSigningKeys200ResponseInner>> {
-    if (requestParameters.kid === null || requestParameters.kid === undefined) {
-      throw new runtime.RequiredError(
-        'kid',
-        'Required parameter requestParameters.kid was null or undefined when calling get.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<GetSigningKeys200ResponseInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['kid']);
 
     const response = await this.request(
       {
         path: `/keys/signing/{kid}`.replace(
-          `{${'kid'}}`,
+          '{kid}',
           encodeURIComponent(String(requestParameters.kid))
         ),
         method: 'GET',
@@ -56,7 +61,7 @@ export class KeysManager extends runtime.BaseAPI {
    */
   async get(
     requestParameters: GetSigningKeyRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<GetSigningKeys200ResponseInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -66,11 +71,10 @@ export class KeysManager extends runtime.BaseAPI {
    * Get all Application Signing Keys
    * Get all Application Signing Keys
    * @throws {RequiredError}
-   * @memberof KeysManager
    */
   async getAllRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<GetSigningKeys200ResponseInner>>> {
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<Array<GetSigningKeys200ResponseInner>>> {
     const response = await this.request(
       {
         path: `/keys/signing`,
@@ -86,9 +90,7 @@ export class KeysManager extends runtime.BaseAPI {
    * Get all Application Signing Keys
    * Get all Application Signing Keys
    */
-  async getAll(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Array<GetSigningKeys200ResponseInner>> {
+  async getAll(initOverrides?: InitOverrides): Promise<Array<GetSigningKeys200ResponseInner>> {
     const response = await this.getAllRaw(initOverrides);
     return await response.value();
   }
@@ -97,11 +99,8 @@ export class KeysManager extends runtime.BaseAPI {
    * Rotate the Application Signing Key
    * Rotate the Application Signing Key
    * @throws {RequiredError}
-   * @memberof KeysManager
    */
-  async rotateRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PostSigningKeys201Response>> {
+  async rotateRaw(initOverrides?: InitOverrides): Promise<ApiResponse<PostSigningKeys201Response>> {
     const response = await this.request(
       {
         path: `/keys/signing/rotate`,
@@ -117,9 +116,7 @@ export class KeysManager extends runtime.BaseAPI {
    * Rotate the Application Signing Key
    * Rotate the Application Signing Key
    */
-  async rotate(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<PostSigningKeys201Response> {
+  async rotate(initOverrides?: InitOverrides): Promise<PostSigningKeys201Response> {
     const response = await this.rotateRaw(initOverrides);
     return await response.value();
   }
@@ -128,23 +125,17 @@ export class KeysManager extends runtime.BaseAPI {
    * Revoke an Application Signing Key by its key id
    * Revoke an Application Signing Key by its key id
    * @throws {RequiredError}
-   * @memberof KeysManager
    */
   async revokeRaw(
     requestParameters: PutSigningKeysRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PutSigningKeys200Response>> {
-    if (requestParameters.kid === null || requestParameters.kid === undefined) {
-      throw new runtime.RequiredError(
-        'kid',
-        'Required parameter requestParameters.kid was null or undefined when calling revoke.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<PutSigningKeys200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['kid']);
 
     const response = await this.request(
       {
         path: `/keys/signing/{kid}/revoke`.replace(
-          `{${'kid'}}`,
+          '{kid}',
           encodeURIComponent(String(requestParameters.kid))
         ),
         method: 'PUT',
@@ -161,7 +152,7 @@ export class KeysManager extends runtime.BaseAPI {
    */
   async revoke(
     requestParameters: PutSigningKeysRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<PutSigningKeys200Response> {
     const response = await this.revokeRaw(requestParameters, initOverrides);
     return await response.value();

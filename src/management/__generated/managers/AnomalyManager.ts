@@ -1,40 +1,45 @@
-/* tslint:disable */
-/* eslint-disable */
 import * as runtime from '../../runtime';
+import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+
+const { BaseAPI } = runtime;
+
+export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteIpsByIdRequest {
+  /**
+   * IP address to unblock.
+   * @type {string}
+   */
   id: string;
 }
 
 export interface GetIpsByIdRequest {
+  /**
+   * IP address to check.
+   * @type {string}
+   */
   id: string;
 }
 
 /**
  *
  */
-export class AnomalyManager extends runtime.BaseAPI {
+export class AnomalyManager extends BaseAPI {
   /**
-   * Unblock an IP address currently blocked by the <a href=\"https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling\">Suspicious IP Throttling</a> due to multiple suspicious attempts.
+   * Unblock an IP address currently blocked by the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
    * Remove the blocked IP address
    * @throws {RequiredError}
-   * @memberof AnomalyManager
    */
   async deleteBlockedIpRaw(
     requestParameters: DeleteIpsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling deleteBlockedIp.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/anomaly/blocks/ips/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
@@ -51,32 +56,26 @@ export class AnomalyManager extends runtime.BaseAPI {
    */
   async deleteBlockedIp(
     requestParameters: DeleteIpsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.deleteBlockedIpRaw(requestParameters, initOverrides);
   }
 
   /**
-   * Check if a given IP address is blocked via the <a href=\"https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling\">Suspicious IP Throttling</a> due to multiple suspicious attempts.
+   * Check if a given IP address is blocked via the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
    * Check if an IP address is blocked
    * @throws {RequiredError}
-   * @memberof AnomalyManager
    */
   async checkIfIpIsBlockedRaw(
     requestParameters: GetIpsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError(
-        'id',
-        'Required parameter requestParameters.id was null or undefined when calling checkIfIpIsBlocked.'
-      );
-    }
+    initOverrides?: InitOverrides
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
         path: `/anomaly/blocks/ips/{id}`.replace(
-          `{${'id'}}`,
+          '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
@@ -93,7 +92,7 @@ export class AnomalyManager extends runtime.BaseAPI {
    */
   async checkIfIpIsBlocked(
     requestParameters: GetIpsByIdRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
+    initOverrides?: InitOverrides
   ): Promise<void> {
     await this.checkIfIpIsBlockedRaw(requestParameters, initOverrides);
   }

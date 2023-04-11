@@ -1,6 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
-
 export interface ConfigurationParameters {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation
@@ -392,4 +389,73 @@ export class TextApiResponse {
   async value(): Promise<string> {
     return await this.raw.text();
   }
+}
+
+export function validateRequiredRequestParams<TRequestParams extends { [key: string]: any }>(
+  requestParameters: TRequestParams,
+  keys: Array<Extract<keyof TRequestParams, string>>
+) {
+  keys.forEach((key) => {
+    if (requestParameters[key] === null || requestParameters[key] === undefined) {
+      throw new RequiredError(
+        key,
+        `Required parameter requestParameters.${key} was null or undefined.`
+      );
+    }
+  });
+}
+
+type QueryParamConfig = {
+  isArray?: boolean;
+  isCollectionFormatMulti?: boolean;
+  collectionFormat?: keyof typeof COLLECTION_FORMATS;
+  isDateTimeType?: boolean;
+  isDateType?: boolean;
+};
+
+export function applyQueryParams<
+  TRequestParams extends { [key: string]: any },
+  Key extends Extract<keyof TRequestParams, string>
+>(
+  requestParameters: TRequestParams,
+  keys: Array<{
+    key: Key;
+    config: QueryParamConfig;
+  }>
+) {
+  return keys.reduce(
+    (
+      acc: { [key: string]: any },
+      {
+        key,
+        config,
+      }: {
+        key: Key;
+        config: QueryParamConfig;
+      }
+    ) => {
+      let value;
+
+      if (config.isArray) {
+        if (config.isCollectionFormatMulti) {
+          value = requestParameters[key];
+        } else {
+          value = requestParameters[key].join(COLLECTION_FORMATS[config.collectionFormat]);
+        }
+      } else {
+        if (requestParameters[key] !== undefined) {
+          if (config.isDateTimeType) {
+            value = requestParameters[key].toISOString();
+          } else if (config.isDateType) {
+            value = requestParameters[key].toISOString().substr(0, 10);
+          } else {
+            value = requestParameters[key];
+          }
+        }
+      }
+
+      return value ? { ...acc, key: value } : acc;
+    },
+    {}
+  ) as Pick<TRequestParams, ReadonlyArray<Key>[number]>;
 }
