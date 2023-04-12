@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   EmailTemplateUpdate,
   GetEmailTemplatesByTemplateName200Response,
@@ -7,8 +7,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetEmailTemplatesByTemplateNameRequest {
   /**
@@ -45,7 +43,7 @@ export class EmailTemplatesManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetEmailTemplatesByTemplateNameRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['templateName']);
 
@@ -69,7 +67,7 @@ export class EmailTemplatesManager extends BaseAPI {
    */
   async get(
     requestParameters: GetEmailTemplatesByTemplateNameRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetEmailTemplatesByTemplateName200Response> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -83,7 +81,7 @@ export class EmailTemplatesManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchEmailTemplatesByTemplateNameRequest,
     bodyParameters: GetEmailTemplatesByTemplateName200Response,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['templateName']);
 
@@ -114,7 +112,7 @@ export class EmailTemplatesManager extends BaseAPI {
   async update(
     requestParameters: PatchEmailTemplatesByTemplateNameRequest,
     bodyParameters: GetEmailTemplatesByTemplateName200Response,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetEmailTemplatesByTemplateName200Response> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -127,7 +125,7 @@ export class EmailTemplatesManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: PostEmailTemplatesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostEmailTemplatesRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -152,7 +150,7 @@ export class EmailTemplatesManager extends BaseAPI {
    */
   async create(
     bodyParameters: PostEmailTemplatesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostEmailTemplatesRequest> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -166,7 +164,7 @@ export class EmailTemplatesManager extends BaseAPI {
   async putRaw(
     requestParameters: PutEmailTemplatesByTemplateNameRequest,
     bodyParameters: EmailTemplateUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostEmailTemplatesRequest>> {
     runtime.validateRequiredRequestParams(requestParameters, ['templateName']);
 
@@ -197,7 +195,7 @@ export class EmailTemplatesManager extends BaseAPI {
   async put(
     requestParameters: PutEmailTemplatesByTemplateNameRequest,
     bodyParameters: EmailTemplateUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostEmailTemplatesRequest> {
     const response = await this.putRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();

@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { TenantSettings, TenantSettingsUpdate } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface TenantSettingsRouteRequest {
   /**
@@ -30,7 +28,7 @@ export class TenantsManager extends BaseAPI {
    */
   async updateSettingsRaw(
     bodyParameters: TenantSettingsUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TenantSettings>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -55,7 +53,7 @@ export class TenantsManager extends BaseAPI {
    */
   async updateSettings(
     bodyParameters: TenantSettingsUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<TenantSettings> {
     const response = await this.updateSettingsRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -68,7 +66,7 @@ export class TenantsManager extends BaseAPI {
    */
   async getSettingsRaw(
     requestParameters: TenantSettingsRouteRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TenantSettings>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -99,7 +97,7 @@ export class TenantsManager extends BaseAPI {
    */
   async getSettings(
     requestParameters: TenantSettingsRouteRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<TenantSettings> {
     const response = await this.getSettingsRaw(requestParameters, initOverrides);
     return await response.value();

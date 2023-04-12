@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   DeletePermissionsRequest,
   DeleteUserIdentityByUserId200ResponseInner,
@@ -27,8 +27,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteAuthenticationMethodsByAuthenticationMethodIdRequest {
   /**
@@ -400,7 +398,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteAuthenticationMethodRaw(
     requestParameters: DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
@@ -425,7 +423,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteAuthenticationMethod(
     requestParameters: DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteAuthenticationMethodRaw(requestParameters, initOverrides);
   }
@@ -436,7 +434,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteAllAuthenticatorsRaw(
     requestParameters: DeleteAuthenticatorsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -459,7 +457,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteAllAuthenticators(
     requestParameters: DeleteAuthenticatorsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteAllAuthenticatorsRaw(requestParameters, initOverrides);
   }
@@ -471,7 +469,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteMultifactorProviderRaw(
     requestParameters: DeleteMultifactorByProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'provider']);
 
@@ -494,7 +492,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteMultifactorProvider(
     requestParameters: DeleteMultifactorByProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteMultifactorProviderRaw(requestParameters, initOverrides);
   }
@@ -508,7 +506,7 @@ export class UsersManager extends BaseAPI {
   async deletePermissiojsRaw(
     requestParameters: DeletePermissionsOperationRequest,
     bodyParameters: DeletePermissionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -539,7 +537,7 @@ export class UsersManager extends BaseAPI {
   async deletePermissiojs(
     requestParameters: DeletePermissionsOperationRequest,
     bodyParameters: DeletePermissionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deletePermissiojsRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -551,7 +549,7 @@ export class UsersManager extends BaseAPI {
    */
   async unlinkRaw(
     requestParameters: DeleteUserIdentityByUserIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<DeleteUserIdentityByUserId200ResponseInner>>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'provider', 'user_id']);
 
@@ -575,7 +573,7 @@ export class UsersManager extends BaseAPI {
    */
   async unlink(
     requestParameters: DeleteUserIdentityByUserIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<DeleteUserIdentityByUserId200ResponseInner>> {
     const response = await this.unlinkRaw(requestParameters, initOverrides);
     return await response.value();
@@ -589,7 +587,7 @@ export class UsersManager extends BaseAPI {
   async deleteRolesRaw(
     requestParameters: DeleteUserRolesOperationRequest,
     bodyParameters: DeleteUserRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -617,7 +615,7 @@ export class UsersManager extends BaseAPI {
   async deleteRoles(
     requestParameters: DeleteUserRolesOperationRequest,
     bodyParameters: DeleteUserRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRolesRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -629,7 +627,7 @@ export class UsersManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteUsersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -650,7 +648,7 @@ export class UsersManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteUsersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -661,7 +659,7 @@ export class UsersManager extends BaseAPI {
    */
   async getAuthenticationMethodsRaw(
     requestParameters: GetAuthenticationMethodsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetAuthenticationMethods200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -700,7 +698,7 @@ export class UsersManager extends BaseAPI {
    */
   async getAuthenticationMethods(
     requestParameters: GetAuthenticationMethodsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetAuthenticationMethods200Response> {
     const response = await this.getAuthenticationMethodsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -712,7 +710,7 @@ export class UsersManager extends BaseAPI {
    */
   async getAuthenticationMethodRaw(
     requestParameters: GetAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
@@ -737,7 +735,7 @@ export class UsersManager extends BaseAPI {
    */
   async getAuthenticationMethod(
     requestParameters: GetAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner> {
     const response = await this.getAuthenticationMethodRaw(requestParameters, initOverrides);
     return await response.value();
@@ -750,7 +748,7 @@ export class UsersManager extends BaseAPI {
    */
   async getEnrollmentsRaw(
     requestParameters: GetEnrollmentsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<UserEnrollment>>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -774,7 +772,7 @@ export class UsersManager extends BaseAPI {
    */
   async getEnrollments(
     requestParameters: GetEnrollmentsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<UserEnrollment>> {
     const response = await this.getEnrollmentsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -793,7 +791,7 @@ export class UsersManager extends BaseAPI {
    */
   async getLogsRaw(
     requestParameters: GetLogsByUserRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogs200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -834,7 +832,7 @@ export class UsersManager extends BaseAPI {
    */
   async getLogs(
     requestParameters: GetLogsByUserRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetLogs200Response> {
     const response = await this.getLogsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -847,7 +845,7 @@ export class UsersManager extends BaseAPI {
    */
   async getPermissionsRaw(
     requestParameters: GetPermissionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPermissions200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -887,7 +885,7 @@ export class UsersManager extends BaseAPI {
    */
   async getPermissions(
     requestParameters: GetPermissionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPermissions200Response> {
     const response = await this.getPermissionsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -901,7 +899,7 @@ export class UsersManager extends BaseAPI {
    */
   async getUserOrganizationsRaw(
     requestParameters: GetUserOrganizationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUserOrganizations200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -941,7 +939,7 @@ export class UsersManager extends BaseAPI {
    */
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetUserOrganizations200Response> {
     const response = await this.getUserOrganizationsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -954,7 +952,7 @@ export class UsersManager extends BaseAPI {
    */
   async getRolesRaw(
     requestParameters: GetUserRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -991,7 +989,7 @@ export class UsersManager extends BaseAPI {
    */
   async getRoles(
     requestParameters: GetUserRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizationMemberRoles200Response> {
     const response = await this.getRolesRaw(requestParameters, initOverrides);
     return await response.value();
@@ -1018,7 +1016,7 @@ export class UsersManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetUsersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -1077,7 +1075,7 @@ export class UsersManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetUsersRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetUsers200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -1090,7 +1088,7 @@ export class UsersManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetUsersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1123,7 +1121,7 @@ export class UsersManager extends BaseAPI {
    */
   async get(
     requestParameters: GetUsersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetUsers200ResponseOneOfInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -1136,7 +1134,7 @@ export class UsersManager extends BaseAPI {
   async updateAuthenticationMethodRaw(
     requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
     bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
@@ -1168,7 +1166,7 @@ export class UsersManager extends BaseAPI {
   async updateAuthenticationMethod(
     requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
     bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateAuthenticationMethodRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -1250,7 +1248,7 @@ export class UsersManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchUsersByIdRequest,
     bodyParameters: UserUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1278,7 +1276,7 @@ export class UsersManager extends BaseAPI {
   async update(
     requestParameters: PatchUsersByIdRequest,
     bodyParameters: UserUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetUsers200ResponseOneOfInner> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -1291,7 +1289,7 @@ export class UsersManager extends BaseAPI {
   async createAuthenticationMethodRaw(
     requestParameters: PostAuthenticationMethodsOperationRequest,
     bodyParameters: PostAuthenticationMethodsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostAuthenticationMethods201Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1321,7 +1319,7 @@ export class UsersManager extends BaseAPI {
   async createAuthenticationMethod(
     requestParameters: PostAuthenticationMethodsOperationRequest,
     bodyParameters: PostAuthenticationMethodsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostAuthenticationMethods201Response> {
     const response = await this.createAuthenticationMethodRaw(
       requestParameters,
@@ -1366,7 +1364,7 @@ export class UsersManager extends BaseAPI {
   async linkRaw(
     requestParameters: PostIdentitiesOperationRequest,
     bodyParameters: PostIdentitiesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<UserIdentity>>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1397,7 +1395,7 @@ export class UsersManager extends BaseAPI {
   async link(
     requestParameters: PostIdentitiesOperationRequest,
     bodyParameters: PostIdentitiesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<UserIdentity>> {
     const response = await this.linkRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -1410,7 +1408,7 @@ export class UsersManager extends BaseAPI {
    */
   async invalidateRememberBrowserRaw(
     requestParameters: PostInvalidateRememberBrowserRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1434,7 +1432,7 @@ export class UsersManager extends BaseAPI {
    */
   async invalidateRememberBrowser(
     requestParameters: PostInvalidateRememberBrowserRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.invalidateRememberBrowserRaw(requestParameters, initOverrides);
   }
@@ -1447,7 +1445,7 @@ export class UsersManager extends BaseAPI {
   async assignPermissionsRaw(
     requestParameters: PostPermissionsOperationRequest,
     bodyParameters: PostPermissionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<any>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1478,7 +1476,7 @@ export class UsersManager extends BaseAPI {
   async assignPermissions(
     requestParameters: PostPermissionsOperationRequest,
     bodyParameters: PostPermissionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<any> {
     const response = await this.assignPermissionsRaw(
       requestParameters,
@@ -1495,7 +1493,7 @@ export class UsersManager extends BaseAPI {
    */
   async regenerateRecoveryCodeRaw(
     requestParameters: PostRecoveryCodeRegenerationRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostRecoveryCodeRegeneration200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1519,7 +1517,7 @@ export class UsersManager extends BaseAPI {
    */
   async regenerateRecoveryCode(
     requestParameters: PostRecoveryCodeRegenerationRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostRecoveryCodeRegeneration200Response> {
     const response = await this.regenerateRecoveryCodeRaw(requestParameters, initOverrides);
     return await response.value();
@@ -1533,7 +1531,7 @@ export class UsersManager extends BaseAPI {
   async assignRolesRaw(
     requestParameters: PostUserRolesOperationRequest,
     bodyParameters: PostUserRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1561,7 +1559,7 @@ export class UsersManager extends BaseAPI {
   async assignRoles(
     requestParameters: PostUserRolesOperationRequest,
     bodyParameters: PostUserRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.assignRolesRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -1575,7 +1573,7 @@ export class UsersManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: UserCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200ResponseOneOfInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1600,7 +1598,7 @@ export class UsersManager extends BaseAPI {
    */
   async create(
     bodyParameters: UserCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetUsers200ResponseOneOfInner> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -1613,7 +1611,7 @@ export class UsersManager extends BaseAPI {
   async updateAuthenticationMethodsRaw(
     requestParameters: PutAuthenticationMethodsRequest,
     bodyParameters: Array<PutAuthenticationMethodsRequestInner>,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1643,7 +1641,7 @@ export class UsersManager extends BaseAPI {
   async updateAuthenticationMethods(
     requestParameters: PutAuthenticationMethodsRequest,
     bodyParameters: Array<PutAuthenticationMethodsRequestInner>,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateAuthenticationMethodsRaw(requestParameters, bodyParameters, initOverrides);
   }

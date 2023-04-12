@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { Token } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetTokensRequest {
   /**
@@ -28,7 +26,7 @@ export class BlacklistsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetTokensRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<Token>>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -55,7 +53,7 @@ export class BlacklistsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetTokensRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<Token>> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -67,7 +65,7 @@ export class BlacklistsManager extends BaseAPI {
    * Blacklist a token
    * @throws {RequiredError}
    */
-  async addRaw(bodyParameters: Token, initOverrides?: InitOverrides): Promise<ApiResponse<void>> {
+  async addRaw(bodyParameters: Token, initOverrides?: InitOverride): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -89,7 +87,7 @@ export class BlacklistsManager extends BaseAPI {
    * Add the token identified by the `jti` to a blacklist for the tenant.<br/>
    * Blacklist a token
    */
-  async add(bodyParameters: Token, initOverrides?: InitOverrides): Promise<void> {
+  async add(bodyParameters: Token, initOverrides?: InitOverride): Promise<void> {
     await this.addRaw(bodyParameters, initOverrides);
   }
 }

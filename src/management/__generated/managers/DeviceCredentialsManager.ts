@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   DeviceCredentialCreate,
   GetDeviceCredentials200Response,
@@ -7,8 +7,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteDeviceCredentialsByIdRequest {
   /**
@@ -72,7 +70,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteDeviceCredentialsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -96,7 +94,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteDeviceCredentialsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -112,7 +110,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetDeviceCredentialsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetDeviceCredentials200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -167,7 +165,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetDeviceCredentialsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetDeviceCredentials200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -184,7 +182,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    */
   async createPublicKeyRaw(
     bodyParameters: DeviceCredentialCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostDeviceCredentials201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -209,7 +207,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    */
   async createPublicKey(
     bodyParameters: DeviceCredentialCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostDeviceCredentials201Response> {
     const response = await this.createPublicKeyRaw(bodyParameters, initOverrides);
     return await response.value();

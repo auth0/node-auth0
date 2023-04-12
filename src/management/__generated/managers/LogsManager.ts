@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { GetLogs200Response, Log } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetLogsRequest {
   /**
@@ -102,7 +100,7 @@ export class LogsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetLogsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogs200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -161,7 +159,7 @@ export class LogsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetLogsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetLogs200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -174,7 +172,7 @@ export class LogsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetLogsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Log>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -193,7 +191,7 @@ export class LogsManager extends BaseAPI {
    * Retrieve an individual log event.
    * Get a log event by id
    */
-  async get(requestParameters: GetLogsByIdRequest, initOverrides?: InitOverrides): Promise<Log> {
+  async get(requestParameters: GetLogsByIdRequest, initOverrides?: InitOverride): Promise<Log> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
   }

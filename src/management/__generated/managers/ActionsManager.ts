@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   GetActionVersions200Response,
   GetActionVersions200ResponseVersionsInner,
@@ -18,8 +18,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteActionRequest {
   /**
@@ -190,7 +188,7 @@ export class ActionsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -222,7 +220,7 @@ export class ActionsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -235,7 +233,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -259,7 +257,7 @@ export class ActionsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActions200ResponseActionsInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -274,7 +272,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getVersionRaw(
     requestParameters: GetActionVersionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActionVersions200ResponseVersionsInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['actionId', 'id']);
 
@@ -297,7 +295,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getVersion(
     requestParameters: GetActionVersionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActionVersions200ResponseVersionsInner> {
     const response = await this.getVersionRaw(requestParameters, initOverrides);
     return await response.value();
@@ -312,7 +310,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getVersionsRaw(
     requestParameters: GetActionVersionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActionVersions200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['actionId']);
 
@@ -348,7 +346,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getVersions(
     requestParameters: GetActionVersionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActionVersions200Response> {
     const response = await this.getVersionsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -362,7 +360,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetActionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActions200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -409,7 +407,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetActionsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActions200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -425,7 +423,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getTriggerBindingsRaw(
     requestParameters: GetBindingsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetBindings200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['triggerId']);
 
@@ -461,7 +459,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getTriggerBindings(
     requestParameters: GetBindingsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetBindings200Response> {
     const response = await this.getTriggerBindingsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -476,7 +474,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getExecutionRaw(
     requestParameters: GetExecutionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetExecution200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -500,7 +498,7 @@ export class ActionsManager extends BaseAPI {
    */
   async getExecution(
     requestParameters: GetExecutionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetExecution200Response> {
     const response = await this.getExecutionRaw(requestParameters, initOverrides);
     return await response.value();
@@ -514,7 +512,7 @@ export class ActionsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getAllTriggersRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetTriggers200Response>> {
     const response = await this.request(
       {
@@ -531,7 +529,7 @@ export class ActionsManager extends BaseAPI {
    * Retrieve the set of triggers currently available within actions. A trigger is an extensibility point to which actions <br/>can be bound.<br/>
    * Get triggers
    */
-  async getAllTriggers(initOverrides?: InitOverrides): Promise<GetTriggers200Response> {
+  async getAllTriggers(initOverrides?: InitOverride): Promise<GetTriggers200Response> {
     const response = await this.getAllTriggersRaw(initOverrides);
     return await response.value();
   }
@@ -546,7 +544,7 @@ export class ActionsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchActionOperationRequest,
     bodyParameters: PatchActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -577,7 +575,7 @@ export class ActionsManager extends BaseAPI {
   async update(
     requestParameters: PatchActionOperationRequest,
     bodyParameters: PatchActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActions200ResponseActionsInner> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -594,7 +592,7 @@ export class ActionsManager extends BaseAPI {
   async updateTriggerBindingsRaw(
     requestParameters: PatchBindingsOperationRequest,
     bodyParameters: PatchBindingsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PatchBindings200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['triggerId']);
 
@@ -625,7 +623,7 @@ export class ActionsManager extends BaseAPI {
   async updateTriggerBindings(
     requestParameters: PatchBindingsOperationRequest,
     bodyParameters: PatchBindingsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PatchBindings200Response> {
     const response = await this.updateTriggerBindingsRaw(
       requestParameters,
@@ -644,7 +642,7 @@ export class ActionsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: PostActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -669,7 +667,7 @@ export class ActionsManager extends BaseAPI {
    */
   async create(
     bodyParameters: PostActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActions200ResponseActionsInner> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -684,7 +682,7 @@ export class ActionsManager extends BaseAPI {
    */
   async deployRaw(
     requestParameters: PostDeployActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActionVersions200ResponseVersionsInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -708,7 +706,7 @@ export class ActionsManager extends BaseAPI {
    */
   async deploy(
     requestParameters: PostDeployActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActionVersions200ResponseVersionsInner> {
     const response = await this.deployRaw(requestParameters, initOverrides);
     return await response.value();
@@ -725,7 +723,7 @@ export class ActionsManager extends BaseAPI {
   async deployVersionRaw(
     requestParameters: PostDeployDraftVersionOperationRequest,
     bodyParameters: PostDeployDraftVersionRequest | null,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetActionVersions200ResponseVersionsInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'actionId']);
 
@@ -755,7 +753,7 @@ export class ActionsManager extends BaseAPI {
   async deployVersion(
     requestParameters: PostDeployDraftVersionOperationRequest,
     bodyParameters: PostDeployDraftVersionRequest | null,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetActionVersions200ResponseVersionsInner> {
     const response = await this.deployVersionRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -770,7 +768,7 @@ export class ActionsManager extends BaseAPI {
   async testRaw(
     requestParameters: PostTestActionOperationRequest,
     bodyParameters: PostTestActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostTestAction200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -801,7 +799,7 @@ export class ActionsManager extends BaseAPI {
   async test(
     requestParameters: PostTestActionOperationRequest,
     bodyParameters: PostTestActionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostTestAction200Response> {
     const response = await this.testRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();

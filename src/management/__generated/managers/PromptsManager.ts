@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { PromptsSettings, PromptsSettingsUpdate } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetCustomTextByLanguageRequest {
   /**
@@ -43,7 +41,7 @@ export class PromptsManager extends BaseAPI {
    */
   async getCustomTextByLanguageRaw(
     requestParameters: GetCustomTextByLanguageRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
     runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'language']);
 
@@ -66,7 +64,7 @@ export class PromptsManager extends BaseAPI {
    */
   async getCustomTextByLanguage(
     requestParameters: GetCustomTextByLanguageRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<{ [key: string]: any }> {
     const response = await this.getCustomTextByLanguageRaw(requestParameters, initOverrides);
     return await response.value();
@@ -77,7 +75,7 @@ export class PromptsManager extends BaseAPI {
    * Get prompts settings
    * @throws {RequiredError}
    */
-  async getRaw(initOverrides?: InitOverrides): Promise<ApiResponse<PromptsSettings>> {
+  async getRaw(initOverrides?: InitOverride): Promise<ApiResponse<PromptsSettings>> {
     const response = await this.request(
       {
         path: `/prompts`,
@@ -93,7 +91,7 @@ export class PromptsManager extends BaseAPI {
    * Retrieve prompts settings.
    * Get prompts settings
    */
-  async get(initOverrides?: InitOverrides): Promise<PromptsSettings> {
+  async get(initOverrides?: InitOverride): Promise<PromptsSettings> {
     const response = await this.getRaw(initOverrides);
     return await response.value();
   }
@@ -105,7 +103,7 @@ export class PromptsManager extends BaseAPI {
    */
   async updateRaw(
     bodyParameters: PromptsSettingsUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PromptsSettings>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -130,7 +128,7 @@ export class PromptsManager extends BaseAPI {
    */
   async update(
     bodyParameters: PromptsSettingsUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PromptsSettings> {
     const response = await this.updateRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -144,7 +142,7 @@ export class PromptsManager extends BaseAPI {
   async updateCustomTextByLanguageRaw(
     requestParameters: PutCustomTextByLanguageRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'language']);
 
@@ -174,7 +172,7 @@ export class PromptsManager extends BaseAPI {
   async updateCustomTextByLanguage(
     requestParameters: PutCustomTextByLanguageRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateCustomTextByLanguageRaw(requestParameters, bodyParameters, initOverrides);
   }

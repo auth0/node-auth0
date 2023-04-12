@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   PostEmailVerification201Response,
   PostEmailVerificationRequest,
@@ -8,8 +8,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 /**
  *
@@ -22,7 +20,7 @@ export class TicketsManager extends BaseAPI {
    */
   async verifyEmailRaw(
     bodyParameters: PostEmailVerificationRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostEmailVerification201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -47,7 +45,7 @@ export class TicketsManager extends BaseAPI {
    */
   async verifyEmail(
     bodyParameters: PostEmailVerificationRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostEmailVerification201Response> {
     const response = await this.verifyEmailRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -60,7 +58,7 @@ export class TicketsManager extends BaseAPI {
    */
   async changePasswordRaw(
     bodyParameters: PostPasswordChangeRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostPasswordChange201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -85,7 +83,7 @@ export class TicketsManager extends BaseAPI {
    */
   async changePassword(
     bodyParameters: PostPasswordChangeRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostPasswordChange201Response> {
     const response = await this.changePasswordRaw(bodyParameters, initOverrides);
     return await response.value();

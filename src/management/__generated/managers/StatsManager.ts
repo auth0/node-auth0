@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { StatsEntry } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetDailyRequest {
   /**
@@ -28,7 +26,7 @@ export class StatsManager extends BaseAPI {
    * Get active users count
    * @throws {RequiredError}
    */
-  async getActiveUsersCountRaw(initOverrides?: InitOverrides): Promise<ApiResponse<number>> {
+  async getActiveUsersCountRaw(initOverrides?: InitOverride): Promise<ApiResponse<number>> {
     const response = await this.request(
       {
         path: `/stats/active-users`,
@@ -44,7 +42,7 @@ export class StatsManager extends BaseAPI {
    * Retrieve the number of active users that logged in during the last 30 days.
    * Get active users count
    */
-  async getActiveUsersCount(initOverrides?: InitOverrides): Promise<number> {
+  async getActiveUsersCount(initOverrides?: InitOverride): Promise<number> {
     const response = await this.getActiveUsersCountRaw(initOverrides);
     return await response.value();
   }
@@ -56,7 +54,7 @@ export class StatsManager extends BaseAPI {
    */
   async getDailyRaw(
     requestParameters: GetDailyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<StatsEntry>>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -87,7 +85,7 @@ export class StatsManager extends BaseAPI {
    */
   async getDaily(
     requestParameters: GetDailyRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<StatsEntry>> {
     const response = await this.getDailyRaw(requestParameters, initOverrides);
     return await response.value();

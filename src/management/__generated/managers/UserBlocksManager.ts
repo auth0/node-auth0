@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { UserBlock } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteUserBlocksRequest {
   /**
@@ -60,7 +58,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async deleteAllRaw(
     requestParameters: DeleteUserBlocksRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['identifier']);
 
@@ -89,7 +87,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async deleteAll(
     requestParameters: DeleteUserBlocksRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteAllRaw(requestParameters, initOverrides);
   }
@@ -104,7 +102,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteUserBlocksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -125,7 +123,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteUserBlocksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -138,7 +136,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetUserBlocksRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<UserBlock>> {
     runtime.validateRequiredRequestParams(requestParameters, ['identifier']);
 
@@ -171,7 +169,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetUserBlocksRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<UserBlock> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -186,7 +184,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetUserBlocksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<UserBlock>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -215,7 +213,7 @@ export class UserBlocksManager extends BaseAPI {
    */
   async get(
     requestParameters: GetUserBlocksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<UserBlock> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();

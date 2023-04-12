@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { GetGrants200Response } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteRequest {
   /**
@@ -66,7 +64,7 @@ export class GrantsManager extends BaseAPI {
    */
   async deleteByUserIdRaw(
     requestParameters: DeleteRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -93,7 +91,7 @@ export class GrantsManager extends BaseAPI {
    */
   async deleteByUserId(
     requestParameters: DeleteRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteByUserIdRaw(requestParameters, initOverrides);
   }
@@ -105,7 +103,7 @@ export class GrantsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteGrantsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -126,7 +124,7 @@ export class GrantsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteGrantsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -138,7 +136,7 @@ export class GrantsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetGrantsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetGrants200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -185,7 +183,7 @@ export class GrantsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetGrantsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetGrants200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();

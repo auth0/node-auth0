@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   GetLogStreams200ResponseInner,
   PatchLogStreamsByIdRequest,
@@ -7,8 +7,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteLogStreamsByIdRequest {
   /**
@@ -46,7 +44,7 @@ export class LogStreamsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteLogStreamsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -67,7 +65,7 @@ export class LogStreamsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteLogStreamsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -144,7 +142,7 @@ export class LogStreamsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getAllRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<GetLogStreams200ResponseInner>>> {
     const response = await this.request(
       {
@@ -161,7 +159,7 @@ export class LogStreamsManager extends BaseAPI {
    * Retrieve details on <a href=\"https://auth0.com/docs/logs/streams\">log streams</a>.<br/><h5>Sample Response</h5><pre><code>[{<br/> \"id\": \"string\",<br/> \"name\": \"string\",<br/> \"type\": \"eventbridge\",<br/> \"status\": \"active|paused|suspended\",<br/> \"sink\": {<br/>  \"awsAccountId\": \"string\",<br/>  \"awsRegion\": \"string\",<br/>  \"awsPartnerEventSource\": \"string\"<br/> }<br/>}, {<br/> \"id\": \"string\",<br/> \"name\": \"string\",<br/> \"type\": \"http\",<br/> \"status\": \"active|paused|suspended\",<br/> \"sink\": {<br/>  \"httpContentFormat\": \"JSONLINES|JSONARRAY\",<br/>  \"httpContentType\": \"string\",<br/>  \"httpEndpoint\": \"string\",<br/>  \"httpAuthorization\": \"string\"<br/> }<br/>},<br/>{<br/> \"id\": \"string\",<br/> \"name\": \"string\",<br/> \"type\": \"eventgrid\",<br/> \"status\": \"active|paused|suspended\",<br/> \"sink\": {<br/>  \"azureSubscriptionId\": \"string\",<br/>  \"azureResourceGroup\": \"string\",<br/>  \"azureRegion\": \"string\",<br/>  \"azurePartnerTopic\": \"string\"<br/> }<br/>},<br/>{<br/> \"id\": \"string\",<br/> \"name\": \"string\",<br/> \"type\": \"splunk\",<br/> \"status\": \"active|paused|suspended\",<br/> \"sink\": {<br/>  \"splunkDomain\": \"string\",<br/>  \"splunkToken\": \"string\",<br/>  \"splunkPort\": \"string\",<br/>  \"splunkSecure\": \"boolean\"<br/> }<br/>},<br/>{<br/> \"id\": \"string\",<br/> \"name\": \"string\",<br/> \"type\": \"sumo\",<br/> \"status\": \"active|paused|suspended\",<br/> \"sink\": {<br/>  \"sumoSourceAddress\": \"string\",<br/> }<br/>},<br/>{<br/> \"id\": \"string\",<br/> \"name\": \"string\",<br/> \"type\": \"datadog\",<br/> \"status\": \"active|paused|suspended\",<br/> \"sink\": {<br/>  \"datadogRegion\": \"string\",<br/>  \"datadogApiKey\": \"string\"<br/> }<br/>}]</code></pre><br/>
    * Get log streams
    */
-  async getAll(initOverrides?: InitOverrides): Promise<Array<GetLogStreams200ResponseInner>> {
+  async getAll(initOverrides?: InitOverride): Promise<Array<GetLogStreams200ResponseInner>> {
     const response = await this.getAllRaw(initOverrides);
     return await response.value();
   }
@@ -227,7 +225,7 @@ export class LogStreamsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetLogStreamsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogStreams200ResponseInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -248,7 +246,7 @@ export class LogStreamsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetLogStreamsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetLogStreams200ResponseInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -296,7 +294,7 @@ export class LogStreamsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchLogStreamsByIdOperationRequest,
     bodyParameters: PatchLogStreamsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogStreams200ResponseInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -324,7 +322,7 @@ export class LogStreamsManager extends BaseAPI {
   async update(
     requestParameters: PatchLogStreamsByIdOperationRequest,
     bodyParameters: PatchLogStreamsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetLogStreams200ResponseInner> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -463,7 +461,7 @@ export class LogStreamsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: PostLogStreamsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogStreams200ResponseInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -488,7 +486,7 @@ export class LogStreamsManager extends BaseAPI {
    */
   async create(
     bodyParameters: PostLogStreamsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetLogStreams200ResponseInner> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();

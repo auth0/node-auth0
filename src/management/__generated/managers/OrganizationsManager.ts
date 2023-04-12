@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   DeleteMembersRequest,
   DeleteOrganizationMemberRolesRequest,
@@ -21,8 +21,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
@@ -354,7 +352,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async removeEnabledConnectionRaw(
     requestParameters: DeleteEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'connectionId']);
 
@@ -376,7 +374,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async removeEnabledConnection(
     requestParameters: DeleteEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.removeEnabledConnectionRaw(requestParameters, initOverrides);
   }
@@ -387,7 +385,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async deleteInvitationRaw(
     requestParameters: DeleteInvitationsByInvitationIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'invitation_id']);
 
@@ -409,7 +407,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async deleteInvitation(
     requestParameters: DeleteInvitationsByInvitationIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteInvitationRaw(requestParameters, initOverrides);
   }
@@ -421,7 +419,7 @@ export class OrganizationsManager extends BaseAPI {
   async deleteMembersRaw(
     requestParameters: DeleteMembersOperationRequest,
     bodyParameters: DeleteMembersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -451,7 +449,7 @@ export class OrganizationsManager extends BaseAPI {
   async deleteMembers(
     requestParameters: DeleteMembersOperationRequest,
     bodyParameters: DeleteMembersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteMembersRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -463,7 +461,7 @@ export class OrganizationsManager extends BaseAPI {
   async deleteMemberRolesRaw(
     requestParameters: DeleteOrganizationMemberRolesOperationRequest,
     bodyParameters: DeleteOrganizationMemberRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'user_id']);
 
@@ -492,7 +490,7 @@ export class OrganizationsManager extends BaseAPI {
   async deleteMemberRoles(
     requestParameters: DeleteOrganizationMemberRolesOperationRequest,
     bodyParameters: DeleteOrganizationMemberRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteMemberRolesRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -505,7 +503,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteOrganizationsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -529,7 +527,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteOrganizationsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -540,7 +538,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getEnabledConnectionsRaw(
     requestParameters: GetEnabledConnectionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -579,7 +577,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getEnabledConnections(
     requestParameters: GetEnabledConnectionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetEnabledConnections200Response> {
     const response = await this.getEnabledConnectionsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -591,7 +589,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getEnabledConnectionRaw(
     requestParameters: GetEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'connectionId']);
 
@@ -613,7 +611,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getEnabledConnection(
     requestParameters: GetEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetEnabledConnections200ResponseOneOfInner> {
     const response = await this.getEnabledConnectionRaw(requestParameters, initOverrides);
     return await response.value();
@@ -625,7 +623,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getInvitationsRaw(
     requestParameters: GetInvitationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetInvitations200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -676,7 +674,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getInvitations(
     requestParameters: GetInvitationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetInvitations200Response> {
     const response = await this.getInvitationsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -688,7 +686,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getInvitationRaw(
     requestParameters: GetInvitationsByInvitationIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetInvitations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'invitation_id']);
 
@@ -722,7 +720,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getInvitation(
     requestParameters: GetInvitationsByInvitationIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetInvitations200ResponseOneOfInner> {
     const response = await this.getInvitationRaw(requestParameters, initOverrides);
     return await response.value();
@@ -748,7 +746,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getMembersRaw(
     requestParameters: GetMembersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMembers200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -796,7 +794,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getMembers(
     requestParameters: GetMembersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetMembers200Response> {
     const response = await this.getMembersRaw(requestParameters, initOverrides);
     return await response.value();
@@ -810,7 +808,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getByNameRaw(
     requestParameters: GetNameByNameRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['name']);
 
@@ -834,7 +832,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getByName(
     requestParameters: GetNameByNameRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizations200ResponseOneOfInner> {
     const response = await this.getByNameRaw(requestParameters, initOverrides);
     return await response.value();
@@ -846,7 +844,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getMemberRolesRaw(
     requestParameters: GetOrganizationMemberRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'user_id']);
 
@@ -884,7 +882,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getMemberRoles(
     requestParameters: GetOrganizationMemberRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizationMemberRoles200Response> {
     const response = await this.getMemberRolesRaw(requestParameters, initOverrides);
     return await response.value();
@@ -910,7 +908,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetOrganizationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -957,7 +955,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetOrganizationsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizations200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -971,7 +969,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetOrganizationsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -995,7 +993,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetOrganizationsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizations200ResponseOneOfInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -1010,7 +1008,7 @@ export class OrganizationsManager extends BaseAPI {
   async updateEnabledConnectionRaw(
     requestParameters: PatchEnabledConnectionsByConnectionIdOperationRequest,
     bodyParameters: PatchEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'connectionId']);
 
@@ -1040,7 +1038,7 @@ export class OrganizationsManager extends BaseAPI {
   async updateEnabledConnection(
     requestParameters: PatchEnabledConnectionsByConnectionIdOperationRequest,
     bodyParameters: PatchEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetEnabledConnections200ResponseOneOfInner> {
     const response = await this.updateEnabledConnectionRaw(
       requestParameters,
@@ -1059,7 +1057,7 @@ export class OrganizationsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchOrganizationsByIdOperationRequest,
     bodyParameters: PatchOrganizationsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1090,7 +1088,7 @@ export class OrganizationsManager extends BaseAPI {
   async update(
     requestParameters: PatchOrganizationsByIdOperationRequest,
     bodyParameters: PatchOrganizationsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizations200ResponseOneOfInner> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -1103,7 +1101,7 @@ export class OrganizationsManager extends BaseAPI {
   async addEnabledConnectionRaw(
     requestParameters: PostEnabledConnectionsOperationRequest,
     bodyParameters: PostEnabledConnectionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1133,7 +1131,7 @@ export class OrganizationsManager extends BaseAPI {
   async addEnabledConnection(
     requestParameters: PostEnabledConnectionsOperationRequest,
     bodyParameters: PostEnabledConnectionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetEnabledConnections200ResponseOneOfInner> {
     const response = await this.addEnabledConnectionRaw(
       requestParameters,
@@ -1150,7 +1148,7 @@ export class OrganizationsManager extends BaseAPI {
   async createInvitationRaw(
     requestParameters: PostInvitationsOperationRequest,
     bodyParameters: PostInvitationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetInvitations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1180,7 +1178,7 @@ export class OrganizationsManager extends BaseAPI {
   async createInvitation(
     requestParameters: PostInvitationsOperationRequest,
     bodyParameters: PostInvitationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetInvitations200ResponseOneOfInner> {
     const response = await this.createInvitationRaw(
       requestParameters,
@@ -1197,7 +1195,7 @@ export class OrganizationsManager extends BaseAPI {
   async addMembersRaw(
     requestParameters: PostMembersOperationRequest,
     bodyParameters: PostMembersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -1227,7 +1225,7 @@ export class OrganizationsManager extends BaseAPI {
   async addMembers(
     requestParameters: PostMembersOperationRequest,
     bodyParameters: PostMembersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.addMembersRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -1239,7 +1237,7 @@ export class OrganizationsManager extends BaseAPI {
   async addMemberRolesRaw(
     requestParameters: PostOrganizationMemberRolesOperationRequest,
     bodyParameters: PostOrganizationMemberRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'user_id']);
 
@@ -1268,7 +1266,7 @@ export class OrganizationsManager extends BaseAPI {
   async addMemberRoles(
     requestParameters: PostOrganizationMemberRolesOperationRequest,
     bodyParameters: PostOrganizationMemberRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.addMemberRolesRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -1281,7 +1279,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: PostOrganizationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1306,7 +1304,7 @@ export class OrganizationsManager extends BaseAPI {
    */
   async create(
     bodyParameters: PostOrganizationsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizations200ResponseOneOfInner> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();

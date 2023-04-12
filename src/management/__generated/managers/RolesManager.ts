@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   GetOrganizationMemberRoles200Response,
   GetOrganizationMemberRoles200ResponseOneOfInner,
@@ -12,8 +12,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteRolePermissionAssignmentRequest {
   /**
@@ -155,7 +153,7 @@ export class RolesManager extends BaseAPI {
   async removePermissionsRaw(
     requestParameters: DeleteRolePermissionAssignmentRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<any>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -186,7 +184,7 @@ export class RolesManager extends BaseAPI {
   async removePermissions(
     requestParameters: DeleteRolePermissionAssignmentRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<any> {
     const response = await this.removePermissionsRaw(
       requestParameters,
@@ -204,7 +202,7 @@ export class RolesManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteRolesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -225,7 +223,7 @@ export class RolesManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteRolesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -238,7 +236,7 @@ export class RolesManager extends BaseAPI {
    */
   async getPermissionsRaw(
     requestParameters: GetRolePermissionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRolePermission200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -278,7 +276,7 @@ export class RolesManager extends BaseAPI {
    */
   async getPermissions(
     requestParameters: GetRolePermissionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetRolePermission200Response> {
     const response = await this.getPermissionsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -304,7 +302,7 @@ export class RolesManager extends BaseAPI {
    */
   async getUsersRaw(
     requestParameters: GetRoleUserRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRoleUser200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -349,7 +347,7 @@ export class RolesManager extends BaseAPI {
    */
   async getUsers(
     requestParameters: GetRoleUserRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetRoleUser200Response> {
     const response = await this.getUsersRaw(requestParameters, initOverrides);
     return await response.value();
@@ -363,7 +361,7 @@ export class RolesManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetRolesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -402,7 +400,7 @@ export class RolesManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetRolesRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizationMemberRoles200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -416,7 +414,7 @@ export class RolesManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetRolesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -437,7 +435,7 @@ export class RolesManager extends BaseAPI {
    */
   async get(
     requestParameters: GetRolesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizationMemberRoles200ResponseOneOfInner> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -452,7 +450,7 @@ export class RolesManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchRolesByIdRequest,
     bodyParameters: RoleUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -480,7 +478,7 @@ export class RolesManager extends BaseAPI {
   async update(
     requestParameters: PatchRolesByIdRequest,
     bodyParameters: RoleUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizationMemberRoles200ResponseOneOfInner> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -495,7 +493,7 @@ export class RolesManager extends BaseAPI {
   async addPermissionsRaw(
     requestParameters: PostRolePermissionAssignmentOperationRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<any>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -526,7 +524,7 @@ export class RolesManager extends BaseAPI {
   async addPermissions(
     requestParameters: PostRolePermissionAssignmentOperationRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<any> {
     const response = await this.addPermissionsRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -540,7 +538,7 @@ export class RolesManager extends BaseAPI {
   async assignUsersRaw(
     requestParameters: PostRoleUsersOperationRequest,
     bodyParameters: PostRoleUsersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<any>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -568,7 +566,7 @@ export class RolesManager extends BaseAPI {
   async assignUsers(
     requestParameters: PostRoleUsersOperationRequest,
     bodyParameters: PostRoleUsersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<any> {
     const response = await this.assignUsersRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -582,7 +580,7 @@ export class RolesManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: RoleCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOfInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -607,7 +605,7 @@ export class RolesManager extends BaseAPI {
    */
   async create(
     bodyParameters: RoleCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetOrganizationMemberRoles200ResponseOneOfInner> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();

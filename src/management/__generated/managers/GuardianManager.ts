@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   Enrollment,
   EnrollmentCreate,
@@ -25,8 +25,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteEnrollmentsByIdRequest {
   /**
@@ -63,7 +61,7 @@ export class GuardianManager extends BaseAPI {
    */
   async deleteGuardianEnrollmentRaw(
     requestParameters: DeleteEnrollmentsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -87,7 +85,7 @@ export class GuardianManager extends BaseAPI {
    */
   async deleteGuardianEnrollment(
     requestParameters: DeleteEnrollmentsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteGuardianEnrollmentRaw(requestParameters, initOverrides);
   }
@@ -97,7 +95,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPushNotificationProviderAPNSRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetApns200Response>> {
     const response = await this.request(
       {
@@ -113,9 +111,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Retrieve APNS push notification configuration
    */
-  async getPushNotificationProviderAPNS(
-    initOverrides?: InitOverrides
-  ): Promise<GetApns200Response> {
+  async getPushNotificationProviderAPNS(initOverrides?: InitOverride): Promise<GetApns200Response> {
     const response = await this.getPushNotificationProviderAPNSRaw(initOverrides);
     return await response.value();
   }
@@ -129,7 +125,7 @@ export class GuardianManager extends BaseAPI {
    */
   async getGuardianEnrollmentRaw(
     requestParameters: GetEnrollmentsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Enrollment>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -153,7 +149,7 @@ export class GuardianManager extends BaseAPI {
    */
   async getGuardianEnrollment(
     requestParameters: GetEnrollmentsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Enrollment> {
     const response = await this.getGuardianEnrollmentRaw(requestParameters, initOverrides);
     return await response.value();
@@ -165,7 +161,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPhoneFactorTemplatesRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TemplateMessages>> {
     const response = await this.request(
       {
@@ -182,7 +178,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve phone enrollment and verification templates (subscription required).
    * Retrieve Enrollment and Verification Phone Templates
    */
-  async getPhoneFactorTemplates(initOverrides?: InitOverrides): Promise<TemplateMessages> {
+  async getPhoneFactorTemplates(initOverrides?: InitOverride): Promise<TemplateMessages> {
     const response = await this.getPhoneFactorTemplatesRaw(initOverrides);
     return await response.value();
   }
@@ -195,7 +191,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getSmsFactorTemplatesRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TemplateMessages>> {
     const response = await this.request(
       {
@@ -212,7 +208,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve SMS enrollment and verification templates (subscription required). <br/><br/>    A new endpoint is available to retrieve enrollment and verification templates related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_templates\'>phone templates</a>). It has the same payload as this one. Please use it instead.
    * Retrieve SMS Enrollment and Verification Templates
    */
-  async getSmsFactorTemplates(initOverrides?: InitOverrides): Promise<TemplateMessages> {
+  async getSmsFactorTemplates(initOverrides?: InitOverride): Promise<TemplateMessages> {
     const response = await this.getSmsFactorTemplatesRaw(initOverrides);
     return await response.value();
   }
@@ -222,7 +218,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve Factors and their Status
    * @throws {RequiredError}
    */
-  async getFactorsRaw(initOverrides?: InitOverrides): Promise<ApiResponse<Array<Factor>>> {
+  async getFactorsRaw(initOverrides?: InitOverride): Promise<ApiResponse<Array<Factor>>> {
     const response = await this.request(
       {
         path: `/guardian/factors`,
@@ -238,7 +234,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve all <a href=\"https://auth0.com/docs/multifactor-authentication\">multi-factor authentication</a> configurations.
    * Retrieve Factors and their Status
    */
-  async getFactors(initOverrides?: InitOverrides): Promise<Array<Factor>> {
+  async getFactors(initOverrides?: InitOverride): Promise<Array<Factor>> {
     const response = await this.getFactorsRaw(initOverrides);
     return await response.value();
   }
@@ -248,7 +244,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPhoneFactorMessageTypesRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMessageTypes200Response>> {
     const response = await this.request(
       {
@@ -265,7 +261,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve the Enabled Phone Factors
    */
   async getPhoneFactorMessageTypes(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetMessageTypes200Response> {
     const response = await this.getPhoneFactorMessageTypesRaw(initOverrides);
     return await response.value();
@@ -276,7 +272,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPhoneFactorSelectedProviderRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const response = await this.request(
       {
@@ -293,7 +289,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve phone configuration (one of auth0|twilio|phone-message-hook)
    */
   async getPhoneFactorSelectedProvider(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.getPhoneFactorSelectedProviderRaw(initOverrides);
     return await response.value();
@@ -305,7 +301,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPhoneFactorProviderTwilioRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TwilioFactorProvider>> {
     const response = await this.request(
       {
@@ -322,7 +318,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio phone provider configuration</a> (subscription required).
    * Retrieve Twilio phone configuration
    */
-  async getPhoneFactorProviderTwilio(initOverrides?: InitOverrides): Promise<TwilioFactorProvider> {
+  async getPhoneFactorProviderTwilio(initOverrides?: InitOverride): Promise<TwilioFactorProvider> {
     const response = await this.getPhoneFactorProviderTwilioRaw(initOverrides);
     return await response.value();
   }
@@ -332,7 +328,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPushNotificationSelectedProviderRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPnProviders200Response>> {
     const response = await this.request(
       {
@@ -349,7 +345,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve push notification provider
    */
   async getPushNotificationSelectedProvider(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPnProviders200Response> {
     const response = await this.getPushNotificationSelectedProviderRaw(initOverrides);
     return await response.value();
@@ -364,7 +360,7 @@ export class GuardianManager extends BaseAPI {
    * Get the Multi-factor Authentication policies
    * @throws {RequiredError}
    */
-  async getPoliciesRaw(initOverrides?: InitOverrides): Promise<ApiResponse<Array<string>>> {
+  async getPoliciesRaw(initOverrides?: InitOverride): Promise<ApiResponse<Array<string>>> {
     const response = await this.request(
       {
         path: `/guardian/policies`,
@@ -380,7 +376,7 @@ export class GuardianManager extends BaseAPI {
    * Gets the MFA policies for the tenant.<br/><br/>The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul><br/>Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href=\"https://auth0.com/docs/mfa/adaptive-mfa\">full documentation</a>.<br/>
    * Get the Multi-factor Authentication policies
    */
-  async getPolicies(initOverrides?: InitOverrides): Promise<Array<string>> {
+  async getPolicies(initOverrides?: InitOverride): Promise<Array<string>> {
     const response = await this.getPoliciesRaw(initOverrides);
     return await response.value();
   }
@@ -391,7 +387,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getSmsSelectedProviderRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const response = await this.request(
       {
@@ -409,7 +405,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve SMS configuration (one of auth0|twilio|phone-message-hook)
    */
   async getSmsSelectedProvider(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.getSmsSelectedProviderRaw(initOverrides);
     return await response.value();
@@ -423,7 +419,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getSmsFactorProviderTwilioRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TwilioFactorProvider>> {
     const response = await this.request(
       {
@@ -440,7 +436,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/twilio-configuration\">Twilio SMS provider configuration</a> (subscription required).<br/><br/>    A new endpoint is available to retrieve the Twilio configuration related to phone factors (<a href=\'https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_twilio\'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
    * Retrieve Twilio SMS configuration
    */
-  async getSmsFactorProviderTwilio(initOverrides?: InitOverrides): Promise<TwilioFactorProvider> {
+  async getSmsFactorProviderTwilio(initOverrides?: InitOverride): Promise<TwilioFactorProvider> {
     const response = await this.getSmsFactorProviderTwilioRaw(initOverrides);
     return await response.value();
   }
@@ -451,7 +447,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPushNotificationProviderSNSRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<SnsFactorProvider>> {
     const response = await this.request(
       {
@@ -468,7 +464,7 @@ export class GuardianManager extends BaseAPI {
    * Retrieve the <a href=\"https://auth0.com/docs/multifactor-authentication/developer/sns-configuration\">AWS SNS push notification provider configuration</a> (subscription required).
    * Retrieve AWS SNS push notification configuration
    */
-  async getPushNotificationProviderSNS(initOverrides?: InitOverrides): Promise<SnsFactorProvider> {
+  async getPushNotificationProviderSNS(initOverrides?: InitOverride): Promise<SnsFactorProvider> {
     const response = await this.getPushNotificationProviderSNSRaw(initOverrides);
     return await response.value();
   }
@@ -479,7 +475,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePushNotificationProviderAPNSRaw(
     bodyParameters: PutApnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutApns200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -503,7 +499,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePushNotificationProviderAPNS(
     bodyParameters: PutApnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutApns200Response> {
     const response = await this.updatePushNotificationProviderAPNSRaw(
       bodyParameters,
@@ -518,7 +514,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePushNotificationProviderFCMRaw(
     bodyParameters: PutFcmRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -542,7 +538,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePushNotificationProviderFCM(
     bodyParameters: PutFcmRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<{ [key: string]: any }> {
     const response = await this.updatePushNotificationProviderFCMRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -555,7 +551,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePushNotificationProviderSNSRaw(
     bodyParameters: PutSnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutSnsRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -580,7 +576,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePushNotificationProviderSNS(
     bodyParameters: PutSnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutSnsRequest> {
     const response = await this.updatePushNotificationProviderSNSRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -593,7 +589,7 @@ export class GuardianManager extends BaseAPI {
    */
   async createEnrollmentTicketRaw(
     bodyParameters: EnrollmentCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostTicket200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -618,7 +614,7 @@ export class GuardianManager extends BaseAPI {
    */
   async createEnrollmentTicket(
     bodyParameters: EnrollmentCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostTicket200Response> {
     const response = await this.createEnrollmentTicketRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -630,7 +626,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationProviderAPNSRaw(
     bodyParameters: PutApnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutApns200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -654,7 +650,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationProviderAPNS(
     bodyParameters: PutApnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutApns200Response> {
     const response = await this.setPushNotificationProviderAPNSRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -667,7 +663,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPhoneFactorTemplatesRaw(
     bodyParameters: TemplateMessages,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TemplateMessages>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -692,7 +688,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPhoneFactorTemplates(
     bodyParameters: TemplateMessages,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<TemplateMessages> {
     const response = await this.setPhoneFactorTemplatesRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -707,7 +703,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setSmsFactorTemplatesRaw(
     bodyParameters: TemplateMessages,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<TemplateMessages>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -732,7 +728,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setSmsFactorTemplates(
     bodyParameters: TemplateMessages,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<TemplateMessages> {
     const response = await this.setSmsFactorTemplatesRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -746,7 +742,7 @@ export class GuardianManager extends BaseAPI {
   async updateFactorRaw(
     requestParameters: PutFactorsByNameOperationRequest,
     bodyParameters: PutFactorsByNameRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutFactorsByName200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['name']);
 
@@ -777,7 +773,7 @@ export class GuardianManager extends BaseAPI {
   async updateFactor(
     requestParameters: PutFactorsByNameOperationRequest,
     bodyParameters: PutFactorsByNameRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutFactorsByName200Response> {
     const response = await this.updateFactorRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -789,7 +785,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationProviderFCMRaw(
     bodyParameters: PutFcmRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -813,7 +809,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationProviderFCM(
     bodyParameters: PutFcmRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<{ [key: string]: any }> {
     const response = await this.setPushNotificationProviderFCMRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -826,7 +822,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePhoneFactorMessageTypesRaw(
     bodyParameters: PutMessageTypesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMessageTypes200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -851,7 +847,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePhoneFactorMessageTypes(
     bodyParameters: PutMessageTypesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetMessageTypes200Response> {
     const response = await this.updatePhoneFactorMessageTypesRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -863,7 +859,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePhoneFactorSelectedProviderRaw(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -887,7 +883,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePhoneFactorSelectedProvider(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.updatePhoneFactorSelectedProviderRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -899,7 +895,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationSelectedProviderRaw(
     bodyParameters: PutPnProvidersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPnProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -923,7 +919,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationSelectedProvider(
     bodyParameters: PutPnProvidersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPnProviders200Response> {
     const response = await this.setPushNotificationSelectedProviderRaw(
       bodyParameters,
@@ -944,7 +940,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePoliciesRaw(
     bodyParameters: Array<string>,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<string>>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -969,7 +965,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePolicies(
     bodyParameters: Array<string>,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<string>> {
     const response = await this.updatePoliciesRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -982,7 +978,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setSmsSelectedProviderRaw(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1007,7 +1003,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setSmsSelectedProvider(
     bodyParameters: PutPhoneProvidersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetPhoneProviders200Response> {
     const response = await this.setSmsSelectedProviderRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -1022,7 +1018,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setSmsFactorProviderTwilioRaw(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutTwilioRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1047,7 +1043,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setSmsFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutTwilioRequest> {
     const response = await this.setSmsFactorProviderTwilioRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -1060,7 +1056,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationProviderSNSRaw(
     bodyParameters: PutSnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutSnsRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1085,7 +1081,7 @@ export class GuardianManager extends BaseAPI {
    */
   async setPushNotificationProviderSNS(
     bodyParameters: PutSnsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutSnsRequest> {
     const response = await this.setPushNotificationProviderSNSRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -1098,7 +1094,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePhoneFactorProviderTwilioRaw(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutTwilioRequest>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -1123,7 +1119,7 @@ export class GuardianManager extends BaseAPI {
    */
   async updatePhoneFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutTwilioRequest> {
     const response = await this.updatePhoneFactorProviderTwilioRaw(bodyParameters, initOverrides);
     return await response.value();

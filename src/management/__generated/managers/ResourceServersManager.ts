@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   GetResourceServers200Response,
   PostResourceServersRequest,
@@ -8,8 +8,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteResourceServersByIdRequest {
   /**
@@ -74,7 +72,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteResourceServersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -98,7 +96,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteResourceServersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -110,7 +108,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetResourceServersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetResourceServers200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -149,7 +147,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetResourceServersRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetResourceServers200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -162,7 +160,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetResourceServersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<ResourceServer>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -194,7 +192,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async get(
     requestParameters: GetResourceServersByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ResourceServer> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -208,7 +206,7 @@ export class ResourceServersManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchResourceServersByIdRequest,
     bodyParameters: ResourceServerUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -239,7 +237,7 @@ export class ResourceServersManager extends BaseAPI {
   async update(
     requestParameters: PatchResourceServersByIdRequest,
     bodyParameters: ResourceServerUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -251,7 +249,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: PostResourceServersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -276,7 +274,7 @@ export class ResourceServersManager extends BaseAPI {
    */
   async create(
     bodyParameters: PostResourceServersRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.createRaw(bodyParameters, initOverrides);
   }

@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { Client, ClientCreate, ClientUpdate } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteClientsByIdRequest {
   /**
@@ -102,7 +100,7 @@ export class ClientsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteClientsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -123,7 +121,7 @@ export class ClientsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteClientsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -165,7 +163,7 @@ export class ClientsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetClientsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<Client>>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -220,7 +218,7 @@ export class ClientsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetClientsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<Client>> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -262,7 +260,7 @@ export class ClientsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetClientsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -295,7 +293,7 @@ export class ClientsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetClientsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Client> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -309,7 +307,7 @@ export class ClientsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchClientsByIdRequest,
     bodyParameters: ClientUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -337,7 +335,7 @@ export class ClientsManager extends BaseAPI {
   async update(
     requestParameters: PatchClientsByIdRequest,
     bodyParameters: ClientUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Client> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -355,7 +353,7 @@ export class ClientsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: ClientCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -378,7 +376,7 @@ export class ClientsManager extends BaseAPI {
    * Create a new client (application or SSO integration).<br/><br/>Note: We recommend leaving the `client_secret` parameter unspecified to allow the generation of a safe secret.<br/><br/><div class=\"alert alert-warning\">SSO Integrations created via this endpoint will accept login requests and share user profile information.</div><br/>
    * Create a client
    */
-  async create(bodyParameters: ClientCreate, initOverrides?: InitOverrides): Promise<Client> {
+  async create(bodyParameters: ClientCreate, initOverrides?: InitOverride): Promise<Client> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
   }
@@ -393,7 +391,7 @@ export class ClientsManager extends BaseAPI {
    */
   async rotateClientSecretRaw(
     requestParameters: PostRotateSecretRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -417,7 +415,7 @@ export class ClientsManager extends BaseAPI {
    */
   async rotateClientSecret(
     requestParameters: PostRotateSecretRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Client> {
     const response = await this.rotateClientSecretRaw(requestParameters, initOverrides);
     return await response.value();

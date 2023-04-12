@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   Connection,
   ConnectionCreate,
@@ -8,8 +8,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteConnectionsByIdRequest {
   /**
@@ -116,7 +114,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteConnectionsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -137,7 +135,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteConnectionsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -150,7 +148,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async deleteUserByEmailRaw(
     requestParameters: DeleteUsersByEmailRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'email']);
 
@@ -182,7 +180,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async deleteUserByEmail(
     requestParameters: DeleteUsersByEmailRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteUserByEmailRaw(requestParameters, initOverrides);
   }
@@ -195,7 +193,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetConnectionsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetConnections200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -250,7 +248,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetConnectionsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetConnections200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -264,7 +262,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetConnectionsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Connection>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -297,7 +295,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetConnectionsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Connection> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -310,7 +308,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async checkStatusRaw(
     requestParameters: GetStatusRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -334,7 +332,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async checkStatus(
     requestParameters: GetStatusRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.checkStatusRaw(requestParameters, initOverrides);
   }
@@ -348,7 +346,7 @@ export class ConnectionsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchConnectionsByIdRequest,
     bodyParameters: ConnectionUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Connection>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -376,7 +374,7 @@ export class ConnectionsManager extends BaseAPI {
   async update(
     requestParameters: PatchConnectionsByIdRequest,
     bodyParameters: ConnectionUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Connection> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -393,7 +391,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: ConnectionCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Connection>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -418,7 +416,7 @@ export class ConnectionsManager extends BaseAPI {
    */
   async create(
     bodyParameters: ConnectionCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Connection> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();

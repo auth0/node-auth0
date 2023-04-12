@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   CustomDomain,
   PatchCustomDomainsByIdRequest,
@@ -9,8 +9,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteCustomDomainsByIdRequest {
   /**
@@ -55,7 +53,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteCustomDomainsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -79,7 +77,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteCustomDomainsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -89,7 +87,7 @@ export class CustomDomainsManager extends BaseAPI {
    * Get custom domains configurations
    * @throws {RequiredError}
    */
-  async getAllRaw(initOverrides?: InitOverrides): Promise<ApiResponse<Array<CustomDomain>>> {
+  async getAllRaw(initOverrides?: InitOverride): Promise<ApiResponse<Array<CustomDomain>>> {
     const response = await this.request(
       {
         path: `/custom-domains`,
@@ -105,7 +103,7 @@ export class CustomDomainsManager extends BaseAPI {
    * Retrieve details on <a href=\"https://auth0.com/docs/custom-domains\">custom domains</a>.
    * Get custom domains configurations
    */
-  async getAll(initOverrides?: InitOverrides): Promise<Array<CustomDomain>> {
+  async getAll(initOverrides?: InitOverride): Promise<Array<CustomDomain>> {
     const response = await this.getAllRaw(initOverrides);
     return await response.value();
   }
@@ -117,7 +115,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetCustomDomainsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<CustomDomain>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -141,7 +139,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetCustomDomainsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<CustomDomain> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -180,7 +178,7 @@ export class CustomDomainsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchCustomDomainsByIdOperationRequest,
     bodyParameters: PatchCustomDomainsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostCustomDomains201Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -211,7 +209,7 @@ export class CustomDomainsManager extends BaseAPI {
   async update(
     requestParameters: PatchCustomDomainsByIdOperationRequest,
     bodyParameters: PatchCustomDomainsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostCustomDomains201Response> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -245,7 +243,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: PostCustomDomainsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostCustomDomains201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -270,7 +268,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async create(
     bodyParameters: PostCustomDomainsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostCustomDomains201Response> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -291,7 +289,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async verifyRaw(
     requestParameters: PostVerifyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PostVerify200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -315,7 +313,7 @@ export class CustomDomainsManager extends BaseAPI {
    */
   async verify(
     requestParameters: PostVerifyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PostVerify200Response> {
     const response = await this.verifyRaw(requestParameters, initOverrides);
     return await response.value();

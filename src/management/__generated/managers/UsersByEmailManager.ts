@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { GetUsers200ResponseOneOfInner } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetUsersByEmailRequest {
   /**
@@ -40,7 +38,7 @@ export class UsersByEmailManager extends BaseAPI {
    */
   async getByEmailRaw(
     requestParameters: GetUsersByEmailRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<GetUsers200ResponseOneOfInner>>> {
     runtime.validateRequiredRequestParams(requestParameters, ['email']);
 
@@ -77,7 +75,7 @@ export class UsersByEmailManager extends BaseAPI {
    */
   async getByEmail(
     requestParameters: GetUsersByEmailRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Array<GetUsers200ResponseOneOfInner>> {
     const response = await this.getByEmailRaw(requestParameters, initOverrides);
     return await response.value();

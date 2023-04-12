@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   ClientGrant,
   ClientGrantCreate,
@@ -8,8 +8,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteClientGrantsByIdRequest {
   /**
@@ -66,7 +64,7 @@ export class ClientGrantsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteClientGrantsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -90,7 +88,7 @@ export class ClientGrantsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteClientGrantsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -103,7 +101,7 @@ export class ClientGrantsManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetClientGrantsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetClientGrants200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -146,7 +144,7 @@ export class ClientGrantsManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetClientGrantsRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetClientGrants200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -160,7 +158,7 @@ export class ClientGrantsManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchClientGrantsByIdOperationRequest,
     bodyParameters: PatchClientGrantsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<ClientGrant>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -191,7 +189,7 @@ export class ClientGrantsManager extends BaseAPI {
   async update(
     requestParameters: PatchClientGrantsByIdOperationRequest,
     bodyParameters: PatchClientGrantsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ClientGrant> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -204,7 +202,7 @@ export class ClientGrantsManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: ClientGrantCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -227,7 +225,7 @@ export class ClientGrantsManager extends BaseAPI {
    * Create a client grant.
    * Create client grant
    */
-  async create(bodyParameters: ClientGrantCreate, initOverrides?: InitOverrides): Promise<void> {
+  async create(bodyParameters: ClientGrantCreate, initOverrides?: InitOverride): Promise<void> {
     await this.createRaw(bodyParameters, initOverrides);
   }
 }

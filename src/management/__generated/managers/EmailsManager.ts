@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { EmailProvider, PatchProviderRequest, PostProviderRequest } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetProviderRequest {
   /**
@@ -31,7 +29,7 @@ export class EmailsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<EmailProvider>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -62,7 +60,7 @@ export class EmailsManager extends BaseAPI {
    */
   async get(
     requestParameters: GetProviderRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<EmailProvider> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
@@ -79,7 +77,7 @@ export class EmailsManager extends BaseAPI {
    */
   async updateRaw(
     bodyParameters: PatchProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<EmailProvider>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -104,7 +102,7 @@ export class EmailsManager extends BaseAPI {
    */
   async update(
     bodyParameters: PatchProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<EmailProvider> {
     const response = await this.updateRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -121,7 +119,7 @@ export class EmailsManager extends BaseAPI {
    */
   async configureRaw(
     bodyParameters: PostProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<EmailProvider>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -146,7 +144,7 @@ export class EmailsManager extends BaseAPI {
    */
   async configure(
     bodyParameters: PostProviderRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<EmailProvider> {
     const response = await this.configureRaw(bodyParameters, initOverrides);
     return await response.value();

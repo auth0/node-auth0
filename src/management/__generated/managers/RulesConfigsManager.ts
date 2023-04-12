@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   GetRulesConfigs200ResponseInner,
   PutRulesConfigsByKey200Response,
@@ -7,8 +7,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteRulesConfigsByKeyRequest {
   /**
@@ -37,7 +35,7 @@ export class RulesConfigsManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteRulesConfigsByKeyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['key']);
 
@@ -61,7 +59,7 @@ export class RulesConfigsManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteRulesConfigsByKeyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -74,7 +72,7 @@ export class RulesConfigsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getAllRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<GetRulesConfigs200ResponseInner>>> {
     const response = await this.request(
       {
@@ -91,7 +89,7 @@ export class RulesConfigsManager extends BaseAPI {
    * Retrieve rules config variable keys.<br/><br/>    Note: For security, config variable values cannot be retrieved outside rule execution.
    * Retrieve config variable keys for rules (get_rules-configs)
    */
-  async getAll(initOverrides?: InitOverrides): Promise<Array<GetRulesConfigs200ResponseInner>> {
+  async getAll(initOverrides?: InitOverride): Promise<Array<GetRulesConfigs200ResponseInner>> {
     const response = await this.getAllRaw(initOverrides);
     return await response.value();
   }
@@ -104,7 +102,7 @@ export class RulesConfigsManager extends BaseAPI {
   async setRaw(
     requestParameters: PutRulesConfigsByKeyOperationRequest,
     bodyParameters: PutRulesConfigsByKeyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<PutRulesConfigsByKey200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['key']);
 
@@ -135,7 +133,7 @@ export class RulesConfigsManager extends BaseAPI {
   async set(
     requestParameters: PutRulesConfigsByKeyOperationRequest,
     bodyParameters: PutRulesConfigsByKeyRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<PutRulesConfigsByKey200Response> {
     const response = await this.setRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();

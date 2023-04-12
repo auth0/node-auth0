@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
@@ -7,8 +7,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 /**
  *
@@ -20,7 +18,7 @@ export class AttackProtectionManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getBreachedPasswordDetectionConfigRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const response = await this.request(
       {
@@ -37,7 +35,7 @@ export class AttackProtectionManager extends BaseAPI {
    * Get breached password detection settings
    * Get breached password detection settings
    */
-  async getBreachedPasswordDetectionConfig(initOverrides?: InitOverrides): Promise<void> {
+  async getBreachedPasswordDetectionConfig(initOverrides?: InitOverride): Promise<void> {
     await this.getBreachedPasswordDetectionConfigRaw(initOverrides);
   }
 
@@ -46,7 +44,7 @@ export class AttackProtectionManager extends BaseAPI {
    * Get the brute force configuration
    * @throws {RequiredError}
    */
-  async getBruteForceConfigRaw(initOverrides?: InitOverrides): Promise<ApiResponse<void>> {
+  async getBruteForceConfigRaw(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
     const response = await this.request(
       {
         path: `/attack-protection/brute-force-protection`,
@@ -62,7 +60,7 @@ export class AttackProtectionManager extends BaseAPI {
    * Get the brute force configuration
    * Get the brute force configuration
    */
-  async getBruteForceConfig(initOverrides?: InitOverrides): Promise<void> {
+  async getBruteForceConfig(initOverrides?: InitOverride): Promise<void> {
     await this.getBruteForceConfigRaw(initOverrides);
   }
 
@@ -71,7 +69,7 @@ export class AttackProtectionManager extends BaseAPI {
    * Get the brute force configuration defaults
    * @throws {RequiredError}
    */
-  async getBruteForceDefaultsRaw(initOverrides?: InitOverrides): Promise<ApiResponse<void>> {
+  async getBruteForceDefaultsRaw(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
     const response = await this.request(
       {
         path: `/attack-protection/brute-force-protection/defaults`,
@@ -87,7 +85,7 @@ export class AttackProtectionManager extends BaseAPI {
    * Get the brute force configuration defaults
    * Get the brute force configuration defaults
    */
-  async getBruteForceDefaults(initOverrides?: InitOverrides): Promise<void> {
+  async getBruteForceDefaults(initOverrides?: InitOverride): Promise<void> {
     await this.getBruteForceDefaultsRaw(initOverrides);
   }
 
@@ -97,7 +95,7 @@ export class AttackProtectionManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getSuspiciousIpThrottlingConfigRaw(
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const response = await this.request(
       {
@@ -114,7 +112,7 @@ export class AttackProtectionManager extends BaseAPI {
    * Get the suspicious IP throttling configuration
    * Get the suspicious IP throttling configuration
    */
-  async getSuspiciousIpThrottlingConfig(initOverrides?: InitOverrides): Promise<void> {
+  async getSuspiciousIpThrottlingConfig(initOverrides?: InitOverride): Promise<void> {
     await this.getSuspiciousIpThrottlingConfigRaw(initOverrides);
   }
 
@@ -125,7 +123,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async updateBreachedPasswordDetectionConfigRaw(
     bodyParameters: PatchBreachedPasswordDetectionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -150,7 +148,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async updateBreachedPasswordDetectionConfig(
     bodyParameters: PatchBreachedPasswordDetectionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateBreachedPasswordDetectionConfigRaw(bodyParameters, initOverrides);
   }
@@ -162,7 +160,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async updateBruteForceConfigRaw(
     bodyParameters: PatchBruteForceProtectionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -187,7 +185,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async updateBruteForceConfig(
     bodyParameters: PatchBruteForceProtectionRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateBruteForceConfigRaw(bodyParameters, initOverrides);
   }
@@ -199,7 +197,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async updateSuspiciousIpThrottlingConfigRaw(
     bodyParameters: PatchSuspiciousIpThrottlingRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -224,7 +222,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async updateSuspiciousIpThrottlingConfig(
     bodyParameters: PatchSuspiciousIpThrottlingRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.updateSuspiciousIpThrottlingConfigRaw(bodyParameters, initOverrides);
   }

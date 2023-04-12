@@ -253,6 +253,7 @@ export type InitOverrideFunction = (requestContext: {
   init: HTTPRequestInit;
   context: RequestOpts;
 }) => Promise<RequestInit>;
+export type InitOverride = RequestInit | InitOverrideFunction;
 
 export interface FetchParams {
   url: string;

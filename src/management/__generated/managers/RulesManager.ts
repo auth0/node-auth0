@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { GetRules200Response, Rule, RuleCreate, RuleUpdate } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteRulesByIdRequest {
   /**
@@ -85,7 +83,7 @@ export class RulesManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteRulesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -106,7 +104,7 @@ export class RulesManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteRulesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -119,7 +117,7 @@ export class RulesManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetRulesRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRules200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -166,7 +164,7 @@ export class RulesManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetRulesRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetRules200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -180,7 +178,7 @@ export class RulesManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetRulesByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Rule>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -211,7 +209,7 @@ export class RulesManager extends BaseAPI {
    * Retrieve <a href=\"https://auth0.com/docs/rules\">rule</a> details. Accepts a list of fields to include or exclude in the result.<br/>
    * Get a rule
    */
-  async get(requestParameters: GetRulesByIdRequest, initOverrides?: InitOverrides): Promise<Rule> {
+  async get(requestParameters: GetRulesByIdRequest, initOverrides?: InitOverride): Promise<Rule> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
   }
@@ -225,7 +223,7 @@ export class RulesManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchRulesByIdRequest,
     bodyParameters: RuleUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Rule>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -253,7 +251,7 @@ export class RulesManager extends BaseAPI {
   async update(
     requestParameters: PatchRulesByIdRequest,
     bodyParameters: RuleUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Rule> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -269,7 +267,7 @@ export class RulesManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: RuleCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Rule>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -292,7 +290,7 @@ export class RulesManager extends BaseAPI {
    * Create a <a href=\"https://auth0.com/docs/rules#create-a-new-rule-using-the-management-api\">new rule</a>.<br/><br/>Note: Changing a rule\'s stage of execution from the default <code>login_success</code> can change the rule\'s function signature to have user omitted.<br/>
    * Create a rule
    */
-  async create(bodyParameters: RuleCreate, initOverrides?: InitOverrides): Promise<Rule> {
+  async create(bodyParameters: RuleCreate, initOverrides?: InitOverride): Promise<Rule> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
   }

@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type {
   GetErrors200Response,
   Job,
@@ -8,8 +8,6 @@ import type {
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface GetErrorsRequest {
   /**
@@ -66,7 +64,7 @@ export class JobsManager extends BaseAPI {
    */
   async getErrorsRaw(
     requestParameters: GetErrorsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetErrors200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -87,7 +85,7 @@ export class JobsManager extends BaseAPI {
    */
   async getErrors(
     requestParameters: GetErrorsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetErrors200Response> {
     const response = await this.getErrorsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -100,7 +98,7 @@ export class JobsManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetJobsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -119,7 +117,7 @@ export class JobsManager extends BaseAPI {
    * Retrieves a job. Useful to check its status.
    * Get a job
    */
-  async get(requestParameters: GetJobsByIdRequest, initOverrides?: InitOverrides): Promise<Job> {
+  async get(requestParameters: GetJobsByIdRequest, initOverrides?: InitOverride): Promise<Job> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
   }
@@ -131,7 +129,7 @@ export class JobsManager extends BaseAPI {
    */
   async exportUsersRaw(
     bodyParameters: PostUsersExportsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -156,7 +154,7 @@ export class JobsManager extends BaseAPI {
    */
   async exportUsers(
     bodyParameters: PostUsersExportsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Job> {
     const response = await this.exportUsersRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -169,7 +167,7 @@ export class JobsManager extends BaseAPI {
    */
   async importUsersRaw(
     bodyParameters: PostUsersImportsData,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
     const consumes: runtime.Consume[] = [{ contentType: 'multipart/form-data' }];
     // @ts-ignore: canConsumeForm may be unused
@@ -223,7 +221,7 @@ export class JobsManager extends BaseAPI {
    */
   async importUsers(
     bodyParameters: PostUsersImportsData,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Job> {
     const response = await this.importUsersRaw(bodyParameters, initOverrides);
     return await response.value();
@@ -238,7 +236,7 @@ export class JobsManager extends BaseAPI {
    */
   async verifyEmailRaw(
     bodyParameters: PostVerificationEmailRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -263,7 +261,7 @@ export class JobsManager extends BaseAPI {
    */
   async verifyEmail(
     bodyParameters: PostVerificationEmailRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Job> {
     const response = await this.verifyEmailRaw(bodyParameters, initOverrides);
     return await response.value();

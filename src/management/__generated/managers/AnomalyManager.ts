@@ -1,9 +1,7 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteIpsByIdRequest {
   /**
@@ -32,7 +30,7 @@ export class AnomalyManager extends BaseAPI {
    */
   async deleteBlockedIpRaw(
     requestParameters: DeleteIpsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -56,7 +54,7 @@ export class AnomalyManager extends BaseAPI {
    */
   async deleteBlockedIp(
     requestParameters: DeleteIpsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteBlockedIpRaw(requestParameters, initOverrides);
   }
@@ -68,7 +66,7 @@ export class AnomalyManager extends BaseAPI {
    */
   async checkIfIpIsBlockedRaw(
     requestParameters: GetIpsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -92,7 +90,7 @@ export class AnomalyManager extends BaseAPI {
    */
   async checkIfIpIsBlocked(
     requestParameters: GetIpsByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.checkIfIpIsBlockedRaw(requestParameters, initOverrides);
   }

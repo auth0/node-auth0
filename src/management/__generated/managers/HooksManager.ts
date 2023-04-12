@@ -1,10 +1,8 @@
 import * as runtime from '../../runtime';
-import type { InitOverrideFunction, ApiResponse } from '../../runtime';
+import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
 import type { GetHooks200Response, Hook, HookCreate, HookUpdate } from '../models';
 
 const { BaseAPI } = runtime;
-
-export type InitOverrides = RequestInit | InitOverrideFunction;
 
 export interface DeleteHooksByIdRequest {
   /**
@@ -112,7 +110,7 @@ export class HooksManager extends BaseAPI {
    */
   async deleteRaw(
     requestParameters: DeleteHooksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -133,7 +131,7 @@ export class HooksManager extends BaseAPI {
    */
   async delete(
     requestParameters: DeleteHooksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteRaw(requestParameters, initOverrides);
   }
@@ -146,7 +144,7 @@ export class HooksManager extends BaseAPI {
   async deleteSecretsRaw(
     requestParameters: DeleteSecretsRequest,
     bodyParameters: Array<string>,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -177,7 +175,7 @@ export class HooksManager extends BaseAPI {
   async deleteSecrets(
     requestParameters: DeleteSecretsRequest,
     bodyParameters: Array<string>,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<void> {
     await this.deleteSecretsRaw(requestParameters, bodyParameters, initOverrides);
   }
@@ -190,7 +188,7 @@ export class HooksManager extends BaseAPI {
    */
   async getAllRaw(
     requestParameters: GetHooksRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetHooks200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -237,7 +235,7 @@ export class HooksManager extends BaseAPI {
    */
   async getAll(
     requestParameters: GetHooksRequest = {},
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<GetHooks200Response> {
     const response = await this.getAllRaw(requestParameters, initOverrides);
     return await response.value();
@@ -251,7 +249,7 @@ export class HooksManager extends BaseAPI {
    */
   async getRaw(
     requestParameters: GetHooksByIdRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Hook>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -278,7 +276,7 @@ export class HooksManager extends BaseAPI {
    * Retrieve <a href=\"https://auth0.com/docs/hooks\">a hook</a> by its ID. Accepts a list of fields to include in the result.<br/>
    * Get a hook
    */
-  async get(requestParameters: GetHooksByIdRequest, initOverrides?: InitOverrides): Promise<Hook> {
+  async get(requestParameters: GetHooksByIdRequest, initOverrides?: InitOverride): Promise<Hook> {
     const response = await this.getRaw(requestParameters, initOverrides);
     return await response.value();
   }
@@ -291,7 +289,7 @@ export class HooksManager extends BaseAPI {
    */
   async getSecretsRaw(
     requestParameters: GetSecretsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -315,7 +313,7 @@ export class HooksManager extends BaseAPI {
    */
   async getSecrets(
     requestParameters: GetSecretsRequest,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<{ [key: string]: any }> {
     const response = await this.getSecretsRaw(requestParameters, initOverrides);
     return await response.value();
@@ -330,7 +328,7 @@ export class HooksManager extends BaseAPI {
   async updateRaw(
     requestParameters: PatchHooksByIdRequest,
     bodyParameters: HookUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Hook>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -358,7 +356,7 @@ export class HooksManager extends BaseAPI {
   async update(
     requestParameters: PatchHooksByIdRequest,
     bodyParameters: HookUpdate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<Hook> {
     const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -373,7 +371,7 @@ export class HooksManager extends BaseAPI {
   async updateSecretsRaw(
     requestParameters: PatchSecretsRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -404,7 +402,7 @@ export class HooksManager extends BaseAPI {
   async updateSecrets(
     requestParameters: PatchSecretsRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<{ [key: string]: any }> {
     const response = await this.updateSecretsRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
@@ -418,7 +416,7 @@ export class HooksManager extends BaseAPI {
    */
   async createRaw(
     bodyParameters: HookCreate,
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<Hook>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -441,7 +439,7 @@ export class HooksManager extends BaseAPI {
    * Create a new hook.<br/>
    * Create a hook
    */
-  async create(bodyParameters: HookCreate, initOverrides?: InitOverrides): Promise<Hook> {
+  async create(bodyParameters: HookCreate, initOverrides?: InitOverride): Promise<Hook> {
     const response = await this.createRaw(bodyParameters, initOverrides);
     return await response.value();
   }
@@ -455,7 +453,7 @@ export class HooksManager extends BaseAPI {
   async addSecretsRaw(
     requestParameters: PostSecretsRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -486,7 +484,7 @@ export class HooksManager extends BaseAPI {
   async addSecrets(
     requestParameters: PostSecretsRequest,
     bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverrides
+    initOverrides?: InitOverride
   ): Promise<{ [key: string]: any }> {
     const response = await this.addSecretsRaw(requestParameters, bodyParameters, initOverrides);
     return await response.value();
