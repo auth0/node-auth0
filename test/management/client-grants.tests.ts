@@ -1,20 +1,28 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
+import fetch, { RequestInfo as NFRequestInfo, RequestInit as NFRequestInit } from 'node-fetch';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const ClientGrantsManager = require(`../../src/management/ClientGrantsManager`);
-const { ArgumentError } = require('rest-facade');
+import {
+  ClientGrant,
+  ClientGrantsManager,
+  Configuration,
+} from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('ClientGrantsManager', () => {
+  let grants: ClientGrantsManager;
+
   before(function () {
     this.token = 'TOKEN';
-    this.grants = new ClientGrantsManager({
-      headers: {
-        authorization: `Bearer ${this.token}`,
-      },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: this.token,
     });
+    this.grants = grants = client.clientGrants;
   });
 
   afterEach(() => {
@@ -26,44 +34,54 @@ describe('ClientGrantsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.grants[method]).to.exist.to.be.an.instanceOf(Function);
+        expect(grants[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new ClientGrantsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new ClientGrantsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new ClientGrantsManager(
+          new Configuration({
+            fetchApi: (url: RequestInfo, init: RequestInit) => {
+              return fetch(
+                url as NFRequestInfo,
+                init as NFRequestInit
+              ) as unknown as Promise<Response>;
+            },
+            middleware: [],
+          } as any)
+        );
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new ClientGrantsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+        new ClientGrantsManager(
+          new Configuration({
+            baseUrl: '',
+            fetchApi: (url: RequestInfo, init: RequestInit) => {
+              return fetch(
+                url as NFRequestInfo,
+                init as NFRequestInit
+              ) as unknown as Promise<Response>;
+            },
+            middleware: [],
+          })
+        );
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
+    const data = [{ id: '1', client_id: '123' }];
     beforeEach(function () {
-      this.request = nock(API_URL).get('/client-grants').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.grants.getAll(() => {
-        done();
-      });
+      this.request = nock(API_URL).get('/client-grants').reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.grants.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
+      grants.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -71,7 +89,7 @@ describe('ClientGrantsManager', () => {
 
       nock(API_URL).get('/client-grants').reply(500);
 
-      this.grants.getAll().catch((err) => {
+      grants.getAll().catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -80,15 +98,13 @@ describe('ClientGrantsManager', () => {
     it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      const data = [{ test: true }];
       nock(API_URL).get('/client-grants').reply(200, data);
 
-      this.grants.getAll().then((grants) => {
+      grants.getAll().then((grants) => {
         expect(grants).to.be.an.instanceOf(Array);
 
-        expect(grants.length).to.equal(data.length);
-
-        expect(grants[0].test).to.equal(data[0].test);
+        expect((grants as Array<ClientGrant>).length).to.equal(data.length);
+        expect((grants as Array<ClientGrant>)[0].id).to.equal(data[0].id);
 
         done();
       });
@@ -97,7 +113,7 @@ describe('ClientGrantsManager', () => {
     it('should perform a GET request to /api/v2/client-grants', function (done) {
       const { request } = this;
 
-      this.grants.getAll().then(() => {
+      grants.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -109,9 +125,9 @@ describe('ClientGrantsManager', () => {
       const request = nock(API_URL)
         .get('/client-grants')
         .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .reply(200, data);
 
-      this.grants.getAll().then(() => {
+      grants.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -123,12 +139,12 @@ describe('ClientGrantsManager', () => {
       const request = nock(API_URL)
         .get('/client-grants')
         .query({
-          include_fields: true,
-          fields: 'test',
+          page: 1,
+          per_page: 2,
         })
-        .reply(200);
+        .reply(200, data);
 
-      this.grants.getAll({ include_fields: true, fields: 'test' }).then(() => {
+      grants.getAll({ page: 1, per_page: 2 }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -146,18 +162,14 @@ describe('ClientGrantsManager', () => {
       this.request = nock(API_URL).post('/client-grants').reply(201, data);
     });
 
-    it('should accept a callback', function (done) {
-      this.grants.create(data, done.bind(null, null));
-    });
-
     it('should return a promise if no callback is given', function (done) {
-      this.grants.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
+      grants.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/client-grants', function (done) {
       const { request } = this;
 
-      this.grants.create(data).then(() => {
+      grants.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -172,7 +184,7 @@ describe('ClientGrantsManager', () => {
         .matchHeader('Authorization', `Bearer ${this.token}`)
         .reply(201, data);
 
-      this.grants.create(data).then(() => {
+      grants.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -184,7 +196,7 @@ describe('ClientGrantsManager', () => {
 
       const request = nock(API_URL).post('/client-grants', data).reply(201, data);
 
-      this.grants.create(data).then(() => {
+      grants.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -193,24 +205,24 @@ describe('ClientGrantsManager', () => {
   });
 
   describe('#update', () => {
+    const data = {
+      client_id: 'CLIENT_ID',
+      audience: 'AUDIENCE',
+      scope: ['user'],
+    };
+
     beforeEach(function () {
-      this.data = { id: 5 };
-
-      this.request = nock(API_URL).patch(`/client-grants/${this.data.id}`).reply(200, this.data);
-    });
-
-    it('should accept a callback', function (done) {
-      this.grants.update({ id: 5 }, {}, done.bind(null, null));
+      this.request = nock(API_URL).patch(`/client-grants/5`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.grants.update({ id: 5 }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
+      grants.update({ id: '5' }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a PATCH request to /api/v2/client-grants/5', function (done) {
       const { request } = this;
 
-      this.grants.update({ id: 5 }, {}).then(() => {
+      grants.update({ id: '5' }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -220,9 +232,9 @@ describe('ClientGrantsManager', () => {
     it('should include the new data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).patch(`/client-grants/${this.data.id}`, this.data).reply(200);
+      const request = nock(API_URL).patch(`/client-grants/5`, data).reply(200, data);
 
-      this.grants.update({ id: 5 }, this.data).then(() => {
+      grants.update({ id: '5' }, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -231,24 +243,24 @@ describe('ClientGrantsManager', () => {
   });
 
   describe('#delete', () => {
-    const id = 5;
+    const id = '5';
 
     beforeEach(function () {
       this.request = nock(API_URL).delete(`/client-grants/${id}`).reply(200);
     });
 
     it('should accept a callback', function (done) {
-      this.grants.delete({ id }, done.bind(null, null));
+      grants.delete({ id }, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function (done) {
-      this.grants.delete({ id }).then(done.bind(null, null));
+      grants.delete({ id }).then(done.bind(null, null));
     });
 
     it(`should perform a DELETE request to /client-grants/${id}`, function (done) {
       const { request } = this;
 
-      this.grants.delete({ id }).then(() => {
+      grants.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
