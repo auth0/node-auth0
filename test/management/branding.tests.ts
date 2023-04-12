@@ -3,6 +3,10 @@ import nock from 'nock';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
@@ -391,7 +395,7 @@ describe('BrandingManager', () => {
       try {
         await branding.getTheme({ themeId: 'themeid1' });
       } catch (err) {
-        expect(err.statusCode).to.eq(404);
+        expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
     });
@@ -426,7 +430,13 @@ describe('BrandingManager', () => {
     beforeEach(() => {});
 
     it('should return a promise if no callback is given', async () => {
-      nock(API_URL).get('/branding/themes/default').reply(200);
+      const data = JSON.parse(
+        (await util.promisify(fs.readFile)(
+          path.join(__dirname, '../data/theme.json')
+        )) as unknown as string
+      );
+
+      nock(API_URL).get('/branding/themes/default').reply(200, data);
 
       const promise = branding.getDefaultTheme();
       expect(promise.then).to.exist;
@@ -440,7 +450,7 @@ describe('BrandingManager', () => {
       try {
         await branding.getDefaultTheme();
       } catch (err) {
-        expect(err.statusCode).to.eq(404);
+        expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
     });
@@ -458,7 +468,12 @@ describe('BrandingManager', () => {
     });
 
     it('should perform a GET request to /api/v2/branding/themes/default', async () => {
-      const request = nock(API_URL).get('/branding/themes/default').reply(200);
+      const data = JSON.parse(
+        (await util.promisify(fs.readFile)(
+          path.join(__dirname, '../data/theme.json')
+        )) as unknown as string
+      );
+      const request = nock(API_URL).get('/branding/themes/default').reply(200, data);
 
       await branding.getDefaultTheme();
       expect(request.isDone()).to.be.true;
@@ -486,7 +501,7 @@ describe('BrandingManager', () => {
     });
 
     it('should return a promise if no callback is given', async () => {
-      nock(API_URL).post(`/branding/themes`, data).reply(201);
+      nock(API_URL).post(`/branding/themes`, data).reply(201, data);
 
       const promise = branding.createTheme(data);
       expect(promise.then).to.exist;
@@ -500,7 +515,7 @@ describe('BrandingManager', () => {
       try {
         await branding.createTheme(data);
       } catch (err) {
-        expect(err.statusCode).to.eq(409);
+        expect(err.response.status).to.eq(409);
         expect(err).to.exist;
       }
     });
@@ -538,11 +553,11 @@ describe('BrandingManager', () => {
           path.join(__dirname, '../data/theme.json')
         )) as unknown as string
       ));
-      params = { id: themeId };
+      params = { themeId: themeId };
     });
 
     it('should return a promise if no callback is given', async () => {
-      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200);
+      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
 
       const promise = branding.updateTheme(params, data);
       expect(promise.then).to.exist;
@@ -556,7 +571,7 @@ describe('BrandingManager', () => {
       try {
         await branding.updateTheme(params, data);
       } catch (err) {
-        expect(err.statusCode).to.eq(404);
+        expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
     });
@@ -590,7 +605,7 @@ describe('BrandingManager', () => {
     let themeId, params;
     beforeEach(async () => {
       themeId = 'themeid1';
-      params = { id: themeId };
+      params = { themeId: themeId };
     });
 
     it('should return a promise if no callback is given', async () => {
@@ -606,9 +621,9 @@ describe('BrandingManager', () => {
       nock(API_URL).delete(`/branding/themes/${themeId}`).reply(404);
 
       try {
-        await branding.deleteTheme(params);
+        await branding.deleteThemeRaw(params);
       } catch (err) {
-        expect(err.statusCode).to.eq(404);
+        expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
     });
