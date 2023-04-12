@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
+import type { InitOverride, ApiResponse } from '../../runtime';
 import type {
   Connection,
   ConnectionCreate,
@@ -213,7 +213,6 @@ export class ConnectionsManager extends BaseAPI {
         config: {
           isArray: true,
           isCollectionFormatMulti: true,
-          collectionFormat: multi,
         },
       },
       {

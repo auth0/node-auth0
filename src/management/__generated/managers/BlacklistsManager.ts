@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
+import type { InitOverride, ApiResponse } from '../../runtime';
 import type { Token } from '../models';
 
 const { BaseAPI } = runtime;

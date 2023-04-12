@@ -455,7 +455,7 @@ export function applyQueryParams<
         }
       }
 
-      return value ? { ...acc, key: value } : acc;
+      return value ? { ...acc, [key]: value } : acc;
     },
     {}
   ) as Pick<TRequestParams, ReadonlyArray<Key>[number]>;

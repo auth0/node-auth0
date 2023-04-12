@@ -1,5 +1,5 @@
 import * as runtime from '../../runtime';
-import type { InitOverride, InitOverrideFunction, ApiResponse } from '../../../../../src/runtime';
+import type { InitOverride, ApiResponse } from '../../runtime';
 import type {
   GetErrors200Response,
   Job,
@@ -176,7 +176,7 @@ export class JobsManager extends BaseAPI {
     let formParams: { append(param: string, value: any): any };
     let useForm = false;
     // use FormData to transmit files using content-type "multipart/form-data"
-    useForm = runtime.canConsumeForm;
+    useForm = canConsumeForm;
     if (useForm) {
       formParams = new FormData();
     } else {
