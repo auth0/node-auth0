@@ -56,7 +56,7 @@ export class UserBlocksManager extends BaseAPI {
    * Unblock by identifier
    * @throws {RequiredError}
    */
-  async deleteAllRaw(
+  async deleteAll(
     requestParameters: DeleteUserBlocksRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -78,18 +78,7 @@ export class UserBlocksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Unblock a user blocked due to an excessive amount of incorrectly-provided credentials.<br/>
-   * Unblock by identifier
-   */
-  async deleteAll(
-    requestParameters: DeleteUserBlocksRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteAllRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -100,7 +89,7 @@ export class UserBlocksManager extends BaseAPI {
    * Unblock a user
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteUserBlocksByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -114,18 +103,7 @@ export class UserBlocksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Unblock a user that was blocked due to an excessive amount of incorrectly provided credentials.<br/><br/>Note: This endpoint does not unblock users that were <a href=\"https://auth0.com/docs/user-profile#block-and-unblock-a-user\">blocked by admins</a>.<br/>
-   * Unblock a user
-   */
-  async delete(
-    requestParameters: DeleteUserBlocksByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -134,7 +112,7 @@ export class UserBlocksManager extends BaseAPI {
    * Get blocks by identifier
    * @throws {RequiredError}
    */
-  async getAllRaw(
+  async getAll(
     requestParameters: GetUserBlocksRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<UserBlock>> {
@@ -160,19 +138,7 @@ export class UserBlocksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve a list of blocked IP addresses for a given identifier (e.g., username, phone number or email).<br/>
-   * Get blocks by identifier
-   */
-  async getAll(
-    requestParameters: GetUserBlocksRequest,
-    initOverrides?: InitOverride
-  ): Promise<UserBlock> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -182,7 +148,7 @@ export class UserBlocksManager extends BaseAPI {
    * Get a user's blocks
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetUserBlocksByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<UserBlock>> {
@@ -204,18 +170,6 @@ export class UserBlocksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve a list of blocked IP addresses for the login identifiers (email, username, phone number, etc) associated with the specified user.<br/><br/>
-   * Get a user\'s blocks
-   */
-  async get(
-    requestParameters: GetUserBlocksByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<UserBlock> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

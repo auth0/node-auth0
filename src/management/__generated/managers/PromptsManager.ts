@@ -39,7 +39,7 @@ export class PromptsManager extends BaseAPI {
    * Get custom text for a prompt
    * @throws {RequiredError}
    */
-  async getCustomTextByLanguageRaw(
+  async getCustomTextByLanguage(
     requestParameters: GetCustomTextByLanguageRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
@@ -55,19 +55,7 @@ export class PromptsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse<any>(response);
-  }
-
-  /**
-   * Retrieve custom text for a specific prompt and language.
-   * Get custom text for a prompt
-   */
-  async getCustomTextByLanguage(
-    requestParameters: GetCustomTextByLanguageRequest,
-    initOverrides?: InitOverride
-  ): Promise<{ [key: string]: any }> {
-    const response = await this.getCustomTextByLanguageRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -75,7 +63,7 @@ export class PromptsManager extends BaseAPI {
    * Get prompts settings
    * @throws {RequiredError}
    */
-  async getRaw(initOverrides?: InitOverride): Promise<ApiResponse<PromptsSettings>> {
+  async get(initOverrides?: InitOverride): Promise<ApiResponse<PromptsSettings>> {
     const response = await this.request(
       {
         path: `/prompts`,
@@ -84,16 +72,7 @@ export class PromptsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve prompts settings.
-   * Get prompts settings
-   */
-  async get(initOverrides?: InitOverride): Promise<PromptsSettings> {
-    const response = await this.getRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -101,7 +80,7 @@ export class PromptsManager extends BaseAPI {
    * Update prompts settings
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     bodyParameters: PromptsSettingsUpdate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PromptsSettings>> {
@@ -119,19 +98,7 @@ export class PromptsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update prompts settings.
-   * Update prompts settings
-   */
-  async update(
-    bodyParameters: PromptsSettingsUpdate,
-    initOverrides?: InitOverride
-  ): Promise<PromptsSettings> {
-    const response = await this.updateRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -139,7 +106,7 @@ export class PromptsManager extends BaseAPI {
    * Set custom text for a specific prompt
    * @throws {RequiredError}
    */
-  async updateCustomTextByLanguageRaw(
+  async updateCustomTextByLanguage(
     requestParameters: PutCustomTextByLanguageRequest,
     bodyParameters: { [key: string]: any },
     initOverrides?: InitOverride
@@ -162,19 +129,7 @@ export class PromptsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Set custom text for a specific prompt. Existing texts will be overwritten.
-   * Set custom text for a specific prompt
-   */
-  async updateCustomTextByLanguage(
-    requestParameters: PutCustomTextByLanguageRequest,
-    bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.updateCustomTextByLanguageRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }
 

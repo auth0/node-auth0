@@ -33,7 +33,7 @@ export class KeysManager extends BaseAPI {
    * Get an Application Signing Key by its key id
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetSigningKeyRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetSigningKeys200ResponseInner>> {
@@ -50,19 +50,7 @@ export class KeysManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get an Application Signing Key by its key id
-   * Get an Application Signing Key by its key id
-   */
-  async get(
-    requestParameters: GetSigningKeyRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetSigningKeys200ResponseInner> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -70,7 +58,7 @@ export class KeysManager extends BaseAPI {
    * Get all Application Signing Keys
    * @throws {RequiredError}
    */
-  async getAllRaw(
+  async getAll(
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<GetSigningKeys200ResponseInner>>> {
     const response = await this.request(
@@ -81,16 +69,7 @@ export class KeysManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get all Application Signing Keys
-   * Get all Application Signing Keys
-   */
-  async getAll(initOverrides?: InitOverride): Promise<Array<GetSigningKeys200ResponseInner>> {
-    const response = await this.getAllRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -98,7 +77,7 @@ export class KeysManager extends BaseAPI {
    * Rotate the Application Signing Key
    * @throws {RequiredError}
    */
-  async rotateRaw(initOverrides?: InitOverride): Promise<ApiResponse<PostSigningKeys201Response>> {
+  async rotate(initOverrides?: InitOverride): Promise<ApiResponse<PostSigningKeys201Response>> {
     const response = await this.request(
       {
         path: `/keys/signing/rotate`,
@@ -107,16 +86,7 @@ export class KeysManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Rotate the Application Signing Key
-   * Rotate the Application Signing Key
-   */
-  async rotate(initOverrides?: InitOverride): Promise<PostSigningKeys201Response> {
-    const response = await this.rotateRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -124,7 +94,7 @@ export class KeysManager extends BaseAPI {
    * Revoke an Application Signing Key by its key id
    * @throws {RequiredError}
    */
-  async revokeRaw(
+  async revoke(
     requestParameters: PutSigningKeysRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PutSigningKeys200Response>> {
@@ -141,18 +111,6 @@ export class KeysManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Revoke an Application Signing Key by its key id
-   * Revoke an Application Signing Key by its key id
-   */
-  async revoke(
-    requestParameters: PutSigningKeysRequest,
-    initOverrides?: InitOverride
-  ): Promise<PutSigningKeys200Response> {
-    const response = await this.revokeRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

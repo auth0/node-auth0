@@ -26,7 +26,7 @@ export class TenantsManager extends BaseAPI {
    * Update tenant settings
    * @throws {RequiredError}
    */
-  async updateSettingsRaw(
+  async updateSettings(
     bodyParameters: TenantSettingsUpdate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<TenantSettings>> {
@@ -44,19 +44,7 @@ export class TenantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update settings for a tenant.
-   * Update tenant settings
-   */
-  async updateSettings(
-    bodyParameters: TenantSettingsUpdate,
-    initOverrides?: InitOverride
-  ): Promise<TenantSettings> {
-    const response = await this.updateSettingsRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -64,8 +52,8 @@ export class TenantsManager extends BaseAPI {
    * Get tenant settings
    * @throws {RequiredError}
    */
-  async getSettingsRaw(
-    requestParameters: TenantSettingsRouteRequest,
+  async getSettings(
+    requestParameters: TenantSettingsRouteRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<TenantSettings>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -88,18 +76,6 @@ export class TenantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve tenant settings. A list of fields to include or exclude may also be specified.
-   * Get tenant settings
-   */
-  async getSettings(
-    requestParameters: TenantSettingsRouteRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<TenantSettings> {
-    const response = await this.getSettingsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

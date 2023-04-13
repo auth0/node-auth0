@@ -68,7 +68,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    * Delete a device credential
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteDeviceCredentialsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -85,18 +85,7 @@ export class DeviceCredentialsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a device credential.
-   * Delete a device credential
-   */
-  async delete(
-    requestParameters: DeleteDeviceCredentialsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -108,8 +97,8 @@ export class DeviceCredentialsManager extends BaseAPI {
    * Retrieve device credentials
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetDeviceCredentialsRequest,
+  async getAll(
+    requestParameters: GetDeviceCredentialsRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetDeviceCredentials200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -156,19 +145,7 @@ export class DeviceCredentialsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.<br/><br/>Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.<br/>Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.<br/>
-   * Retrieve device credentials
-   */
-  async getAll(
-    requestParameters: GetDeviceCredentialsRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetDeviceCredentials200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -180,7 +157,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    * Create a device public key credential
    * @throws {RequiredError}
    */
-  async createPublicKeyRaw(
+  async createPublicKey(
     bodyParameters: DeviceCredentialCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostDeviceCredentials201Response>> {
@@ -198,19 +175,7 @@ export class DeviceCredentialsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.<br/><br/>Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.<br/>Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.<br/>
-   * Create a device public key credential
-   */
-  async createPublicKey(
-    bodyParameters: DeviceCredentialCreate,
-    initOverrides?: InitOverride
-  ): Promise<PostDeviceCredentials201Response> {
-    const response = await this.createPublicKeyRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }
 

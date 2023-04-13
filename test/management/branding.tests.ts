@@ -97,8 +97,8 @@ describe('BrandingManager', () => {
 
       nock(API_URL).get('/branding').reply(200, data);
 
-      this.branding.getSettings().then((provider) => {
-        expect(provider.logo_url).to.equal(data.logo_url);
+      branding.getSettings().then((provider) => {
+        expect(provider.data.logo_url).to.equal(data.logo_url);
 
         done();
       });
@@ -235,7 +235,7 @@ describe('BrandingManager', () => {
       nock(API_URL).get('/branding/templates/universal-login').reply(200, data);
 
       branding.getUniversalLoginTemplate().then((response) => {
-        expect(typeof response !== 'string' && response.body).to.equal(data.body);
+        expect(typeof response.data !== 'string' && response.data.body).to.equal(data.body);
 
         done();
       });
@@ -405,7 +405,7 @@ describe('BrandingManager', () => {
       nock(API_URL).get('/branding/themes/themeid1').reply(200, data);
 
       const theme = await branding.getTheme({ themeId: 'themeid1' });
-      expect(theme.themeId).to.equal(data.themeId);
+      expect(theme.data.themeId).to.equal(data.themeId);
     });
 
     it('should perform a GET request to /api/v2/branding/themes/:theme_id', async () => {
@@ -464,7 +464,7 @@ describe('BrandingManager', () => {
       nock(API_URL).get('/branding/themes/default').reply(200, data);
 
       const theme = await branding.getDefaultTheme();
-      expect(theme.themeId).to.equal(data.themeId);
+      expect(theme.data.themeId).to.equal(data.themeId);
     });
 
     it('should perform a GET request to /api/v2/branding/themes/default', async () => {
@@ -524,7 +524,7 @@ describe('BrandingManager', () => {
       nock(API_URL).post(`/branding/themes`, data).reply(201, data);
 
       const theme = await branding.createTheme(data);
-      expect(theme.themeId).to.equal(data.themeId);
+      expect(theme.data.themeId).to.equal(data.themeId);
     });
 
     it('should perform a POST request to /branding/themes', async () => {
@@ -580,7 +580,7 @@ describe('BrandingManager', () => {
       nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
 
       const theme = await branding.updateTheme(params, data);
-      expect(theme.themeId).to.equal(data.themeId);
+      expect(theme.data.themeId).to.equal(data.themeId);
     });
 
     it('should perform a PATCH request to /api/v2/branding/themes/:theme_id', async () => {
@@ -621,7 +621,7 @@ describe('BrandingManager', () => {
       nock(API_URL).delete(`/branding/themes/${themeId}`).reply(404);
 
       try {
-        await branding.deleteThemeRaw(params);
+        await branding.deleteTheme(params);
       } catch (err) {
         expect(err.response.status).to.eq(404);
         expect(err).to.exist;

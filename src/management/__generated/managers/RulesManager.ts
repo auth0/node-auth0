@@ -81,7 +81,7 @@ export class RulesManager extends BaseAPI {
    * Delete a rule
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteRulesByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -95,18 +95,7 @@ export class RulesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a rule.<br/>
-   * Delete a rule
-   */
-  async delete(
-    requestParameters: DeleteRulesByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -115,8 +104,8 @@ export class RulesManager extends BaseAPI {
    * Get rules
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetRulesRequest,
+  async getAll(
+    requestParameters: GetRulesRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRules200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -155,19 +144,7 @@ export class RulesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve a filtered list of <a href=\"https://auth0.com/docs/rules\">rules</a>. Accepts a list of fields to include or exclude.<br/>
-   * Get rules
-   */
-  async getAll(
-    requestParameters: GetRulesRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetRules200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -176,7 +153,7 @@ export class RulesManager extends BaseAPI {
    * Get a rule
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetRulesByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Rule>> {
@@ -202,16 +179,7 @@ export class RulesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve <a href=\"https://auth0.com/docs/rules\">rule</a> details. Accepts a list of fields to include or exclude in the result.<br/>
-   * Get a rule
-   */
-  async get(requestParameters: GetRulesByIdRequest, initOverrides?: InitOverride): Promise<Rule> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -220,7 +188,7 @@ export class RulesManager extends BaseAPI {
    * Update a rule
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchRulesByIdRequest,
     bodyParameters: RuleUpdate,
     initOverrides?: InitOverride
@@ -241,20 +209,7 @@ export class RulesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update an existing rule.<br/>
-   * Update a rule
-   */
-  async update(
-    requestParameters: PatchRulesByIdRequest,
-    bodyParameters: RuleUpdate,
-    initOverrides?: InitOverride
-  ): Promise<Rule> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -265,7 +220,7 @@ export class RulesManager extends BaseAPI {
    * Create a rule
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: RuleCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Rule>> {
@@ -283,15 +238,6 @@ export class RulesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a <a href=\"https://auth0.com/docs/rules#create-a-new-rule-using-the-management-api\">new rule</a>.<br/><br/>Note: Changing a rule\'s stage of execution from the default <code>login_success</code> can change the rule\'s function signature to have user omitted.<br/>
-   * Create a rule
-   */
-  async create(bodyParameters: RuleCreate, initOverrides?: InitOverride): Promise<Rule> {
-    const response = await this.createRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

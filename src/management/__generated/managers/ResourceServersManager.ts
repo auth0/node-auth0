@@ -70,7 +70,7 @@ export class ResourceServersManager extends BaseAPI {
    * Delete a resource server
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteResourceServersByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -87,18 +87,7 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete an existing API (also known as a resource server).
-   * Delete a resource server
-   */
-  async delete(
-    requestParameters: DeleteResourceServersByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -106,8 +95,8 @@ export class ResourceServersManager extends BaseAPI {
    * Get resource servers
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetResourceServersRequest,
+  async getAll(
+    requestParameters: GetResourceServersRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetResourceServers200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -138,19 +127,7 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve <a href=\"https://auth0.com/docs/apis\">APIs</a> (also known as resource servers) that you can consume from your authorized applications.
-   * Get resource servers
-   */
-  async getAll(
-    requestParameters: GetResourceServersRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetResourceServers200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -158,7 +135,7 @@ export class ResourceServersManager extends BaseAPI {
    * Get a resource server
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetResourceServersByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<ResourceServer>> {
@@ -183,19 +160,7 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve an <a href=\"https://auth0.com/docs/apis\">API</a> (also known as resource server).
-   * Get a resource server
-   */
-  async get(
-    requestParameters: GetResourceServersByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<ResourceServer> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -203,7 +168,7 @@ export class ResourceServersManager extends BaseAPI {
    * Update a resource server
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchResourceServersByIdRequest,
     bodyParameters: ResourceServerUpdate,
     initOverrides?: InitOverride
@@ -227,19 +192,7 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Update an existing API (also known as a resource server).
-   * Update a resource server
-   */
-  async update(
-    requestParameters: PatchResourceServersByIdRequest,
-    bodyParameters: ResourceServerUpdate,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.updateRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -247,7 +200,7 @@ export class ResourceServersManager extends BaseAPI {
    * Create a resource server
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: PostResourceServersRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -265,17 +218,6 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Create a new API (also known as a resource server).
-   * Create a resource server
-   */
-  async create(
-    bodyParameters: PostResourceServersRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.createRaw(bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }

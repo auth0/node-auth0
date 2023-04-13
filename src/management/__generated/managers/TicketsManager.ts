@@ -18,7 +18,7 @@ export class TicketsManager extends BaseAPI {
    * Create an email verification ticket
    * @throws {RequiredError}
    */
-  async verifyEmailRaw(
+  async verifyEmail(
     bodyParameters: PostEmailVerificationRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostEmailVerification201Response>> {
@@ -36,19 +36,7 @@ export class TicketsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a <a href=\"https://auth0.com/docs/email/custom#verification-email\">ticket to verify a user\'s email address</a>.
-   * Create an email verification ticket
-   */
-  async verifyEmail(
-    bodyParameters: PostEmailVerificationRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostEmailVerification201Response> {
-    const response = await this.verifyEmailRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -56,7 +44,7 @@ export class TicketsManager extends BaseAPI {
    * Create a password change ticket
    * @throws {RequiredError}
    */
-  async changePasswordRaw(
+  async changePassword(
     bodyParameters: PostPasswordChangeRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostPasswordChange201Response>> {
@@ -74,18 +62,6 @@ export class TicketsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a <a href=\"https://auth0.com/docs/connections/database/password-change\">password change ticket</a> for a user.
-   * Create a password change ticket
-   */
-  async changePassword(
-    bodyParameters: PostPasswordChangeRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostPasswordChange201Response> {
-    const response = await this.changePasswordRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

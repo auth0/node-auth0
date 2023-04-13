@@ -107,11 +107,11 @@ describe('ActionsManager', () => {
         nock(API_URL).get('/actions/actions').reply(200, data);
 
         this.actions.getAll().then((credentials) => {
-          expect(credentials).to.be.an.instanceOf(Array);
+          expect(credentials.data).to.be.an.instanceOf(Array);
 
-          expect(credentials.length).to.equal(data.length);
+          expect(credentials.data.length).to.equal(data.length);
 
-          expect(credentials[0].test).to.equal(data[0].test);
+          expect(credentials.data[0].test).to.equal(data[0].test);
 
           done();
         });
@@ -763,11 +763,11 @@ describe('ActionsManager', () => {
         nock(API_URL).get('/actions/triggers').reply(200, data);
 
         this.actions.getAllTriggers().then((triggers) => {
-          expect(triggers).to.be.an.instanceOf(Array);
+          expect(triggers.data).to.be.an.instanceOf(Array);
 
-          expect(triggers.length).to.equal(data.length);
+          expect(triggers.data.length).to.equal(data.length);
 
-          expect(triggers[0].trigger1).to.equal(data[0].trigger1);
+          expect(triggers.data[0].trigger1).to.equal(data[0].trigger1);
 
           done();
         });

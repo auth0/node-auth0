@@ -62,7 +62,7 @@ export class JobsManager extends BaseAPI {
    * Get job error details
    * @throws {RequiredError}
    */
-  async getErrorsRaw(
+  async getErrors(
     requestParameters: GetErrorsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetErrors200Response>> {
@@ -76,19 +76,7 @@ export class JobsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve error details of a failed job.
-   * Get job error details
-   */
-  async getErrors(
-    requestParameters: GetErrorsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetErrors200Response> {
-    const response = await this.getErrorsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -96,7 +84,7 @@ export class JobsManager extends BaseAPI {
    * Get a job
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetJobsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
@@ -110,16 +98,7 @@ export class JobsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieves a job. Useful to check its status.
-   * Get a job
-   */
-  async get(requestParameters: GetJobsByIdRequest, initOverrides?: InitOverride): Promise<Job> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -127,7 +106,7 @@ export class JobsManager extends BaseAPI {
    * Create export users job
    * @throws {RequiredError}
    */
-  async exportUsersRaw(
+  async exportUsers(
     bodyParameters: PostUsersExportsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
@@ -145,19 +124,7 @@ export class JobsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Export all users to a file via a long-running job.
-   * Create export users job
-   */
-  async exportUsers(
-    bodyParameters: PostUsersExportsRequest,
-    initOverrides?: InitOverride
-  ): Promise<Job> {
-    const response = await this.exportUsersRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -165,7 +132,7 @@ export class JobsManager extends BaseAPI {
    * Create import users job
    * @throws {RequiredError}
    */
-  async importUsersRaw(
+  async importUsers(
     bodyParameters: PostUsersImportsData,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
@@ -212,19 +179,7 @@ export class JobsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Import users from a <a href=\"https://manage.local.dev.auth0.com/docs/users/references/bulk-import-database-schema-examples\">formatted file</a> into a connection via a long-running job.
-   * Create import users job
-   */
-  async importUsers(
-    bodyParameters: PostUsersImportsData,
-    initOverrides?: InitOverride
-  ): Promise<Job> {
-    const response = await this.importUsersRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -234,7 +189,7 @@ export class JobsManager extends BaseAPI {
    * Send an email address verification email
    * @throws {RequiredError}
    */
-  async verifyEmailRaw(
+  async verifyEmail(
     bodyParameters: PostVerificationEmailRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
@@ -252,18 +207,6 @@ export class JobsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Send an email to the specified user that asks them to click a link to <a href=\"https://auth0.com/docs/email/custom#verification-email\">verify their email address</a>.<br/><br/>Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
-   * Send an email address verification email
-   */
-  async verifyEmail(
-    bodyParameters: PostVerificationEmailRequest,
-    initOverrides?: InitOverride
-  ): Promise<Job> {
-    const response = await this.verifyEmailRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

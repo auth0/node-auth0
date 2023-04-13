@@ -33,7 +33,7 @@ export class RulesConfigsManager extends BaseAPI {
    * Delete rules config for a given key
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteRulesConfigsByKeyRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -50,18 +50,7 @@ export class RulesConfigsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a rules config variable identified by its key.
-   * Delete rules config for a given key
-   */
-  async delete(
-    requestParameters: DeleteRulesConfigsByKeyRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -71,7 +60,7 @@ export class RulesConfigsManager extends BaseAPI {
    * Retrieve config variable keys for rules (get_rules-configs)
    * @throws {RequiredError}
    */
-  async getAllRaw(
+  async getAll(
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<GetRulesConfigs200ResponseInner>>> {
     const response = await this.request(
@@ -82,16 +71,7 @@ export class RulesConfigsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve rules config variable keys.<br/><br/>    Note: For security, config variable values cannot be retrieved outside rule execution.
-   * Retrieve config variable keys for rules (get_rules-configs)
-   */
-  async getAll(initOverrides?: InitOverride): Promise<Array<GetRulesConfigs200ResponseInner>> {
-    const response = await this.getAllRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -99,7 +79,7 @@ export class RulesConfigsManager extends BaseAPI {
    * Set rules config for a given key
    * @throws {RequiredError}
    */
-  async setRaw(
+  async set(
     requestParameters: PutRulesConfigsByKeyOperationRequest,
     bodyParameters: PutRulesConfigsByKeyRequest,
     initOverrides?: InitOverride
@@ -123,19 +103,6 @@ export class RulesConfigsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Sets a rules config variable.
-   * Set rules config for a given key
-   */
-  async set(
-    requestParameters: PutRulesConfigsByKeyOperationRequest,
-    bodyParameters: PutRulesConfigsByKeyRequest,
-    initOverrides?: InitOverride
-  ): Promise<PutRulesConfigsByKey200Response> {
-    const response = await this.setRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

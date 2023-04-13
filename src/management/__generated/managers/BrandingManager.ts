@@ -44,7 +44,7 @@ export class BrandingManager extends BaseAPI {
    * Delete branding theme
    * @throws {RequiredError}
    */
-  async deleteThemeRaw(
+  async deleteTheme(
     requestParameters: DeleteBrandingThemeRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -61,25 +61,14 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete branding theme.
-   * Delete branding theme
-   */
-  async deleteTheme(
-    requestParameters: DeleteBrandingThemeRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteThemeRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Delete template for New Universal Login Experience
    * @throws {RequiredError}
    */
-  async deleteUniversalLoginTemplateRaw(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
+  async deleteUniversalLoginTemplate(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
     const response = await this.request(
       {
         path: `/branding/templates/universal-login`,
@@ -88,14 +77,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete template for New Universal Login Experience
-   */
-  async deleteUniversalLoginTemplate(initOverrides?: InitOverride): Promise<void> {
-    await this.deleteUniversalLoginTemplateRaw(initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -103,7 +85,7 @@ export class BrandingManager extends BaseAPI {
    * Get branding settings
    * @throws {RequiredError}
    */
-  async getSettingsRaw(initOverrides?: InitOverride): Promise<ApiResponse<GetBranding200Response>> {
+  async getSettings(initOverrides?: InitOverride): Promise<ApiResponse<GetBranding200Response>> {
     const response = await this.request(
       {
         path: `/branding`,
@@ -112,16 +94,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve branding settings.
-   * Get branding settings
-   */
-  async getSettings(initOverrides?: InitOverride): Promise<GetBranding200Response> {
-    const response = await this.getSettingsRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -129,7 +102,7 @@ export class BrandingManager extends BaseAPI {
    * Get branding theme
    * @throws {RequiredError}
    */
-  async getThemeRaw(
+  async getTheme(
     requestParameters: GetBrandingThemeRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostBrandingTheme200Response>> {
@@ -146,19 +119,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve branding theme.
-   * Get branding theme
-   */
-  async getTheme(
-    requestParameters: GetBrandingThemeRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostBrandingTheme200Response> {
-    const response = await this.getThemeRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -166,7 +127,7 @@ export class BrandingManager extends BaseAPI {
    * Get default branding theme
    * @throws {RequiredError}
    */
-  async getDefaultThemeRaw(
+  async getDefaultTheme(
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostBrandingTheme200Response>> {
     const response = await this.request(
@@ -177,23 +138,14 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve default branding theme.
-   * Get default branding theme
-   */
-  async getDefaultTheme(initOverrides?: InitOverride): Promise<PostBrandingTheme200Response> {
-    const response = await this.getDefaultThemeRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Get template for New Universal Login Experience
    * @throws {RequiredError}
    */
-  async getUniversalLoginTemplateRaw(
+  async getUniversalLoginTemplate(
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUniversalLogin200Response>> {
     const response = await this.request(
@@ -204,17 +156,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get template for New Universal Login Experience
-   */
-  async getUniversalLoginTemplate(
-    initOverrides?: InitOverride
-  ): Promise<GetUniversalLogin200Response> {
-    const response = await this.getUniversalLoginTemplateRaw(initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -222,7 +164,7 @@ export class BrandingManager extends BaseAPI {
    * Update branding settings
    * @throws {RequiredError}
    */
-  async updateSettingsRaw(
+  async updateSettings(
     bodyParameters: PatchBrandingRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetBranding200Response>> {
@@ -240,19 +182,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update branding settings.
-   * Update branding settings
-   */
-  async updateSettings(
-    bodyParameters: PatchBrandingRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetBranding200Response> {
-    const response = await this.updateSettingsRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -260,7 +190,7 @@ export class BrandingManager extends BaseAPI {
    * Update branding theme
    * @throws {RequiredError}
    */
-  async updateThemeRaw(
+  async updateTheme(
     requestParameters: PatchBrandingThemeRequest,
     bodyParameters: PostBrandingThemeRequest,
     initOverrides?: InitOverride
@@ -284,20 +214,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update branding theme.
-   * Update branding theme
-   */
-  async updateTheme(
-    requestParameters: PatchBrandingThemeRequest,
-    bodyParameters: PostBrandingThemeRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostBrandingTheme200Response> {
-    const response = await this.updateThemeRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -305,7 +222,7 @@ export class BrandingManager extends BaseAPI {
    * Create branding theme
    * @throws {RequiredError}
    */
-  async createThemeRaw(
+  async createTheme(
     bodyParameters: PostBrandingThemeRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostBrandingTheme200Response>> {
@@ -323,19 +240,7 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create branding theme.
-   * Create branding theme
-   */
-  async createTheme(
-    bodyParameters: PostBrandingThemeRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostBrandingTheme200Response> {
-    const response = await this.createThemeRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -368,7 +273,7 @@ export class BrandingManager extends BaseAPI {
    * Set template for New Universal Login Experience
    * @throws {RequiredError}
    */
-  async setUniversalLoginTemplateRaw(
+  async setUniversalLoginTemplate(
     bodyParameters: PutUniversalLoginRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -386,17 +291,6 @@ export class BrandingManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Update the Universal Login branding template.<br/><br/><p>When <code>content-type</code> header is set to <code>application/json</code>, the expected body must be JSON:</p><br/><pre><br/>{<br/>  \"template\": \"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;{%- auth0:head -%}&lt;/head&gt;&lt;body&gt;{%- auth0:widget -%}&lt;/body&gt;&lt;/html&gt;\"<br/>}<br/></pre><br/><br/><p><br/>  When <code>content-type</code> header is set to <code>text/html</code>, the expected body must be the HTML template:<br/></p><br/><pre><br/>&lt!DOCTYPE html&gt;<br/>&lt;code&gt;<br/>  &lt;html&gt;<br/>    &lt;head&gt;<br/>     {%- auth0:head -%}<br/>    &lt;/head&gt;<br/>    &lt;body&gt;<br/>      {%- auth0:widget -%}<br/>    &lt;/body&gt;<br/>  &lt;/html&gt;<br/>&lt;/code&gt;<br/></pre><br/>
-   * Set template for New Universal Login Experience
-   */
-  async setUniversalLoginTemplate(
-    bodyParameters: PutUniversalLoginRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.setUniversalLoginTemplateRaw(bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }

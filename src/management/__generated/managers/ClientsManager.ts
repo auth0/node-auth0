@@ -98,7 +98,7 @@ export class ClientsManager extends BaseAPI {
    * Delete a client
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteClientsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -112,18 +112,7 @@ export class ClientsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a client and related configuration (rules, connections, etc).
-   * Delete a client
-   */
-  async delete(
-    requestParameters: DeleteClientsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -161,8 +150,8 @@ export class ClientsManager extends BaseAPI {
    * Get clients
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetClientsRequest,
+  async getAll(
+    requestParameters: GetClientsRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<Client>>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -209,19 +198,7 @@ export class ClientsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve clients (applications and SSO integrations) matching provided filters. A list of fields to include or exclude<br/>may also be specified. Note:<br/><ul><br/>  <li><br/>    <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with<br/>    any scope.<br/>  </li><br/>  <li><br/>    <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,<br/>    <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,<br/>    <code>callback_url_template</code>, <code>jwt_configuration</code>,<br/>    <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,<br/>    <code>jwt_configuration.scopes</code>, <code>jwt_configuration.alg</code>, <code>api_type</code>,<br/>    <code>logo_uri</code>, <code>allowed_clients</code>, <code>owners</code>, <code>custom_login_page</code>,<br/>    <code>custom_login_page_off</code>, <code>sso</code>, <code>addons</code>, <code>form_template</code>,<br/>    <code>custom_login_page_codeview</code>, <code>resource_servers</code>, <code>client_metadata</code>,<br/>    <code>mobile</code>, <code>mobile.android</code>, <code>mobile.ios</code>, <code>allowed_logout_urls</code>,<br/>    <code>token_endpoint_auth_method</code>, <code>is_first_party</code>, <code>oidc_conformant</code>,<br/>    <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,<br/>    <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,<br/>    <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>organization_usage</code>, and<br/>    <code>organization_require_behavior</code> properties can only be retrieved with the <code>read:clients</code> or<br/>    <code>read:client_keys</code> scope.<br/>  </li><br/>  <li><br/>    <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,<br/>    <code>client_secret</code>, and <code>signing_key</code> properties can only be retrieved with the<br/>    <code>read:client_keys</code> scope.<br/>  </li><br/></ul><br/>
-   * Get clients
-   */
-  async getAll(
-    requestParameters: GetClientsRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<Array<Client>> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -258,7 +235,7 @@ export class ClientsManager extends BaseAPI {
    * Get a client
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetClientsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
@@ -284,19 +261,7 @@ export class ClientsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve client details. A list of fields to include or exclude may also be specified. Note:<br/><ul><br/>  <li><br/>    <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with<br/>    the any of the scopes.<br/>  </li><br/>  <li><br/>    <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,<br/>    <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,<br/>    <code>callback_url_template</code>, <code>jwt_configuration</code>,<br/>    <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,<br/>    <code>jwt_configuration.scopes</code>, <code>jwt_configuration.alg</code>, <code>api_type</code>,<br/>    <code>logo_uri</code>, <code>allowed_clients</code>, <code>owners</code>, <code>custom_login_page</code>,<br/>    <code>custom_login_page_off</code>, <code>sso</code>, <code>addons</code>, <code>form_template</code>,<br/>    <code>custom_login_page_codeview</code>, <code>resource_servers</code>, <code>client_metadata</code>,<br/>    <code>mobile</code>, <code>mobile.android</code>, <code>mobile.ios</code>, <code>allowed_logout_urls</code>,<br/>    <code>token_endpoint_auth_method</code>, <code>is_first_party</code>, <code>oidc_conformant</code>,<br/>    <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,<br/>    <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,<br/>    <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>organization_usage</code>, and<br/>    <code>organization_require_behavior</code> properties can only be retrieved with the <code>read:clients</code> or<br/>    <code>read:client_keys</code> scope.<br/>  </li><br/>  <li><br/>    <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,<br/>    <code>client_secret</code>, and <code>signing_key</code> properties can only be retrieved with the<br/>    <code>read:client_keys</code> scope.<br/>  </li><br/></ul><br/>
-   * Get a client
-   */
-  async get(
-    requestParameters: GetClientsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<Client> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -304,7 +269,7 @@ export class ClientsManager extends BaseAPI {
    * Update a client
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchClientsByIdRequest,
     bodyParameters: ClientUpdate,
     initOverrides?: InitOverride
@@ -325,20 +290,7 @@ export class ClientsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Note: The `client_secret` and `signing_key` attributes can only be updated with the `update:client_keys` scope.
-   * Update a client
-   */
-  async update(
-    requestParameters: PatchClientsByIdRequest,
-    bodyParameters: ClientUpdate,
-    initOverrides?: InitOverride
-  ): Promise<Client> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -351,7 +303,7 @@ export class ClientsManager extends BaseAPI {
    * Create a client
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: ClientCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
@@ -369,16 +321,7 @@ export class ClientsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a new client (application or SSO integration).<br/><br/>Note: We recommend leaving the `client_secret` parameter unspecified to allow the generation of a safe secret.<br/><br/><div class=\"alert alert-warning\">SSO Integrations created via this endpoint will accept login requests and share user profile information.</div><br/>
-   * Create a client
-   */
-  async create(bodyParameters: ClientCreate, initOverrides?: InitOverride): Promise<Client> {
-    const response = await this.createRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -389,7 +332,7 @@ export class ClientsManager extends BaseAPI {
    * Rotate a client secret
    * @throws {RequiredError}
    */
-  async rotateClientSecretRaw(
+  async rotateClientSecret(
     requestParameters: PostRotateSecretRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
@@ -406,18 +349,6 @@ export class ClientsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Rotate a client secret.<br/><br/>Note: The generated secret is NOT base64 encoded.<br/>
-   * Rotate a client secret
-   */
-  async rotateClientSecret(
-    requestParameters: PostRotateSecretRequest,
-    initOverrides?: InitOverride
-  ): Promise<Client> {
-    const response = await this.rotateClientSecretRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

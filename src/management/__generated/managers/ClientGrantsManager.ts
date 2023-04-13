@@ -62,7 +62,7 @@ export class ClientGrantsManager extends BaseAPI {
    * Delete client grant
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteClientGrantsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -79,18 +79,7 @@ export class ClientGrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a client grant.
-   * Delete client grant
-   */
-  async delete(
-    requestParameters: DeleteClientGrantsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -99,8 +88,8 @@ export class ClientGrantsManager extends BaseAPI {
    * Get client grants
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetClientGrantsRequest,
+  async getAll(
+    requestParameters: GetClientGrantsRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetClientGrants200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -135,19 +124,7 @@ export class ClientGrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve <a href=\"https://auth0.com/docs/api-auth/grant/client-credentials\">client grants</a>.<br/>
-   * Get client grants
-   */
-  async getAll(
-    requestParameters: GetClientGrantsRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetClientGrants200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -155,7 +132,7 @@ export class ClientGrantsManager extends BaseAPI {
    * Update client grant
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchClientGrantsByIdOperationRequest,
     bodyParameters: PatchClientGrantsByIdRequest,
     initOverrides?: InitOverride
@@ -179,20 +156,7 @@ export class ClientGrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update a client grant.
-   * Update client grant
-   */
-  async update(
-    requestParameters: PatchClientGrantsByIdOperationRequest,
-    bodyParameters: PatchClientGrantsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<ClientGrant> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -200,7 +164,7 @@ export class ClientGrantsManager extends BaseAPI {
    * Create client grant
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: ClientGrantCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -218,14 +182,6 @@ export class ClientGrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Create a client grant.
-   * Create client grant
-   */
-  async create(bodyParameters: ClientGrantCreate, initOverrides?: InitOverride): Promise<void> {
-    await this.createRaw(bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }
