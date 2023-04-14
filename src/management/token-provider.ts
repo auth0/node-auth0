@@ -93,10 +93,10 @@ export class TokenProvider {
       load: (options: TokenProviderOptions, callback: (err: any, data: TokenResponse) => void) => {
         this.clientCredentialsGrant(options.domain, options.scope, options.audience)
           .then((data: TokenResponse) => {
-            setImmediate(() => callback(null, data));
+            callback(null, data);
           })
           .catch((err: any) => {
-            setImmediate(() => callback(err, null));
+            callback(err, null);
           });
       },
       hash(options: TokenProviderOptions) {
