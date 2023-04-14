@@ -89,7 +89,7 @@ export class BaseAPI {
       // only add the querystring to the URL if there are query parameters.
       // this is done to avoid urls ending with a "?" character which buggy webservers
       // do not handle correctly sometimes.
-      url += '?' + this.configuration.queryParamsStringify(context.query);
+      url += `?${this.configuration.queryParamsStringify(context.query)}`;
     }
 
     const headers = Object.assign({}, this.configuration.headers, context.headers);
@@ -189,30 +189,30 @@ export class BaseAPI {
   }
 }
 
-function isBlob(value: any): value is Blob {
+function isBlob(value: unknown): value is Blob {
   return typeof Blob !== 'undefined' && value instanceof Blob;
 }
 
-function isFormData(value: any): value is FormData {
+function isFormData(value: unknown): value is FormData {
   return typeof FormData !== 'undefined' && value instanceof FormData;
 }
 
 export class ResponseError extends Error {
-  override name: 'ResponseError' = 'ResponseError';
+  override name = 'ResponseError' as const;
   constructor(public response: Response, msg?: string) {
     super(msg);
   }
 }
 
 export class FetchError extends Error {
-  override name: 'FetchError' = 'FetchError';
+  override name = 'FetchError' as const;
   constructor(public cause: Error, msg?: string) {
     super(msg);
   }
 }
 
 export class RequiredError extends Error {
-  override name: 'RequiredError' = 'RequiredError';
+  override name = 'RequiredError' as const;
   constructor(public field: string, msg?: string) {
     super(msg);
   }
@@ -268,7 +268,7 @@ export interface RequestOpts {
   body?: HTTPBody;
 }
 
-export function querystring(params: HTTPQuery, prefix: string = ''): string {
+export function querystring(params: HTTPQuery, prefix = ''): string {
   return Object.keys(params)
     .map((key) => querystringSingleKey(key, params[key], prefix))
     .filter((part) => part.length > 0)
@@ -286,7 +286,7 @@ function querystringSingleKey(
     | Array<string | number | null | boolean>
     | Set<string | number | null | boolean>
     | HTTPQuery,
-  keyPrefix: string = ''
+  keyPrefix = ''
 ): string {
   const fullKey = keyPrefix + (keyPrefix.length ? `[${key}]` : key);
   if (value instanceof Array) {
@@ -355,10 +355,6 @@ export interface ApiResponse<T> {
   statusText: string;
 }
 
-export interface ResponseTransformer<T> {
-  (json: any): T;
-}
-
 export class JSONApiResponse<T> implements ApiResponse<T> {
   constructor(
     public data: T,
@@ -367,8 +363,8 @@ export class JSONApiResponse<T> implements ApiResponse<T> {
     readonly statusText: string
   ) {}
 
-  static async fromResponse<T = any>(raw: Response) {
-    const value = (await raw.json()) as any;
+  static async fromResponse<T = unknown>(raw: Response) {
+    const value = (await raw.json()) as T;
     return new JSONApiResponse<T>(value, raw.headers, raw.status, raw.statusText);
   }
 }

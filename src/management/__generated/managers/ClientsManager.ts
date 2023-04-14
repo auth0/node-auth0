@@ -7,7 +7,6 @@ const { BaseAPI } = runtime;
 export interface DeleteClientsByIdRequest {
   /**
    * ID of the client to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -15,42 +14,34 @@ export interface DeleteClientsByIdRequest {
 export interface GetClientsRequest {
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Default value is 50, maximum value is 100
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional filter on the global client parameter.
-   * @type {boolean}
    */
   is_global?: boolean;
   /**
    * Optional filter on whether or not a client is a first-party client.
-   * @type {boolean}
    */
   is_first_party?: boolean;
   /**
    * Optional filter by a comma-separated list of application types.
-   * @type {string}
    */
   app_type?: string;
 }
@@ -58,17 +49,14 @@ export interface GetClientsRequest {
 export interface GetClientsByIdRequest {
   /**
    * ID of the client to retrieve.
-   * @type {string}
    */
   id: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -76,7 +64,6 @@ export interface GetClientsByIdRequest {
 export interface PatchClientsByIdRequest {
   /**
    * ID of the client to update.
-   * @type {string}
    */
   id: string;
 }
@@ -84,7 +71,6 @@ export interface PatchClientsByIdRequest {
 export interface PostRotateSecretRequest {
   /**
    * ID of the client that will rotate secrets.
-   * @type {string}
    */
   id: string;
 }
@@ -96,6 +82,7 @@ export class ClientsManager extends BaseAPI {
   /**
    * Delete a client and related configuration (rules, connections, etc).
    * Delete a client
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -148,6 +135,7 @@ export class ClientsManager extends BaseAPI {
    * </ul>
    *
    * Get clients
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -233,6 +221,7 @@ export class ClientsManager extends BaseAPI {
    * </ul>
    *
    * Get a client
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -267,6 +256,7 @@ export class ClientsManager extends BaseAPI {
   /**
    * Note: The `client_secret` and `signing_key` attributes can only be updated with the `update:client_keys` scope.
    * Update a client
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -301,6 +291,7 @@ export class ClientsManager extends BaseAPI {
    * <div class="alert alert-warning">SSO Integrations created via this endpoint will accept login requests and share user profile information.</div>
    *
    * Create a client
+   *
    * @throws {RequiredError}
    */
   async create(
@@ -330,6 +321,7 @@ export class ClientsManager extends BaseAPI {
    * Note: The generated secret is NOT base64 encoded.
    *
    * Rotate a client secret
+   *
    * @throws {RequiredError}
    */
   async rotateClientSecret(

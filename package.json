@@ -24,14 +24,14 @@
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 './test/**/*.tests.js' './test/*.tests.js' --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
     "precommit": "pretty-quick --staged",
-    "lint": "eslint ."
+    "lint": "eslint ./src --ext ts"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/auth0/node-auth0"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "keywords": [
     "auth0",
@@ -59,6 +59,8 @@
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/lru-cache": "4.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "cross-env": "^5.2.0",

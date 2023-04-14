@@ -7,7 +7,6 @@ const { BaseAPI } = runtime;
 export interface DeleteUserBlocksRequest {
   /**
    * Should be any of a username, phone number, or email.
-   * @type {string}
    */
   identifier: string;
 }
@@ -15,7 +14,6 @@ export interface DeleteUserBlocksRequest {
 export interface DeleteUserBlocksByIdRequest {
   /**
    * The user_id of the user to update.
-   * @type {string}
    */
   id: string;
 }
@@ -23,12 +21,10 @@ export interface DeleteUserBlocksByIdRequest {
 export interface GetUserBlocksRequest {
   /**
    * Should be any of a username, phone number, or email.
-   * @type {string}
    */
   identifier: string;
   /**
    * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
-   * @type {boolean}
    */
   consider_brute_force_enablement?: boolean;
 }
@@ -36,12 +32,10 @@ export interface GetUserBlocksRequest {
 export interface GetUserBlocksByIdRequest {
   /**
    * user_id of the user blocks to retrieve.
-   * @type {string}
    */
   id: string;
   /**
    * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
-   * @type {boolean}
    */
   consider_brute_force_enablement?: boolean;
 }
@@ -54,6 +48,7 @@ export class UserBlocksManager extends BaseAPI {
    * Unblock a user blocked due to an excessive amount of incorrectly-provided credentials.
    *
    * Unblock by identifier
+   *
    * @throws {RequiredError}
    */
   async deleteAll(
@@ -87,6 +82,7 @@ export class UserBlocksManager extends BaseAPI {
    * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by admins</a>.
    *
    * Unblock a user
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -110,6 +106,7 @@ export class UserBlocksManager extends BaseAPI {
    * Retrieve a list of blocked IP addresses for a given identifier (e.g., username, phone number or email).
    *
    * Get blocks by identifier
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -146,6 +143,7 @@ export class UserBlocksManager extends BaseAPI {
    *
    *
    * Get a user's blocks
+   *
    * @throws {RequiredError}
    */
   async get(

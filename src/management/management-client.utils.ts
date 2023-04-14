@@ -2,7 +2,7 @@ import {
   ManagementClientOptionsWithClientCredentials,
   ManagementClientOptionsWithToken,
 } from './management-client.options';
-import { TokenProviderOptions, TokenProvider } from './token-provider';
+import { TokenProvider, TokenProviderOptions } from './token-provider';
 
 export function toTokenProviderOptions(
   options: ManagementClientOptionsWithClientCredentials
@@ -32,9 +32,7 @@ export function tokenProviderFactory(
 ) {
   if ('token' in options) {
     return {
-      getAccessToken: () => {
-        return Promise.resolve(options.token);
-      },
+      getAccessToken: () => Promise.resolve(options.token),
     } as TokenProvider;
   } else {
     return new TokenProvider(toTokenProviderOptions(options));

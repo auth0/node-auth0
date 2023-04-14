@@ -7,12 +7,10 @@ const { BaseAPI } = runtime;
 export interface GetProviderRequest {
   /**
    * Comma-separated list of fields to include or exclude (dependent upon include_fields) from the result. Leave empty to retrieve `name` and `enabled`. Additional fields available include `credentials`, `default_from_address`, and `settings`.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -25,6 +23,7 @@ export class EmailsManager extends BaseAPI {
    * Retrieve <a href="https://auth0.com/docs/email/providers">email provider</a> details. A list of fields to include or exclude may also be specified.
    *
    * Get the email provider
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -61,6 +60,7 @@ export class EmailsManager extends BaseAPI {
    * <ul><li><code>smtp</code> provider, <code>settings</code> may contain <code>headers</code> object. When using AWS SES SMTP host, you may provide a name of configuration set in <code>X-SES-Configuration-Set</code> header. Value must be a string.</li><li>for <code>ses</code> provider, <code>settings</code> may contain <code>message</code> object, where you can provide a name of configuration set in <code>configuration_set_name</code> property. Value must be a string.</li></ul>
    *
    * Update the email provider
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -91,6 +91,7 @@ export class EmailsManager extends BaseAPI {
    * <ul><li><code>smtp</code> provider, <code>settings</code> may contain <code>headers</code> object. When using AWS SES SMTP host, you may provide a name of configuration set in <code>X-SES-Configuration-Set</code> header. Value must be a string.</li><li>for <code>ses</code> provider, <code>settings</code> may contain <code>message</code> object, where you can provide a name of configuration set in <code>configuration_set_name</code> property. Value must be a string.</li></ul>
    *
    * Configure the email provider
+   *
    * @throws {RequiredError}
    */
   async configure(

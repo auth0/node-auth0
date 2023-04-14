@@ -7,12 +7,10 @@ const { BaseAPI } = runtime;
 export interface GetDailyRequest {
   /**
    * Optional first day of the date range (inclusive) in YYYYMMDD format.
-   * @type {string}
    */
   from?: string;
   /**
    * Optional last day of the date range (inclusive) in YYYYMMDD format.
-   * @type {string}
    */
   to?: string;
 }
@@ -24,6 +22,7 @@ export class StatsManager extends BaseAPI {
   /**
    * Retrieve the number of active users that logged in during the last 30 days.
    * Get active users count
+   *
    * @throws {RequiredError}
    */
   async getActiveUsersCount(initOverrides?: InitOverride): Promise<ApiResponse<number>> {
@@ -41,6 +40,7 @@ export class StatsManager extends BaseAPI {
   /**
    * Retrieve the number of logins, signups and breached-password detections (subscription required) that occurred each day within a specified date range.
    * Get daily stats
+   *
    * @throws {RequiredError}
    */
   async getDaily(

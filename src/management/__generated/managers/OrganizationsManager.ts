@@ -25,12 +25,10 @@ const { BaseAPI } = runtime;
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * Connection identifier
-   * @type {string}
    */
   connectionId: string;
 }
@@ -38,12 +36,10 @@ export interface DeleteEnabledConnectionsByConnectionIdRequest {
 export interface DeleteInvitationsByInvitationIdRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * The id of the user invitation.
-   * @type {string}
    */
   invitation_id: string;
 }
@@ -51,7 +47,6 @@ export interface DeleteInvitationsByInvitationIdRequest {
 export interface DeleteMembersOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
 }
@@ -59,12 +54,10 @@ export interface DeleteMembersOperationRequest {
 export interface DeleteOrganizationMemberRolesOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * User ID of the organization member to remove roles from.
-   * @type {string}
    */
   user_id: string;
 }
@@ -72,7 +65,6 @@ export interface DeleteOrganizationMemberRolesOperationRequest {
 export interface DeleteOrganizationsByIdRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
 }
@@ -80,22 +72,18 @@ export interface DeleteOrganizationsByIdRequest {
 export interface GetEnabledConnectionsRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -103,12 +91,10 @@ export interface GetEnabledConnectionsRequest {
 export interface GetEnabledConnectionsByConnectionIdRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * Connection identifier
-   * @type {string}
    */
   connectionId: string;
 }
@@ -116,37 +102,30 @@ export interface GetEnabledConnectionsByConnectionIdRequest {
 export interface GetInvitationsRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * When true, return results inside an object that also contains the start and limit.  When false (default), a direct array of results is returned.  We do not yet support returning the total invitations count.
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-   * @type {boolean}
    */
   include_fields?: boolean;
   /**
    * Field to sort by. Use field:order where order is 1 for ascending and -1 for descending Defaults to created_at:-1.
-   * @type {string}
    */
   sort?: string;
 }
@@ -154,22 +133,18 @@ export interface GetInvitationsRequest {
 export interface GetInvitationsByInvitationIdRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * The id of the user invitation.
-   * @type {string}
    */
   invitation_id: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -177,32 +152,26 @@ export interface GetInvitationsByInvitationIdRequest {
 export interface GetMembersRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional Id from which to start selection.
-   * @type {string}
    */
   from?: string;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   take?: number;
 }
@@ -210,7 +179,6 @@ export interface GetMembersRequest {
 export interface GetNameByNameRequest {
   /**
    * name of the organization to retrieve.
-   * @type {string}
    */
   name: string;
 }
@@ -218,27 +186,22 @@ export interface GetNameByNameRequest {
 export interface GetOrganizationMemberRolesRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * ID of the user to associate roles with.
-   * @type {string}
    */
   user_id: string;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -246,32 +209,26 @@ export interface GetOrganizationMemberRolesRequest {
 export interface GetOrganizationsRequest {
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional Id from which to start selection.
-   * @type {string}
    */
   from?: string;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   take?: number;
   /**
    * Field to sort by. Use &lt;code&gt;field:order&lt;/code&gt; where order is &lt;code&gt;1&lt;/code&gt; for ascending and &lt;code&gt;-1&lt;/code&gt; for descending. e.g. &lt;code&gt;created_at:1&lt;/code&gt;. We currently support sorting by the following fields: &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;display_name&lt;/code&gt; and &lt;code&gt;created_at&lt;/code&gt;.
-   * @type {string}
    */
   sort?: string;
 }
@@ -279,7 +236,6 @@ export interface GetOrganizationsRequest {
 export interface GetOrganizationsByIdRequest {
   /**
    * ID of the organization to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -287,12 +243,10 @@ export interface GetOrganizationsByIdRequest {
 export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * Connection identifier
-   * @type {string}
    */
   connectionId: string;
 }
@@ -300,7 +254,6 @@ export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
 export interface PatchOrganizationsByIdOperationRequest {
   /**
    * ID of the organization to update.
-   * @type {string}
    */
   id: string;
 }
@@ -308,7 +261,6 @@ export interface PatchOrganizationsByIdOperationRequest {
 export interface PostEnabledConnectionsOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
 }
@@ -316,7 +268,6 @@ export interface PostEnabledConnectionsOperationRequest {
 export interface PostInvitationsOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
 }
@@ -324,7 +275,6 @@ export interface PostInvitationsOperationRequest {
 export interface PostMembersOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
 }
@@ -332,12 +282,10 @@ export interface PostMembersOperationRequest {
 export interface PostOrganizationMemberRolesOperationRequest {
   /**
    * Organization identifier
-   * @type {string}
    */
   id: string;
   /**
    * ID of the user to associate roles with.
-   * @type {string}
    */
   user_id: string;
 }
@@ -348,6 +296,7 @@ export interface PostOrganizationMemberRolesOperationRequest {
 export class OrganizationsManager extends BaseAPI {
   /**
    * Delete connections from an organization
+   *
    * @throws {RequiredError}
    */
   async removeEnabledConnection(
@@ -371,6 +320,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Delete an invitation to organization
+   *
    * @throws {RequiredError}
    */
   async deleteInvitation(
@@ -394,6 +344,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Delete members from an organization
+   *
    * @throws {RequiredError}
    */
   async deleteMembers(
@@ -425,6 +376,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Remove one or more roles from a given user in the context of the provided organization
+   *
    * @throws {RequiredError}
    */
   async deleteMemberRoles(
@@ -457,6 +409,7 @@ export class OrganizationsManager extends BaseAPI {
    * Delete a specific organization
    *
    * Delete organization
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -481,6 +434,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Get connections enabled for an organization
+   *
    * @throws {RequiredError}
    */
   async getEnabledConnections(
@@ -521,6 +475,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Get an enabled connection for an organization
+   *
    * @throws {RequiredError}
    */
   async getEnabledConnection(
@@ -544,6 +499,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Get invitations to organization
+   *
    * @throws {RequiredError}
    */
   async getInvitations(
@@ -596,6 +552,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Get an invitation to organization
+   *
    * @throws {RequiredError}
    */
   async getInvitation(
@@ -645,6 +602,7 @@ export class OrganizationsManager extends BaseAPI {
    * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
    *
    * Get members who belong to an organization
+   *
    * @throws {RequiredError}
    */
   async getMembers(
@@ -695,6 +653,7 @@ export class OrganizationsManager extends BaseAPI {
    * Get a specific organization by name
    *
    * Get organization by name
+   *
    * @throws {RequiredError}
    */
   async getByName(
@@ -719,6 +678,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Get the roles assigned to an organization member
+   *
    * @throws {RequiredError}
    */
   async getMemberRoles(
@@ -772,6 +732,7 @@ export class OrganizationsManager extends BaseAPI {
    * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
    *
    * Get organizations
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -821,6 +782,7 @@ export class OrganizationsManager extends BaseAPI {
    * Get a specific organization
    *
    * Get organization
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -847,6 +809,7 @@ export class OrganizationsManager extends BaseAPI {
    * Modify an enabled_connection belonging to an Organization.
    *
    * Modify an Organizations Connection
+   *
    * @throws {RequiredError}
    */
   async updateEnabledConnection(
@@ -879,6 +842,7 @@ export class OrganizationsManager extends BaseAPI {
    * Modify an organization
    *
    * Modify an Organization
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -910,6 +874,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Add connections to an organization
+   *
    * @throws {RequiredError}
    */
   async addEnabledConnection(
@@ -941,6 +906,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Create invitations to organization
+   *
    * @throws {RequiredError}
    */
   async createInvitation(
@@ -972,6 +938,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Add members to an organization
+   *
    * @throws {RequiredError}
    */
   async addMembers(
@@ -1003,6 +970,7 @@ export class OrganizationsManager extends BaseAPI {
 
   /**
    * Assign one or more roles to a given user that will be applied in the context of the provided organization
+   *
    * @throws {RequiredError}
    */
   async addMemberRoles(
@@ -1035,6 +1003,7 @@ export class OrganizationsManager extends BaseAPI {
    * Create an organization
    *
    * Create an Organization
+   *
    * @throws {RequiredError}
    */
   async create(

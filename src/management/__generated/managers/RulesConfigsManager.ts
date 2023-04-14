@@ -11,7 +11,6 @@ const { BaseAPI } = runtime;
 export interface DeleteRulesConfigsByKeyRequest {
   /**
    * Key of the rules config variable to delete.
-   * @type {string}
    */
   key: string;
 }
@@ -19,7 +18,6 @@ export interface DeleteRulesConfigsByKeyRequest {
 export interface PutRulesConfigsByKeyOperationRequest {
   /**
    * Key of the rules config variable to set (max length: 127 characters).
-   * @type {string}
    */
   key: string;
 }
@@ -31,6 +29,7 @@ export class RulesConfigsManager extends BaseAPI {
   /**
    * Delete a rules config variable identified by its key.
    * Delete rules config for a given key
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -58,6 +57,7 @@ export class RulesConfigsManager extends BaseAPI {
    *
    *     Note: For security, config variable values cannot be retrieved outside rule execution.
    * Retrieve config variable keys for rules (get_rules-configs)
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -77,6 +77,7 @@ export class RulesConfigsManager extends BaseAPI {
   /**
    * Sets a rules config variable.
    * Set rules config for a given key
+   *
    * @throws {RequiredError}
    */
   async set(
