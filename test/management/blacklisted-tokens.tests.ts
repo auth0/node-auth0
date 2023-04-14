@@ -71,11 +71,11 @@ describe('BlacklistedTokensManager', () => {
       nock(API_URL).get('/blacklists/tokens').reply(200, data);
 
       this.blacklistedTokens.getAll().then((blacklistedTokens) => {
-        expect(blacklistedTokens).to.be.an.instanceOf(Array);
+        expect(blacklistedTokens.data).to.be.an.instanceOf(Array);
 
-        expect(blacklistedTokens.length).to.equal(data.length);
+        expect(blacklistedTokens.data.length).to.equal(data.length);
 
-        expect(blacklistedTokens[0].aud).to.equal(data[0].aud);
+        expect(blacklistedTokens.data[0].aud).to.equal(data[0].aud);
 
         done();
       });

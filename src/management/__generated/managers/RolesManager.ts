@@ -150,7 +150,7 @@ export class RolesManager extends BaseAPI {
    * Remove permissions from a role
    * @throws {RequiredError}
    */
-  async removePermissionsRaw(
+  async removePermissions(
     requestParameters: DeleteRolePermissionAssignmentRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
     initOverrides?: InitOverride
@@ -174,24 +174,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.TextApiResponse(response) as any;
-  }
-
-  /**
-   * Remove permissions associated with a role.<br/>
-   * Remove permissions from a role
-   */
-  async removePermissions(
-    requestParameters: DeleteRolePermissionAssignmentRequest,
-    bodyParameters: PostRolePermissionAssignmentRequest,
-    initOverrides?: InitOverride
-  ): Promise<any> {
-    const response = await this.removePermissionsRaw(
-      requestParameters,
-      bodyParameters,
-      initOverrides
-    );
-    return await response.value();
+    return runtime.TextApiResponse.fromResponse(response) as any;
   }
 
   /**
@@ -200,7 +183,7 @@ export class RolesManager extends BaseAPI {
    * Delete a role
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteRolesByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -214,18 +197,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a role.<br/>
-   * Delete a role
-   */
-  async delete(
-    requestParameters: DeleteRolesByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -234,7 +206,7 @@ export class RolesManager extends BaseAPI {
    * Get permissions granted by role
    * @throws {RequiredError}
    */
-  async getPermissionsRaw(
+  async getPermissions(
     requestParameters: GetRolePermissionRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRolePermission200Response>> {
@@ -267,19 +239,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve list of permissions granted by a role.<br/>
-   * Get permissions granted by role
-   */
-  async getPermissions(
-    requestParameters: GetRolePermissionRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetRolePermission200Response> {
-    const response = await this.getPermissionsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -300,7 +260,7 @@ export class RolesManager extends BaseAPI {
    * Get a role's users
    * @throws {RequiredError}
    */
-  async getUsersRaw(
+  async getUsers(
     requestParameters: GetRoleUserRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRoleUser200Response>> {
@@ -338,19 +298,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve users associated with a role. This endpoint supports two types of pagination:<br/>- Offset pagination<br/>- Checkpoint pagination<br/><br/>Checkpoint pagination must be used if you need to retrieve more than 1000 users for a given role.<br/><br/><h2>Checkpoint Pagination</h2><br/><br/>To search by checkpoint, use the following parameters:<br/>- from: Optional id from which to start selection.<br/>- take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.<br/><br/>Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.<br/>
-   * Get a role\'s users
-   */
-  async getUsers(
-    requestParameters: GetRoleUserRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetRoleUser200Response> {
-    const response = await this.getUsersRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -359,8 +307,8 @@ export class RolesManager extends BaseAPI {
    * Get roles
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetRolesRequest,
+  async getAll(
+    requestParameters: GetRolesRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -391,19 +339,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve filtered list of roles that can be assigned to users.<br/>
-   * Get roles
-   */
-  async getAll(
-    requestParameters: GetRolesRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizationMemberRoles200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -412,7 +348,7 @@ export class RolesManager extends BaseAPI {
    * Get a role
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetRolesByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOfInner>> {
@@ -426,19 +362,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve a role.<br/>
-   * Get a role
-   */
-  async get(
-    requestParameters: GetRolesByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizationMemberRoles200ResponseOneOfInner> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -447,7 +371,7 @@ export class RolesManager extends BaseAPI {
    * Update a role
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchRolesByIdRequest,
     bodyParameters: RoleUpdate,
     initOverrides?: InitOverride
@@ -468,20 +392,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update a role.<br/>
-   * Update a role
-   */
-  async update(
-    requestParameters: PatchRolesByIdRequest,
-    bodyParameters: RoleUpdate,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizationMemberRoles200ResponseOneOfInner> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -490,7 +401,7 @@ export class RolesManager extends BaseAPI {
    * Associate permissions with a role
    * @throws {RequiredError}
    */
-  async addPermissionsRaw(
+  async addPermissions(
     requestParameters: PostRolePermissionAssignmentOperationRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
     initOverrides?: InitOverride
@@ -514,20 +425,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.TextApiResponse(response) as any;
-  }
-
-  /**
-   * Associate permissions with a role.<br/>
-   * Associate permissions with a role
-   */
-  async addPermissions(
-    requestParameters: PostRolePermissionAssignmentOperationRequest,
-    bodyParameters: PostRolePermissionAssignmentRequest,
-    initOverrides?: InitOverride
-  ): Promise<any> {
-    const response = await this.addPermissionsRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.TextApiResponse.fromResponse(response) as any;
   }
 
   /**
@@ -535,7 +433,7 @@ export class RolesManager extends BaseAPI {
    * Assign users to a role
    * @throws {RequiredError}
    */
-  async assignUsersRaw(
+  async assignUsers(
     requestParameters: PostRoleUsersOperationRequest,
     bodyParameters: PostRoleUsersRequest,
     initOverrides?: InitOverride
@@ -556,20 +454,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.TextApiResponse(response) as any;
-  }
-
-  /**
-   * Assign users to a role.
-   * Assign users to a role
-   */
-  async assignUsers(
-    requestParameters: PostRoleUsersOperationRequest,
-    bodyParameters: PostRoleUsersRequest,
-    initOverrides?: InitOverride
-  ): Promise<any> {
-    const response = await this.assignUsersRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.TextApiResponse.fromResponse(response) as any;
   }
 
   /**
@@ -578,7 +463,7 @@ export class RolesManager extends BaseAPI {
    * Create a role
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: RoleCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOfInner>> {
@@ -596,18 +481,6 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a new role.<br/>
-   * Create a role
-   */
-  async create(
-    bodyParameters: RoleCreate,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizationMemberRoles200ResponseOneOfInner> {
-    const response = await this.createRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

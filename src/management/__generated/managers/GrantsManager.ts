@@ -62,8 +62,8 @@ export class GrantsManager extends BaseAPI {
    * Delete a grant by user_id
    * @throws {RequiredError}
    */
-  async deleteByUserIdRaw(
-    requestParameters: DeleteRequest,
+  async deleteByUserId(
+    requestParameters: DeleteRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -82,18 +82,7 @@ export class GrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a grant associated with your account.
-   * Delete a grant by user_id
-   */
-  async deleteByUserId(
-    requestParameters: DeleteRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteByUserIdRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -101,7 +90,7 @@ export class GrantsManager extends BaseAPI {
    * Delete a grant by id
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteGrantsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -115,18 +104,7 @@ export class GrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a grant associated with your account.
-   * Delete a grant by id
-   */
-  async delete(
-    requestParameters: DeleteGrantsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -134,8 +112,8 @@ export class GrantsManager extends BaseAPI {
    * Get grants
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetGrantsRequest,
+  async getAll(
+    requestParameters: GetGrantsRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetGrants200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -174,18 +152,6 @@ export class GrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve the <a href=\"https://auth0.com/docs/api-auth/which-oauth-flow-to-use\">grants</a> associated with your account.
-   * Get grants
-   */
-  async getAll(
-    requestParameters: GetGrantsRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetGrants200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

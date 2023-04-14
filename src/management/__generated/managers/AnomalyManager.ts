@@ -28,7 +28,7 @@ export class AnomalyManager extends BaseAPI {
    * Remove the blocked IP address
    * @throws {RequiredError}
    */
-  async deleteBlockedIpRaw(
+  async deleteBlockedIp(
     requestParameters: DeleteIpsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -45,18 +45,7 @@ export class AnomalyManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Unblock an IP address currently blocked by the <a href=\"https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling\">Suspicious IP Throttling</a> due to multiple suspicious attempts.
-   * Remove the blocked IP address
-   */
-  async deleteBlockedIp(
-    requestParameters: DeleteIpsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteBlockedIpRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -64,7 +53,7 @@ export class AnomalyManager extends BaseAPI {
    * Check if an IP address is blocked
    * @throws {RequiredError}
    */
-  async checkIfIpIsBlockedRaw(
+  async checkIfIpIsBlocked(
     requestParameters: GetIpsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -81,17 +70,6 @@ export class AnomalyManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Check if a given IP address is blocked via the <a href=\"https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling\">Suspicious IP Throttling</a> due to multiple suspicious attempts.
-   * Check if an IP address is blocked
-   */
-  async checkIfIpIsBlocked(
-    requestParameters: GetIpsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.checkIfIpIsBlockedRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }

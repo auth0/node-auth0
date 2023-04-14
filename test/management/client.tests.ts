@@ -106,11 +106,11 @@ describe('ClientsManager', () => {
       nock(API_URL).get('/clients').reply(200, data);
 
       clients.getAll().then((clients) => {
-        expect(clients).to.be.an.instanceOf(Array);
+        expect(clients.data).to.be.an.instanceOf(Array);
 
-        expect(clients.length).to.equal(data.length);
+        expect(clients.data.length).to.equal(data.length);
 
-        expect(clients[0].client_id).to.equal(data[0].client_id);
+        expect(clients.data[0].client_id).to.equal(data[0].client_id);
 
         done();
       });

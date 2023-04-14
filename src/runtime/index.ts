@@ -349,46 +349,64 @@ export interface Middleware {
 }
 
 export interface ApiResponse<T> {
-  raw: Response;
-  value(): Promise<T>;
+  data: T;
+  headers: Headers;
+  status: number;
+  statusText: string;
 }
 
 export interface ResponseTransformer<T> {
   (json: any): T;
 }
 
-export class JSONApiResponse<T> {
+export class JSONApiResponse<T> implements ApiResponse<T> {
   constructor(
-    public raw: Response,
-    private transformer: ResponseTransformer<T> = (jsonValue: any) => jsonValue
+    public data: T,
+    public headers: Headers,
+    readonly status: number,
+    readonly statusText: string
   ) {}
 
-  async value(): Promise<T> {
-    return this.transformer(await this.raw.json());
+  static async fromResponse<T = any>(raw: Response) {
+    const value = (await raw.json()) as any;
+    return new JSONApiResponse<T>(value, raw.headers, raw.status, raw.statusText);
   }
 }
 
-export class VoidApiResponse {
-  constructor(public raw: Response) {}
+export class VoidApiResponse implements ApiResponse<undefined> {
+  public data: undefined;
+  constructor(public headers: Headers, readonly status: number, readonly statusText: string) {}
 
-  async value(): Promise<void> {
-    return undefined;
+  static async fromResponse(raw: Response) {
+    return new VoidApiResponse(raw.headers, raw.status, raw.statusText);
   }
 }
 
-export class BlobApiResponse {
-  constructor(public raw: Response) {}
+export class BlobApiResponse implements ApiResponse<Blob> {
+  constructor(
+    public data: Blob,
+    public headers: Headers,
+    readonly status: number,
+    readonly statusText: string
+  ) {}
 
-  async value(): Promise<Blob> {
-    return await this.raw.blob();
+  static async fromResponse(raw: Response) {
+    const value = await raw.blob();
+    return new BlobApiResponse(value, raw.headers, raw.status, raw.statusText);
   }
 }
 
-export class TextApiResponse {
-  constructor(public raw: Response) {}
+export class TextApiResponse implements ApiResponse<string> {
+  constructor(
+    public data: string,
+    public headers: Headers,
+    readonly status: number,
+    readonly statusText: string
+  ) {}
 
-  async value(): Promise<string> {
-    return await this.raw.text();
+  static async fromResponse(raw: Response) {
+    const value = await raw.text();
+    return new TextApiResponse(value, raw.headers, raw.status, raw.statusText);
   }
 }
 

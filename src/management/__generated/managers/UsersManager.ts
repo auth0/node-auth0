@@ -396,7 +396,7 @@ export class UsersManager extends BaseAPI {
    * Deletes an authentication method by ID
    * @throws {RequiredError}
    */
-  async deleteAuthenticationMethodRaw(
+  async deleteAuthenticationMethod(
     requestParameters: DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -415,24 +415,14 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Deletes an authentication method by ID
-   */
-  async deleteAuthenticationMethod(
-    requestParameters: DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteAuthenticationMethodRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Delete All Authenticators
    * @throws {RequiredError}
    */
-  async deleteAllAuthenticatorsRaw(
+  async deleteAllAuthenticators(
     requestParameters: DeleteAuthenticatorsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -449,17 +439,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete All Authenticators
-   */
-  async deleteAllAuthenticators(
-    requestParameters: DeleteAuthenticatorsRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteAllAuthenticatorsRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -467,7 +447,7 @@ export class UsersManager extends BaseAPI {
    * Delete a User's Multi-factor Provider
    * @throws {RequiredError}
    */
-  async deleteMultifactorProviderRaw(
+  async deleteMultifactorProvider(
     requestParameters: DeleteMultifactorByProviderRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -483,18 +463,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a <a href=\"https://auth0.com/docs/multifactor-authentication\">multifactor</a> configuration for a user. This forces the user to re-configure the multi-factor provider.
-   * Delete a User\'s Multi-factor Provider
-   */
-  async deleteMultifactorProvider(
-    requestParameters: DeleteMultifactorByProviderRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteMultifactorProviderRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -503,7 +472,7 @@ export class UsersManager extends BaseAPI {
    * Remove Permissions from a User
    * @throws {RequiredError}
    */
-  async deletePermissiojsRaw(
+  async deletePermissiojs(
     requestParameters: DeletePermissionsOperationRequest,
     bodyParameters: DeletePermissionsRequest,
     initOverrides?: InitOverride
@@ -527,19 +496,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Remove permissions from a user.<br/>
-   * Remove Permissions from a User
-   */
-  async deletePermissiojs(
-    requestParameters: DeletePermissionsOperationRequest,
-    bodyParameters: DeletePermissionsRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deletePermissiojsRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -547,7 +504,7 @@ export class UsersManager extends BaseAPI {
    * Unlink a User Identity
    * @throws {RequiredError}
    */
-  async unlinkRaw(
+  async unlink(
     requestParameters: DeleteUserIdentityByUserIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<DeleteUserIdentityByUserId200ResponseInner>>> {
@@ -564,19 +521,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Unlink an identity from the target user making it a separate user account again.
-   * Unlink a User Identity
-   */
-  async unlink(
-    requestParameters: DeleteUserIdentityByUserIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<Array<DeleteUserIdentityByUserId200ResponseInner>> {
-    const response = await this.unlinkRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -584,7 +529,7 @@ export class UsersManager extends BaseAPI {
    * Removes roles from a user
    * @throws {RequiredError}
    */
-  async deleteRolesRaw(
+  async deleteRoles(
     requestParameters: DeleteUserRolesOperationRequest,
     bodyParameters: DeleteUserRolesRequest,
     initOverrides?: InitOverride
@@ -605,19 +550,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Remove roles from a user.
-   * Removes roles from a user
-   */
-  async deleteRoles(
-    requestParameters: DeleteUserRolesOperationRequest,
-    bodyParameters: DeleteUserRolesRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRolesRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -625,7 +558,7 @@ export class UsersManager extends BaseAPI {
    * Delete a User
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteUsersByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -639,25 +572,14 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a user.
-   * Delete a User
-   */
-  async delete(
-    requestParameters: DeleteUsersByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Gets a list of authentication methods
    * @throws {RequiredError}
    */
-  async getAuthenticationMethodsRaw(
+  async getAuthenticationMethods(
     requestParameters: GetAuthenticationMethodsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetAuthenticationMethods200Response>> {
@@ -690,25 +612,14 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Gets a list of authentication methods
-   */
-  async getAuthenticationMethods(
-    requestParameters: GetAuthenticationMethodsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetAuthenticationMethods200Response> {
-    const response = await this.getAuthenticationMethodsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Gets an authentication method by ID.
    * @throws {RequiredError}
    */
-  async getAuthenticationMethodRaw(
+  async getAuthenticationMethod(
     requestParameters: GetAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner>> {
@@ -727,18 +638,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Gets an authentication method by ID.
-   */
-  async getAuthenticationMethod(
-    requestParameters: GetAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner> {
-    const response = await this.getAuthenticationMethodRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -746,7 +646,7 @@ export class UsersManager extends BaseAPI {
    * Get the First Confirmed Multi-factor Authentication Enrollment
    * @throws {RequiredError}
    */
-  async getEnrollmentsRaw(
+  async getEnrollments(
     requestParameters: GetEnrollmentsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<UserEnrollment>>> {
@@ -763,19 +663,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve the first confirmed <a href=\"https://auth0.com/docs/multifactor-authentication/guardian\">Guardian</a> enrollment for a user.
-   * Get the First Confirmed Multi-factor Authentication Enrollment
-   */
-  async getEnrollments(
-    requestParameters: GetEnrollmentsRequest,
-    initOverrides?: InitOverride
-  ): Promise<Array<UserEnrollment>> {
-    const response = await this.getEnrollmentsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -789,7 +677,7 @@ export class UsersManager extends BaseAPI {
    * Get user's log events
    * @throws {RequiredError}
    */
-  async getLogsRaw(
+  async getLogs(
     requestParameters: GetLogsByUserRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogs200Response>> {
@@ -823,19 +711,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve log events for a specific user.<br/><br/>Note: For more information on all possible event types, their respective acronyms and descriptions, see <a href=\"https://auth0.com/docs/logs/log-event-type-codes\">Log Event Type Codes</a>.<br/><br/>For more information on the list of fields that can be used in `sort`, see <a href=\"https://auth0.com/docs/logs/log-search-query-syntax#searchable-fields\">Searchable Fields</a>.<br/><br/>Auth0 <a href=\"https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations\">limits the number of logs</a> you can return by search criteria to 100 logs per request. Furthermore, you may only paginate through up to 1,000 search results. If you exceed this threshold, please redefine your search.
-   * Get user\'s log events
-   */
-  async getLogs(
-    requestParameters: GetLogsByUserRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetLogs200Response> {
-    const response = await this.getLogsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -843,7 +719,7 @@ export class UsersManager extends BaseAPI {
    * Get a User's Permissions
    * @throws {RequiredError}
    */
-  async getPermissionsRaw(
+  async getPermissions(
     requestParameters: GetPermissionsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPermissions200Response>> {
@@ -876,19 +752,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve all permissions associated with the user.
-   * Get a User\'s Permissions
-   */
-  async getPermissions(
-    requestParameters: GetPermissionsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetPermissions200Response> {
-    const response = await this.getPermissionsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -897,7 +761,7 @@ export class UsersManager extends BaseAPI {
    * List user's organizations
    * @throws {RequiredError}
    */
-  async getUserOrganizationsRaw(
+  async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUserOrganizations200Response>> {
@@ -930,19 +794,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * This endpoint will retrieve all organizations that the specified user is a member of.<br/>
-   * List user\'s organizations
-   */
-  async getUserOrganizations(
-    requestParameters: GetUserOrganizationsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetUserOrganizations200Response> {
-    const response = await this.getUserOrganizationsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -950,7 +802,7 @@ export class UsersManager extends BaseAPI {
    * Get a user's roles
    * @throws {RequiredError}
    */
-  async getRolesRaw(
+  async getRoles(
     requestParameters: GetUserRolesRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
@@ -980,19 +832,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * List the the roles associated with a user.
-   * Get a user\'s roles
-   */
-  async getRoles(
-    requestParameters: GetUserRolesRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizationMemberRoles200Response> {
-    const response = await this.getRolesRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1014,8 +854,8 @@ export class UsersManager extends BaseAPI {
    * List or Search Users
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetUsersRequest,
+  async getAll(
+    requestParameters: GetUsersRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -1066,19 +906,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve details of users. It is possible to:<br/><br/>- Specify a search criteria for users<br/>- Sort the users to be returned<br/>- Select the fields to be returned<br/>- Specify the number of users to retrieve per page and the page index<br/> <!-- only v3 is available --><br/>The <code>q</code> query parameter can be used to get users that match the specified criteria <a href=\"https://manage.local.dev.auth0.com/docs/users/search/v3/query-syntax\">using query string syntax.</a><br/><br/><a href=\"https://manage.local.dev.auth0.com/docs/users/search/v3\">Learn more about searching for users.</a><br/><br/>Read about <a href=\"https://manage.local.dev.auth0.com/docs/users/search/best-practices\">best practices</a> when working with the API endpoints for retrieving users.<br/><br/>Auth0 limits the number of users you can return. If you exceed this threshold, please redefine your search, use the <a href=\"https://manage.local.dev.auth0.com/docs/api/management/v2#!/Jobs/post_users_exports\">export job</a>, or the <a href=\"https://manage.local.dev.auth0.com/docs/extensions/user-import-export\">User Import / Export</a> extension.<br/>
-   * List or Search Users
-   */
-  async getAll(
-    requestParameters: GetUsersRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetUsers200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1086,7 +914,7 @@ export class UsersManager extends BaseAPI {
    * Get a User
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetUsersByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200ResponseOneOfInner>> {
@@ -1112,26 +940,14 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve user details. A list of fields to include or exclude may also be specified.
-   * Get a User
-   */
-  async get(
-    requestParameters: GetUsersByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetUsers200ResponseOneOfInner> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Updates an authentication method.
    * @throws {RequiredError}
    */
-  async updateAuthenticationMethodRaw(
+  async updateAuthenticationMethod(
     requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
     bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
@@ -1157,18 +973,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Updates an authentication method.
-   */
-  async updateAuthenticationMethod(
-    requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
-    bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.updateAuthenticationMethodRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -1245,7 +1050,7 @@ export class UsersManager extends BaseAPI {
    * Update a User
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchUsersByIdRequest,
     bodyParameters: UserUpdate,
     initOverrides?: InitOverride
@@ -1266,27 +1071,14 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update a user.<br/><br/>These are the attributes that can be updated at the root level:<br/><br/><ul><br/>    <li>app_metadata</li><br/>    <li>blocked</li><br/>    <li>email</li><br/>    <li>email_verified</li><br/>    <li>family_name</li><br/>    <li>given_name</li><br/>    <li>name</li><br/>    <li>nickname</li><br/>    <li>password</li><br/>    <li>phone_number</li><br/>    <li>phone_verified</li><br/>    <li>picture</li><br/>    <li>username</li><br/>    <li>user_metadata</li><br/>    <li>verify_email</li><br/></ul><br/><br/>Some considerations:<br/><ul><br/>    <li>The properties of the new object will replace the old ones.</li><br/>    <li>The metadata fields are an exception to this rule (<code>user_metadata</code> and <code>app_metadata</code>). These properties are merged instead of being replaced but be careful, the merge only occurs on the first level.</li><br/>    <li>If you are updating <code>email</code>, <code>email_verified</code>, <code>phone_number</code>, <code>phone_verified</code>, <code>username</code> or <code>password</code> of a secondary identity, you need to specify the <code>connection</code> property too.</li><br/>    <li>If you are updating <code>email</code> or <code>phone_number</code> you can specify, optionally, the <code>client_id</code> property.</li><br/>    <li>Updating <code>email_verified</code> is not supported for enterprise and passwordless sms connections.</li><br/>    <li>Updating the <code>blocked</code> to <code>false</code> does not affect the user\'s blocked state from an excessive amount of incorrectly provided credentials. Use the \"Unblock a user\" endpoint from the \"User Blocks\" API to change the user\'s state.</li><br/></ul><br/><br/><h5>Updating a field (non-metadata property)</h5><br/>To mark the email address of a user as verified, the body to send should be:<br/><pre><code>{ \"email_verified\": true }</code></pre><br/><br/><h5>Updating a user metadata root property</h5>Let\'s assume that our test user has the following <code>user_metadata</code>:<br/><pre><code>{ \"user_metadata\" : { \"profileCode\": 1479 } }</code></pre><br/><br/>To add the field <code>addresses</code> the body to send should be:<br/><pre><code>{ \"user_metadata\" : { \"addresses\": {\"work_address\": \"100 Industrial Way\"} }}</code></pre><br/><br/>The modified object ends up with the following <code>user_metadata</code> property:<pre><code>{<br/>  \"user_metadata\": {<br/>    \"profileCode\": 1479,<br/>    \"addresses\": { \"work_address\": \"100 Industrial Way\" }<br/>  }<br/>}</code></pre><br/><br/><h5>Updating an inner user metadata property</h5>If there\'s existing user metadata to which we want to add  <code>\"home_address\": \"742 Evergreen Terrace\"</code> (using the <code>addresses</code> property) we should send the whole <code>addresses</code> object. Since this is a first-level object, the object will be merged in, but its own properties will not be. The body to send should be:<br/><pre><code>{<br/>  \"user_metadata\": {<br/>    \"addresses\": {<br/>      \"work_address\": \"100 Industrial Way\",<br/>      \"home_address\": \"742 Evergreen Terrace\"<br/>    }<br/>  }<br/>}</code></pre><br/><br/>The modified object ends up with the following <code>user_metadata</code> property:<br/><pre><code>{<br/>  \"user_metadata\": {<br/>    \"profileCode\": 1479,<br/>    \"addresses\": {<br/>      \"work_address\": \"100 Industrial Way\",<br/>      \"home_address\": \"742 Evergreen Terrace\"<br/>    }<br/>  }<br/>}</code></pre><br/>
-   * Update a User
-   */
-  async update(
-    requestParameters: PatchUsersByIdRequest,
-    bodyParameters: UserUpdate,
-    initOverrides?: InitOverride
-  ): Promise<GetUsers200ResponseOneOfInner> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Creates an authentication method for a given user.
    * @throws {RequiredError}
    */
-  async createAuthenticationMethodRaw(
+  async createAuthenticationMethod(
     requestParameters: PostAuthenticationMethodsOperationRequest,
     bodyParameters: PostAuthenticationMethodsRequest,
     initOverrides?: InitOverride
@@ -1310,23 +1102,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Creates an authentication method for a given user.
-   */
-  async createAuthenticationMethod(
-    requestParameters: PostAuthenticationMethodsOperationRequest,
-    bodyParameters: PostAuthenticationMethodsRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostAuthenticationMethods201Response> {
-    const response = await this.createAuthenticationMethodRaw(
-      requestParameters,
-      bodyParameters,
-      initOverrides
-    );
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1361,7 +1137,7 @@ export class UsersManager extends BaseAPI {
    * Link a User Account
    * @throws {RequiredError}
    */
-  async linkRaw(
+  async link(
     requestParameters: PostIdentitiesOperationRequest,
     bodyParameters: PostIdentitiesRequest,
     initOverrides?: InitOverride
@@ -1385,20 +1161,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Link two user accounts together forming a primary and secondary relationship. On successful linking, the endpoint returns the new array of the primary account identities.<br/><br/>Note: There are two ways of invoking the endpoint:<br/><br/><ul><br/>  <li>With the authenticated primary account\'s JWT in the Authorization header, which has the <code>update:current_user_identities</code> scope:<br/>    <pre><br/>      POST /api/v2/users/PRIMARY_ACCOUNT_USER_ID/identities<br/>      Authorization: \"Bearer PRIMARY_ACCOUNT_JWT\"<br/>      {<br/>        \"link_with\": \"SECONDARY_ACCOUNT_JWT\"<br/>      }<br/>    </pre><br/>    In this case, only the <code>link_with</code> param is required in the body, which also contains the JWT obtained upon the secondary account\'s authentication.<br/>  </li><br/>  <li>With a token generated by the API V2 containing the <code>update:users</code> scope:<br/>    <pre><br/>    POST /api/v2/users/PRIMARY_ACCOUNT_USER_ID/identities<br/>    Authorization: \"Bearer YOUR_API_V2_TOKEN\"<br/>    {<br/>      \"provider\": \"SECONDARY_ACCOUNT_PROVIDER\",<br/>      \"connection_id\": \"SECONDARY_ACCOUNT_CONNECTION_ID(OPTIONAL)\",<br/>      \"user_id\": \"SECONDARY_ACCOUNT_USER_ID\"<br/>    }<br/>    </pre><br/>    In this case you need to send <code>provider</code> and <code>user_id</code> in the body. Optionally you can also send the <code>connection_id</code> param which is suitable for identifying a particular database connection for the \'auth0\' provider.<br/>  </li><br/></ul>
-   * Link a User Account
-   */
-  async link(
-    requestParameters: PostIdentitiesOperationRequest,
-    bodyParameters: PostIdentitiesRequest,
-    initOverrides?: InitOverride
-  ): Promise<Array<UserIdentity>> {
-    const response = await this.linkRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1406,7 +1169,7 @@ export class UsersManager extends BaseAPI {
    * Invalidate All Remembered Browsers for Multi-factor Authentication
    * @throws {RequiredError}
    */
-  async invalidateRememberBrowserRaw(
+  async invalidateRememberBrowser(
     requestParameters: PostInvalidateRememberBrowserRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -1423,18 +1186,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Invalidate all remembered browsers across all <a href=\"https://auth0.com/docs/multifactor-authentication\">authentication factors</a> for a user.
-   * Invalidate All Remembered Browsers for Multi-factor Authentication
-   */
-  async invalidateRememberBrowser(
-    requestParameters: PostInvalidateRememberBrowserRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.invalidateRememberBrowserRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -1442,7 +1194,7 @@ export class UsersManager extends BaseAPI {
    * Assign Permissions to a User
    * @throws {RequiredError}
    */
-  async assignPermissionsRaw(
+  async assignPermissions(
     requestParameters: PostPermissionsOperationRequest,
     bodyParameters: PostPermissionsRequest,
     initOverrides?: InitOverride
@@ -1466,24 +1218,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.TextApiResponse(response) as any;
-  }
-
-  /**
-   * Assign permissions to a user.
-   * Assign Permissions to a User
-   */
-  async assignPermissions(
-    requestParameters: PostPermissionsOperationRequest,
-    bodyParameters: PostPermissionsRequest,
-    initOverrides?: InitOverride
-  ): Promise<any> {
-    const response = await this.assignPermissionsRaw(
-      requestParameters,
-      bodyParameters,
-      initOverrides
-    );
-    return await response.value();
+    return runtime.TextApiResponse.fromResponse(response) as any;
   }
 
   /**
@@ -1491,7 +1226,7 @@ export class UsersManager extends BaseAPI {
    * Generate New Multi-factor Authentication Recovery Code
    * @throws {RequiredError}
    */
-  async regenerateRecoveryCodeRaw(
+  async regenerateRecoveryCode(
     requestParameters: PostRecoveryCodeRegenerationRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostRecoveryCodeRegeneration200Response>> {
@@ -1508,19 +1243,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Remove the current <a href=\"https://auth0.com/docs/multifactor-authentication/guardian\">multi-factor authentication</a> recovery code and generate a new one.
-   * Generate New Multi-factor Authentication Recovery Code
-   */
-  async regenerateRecoveryCode(
-    requestParameters: PostRecoveryCodeRegenerationRequest,
-    initOverrides?: InitOverride
-  ): Promise<PostRecoveryCodeRegeneration200Response> {
-    const response = await this.regenerateRecoveryCodeRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1528,7 +1251,7 @@ export class UsersManager extends BaseAPI {
    * Assign roles to a user
    * @throws {RequiredError}
    */
-  async assignRolesRaw(
+  async assignRoles(
     requestParameters: PostUserRolesOperationRequest,
     bodyParameters: PostUserRolesRequest,
     initOverrides?: InitOverride
@@ -1549,19 +1272,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Associate roles with a user.
-   * Assign roles to a user
-   */
-  async assignRoles(
-    requestParameters: PostUserRolesOperationRequest,
-    bodyParameters: PostUserRolesRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.assignRolesRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -1571,7 +1282,7 @@ export class UsersManager extends BaseAPI {
    * Create a User
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: UserCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUsers200ResponseOneOfInner>> {
@@ -1589,26 +1300,14 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a new user for a given <a href=\"https://auth0.com/docs/connections/database\">database</a> or <a href=\"https://auth0.com/docs/connections/passwordless\">passwordless</a> connection.<br/><br/>Note: <code>connection</code> is required but other parameters such as <code>email</code> and <code>password</code> are dependent upon the type of connection.
-   * Create a User
-   */
-  async create(
-    bodyParameters: UserCreate,
-    initOverrides?: InitOverride
-  ): Promise<GetUsers200ResponseOneOfInner> {
-    const response = await this.createRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Updates all authentication methods by replacing them with the given ones.
    * @throws {RequiredError}
    */
-  async updateAuthenticationMethodsRaw(
+  async updateAuthenticationMethods(
     requestParameters: PutAuthenticationMethodsRequest,
     bodyParameters: Array<PutAuthenticationMethodsRequestInner>,
     initOverrides?: InitOverride
@@ -1632,18 +1331,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Updates all authentication methods by replacing them with the given ones.
-   */
-  async updateAuthenticationMethods(
-    requestParameters: PutAuthenticationMethodsRequest,
-    bodyParameters: Array<PutAuthenticationMethodsRequestInner>,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.updateAuthenticationMethodsRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }
 

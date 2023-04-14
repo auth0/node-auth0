@@ -101,10 +101,10 @@ describe('ClientGrantsManager', () => {
       nock(API_URL).get('/client-grants').reply(200, data);
 
       grants.getAll().then((grants) => {
-        expect(grants).to.be.an.instanceOf(Array);
+        expect(grants.data).to.be.an.instanceOf(Array);
 
-        expect((grants as Array<ClientGrant>).length).to.equal(data.length);
-        expect((grants as Array<ClientGrant>)[0].id).to.equal(data[0].id);
+        expect((grants.data as Array<ClientGrant>).length).to.equal(data.length);
+        expect((grants.data as Array<ClientGrant>)[0].id).to.equal(data[0].id);
 
         done();
       });

@@ -350,7 +350,7 @@ export class OrganizationsManager extends BaseAPI {
    * Delete connections from an organization
    * @throws {RequiredError}
    */
-  async removeEnabledConnectionRaw(
+  async removeEnabledConnection(
     requestParameters: DeleteEnabledConnectionsByConnectionIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -366,24 +366,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete connections from an organization
-   */
-  async removeEnabledConnection(
-    requestParameters: DeleteEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.removeEnabledConnectionRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Delete an invitation to organization
    * @throws {RequiredError}
    */
-  async deleteInvitationRaw(
+  async deleteInvitation(
     requestParameters: DeleteInvitationsByInvitationIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -399,24 +389,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete an invitation to organization
-   */
-  async deleteInvitation(
-    requestParameters: DeleteInvitationsByInvitationIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteInvitationRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Delete members from an organization
    * @throws {RequiredError}
    */
-  async deleteMembersRaw(
+  async deleteMembers(
     requestParameters: DeleteMembersOperationRequest,
     bodyParameters: DeleteMembersRequest,
     initOverrides?: InitOverride
@@ -440,25 +420,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete members from an organization
-   */
-  async deleteMembers(
-    requestParameters: DeleteMembersOperationRequest,
-    bodyParameters: DeleteMembersRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteMembersRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Remove one or more roles from a given user in the context of the provided organization
    * @throws {RequiredError}
    */
-  async deleteMemberRolesRaw(
+  async deleteMemberRoles(
     requestParameters: DeleteOrganizationMemberRolesOperationRequest,
     bodyParameters: DeleteOrganizationMemberRolesRequest,
     initOverrides?: InitOverride
@@ -481,18 +450,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Remove one or more roles from a given user in the context of the provided organization
-   */
-  async deleteMemberRoles(
-    requestParameters: DeleteOrganizationMemberRolesOperationRequest,
-    bodyParameters: DeleteOrganizationMemberRolesRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteMemberRolesRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -501,7 +459,7 @@ export class OrganizationsManager extends BaseAPI {
    * Delete organization
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteOrganizationsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -518,25 +476,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a specific organization<br/>
-   * Delete organization
-   */
-  async delete(
-    requestParameters: DeleteOrganizationsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Get connections enabled for an organization
    * @throws {RequiredError}
    */
-  async getEnabledConnectionsRaw(
+  async getEnabledConnections(
     requestParameters: GetEnabledConnectionsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200Response>> {
@@ -569,25 +516,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get connections enabled for an organization
-   */
-  async getEnabledConnections(
-    requestParameters: GetEnabledConnectionsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetEnabledConnections200Response> {
-    const response = await this.getEnabledConnectionsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Get an enabled connection for an organization
    * @throws {RequiredError}
    */
-  async getEnabledConnectionRaw(
+  async getEnabledConnection(
     requestParameters: GetEnabledConnectionsByConnectionIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200ResponseOneOfInner>> {
@@ -603,25 +539,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get an enabled connection for an organization
-   */
-  async getEnabledConnection(
-    requestParameters: GetEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetEnabledConnections200ResponseOneOfInner> {
-    const response = await this.getEnabledConnectionRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Get invitations to organization
    * @throws {RequiredError}
    */
-  async getInvitationsRaw(
+  async getInvitations(
     requestParameters: GetInvitationsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetInvitations200Response>> {
@@ -666,25 +591,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get invitations to organization
-   */
-  async getInvitations(
-    requestParameters: GetInvitationsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetInvitations200Response> {
-    const response = await this.getInvitationsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Get an invitation to organization
    * @throws {RequiredError}
    */
-  async getInvitationRaw(
+  async getInvitation(
     requestParameters: GetInvitationsByInvitationIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetInvitations200ResponseOneOfInner>> {
@@ -712,18 +626,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get an invitation to organization
-   */
-  async getInvitation(
-    requestParameters: GetInvitationsByInvitationIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetInvitations200ResponseOneOfInner> {
-    const response = await this.getInvitationRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -744,7 +647,7 @@ export class OrganizationsManager extends BaseAPI {
    * Get members who belong to an organization
    * @throws {RequiredError}
    */
-  async getMembersRaw(
+  async getMembers(
     requestParameters: GetMembersRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMembers200Response>> {
@@ -785,19 +688,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * List organization members. This endpoint supports two types of pagination:<br/>- Offset pagination<br/>- Checkpoint pagination<br/><br/>Checkpoint pagination must be used if you need to retrieve more than 1000 organization members.<br/><br/><h2>Checkpoint Pagination</h2><br/><br/>To search by checkpoint, use the following parameters:<br/>- from: Optional id from which to start selection.<br/>- take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.<br/><br/>Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.<br/>
-   * Get members who belong to an organization
-   */
-  async getMembers(
-    requestParameters: GetMembersRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetMembers200Response> {
-    const response = await this.getMembersRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -806,7 +697,7 @@ export class OrganizationsManager extends BaseAPI {
    * Get organization by name
    * @throws {RequiredError}
    */
-  async getByNameRaw(
+  async getByName(
     requestParameters: GetNameByNameRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
@@ -823,26 +714,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get a specific organization by name<br/>
-   * Get organization by name
-   */
-  async getByName(
-    requestParameters: GetNameByNameRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizations200ResponseOneOfInner> {
-    const response = await this.getByNameRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Get the roles assigned to an organization member
    * @throws {RequiredError}
    */
-  async getMemberRolesRaw(
+  async getMemberRoles(
     requestParameters: GetOrganizationMemberRolesRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
@@ -874,18 +753,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get the roles assigned to an organization member
-   */
-  async getMemberRoles(
-    requestParameters: GetOrganizationMemberRolesRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizationMemberRoles200Response> {
-    const response = await this.getMemberRolesRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -906,8 +774,8 @@ export class OrganizationsManager extends BaseAPI {
    * Get organizations
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetOrganizationsRequest,
+  async getAll(
+    requestParameters: GetOrganizationsRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -946,19 +814,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * List available organizations. This endpoint supports two types of pagination:<br/>- Offset pagination<br/>- Checkpoint pagination<br/><br/>Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.<br/><br/><h2>Checkpoint Pagination</h2><br/><br/>To search by checkpoint, use the following parameters:<br/>- from: Optional id from which to start selection.<br/>- take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.<br/><br/>Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.<br/>
-   * Get organizations
-   */
-  async getAll(
-    requestParameters: GetOrganizationsRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizations200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -967,7 +823,7 @@ export class OrganizationsManager extends BaseAPI {
    * Get organization
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetOrganizationsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
@@ -984,19 +840,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Get a specific organization<br/>
-   * Get organization
-   */
-  async get(
-    requestParameters: GetOrganizationsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizations200ResponseOneOfInner> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1005,7 +849,7 @@ export class OrganizationsManager extends BaseAPI {
    * Modify an Organizations Connection
    * @throws {RequiredError}
    */
-  async updateEnabledConnectionRaw(
+  async updateEnabledConnection(
     requestParameters: PatchEnabledConnectionsByConnectionIdOperationRequest,
     bodyParameters: PatchEnabledConnectionsByConnectionIdRequest,
     initOverrides?: InitOverride
@@ -1028,24 +872,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Modify an enabled_connection belonging to an Organization.<br/>
-   * Modify an Organizations Connection
-   */
-  async updateEnabledConnection(
-    requestParameters: PatchEnabledConnectionsByConnectionIdOperationRequest,
-    bodyParameters: PatchEnabledConnectionsByConnectionIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetEnabledConnections200ResponseOneOfInner> {
-    const response = await this.updateEnabledConnectionRaw(
-      requestParameters,
-      bodyParameters,
-      initOverrides
-    );
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -1054,7 +881,7 @@ export class OrganizationsManager extends BaseAPI {
    * Modify an Organization
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchOrganizationsByIdOperationRequest,
     bodyParameters: PatchOrganizationsByIdRequest,
     initOverrides?: InitOverride
@@ -1078,27 +905,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Modify an organization<br/>
-   * Modify an Organization
-   */
-  async update(
-    requestParameters: PatchOrganizationsByIdOperationRequest,
-    bodyParameters: PatchOrganizationsByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizations200ResponseOneOfInner> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Add connections to an organization
    * @throws {RequiredError}
    */
-  async addEnabledConnectionRaw(
+  async addEnabledConnection(
     requestParameters: PostEnabledConnectionsOperationRequest,
     bodyParameters: PostEnabledConnectionsRequest,
     initOverrides?: InitOverride
@@ -1122,30 +936,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Add connections to an organization
-   */
-  async addEnabledConnection(
-    requestParameters: PostEnabledConnectionsOperationRequest,
-    bodyParameters: PostEnabledConnectionsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetEnabledConnections200ResponseOneOfInner> {
-    const response = await this.addEnabledConnectionRaw(
-      requestParameters,
-      bodyParameters,
-      initOverrides
-    );
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Create invitations to organization
    * @throws {RequiredError}
    */
-  async createInvitationRaw(
+  async createInvitation(
     requestParameters: PostInvitationsOperationRequest,
     bodyParameters: PostInvitationsRequest,
     initOverrides?: InitOverride
@@ -1169,30 +967,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create invitations to organization
-   */
-  async createInvitation(
-    requestParameters: PostInvitationsOperationRequest,
-    bodyParameters: PostInvitationsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetInvitations200ResponseOneOfInner> {
-    const response = await this.createInvitationRaw(
-      requestParameters,
-      bodyParameters,
-      initOverrides
-    );
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
    * Add members to an organization
    * @throws {RequiredError}
    */
-  async addMembersRaw(
+  async addMembers(
     requestParameters: PostMembersOperationRequest,
     bodyParameters: PostMembersRequest,
     initOverrides?: InitOverride
@@ -1216,25 +998,14 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Add members to an organization
-   */
-  async addMembers(
-    requestParameters: PostMembersOperationRequest,
-    bodyParameters: PostMembersRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.addMembersRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
    * Assign one or more roles to a given user that will be applied in the context of the provided organization
    * @throws {RequiredError}
    */
-  async addMemberRolesRaw(
+  async addMemberRoles(
     requestParameters: PostOrganizationMemberRolesOperationRequest,
     bodyParameters: PostOrganizationMemberRolesRequest,
     initOverrides?: InitOverride
@@ -1257,18 +1028,7 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Assign one or more roles to a given user that will be applied in the context of the provided organization
-   */
-  async addMemberRoles(
-    requestParameters: PostOrganizationMemberRolesOperationRequest,
-    bodyParameters: PostOrganizationMemberRolesRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.addMemberRolesRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -1277,7 +1037,7 @@ export class OrganizationsManager extends BaseAPI {
    * Create an Organization
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: PostOrganizationsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
@@ -1295,18 +1055,6 @@ export class OrganizationsManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create an organization<br/>
-   * Create an Organization
-   */
-  async create(
-    bodyParameters: PostOrganizationsRequest,
-    initOverrides?: InitOverride
-  ): Promise<GetOrganizations200ResponseOneOfInner> {
-    const response = await this.createRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

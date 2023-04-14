@@ -108,7 +108,7 @@ export class HooksManager extends BaseAPI {
    * Delete a hook
    * @throws {RequiredError}
    */
-  async deleteRaw(
+  async delete(
     requestParameters: DeleteHooksByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -122,18 +122,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete a hook.<br/>
-   * Delete a hook
-   */
-  async delete(
-    requestParameters: DeleteHooksByIdRequest,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteRaw(requestParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -141,7 +130,7 @@ export class HooksManager extends BaseAPI {
    * Delete hook secrets
    * @throws {RequiredError}
    */
-  async deleteSecretsRaw(
+  async deleteSecrets(
     requestParameters: DeleteSecretsRequest,
     bodyParameters: Array<string>,
     initOverrides?: InitOverride
@@ -165,19 +154,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * Delete one or more existing secrets for a given hook. Accepts an array of secret names to delete.
-   * Delete hook secrets
-   */
-  async deleteSecrets(
-    requestParameters: DeleteSecretsRequest,
-    bodyParameters: Array<string>,
-    initOverrides?: InitOverride
-  ): Promise<void> {
-    await this.deleteSecretsRaw(requestParameters, bodyParameters, initOverrides);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -186,8 +163,8 @@ export class HooksManager extends BaseAPI {
    * Get hooks
    * @throws {RequiredError}
    */
-  async getAllRaw(
-    requestParameters: GetHooksRequest,
+  async getAll(
+    requestParameters: GetHooksRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetHooks200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
@@ -226,19 +203,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve all <a href=\"https://auth0.com/docs/hooks\">hooks</a>. Accepts a list of fields to include or exclude in the result.<br/>
-   * Get hooks
-   */
-  async getAll(
-    requestParameters: GetHooksRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<GetHooks200Response> {
-    const response = await this.getAllRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -247,7 +212,7 @@ export class HooksManager extends BaseAPI {
    * Get a hook
    * @throws {RequiredError}
    */
-  async getRaw(
+  async get(
     requestParameters: GetHooksByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Hook>> {
@@ -269,16 +234,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Retrieve <a href=\"https://auth0.com/docs/hooks\">a hook</a> by its ID. Accepts a list of fields to include in the result.<br/>
-   * Get a hook
-   */
-  async get(requestParameters: GetHooksByIdRequest, initOverrides?: InitOverride): Promise<Hook> {
-    const response = await this.getRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -287,7 +243,7 @@ export class HooksManager extends BaseAPI {
    * Get hook secrets
    * @throws {RequiredError}
    */
-  async getSecretsRaw(
+  async getSecrets(
     requestParameters: GetSecretsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<{ [key: string]: any }>> {
@@ -304,19 +260,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse<any>(response);
-  }
-
-  /**
-   * Retrieve a hook\'s secrets by the ID of the hook. <br/>
-   * Get hook secrets
-   */
-  async getSecrets(
-    requestParameters: GetSecretsRequest,
-    initOverrides?: InitOverride
-  ): Promise<{ [key: string]: any }> {
-    const response = await this.getSecretsRaw(requestParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -325,7 +269,7 @@ export class HooksManager extends BaseAPI {
    * Update a hook
    * @throws {RequiredError}
    */
-  async updateRaw(
+  async update(
     requestParameters: PatchHooksByIdRequest,
     bodyParameters: HookUpdate,
     initOverrides?: InitOverride
@@ -346,20 +290,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Update an existing hook.<br/>
-   * Update a hook
-   */
-  async update(
-    requestParameters: PatchHooksByIdRequest,
-    bodyParameters: HookUpdate,
-    initOverrides?: InitOverride
-  ): Promise<Hook> {
-    const response = await this.updateRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -368,7 +299,7 @@ export class HooksManager extends BaseAPI {
    * Update hook secrets
    * @throws {RequiredError}
    */
-  async updateSecretsRaw(
+  async updateSecrets(
     requestParameters: PatchSecretsRequest,
     bodyParameters: { [key: string]: any },
     initOverrides?: InitOverride
@@ -392,20 +323,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse<any>(response);
-  }
-
-  /**
-   * Update one or more existing secrets for an existing hook. Accepts an object of key-value pairs, where the key is the name of the existing secret. <br/>
-   * Update hook secrets
-   */
-  async updateSecrets(
-    requestParameters: PatchSecretsRequest,
-    bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverride
-  ): Promise<{ [key: string]: any }> {
-    const response = await this.updateSecretsRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -414,7 +332,7 @@ export class HooksManager extends BaseAPI {
    * Create a hook
    * @throws {RequiredError}
    */
-  async createRaw(
+  async create(
     bodyParameters: HookCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Hook>> {
@@ -432,16 +350,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse(response);
-  }
-
-  /**
-   * Create a new hook.<br/>
-   * Create a hook
-   */
-  async create(bodyParameters: HookCreate, initOverrides?: InitOverride): Promise<Hook> {
-    const response = await this.createRaw(bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -450,7 +359,7 @@ export class HooksManager extends BaseAPI {
    * Add hook secrets
    * @throws {RequiredError}
    */
-  async addSecretsRaw(
+  async addSecrets(
     requestParameters: PostSecretsRequest,
     bodyParameters: { [key: string]: any },
     initOverrides?: InitOverride
@@ -474,20 +383,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return new runtime.JSONApiResponse<any>(response);
-  }
-
-  /**
-   * Add one or more secrets to an existing hook. Accepts an object of key-value pairs, where the key is the name of the secret. A hook can have a maximum of 20 secrets. <br/>
-   * Add hook secrets
-   */
-  async addSecrets(
-    requestParameters: PostSecretsRequest,
-    bodyParameters: { [key: string]: any },
-    initOverrides?: InitOverride
-  ): Promise<{ [key: string]: any }> {
-    const response = await this.addSecretsRaw(requestParameters, bodyParameters, initOverrides);
-    return await response.value();
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 }
 
