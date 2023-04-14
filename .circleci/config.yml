@@ -33,7 +33,7 @@ jobs:
           command: yarn build
       - run:
           name: Tests
-          command: yarn test
+          command: yarn test:ci
       - when:
           condition:
             equal: [ "16.18", << parameters.node-version >> ]
