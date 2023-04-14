@@ -1,17 +1,13 @@
-import AuthenticationClient from '../auth';
 import memoizer from 'lru-memoizer';
 import { promisify } from 'util';
 
-interface TokenResponse {
-  access_token: string;
-  expires_in: number;
-}
+import { AuthenticationClient } from '../auth';
+import { TokenSet } from '../auth/OAuth';
+
 export interface BaseTokenProviderOptions {
   domain: string;
   audience: string;
   clientId: string;
-  scope?: string;
-
   enableCache?: boolean;
   cacheTTLInSeconds?: number;
 }
@@ -31,8 +27,7 @@ export type TokenProviderOptions =
 export class TokenProvider {
   private options: TokenProviderOptions;
 
-  // Due to lack of ESM support, using any for now.
-  private authenticationClient: any;
+  private authenticationClient: AuthenticationClient;
 
   constructor(options: TokenProviderOptions) {
     if (!options || typeof options !== 'object') {
@@ -76,33 +71,33 @@ export class TokenProvider {
       }
     }
 
-    if (params.scope && typeof params.scope !== 'string') {
-      throw new Error('scope must be a string');
-    }
-
     this.options = params;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { scope, audience, enableCache, cacheTTLInSeconds, ...authenticationClientOptions } =
+    const { audience, enableCache, cacheTTLInSeconds, ...authenticationClientOptions } =
       this.options;
 
-    this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
+    this.authenticationClient = new AuthenticationClient({
+      ...authenticationClientOptions,
+      baseUrl: `https://${params.domain}`,
+    });
   }
 
-  private getCachedAccessToken = promisify<TokenProviderOptions, TokenResponse>(
-    memoizer<TokenProviderOptions, TokenResponse>({
-      load: (options: TokenProviderOptions, callback: (err: any, data: TokenResponse) => void) => {
-        this.clientCredentialsGrant(options.domain, options.scope, options.audience)
-          .then((data: TokenResponse) => {
+  private getCachedAccessToken = promisify<TokenProviderOptions, TokenSet>(
+    memoizer<TokenProviderOptions, TokenSet>({
+      load: (options: TokenProviderOptions, callback: (err: any, data?: TokenSet) => void) => {
+        this.authenticationClient.oauth
+          .clientCredentialsGrant({ audience: this.options.audience })
+          .then(({ data }: { data: TokenSet }) => {
             callback(null, data);
           })
           .catch((err: any) => {
-            callback(err, null);
+            callback(err, undefined);
           });
       },
       hash(options: TokenProviderOptions) {
-        return `${options.domain}-${options.clientId}-${options.scope}`;
+        return `${options.domain}-${options.clientId}-${options.audience}`;
       },
-      itemMaxAge(options: TokenProviderOptions, data: TokenResponse) {
+      itemMaxAge(options: TokenProviderOptions, data: TokenSet) {
         if (options.cacheTTLInSeconds) {
           return options.cacheTTLInSeconds * 1000;
         }
@@ -132,23 +127,10 @@ export class TokenProvider {
       const data = await this.getCachedAccessToken(this.options);
       return data.access_token;
     } else {
-      const data = await this.clientCredentialsGrant(
-        this.options.domain,
-        this.options.scope,
-        this.options.audience
-      );
+      const { data } = await this.authenticationClient.oauth.clientCredentialsGrant({
+        audience: this.options.audience,
+      });
       return data.access_token;
     }
-  }
-
-  private clientCredentialsGrant(
-    domain: string,
-    scope: string,
-    audience: string
-  ): Promise<TokenResponse> {
-    return this.authenticationClient.clientCredentialsGrant({
-      audience,
-      scope,
-    });
   }
 }

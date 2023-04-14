@@ -7,7 +7,7 @@ export interface ConfigurationParameters {
 }
 
 export class Configuration {
-  constructor(private configuration: ConfigurationParameters) {}
+  constructor(protected configuration: ConfigurationParameters) {}
 
   set config(configuration: Configuration) {
     this.configuration = configuration;
@@ -455,7 +455,9 @@ export function applyQueryParams<
         if (config.isCollectionFormatMulti) {
           value = requestParameters[key];
         } else {
-          value = requestParameters[key].join(COLLECTION_FORMATS[config.collectionFormat]);
+          value = requestParameters[key].join(
+            COLLECTION_FORMATS[config.collectionFormat as keyof typeof COLLECTION_FORMATS]
+          );
         }
       } else {
         if (requestParameters[key] !== undefined) {
