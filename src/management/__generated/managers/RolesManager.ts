@@ -16,7 +16,6 @@ const { BaseAPI } = runtime;
 export interface DeleteRolePermissionAssignmentRequest {
   /**
    * ID of the role to remove permissions from.
-   * @type {string}
    */
   id: string;
 }
@@ -24,7 +23,6 @@ export interface DeleteRolePermissionAssignmentRequest {
 export interface DeleteRolesByIdRequest {
   /**
    * ID of the role to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -32,22 +30,18 @@ export interface DeleteRolesByIdRequest {
 export interface GetRolePermissionRequest {
   /**
    * ID of the role to list granted permissions.
-   * @type {string}
    */
   id: string;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -55,32 +49,26 @@ export interface GetRolePermissionRequest {
 export interface GetRoleUserRequest {
   /**
    * ID of the role to retrieve a list of users associated with.
-   * @type {string}
    */
   id: string;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional Id from which to start selection.
-   * @type {string}
    */
   from?: string;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   take?: number;
 }
@@ -88,22 +76,18 @@ export interface GetRoleUserRequest {
 export interface GetRolesRequest {
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional filter on name (case-insensitive).
-   * @type {string}
    */
   name_filter?: string;
 }
@@ -111,7 +95,6 @@ export interface GetRolesRequest {
 export interface GetRolesByIdRequest {
   /**
    * ID of the role to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -119,7 +102,6 @@ export interface GetRolesByIdRequest {
 export interface PatchRolesByIdRequest {
   /**
    * ID of the role to update.
-   * @type {string}
    */
   id: string;
 }
@@ -127,7 +109,6 @@ export interface PatchRolesByIdRequest {
 export interface PostRolePermissionAssignmentOperationRequest {
   /**
    * ID of the role to add permissions to.
-   * @type {string}
    */
   id: string;
 }
@@ -135,7 +116,6 @@ export interface PostRolePermissionAssignmentOperationRequest {
 export interface PostRoleUsersOperationRequest {
   /**
    * ID of the role to assign users to.
-   * @type {string}
    */
   id: string;
 }
@@ -148,6 +128,7 @@ export class RolesManager extends BaseAPI {
    * Remove permissions associated with a role.
    *
    * Remove permissions from a role
+   *
    * @throws {RequiredError}
    */
   async removePermissions(
@@ -181,6 +162,7 @@ export class RolesManager extends BaseAPI {
    * Delete a role.
    *
    * Delete a role
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -204,6 +186,7 @@ export class RolesManager extends BaseAPI {
    * Retrieve list of permissions granted by a role.
    *
    * Get permissions granted by role
+   *
    * @throws {RequiredError}
    */
   async getPermissions(
@@ -258,6 +241,7 @@ export class RolesManager extends BaseAPI {
    * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
    *
    * Get a role's users
+   *
    * @throws {RequiredError}
    */
   async getUsers(
@@ -305,6 +289,7 @@ export class RolesManager extends BaseAPI {
    * Retrieve filtered list of roles that can be assigned to users.
    *
    * Get roles
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -346,6 +331,7 @@ export class RolesManager extends BaseAPI {
    * Retrieve a role.
    *
    * Get a role
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -369,6 +355,7 @@ export class RolesManager extends BaseAPI {
    * Update a role.
    *
    * Update a role
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -399,6 +386,7 @@ export class RolesManager extends BaseAPI {
    * Associate permissions with a role.
    *
    * Associate permissions with a role
+   *
    * @throws {RequiredError}
    */
   async addPermissions(
@@ -431,6 +419,7 @@ export class RolesManager extends BaseAPI {
   /**
    * Assign users to a role.
    * Assign users to a role
+   *
    * @throws {RequiredError}
    */
   async assignUsers(
@@ -461,6 +450,7 @@ export class RolesManager extends BaseAPI {
    * Create a new role.
    *
    * Create a role
+   *
    * @throws {RequiredError}
    */
   async create(

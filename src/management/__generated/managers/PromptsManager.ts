@@ -7,12 +7,10 @@ const { BaseAPI } = runtime;
 export interface GetCustomTextByLanguageRequest {
   /**
    * Name of the prompt.
-   * @type {GetCustomTextByLanguagePromptEnum}
    */
   prompt: GetCustomTextByLanguagePromptEnum;
   /**
    * Language to update.
-   * @type {GetCustomTextByLanguageLanguageEnum}
    */
   language: GetCustomTextByLanguageLanguageEnum;
 }
@@ -20,12 +18,10 @@ export interface GetCustomTextByLanguageRequest {
 export interface PutCustomTextByLanguageRequest {
   /**
    * Name of the prompt.
-   * @type {PutCustomTextByLanguagePromptEnum}
    */
   prompt: PutCustomTextByLanguagePromptEnum;
   /**
    * Language to update.
-   * @type {PutCustomTextByLanguageLanguageEnum}
    */
   language: PutCustomTextByLanguageLanguageEnum;
 }
@@ -37,6 +33,7 @@ export class PromptsManager extends BaseAPI {
   /**
    * Retrieve custom text for a specific prompt and language.
    * Get custom text for a prompt
+   *
    * @throws {RequiredError}
    */
   async getCustomTextByLanguage(
@@ -61,6 +58,7 @@ export class PromptsManager extends BaseAPI {
   /**
    * Retrieve prompts settings.
    * Get prompts settings
+   *
    * @throws {RequiredError}
    */
   async get(initOverrides?: InitOverride): Promise<ApiResponse<PromptsSettings>> {
@@ -78,6 +76,7 @@ export class PromptsManager extends BaseAPI {
   /**
    * Update prompts settings.
    * Update prompts settings
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -104,6 +103,7 @@ export class PromptsManager extends BaseAPI {
   /**
    * Set custom text for a specific prompt. Existing texts will be overwritten.
    * Set custom text for a specific prompt
+   *
    * @throws {RequiredError}
    */
   async updateCustomTextByLanguage(
@@ -133,9 +133,6 @@ export class PromptsManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const GetCustomTextByLanguagePromptEnum = {
   login: 'login',
   login_id: 'login-id',
@@ -167,9 +164,7 @@ export const GetCustomTextByLanguagePromptEnum = {
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   typeof GetCustomTextByLanguagePromptEnum[keyof typeof GetCustomTextByLanguagePromptEnum];
-/**
- * @export
- */
+
 export const GetCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
   bg: 'bg',
@@ -217,9 +212,7 @@ export const GetCustomTextByLanguageLanguageEnum = {
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
   typeof GetCustomTextByLanguageLanguageEnum[keyof typeof GetCustomTextByLanguageLanguageEnum];
-/**
- * @export
- */
+
 export const PutCustomTextByLanguagePromptEnum = {
   login: 'login',
   login_id: 'login-id',
@@ -251,9 +244,7 @@ export const PutCustomTextByLanguagePromptEnum = {
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   typeof PutCustomTextByLanguagePromptEnum[keyof typeof PutCustomTextByLanguagePromptEnum];
-/**
- * @export
- */
+
 export const PutCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
   bg: 'bg',

@@ -14,7 +14,6 @@ const { BaseAPI } = runtime;
 export interface DeleteBrandingThemeRequest {
   /**
    * The ID of the theme
-   * @type {string}
    */
   themeId: string;
 }
@@ -22,7 +21,6 @@ export interface DeleteBrandingThemeRequest {
 export interface GetBrandingThemeRequest {
   /**
    * The ID of the theme
-   * @type {string}
    */
   themeId: string;
 }
@@ -30,7 +28,6 @@ export interface GetBrandingThemeRequest {
 export interface PatchBrandingThemeRequest {
   /**
    * The ID of the theme
-   * @type {string}
    */
   themeId: string;
 }
@@ -42,6 +39,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Delete branding theme.
    * Delete branding theme
+   *
    * @throws {RequiredError}
    */
   async deleteTheme(
@@ -66,6 +64,7 @@ export class BrandingManager extends BaseAPI {
 
   /**
    * Delete template for New Universal Login Experience
+   *
    * @throws {RequiredError}
    */
   async deleteUniversalLoginTemplate(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
@@ -83,6 +82,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Retrieve branding settings.
    * Get branding settings
+   *
    * @throws {RequiredError}
    */
   async getSettings(initOverrides?: InitOverride): Promise<ApiResponse<GetBranding200Response>> {
@@ -100,6 +100,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Retrieve branding theme.
    * Get branding theme
+   *
    * @throws {RequiredError}
    */
   async getTheme(
@@ -125,6 +126,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Retrieve default branding theme.
    * Get default branding theme
+   *
    * @throws {RequiredError}
    */
   async getDefaultTheme(
@@ -143,6 +145,7 @@ export class BrandingManager extends BaseAPI {
 
   /**
    * Get template for New Universal Login Experience
+   *
    * @throws {RequiredError}
    */
   async getUniversalLoginTemplate(
@@ -162,6 +165,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Update branding settings.
    * Update branding settings
+   *
    * @throws {RequiredError}
    */
   async updateSettings(
@@ -188,6 +192,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Update branding theme.
    * Update branding theme
+   *
    * @throws {RequiredError}
    */
   async updateTheme(
@@ -220,6 +225,7 @@ export class BrandingManager extends BaseAPI {
   /**
    * Create branding theme.
    * Create branding theme
+   *
    * @throws {RequiredError}
    */
   async createTheme(
@@ -271,6 +277,7 @@ export class BrandingManager extends BaseAPI {
    * </pre>
    *
    * Set template for New Universal Login Experience
+   *
    * @throws {RequiredError}
    */
   async setUniversalLoginTemplate(

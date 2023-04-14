@@ -7,17 +7,14 @@ const { BaseAPI } = runtime;
 export interface GetUsersByEmailRequest {
   /**
    * Email address to search for (case-sensitive).
-   * @type {string}
    */
   email: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -34,6 +31,7 @@ export class UsersByEmailManager extends BaseAPI {
    * When using this endpoint, make sure that you are searching for users via email addresses using the correct case.
    *
    * Search Users by Email
+   *
    * @throws {RequiredError}
    */
   async getByEmail(

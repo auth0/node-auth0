@@ -12,7 +12,6 @@ const { BaseAPI } = runtime;
 export interface DeleteConnectionsByIdRequest {
   /**
    * The id of the connection to delete
-   * @type {string}
    */
   id: string;
 }
@@ -20,12 +19,10 @@ export interface DeleteConnectionsByIdRequest {
 export interface DeleteUsersByEmailRequest {
   /**
    * The id of the connection (currently only database connections are supported)
-   * @type {string}
    */
   id: string;
   /**
    * The email of the user to delete
-   * @type {string}
    */
   email: string;
 }
@@ -33,37 +30,30 @@ export interface DeleteUsersByEmailRequest {
 export interface GetConnectionsRequest {
   /**
    * The amount of entries per page. Default: no paging is used, all connections are returned
-   * @type {number}
    */
   per_page?: number;
   /**
    * The page number. Zero based
-   * @type {number}
    */
   page?: number;
   /**
    * true if a query summary must be included in the result, false otherwise. Default <code>false</code>.
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Provide strategies to only retrieve connections with such strategies
-   * @type {Array<GetConnectionsStrategyEnum>}
    */
   strategy?: Array<GetConnectionsStrategyEnum>;
   /**
    * Provide the name of the connection to retrieve
-   * @type {string}
    */
   name?: string;
   /**
    * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
-   * @type {string}
    */
   fields?: string;
   /**
    * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -71,17 +61,14 @@ export interface GetConnectionsRequest {
 export interface GetConnectionsByIdRequest {
   /**
    * The id of the connection to retrieve
-   * @type {string}
    */
   id: string;
   /**
    * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
-   * @type {string}
    */
   fields?: string;
   /**
    * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -89,7 +76,6 @@ export interface GetConnectionsByIdRequest {
 export interface GetStatusRequest {
   /**
    * ID of the connection to check
-   * @type {string}
    */
   id: string;
 }
@@ -97,7 +83,6 @@ export interface GetStatusRequest {
 export interface PatchConnectionsByIdRequest {
   /**
    * The id of the connection to retrieve
-   * @type {string}
    */
   id: string;
 }
@@ -110,6 +95,7 @@ export class ConnectionsManager extends BaseAPI {
    * Deletes a connection and all its users.
    *
    * Delete a connection
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -133,6 +119,7 @@ export class ConnectionsManager extends BaseAPI {
    * Deletes a specified connection user by its email (you cannot delete all users from specific connection). Currently, only Database Connections are supported.
    *
    * Delete a connection user
+   *
    * @throws {RequiredError}
    */
   async deleteUserByEmail(
@@ -167,6 +154,7 @@ export class ConnectionsManager extends BaseAPI {
    * Retrieves every connection matching the specified strategy. All connections are retrieved if no strategy is being specified. Accepts a list of fields to include or exclude in the resulting list of connection objects.
    *
    * Get all connections
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -223,6 +211,7 @@ export class ConnectionsManager extends BaseAPI {
    * Retrieves a connection by its <code>ID</code>.
    *
    * Get a connection
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -257,6 +246,7 @@ export class ConnectionsManager extends BaseAPI {
   /**
    * Retrieves the status of an ad/ldap connection referenced by its <code>ID</code>. <code>200 OK</code> http status code response is returned  when the connection is online, otherwise a <code>404</code> status code is returned along with an error message
    * Check connection status
+   *
    * @throws {RequiredError}
    */
   async checkStatus(
@@ -283,6 +273,7 @@ export class ConnectionsManager extends BaseAPI {
    * <b>Note:</b> if you use the options parameter, the whole options object will be overridden, so ensure that all parameters are present
    *
    * Update a connection
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -316,6 +307,7 @@ export class ConnectionsManager extends BaseAPI {
    *
    * <div class="alert alert-warning">Connections created via this endpoint may redirect users to log in, receive and store user identities, and update user root profiles</div>
    * Create a connection
+   *
    * @throws {RequiredError}
    */
   async create(
@@ -340,9 +332,6 @@ export class ConnectionsManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const GetConnectionsStrategyEnum = {
   ad: 'ad',
   adfs: 'adfs',

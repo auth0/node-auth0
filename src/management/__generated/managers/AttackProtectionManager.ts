@@ -14,7 +14,7 @@ const { BaseAPI } = runtime;
 export class AttackProtectionManager extends BaseAPI {
   /**
    * Get breached password detection settings
-   * Get breached password detection settings
+   *
    * @throws {RequiredError}
    */
   async getBreachedPasswordDetectionConfig(
@@ -33,7 +33,7 @@ export class AttackProtectionManager extends BaseAPI {
 
   /**
    * Get the brute force configuration
-   * Get the brute force configuration
+   *
    * @throws {RequiredError}
    */
   async getBruteForceConfig(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
@@ -50,7 +50,7 @@ export class AttackProtectionManager extends BaseAPI {
 
   /**
    * Get the brute force configuration defaults
-   * Get the brute force configuration defaults
+   *
    * @throws {RequiredError}
    */
   async getBruteForceDefaults(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
@@ -67,7 +67,7 @@ export class AttackProtectionManager extends BaseAPI {
 
   /**
    * Get the suspicious IP throttling configuration
-   * Get the suspicious IP throttling configuration
+   *
    * @throws {RequiredError}
    */
   async getSuspiciousIpThrottlingConfig(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
@@ -84,7 +84,7 @@ export class AttackProtectionManager extends BaseAPI {
 
   /**
    * Update breached password detection settings
-   * Update breached password detection settings
+   *
    * @throws {RequiredError}
    */
   async updateBreachedPasswordDetectionConfig(
@@ -110,7 +110,7 @@ export class AttackProtectionManager extends BaseAPI {
 
   /**
    * Update the brute force configuration
-   * Update the brute force configuration
+   *
    * @throws {RequiredError}
    */
   async updateBruteForceConfig(
@@ -136,7 +136,7 @@ export class AttackProtectionManager extends BaseAPI {
 
   /**
    * Update the suspicious IP throttling configuration
-   * Update the suspicious IP throttling configuration
+   *
    * @throws {RequiredError}
    */
   async updateSuspiciousIpThrottlingConfig(

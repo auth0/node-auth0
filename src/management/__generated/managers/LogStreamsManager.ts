@@ -11,7 +11,6 @@ const { BaseAPI } = runtime;
 export interface DeleteLogStreamsByIdRequest {
   /**
    * The id of the log stream to delete
-   * @type {string}
    */
   id: string;
 }
@@ -19,7 +18,6 @@ export interface DeleteLogStreamsByIdRequest {
 export interface GetLogStreamsByIdRequest {
   /**
    * The id of the log stream to get
-   * @type {string}
    */
   id: string;
 }
@@ -27,7 +25,6 @@ export interface GetLogStreamsByIdRequest {
 export interface PatchLogStreamsByIdOperationRequest {
   /**
    * The id of the log stream to get
-   * @type {string}
    */
   id: string;
 }
@@ -40,6 +37,7 @@ export class LogStreamsManager extends BaseAPI {
    * Delete a log stream.
    *
    * Delete log stream
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -128,6 +126,7 @@ export class LogStreamsManager extends BaseAPI {
    * }]</code></pre>
    *
    * Get log streams
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -201,6 +200,7 @@ export class LogStreamsManager extends BaseAPI {
    * 3. <code>suspended</code> - Stream is currently disabled because of errors and will not attempt log delivery.
    *
    * Get log stream by ID
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -257,6 +257,7 @@ export class LogStreamsManager extends BaseAPI {
    *   }
    * }</code></pre>
    * Update a log stream
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -412,6 +413,7 @@ export class LogStreamsManager extends BaseAPI {
    * }</code></pre>
    *
    * Create a log stream
+   *
    * @throws {RequiredError}
    */
   async create(

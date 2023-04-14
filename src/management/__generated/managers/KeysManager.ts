@@ -11,7 +11,6 @@ const { BaseAPI } = runtime;
 export interface GetSigningKeyRequest {
   /**
    * Key id of the key to retrieve
-   * @type {string}
    */
   kid: string;
 }
@@ -19,7 +18,6 @@ export interface GetSigningKeyRequest {
 export interface PutSigningKeysRequest {
   /**
    * Key id of the key to revoke
-   * @type {string}
    */
   kid: string;
 }
@@ -30,7 +28,7 @@ export interface PutSigningKeysRequest {
 export class KeysManager extends BaseAPI {
   /**
    * Get an Application Signing Key by its key id
-   * Get an Application Signing Key by its key id
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -55,7 +53,7 @@ export class KeysManager extends BaseAPI {
 
   /**
    * Get all Application Signing Keys
-   * Get all Application Signing Keys
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -74,7 +72,7 @@ export class KeysManager extends BaseAPI {
 
   /**
    * Rotate the Application Signing Key
-   * Rotate the Application Signing Key
+   *
    * @throws {RequiredError}
    */
   async rotate(initOverrides?: InitOverride): Promise<ApiResponse<PostSigningKeys201Response>> {
@@ -91,7 +89,7 @@ export class KeysManager extends BaseAPI {
 
   /**
    * Revoke an Application Signing Key by its key id
-   * Revoke an Application Signing Key by its key id
+   *
    * @throws {RequiredError}
    */
   async revoke(

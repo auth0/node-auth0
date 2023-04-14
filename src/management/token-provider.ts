@@ -1,7 +1,6 @@
+import AuthenticationClient from '../auth';
 import memoizer from 'lru-memoizer';
 import { promisify } from 'util';
-
-import AuthenticationClient from '../auth';
 
 interface TokenResponse {
   access_token: string;
@@ -82,7 +81,7 @@ export class TokenProvider {
     }
 
     this.options = params;
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { scope, audience, enableCache, cacheTTLInSeconds, ...authenticationClientOptions } =
       this.options;
 
@@ -94,10 +93,10 @@ export class TokenProvider {
       load: (options: TokenProviderOptions, callback: (err: any, data: TokenResponse) => void) => {
         this.clientCredentialsGrant(options.domain, options.scope, options.audience)
           .then((data: TokenResponse) => {
-            callback(null, data);
+            setImmediate(() => callback(null, data));
           })
           .catch((err: any) => {
-            callback(err, null);
+            setImmediate(() => callback(err, null));
           });
       },
       hash(options: TokenProviderOptions) {

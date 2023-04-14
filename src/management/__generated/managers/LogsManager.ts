@@ -7,47 +7,38 @@ const { BaseAPI } = runtime;
 export interface GetLogsRequest {
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    *  Number of results per page. Paging is disabled if parameter not sent. Default: <code>50</code>. Max value: <code>100</code>
-   * @type {number}
    */
   per_page?: number;
   /**
    * Field to use for sorting appended with <code>:1</code>  for ascending and <code>:-1</code> for descending. e.g. <code>date:-1</code>
-   * @type {string}
    */
   sort?: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for <code>include_fields</code>) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (<code>true</code>) or excluded (<code>false</code>)
-   * @type {boolean}
    */
   include_fields?: boolean;
   /**
    * Return results as an array when false (default). Return results inside an object that also contains a total result count when true.
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Log Event Id from which to start selection from.
-   * @type {string}
    */
   from?: string;
   /**
    * Number of entries to retrieve when using the <code>from</code> parameter. Default <code>50</code>, max <code>100</code>
-   * @type {number}
    */
   take?: number;
   /**
    * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>.
-   * @type {string}
    */
   q?: string;
 }
@@ -55,7 +46,6 @@ export interface GetLogsRequest {
 export interface GetLogsByIdRequest {
   /**
    * log_id of the log to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -96,6 +86,7 @@ export class LogsManager extends BaseAPI {
    * <strong>Important:</strong> When fetching logs from a checkpoint log ID, any parameter other than <code>from</code> and <code>take</code> will be ignored, and date ordering is not guaranteed.
    *
    * Search log events
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -156,6 +147,7 @@ export class LogsManager extends BaseAPI {
   /**
    * Retrieve an individual log event.
    * Get a log event by id
+   *
    * @throws {RequiredError}
    */
   async get(

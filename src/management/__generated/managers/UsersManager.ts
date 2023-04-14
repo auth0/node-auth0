@@ -31,12 +31,10 @@ const { BaseAPI } = runtime;
 export interface DeleteAuthenticationMethodsByAuthenticationMethodIdRequest {
   /**
    * The ID of the user in question.
-   * @type {string}
    */
   id: string;
   /**
    * The ID of the authentication method to delete.
-   * @type {string}
    */
   authentication_method_id: string;
 }
@@ -44,7 +42,6 @@ export interface DeleteAuthenticationMethodsByAuthenticationMethodIdRequest {
 export interface DeleteAuthenticatorsRequest {
   /**
    * ID of the user to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -52,12 +49,10 @@ export interface DeleteAuthenticatorsRequest {
 export interface DeleteMultifactorByProviderRequest {
   /**
    * ID of the user to remove a multifactor configuration from.
-   * @type {string}
    */
   id: string;
   /**
    * The multi-factor provider. Supported values 'duo' or 'google-authenticator'
-   * @type {DeleteMultifactorByProviderProviderEnum}
    */
   provider: DeleteMultifactorByProviderProviderEnum;
 }
@@ -65,7 +60,6 @@ export interface DeleteMultifactorByProviderRequest {
 export interface DeletePermissionsOperationRequest {
   /**
    * ID of the user to remove permissions from.
-   * @type {string}
    */
   id: string;
 }
@@ -73,17 +67,14 @@ export interface DeletePermissionsOperationRequest {
 export interface DeleteUserIdentityByUserIdRequest {
   /**
    * ID of the primary user account.
-   * @type {string}
    */
   id: string;
   /**
    * Identity provider name of the secondary linked account (e.g. `google-oauth2`).
-   * @type {DeleteUserIdentityByUserIdProviderEnum}
    */
   provider: DeleteUserIdentityByUserIdProviderEnum;
   /**
    * ID of the secondary linked account (e.g. `123456789081523216417` part after the `|` in `google-oauth2|123456789081523216417`).
-   * @type {string}
    */
   user_id: string;
 }
@@ -91,7 +82,6 @@ export interface DeleteUserIdentityByUserIdRequest {
 export interface DeleteUserRolesOperationRequest {
   /**
    * ID of the user to remove roles from.
-   * @type {string}
    */
   id: string;
 }
@@ -99,7 +89,6 @@ export interface DeleteUserRolesOperationRequest {
 export interface DeleteUsersByIdRequest {
   /**
    * ID of the user to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -107,22 +96,18 @@ export interface DeleteUsersByIdRequest {
 export interface GetAuthenticationMethodsRequest {
   /**
    * The ID of the user in question.
-   * @type {string}
    */
   id: string;
   /**
    * Page index of the results to return. First page is 0. Default is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Default is 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -130,12 +115,10 @@ export interface GetAuthenticationMethodsRequest {
 export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
   /**
    * The ID of the user in question.
-   * @type {string}
    */
   id: string;
   /**
    * The ID of the authentication methods in question.
-   * @type {string}
    */
   authentication_method_id: string;
 }
@@ -143,7 +126,6 @@ export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
 export interface GetEnrollmentsRequest {
   /**
    * ID of the user to list enrollments for.
-   * @type {string}
    */
   id: string;
 }
@@ -151,27 +133,22 @@ export interface GetEnrollmentsRequest {
 export interface GetLogsByUserRequest {
   /**
    * ID of the user of the logs to retrieve
-   * @type {string}
    */
   id: string;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Field to sort by. Use `fieldname:1` for ascending order and `fieldname:-1` for descending.
-   * @type {string}
    */
   sort?: string;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -179,22 +156,18 @@ export interface GetLogsByUserRequest {
 export interface GetPermissionsRequest {
   /**
    * ID of the user to retrieve the permissions for.
-   * @type {string}
    */
   id: string;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -202,22 +175,18 @@ export interface GetPermissionsRequest {
 export interface GetUserOrganizationsRequest {
   /**
    * ID of the user to retrieve the organizations for.
-   * @type {string}
    */
   id: string;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Defaults to 50.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -225,22 +194,18 @@ export interface GetUserOrganizationsRequest {
 export interface GetUserRolesRequest {
   /**
    * ID of the user to list roles for.
-   * @type {string}
    */
   id: string;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
 }
@@ -248,47 +213,38 @@ export interface GetUserRolesRequest {
 export interface GetUsersRequest {
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Field to sort by. Use <code>field:order</code> where order is <code>1</code> for ascending and <code>-1</code> for descending. e.g. <code>created_at:1</code>
-   * @type {string}
    */
   sort?: string;
   /**
    * Connection filter. Only applies when using <code>search_engine=v1</code>. To filter by connection with <code>search_engine=v2|v3</code>, use <code>q=identities.connection:"connection_name"</code>
-   * @type {string}
    */
   connection?: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
   /**
    * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://manage.local.dev.auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>.
-   * @type {string}
    */
   q?: string;
   /**
    * The version of the search engine
-   * @type {GetUsersSearchEngineEnum}
    */
   search_engine?: GetUsersSearchEngineEnum;
 }
@@ -296,17 +252,14 @@ export interface GetUsersRequest {
 export interface GetUsersByIdRequest {
   /**
    * ID of the user to retrieve.
-   * @type {string}
    */
   id: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -314,12 +267,10 @@ export interface GetUsersByIdRequest {
 export interface PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest {
   /**
    * The ID of the user in question.
-   * @type {string}
    */
   id: string;
   /**
    * The ID of the authentication method to update.
-   * @type {string}
    */
   authentication_method_id: string;
 }
@@ -327,7 +278,6 @@ export interface PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequ
 export interface PatchUsersByIdRequest {
   /**
    * ID of the user to update.
-   * @type {string}
    */
   id: string;
 }
@@ -335,7 +285,6 @@ export interface PatchUsersByIdRequest {
 export interface PostAuthenticationMethodsOperationRequest {
   /**
    * The ID of the user to whom the new authentication method will be assigned.
-   * @type {string}
    */
   id: string;
 }
@@ -343,7 +292,6 @@ export interface PostAuthenticationMethodsOperationRequest {
 export interface PostIdentitiesOperationRequest {
   /**
    * ID of the primary user account to link a second user account to.
-   * @type {string}
    */
   id: string;
 }
@@ -351,7 +299,6 @@ export interface PostIdentitiesOperationRequest {
 export interface PostInvalidateRememberBrowserRequest {
   /**
    * ID of the user to invalidate all remembered browsers and authentication factors for.
-   * @type {string}
    */
   id: string;
 }
@@ -359,7 +306,6 @@ export interface PostInvalidateRememberBrowserRequest {
 export interface PostPermissionsOperationRequest {
   /**
    * ID of the user to assign permissions to.
-   * @type {string}
    */
   id: string;
 }
@@ -367,7 +313,6 @@ export interface PostPermissionsOperationRequest {
 export interface PostRecoveryCodeRegenerationRequest {
   /**
    * ID of the user to regenerate a multi-factor authentication recovery code for.
-   * @type {string}
    */
   id: string;
 }
@@ -375,7 +320,6 @@ export interface PostRecoveryCodeRegenerationRequest {
 export interface PostUserRolesOperationRequest {
   /**
    * ID of the user to associate roles with.
-   * @type {string}
    */
   id: string;
 }
@@ -383,7 +327,6 @@ export interface PostUserRolesOperationRequest {
 export interface PutAuthenticationMethodsRequest {
   /**
    * The ID of the user in question.
-   * @type {string}
    */
   id: string;
 }
@@ -394,6 +337,7 @@ export interface PutAuthenticationMethodsRequest {
 export class UsersManager extends BaseAPI {
   /**
    * Deletes an authentication method by ID
+   *
    * @throws {RequiredError}
    */
   async deleteAuthenticationMethod(
@@ -420,6 +364,7 @@ export class UsersManager extends BaseAPI {
 
   /**
    * Delete All Authenticators
+   *
    * @throws {RequiredError}
    */
   async deleteAllAuthenticators(
@@ -445,6 +390,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Delete a <a href="https://auth0.com/docs/multifactor-authentication">multifactor</a> configuration for a user. This forces the user to re-configure the multi-factor provider.
    * Delete a User's Multi-factor Provider
+   *
    * @throws {RequiredError}
    */
   async deleteMultifactorProvider(
@@ -470,6 +416,7 @@ export class UsersManager extends BaseAPI {
    * Remove permissions from a user.
    *
    * Remove Permissions from a User
+   *
    * @throws {RequiredError}
    */
   async deletePermissiojs(
@@ -502,6 +449,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Unlink an identity from the target user making it a separate user account again.
    * Unlink a User Identity
+   *
    * @throws {RequiredError}
    */
   async unlink(
@@ -527,6 +475,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Remove roles from a user.
    * Removes roles from a user
+   *
    * @throws {RequiredError}
    */
   async deleteRoles(
@@ -556,6 +505,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Delete a user.
    * Delete a User
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -577,6 +527,7 @@ export class UsersManager extends BaseAPI {
 
   /**
    * Gets a list of authentication methods
+   *
    * @throws {RequiredError}
    */
   async getAuthenticationMethods(
@@ -617,6 +568,7 @@ export class UsersManager extends BaseAPI {
 
   /**
    * Gets an authentication method by ID.
+   *
    * @throws {RequiredError}
    */
   async getAuthenticationMethod(
@@ -644,6 +596,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Retrieve the first confirmed <a href="https://auth0.com/docs/multifactor-authentication/guardian">Guardian</a> enrollment for a user.
    * Get the First Confirmed Multi-factor Authentication Enrollment
+   *
    * @throws {RequiredError}
    */
   async getEnrollments(
@@ -675,6 +628,7 @@ export class UsersManager extends BaseAPI {
    *
    * Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations">limits the number of logs</a> you can return by search criteria to 100 logs per request. Furthermore, you may only paginate through up to 1,000 search results. If you exceed this threshold, please redefine your search.
    * Get user's log events
+   *
    * @throws {RequiredError}
    */
   async getLogs(
@@ -717,6 +671,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Retrieve all permissions associated with the user.
    * Get a User's Permissions
+   *
    * @throws {RequiredError}
    */
   async getPermissions(
@@ -759,6 +714,7 @@ export class UsersManager extends BaseAPI {
    * This endpoint will retrieve all organizations that the specified user is a member of.
    *
    * List user's organizations
+   *
    * @throws {RequiredError}
    */
   async getUserOrganizations(
@@ -800,6 +756,7 @@ export class UsersManager extends BaseAPI {
   /**
    * List the the roles associated with a user.
    * Get a user's roles
+   *
    * @throws {RequiredError}
    */
   async getRoles(
@@ -852,6 +809,7 @@ export class UsersManager extends BaseAPI {
    * Auth0 limits the number of users you can return. If you exceed this threshold, please redefine your search, use the <a href="https://manage.local.dev.auth0.com/docs/api/management/v2#!/Jobs/post_users_exports">export job</a>, or the <a href="https://manage.local.dev.auth0.com/docs/extensions/user-import-export">User Import / Export</a> extension.
    *
    * List or Search Users
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -912,6 +870,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Retrieve user details. A list of fields to include or exclude may also be specified.
    * Get a User
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -945,6 +904,7 @@ export class UsersManager extends BaseAPI {
 
   /**
    * Updates an authentication method.
+   *
    * @throws {RequiredError}
    */
   async updateAuthenticationMethod(
@@ -1048,6 +1008,7 @@ export class UsersManager extends BaseAPI {
    * }</code></pre>
    *
    * Update a User
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -1076,6 +1037,7 @@ export class UsersManager extends BaseAPI {
 
   /**
    * Creates an authentication method for a given user.
+   *
    * @throws {RequiredError}
    */
   async createAuthenticationMethod(
@@ -1135,6 +1097,7 @@ export class UsersManager extends BaseAPI {
    *   </li>
    * </ul>
    * Link a User Account
+   *
    * @throws {RequiredError}
    */
   async link(
@@ -1167,6 +1130,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Invalidate all remembered browsers across all <a href="https://auth0.com/docs/multifactor-authentication">authentication factors</a> for a user.
    * Invalidate All Remembered Browsers for Multi-factor Authentication
+   *
    * @throws {RequiredError}
    */
   async invalidateRememberBrowser(
@@ -1192,6 +1156,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Assign permissions to a user.
    * Assign Permissions to a User
+   *
    * @throws {RequiredError}
    */
   async assignPermissions(
@@ -1224,6 +1189,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Remove the current <a href="https://auth0.com/docs/multifactor-authentication/guardian">multi-factor authentication</a> recovery code and generate a new one.
    * Generate New Multi-factor Authentication Recovery Code
+   *
    * @throws {RequiredError}
    */
   async regenerateRecoveryCode(
@@ -1249,6 +1215,7 @@ export class UsersManager extends BaseAPI {
   /**
    * Associate roles with a user.
    * Assign roles to a user
+   *
    * @throws {RequiredError}
    */
   async assignRoles(
@@ -1280,6 +1247,7 @@ export class UsersManager extends BaseAPI {
    *
    * Note: <code>connection</code> is required but other parameters such as <code>email</code> and <code>password</code> are dependent upon the type of connection.
    * Create a User
+   *
    * @throws {RequiredError}
    */
   async create(
@@ -1305,6 +1273,7 @@ export class UsersManager extends BaseAPI {
 
   /**
    * Updates all authentication methods by replacing them with the given ones.
+   *
    * @throws {RequiredError}
    */
   async updateAuthenticationMethods(
@@ -1335,18 +1304,13 @@ export class UsersManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const DeleteMultifactorByProviderProviderEnum = {
   duo: 'duo',
   google_authenticator: 'google-authenticator',
 } as const;
 export type DeleteMultifactorByProviderProviderEnum =
   typeof DeleteMultifactorByProviderProviderEnum[keyof typeof DeleteMultifactorByProviderProviderEnum];
-/**
- * @export
- */
+
 export const DeleteUserIdentityByUserIdProviderEnum = {
   ad: 'ad',
   adfs: 'adfs',
@@ -1412,9 +1376,7 @@ export const DeleteUserIdentityByUserIdProviderEnum = {
 } as const;
 export type DeleteUserIdentityByUserIdProviderEnum =
   typeof DeleteUserIdentityByUserIdProviderEnum[keyof typeof DeleteUserIdentityByUserIdProviderEnum];
-/**
- * @export
- */
+
 export const GetUsersSearchEngineEnum = {
   v1: 'v1',
   v2: 'v2',

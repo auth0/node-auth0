@@ -22,12 +22,10 @@ const { BaseAPI } = runtime;
 export interface DeleteActionRequest {
   /**
    * The ID of the action to delete.
-   * @type {string}
    */
   id: string;
   /**
    * Force action deletion detaching bindings
-   * @type {boolean}
    */
   force?: boolean;
 }
@@ -35,7 +33,6 @@ export interface DeleteActionRequest {
 export interface GetActionRequest {
   /**
    * The ID of the action to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -43,12 +40,10 @@ export interface GetActionRequest {
 export interface GetActionVersionRequest {
   /**
    * The ID of the action.
-   * @type {string}
    */
   actionId: string;
   /**
    * The ID of the action version.
-   * @type {string}
    */
   id: string;
 }
@@ -56,17 +51,14 @@ export interface GetActionVersionRequest {
 export interface GetActionVersionsRequest {
   /**
    * The ID of the action.
-   * @type {string}
    */
   actionId: string;
   /**
    * Use this field to request a specific page of the list results.
-   * @type {number}
    */
   page?: number;
   /**
    * This field specify the maximum number of results to be returned by the server. 20 by default
-   * @type {number}
    */
   per_page?: number;
 }
@@ -74,32 +66,26 @@ export interface GetActionVersionsRequest {
 export interface GetActionsRequest {
   /**
    * An actions extensibility point.
-   * @type {GetActionsTriggerIdEnum}
    */
   triggerId?: GetActionsTriggerIdEnum;
   /**
    * The name of the action to retrieve.
-   * @type {string}
    */
   actionName?: string;
   /**
    * Optional filter to only retrieve actions that are deployed.
-   * @type {boolean}
    */
   deployed?: boolean;
   /**
    * Use this field to request a specific page of the list results.
-   * @type {number}
    */
   page?: number;
   /**
    * The maximum number of results to be returned by the server in single response. 20 by default
-   * @type {number}
    */
   per_page?: number;
   /**
    * Optional. When true, return only installed actions. When false, return only custom actions. Returns all actions by default.
-   * @type {boolean}
    */
   installed?: boolean;
 }
@@ -107,17 +93,14 @@ export interface GetActionsRequest {
 export interface GetBindingsRequest {
   /**
    * An actions extensibility point.
-   * @type {GetBindingsTriggerIdEnum}
    */
   triggerId: GetBindingsTriggerIdEnum;
   /**
    * Use this field to request a specific page of the list results.
-   * @type {number}
    */
   page?: number;
   /**
    * The maximum number of results to be returned in a single request. 20 by default
-   * @type {number}
    */
   per_page?: number;
 }
@@ -125,7 +108,6 @@ export interface GetBindingsRequest {
 export interface GetExecutionRequest {
   /**
    * The ID of the execution to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -133,7 +115,6 @@ export interface GetExecutionRequest {
 export interface PatchActionOperationRequest {
   /**
    * The id of the action to update.
-   * @type {string}
    */
   id: string;
 }
@@ -141,7 +122,6 @@ export interface PatchActionOperationRequest {
 export interface PatchBindingsOperationRequest {
   /**
    * An actions extensibility point.
-   * @type {PatchBindingsOperationTriggerIdEnum}
    */
   triggerId: PatchBindingsOperationTriggerIdEnum;
 }
@@ -149,7 +129,6 @@ export interface PatchBindingsOperationRequest {
 export interface PostDeployActionRequest {
   /**
    * The ID of an action.
-   * @type {string}
    */
   id: string;
 }
@@ -157,12 +136,10 @@ export interface PostDeployActionRequest {
 export interface PostDeployDraftVersionOperationRequest {
   /**
    * The ID of an action version.
-   * @type {string}
    */
   id: string;
   /**
    * The ID of an action.
-   * @type {string}
    */
   actionId: string;
 }
@@ -170,7 +147,6 @@ export interface PostDeployDraftVersionOperationRequest {
 export interface PostTestActionOperationRequest {
   /**
    * The id of the action to test.
-   * @type {string}
    */
   id: string;
 }
@@ -184,6 +160,7 @@ export class ActionsManager extends BaseAPI {
    * before it can be deleted.
    *
    * Delete an action
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -218,6 +195,7 @@ export class ActionsManager extends BaseAPI {
    * Retrieve an action by its ID.
    *
    * Get an action
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -245,6 +223,7 @@ export class ActionsManager extends BaseAPI {
    * an action is deployed. An action version is immutable, once created.
    *
    * Get a specific version of an action
+   *
    * @throws {RequiredError}
    */
   async getVersion(
@@ -271,6 +250,7 @@ export class ActionsManager extends BaseAPI {
    * an action is deployed. An action version is immutable, once created.
    *
    * Get an action's versions
+   *
    * @throws {RequiredError}
    */
   async getVersions(
@@ -309,6 +289,7 @@ export class ActionsManager extends BaseAPI {
    * Retrieve all actions.
    *
    * Get actions
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -360,6 +341,7 @@ export class ActionsManager extends BaseAPI {
    * reflects the order in which they will be executed during the appropriate flow.
    *
    * Get trigger bindings
+   *
    * @throws {RequiredError}
    */
   async getTriggerBindings(
@@ -399,6 +381,7 @@ export class ActionsManager extends BaseAPI {
    * generated as part of that authentication flow. Executions will only be stored for 10 days after their creation.
    *
    * Get an execution
+   *
    * @throws {RequiredError}
    */
   async getExecution(
@@ -426,6 +409,7 @@ export class ActionsManager extends BaseAPI {
    * can be bound.
    *
    * Get triggers
+   *
    * @throws {RequiredError}
    */
   async getAllTriggers(initOverrides?: InitOverride): Promise<ApiResponse<GetTriggers200Response>> {
@@ -445,6 +429,7 @@ export class ActionsManager extends BaseAPI {
    * any user flows until the action is deployed.
    *
    * Update an action
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -480,6 +465,7 @@ export class ActionsManager extends BaseAPI {
    * provided will determine the order in which they are executed.
    *
    * Update trigger bindings
+   *
    * @throws {RequiredError}
    */
   async updateTriggerBindings(
@@ -514,6 +500,7 @@ export class ActionsManager extends BaseAPI {
    * bound to a trigger before it will be executed as part of a flow.
    *
    * Create an action
+   *
    * @throws {RequiredError}
    */
   async create(
@@ -542,6 +529,7 @@ export class ActionsManager extends BaseAPI {
    * currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately. Otherwise, the action will only be executed as a part of a flow once it is bound to that flow.
    *
    * Deploy an action
+   *
    * @throws {RequiredError}
    */
   async deploy(
@@ -570,6 +558,7 @@ export class ActionsManager extends BaseAPI {
    * system will begin executing the newly-created version immediately.
    *
    * Roll back to a previous action version
+   *
    * @throws {RequiredError}
    */
   async deployVersion(
@@ -602,6 +591,7 @@ export class ActionsManager extends BaseAPI {
    * Test an action. After updating an action, it can be tested prior to being deployed to ensure it behaves as expected.
    *
    * Test an Action
+   *
    * @throws {RequiredError}
    */
   async test(
@@ -632,9 +622,6 @@ export class ActionsManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const GetActionsTriggerIdEnum = {
   post_login: 'post-login',
   credentials_exchange: 'credentials-exchange',
@@ -649,9 +636,7 @@ export const GetActionsTriggerIdEnum = {
 } as const;
 export type GetActionsTriggerIdEnum =
   typeof GetActionsTriggerIdEnum[keyof typeof GetActionsTriggerIdEnum];
-/**
- * @export
- */
+
 export const GetBindingsTriggerIdEnum = {
   post_login: 'post-login',
   credentials_exchange: 'credentials-exchange',
@@ -666,9 +651,7 @@ export const GetBindingsTriggerIdEnum = {
 } as const;
 export type GetBindingsTriggerIdEnum =
   typeof GetBindingsTriggerIdEnum[keyof typeof GetBindingsTriggerIdEnum];
-/**
- * @export
- */
+
 export const PatchBindingsOperationTriggerIdEnum = {
   post_login: 'post-login',
   credentials_exchange: 'credentials-exchange',

@@ -12,7 +12,6 @@ const { BaseAPI } = runtime;
 export interface DeleteResourceServersByIdRequest {
   /**
    * ID or the audience of the resource server to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -20,22 +19,18 @@ export interface DeleteResourceServersByIdRequest {
 export interface GetResourceServersRequest {
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -43,12 +38,10 @@ export interface GetResourceServersRequest {
 export interface GetResourceServersByIdRequest {
   /**
    * ID or audience of the resource server to retrieve.
-   * @type {string}
    */
   id: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -56,7 +49,6 @@ export interface GetResourceServersByIdRequest {
 export interface PatchResourceServersByIdRequest {
   /**
    * ID or audience of the resource server to update.
-   * @type {string}
    */
   id: string;
 }
@@ -68,6 +60,7 @@ export class ResourceServersManager extends BaseAPI {
   /**
    * Delete an existing API (also known as a resource server).
    * Delete a resource server
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -93,6 +86,7 @@ export class ResourceServersManager extends BaseAPI {
   /**
    * Retrieve <a href="https://auth0.com/docs/apis">APIs</a> (also known as resource servers) that you can consume from your authorized applications.
    * Get resource servers
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -133,6 +127,7 @@ export class ResourceServersManager extends BaseAPI {
   /**
    * Retrieve an <a href="https://auth0.com/docs/apis">API</a> (also known as resource server).
    * Get a resource server
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -166,6 +161,7 @@ export class ResourceServersManager extends BaseAPI {
   /**
    * Update an existing API (also known as a resource server).
    * Update a resource server
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -198,6 +194,7 @@ export class ResourceServersManager extends BaseAPI {
   /**
    * Create a new API (also known as a resource server).
    * Create a resource server
+   *
    * @throws {RequiredError}
    */
   async create(

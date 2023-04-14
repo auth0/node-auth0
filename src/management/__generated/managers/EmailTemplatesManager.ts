@@ -11,7 +11,6 @@ const { BaseAPI } = runtime;
 export interface GetEmailTemplatesByTemplateNameRequest {
   /**
    * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
-   * @type {GetEmailTemplatesByTemplateNameTemplateNameEnum}
    */
   templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
 }
@@ -19,7 +18,6 @@ export interface GetEmailTemplatesByTemplateNameRequest {
 export interface PatchEmailTemplatesByTemplateNameRequest {
   /**
    * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
-   * @type {PatchEmailTemplatesByTemplateNameTemplateNameEnum}
    */
   templateName: PatchEmailTemplatesByTemplateNameTemplateNameEnum;
 }
@@ -27,7 +25,6 @@ export interface PatchEmailTemplatesByTemplateNameRequest {
 export interface PutEmailTemplatesByTemplateNameRequest {
   /**
    * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
-   * @type {PutEmailTemplatesByTemplateNameTemplateNameEnum}
    */
   templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
 }
@@ -39,6 +36,7 @@ export class EmailTemplatesManager extends BaseAPI {
   /**
    * Retrieve an email template by pre-defined name. These names are `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, and `user_invitation`. The names `change_password`, and `password_reset` are also supported for legacy scenarios.
    * Get an email template
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -64,6 +62,7 @@ export class EmailTemplatesManager extends BaseAPI {
   /**
    * Modify an email template.
    * Patch an email template
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -96,6 +95,7 @@ export class EmailTemplatesManager extends BaseAPI {
   /**
    * Create an email template.
    * Create an email template
+   *
    * @throws {RequiredError}
    */
   async create(
@@ -122,6 +122,7 @@ export class EmailTemplatesManager extends BaseAPI {
   /**
    * Update an email template.
    * Update an email template
+   *
    * @throws {RequiredError}
    */
   async put(
@@ -152,9 +153,6 @@ export class EmailTemplatesManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
@@ -170,9 +168,7 @@ export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
 } as const;
 export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
   typeof GetEmailTemplatesByTemplateNameTemplateNameEnum[keyof typeof GetEmailTemplatesByTemplateNameTemplateNameEnum];
-/**
- * @export
- */
+
 export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
@@ -188,9 +184,7 @@ export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
 } as const;
 export type PatchEmailTemplatesByTemplateNameTemplateNameEnum =
   typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum[keyof typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum];
-/**
- * @export
- */
+
 export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',

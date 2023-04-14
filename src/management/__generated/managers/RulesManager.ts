@@ -7,7 +7,6 @@ const { BaseAPI } = runtime;
 export interface DeleteRulesByIdRequest {
   /**
    * ID of the rule to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -15,32 +14,26 @@ export interface DeleteRulesByIdRequest {
 export interface GetRulesRequest {
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional filter on whether a rule is enabled (true) or disabled (false).
-   * @type {boolean}
    */
   enabled?: boolean;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -48,17 +41,14 @@ export interface GetRulesRequest {
 export interface GetRulesByIdRequest {
   /**
    * ID of the rule to retrieve.
-   * @type {string}
    */
   id: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -66,7 +56,6 @@ export interface GetRulesByIdRequest {
 export interface PatchRulesByIdRequest {
   /**
    * ID of the rule to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -79,6 +68,7 @@ export class RulesManager extends BaseAPI {
    * Delete a rule.
    *
    * Delete a rule
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -102,6 +92,7 @@ export class RulesManager extends BaseAPI {
    * Retrieve a filtered list of <a href="https://auth0.com/docs/rules">rules</a>. Accepts a list of fields to include or exclude.
    *
    * Get rules
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -151,6 +142,7 @@ export class RulesManager extends BaseAPI {
    * Retrieve <a href="https://auth0.com/docs/rules">rule</a> details. Accepts a list of fields to include or exclude in the result.
    *
    * Get a rule
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -186,6 +178,7 @@ export class RulesManager extends BaseAPI {
    * Update an existing rule.
    *
    * Update a rule
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -218,6 +211,7 @@ export class RulesManager extends BaseAPI {
    * Note: Changing a rule's stage of execution from the default <code>login_success</code> can change the rule's function signature to have user omitted.
    *
    * Create a rule
+   *
    * @throws {RequiredError}
    */
   async create(

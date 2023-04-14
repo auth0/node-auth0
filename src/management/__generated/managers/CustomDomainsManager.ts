@@ -13,7 +13,6 @@ const { BaseAPI } = runtime;
 export interface DeleteCustomDomainsByIdRequest {
   /**
    * ID of the custom domain to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -21,7 +20,6 @@ export interface DeleteCustomDomainsByIdRequest {
 export interface GetCustomDomainsByIdRequest {
   /**
    * ID of the custom domain to retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -29,7 +27,6 @@ export interface GetCustomDomainsByIdRequest {
 export interface PatchCustomDomainsByIdOperationRequest {
   /**
    * The id of the custom domain to update
-   * @type {string}
    */
   id: string;
 }
@@ -37,7 +34,6 @@ export interface PatchCustomDomainsByIdOperationRequest {
 export interface PostVerifyRequest {
   /**
    * ID of the custom domain to verify.
-   * @type {string}
    */
   id: string;
 }
@@ -49,6 +45,7 @@ export class CustomDomainsManager extends BaseAPI {
   /**
    * Delete a custom domain and stop serving requests for it.
    * Delete custom domain configuration
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -74,6 +71,7 @@ export class CustomDomainsManager extends BaseAPI {
   /**
    * Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domains</a>.
    * Get custom domains configurations
+   *
    * @throws {RequiredError}
    */
   async getAll(initOverrides?: InitOverride): Promise<ApiResponse<Array<CustomDomain>>> {
@@ -91,6 +89,7 @@ export class CustomDomainsManager extends BaseAPI {
   /**
    * Retrieve a custom domain configuration and status.
    * Get custom domain configuration
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -141,6 +140,7 @@ export class CustomDomainsManager extends BaseAPI {
    * - Do not use the <code>compatible</code> TLS policy unless you have clients that require TLS 1.0.
    *
    * Update custom domain configuration
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -194,6 +194,7 @@ export class CustomDomainsManager extends BaseAPI {
    * - Do not use the <code>compatible</code> TLS policy unless you have clients that require TLS 1.0.
    *
    * Configure a new custom domain
+   *
    * @throws {RequiredError}
    */
   async create(
@@ -228,6 +229,7 @@ export class CustomDomainsManager extends BaseAPI {
    * <a href="https://auth0.com/docs/custom-domains/self-managed-certificates#step-2-verify-ownership">Learn more</a> about verifying custom domains that use Self Managed certificates.
    *
    * Verify a custom domain
+   *
    * @throws {RequiredError}
    */
   async verify(

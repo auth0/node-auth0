@@ -29,7 +29,6 @@ const { BaseAPI } = runtime;
 export interface DeleteEnrollmentsByIdRequest {
   /**
    * ID of the enrollment to be deleted.
-   * @type {string}
    */
   id: string;
 }
@@ -37,7 +36,6 @@ export interface DeleteEnrollmentsByIdRequest {
 export interface GetEnrollmentsByIdRequest {
   /**
    * ID of the enrollment to be retrieve.
-   * @type {string}
    */
   id: string;
 }
@@ -45,7 +43,6 @@ export interface GetEnrollmentsByIdRequest {
 export interface PutFactorsByNameOperationRequest {
   /**
    * Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
-   * @type {PutFactorsByNameOperationNameEnum}
    */
   name: PutFactorsByNameOperationNameEnum;
 }
@@ -57,6 +54,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Delete an enrollment to allow the user to enroll with multi-factor authentication again.
    * Delete a multi-factor authentication enrollment
+   *
    * @throws {RequiredError}
    */
   async deleteGuardianEnrollment(
@@ -81,6 +79,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Retrieve APNS push notification configuration
+   *
    * @throws {RequiredError}
    */
   async getPushNotificationProviderAPNS(
@@ -102,6 +101,7 @@ export class GuardianManager extends BaseAPI {
    *
    * Note: Phone numbers are partially obfuscated.
    * Retrieve a multi-factor authentication enrollment
+   *
    * @throws {RequiredError}
    */
   async getGuardianEnrollment(
@@ -127,6 +127,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Retrieve phone enrollment and verification templates (subscription required).
    * Retrieve Enrollment and Verification Phone Templates
+   *
    * @throws {RequiredError}
    */
   async getPhoneFactorTemplates(
@@ -148,6 +149,7 @@ export class GuardianManager extends BaseAPI {
    *
    *     A new endpoint is available to retrieve enrollment and verification templates related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_templates'>phone templates</a>). It has the same payload as this one. Please use it instead.
    * Retrieve SMS Enrollment and Verification Templates
+   *
    * @throws {RequiredError}
    */
   async getSmsFactorTemplates(
@@ -167,6 +169,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Retrieve all <a href="https://auth0.com/docs/multifactor-authentication">multi-factor authentication</a> configurations.
    * Retrieve Factors and their Status
+   *
    * @throws {RequiredError}
    */
   async getFactors(initOverrides?: InitOverride): Promise<ApiResponse<Array<Factor>>> {
@@ -183,6 +186,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Retrieve the Enabled Phone Factors
+   *
    * @throws {RequiredError}
    */
   async getPhoneFactorMessageTypes(
@@ -201,6 +205,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Retrieve phone configuration (one of auth0|twilio|phone-message-hook)
+   *
    * @throws {RequiredError}
    */
   async getPhoneFactorSelectedProvider(
@@ -220,6 +225,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio phone provider configuration</a> (subscription required).
    * Retrieve Twilio phone configuration
+   *
    * @throws {RequiredError}
    */
   async getPhoneFactorProviderTwilio(
@@ -238,6 +244,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Retrieve push notification provider
+   *
    * @throws {RequiredError}
    */
   async getPushNotificationSelectedProvider(
@@ -261,6 +268,7 @@ export class GuardianManager extends BaseAPI {
    * Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href="https://auth0.com/docs/mfa/adaptive-mfa">full documentation</a>.
    *
    * Get the Multi-factor Authentication policies
+   *
    * @throws {RequiredError}
    */
   async getPolicies(initOverrides?: InitOverride): Promise<ApiResponse<Array<string>>> {
@@ -278,6 +286,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * A new endpoint is available to retrieve the configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_selected_provider'>phone configuration</a>). It has the same payload as this one. Please use it instead.
    * Retrieve SMS configuration (one of auth0|twilio|phone-message-hook)
+   *
    * @throws {RequiredError}
    */
   async getSmsSelectedProvider(
@@ -299,6 +308,7 @@ export class GuardianManager extends BaseAPI {
    *
    *     A new endpoint is available to retrieve the Twilio configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_twilio'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
    * Retrieve Twilio SMS configuration
+   *
    * @throws {RequiredError}
    */
   async getSmsFactorProviderTwilio(
@@ -318,6 +328,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
    * Retrieve AWS SNS push notification configuration
+   *
    * @throws {RequiredError}
    */
   async getPushNotificationProviderSNS(
@@ -336,6 +347,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Updates APNs provider configuration
+   *
    * @throws {RequiredError}
    */
   async updatePushNotificationProviderAPNS(
@@ -361,6 +373,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Updates FCM provider configuration
+   *
    * @throws {RequiredError}
    */
   async updatePushNotificationProviderFCM(
@@ -387,6 +400,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
    * Update SNS configuration for push notifications
+   *
    * @throws {RequiredError}
    */
   async updatePushNotificationProviderSNS(
@@ -413,6 +427,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Generate an email with a link to start the multi-factor authentication enrollment process (subscription required).
    * Create a multi-factor authentication enrollment ticket
+   *
    * @throws {RequiredError}
    */
   async createEnrollmentTicket(
@@ -438,6 +453,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Updates APNs provider configuration
+   *
    * @throws {RequiredError}
    */
   async setPushNotificationProviderAPNS(
@@ -464,6 +480,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Customize the messages sent to complete phone enrollment and verification (subscription required).
    * Update Enrollment and Verification Phone Templates
+   *
    * @throws {RequiredError}
    */
   async setPhoneFactorTemplates(
@@ -492,6 +509,7 @@ export class GuardianManager extends BaseAPI {
    *
    *     A new endpoint is available to update enrollment and verification templates related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_templates'>phone templates</a>). It has the same payload as this one. Please use it instead.
    * Update SMS Enrollment and Verification Templates
+   *
    * @throws {RequiredError}
    */
   async setSmsFactorTemplates(
@@ -518,6 +536,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Update a multi-factor authentication factor (subscription required).
    * Update a Multi-factor Authentication Factor
+   *
    * @throws {RequiredError}
    */
   async updateFactor(
@@ -549,6 +568,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Updates FCM provider configuration
+   *
    * @throws {RequiredError}
    */
   async setPushNotificationProviderFCM(
@@ -575,6 +595,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Update enabled phone factors for multi-factor authentication
    * Update the Enabled Phone Factors
+   *
    * @throws {RequiredError}
    */
   async updatePhoneFactorMessageTypes(
@@ -600,6 +621,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Update phone configuration (one of auth0|twilio|phone-message-hook)
+   *
    * @throws {RequiredError}
    */
   async updatePhoneFactorSelectedProvider(
@@ -625,6 +647,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Update Push Notification configuration (one of direct|sns|guardian)
+   *
    * @throws {RequiredError}
    */
   async setPushNotificationSelectedProvider(
@@ -656,6 +679,7 @@ export class GuardianManager extends BaseAPI {
    *
    *
    * Set the Multi-factor Authentication policies
+   *
    * @throws {RequiredError}
    */
   async updatePolicies(
@@ -682,6 +706,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * A new endpoint is available to update the configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_selected_provider'>phone configuration</a>). It has the same payload as this one. Please use it instead.
    * Update SMS configuration (one of auth0|twilio|phone-message-hook)
+   *
    * @throws {RequiredError}
    */
   async setSmsSelectedProvider(
@@ -710,6 +735,7 @@ export class GuardianManager extends BaseAPI {
    *
    *     A new endpoint is available to update the Twilio configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_twilio'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
    * Update Twilio SMS configuration
+   *
    * @throws {RequiredError}
    */
   async setSmsFactorProviderTwilio(
@@ -736,6 +762,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
    * Update AWS SNS push notification configuration
+   *
    * @throws {RequiredError}
    */
   async setPushNotificationProviderSNS(
@@ -762,6 +789,7 @@ export class GuardianManager extends BaseAPI {
   /**
    * Configure the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio phone provider configuration</a> (subscription required).
    * Update Twilio phone configuration
+   *
    * @throws {RequiredError}
    */
   async updatePhoneFactorProviderTwilio(
@@ -786,9 +814,6 @@ export class GuardianManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const PutFactorsByNameOperationNameEnum = {
   push_notification: 'push-notification',
   sms: 'sms',

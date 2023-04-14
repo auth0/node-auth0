@@ -11,7 +11,6 @@ const { BaseAPI } = runtime;
 export interface DeleteDeviceCredentialsByIdRequest {
   /**
    * ID of the credential to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -19,42 +18,34 @@ export interface DeleteDeviceCredentialsByIdRequest {
 export interface GetDeviceCredentialsRequest {
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Number of results per page.  There is a maximum of 1000 results allowed from this endpoint.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
   /**
    * user_id of the devices to retrieve.
-   * @type {string}
    */
   user_id?: string;
   /**
    * client_id of the devices to retrieve.
-   * @type {string}
    */
   client_id?: string;
   /**
    * Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested
-   * @type {GetDeviceCredentialsTypeEnum}
    */
   type?: GetDeviceCredentialsTypeEnum;
 }
@@ -66,6 +57,7 @@ export class DeviceCredentialsManager extends BaseAPI {
   /**
    * Delete a device credential.
    * Delete a device credential
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -95,6 +87,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    * Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.
    *
    * Retrieve device credentials
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -155,6 +148,7 @@ export class DeviceCredentialsManager extends BaseAPI {
    * Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.
    *
    * Create a device public key credential
+   *
    * @throws {RequiredError}
    */
   async createPublicKey(
@@ -179,9 +173,6 @@ export class DeviceCredentialsManager extends BaseAPI {
   }
 }
 
-/**
- * @export
- */
 export const GetDeviceCredentialsTypeEnum = {
   public_key: 'public_key',
   refresh_token: 'refresh_token',

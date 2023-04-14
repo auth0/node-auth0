@@ -16,6 +16,7 @@ export class TicketsManager extends BaseAPI {
   /**
    * Create a <a href="https://auth0.com/docs/email/custom#verification-email">ticket to verify a user's email address</a>.
    * Create an email verification ticket
+   *
    * @throws {RequiredError}
    */
   async verifyEmail(
@@ -42,6 +43,7 @@ export class TicketsManager extends BaseAPI {
   /**
    * Create a <a href="https://auth0.com/docs/connections/database/password-change">password change ticket</a> for a user.
    * Create a password change ticket
+   *
    * @throws {RequiredError}
    */
   async changePassword(

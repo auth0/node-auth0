@@ -12,7 +12,6 @@ const { BaseAPI } = runtime;
 export interface DeleteClientGrantsByIdRequest {
   /**
    * ID of the client grant to delete.
-   * @type {string}
    */
   id: string;
 }
@@ -20,27 +19,22 @@ export interface DeleteClientGrantsByIdRequest {
 export interface GetClientGrantsRequest {
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
-   * @type {number}
    */
   per_page?: number;
   /**
    * Page index of the results to return. First page is 0.
-   * @type {number}
    */
   page?: number;
   /**
    * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   * @type {boolean}
    */
   include_totals?: boolean;
   /**
    * Optional filter on audience.
-   * @type {string}
    */
   audience?: string;
   /**
    * Optional filter on client_id.
-   * @type {string}
    */
   client_id?: string;
 }
@@ -48,7 +42,6 @@ export interface GetClientGrantsRequest {
 export interface PatchClientGrantsByIdOperationRequest {
   /**
    * ID of the client grant to update.
-   * @type {string}
    */
   id: string;
 }
@@ -60,6 +53,7 @@ export class ClientGrantsManager extends BaseAPI {
   /**
    * Delete a client grant.
    * Delete client grant
+   *
    * @throws {RequiredError}
    */
   async delete(
@@ -86,6 +80,7 @@ export class ClientGrantsManager extends BaseAPI {
    * Retrieve <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>.
    *
    * Get client grants
+   *
    * @throws {RequiredError}
    */
   async getAll(
@@ -130,6 +125,7 @@ export class ClientGrantsManager extends BaseAPI {
   /**
    * Update a client grant.
    * Update client grant
+   *
    * @throws {RequiredError}
    */
   async update(
@@ -162,6 +158,7 @@ export class ClientGrantsManager extends BaseAPI {
   /**
    * Create a client grant.
    * Create client grant
+   *
    * @throws {RequiredError}
    */
   async create(

@@ -12,7 +12,6 @@ const { BaseAPI } = runtime;
 export interface GetErrorsRequest {
   /**
    * ID of the job.
-   * @type {string}
    */
   id: string;
 }
@@ -20,7 +19,6 @@ export interface GetErrorsRequest {
 export interface GetJobsByIdRequest {
   /**
    * ID of the job.
-   * @type {string}
    */
   id: string;
 }
@@ -28,27 +26,22 @@ export interface GetJobsByIdRequest {
 export interface PostUsersImportsData {
   /**
    *
-   * @type {Blob}
    */
   users: Blob;
   /**
    * connection_id of the connection to which users will be imported.
-   * @type {string}
    */
   connection_id: string;
   /**
    * Whether to update users if they already exist (true) or to ignore them (false).
-   * @type {boolean}
    */
   upsert?: boolean;
   /**
    * Customer-defined ID.
-   * @type {string}
    */
   external_id?: string;
   /**
    * Whether to send a completion email to all tenant owners when the job is finished (true) or not (false).
-   * @type {boolean}
    */
   send_completion_email?: boolean;
 }
@@ -60,6 +53,7 @@ export class JobsManager extends BaseAPI {
   /**
    * Retrieve error details of a failed job.
    * Get job error details
+   *
    * @throws {RequiredError}
    */
   async getErrors(
@@ -82,6 +76,7 @@ export class JobsManager extends BaseAPI {
   /**
    * Retrieves a job. Useful to check its status.
    * Get a job
+   *
    * @throws {RequiredError}
    */
   async get(
@@ -104,6 +99,7 @@ export class JobsManager extends BaseAPI {
   /**
    * Export all users to a file via a long-running job.
    * Create export users job
+   *
    * @throws {RequiredError}
    */
   async exportUsers(
@@ -130,6 +126,7 @@ export class JobsManager extends BaseAPI {
   /**
    * Import users from a <a href="https://manage.local.dev.auth0.com/docs/users/references/bulk-import-database-schema-examples">formatted file</a> into a connection via a long-running job.
    * Create import users job
+   *
    * @throws {RequiredError}
    */
   async importUsers(
@@ -137,13 +134,11 @@ export class JobsManager extends BaseAPI {
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
     const consumes: runtime.Consume[] = [{ contentType: 'multipart/form-data' }];
-    // @ts-ignore: canConsumeForm may be unused
-    const canConsumeForm = runtime.canConsumeForm(consumes);
 
     let formParams: { append(param: string, value: any): any };
     let useForm = false;
     // use FormData to transmit files using content-type "multipart/form-data"
-    useForm = canConsumeForm;
+    useForm = runtime.canConsumeForm(consumes);
     if (useForm) {
       formParams = new FormData();
     } else {
@@ -187,6 +182,7 @@ export class JobsManager extends BaseAPI {
    *
    * Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
    * Send an email address verification email
+   *
    * @throws {RequiredError}
    */
   async verifyEmail(

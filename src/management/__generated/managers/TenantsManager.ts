@@ -7,12 +7,10 @@ const { BaseAPI } = runtime;
 export interface TenantSettingsRouteRequest {
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   * @type {string}
    */
   fields?: string;
   /**
    * Whether specified fields are to be included (true) or excluded (false).
-   * @type {boolean}
    */
   include_fields?: boolean;
 }
@@ -24,6 +22,7 @@ export class TenantsManager extends BaseAPI {
   /**
    * Update settings for a tenant.
    * Update tenant settings
+   *
    * @throws {RequiredError}
    */
   async updateSettings(
@@ -50,6 +49,7 @@ export class TenantsManager extends BaseAPI {
   /**
    * Retrieve tenant settings. A list of fields to include or exclude may also be specified.
    * Get tenant settings
+   *
    * @throws {RequiredError}
    */
   async getSettings(
