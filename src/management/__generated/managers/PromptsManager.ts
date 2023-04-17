@@ -163,7 +163,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   common: 'common',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
-  typeof GetCustomTextByLanguagePromptEnum[keyof typeof GetCustomTextByLanguagePromptEnum];
+  (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
 
 export const GetCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
@@ -211,7 +211,7 @@ export const GetCustomTextByLanguageLanguageEnum = {
   zh_TW: 'zh-TW',
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
-  typeof GetCustomTextByLanguageLanguageEnum[keyof typeof GetCustomTextByLanguageLanguageEnum];
+  (typeof GetCustomTextByLanguageLanguageEnum)[keyof typeof GetCustomTextByLanguageLanguageEnum];
 
 export const PutCustomTextByLanguagePromptEnum = {
   login: 'login',
@@ -243,7 +243,7 @@ export const PutCustomTextByLanguagePromptEnum = {
   common: 'common',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
-  typeof PutCustomTextByLanguagePromptEnum[keyof typeof PutCustomTextByLanguagePromptEnum];
+  (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
 
 export const PutCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
@@ -291,4 +291,4 @@ export const PutCustomTextByLanguageLanguageEnum = {
   zh_TW: 'zh-TW',
 } as const;
 export type PutCustomTextByLanguageLanguageEnum =
-  typeof PutCustomTextByLanguageLanguageEnum[keyof typeof PutCustomTextByLanguageLanguageEnum];
+  (typeof PutCustomTextByLanguageLanguageEnum)[keyof typeof PutCustomTextByLanguageLanguageEnum];

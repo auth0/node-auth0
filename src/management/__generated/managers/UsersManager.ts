@@ -1309,7 +1309,7 @@ export const DeleteMultifactorByProviderProviderEnum = {
   google_authenticator: 'google-authenticator',
 } as const;
 export type DeleteMultifactorByProviderProviderEnum =
-  typeof DeleteMultifactorByProviderProviderEnum[keyof typeof DeleteMultifactorByProviderProviderEnum];
+  (typeof DeleteMultifactorByProviderProviderEnum)[keyof typeof DeleteMultifactorByProviderProviderEnum];
 
 export const DeleteUserIdentityByUserIdProviderEnum = {
   ad: 'ad',
@@ -1375,7 +1375,7 @@ export const DeleteUserIdentityByUserIdProviderEnum = {
   yandex: 'yandex',
 } as const;
 export type DeleteUserIdentityByUserIdProviderEnum =
-  typeof DeleteUserIdentityByUserIdProviderEnum[keyof typeof DeleteUserIdentityByUserIdProviderEnum];
+  (typeof DeleteUserIdentityByUserIdProviderEnum)[keyof typeof DeleteUserIdentityByUserIdProviderEnum];
 
 export const GetUsersSearchEngineEnum = {
   v1: 'v1',
@@ -1383,4 +1383,4 @@ export const GetUsersSearchEngineEnum = {
   v3: 'v3',
 } as const;
 export type GetUsersSearchEngineEnum =
-  typeof GetUsersSearchEngineEnum[keyof typeof GetUsersSearchEngineEnum];
+  (typeof GetUsersSearchEngineEnum)[keyof typeof GetUsersSearchEngineEnum];

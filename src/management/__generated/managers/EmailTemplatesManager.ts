@@ -167,7 +167,7 @@ export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
   password_reset: 'password_reset',
 } as const;
 export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
-  typeof GetEmailTemplatesByTemplateNameTemplateNameEnum[keyof typeof GetEmailTemplatesByTemplateNameTemplateNameEnum];
+  (typeof GetEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof GetEmailTemplatesByTemplateNameTemplateNameEnum];
 
 export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
@@ -183,7 +183,7 @@ export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
   password_reset: 'password_reset',
 } as const;
 export type PatchEmailTemplatesByTemplateNameTemplateNameEnum =
-  typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum[keyof typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum];
+  (typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum];
 
 export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
@@ -199,4 +199,4 @@ export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   password_reset: 'password_reset',
 } as const;
 export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
-  typeof PutEmailTemplatesByTemplateNameTemplateNameEnum[keyof typeof PutEmailTemplatesByTemplateNameTemplateNameEnum];
+  (typeof PutEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PutEmailTemplatesByTemplateNameTemplateNameEnum];

@@ -181,7 +181,7 @@ export const ClientTokenEndpointAuthMethodEnum = {
   client_secret_basic: 'client_secret_basic',
 } as const;
 export type ClientTokenEndpointAuthMethodEnum =
-  typeof ClientTokenEndpointAuthMethodEnum[keyof typeof ClientTokenEndpointAuthMethodEnum];
+  (typeof ClientTokenEndpointAuthMethodEnum)[keyof typeof ClientTokenEndpointAuthMethodEnum];
 
 export const ClientOrganizationUsageEnum = {
   deny: 'deny',
@@ -189,7 +189,7 @@ export const ClientOrganizationUsageEnum = {
   require: 'require',
 } as const;
 export type ClientOrganizationUsageEnum =
-  typeof ClientOrganizationUsageEnum[keyof typeof ClientOrganizationUsageEnum];
+  (typeof ClientOrganizationUsageEnum)[keyof typeof ClientOrganizationUsageEnum];
 
 export const ClientOrganizationRequireBehaviorEnum = {
   no_prompt: 'no_prompt',
@@ -197,7 +197,7 @@ export const ClientOrganizationRequireBehaviorEnum = {
   post_login_prompt: 'post_login_prompt',
 } as const;
 export type ClientOrganizationRequireBehaviorEnum =
-  typeof ClientOrganizationRequireBehaviorEnum[keyof typeof ClientOrganizationRequireBehaviorEnum];
+  (typeof ClientOrganizationRequireBehaviorEnum)[keyof typeof ClientOrganizationRequireBehaviorEnum];
 
 /**
  * Addons enabled for this client and their associated configurations.
@@ -954,7 +954,7 @@ export const ClientCreateTokenEndpointAuthMethodEnum = {
   client_secret_basic: 'client_secret_basic',
 } as const;
 export type ClientCreateTokenEndpointAuthMethodEnum =
-  typeof ClientCreateTokenEndpointAuthMethodEnum[keyof typeof ClientCreateTokenEndpointAuthMethodEnum];
+  (typeof ClientCreateTokenEndpointAuthMethodEnum)[keyof typeof ClientCreateTokenEndpointAuthMethodEnum];
 
 export const ClientCreateAppTypeEnum = {
   native: 'native',
@@ -981,7 +981,7 @@ export const ClientCreateAppTypeEnum = {
   sso_integration: 'sso_integration',
 } as const;
 export type ClientCreateAppTypeEnum =
-  typeof ClientCreateAppTypeEnum[keyof typeof ClientCreateAppTypeEnum];
+  (typeof ClientCreateAppTypeEnum)[keyof typeof ClientCreateAppTypeEnum];
 
 export const ClientCreateOrganizationUsageEnum = {
   deny: 'deny',
@@ -989,7 +989,7 @@ export const ClientCreateOrganizationUsageEnum = {
   require: 'require',
 } as const;
 export type ClientCreateOrganizationUsageEnum =
-  typeof ClientCreateOrganizationUsageEnum[keyof typeof ClientCreateOrganizationUsageEnum];
+  (typeof ClientCreateOrganizationUsageEnum)[keyof typeof ClientCreateOrganizationUsageEnum];
 
 export const ClientCreateOrganizationRequireBehaviorEnum = {
   no_prompt: 'no_prompt',
@@ -997,7 +997,7 @@ export const ClientCreateOrganizationRequireBehaviorEnum = {
   post_login_prompt: 'post_login_prompt',
 } as const;
 export type ClientCreateOrganizationRequireBehaviorEnum =
-  typeof ClientCreateOrganizationRequireBehaviorEnum[keyof typeof ClientCreateOrganizationRequireBehaviorEnum];
+  (typeof ClientCreateOrganizationRequireBehaviorEnum)[keyof typeof ClientCreateOrganizationRequireBehaviorEnum];
 
 /**
  * Encryption used for WsFed responses with this client.
@@ -1045,7 +1045,7 @@ export const ClientCreateJwtConfigurationAlgEnum = {
   RS256: 'RS256',
 } as const;
 export type ClientCreateJwtConfigurationAlgEnum =
-  typeof ClientCreateJwtConfigurationAlgEnum[keyof typeof ClientCreateJwtConfigurationAlgEnum];
+  (typeof ClientCreateJwtConfigurationAlgEnum)[keyof typeof ClientCreateJwtConfigurationAlgEnum];
 
 /**
  * Additional configuration for native mobile apps.
@@ -1194,7 +1194,7 @@ export const ClientJwtConfigurationAlgEnum = {
   RS256: 'RS256',
 } as const;
 export type ClientJwtConfigurationAlgEnum =
-  typeof ClientJwtConfigurationAlgEnum[keyof typeof ClientJwtConfigurationAlgEnum];
+  (typeof ClientJwtConfigurationAlgEnum)[keyof typeof ClientJwtConfigurationAlgEnum];
 
 /**
  * Additional configuration for native mobile apps.
@@ -1324,14 +1324,14 @@ export const ClientRefreshTokenRotationTypeEnum = {
   non_rotating: 'non-rotating',
 } as const;
 export type ClientRefreshTokenRotationTypeEnum =
-  typeof ClientRefreshTokenRotationTypeEnum[keyof typeof ClientRefreshTokenRotationTypeEnum];
+  (typeof ClientRefreshTokenRotationTypeEnum)[keyof typeof ClientRefreshTokenRotationTypeEnum];
 
 export const ClientRefreshTokenExpirationTypeEnum = {
   expiring: 'expiring',
   non_expiring: 'non-expiring',
 } as const;
 export type ClientRefreshTokenExpirationTypeEnum =
-  typeof ClientRefreshTokenExpirationTypeEnum[keyof typeof ClientRefreshTokenExpirationTypeEnum];
+  (typeof ClientRefreshTokenExpirationTypeEnum)[keyof typeof ClientRefreshTokenExpirationTypeEnum];
 
 /**
  *
@@ -1516,7 +1516,7 @@ export const ClientUpdateTokenEndpointAuthMethodEnum = {
   null: 'null',
 } as const;
 export type ClientUpdateTokenEndpointAuthMethodEnum =
-  typeof ClientUpdateTokenEndpointAuthMethodEnum[keyof typeof ClientUpdateTokenEndpointAuthMethodEnum];
+  (typeof ClientUpdateTokenEndpointAuthMethodEnum)[keyof typeof ClientUpdateTokenEndpointAuthMethodEnum];
 
 export const ClientUpdateAppTypeEnum = {
   native: 'native',
@@ -1543,7 +1543,7 @@ export const ClientUpdateAppTypeEnum = {
   sso_integration: 'sso_integration',
 } as const;
 export type ClientUpdateAppTypeEnum =
-  typeof ClientUpdateAppTypeEnum[keyof typeof ClientUpdateAppTypeEnum];
+  (typeof ClientUpdateAppTypeEnum)[keyof typeof ClientUpdateAppTypeEnum];
 
 export const ClientUpdateOrganizationUsageEnum = {
   deny: 'deny',
@@ -1551,7 +1551,7 @@ export const ClientUpdateOrganizationUsageEnum = {
   require: 'require',
 } as const;
 export type ClientUpdateOrganizationUsageEnum =
-  typeof ClientUpdateOrganizationUsageEnum[keyof typeof ClientUpdateOrganizationUsageEnum];
+  (typeof ClientUpdateOrganizationUsageEnum)[keyof typeof ClientUpdateOrganizationUsageEnum];
 
 export const ClientUpdateOrganizationRequireBehaviorEnum = {
   no_prompt: 'no_prompt',
@@ -1559,7 +1559,7 @@ export const ClientUpdateOrganizationRequireBehaviorEnum = {
   post_login_prompt: 'post_login_prompt',
 } as const;
 export type ClientUpdateOrganizationRequireBehaviorEnum =
-  typeof ClientUpdateOrganizationRequireBehaviorEnum[keyof typeof ClientUpdateOrganizationRequireBehaviorEnum];
+  (typeof ClientUpdateOrganizationRequireBehaviorEnum)[keyof typeof ClientUpdateOrganizationRequireBehaviorEnum];
 
 /**
  * Addons enabled for this client and their associated configurations.
@@ -1707,7 +1707,7 @@ export const ClientUpdateJwtConfigurationAlgEnum = {
   RS256: 'RS256',
 } as const;
 export type ClientUpdateJwtConfigurationAlgEnum =
-  typeof ClientUpdateJwtConfigurationAlgEnum[keyof typeof ClientUpdateJwtConfigurationAlgEnum];
+  (typeof ClientUpdateJwtConfigurationAlgEnum)[keyof typeof ClientUpdateJwtConfigurationAlgEnum];
 
 /**
  * Configuration related to native mobile apps
@@ -1909,7 +1909,7 @@ export const ConnectionCreateStrategyEnum = {
   yandex: 'yandex',
 } as const;
 export type ConnectionCreateStrategyEnum =
-  typeof ConnectionCreateStrategyEnum[keyof typeof ConnectionCreateStrategyEnum];
+  (typeof ConnectionCreateStrategyEnum)[keyof typeof ConnectionCreateStrategyEnum];
 
 /**
  * The connection's options (depend on the connection strategy)
@@ -2008,14 +2008,14 @@ export const ConnectionCreateOptionsPasswordPolicyEnum = {
   null: 'null',
 } as const;
 export type ConnectionCreateOptionsPasswordPolicyEnum =
-  typeof ConnectionCreateOptionsPasswordPolicyEnum[keyof typeof ConnectionCreateOptionsPasswordPolicyEnum];
+  (typeof ConnectionCreateOptionsPasswordPolicyEnum)[keyof typeof ConnectionCreateOptionsPasswordPolicyEnum];
 
 export const ConnectionCreateOptionsSetUserRootAttributesEnum = {
   each_login: 'on_each_login',
   first_login: 'on_first_login',
 } as const;
 export type ConnectionCreateOptionsSetUserRootAttributesEnum =
-  typeof ConnectionCreateOptionsSetUserRootAttributesEnum[keyof typeof ConnectionCreateOptionsSetUserRootAttributesEnum];
+  (typeof ConnectionCreateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionCreateOptionsSetUserRootAttributesEnum];
 
 /**
  * A map of scripts used to integrate with a custom database.
@@ -2260,14 +2260,14 @@ export const ConnectionUpdateOptionsPasswordPolicyEnum = {
   null: 'null',
 } as const;
 export type ConnectionUpdateOptionsPasswordPolicyEnum =
-  typeof ConnectionUpdateOptionsPasswordPolicyEnum[keyof typeof ConnectionUpdateOptionsPasswordPolicyEnum];
+  (typeof ConnectionUpdateOptionsPasswordPolicyEnum)[keyof typeof ConnectionUpdateOptionsPasswordPolicyEnum];
 
 export const ConnectionUpdateOptionsSetUserRootAttributesEnum = {
   each_login: 'on_each_login',
   first_login: 'on_first_login',
 } as const;
 export type ConnectionUpdateOptionsSetUserRootAttributesEnum =
-  typeof ConnectionUpdateOptionsSetUserRootAttributesEnum[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
+  (typeof ConnectionUpdateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
 
 /**
  *
@@ -2325,13 +2325,13 @@ export const CustomDomainStatusEnum = {
   ready: 'ready',
 } as const;
 export type CustomDomainStatusEnum =
-  typeof CustomDomainStatusEnum[keyof typeof CustomDomainStatusEnum];
+  (typeof CustomDomainStatusEnum)[keyof typeof CustomDomainStatusEnum];
 
 export const CustomDomainTypeEnum = {
   auth0_managed_certs: 'auth0_managed_certs',
   self_managed_certs: 'self_managed_certs',
 } as const;
-export type CustomDomainTypeEnum = typeof CustomDomainTypeEnum[keyof typeof CustomDomainTypeEnum];
+export type CustomDomainTypeEnum = (typeof CustomDomainTypeEnum)[keyof typeof CustomDomainTypeEnum];
 
 /**
  *
@@ -2458,7 +2458,7 @@ export const DeviceCredentialTypeEnum = {
   rotating_refresh_token: 'rotating_refresh_token',
 } as const;
 export type DeviceCredentialTypeEnum =
-  typeof DeviceCredentialTypeEnum[keyof typeof DeviceCredentialTypeEnum];
+  (typeof DeviceCredentialTypeEnum)[keyof typeof DeviceCredentialTypeEnum];
 
 /**
  *
@@ -2495,7 +2495,7 @@ export const DeviceCredentialCreateTypeEnum = {
   public_key: 'public_key',
 } as const;
 export type DeviceCredentialCreateTypeEnum =
-  typeof DeviceCredentialCreateTypeEnum[keyof typeof DeviceCredentialCreateTypeEnum];
+  (typeof DeviceCredentialCreateTypeEnum)[keyof typeof DeviceCredentialCreateTypeEnum];
 
 /**
  *
@@ -2630,7 +2630,7 @@ export const EmailTemplateUpdateTemplateEnum = {
   password_reset: 'password_reset',
 } as const;
 export type EmailTemplateUpdateTemplateEnum =
-  typeof EmailTemplateUpdateTemplateEnum[keyof typeof EmailTemplateUpdateTemplateEnum];
+  (typeof EmailTemplateUpdateTemplateEnum)[keyof typeof EmailTemplateUpdateTemplateEnum];
 
 /**
  *
@@ -2673,7 +2673,7 @@ export const EnrollmentStatusEnum = {
   pending: 'pending',
   confirmed: 'confirmed',
 } as const;
-export type EnrollmentStatusEnum = typeof EnrollmentStatusEnum[keyof typeof EnrollmentStatusEnum];
+export type EnrollmentStatusEnum = (typeof EnrollmentStatusEnum)[keyof typeof EnrollmentStatusEnum];
 
 /**
  *
@@ -2734,7 +2734,7 @@ export const FactorNameEnum = {
   webauthn_platform: 'webauthn-platform',
   recovery_code: 'recovery-code',
 } as const;
-export type FactorNameEnum = typeof FactorNameEnum[keyof typeof FactorNameEnum];
+export type FactorNameEnum = (typeof FactorNameEnum)[keyof typeof FactorNameEnum];
 
 /**
  *
@@ -2847,7 +2847,7 @@ export const GetActionVersions200ResponseVersionsInnerStatusEnum = {
   failed: 'failed',
 } as const;
 export type GetActionVersions200ResponseVersionsInnerStatusEnum =
-  typeof GetActionVersions200ResponseVersionsInnerStatusEnum[keyof typeof GetActionVersions200ResponseVersionsInnerStatusEnum];
+  (typeof GetActionVersions200ResponseVersionsInnerStatusEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerStatusEnum];
 
 /**
  * The action to which this verison belongs.
@@ -2937,7 +2937,7 @@ export const GetActionVersions200ResponseVersionsInnerActionStatusEnum = {
   failed: 'failed',
 } as const;
 export type GetActionVersions200ResponseVersionsInnerActionStatusEnum =
-  typeof GetActionVersions200ResponseVersionsInnerActionStatusEnum[keyof typeof GetActionVersions200ResponseVersionsInnerActionStatusEnum];
+  (typeof GetActionVersions200ResponseVersionsInnerActionStatusEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerActionStatusEnum];
 
 /**
  * Error is a generic error with a human readable id which should be easily referenced in support tickets.
@@ -3066,7 +3066,7 @@ export const GetActions200ResponseActionsInnerStatusEnum = {
   failed: 'failed',
 } as const;
 export type GetActions200ResponseActionsInnerStatusEnum =
-  typeof GetActions200ResponseActionsInnerStatusEnum[keyof typeof GetActions200ResponseActionsInnerStatusEnum];
+  (typeof GetActions200ResponseActionsInnerStatusEnum)[keyof typeof GetActions200ResponseActionsInnerStatusEnum];
 
 /**
  * Dependency is an npm module. These values are used to produce an immutable artifact, which manifests as a layer_id.
@@ -3164,7 +3164,7 @@ export const GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum = {
   sms_provider: 'sms_provider',
 } as const;
 export type GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum =
-  typeof GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum[keyof typeof GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum];
+  (typeof GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum)[keyof typeof GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum];
 
 /**
  *
@@ -3247,7 +3247,7 @@ export const GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredS
     STRING: 'STRING',
   } as const;
 export type GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum =
-  typeof GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum[keyof typeof GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum];
+  (typeof GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum)[keyof typeof GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum];
 
 /**
  *
@@ -3343,7 +3343,7 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
 } as const;
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum =
-  typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum];
+  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum];
 
 /**
  *
@@ -3375,7 +3375,7 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTr
     iga_fulfillment_execution: 'iga-fulfillment-execution',
   } as const;
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
-  typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum];
+  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum];
 
 /**
  *
@@ -3506,7 +3506,7 @@ export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum
   guardian: 'guardian',
 } as const;
 export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum =
-  typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum];
+  (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum];
 
 /**
  *
@@ -3528,7 +3528,7 @@ export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenti
     voice: 'voice',
   } as const;
 export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum =
-  typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum];
+  (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum];
 
 /**
  *
@@ -3609,7 +3609,7 @@ export const GetAuthenticationMethods200ResponseOneOfInnerTypeEnum = {
   webauthn_platform: 'webauthn-platform',
 } as const;
 export type GetAuthenticationMethods200ResponseOneOfInnerTypeEnum =
-  typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum[keyof typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum];
+  (typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum];
 
 /**
  *
@@ -3683,7 +3683,7 @@ export const GetBindings200ResponseBindingsInnerTriggerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
 } as const;
 export type GetBindings200ResponseBindingsInnerTriggerIdEnum =
-  typeof GetBindings200ResponseBindingsInnerTriggerIdEnum[keyof typeof GetBindings200ResponseBindingsInnerTriggerIdEnum];
+  (typeof GetBindings200ResponseBindingsInnerTriggerIdEnum)[keyof typeof GetBindings200ResponseBindingsInnerTriggerIdEnum];
 
 /**
  *
@@ -3863,7 +3863,7 @@ export const GetEmailTemplatesByTemplateName200ResponseTemplateEnum = {
   password_reset: 'password_reset',
 } as const;
 export type GetEmailTemplatesByTemplateName200ResponseTemplateEnum =
-  typeof GetEmailTemplatesByTemplateName200ResponseTemplateEnum[keyof typeof GetEmailTemplatesByTemplateName200ResponseTemplateEnum];
+  (typeof GetEmailTemplatesByTemplateName200ResponseTemplateEnum)[keyof typeof GetEmailTemplatesByTemplateName200ResponseTemplateEnum];
 
 /**
  *
@@ -4007,7 +4007,7 @@ export const GetExecution200ResponseTriggerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
 } as const;
 export type GetExecution200ResponseTriggerIdEnum =
-  typeof GetExecution200ResponseTriggerIdEnum[keyof typeof GetExecution200ResponseTriggerIdEnum];
+  (typeof GetExecution200ResponseTriggerIdEnum)[keyof typeof GetExecution200ResponseTriggerIdEnum];
 
 export const GetExecution200ResponseStatusEnum = {
   unspecified: 'unspecified',
@@ -4018,7 +4018,7 @@ export const GetExecution200ResponseStatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetExecution200ResponseStatusEnum =
-  typeof GetExecution200ResponseStatusEnum[keyof typeof GetExecution200ResponseStatusEnum];
+  (typeof GetExecution200ResponseStatusEnum)[keyof typeof GetExecution200ResponseStatusEnum];
 
 /**
  * Captures the results of a single action being executed.
@@ -4292,13 +4292,13 @@ export const GetLogStreams200ResponseInnerOneOfStatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOfStatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOfStatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOfStatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOfStatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfStatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOfTypeEnum = {
   http: 'http',
 } as const;
 export type GetLogStreams200ResponseInnerOneOfTypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOfTypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOfTypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOfTypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfTypeEnum];
 
 /**
  *
@@ -4338,13 +4338,13 @@ export const GetLogStreams200ResponseInnerOneOf1StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf1StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf1StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf1StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf1StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf1StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf1TypeEnum = {
   eventbridge: 'eventbridge',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf1TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf1TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf1TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf1TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf1TypeEnum];
 
 /**
  *
@@ -4393,7 +4393,7 @@ export const GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum = {
   us_west_2: 'us-west-2',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum =
-  typeof GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum[keyof typeof GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum];
 
 /**
  *
@@ -4433,13 +4433,13 @@ export const GetLogStreams200ResponseInnerOneOf2StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf2StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf2StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf2StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf2StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf2StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf2TypeEnum = {
   eventgrid: 'eventgrid',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf2TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf2TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf2TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf2TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf2TypeEnum];
 
 /**
  *
@@ -4503,7 +4503,7 @@ export const GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum = {
   westus2: 'westus2',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum =
-  typeof GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum[keyof typeof GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum];
 
 /**
  *
@@ -4543,13 +4543,13 @@ export const GetLogStreams200ResponseInnerOneOf3StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf3StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf3StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf3StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf3StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf3StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf3TypeEnum = {
   datadog: 'datadog',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf3TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf3TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf3TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf3TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf3TypeEnum];
 
 /**
  *
@@ -4574,7 +4574,7 @@ export const GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum = {
   us5: 'us5',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum =
-  typeof GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum[keyof typeof GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum];
 
 /**
  *
@@ -4614,13 +4614,13 @@ export const GetLogStreams200ResponseInnerOneOf4StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf4StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf4StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf4StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf4StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf4StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf4TypeEnum = {
   splunk: 'splunk',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf4TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf4TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf4TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf4TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf4TypeEnum];
 
 /**
  *
@@ -4685,13 +4685,13 @@ export const GetLogStreams200ResponseInnerOneOf5StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf5StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf5StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf5StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf5StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf5StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf5TypeEnum = {
   sumo: 'sumo',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf5TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf5TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf5TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf5TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf5TypeEnum];
 
 /**
  *
@@ -4741,13 +4741,13 @@ export const GetLogStreams200ResponseInnerOneOf6StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf6StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf6StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf6StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf6StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf6StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf6TypeEnum = {
   segment: 'segment',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf6TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf6TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf6TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf6TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf6TypeEnum];
 
 /**
  *
@@ -4797,13 +4797,13 @@ export const GetLogStreams200ResponseInnerOneOf7StatusEnum = {
   suspended: 'suspended',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf7StatusEnum =
-  typeof GetLogStreams200ResponseInnerOneOf7StatusEnum[keyof typeof GetLogStreams200ResponseInnerOneOf7StatusEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf7StatusEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf7StatusEnum];
 
 export const GetLogStreams200ResponseInnerOneOf7TypeEnum = {
   mixpanel: 'mixpanel',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf7TypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOf7TypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOf7TypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf7TypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf7TypeEnum];
 
 /**
  *
@@ -4836,7 +4836,7 @@ export const GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum = {
   eu: 'eu',
 } as const;
 export type GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum =
-  typeof GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum[keyof typeof GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum];
+  (typeof GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum)[keyof typeof GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum];
 
 /**
  *
@@ -4858,7 +4858,7 @@ export const GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum = {
   category: 'category',
 } as const;
 export type GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum =
-  typeof GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum[keyof typeof GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum];
+  (typeof GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum];
 
 export const GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum = {
   auth_ancillary_fail: 'auth.ancillary.fail',
@@ -4883,7 +4883,7 @@ export const GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum = {
   other: 'other',
 } as const;
 export type GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum =
-  typeof GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum[keyof typeof GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum];
+  (typeof GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum];
 
 /**
  *
@@ -4922,7 +4922,7 @@ export const GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum = {
   JSONOBJECT: 'JSONOBJECT',
 } as const;
 export type GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum =
-  typeof GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum[keyof typeof GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum];
+  (typeof GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum];
 
 /**
  *
@@ -5039,7 +5039,7 @@ export const GetMessageTypes200ResponseMessageTypesEnum = {
   voice: 'voice',
 } as const;
 export type GetMessageTypes200ResponseMessageTypesEnum =
-  typeof GetMessageTypes200ResponseMessageTypesEnum[keyof typeof GetMessageTypes200ResponseMessageTypesEnum];
+  (typeof GetMessageTypes200ResponseMessageTypesEnum)[keyof typeof GetMessageTypes200ResponseMessageTypesEnum];
 
 /**
  *
@@ -5241,7 +5241,7 @@ export const GetPhoneProviders200ResponseProviderEnum = {
   phone_message_hook: 'phone-message-hook',
 } as const;
 export type GetPhoneProviders200ResponseProviderEnum =
-  typeof GetPhoneProviders200ResponseProviderEnum[keyof typeof GetPhoneProviders200ResponseProviderEnum];
+  (typeof GetPhoneProviders200ResponseProviderEnum)[keyof typeof GetPhoneProviders200ResponseProviderEnum];
 
 /**
  *
@@ -5258,7 +5258,7 @@ export const GetPnProviders200ResponseProviderEnum = {
   direct: 'direct',
 } as const;
 export type GetPnProviders200ResponseProviderEnum =
-  typeof GetPnProviders200ResponseProviderEnum[keyof typeof GetPnProviders200ResponseProviderEnum];
+  (typeof GetPnProviders200ResponseProviderEnum)[keyof typeof GetPnProviders200ResponseProviderEnum];
 
 /**
  *
@@ -5727,7 +5727,7 @@ export const HookCreateTriggerIdEnum = {
   send_phone_message: 'send-phone-message',
 } as const;
 export type HookCreateTriggerIdEnum =
-  typeof HookCreateTriggerIdEnum[keyof typeof HookCreateTriggerIdEnum];
+  (typeof HookCreateTriggerIdEnum)[keyof typeof HookCreateTriggerIdEnum];
 
 /**
  *
@@ -5804,7 +5804,7 @@ export const JobFormatEnum = {
   json: 'json',
   csv: 'csv',
 } as const;
-export type JobFormatEnum = typeof JobFormatEnum[keyof typeof JobFormatEnum];
+export type JobFormatEnum = (typeof JobFormatEnum)[keyof typeof JobFormatEnum];
 
 /**
  *
@@ -6029,7 +6029,7 @@ export const PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredA
     sms: 'sms',
   } as const;
 export type PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredAuthenticationMethodEnum =
-  typeof PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredAuthenticationMethodEnum[keyof typeof PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredAuthenticationMethodEnum];
+  (typeof PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredAuthenticationMethodEnum)[keyof typeof PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredAuthenticationMethodEnum];
 
 /**
  *
@@ -6093,7 +6093,7 @@ export const PatchBindingsRequestBindingsInnerOneOfRefTypeEnum = {
   action_name: 'action_name',
 } as const;
 export type PatchBindingsRequestBindingsInnerOneOfRefTypeEnum =
-  typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum[keyof typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum];
+  (typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum)[keyof typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum];
 
 /**
  * Branding settings
@@ -6174,7 +6174,7 @@ export const PatchBreachedPasswordDetectionRequestShieldsEnum = {
   admin_notification: 'admin_notification',
 } as const;
 export type PatchBreachedPasswordDetectionRequestShieldsEnum =
-  typeof PatchBreachedPasswordDetectionRequestShieldsEnum[keyof typeof PatchBreachedPasswordDetectionRequestShieldsEnum];
+  (typeof PatchBreachedPasswordDetectionRequestShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestShieldsEnum];
 
 export const PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum = {
   immediately: 'immediately',
@@ -6183,14 +6183,14 @@ export const PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum
   monthly: 'monthly',
 } as const;
 export type PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum =
-  typeof PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum[keyof typeof PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum];
+  (typeof PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum)[keyof typeof PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum];
 
 export const PatchBreachedPasswordDetectionRequestMethodEnum = {
   standard: 'standard',
   enhanced: 'enhanced',
 } as const;
 export type PatchBreachedPasswordDetectionRequestMethodEnum =
-  typeof PatchBreachedPasswordDetectionRequestMethodEnum[keyof typeof PatchBreachedPasswordDetectionRequestMethodEnum];
+  (typeof PatchBreachedPasswordDetectionRequestMethodEnum)[keyof typeof PatchBreachedPasswordDetectionRequestMethodEnum];
 
 /**
  *
@@ -6216,7 +6216,7 @@ export const PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShield
   admin_notification: 'admin_notification',
 } as const;
 export type PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum =
-  typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum[keyof typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum];
+  (typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum];
 
 /**
  *
@@ -6254,14 +6254,14 @@ export const PatchBruteForceProtectionRequestShieldsEnum = {
   user_notification: 'user_notification',
 } as const;
 export type PatchBruteForceProtectionRequestShieldsEnum =
-  typeof PatchBruteForceProtectionRequestShieldsEnum[keyof typeof PatchBruteForceProtectionRequestShieldsEnum];
+  (typeof PatchBruteForceProtectionRequestShieldsEnum)[keyof typeof PatchBruteForceProtectionRequestShieldsEnum];
 
 export const PatchBruteForceProtectionRequestModeEnum = {
   identifier_and_ip: 'count_per_identifier_and_ip',
   identifier: 'count_per_identifier',
 } as const;
 export type PatchBruteForceProtectionRequestModeEnum =
-  typeof PatchBruteForceProtectionRequestModeEnum[keyof typeof PatchBruteForceProtectionRequestModeEnum];
+  (typeof PatchBruteForceProtectionRequestModeEnum)[keyof typeof PatchBruteForceProtectionRequestModeEnum];
 
 /**
  *
@@ -6298,7 +6298,7 @@ export const PatchCustomDomainsByIdRequestTlsPolicyEnum = {
   compatible: 'compatible',
 } as const;
 export type PatchCustomDomainsByIdRequestTlsPolicyEnum =
-  typeof PatchCustomDomainsByIdRequestTlsPolicyEnum[keyof typeof PatchCustomDomainsByIdRequestTlsPolicyEnum];
+  (typeof PatchCustomDomainsByIdRequestTlsPolicyEnum)[keyof typeof PatchCustomDomainsByIdRequestTlsPolicyEnum];
 
 export const PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum = {
   true_client_ip: 'true-client-ip',
@@ -6307,7 +6307,7 @@ export const PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum = {
   empty: '',
 } as const;
 export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
-  typeof PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum[keyof typeof PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum];
+  (typeof PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum)[keyof typeof PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum];
 
 /**
  *
@@ -6349,7 +6349,7 @@ export const PatchLogStreamsByIdRequestStatusEnum = {
   suspended: 'suspended',
 } as const;
 export type PatchLogStreamsByIdRequestStatusEnum =
-  typeof PatchLogStreamsByIdRequestStatusEnum[keyof typeof PatchLogStreamsByIdRequestStatusEnum];
+  (typeof PatchLogStreamsByIdRequestStatusEnum)[keyof typeof PatchLogStreamsByIdRequestStatusEnum];
 
 /**
  *
@@ -6392,7 +6392,7 @@ export const PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum = {
   eu: 'eu',
 } as const;
 export type PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum =
-  typeof PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum[keyof typeof PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum];
+  (typeof PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum)[keyof typeof PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum];
 
 /**
  *
@@ -6468,7 +6468,7 @@ export const PatchProviderRequestNameEnum = {
   smtp: 'smtp',
 } as const;
 export type PatchProviderRequestNameEnum =
-  typeof PatchProviderRequestNameEnum[keyof typeof PatchProviderRequestNameEnum];
+  (typeof PatchProviderRequestNameEnum)[keyof typeof PatchProviderRequestNameEnum];
 
 /**
  *
@@ -6499,7 +6499,7 @@ export const PatchSuspiciousIpThrottlingRequestShieldsEnum = {
   admin_notification: 'admin_notification',
 } as const;
 export type PatchSuspiciousIpThrottlingRequestShieldsEnum =
-  typeof PatchSuspiciousIpThrottlingRequestShieldsEnum[keyof typeof PatchSuspiciousIpThrottlingRequestShieldsEnum];
+  (typeof PatchSuspiciousIpThrottlingRequestShieldsEnum)[keyof typeof PatchSuspiciousIpThrottlingRequestShieldsEnum];
 
 /**
  * Holds per-stage configuration options (max_attempts and rate).
@@ -6686,14 +6686,14 @@ export const PostAuthenticationMethods201ResponseTypeEnum = {
   webauthn_roaming: 'webauthn-roaming',
 } as const;
 export type PostAuthenticationMethods201ResponseTypeEnum =
-  typeof PostAuthenticationMethods201ResponseTypeEnum[keyof typeof PostAuthenticationMethods201ResponseTypeEnum];
+  (typeof PostAuthenticationMethods201ResponseTypeEnum)[keyof typeof PostAuthenticationMethods201ResponseTypeEnum];
 
 export const PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum = {
   voice: 'voice',
   sms: 'sms',
 } as const;
 export type PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum =
-  typeof PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum[keyof typeof PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum];
+  (typeof PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum)[keyof typeof PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum];
 
 /**
  *
@@ -6714,7 +6714,7 @@ export const PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeE
   voice: 'voice',
 } as const;
 export type PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum =
-  typeof PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum[keyof typeof PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum];
+  (typeof PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum)[keyof typeof PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum];
 
 /**
  *
@@ -6772,14 +6772,14 @@ export const PostAuthenticationMethodsRequestTypeEnum = {
   webauthn_roaming: 'webauthn-roaming',
 } as const;
 export type PostAuthenticationMethodsRequestTypeEnum =
-  typeof PostAuthenticationMethodsRequestTypeEnum[keyof typeof PostAuthenticationMethodsRequestTypeEnum];
+  (typeof PostAuthenticationMethodsRequestTypeEnum)[keyof typeof PostAuthenticationMethodsRequestTypeEnum];
 
 export const PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum = {
   voice: 'voice',
   sms: 'sms',
 } as const;
 export type PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum =
-  typeof PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum[keyof typeof PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum];
+  (typeof PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum)[keyof typeof PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum];
 
 /**
  *
@@ -6893,7 +6893,7 @@ export const PostBrandingThemeRequestBordersButtonsStyleEnum = {
   sharp: 'sharp',
 } as const;
 export type PostBrandingThemeRequestBordersButtonsStyleEnum =
-  typeof PostBrandingThemeRequestBordersButtonsStyleEnum[keyof typeof PostBrandingThemeRequestBordersButtonsStyleEnum];
+  (typeof PostBrandingThemeRequestBordersButtonsStyleEnum)[keyof typeof PostBrandingThemeRequestBordersButtonsStyleEnum];
 
 export const PostBrandingThemeRequestBordersInputsStyleEnum = {
   pill: 'pill',
@@ -6901,7 +6901,7 @@ export const PostBrandingThemeRequestBordersInputsStyleEnum = {
   sharp: 'sharp',
 } as const;
 export type PostBrandingThemeRequestBordersInputsStyleEnum =
-  typeof PostBrandingThemeRequestBordersInputsStyleEnum[keyof typeof PostBrandingThemeRequestBordersInputsStyleEnum];
+  (typeof PostBrandingThemeRequestBordersInputsStyleEnum)[keyof typeof PostBrandingThemeRequestBordersInputsStyleEnum];
 
 /**
  *
@@ -7042,7 +7042,7 @@ export const PostBrandingThemeRequestFontsLinksStyleEnum = {
   underlined: 'underlined',
 } as const;
 export type PostBrandingThemeRequestFontsLinksStyleEnum =
-  typeof PostBrandingThemeRequestFontsLinksStyleEnum[keyof typeof PostBrandingThemeRequestFontsLinksStyleEnum];
+  (typeof PostBrandingThemeRequestFontsLinksStyleEnum)[keyof typeof PostBrandingThemeRequestFontsLinksStyleEnum];
 
 /**
  * Body text
@@ -7161,7 +7161,7 @@ export const PostBrandingThemeRequestPageBackgroundPageLayoutEnum = {
   right: 'right',
 } as const;
 export type PostBrandingThemeRequestPageBackgroundPageLayoutEnum =
-  typeof PostBrandingThemeRequestPageBackgroundPageLayoutEnum[keyof typeof PostBrandingThemeRequestPageBackgroundPageLayoutEnum];
+  (typeof PostBrandingThemeRequestPageBackgroundPageLayoutEnum)[keyof typeof PostBrandingThemeRequestPageBackgroundPageLayoutEnum];
 
 /**
  *
@@ -7200,7 +7200,7 @@ export const PostBrandingThemeRequestWidgetHeaderTextAlignmentEnum = {
   right: 'right',
 } as const;
 export type PostBrandingThemeRequestWidgetHeaderTextAlignmentEnum =
-  typeof PostBrandingThemeRequestWidgetHeaderTextAlignmentEnum[keyof typeof PostBrandingThemeRequestWidgetHeaderTextAlignmentEnum];
+  (typeof PostBrandingThemeRequestWidgetHeaderTextAlignmentEnum)[keyof typeof PostBrandingThemeRequestWidgetHeaderTextAlignmentEnum];
 
 export const PostBrandingThemeRequestWidgetLogoPositionEnum = {
   center: 'center',
@@ -7209,14 +7209,14 @@ export const PostBrandingThemeRequestWidgetLogoPositionEnum = {
   right: 'right',
 } as const;
 export type PostBrandingThemeRequestWidgetLogoPositionEnum =
-  typeof PostBrandingThemeRequestWidgetLogoPositionEnum[keyof typeof PostBrandingThemeRequestWidgetLogoPositionEnum];
+  (typeof PostBrandingThemeRequestWidgetLogoPositionEnum)[keyof typeof PostBrandingThemeRequestWidgetLogoPositionEnum];
 
 export const PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum = {
   bottom: 'bottom',
   top: 'top',
 } as const;
 export type PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum =
-  typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum[keyof typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum];
+  (typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum)[keyof typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum];
 
 /**
  *
@@ -7269,14 +7269,14 @@ export const PostCustomDomains201ResponseStatusEnum = {
   ready: 'ready',
 } as const;
 export type PostCustomDomains201ResponseStatusEnum =
-  typeof PostCustomDomains201ResponseStatusEnum[keyof typeof PostCustomDomains201ResponseStatusEnum];
+  (typeof PostCustomDomains201ResponseStatusEnum)[keyof typeof PostCustomDomains201ResponseStatusEnum];
 
 export const PostCustomDomains201ResponseTypeEnum = {
   auth0_managed_certs: 'auth0_managed_certs',
   self_managed_certs: 'self_managed_certs',
 } as const;
 export type PostCustomDomains201ResponseTypeEnum =
-  typeof PostCustomDomains201ResponseTypeEnum[keyof typeof PostCustomDomains201ResponseTypeEnum];
+  (typeof PostCustomDomains201ResponseTypeEnum)[keyof typeof PostCustomDomains201ResponseTypeEnum];
 
 /**
  * Domain verification settings.
@@ -7314,7 +7314,7 @@ export const PostCustomDomains201ResponseVerificationMethodsInnerNameEnum = {
   txt: 'txt',
 } as const;
 export type PostCustomDomains201ResponseVerificationMethodsInnerNameEnum =
-  typeof PostCustomDomains201ResponseVerificationMethodsInnerNameEnum[keyof typeof PostCustomDomains201ResponseVerificationMethodsInnerNameEnum];
+  (typeof PostCustomDomains201ResponseVerificationMethodsInnerNameEnum)[keyof typeof PostCustomDomains201ResponseVerificationMethodsInnerNameEnum];
 
 /**
  *
@@ -7352,20 +7352,20 @@ export const PostCustomDomainsRequestTypeEnum = {
   self_managed_certs: 'self_managed_certs',
 } as const;
 export type PostCustomDomainsRequestTypeEnum =
-  typeof PostCustomDomainsRequestTypeEnum[keyof typeof PostCustomDomainsRequestTypeEnum];
+  (typeof PostCustomDomainsRequestTypeEnum)[keyof typeof PostCustomDomainsRequestTypeEnum];
 
 export const PostCustomDomainsRequestVerificationMethodEnum = {
   txt: 'txt',
 } as const;
 export type PostCustomDomainsRequestVerificationMethodEnum =
-  typeof PostCustomDomainsRequestVerificationMethodEnum[keyof typeof PostCustomDomainsRequestVerificationMethodEnum];
+  (typeof PostCustomDomainsRequestVerificationMethodEnum)[keyof typeof PostCustomDomainsRequestVerificationMethodEnum];
 
 export const PostCustomDomainsRequestTlsPolicyEnum = {
   recommended: 'recommended',
   compatible: 'compatible',
 } as const;
 export type PostCustomDomainsRequestTlsPolicyEnum =
-  typeof PostCustomDomainsRequestTlsPolicyEnum[keyof typeof PostCustomDomainsRequestTlsPolicyEnum];
+  (typeof PostCustomDomainsRequestTlsPolicyEnum)[keyof typeof PostCustomDomainsRequestTlsPolicyEnum];
 
 export const PostCustomDomainsRequestCustomClientIpHeaderEnum = {
   true_client_ip: 'true-client-ip',
@@ -7374,7 +7374,7 @@ export const PostCustomDomainsRequestCustomClientIpHeaderEnum = {
   null: 'null',
 } as const;
 export type PostCustomDomainsRequestCustomClientIpHeaderEnum =
-  typeof PostCustomDomainsRequestCustomClientIpHeaderEnum[keyof typeof PostCustomDomainsRequestCustomClientIpHeaderEnum];
+  (typeof PostCustomDomainsRequestCustomClientIpHeaderEnum)[keyof typeof PostCustomDomainsRequestCustomClientIpHeaderEnum];
 
 /**
  *
@@ -7455,7 +7455,7 @@ export const PostEmailTemplatesRequestTemplateEnum = {
   password_reset: 'password_reset',
 } as const;
 export type PostEmailTemplatesRequestTemplateEnum =
-  typeof PostEmailTemplatesRequestTemplateEnum[keyof typeof PostEmailTemplatesRequestTemplateEnum];
+  (typeof PostEmailTemplatesRequestTemplateEnum)[keyof typeof PostEmailTemplatesRequestTemplateEnum];
 
 /**
  *
@@ -7608,7 +7608,7 @@ export const PostIdentitiesRequestProviderEnum = {
   yandex: 'yandex',
 } as const;
 export type PostIdentitiesRequestProviderEnum =
-  typeof PostIdentitiesRequestProviderEnum[keyof typeof PostIdentitiesRequestProviderEnum];
+  (typeof PostIdentitiesRequestProviderEnum)[keyof typeof PostIdentitiesRequestProviderEnum];
 
 /**
  * user_id of the secondary user account being linked.
@@ -7701,7 +7701,7 @@ export const PostLogStreamsRequestOneOfTypeEnum = {
   http: 'http',
 } as const;
 export type PostLogStreamsRequestOneOfTypeEnum =
-  typeof PostLogStreamsRequestOneOfTypeEnum[keyof typeof PostLogStreamsRequestOneOfTypeEnum];
+  (typeof PostLogStreamsRequestOneOfTypeEnum)[keyof typeof PostLogStreamsRequestOneOfTypeEnum];
 
 /**
  *
@@ -7734,7 +7734,7 @@ export const PostLogStreamsRequestOneOf1TypeEnum = {
   eventbridge: 'eventbridge',
 } as const;
 export type PostLogStreamsRequestOneOf1TypeEnum =
-  typeof PostLogStreamsRequestOneOf1TypeEnum[keyof typeof PostLogStreamsRequestOneOf1TypeEnum];
+  (typeof PostLogStreamsRequestOneOf1TypeEnum)[keyof typeof PostLogStreamsRequestOneOf1TypeEnum];
 
 /**
  *
@@ -7778,7 +7778,7 @@ export const PostLogStreamsRequestOneOf1SinkAwsRegionEnum = {
   us_west_2: 'us-west-2',
 } as const;
 export type PostLogStreamsRequestOneOf1SinkAwsRegionEnum =
-  typeof PostLogStreamsRequestOneOf1SinkAwsRegionEnum[keyof typeof PostLogStreamsRequestOneOf1SinkAwsRegionEnum];
+  (typeof PostLogStreamsRequestOneOf1SinkAwsRegionEnum)[keyof typeof PostLogStreamsRequestOneOf1SinkAwsRegionEnum];
 
 /**
  *
@@ -7811,7 +7811,7 @@ export const PostLogStreamsRequestOneOf2TypeEnum = {
   eventgrid: 'eventgrid',
 } as const;
 export type PostLogStreamsRequestOneOf2TypeEnum =
-  typeof PostLogStreamsRequestOneOf2TypeEnum[keyof typeof PostLogStreamsRequestOneOf2TypeEnum];
+  (typeof PostLogStreamsRequestOneOf2TypeEnum)[keyof typeof PostLogStreamsRequestOneOf2TypeEnum];
 
 /**
  *
@@ -7870,7 +7870,7 @@ export const PostLogStreamsRequestOneOf2SinkAzureRegionEnum = {
   westus2: 'westus2',
 } as const;
 export type PostLogStreamsRequestOneOf2SinkAzureRegionEnum =
-  typeof PostLogStreamsRequestOneOf2SinkAzureRegionEnum[keyof typeof PostLogStreamsRequestOneOf2SinkAzureRegionEnum];
+  (typeof PostLogStreamsRequestOneOf2SinkAzureRegionEnum)[keyof typeof PostLogStreamsRequestOneOf2SinkAzureRegionEnum];
 
 /**
  *
@@ -7903,7 +7903,7 @@ export const PostLogStreamsRequestOneOf3TypeEnum = {
   datadog: 'datadog',
 } as const;
 export type PostLogStreamsRequestOneOf3TypeEnum =
-  typeof PostLogStreamsRequestOneOf3TypeEnum[keyof typeof PostLogStreamsRequestOneOf3TypeEnum];
+  (typeof PostLogStreamsRequestOneOf3TypeEnum)[keyof typeof PostLogStreamsRequestOneOf3TypeEnum];
 
 /**
  *
@@ -7936,7 +7936,7 @@ export const PostLogStreamsRequestOneOf4TypeEnum = {
   splunk: 'splunk',
 } as const;
 export type PostLogStreamsRequestOneOf4TypeEnum =
-  typeof PostLogStreamsRequestOneOf4TypeEnum[keyof typeof PostLogStreamsRequestOneOf4TypeEnum];
+  (typeof PostLogStreamsRequestOneOf4TypeEnum)[keyof typeof PostLogStreamsRequestOneOf4TypeEnum];
 
 /**
  *
@@ -7969,7 +7969,7 @@ export const PostLogStreamsRequestOneOf5TypeEnum = {
   sumo: 'sumo',
 } as const;
 export type PostLogStreamsRequestOneOf5TypeEnum =
-  typeof PostLogStreamsRequestOneOf5TypeEnum[keyof typeof PostLogStreamsRequestOneOf5TypeEnum];
+  (typeof PostLogStreamsRequestOneOf5TypeEnum)[keyof typeof PostLogStreamsRequestOneOf5TypeEnum];
 
 /**
  *
@@ -8002,7 +8002,7 @@ export const PostLogStreamsRequestOneOf6TypeEnum = {
   segment: 'segment',
 } as const;
 export type PostLogStreamsRequestOneOf6TypeEnum =
-  typeof PostLogStreamsRequestOneOf6TypeEnum[keyof typeof PostLogStreamsRequestOneOf6TypeEnum];
+  (typeof PostLogStreamsRequestOneOf6TypeEnum)[keyof typeof PostLogStreamsRequestOneOf6TypeEnum];
 
 /**
  *
@@ -8035,7 +8035,7 @@ export const PostLogStreamsRequestOneOf7TypeEnum = {
   mixpanel: 'mixpanel',
 } as const;
 export type PostLogStreamsRequestOneOf7TypeEnum =
-  typeof PostLogStreamsRequestOneOf7TypeEnum[keyof typeof PostLogStreamsRequestOneOf7TypeEnum];
+  (typeof PostLogStreamsRequestOneOf7TypeEnum)[keyof typeof PostLogStreamsRequestOneOf7TypeEnum];
 
 /**
  *
@@ -8208,7 +8208,7 @@ export const PostProviderRequestNameEnum = {
   smtp: 'smtp',
 } as const;
 export type PostProviderRequestNameEnum =
-  typeof PostProviderRequestNameEnum[keyof typeof PostProviderRequestNameEnum];
+  (typeof PostProviderRequestNameEnum)[keyof typeof PostProviderRequestNameEnum];
 
 /**
  * Credentials required to use the provider.
@@ -8288,14 +8288,14 @@ export const PostResourceServersRequestSigningAlgEnum = {
   RS256: 'RS256',
 } as const;
 export type PostResourceServersRequestSigningAlgEnum =
-  typeof PostResourceServersRequestSigningAlgEnum[keyof typeof PostResourceServersRequestSigningAlgEnum];
+  (typeof PostResourceServersRequestSigningAlgEnum)[keyof typeof PostResourceServersRequestSigningAlgEnum];
 
 export const PostResourceServersRequestTokenDialectEnum = {
   token: 'access_token',
   token_authz: 'access_token_authz',
 } as const;
 export type PostResourceServersRequestTokenDialectEnum =
-  typeof PostResourceServersRequestTokenDialectEnum[keyof typeof PostResourceServersRequestTokenDialectEnum];
+  (typeof PostResourceServersRequestTokenDialectEnum)[keyof typeof PostResourceServersRequestTokenDialectEnum];
 
 /**
  *
@@ -8423,7 +8423,7 @@ export const PostUsersExportsRequestFormatEnum = {
   csv: 'csv',
 } as const;
 export type PostUsersExportsRequestFormatEnum =
-  typeof PostUsersExportsRequestFormatEnum[keyof typeof PostUsersExportsRequestFormatEnum];
+  (typeof PostUsersExportsRequestFormatEnum)[keyof typeof PostUsersExportsRequestFormatEnum];
 
 /**
  *
@@ -8543,7 +8543,7 @@ export const PostVerificationEmailRequestIdentityProviderEnum = {
   yandex: 'yandex',
 } as const;
 export type PostVerificationEmailRequestIdentityProviderEnum =
-  typeof PostVerificationEmailRequestIdentityProviderEnum[keyof typeof PostVerificationEmailRequestIdentityProviderEnum];
+  (typeof PostVerificationEmailRequestIdentityProviderEnum)[keyof typeof PostVerificationEmailRequestIdentityProviderEnum];
 
 /**
  *
@@ -8606,14 +8606,14 @@ export const PostVerify200ResponseStatusEnum = {
   ready: 'ready',
 } as const;
 export type PostVerify200ResponseStatusEnum =
-  typeof PostVerify200ResponseStatusEnum[keyof typeof PostVerify200ResponseStatusEnum];
+  (typeof PostVerify200ResponseStatusEnum)[keyof typeof PostVerify200ResponseStatusEnum];
 
 export const PostVerify200ResponseTypeEnum = {
   auth0_managed_certs: 'auth0_managed_certs',
   self_managed_certs: 'self_managed_certs',
 } as const;
 export type PostVerify200ResponseTypeEnum =
-  typeof PostVerify200ResponseTypeEnum[keyof typeof PostVerify200ResponseTypeEnum];
+  (typeof PostVerify200ResponseTypeEnum)[keyof typeof PostVerify200ResponseTypeEnum];
 
 /**
  *
@@ -8641,7 +8641,7 @@ export const PromptsSettingsUniversalLoginExperienceEnum = {
   classic: 'classic',
 } as const;
 export type PromptsSettingsUniversalLoginExperienceEnum =
-  typeof PromptsSettingsUniversalLoginExperienceEnum[keyof typeof PromptsSettingsUniversalLoginExperienceEnum];
+  (typeof PromptsSettingsUniversalLoginExperienceEnum)[keyof typeof PromptsSettingsUniversalLoginExperienceEnum];
 
 /**
  * Prompts settings
@@ -8669,7 +8669,7 @@ export const PromptsSettingsUpdateUniversalLoginExperienceEnum = {
   classic: 'classic',
 } as const;
 export type PromptsSettingsUpdateUniversalLoginExperienceEnum =
-  typeof PromptsSettingsUpdateUniversalLoginExperienceEnum[keyof typeof PromptsSettingsUpdateUniversalLoginExperienceEnum];
+  (typeof PromptsSettingsUpdateUniversalLoginExperienceEnum)[keyof typeof PromptsSettingsUpdateUniversalLoginExperienceEnum];
 
 /**
  *
@@ -8736,14 +8736,14 @@ export const PutAuthenticationMethodsRequestInnerTypeEnum = {
   totp: 'totp',
 } as const;
 export type PutAuthenticationMethodsRequestInnerTypeEnum =
-  typeof PutAuthenticationMethodsRequestInnerTypeEnum[keyof typeof PutAuthenticationMethodsRequestInnerTypeEnum];
+  (typeof PutAuthenticationMethodsRequestInnerTypeEnum)[keyof typeof PutAuthenticationMethodsRequestInnerTypeEnum];
 
 export const PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum = {
   voice: 'voice',
   sms: 'sms',
 } as const;
 export type PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum =
-  typeof PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum[keyof typeof PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum];
+  (typeof PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum)[keyof typeof PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum];
 
 /**
  *
@@ -8789,7 +8789,7 @@ export const PutMessageTypesRequestMessageTypesEnum = {
   voice: 'voice',
 } as const;
 export type PutMessageTypesRequestMessageTypesEnum =
-  typeof PutMessageTypesRequestMessageTypesEnum[keyof typeof PutMessageTypesRequestMessageTypesEnum];
+  (typeof PutMessageTypesRequestMessageTypesEnum)[keyof typeof PutMessageTypesRequestMessageTypesEnum];
 
 /**
  *
@@ -8806,7 +8806,7 @@ export const PutPhoneProvidersRequestProviderEnum = {
   phone_message_hook: 'phone-message-hook',
 } as const;
 export type PutPhoneProvidersRequestProviderEnum =
-  typeof PutPhoneProvidersRequestProviderEnum[keyof typeof PutPhoneProvidersRequestProviderEnum];
+  (typeof PutPhoneProvidersRequestProviderEnum)[keyof typeof PutPhoneProvidersRequestProviderEnum];
 
 /**
  *
@@ -8823,7 +8823,7 @@ export const PutPnProvidersRequestProviderEnum = {
   direct: 'direct',
 } as const;
 export type PutPnProvidersRequestProviderEnum =
-  typeof PutPnProvidersRequestProviderEnum[keyof typeof PutPnProvidersRequestProviderEnum];
+  (typeof PutPnProvidersRequestProviderEnum)[keyof typeof PutPnProvidersRequestProviderEnum];
 
 /**
  *
@@ -9001,14 +9001,14 @@ export const ResourceServerSigningAlgEnum = {
   RS256: 'RS256',
 } as const;
 export type ResourceServerSigningAlgEnum =
-  typeof ResourceServerSigningAlgEnum[keyof typeof ResourceServerSigningAlgEnum];
+  (typeof ResourceServerSigningAlgEnum)[keyof typeof ResourceServerSigningAlgEnum];
 
 export const ResourceServerTokenDialectEnum = {
   token: 'access_token',
   token_authz: 'access_token_authz',
 } as const;
 export type ResourceServerTokenDialectEnum =
-  typeof ResourceServerTokenDialectEnum[keyof typeof ResourceServerTokenDialectEnum];
+  (typeof ResourceServerTokenDialectEnum)[keyof typeof ResourceServerTokenDialectEnum];
 
 /**
  *
@@ -9069,14 +9069,14 @@ export const ResourceServerUpdateSigningAlgEnum = {
   RS256: 'RS256',
 } as const;
 export type ResourceServerUpdateSigningAlgEnum =
-  typeof ResourceServerUpdateSigningAlgEnum[keyof typeof ResourceServerUpdateSigningAlgEnum];
+  (typeof ResourceServerUpdateSigningAlgEnum)[keyof typeof ResourceServerUpdateSigningAlgEnum];
 
 export const ResourceServerUpdateTokenDialectEnum = {
   token: 'access_token',
   token_authz: 'access_token_authz',
 } as const;
 export type ResourceServerUpdateTokenDialectEnum =
-  typeof ResourceServerUpdateTokenDialectEnum[keyof typeof ResourceServerUpdateTokenDialectEnum];
+  (typeof ResourceServerUpdateTokenDialectEnum)[keyof typeof ResourceServerUpdateTokenDialectEnum];
 
 /**
  *
@@ -9413,7 +9413,7 @@ export const TenantSettingsEnabledLocalesEnum = {
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsEnabledLocalesEnum =
-  typeof TenantSettingsEnabledLocalesEnum[keyof typeof TenantSettingsEnabledLocalesEnum];
+  (typeof TenantSettingsEnabledLocalesEnum)[keyof typeof TenantSettingsEnabledLocalesEnum];
 
 /**
  * Change Password page customization.
@@ -9451,7 +9451,7 @@ export const TenantSettingsDeviceFlowCharsetEnum = {
   digits: 'digits',
 } as const;
 export type TenantSettingsDeviceFlowCharsetEnum =
-  typeof TenantSettingsDeviceFlowCharsetEnum[keyof typeof TenantSettingsDeviceFlowCharsetEnum];
+  (typeof TenantSettingsDeviceFlowCharsetEnum)[keyof typeof TenantSettingsDeviceFlowCharsetEnum];
 
 /**
  * Error page customization.
@@ -9614,7 +9614,7 @@ export const TenantSettingsSessionCookieModeEnum = {
   non_persistent: 'non-persistent',
 } as const;
 export type TenantSettingsSessionCookieModeEnum =
-  typeof TenantSettingsSessionCookieModeEnum[keyof typeof TenantSettingsSessionCookieModeEnum];
+  (typeof TenantSettingsSessionCookieModeEnum)[keyof typeof TenantSettingsSessionCookieModeEnum];
 
 /**
  *
@@ -9746,7 +9746,7 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsUpdateEnabledLocalesEnum =
-  typeof TenantSettingsUpdateEnabledLocalesEnum[keyof typeof TenantSettingsUpdateEnabledLocalesEnum];
+  (typeof TenantSettingsUpdateEnabledLocalesEnum)[keyof typeof TenantSettingsUpdateEnabledLocalesEnum];
 
 /**
  * Device Flow configuration.
@@ -9769,7 +9769,7 @@ export const TenantSettingsUpdateDeviceFlowCharsetEnum = {
   digits: 'digits',
 } as const;
 export type TenantSettingsUpdateDeviceFlowCharsetEnum =
-  typeof TenantSettingsUpdateDeviceFlowCharsetEnum[keyof typeof TenantSettingsUpdateDeviceFlowCharsetEnum];
+  (typeof TenantSettingsUpdateDeviceFlowCharsetEnum)[keyof typeof TenantSettingsUpdateDeviceFlowCharsetEnum];
 
 /**
  * Flags used to change the behavior of this tenant.
@@ -9896,7 +9896,7 @@ export const TenantSettingsUpdateFlagsChangePwdFlowV1Enum = {
   false: false,
 } as const;
 export type TenantSettingsUpdateFlagsChangePwdFlowV1Enum =
-  typeof TenantSettingsUpdateFlagsChangePwdFlowV1Enum[keyof typeof TenantSettingsUpdateFlagsChangePwdFlowV1Enum];
+  (typeof TenantSettingsUpdateFlagsChangePwdFlowV1Enum)[keyof typeof TenantSettingsUpdateFlagsChangePwdFlowV1Enum];
 
 /**
  *
@@ -10112,7 +10112,7 @@ export const UserEnrollmentStatusEnum = {
   confirmed: 'confirmed',
 } as const;
 export type UserEnrollmentStatusEnum =
-  typeof UserEnrollmentStatusEnum[keyof typeof UserEnrollmentStatusEnum];
+  (typeof UserEnrollmentStatusEnum)[keyof typeof UserEnrollmentStatusEnum];
 
 export const UserEnrollmentAuthMethodEnum = {
   authenticator: 'authenticator',
@@ -10122,7 +10122,7 @@ export const UserEnrollmentAuthMethodEnum = {
   webauthn_roaming: 'webauthn-roaming',
 } as const;
 export type UserEnrollmentAuthMethodEnum =
-  typeof UserEnrollmentAuthMethodEnum[keyof typeof UserEnrollmentAuthMethodEnum];
+  (typeof UserEnrollmentAuthMethodEnum)[keyof typeof UserEnrollmentAuthMethodEnum];
 
 /**
  *

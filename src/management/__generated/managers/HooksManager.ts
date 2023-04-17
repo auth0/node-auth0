@@ -390,4 +390,4 @@ export const GetHooksTriggerIdEnum = {
   send_phone_message: 'send-phone-message',
 } as const;
 export type GetHooksTriggerIdEnum =
-  typeof GetHooksTriggerIdEnum[keyof typeof GetHooksTriggerIdEnum];
+  (typeof GetHooksTriggerIdEnum)[keyof typeof GetHooksTriggerIdEnum];

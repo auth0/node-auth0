@@ -635,7 +635,7 @@ export const GetActionsTriggerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
 } as const;
 export type GetActionsTriggerIdEnum =
-  typeof GetActionsTriggerIdEnum[keyof typeof GetActionsTriggerIdEnum];
+  (typeof GetActionsTriggerIdEnum)[keyof typeof GetActionsTriggerIdEnum];
 
 export const GetBindingsTriggerIdEnum = {
   post_login: 'post-login',
@@ -650,7 +650,7 @@ export const GetBindingsTriggerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
 } as const;
 export type GetBindingsTriggerIdEnum =
-  typeof GetBindingsTriggerIdEnum[keyof typeof GetBindingsTriggerIdEnum];
+  (typeof GetBindingsTriggerIdEnum)[keyof typeof GetBindingsTriggerIdEnum];
 
 export const PatchBindingsOperationTriggerIdEnum = {
   post_login: 'post-login',
@@ -665,4 +665,4 @@ export const PatchBindingsOperationTriggerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
 } as const;
 export type PatchBindingsOperationTriggerIdEnum =
-  typeof PatchBindingsOperationTriggerIdEnum[keyof typeof PatchBindingsOperationTriggerIdEnum];
+  (typeof PatchBindingsOperationTriggerIdEnum)[keyof typeof PatchBindingsOperationTriggerIdEnum];

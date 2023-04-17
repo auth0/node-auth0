@@ -179,4 +179,4 @@ export const GetDeviceCredentialsTypeEnum = {
   rotating_refresh_token: 'rotating_refresh_token',
 } as const;
 export type GetDeviceCredentialsTypeEnum =
-  typeof GetDeviceCredentialsTypeEnum[keyof typeof GetDeviceCredentialsTypeEnum];
+  (typeof GetDeviceCredentialsTypeEnum)[keyof typeof GetDeviceCredentialsTypeEnum];

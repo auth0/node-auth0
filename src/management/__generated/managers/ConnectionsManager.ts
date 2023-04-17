@@ -397,4 +397,4 @@ export const GetConnectionsStrategyEnum = {
   auth0_adldap: 'auth0-adldap',
 } as const;
 export type GetConnectionsStrategyEnum =
-  typeof GetConnectionsStrategyEnum[keyof typeof GetConnectionsStrategyEnum];
+  (typeof GetConnectionsStrategyEnum)[keyof typeof GetConnectionsStrategyEnum];

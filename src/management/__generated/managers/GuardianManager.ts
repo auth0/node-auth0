@@ -825,4 +825,4 @@ export const PutFactorsByNameOperationNameEnum = {
   recovery_code: 'recovery-code',
 } as const;
 export type PutFactorsByNameOperationNameEnum =
-  typeof PutFactorsByNameOperationNameEnum[keyof typeof PutFactorsByNameOperationNameEnum];
+  (typeof PutFactorsByNameOperationNameEnum)[keyof typeof PutFactorsByNameOperationNameEnum];
