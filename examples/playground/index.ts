@@ -3,13 +3,29 @@ dotenv.config({
   path: './examples/playground/.env',
 });
 
-import { ManagementClient } from '../../src/management/index';
+import {
+  ManagementClient,
+  ManagementClientOptionsWithClientAssertion,
+  ManagementClientOptionsWithClientSecret,
+} from '../../src/management/index';
 
-const mgmntClient = new ManagementClient({
+const opts = {
   domain: process.env.AUTH0_DOMAIN as string,
   clientId: process.env.AUTH0_CLIENT_ID as string,
-  clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
-});
+};
+
+if (process.env.AUTH0_CLIENT_SECRET) {
+  (opts as ManagementClientOptionsWithClientSecret).clientSecret = process.env.AUTH0_CLIENT_SECRET;
+}
+
+if (process.env.AUTH0_CLIENT_ASSERTION_SIGING_KEY) {
+  (opts as ManagementClientOptionsWithClientAssertion).clientAssertionSigningKey =
+    process.env.AUTH0_CLIENT_ASSERTION_SIGING_KEY;
+}
+
+const mgmntClient = new ManagementClient(
+  opts as ManagementClientOptionsWithClientAssertion | ManagementClientOptionsWithClientSecret
+);
 
 async function testClients() {
   const { data: newClient } = await mgmntClient.clients.create({
