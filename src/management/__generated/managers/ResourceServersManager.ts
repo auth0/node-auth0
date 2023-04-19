@@ -5,6 +5,7 @@ import type {
   PostResourceServersRequest,
   ResourceServer,
   ResourceServerUpdate,
+  GetResourceServers200ResponseOneOf,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -89,6 +90,14 @@ export class ResourceServersManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetResourceServersRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetResourceServers200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetResourceServersRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<ResourceServer>>>;
   async getAll(
     requestParameters: GetResourceServersRequest = {},
     initOverrides?: InitOverride

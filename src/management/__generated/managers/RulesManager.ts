@@ -1,6 +1,12 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetRules200Response, Rule, RuleCreate, RuleUpdate } from '../models';
+import type {
+  GetRules200Response,
+  Rule,
+  RuleCreate,
+  RuleUpdate,
+  GetRules200ResponseOneOf,
+} from '../models';
 
 const { BaseAPI } = runtime;
 
@@ -95,6 +101,14 @@ export class RulesManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetRulesRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRules200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetRulesRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Rule>>>;
   async getAll(
     requestParameters: GetRulesRequest = {},
     initOverrides?: InitOverride

@@ -1,6 +1,6 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetGrants200Response } from '../models';
+import type { GetGrants200Response, GetGrants200ResponseOneOf, UserGrant } from '../models';
 
 const { BaseAPI } = runtime;
 
@@ -107,6 +107,14 @@ export class GrantsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetGrantsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetGrants200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<UserGrant>>>;
   async getAll(
     requestParameters: GetGrantsRequest = {},
     initOverrides?: InitOverride

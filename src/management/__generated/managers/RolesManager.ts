@@ -9,6 +9,11 @@ import type {
   PostRoleUsersRequest,
   RoleCreate,
   RoleUpdate,
+  GetRolePermission200ResponseOneOf,
+  Permission,
+  GetRoleUser200ResponseOneOf,
+  GetMembers200ResponseOneOfInner,
+  GetOrganizationMemberRoles200ResponseOneOf,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -192,6 +197,14 @@ export class RolesManager extends BaseAPI {
   async getPermissions(
     requestParameters: GetRolePermissionRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRolePermission200ResponseOneOf>>;
+  async getPermissions(
+    requestParameters?: GetRolePermissionRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Permission>>>;
+  async getPermissions(
+    requestParameters: GetRolePermissionRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRolePermission200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -247,6 +260,14 @@ export class RolesManager extends BaseAPI {
   async getUsers(
     requestParameters: GetRoleUserRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRoleUser200ResponseOneOf>>;
+  async getUsers(
+    requestParameters?: GetRoleUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetMembers200ResponseOneOfInner>>>;
+  async getUsers(
+    requestParameters: GetRoleUserRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRoleUser200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -292,6 +313,14 @@ export class RolesManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetRolesRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetRolesRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizationMemberRoles200ResponseOneOfInner>>>;
   async getAll(
     requestParameters: GetRolesRequest = {},
     initOverrides?: InitOverride

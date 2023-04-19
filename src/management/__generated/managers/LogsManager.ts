@@ -1,6 +1,6 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetLogs200Response, Log } from '../models';
+import type { GetLogs200Response, Log, GetLogs200ResponseOneOf } from '../models';
 
 const { BaseAPI } = runtime;
 
@@ -89,6 +89,14 @@ export class LogsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetLogsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetLogs200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetLogsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Log>>>;
   async getAll(
     requestParameters: GetLogsRequest = {},
     initOverrides?: InitOverride

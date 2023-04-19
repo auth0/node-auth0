@@ -5,6 +5,7 @@ import type {
   ConnectionCreate,
   ConnectionUpdate,
   GetConnections200Response,
+  GetConnections200ResponseOneOf,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -157,6 +158,14 @@ export class ConnectionsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetConnectionsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetConnections200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetConnectionsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Connection>>>;
   async getAll(
     requestParameters: GetConnectionsRequest = {},
     initOverrides?: InitOverride
