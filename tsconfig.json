@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
     "outDir": "./dist",
     "allowJs": true,
     "target": "ES2017",
@@ -13,6 +12,5 @@
     "skipLibCheck": true,
     "module": "ESNext"
   },
-  "exclude": ["./test", "./dist/typings"],
-  "include": ["./src"]
+  "include": ["src"]
 }
