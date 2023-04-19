@@ -5,6 +5,7 @@ import type {
   ClientGrantCreate,
   GetClientGrants200Response,
   PatchClientGrantsByIdRequest,
+  GetClientGrants200ResponseOneOf,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -83,6 +84,14 @@ export class ClientGrantsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetClientGrantsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrants200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<ClientGrant>>>;
   async getAll(
     requestParameters: GetClientGrantsRequest = {},
     initOverrides?: InitOverride

@@ -4,6 +4,8 @@ import type {
   DeviceCredentialCreate,
   GetDeviceCredentials200Response,
   PostDeviceCredentials201Response,
+  GetDeviceCredentials200ResponseOneOf,
+  DeviceCredential,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -90,6 +92,14 @@ export class DeviceCredentialsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetDeviceCredentialsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetDeviceCredentials200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetDeviceCredentialsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<DeviceCredential>>>;
   async getAll(
     requestParameters: GetDeviceCredentialsRequest = {},
     initOverrides?: InitOverride

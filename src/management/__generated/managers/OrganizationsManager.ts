@@ -18,6 +18,13 @@ import type {
   PostMembersRequest,
   PostOrganizationMemberRolesRequest,
   PostOrganizationsRequest,
+  GetEnabledConnections200ResponseOneOf,
+  GetInvitations200ResponseOneOf,
+  GetMembers200ResponseOneOf,
+  GetMembers200ResponseOneOfInner,
+  GetOrganizationMemberRoles200ResponseOneOf,
+  GetOrganizationMemberRoles200ResponseOneOfInner,
+  GetOrganizations200ResponseOneOf,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -440,6 +447,14 @@ export class OrganizationsManager extends BaseAPI {
   async getEnabledConnections(
     requestParameters: GetEnabledConnectionsRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetEnabledConnections200ResponseOneOf>>;
+  async getEnabledConnections(
+    requestParameters?: GetEnabledConnectionsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetEnabledConnections200ResponseOneOfInner>>>;
+  async getEnabledConnections(
+    requestParameters: GetEnabledConnectionsRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -502,6 +517,14 @@ export class OrganizationsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getInvitations(
+    requestParameters: GetInvitationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetInvitations200ResponseOneOf>>;
+  async getInvitations(
+    requestParameters?: GetInvitationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetInvitations200ResponseOneOfInner>>>;
   async getInvitations(
     requestParameters: GetInvitationsRequest,
     initOverrides?: InitOverride
@@ -608,6 +631,14 @@ export class OrganizationsManager extends BaseAPI {
   async getMembers(
     requestParameters: GetMembersRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetMembers200ResponseOneOf>>;
+  async getMembers(
+    requestParameters?: GetMembersRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetMembers200ResponseOneOfInner>>>;
+  async getMembers(
+    requestParameters: GetMembersRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMembers200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -684,6 +715,14 @@ export class OrganizationsManager extends BaseAPI {
   async getMemberRoles(
     requestParameters: GetOrganizationMemberRolesRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOf>>;
+  async getMemberRoles(
+    requestParameters?: GetOrganizationMemberRolesRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizationMemberRoles200ResponseOneOfInner>>>;
+  async getMemberRoles(
+    requestParameters: GetOrganizationMemberRolesRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'user_id']);
 
@@ -735,6 +774,14 @@ export class OrganizationsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetOrganizationsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
   async getAll(
     requestParameters: GetOrganizationsRequest = {},
     initOverrides?: InitOverride
