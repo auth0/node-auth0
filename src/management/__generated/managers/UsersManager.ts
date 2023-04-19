@@ -24,6 +24,17 @@ import type {
   UserEnrollment,
   UserIdentity,
   UserUpdate,
+  GetAuthenticationMethods200ResponseOneOf,
+  GetAuthenticationMethods200ResponseOneOfInner,
+  GetLogs200ResponseOneOf,
+  Log,
+  GetPermissions200ResponseOneOf,
+  GetPermissions200ResponseOneOfInner,
+  GetOrganizations200ResponseOneOf,
+  GetOrganizations200ResponseOneOfInner,
+  GetOrganizationMemberRoles200ResponseOneOf,
+  GetOrganizationMemberRoles200ResponseOneOfInner,
+  GetUsers200ResponseOneOf,
 } from '../models';
 
 const { BaseAPI } = runtime;
@@ -533,6 +544,14 @@ export class UsersManager extends BaseAPI {
   async getAuthenticationMethods(
     requestParameters: GetAuthenticationMethodsRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetAuthenticationMethods200ResponseOneOf>>;
+  async getAuthenticationMethods(
+    requestParameters?: GetAuthenticationMethodsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetAuthenticationMethods200ResponseOneOfInner>>>;
+  async getAuthenticationMethods(
+    requestParameters: GetAuthenticationMethodsRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetAuthenticationMethods200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -634,6 +653,14 @@ export class UsersManager extends BaseAPI {
   async getLogs(
     requestParameters: GetLogsByUserRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetLogs200ResponseOneOf>>;
+  async getLogs(
+    requestParameters?: GetLogsByUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Log>>>;
+  async getLogs(
+    requestParameters: GetLogsByUserRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogs200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -674,6 +701,14 @@ export class UsersManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getPermissions(
+    requestParameters: GetPermissionsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetPermissions200ResponseOneOf>>;
+  async getPermissions(
+    requestParameters?: GetPermissionsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetPermissions200ResponseOneOfInner>>>;
   async getPermissions(
     requestParameters: GetPermissionsRequest,
     initOverrides?: InitOverride
@@ -720,6 +755,14 @@ export class UsersManager extends BaseAPI {
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
+  async getUserOrganizations(
+    requestParameters?: GetUserOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
+  async getUserOrganizations(
+    requestParameters: GetUserOrganizationsRequest,
+    initOverrides?: InitOverride
   ): Promise<ApiResponse<GetUserOrganizations200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
@@ -759,6 +802,14 @@ export class UsersManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getRoles(
+    requestParameters: GetUserRolesRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOf>>;
+  async getRoles(
+    requestParameters?: GetUserRolesRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizationMemberRoles200ResponseOneOfInner>>>;
   async getRoles(
     requestParameters: GetUserRolesRequest,
     initOverrides?: InitOverride
@@ -812,6 +863,14 @@ export class UsersManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetUsersRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetUsers200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetUsersRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetUsers200ResponseOneOfInner>>>;
   async getAll(
     requestParameters: GetUsersRequest = {},
     initOverrides?: InitOverride

@@ -1,6 +1,12 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetHooks200Response, Hook, HookCreate, HookUpdate } from '../models';
+import type {
+  GetHooks200Response,
+  Hook,
+  HookCreate,
+  HookUpdate,
+  GetHooks200ResponseOneOf,
+} from '../models';
 
 const { BaseAPI } = runtime;
 
@@ -152,6 +158,14 @@ export class HooksManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
+  async getAll(
+    requestParameters: GetHooksRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetHooks200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetHooksRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Hook>>>;
   async getAll(
     requestParameters: GetHooksRequest = {},
     initOverrides?: InitOverride
