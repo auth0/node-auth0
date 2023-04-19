@@ -25,7 +25,8 @@
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 './test/**/*.tests.js' './test/*.tests.js' --watch",
     "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
     "precommit": "pretty-quick --staged",
-    "lint": "eslint ./src --ext ts"
+    "lint": "eslint ./src --ext ts",
+    "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm examples/playground/index.ts"
   },
   "repository": {
     "type": "git",
@@ -66,6 +67,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "cross-env": "^5.2.0",
+    "dotenv": "^16.0.3",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-jsdoc": "^41.1.1",
