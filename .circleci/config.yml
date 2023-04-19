@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ship: auth0/ship@0.3.1
+  ship: auth0/ship@0.7.8
   codecov: codecov/codecov@3
 jobs:
   build-and-test:
@@ -14,26 +14,16 @@ jobs:
       LANG: en_US.UTF-8
     steps:
       - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install Dependencies
-          command: yarn install --ignore-engines
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
+      - ship/node-install-packages
       - run:
           name: ESLint
-          command: yarn lint
+          command: npm run lint
       - run:
           name: Build
-          command: yarn build
+          command: npm run build
       - run:
           name: Tests
-          command: yarn test:ci
+          command: npm run test:ci
       - when:
           condition:
             equal: [ "16.18", << parameters.node-version >> ]
@@ -47,7 +37,6 @@ workflows:
             parameters:
               node-version: ["16.18", "18.12"]
       - ship/node-publish:
-          pkg-manager: yarn
           requires:
             - build-and-test
           context:

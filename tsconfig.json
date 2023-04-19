@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
     "allowJs": true,
     "target": "ES2017",
@@ -10,8 +9,8 @@
     "declaration": true,
     "declarationDir": "./dist/typings",
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "module": "ESNext"
   },
-  "exclude": ["./test", "./dist/typings"],
-  "include": ["./src"]
+  "include": ["src"]
 }
