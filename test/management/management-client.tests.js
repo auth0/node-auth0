@@ -253,9 +253,6 @@ describe('ManagementClient', () => {
         const utilsStub = {
           generateClientInfo: sinon.spy(() => ({ name: 'test-sdk', version: 'ver-123' })),
         };
-        const ManagementClientProxy = proxyquire('../../src/management/', {
-          '../utils': utilsStub,
-        });
         const client = new ManagementClientProxy(withTokenConfig);
 
         const requestHeaders = {

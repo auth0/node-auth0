@@ -58,7 +58,7 @@ describe('client-authentication', () => {
 
   it('should do client credentials grant with a client secret', async () => {
     const auth0 = new AuthenticationClient({
-      baseUrl: 'https://tenant.auth0.com',
+      domain: 'tenant.auth0.com',
       clientId,
       clientSecret: 'foo',
     });
@@ -76,7 +76,7 @@ describe('client-authentication', () => {
 
   it('should do client credentials grant with a client assertion', async () => {
     const auth0 = new AuthenticationClient({
-      baseUrl: 'https://tenant.auth0.com',
+      domain: 'tenant.auth0.com',
       clientId,
       clientAssertionSigningKey: TEST_PRIVATE_KEY,
     });
@@ -104,7 +104,7 @@ describe('client-authentication', () => {
 
   it('should require a client secret or client assertion with client credentials grant', async () => {
     const auth0 = new AuthenticationClient({
-      baseUrl: 'https://tenant.auth0.com',
+      domain: 'tenant.auth0.com',
       clientId,
     });
     await expect(() =>
@@ -116,7 +116,7 @@ describe('client-authentication', () => {
 
   it('should allow you to pass your own client assertion', async () => {
     const auth0 = new AuthenticationClient({
-      baseUrl: 'https://tenant.auth0.com',
+      domain: 'tenant.auth0.com',
       clientId,
     });
     const now = Math.floor(Date.now() / 1000);

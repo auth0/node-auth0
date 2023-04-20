@@ -33,13 +33,13 @@ describe('BlacklistedTokensManager', () => {
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new BlacklistsManager(new Configuration({} as any));
+        new BlacklistsManager({} as any);
       }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new BlacklistsManager(new Configuration({ baseUrl: '' }));
+        new BlacklistsManager({ baseUrl: '' });
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

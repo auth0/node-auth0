@@ -1,43 +1,29 @@
-import {
-  BaseAPI,
-  Configuration as BaseConfiguration,
-  ConfigurationParameters as BaseConfigurationParameters,
-} from '../runtime';
+import { BaseAPI, Configuration as BaseConfiguration } from '../runtime';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
 
-// TODO simplify config in the runtime
-export interface ConfigurationParameters extends BaseConfigurationParameters {
+export interface Configuration extends Omit<BaseConfiguration, 'baseUrl'> {
+  domain: string;
   clientId: string;
   clientSecret?: string;
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
 }
 
-export class Configuration extends BaseConfiguration {
-  constructor(protected configuration: ConfigurationParameters) {
-    super(configuration);
-  }
-
-  get clientId(): string {
-    return this.configuration.clientId;
-  }
-
-  get clientSecret(): string | undefined {
-    return this.configuration.clientSecret;
-  }
-
-  get clientAssertionSigningKey(): string | undefined {
-    return this.configuration.clientAssertionSigningKey;
-  }
-
-  get clientAssertionSigningAlg(): string | undefined {
-    return this.configuration.clientAssertionSigningAlg;
-  }
-}
-
 export default class BaseAuthAPI extends BaseAPI {
-  constructor(protected configuration: Configuration) {
-    super(configuration);
+  domain: string;
+  clientId: string;
+  clientSecret?: string;
+  clientAssertionSigningKey?: string;
+  clientAssertionSigningAlg?: string;
+
+  constructor(configuration: Configuration) {
+    super({ ...configuration, baseUrl: `https://${configuration.domain}` });
+
+    this.domain = configuration.domain;
+    this.clientId = configuration.clientId;
+    this.clientSecret = configuration.clientSecret;
+    this.clientAssertionSigningKey = configuration.clientAssertionSigningKey;
+    this.clientAssertionSigningAlg = configuration.clientAssertionSigningAlg;
   }
 
   protected async addClientAuthentication(
@@ -46,13 +32,12 @@ export default class BaseAuthAPI extends BaseAPI {
   ): Promise<AddClientAuthenticationPayload> {
     return addClientAuthentication({
       payload,
-      // TODO Use domain instead of baseUrl in runtime
-      domain: this.configuration.baseUrl.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      domain: this.domain,
       required,
-      clientId: this.configuration.clientId,
-      clientSecret: this.configuration.clientSecret,
-      clientAssertionSigningKey: this.configuration.clientAssertionSigningKey,
-      clientAssertionSigningAlg: this.configuration.clientAssertionSigningAlg,
+      clientId: this.clientId,
+      clientSecret: this.clientSecret,
+      clientAssertionSigningKey: this.clientAssertionSigningKey,
+      clientAssertionSigningAlg: this.clientAssertionSigningAlg,
     });
   }
 }
