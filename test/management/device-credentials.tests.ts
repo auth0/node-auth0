@@ -1,18 +1,27 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const DeviceCredentialsManager = require(`../../src/management/DeviceCredentialsManager`);
-const { ArgumentError } = require('rest-facade');
+import {
+  DeviceCredentialsManager,
+  DeviceCredentialCreate,
+} from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('DeviceCredentialsManager', () => {
+  let credentials: DeviceCredentialsManager;
+
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.credentials = new DeviceCredentialsManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
+    credentials = client.deviceCredentials;
   });
 
   describe('instance', () => {
@@ -20,44 +29,34 @@ describe('DeviceCredentialsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.credentials[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((credentials as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new DeviceCredentialsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new DeviceCredentialsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new DeviceCredentialsManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new DeviceCredentialsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
-    beforeEach(function () {
-      this.request = nock(API_URL).get('/device-credentials').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', function (done) {
-      this.credentials.getAll(() => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).get('/device-credentials').reply(200, []);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.credentials.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
+      credentials.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -65,7 +64,7 @@ describe('DeviceCredentialsManager', () => {
 
       nock(API_URL).get('/device-credentials').reply(500);
 
-      this.credentials.getAll().catch((err) => {
+      credentials.getAll().catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -74,24 +73,22 @@ describe('DeviceCredentialsManager', () => {
     it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      const data = [{ test: true }];
+      const data = [{ device_id: '123' }];
       nock(API_URL).get('/device-credentials').reply(200, data);
 
-      this.credentials.getAll().then((credentials) => {
-        expect(credentials).to.be.an.instanceOf(Array);
+      credentials.getAll().then((credentials) => {
+        expect(credentials.data).to.be.an.instanceOf(Array);
 
-        expect(credentials.length).to.equal(data.length);
+        expect(credentials.data.length).to.equal(data.length);
 
-        expect(credentials[0].test).to.equal(data[0].test);
+        expect(credentials.data[0].device_id).to.equal(data[0].device_id);
 
         done();
       });
     });
 
     it('should perform a GET request to /api/v2/device-credentials', function (done) {
-      const { request } = this;
-
-      this.credentials.getAll().then(() => {
+      credentials.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -102,10 +99,10 @@ describe('DeviceCredentialsManager', () => {
 
       const request = nock(API_URL)
         .get('/device-credentials')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, []);
 
-      this.credentials.getAll().then(() => {
+      credentials.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -118,9 +115,9 @@ describe('DeviceCredentialsManager', () => {
         include_fields: true,
         fields: 'test',
       };
-      const request = nock(API_URL).get('/device-credentials').query(params).reply(200);
+      const request = nock(API_URL).get('/device-credentials').query(params).reply(200, []);
 
-      this.credentials.getAll(params).then(() => {
+      credentials.getAll(params).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -130,24 +127,21 @@ describe('DeviceCredentialsManager', () => {
 
   describe('#createPublicKey', () => {
     const data = {
+      device_id: 'Sample device',
+      value: '',
       device_name: 'Sample device',
       type: 'public_key',
       user_id: 'github|1234',
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/device-credentials').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.credentials.createPublicKey(data, () => {
-        done();
-      });
+      request = nock(API_URL).post('/device-credentials').reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.credentials
-        .createPublicKey(data)
+      credentials
+        .createPublicKey(data as DeviceCredentialCreate)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -157,7 +151,7 @@ describe('DeviceCredentialsManager', () => {
 
       nock(API_URL).post('/device-credentials').reply(500);
 
-      this.credentials.createPublicKey(data).catch((err) => {
+      credentials.createPublicKey(data as DeviceCredentialCreate).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -165,9 +159,7 @@ describe('DeviceCredentialsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/device-credentials', function (done) {
-      const { request } = this;
-
-      this.credentials.createPublicKey(data).then(() => {
+      credentials.createPublicKey(data as DeviceCredentialCreate).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -177,9 +169,9 @@ describe('DeviceCredentialsManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/device-credentials', data).reply(200);
+      const request = nock(API_URL).post('/device-credentials', data).reply(200, {});
 
-      this.credentials.createPublicKey(data).then(() => {
+      credentials.createPublicKey(data as DeviceCredentialCreate).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -191,10 +183,10 @@ describe('DeviceCredentialsManager', () => {
 
       const request = nock(API_URL)
         .post('/device-credentials')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
 
-      this.credentials.createPublicKey(data).then(() => {
+      credentials.createPublicKey(data as DeviceCredentialCreate).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -203,24 +195,23 @@ describe('DeviceCredentialsManager', () => {
   });
 
   describe('#delete', () => {
-    const id = 5;
+    const id = '5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/device-credentials/${id}`).reply(200);
+      request = nock(API_URL).delete(`/device-credentials/${id}`).reply(200);
     });
 
     it('should accept a callback', function (done) {
-      this.credentials.delete({ id }, done.bind(null, null));
+      credentials.delete({ id }, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function (done) {
-      this.credentials.delete({ id }).then(done.bind(null, null));
+      credentials.delete({ id }).then(done.bind(null, null));
     });
 
     it(`should perform a delete request to /device-credentials/${id}`, function (done) {
-      const { request } = this;
-
-      this.credentials.delete({ id }).then(() => {
+      credentials.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -232,7 +223,7 @@ describe('DeviceCredentialsManager', () => {
 
       nock(API_URL).delete(`/device-credentials/${id}`).reply(500);
 
-      this.credentials.delete({ id }).catch((err) => {
+      credentials.delete({ id }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -244,10 +235,10 @@ describe('DeviceCredentialsManager', () => {
 
       const request = nock(API_URL)
         .delete(`/device-credentials/${id}`)
-        .matchHeader('authorization', `Bearer ${this.token}`)
+        .matchHeader('authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.credentials.delete({ id }).then(() => {
+      credentials.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
