@@ -1,18 +1,27 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenants.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const TicketsManager = require(`../../src/management/TicketsManager`);
-const { ArgumentError } = require('rest-facade');
+import {
+  TicketsManager,
+  PatchProviderRequestNameEnum,
+  PostProviderRequestNameEnum,
+} from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('TicketsManager', () => {
+  let tickets: TicketsManager;
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.tickets = new TicketsManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
+    tickets = client.tickets;
   });
 
   describe('instance', () => {
@@ -20,28 +29,22 @@ describe('TicketsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.tickets[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((tickets as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new TicketsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new TicketsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new TicketsManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new TicketsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
@@ -50,19 +53,14 @@ describe('TicketsManager', () => {
       result_url: 'http://myapp.com/callback',
       user_id: '',
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/tickets/email-verification').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.tickets.verifyEmail(data, () => {
-        done();
-      });
+      request = nock(API_URL).post('/tickets/email-verification').reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.tickets.verifyEmail(data).then(done.bind(null, null)).catch(done.bind(null, null));
+      tickets.verifyEmail(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -70,16 +68,14 @@ describe('TicketsManager', () => {
 
       nock(API_URL).post('/tickets/email-verification').reply(500);
 
-      this.tickets.verifyEmail(data).catch((err) => {
+      tickets.verifyEmail(data).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
     it('should perform a POST request to /api/v2tickets/email-verification', async function () {
-      const { request } = this;
-
-      await this.tickets.verifyEmail(data);
+      await tickets.verifyEmail(data);
       expect(request.isDone()).to.be.true;
     });
 
@@ -88,10 +84,10 @@ describe('TicketsManager', () => {
 
       const request = nock(API_URL)
         .post('/tickets/email-verification')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      await this.tickets.verifyEmail({});
+      await tickets.verifyEmail({ user_id: '123' });
       expect(request.isDone()).to.be.true;
     });
 
@@ -100,12 +96,11 @@ describe('TicketsManager', () => {
 
       const request = nock(API_URL)
         .post('/tickets/email-verification', {
-          include_fields: true,
-          fields: 'test',
+          user_id: '123',
         })
-        .reply(200);
+        .reply(200, {});
 
-      await this.tickets.verifyEmail({ include_fields: true, fields: 'test' });
+      await tickets.verifyEmail({ user_id: '123' });
       expect(request.isDone()).to.be.true;
     });
   });
@@ -118,19 +113,14 @@ describe('TicketsManager', () => {
       connection_id: 'con_0000000000000001',
       email: '',
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/tickets/password-change').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.tickets.changePassword(data, () => {
-        done();
-      });
+      request = nock(API_URL).post('/tickets/password-change').reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.tickets.changePassword(data).then(done.bind(null, null)).catch(done.bind(null, null));
+      tickets.changePassword(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -138,25 +128,23 @@ describe('TicketsManager', () => {
 
       nock(API_URL).post('/tickets/email-verification').reply(500);
 
-      this.tickets.changePassword(data).catch((err) => {
+      tickets.changePassword(data).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
     it('should perform a POST request to /api/v2tickets/email-verification', async function () {
-      const { request } = this;
-
-      await this.tickets.changePassword(data);
+      await tickets.changePassword(data);
       expect(request.isDone()).to.be.true;
     });
 
     it('should pass the data in the body of the request', async function () {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/tickets/password-change', data).reply(200);
+      const request = nock(API_URL).post('/tickets/password-change', data).reply(200, {});
 
-      await this.tickets.changePassword(data);
+      await tickets.changePassword(data);
       expect(request.isDone()).to.be.true;
     });
 
@@ -165,10 +153,10 @@ describe('TicketsManager', () => {
 
       const request = nock(API_URL)
         .post('/tickets/password-change')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      await this.tickets.changePassword(data);
+      await tickets.changePassword(data);
       expect(request.isDone()).to.be.true;
     });
   });

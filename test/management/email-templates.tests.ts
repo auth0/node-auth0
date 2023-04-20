@@ -1,13 +1,20 @@
-const { expect } = require('chai');
-const nock = require('nock');
-const EmailTemplatesManager = require('../../src/management/EmailTemplatesManager');
-const { ArgumentError } = require('rest-facade');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenant.auth0.com';
-const TEMPLATE_NAME = 'foobar';
-const DEFAULT_PARAMS = { name: TEMPLATE_NAME };
+const API_URL = 'https://tenant.auth0.com/api/v2';
+
+import {
+  EmailTemplatesManager,
+  GetEmailTemplatesByTemplateNameTemplateNameEnum,
+} from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
+
+const TEMPLATE_NAME = GetEmailTemplatesByTemplateNameTemplateNameEnum.reset_email;
+const DEFAULT_PARAMS = { templateName: TEMPLATE_NAME };
 const DEFAULT_DATA = {
-  template: 'verify_email',
+  template: GetEmailTemplatesByTemplateNameTemplateNameEnum.verify_email,
   body: '',
   from: 'sender@auth0.com',
   resultUrl: '',
@@ -18,64 +25,57 @@ const DEFAULT_DATA = {
 };
 
 describe('EmailTemplatesManager', () => {
+  let emailTemplates: EmailTemplatesManager;
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.emailTemplates = new EmailTemplatesManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
+    emailTemplates = client.emailTemplates;
   });
   describe('instance', () => {
     const methods = ['get', 'create', 'update'];
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.emailTemplates[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((emailTemplates as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new EmailTemplatesManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new EmailTemplatesManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new EmailTemplatesManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new EmailTemplatesManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#get', () => {
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL)
-        .get(`/email-templates/${TEMPLATE_NAME}`)
-        .reply(200, DEFAULT_DATA);
+      request = nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(200, DEFAULT_DATA);
     });
 
     it('should accept a callback', function (done) {
-      this.emailTemplates.get(DEFAULT_PARAMS, done.bind(null, null));
+      emailTemplates.get(DEFAULT_PARAMS, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.emailTemplates
-        .get(DEFAULT_PARAMS)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      emailTemplates.get(DEFAULT_PARAMS).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it(`should perform a GET request to /api/v2/email-templates/${TEMPLATE_NAME}`, function (done) {
-      const { request } = this;
-      this.emailTemplates.get(DEFAULT_PARAMS).then(() => {
+      emailTemplates.get(DEFAULT_PARAMS).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -87,7 +87,7 @@ describe('EmailTemplatesManager', () => {
 
       nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(500);
 
-      this.emailTemplates.get(DEFAULT_PARAMS).catch((err) => {
+      emailTemplates.get(DEFAULT_PARAMS).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -99,10 +99,10 @@ describe('EmailTemplatesManager', () => {
 
       const request = nock(API_URL)
         .get(`/email-templates/${TEMPLATE_NAME}`)
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      this.emailTemplates.get(DEFAULT_PARAMS).then(() => {
+      emailTemplates.get(DEFAULT_PARAMS).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -111,21 +111,14 @@ describe('EmailTemplatesManager', () => {
   });
 
   describe('#create', () => {
-    beforeEach(function () {
-      this.request = nock(API_URL).post('/email-templates').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', function (done) {
-      this.emailTemplates.create(DEFAULT_DATA, () => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).post('/email-templates').reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.emailTemplates
-        .create(DEFAULT_DATA)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      emailTemplates.create(DEFAULT_DATA).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -133,7 +126,7 @@ describe('EmailTemplatesManager', () => {
 
       nock(API_URL).post('/email-templates').reply(500);
 
-      this.emailTemplates.create(DEFAULT_DATA).catch((err) => {
+      emailTemplates.create(DEFAULT_DATA).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -141,9 +134,7 @@ describe('EmailTemplatesManager', () => {
     });
 
     it('should perform a POST request to /api/v2/email-templates', function (done) {
-      const { request } = this;
-
-      this.emailTemplates.create(DEFAULT_DATA).then(() => {
+      emailTemplates.create(DEFAULT_DATA).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -153,9 +144,9 @@ describe('EmailTemplatesManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/email-templates', DEFAULT_DATA).reply(200);
+      const request = nock(API_URL).post('/email-templates', DEFAULT_DATA).reply(200, {});
 
-      this.emailTemplates.create(DEFAULT_DATA).then(() => {
+      emailTemplates.create(DEFAULT_DATA).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -167,10 +158,10 @@ describe('EmailTemplatesManager', () => {
 
       const request = nock(API_URL)
         .post('/email-templates')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      this.emailTemplates.create(DEFAULT_DATA).then(() => {
+      emailTemplates.create(DEFAULT_DATA).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -179,29 +170,26 @@ describe('EmailTemplatesManager', () => {
   });
 
   describe('#update', () => {
-    beforeEach(function () {
-      this.patchData = { from: 'new@email.com' };
+    const patchData = { from: 'new@email.com' };
+    let request: nock.Scope;
 
-      this.request = nock(API_URL)
-        .patch(`/email-templates/${TEMPLATE_NAME}`)
-        .reply(200, DEFAULT_DATA);
+    beforeEach(function () {
+      request = nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(200, DEFAULT_DATA);
     });
 
     it('should accept a callback', function (done) {
-      this.emailTemplates.update(DEFAULT_PARAMS, {}, done.bind(null, null));
+      emailTemplates.update(DEFAULT_PARAMS, {}, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.emailTemplates
+      emailTemplates
         .update(DEFAULT_PARAMS, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it(`should perform a PATCH request to /api/v2/email-templates/${TEMPLATE_NAME}`, function (done) {
-      const { request } = this;
-
-      this.emailTemplates.update(DEFAULT_PARAMS, {}).then(() => {
+      emailTemplates.update(DEFAULT_PARAMS, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -212,10 +200,10 @@ describe('EmailTemplatesManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .patch(`/email-templates/${TEMPLATE_NAME}`, this.patchData)
-        .reply(200);
+        .patch(`/email-templates/${TEMPLATE_NAME}`, patchData)
+        .reply(200, {});
 
-      this.emailTemplates.update(DEFAULT_PARAMS, this.patchData).then(() => {
+      emailTemplates.update(DEFAULT_PARAMS, patchData).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -227,7 +215,7 @@ describe('EmailTemplatesManager', () => {
 
       nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(500);
 
-      this.emailTemplates.update(DEFAULT_PARAMS, this.patchData).catch((err) => {
+      emailTemplates.update(DEFAULT_PARAMS, patchData).catch((err) => {
         expect(err).to.exist;
 
         done();

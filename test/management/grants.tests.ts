@@ -1,20 +1,23 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const GrantsManager = require(`../../src/management/GrantsManager`);
-const { ArgumentError } = require('rest-facade');
+import { GrantsManager } from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('GrantsManager', () => {
+  let grants: GrantsManager;
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.grants = new GrantsManager({
-      headers: {
-        authorization: `Bearer ${this.token}`,
-      },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
+    grants = client.grants;
   });
 
   afterEach(() => {
@@ -26,44 +29,34 @@ describe('GrantsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.grants[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((grants as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new GrantsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new GrantsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new GrantsManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new GrantsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
-    beforeEach(function () {
-      this.request = nock(API_URL).get('/grants').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', function (done) {
-      this.grants.getAll(() => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).get('/grants').reply(200, []);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.grants.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
+      grants.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -71,7 +64,7 @@ describe('GrantsManager', () => {
 
       nock(API_URL).get('/grants').reply(500);
 
-      this.grants.getAll().catch((err) => {
+      grants.getAll().catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -80,24 +73,22 @@ describe('GrantsManager', () => {
     it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      const data = [{ test: true }];
+      const data = [{ id: '123' }];
       nock(API_URL).get('/grants').reply(200, data);
 
-      this.grants.getAll().then((grants) => {
-        expect(grants).to.be.an.instanceOf(Array);
+      grants.getAll().then((grants) => {
+        expect(grants.data).to.be.an.instanceOf(Array);
 
-        expect(grants.length).to.equal(data.length);
+        expect(grants.data.length).to.equal(data.length);
 
-        expect(grants[0].test).to.equal(data[0].test);
+        expect(grants.data[0].id).to.equal(data[0].id);
 
         done();
       });
     });
 
     it('should perform a GET request to /api/v2/grants', function (done) {
-      const { request } = this;
-
-      this.grants.getAll().then(() => {
+      grants.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -108,10 +99,10 @@ describe('GrantsManager', () => {
 
       const request = nock(API_URL)
         .get('/grants')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, []);
 
-      this.grants.getAll().then(() => {
+      grants.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -123,12 +114,11 @@ describe('GrantsManager', () => {
       const request = nock(API_URL)
         .get('/grants')
         .query({
-          include_fields: true,
-          fields: 'test',
+          audience: '123',
         })
-        .reply(200);
+        .reply(200, []);
 
-      this.grants.getAll({ include_fields: true, fields: 'test' }).then(() => {
+      grants.getAll({ audience: '123' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -136,24 +126,23 @@ describe('GrantsManager', () => {
   });
 
   describe('#delete', () => {
-    const id = 5;
+    const id = '5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/grants/${id}`).reply(200);
+      request = nock(API_URL).delete(`/grants/${id}`).reply(200);
     });
 
     it('should accept a callback', function (done) {
-      this.grants.delete({ id }, done.bind(null, null));
+      grants.delete({ id }, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function (done) {
-      this.grants.delete({ id }).then(done.bind(null, null));
+      grants.delete({ id }).then(done.bind(null, null));
     });
 
     it(`should perform a DELETE request to /grants/${id}`, function (done) {
-      const { request } = this;
-
-      this.grants.delete({ id }).then(() => {
+      grants.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

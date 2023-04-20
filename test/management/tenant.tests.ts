@@ -1,18 +1,23 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenants.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const TenantManager = require(`../../src/management/TenantManager`);
-const { ArgumentError } = require('rest-facade');
+import { TenantsManager } from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('TenantManager', () => {
+  let tenant: TenantsManager;
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.tenant = new TenantManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
+    tenant = client.tenants;
   });
 
   describe('instance', () => {
@@ -20,44 +25,34 @@ describe('TenantManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.tenant[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((tenant as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new TenantManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new TenantManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new TenantsManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new TenantManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+        new TenantsManager({ baseUrl: '' });
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getSettings', () => {
-    beforeEach(function () {
-      this.request = nock(API_URL).get('/tenants/settings').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', function (done) {
-      this.tenant.getSettings(() => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).get('/tenants/settings').reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.tenant.getSettings().then(done.bind(null, null)).catch(done.bind(null, null));
+      tenant.getSettings().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -65,7 +60,7 @@ describe('TenantManager', () => {
 
       nock(API_URL).get('/tenants/settings').reply(500);
 
-      this.tenant.getSettings().catch((err) => {
+      tenant.getSettings().catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -74,21 +69,16 @@ describe('TenantManager', () => {
     it('should pass the body of the response to the "then" handler', async function () {
       nock.cleanAll();
 
-      const data = [{ test: true }];
+      const data = { friendly_name: '123' };
       nock(API_URL).get('/tenants/settings').reply(200, data);
 
-      const blacklistedTokens = await this.tenant.getSettings();
-      expect(blacklistedTokens).to.be.an.instanceOf(Array);
+      const blacklistedTokens = await tenant.getSettings();
 
-      expect(blacklistedTokens.length).to.equal(data.length);
-
-      expect(blacklistedTokens[0].test).to.equal(data[0].test);
+      expect(blacklistedTokens.data.friendly_name).to.equal(data.friendly_name);
     });
 
     it('should perform a GET request to /api/v2/tenants/settings', async function () {
-      const { request } = this;
-
-      await this.tenant.getSettings();
+      await tenant.getSettings();
       expect(request.isDone()).to.be.true;
     });
 
@@ -97,10 +87,10 @@ describe('TenantManager', () => {
 
       const request = nock(API_URL)
         .get('/tenants/settings')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      await this.tenant.getSettings();
+      await tenant.getSettings();
       expect(request.isDone()).to.be.true;
     });
 
@@ -113,9 +103,9 @@ describe('TenantManager', () => {
           include_fields: true,
           fields: 'test',
         })
-        .reply(200);
+        .reply(200, {});
 
-      await this.tenant.getSettings({ include_fields: true, fields: 'test' });
+      await tenant.getSettings({ include_fields: true, fields: 'test' });
       expect(request.isDone()).to.be.true;
     });
   });
@@ -124,19 +114,14 @@ describe('TenantManager', () => {
     const data = {
       friendly_name: 'Test name',
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).patch('/tenants/settings').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.tenant.updateSettings(data, () => {
-        done();
-      });
+      request = nock(API_URL).patch('/tenants/settings').reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.tenant.updateSettings(data).then(done.bind(null, null)).catch(done.bind(null, null));
+      tenant.updateSettings(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -144,25 +129,23 @@ describe('TenantManager', () => {
 
       nock(API_URL).patch('/tenants/settings').reply(500);
 
-      this.tenant.updateSettings(data).catch((err) => {
+      tenant.updateSettings(data).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
     it('should perform a PATCH request to /api/v2/tenants/settings', async function () {
-      const { request } = this;
-
-      await this.tenant.updateSettings(data);
+      await tenant.updateSettings(data);
       expect(request.isDone()).to.be.true;
     });
 
     it('should pass the data in the body of the request', async function () {
       nock.cleanAll();
 
-      const request = nock(API_URL).patch('/tenants/settings', data).reply(200);
+      const request = nock(API_URL).patch('/tenants/settings', data).reply(200, {});
 
-      await this.tenant.updateSettings(data);
+      await tenant.updateSettings(data);
       expect(request.isDone()).to.be.true;
     });
 
@@ -171,10 +154,10 @@ describe('TenantManager', () => {
 
       const request = nock(API_URL)
         .patch('/tenants/settings')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      await this.tenant.updateSettings(data);
+      await tenant.updateSettings(data);
       expect(request.isDone()).to.be.true;
     });
   });
