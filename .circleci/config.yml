@@ -10,6 +10,7 @@ jobs:
         default: "16.18"
     docker:
       - image: cimg/node:<< parameters.node-version >>
+    resource_class: xlarge
     environment:
       LANG: en_US.UTF-8
     steps:
