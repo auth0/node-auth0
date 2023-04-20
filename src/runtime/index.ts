@@ -30,22 +30,6 @@ export class BaseAPI {
     this.fetchApi = configuration.fetchApi || fetch;
   }
 
-  withMiddleware<T extends BaseAPI>(this: T, ...middlewares: Middleware[]) {
-    const next = this.clone<T>();
-    next.middleware = next.middleware.concat(...middlewares);
-    return next;
-  }
-
-  withPreMiddleware<T extends BaseAPI>(this: T, ...preMiddlewares: Array<Middleware['pre']>) {
-    const middlewares = preMiddlewares.map((pre) => ({ pre }));
-    return this.withMiddleware<T>(...middlewares);
-  }
-
-  withPostMiddleware<T extends BaseAPI>(this: T, ...postMiddlewares: Array<Middleware['post']>) {
-    const middlewares = postMiddlewares.map((post) => ({ post }));
-    return this.withMiddleware<T>(...middlewares);
-  }
-
   protected async request(
     context: RequestOpts,
     initOverrides?: RequestInit | InitOverrideFunction
