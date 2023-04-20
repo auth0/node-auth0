@@ -49,13 +49,13 @@ describe('BrandingManager', () => {
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new BrandingManager(new Configuration({} as any));
+        new BrandingManager({} as any);
       }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new BrandingManager(new Configuration({ baseUrl: '' }));
+        new BrandingManager({ baseUrl: '' });
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

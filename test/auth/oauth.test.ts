@@ -4,10 +4,11 @@ import { jest } from '@jest/globals';
 import OAuth, { TokenSet } from '../../src/auth/OAuth';
 import { AuthenticationClient } from '../../src/auth';
 
-const baseUrl = 'https://example.auth0.com';
+const domain = 'example.auth0.com';
+const baseUrl = `https://${domain}`;
 
 const opts = {
-  baseUrl,
+  domain,
   clientId: 'my-client-id',
   clientSecret: 'my-client-secret',
 };

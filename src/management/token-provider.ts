@@ -78,7 +78,7 @@ export class TokenProvider {
 
     this.authenticationClient = new AuthenticationClient({
       ...authenticationClientOptions,
-      baseUrl: `https://${params.domain}`,
+      domain: params.domain,
     });
   }
 

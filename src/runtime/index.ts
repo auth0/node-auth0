@@ -1,4 +1,6 @@
-export interface ConfigurationParameters {
+import fetch, { RequestInit, Response } from 'node-fetch';
+
+export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation
   middleware?: Middleware[]; // middleware to apply before/after fetch requests
@@ -6,39 +8,13 @@ export interface ConfigurationParameters {
   headers?: HTTPHeaders; //header params we want to use on every request
 }
 
-export class Configuration {
-  constructor(protected configuration: ConfigurationParameters) {}
-
-  set config(configuration: Configuration) {
-    this.configuration = configuration;
-  }
-
-  get baseUrl(): string {
-    return this.configuration.baseUrl;
-  }
-
-  get fetchApi(): FetchAPI | undefined {
-    return this.configuration.fetchApi;
-  }
-
-  get middleware(): Middleware[] {
-    return this.configuration.middleware || [];
-  }
-
-  get queryParamsStringify(): (params: HTTPQuery) => string {
-    return this.configuration.queryParamsStringify || querystring;
-  }
-
-  get headers(): HTTPHeaders | undefined {
-    return this.configuration.headers;
-  }
-}
-
 /**
  * This is the base class for all generated API classes.
  */
 export class BaseAPI {
   private middleware: Middleware[];
+  private queryParamsStringify: (params: HTTPQuery) => string;
+  fetchApi: FetchAPI;
 
   constructor(protected configuration: Configuration) {
     if (configuration.baseUrl === null || configuration.baseUrl === undefined) {
@@ -49,7 +25,9 @@ export class BaseAPI {
       throw new Error('The provided base URL is invalid');
     }
 
-    this.middleware = configuration.middleware;
+    this.middleware = configuration.middleware || [];
+    this.queryParamsStringify = this.configuration.queryParamsStringify || querystring;
+    this.fetchApi = configuration.fetchApi || fetch;
   }
 
   withMiddleware<T extends BaseAPI>(this: T, ...middlewares: Middleware[]) {
@@ -73,7 +51,7 @@ export class BaseAPI {
     initOverrides?: RequestInit | InitOverrideFunction
   ): Promise<Response> {
     const { url, init } = await this.createFetchParams(context, initOverrides);
-    const response = await this.fetchApi(url, init);
+    const response = await this.fetch(url, init);
     if (response && response.status >= 200 && response.status < 300) {
       return response;
     }
@@ -89,7 +67,7 @@ export class BaseAPI {
       // only add the querystring to the URL if there are query parameters.
       // this is done to avoid urls ending with a "?" character which buggy webservers
       // do not handle correctly sometimes.
-      url += `?${this.configuration.queryParamsStringify(context.query)}`;
+      url += `?${this.queryParamsStringify(context.query)}`;
     }
 
     const headers = Object.assign({}, this.configuration.headers, context.headers);
@@ -125,7 +103,7 @@ export class BaseAPI {
     return { url, init };
   }
 
-  private fetchApi = async (url: string, init: RequestInit) => {
+  private fetch: typeof fetch = async (url: URL, init: RequestInit) => {
     let fetchParams = { url, init };
     for (const middleware of this.middleware) {
       if (middleware.pre) {
@@ -138,7 +116,7 @@ export class BaseAPI {
     }
     let response: Response | undefined = undefined;
     try {
-      response = await (this.configuration.fetchApi || fetch)(fetchParams.url, fetchParams.init);
+      response = await this.fetchApi(fetchParams.url, fetchParams.init);
     } catch (e) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
@@ -225,7 +203,7 @@ export const COLLECTION_FORMATS = {
   pipes: '|',
 };
 
-export type FetchAPI = WindowOrWorkerGlobalScope['fetch'];
+export type FetchAPI = typeof fetch;
 
 export type Json = any;
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';
@@ -256,7 +234,7 @@ export type InitOverrideFunction = (requestContext: {
 export type InitOverride = RequestInit | InitOverrideFunction;
 
 export interface FetchParams {
-  url: string;
+  url: URL;
   init: RequestInit;
 }
 
@@ -323,20 +301,20 @@ export interface Consume {
 
 export interface RequestContext {
   fetch: FetchAPI;
-  url: string;
+  url: URL;
   init: RequestInit;
 }
 
 export interface ResponseContext {
   fetch: FetchAPI;
-  url: string;
+  url: URL;
   init: RequestInit;
   response: Response;
 }
 
 export interface ErrorContext {
   fetch: FetchAPI;
-  url: string;
+  url: URL;
   init: RequestInit;
   error: unknown;
   response?: Response;

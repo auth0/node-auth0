@@ -42,34 +42,15 @@ describe('ClientGrantsManager', () => {
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new ClientGrantsManager(
-          new Configuration({
-            fetchApi: (url: RequestInfo, init: RequestInit) => {
-              return fetch(
-                url as NFRequestInfo,
-                init as NFRequestInit
-              ) as unknown as Promise<Response>;
-            },
-            middleware: [],
-          } as any)
-        );
+        new ClientGrantsManager({} as any);
       }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new ClientGrantsManager(
-          new Configuration({
-            baseUrl: '',
-            fetchApi: (url: RequestInfo, init: RequestInit) => {
-              return fetch(
-                url as NFRequestInfo,
-                init as NFRequestInit
-              ) as unknown as Promise<Response>;
-            },
-            middleware: [],
-          })
-        );
+        new ClientGrantsManager({
+          baseUrl: '',
+        });
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
