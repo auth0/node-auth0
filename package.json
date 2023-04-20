@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "mocha && npm run test:jest",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' mocha && npm run test:jest",
     "test:jest": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:ci": "c8 npm run test",
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 './test/**/*.tests.js' './test/*.tests.js' --watch",
