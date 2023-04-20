@@ -35,7 +35,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["16.18", "18.12"]
+              node-version: ["16.18", "18.12", "20.0"]
       - ship/node-publish:
           requires:
             - build-and-test
