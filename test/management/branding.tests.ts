@@ -12,9 +12,7 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 
 import {
   BrandingManager,
-  Configuration,
   DeleteBrandingThemeRequest,
-  PatchBrandingRequest,
   PatchBrandingThemeRequest,
   PostBrandingThemeRequest,
 } from '../../src/management/__generated/index';

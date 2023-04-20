@@ -1,15 +1,10 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import nock from 'nock';
-import fetch, { RequestInfo as NFRequestInfo, RequestInit as NFRequestInit } from 'node-fetch';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import {
-  ClientsManager,
-  Configuration,
-  RequiredError,
-} from '../../src/management/__generated/index';
+import { ClientsManager, RequiredError } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 
 chai.use(chaiAsPromised);

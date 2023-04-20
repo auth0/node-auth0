@@ -3,7 +3,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { BlacklistsManager, Configuration } from '../../src/management/__generated/index';
+import { BlacklistsManager } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;

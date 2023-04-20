@@ -1,12 +1,10 @@
 import chai from 'chai';
 import nock from 'nock';
-import fetch, { RequestInfo as NFRequestInfo, RequestInit as NFRequestInit } from 'node-fetch';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
 import {
   CustomDomainsManager,
-  Configuration,
   PostCustomDomainsRequestTypeEnum,
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';

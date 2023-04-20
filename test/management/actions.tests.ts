@@ -5,16 +5,13 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 
 import {
   ActionsManager,
-  Configuration,
   GetActionVersionRequest,
   GetActions200ResponseActionsInner,
   GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum,
   GetActionsTriggerIdEnum,
   GetBindings200ResponseBindingsInner,
   GetExecution200Response,
-  GetExecution200ResponseResultsInner,
   PatchActionOperationRequest,
-  PatchActionRequest,
   PatchBindingsRequest,
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
