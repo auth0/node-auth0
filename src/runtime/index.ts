@@ -14,7 +14,7 @@ export interface Configuration {
 export class BaseAPI {
   private middleware: Middleware[];
   private queryParamsStringify: (params: HTTPQuery) => string;
-  fetchApi: FetchAPI;
+  private fetchApi: FetchAPI;
 
   constructor(protected configuration: Configuration) {
     if (configuration.baseUrl === null || configuration.baseUrl === undefined) {
