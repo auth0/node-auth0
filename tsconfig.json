@@ -10,7 +10,8 @@
     "declarationDir": "./dist/typings",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "module": "ESNext"
+    "module": "ESNext",
+    "strict": true
   },
   "include": ["src"]
 }

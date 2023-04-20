@@ -86,7 +86,7 @@ export class TokenProvider {
     memoizer<TokenProviderOptions, TokenSet>({
       load: (options: TokenProviderOptions, callback: (err: any, data?: TokenSet) => void) => {
         this.authenticationClient.oauth
-          .clientCredentialsGrant({ audience: this.options.audience })
+          .clientCredentialsGrant({ audience: options.audience })
           .then(({ data }: { data: TokenSet }) => {
             callback(null, data);
           })
@@ -114,7 +114,7 @@ export class TokenProvider {
 
       // TODO: Need to patch lru-memoizer to accept a max on its types.
       // max: 100,
-    })
+    }) as (options: TokenProviderOptions, callback: (err: any, tokenSet: TokenSet) => void) => void
   );
 
   /**
