@@ -1,18 +1,28 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
+import fetch, { RequestInfo as NFRequestInfo, RequestInit as NFRequestInit } from 'node-fetch';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const CustomDomainsManager = require(`../../src/management/CustomDomainsManager`);
-const { ArgumentError } = require('rest-facade');
+import {
+  CustomDomainsManager,
+  Configuration,
+  PostCustomDomainsRequestTypeEnum,
+} from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('CustomDomainsManager', () => {
+  let customDomains: CustomDomainsManager;
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.customDomains = new CustomDomainsManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
+    customDomains = client.customDomains;
   });
 
   describe('instance', () => {
@@ -20,44 +30,36 @@ describe('CustomDomainsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.customDomains[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((customDomains as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new CustomDomainsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new CustomDomainsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new CustomDomainsManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new CustomDomainsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+        new CustomDomainsManager({
+          baseUrl: '',
+        });
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
-    beforeEach(function () {
-      this.request = nock(API_URL).get('/custom-domains').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', function (done) {
-      this.customDomains.getAll(() => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).get('/custom-domains').reply(200, []);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.customDomains.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
+      customDomains.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -65,7 +67,7 @@ describe('CustomDomainsManager', () => {
 
       nock(API_URL).get('/custom-domains').reply(500);
 
-      this.customDomains.getAll().catch((err) => {
+      customDomains.getAll().catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -77,21 +79,19 @@ describe('CustomDomainsManager', () => {
       const data = [{ custom_domain_id: 'cd_0000000000000001' }];
       nock(API_URL).get('/custom-domains').reply(200, data);
 
-      this.customDomains.getAll().then((customDomains) => {
-        expect(customDomains).to.be.an.instanceOf(Array);
+      customDomains.getAll().then((customDomains) => {
+        expect(customDomains.data).to.be.an.instanceOf(Array);
 
-        expect(customDomains.length).to.equal(data.length);
+        expect(customDomains.data.length).to.equal(data.length);
 
-        expect(customDomains[0].test).to.equal(data[0].test);
+        expect(customDomains.data[0].custom_domain_id).to.equal(data[0].custom_domain_id);
 
         done();
       });
     });
 
     it('should perform a GET request to /api/v2/custom-domains', function (done) {
-      const { request } = this;
-
-      this.customDomains.getAll().then(() => {
+      customDomains.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -102,10 +102,10 @@ describe('CustomDomainsManager', () => {
 
       const request = nock(API_URL)
         .get('/custom-domains')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, []);
 
-      this.customDomains.getAll().then(() => {
+      customDomains.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -113,43 +113,35 @@ describe('CustomDomainsManager', () => {
   });
 
   describe('#get', () => {
-    beforeEach(function () {
-      this.data = [
-        {
-          custom_domain_id: 'cd_0000000000000001',
-          domain: 'login.mycompany.com',
-          primary: false,
-          status: 'ready',
-          type: 'self_managed_certs',
-          origin_domain_name: 'mycompany_cd_0000000000000001.edge.tenants.auth0.com',
-          verification: {
-            methods: ['object'],
-          },
+    const data = [
+      {
+        custom_domain_id: 'cd_0000000000000001',
+        domain: 'login.mycompany.com',
+        primary: false,
+        status: 'ready',
+        type: 'self_managed_certs',
+        origin_domain_name: 'mycompany_cd_0000000000000001.edge.tenants.auth0.com',
+        verification: {
+          methods: ['object'],
         },
-      ];
+      },
+    ];
 
-      this.request = nock(API_URL)
-        .get(`/custom-domains/${this.data[0].custom_domain_id}`)
-        .reply(200, this.data);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', function (done) {
-      const params = { id: this.data[0].custom_domain_id };
-
-      this.customDomains.get(params, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL).get(`/custom-domains/${data[0].custom_domain_id}`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.customDomains
-        .get({ id: this.data[0].custom_domain_id })
+      customDomains
+        .get({ id: data[0].custom_domain_id })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/custom-domains/cd_0000000000000001', function (done) {
-      const { request } = this;
-
-      this.customDomains.get({ id: this.data[0].custom_domain_id }).then(() => {
+      customDomains.get({ id: data[0].custom_domain_id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -159,9 +151,9 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/custom-domains/${this.data.id}`).reply(500);
+      nock(API_URL).get(`/custom-domains/${data[0].custom_domain_id}`).reply(500);
 
-      this.customDomains.get({ id: this.data.id }).catch((err) => {
+      customDomains.get({ id: data[0].custom_domain_id }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -172,11 +164,11 @@ describe('CustomDomainsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get(`/custom-domains/${this.data.id}`)
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .get(`/custom-domains/${data[0].custom_domain_id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data[0]);
 
-      this.customDomains.get({ id: this.data.id }).then(() => {
+      customDomains.get({ id: data[0].custom_domain_id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -190,25 +182,20 @@ describe('CustomDomainsManager', () => {
       domain: 'login.mycompany.com',
       primary: false,
       status: 'ready',
-      type: 'self_managed_certs',
+      type: PostCustomDomainsRequestTypeEnum.self_managed_certs,
       origin_domain_name: 'mycompany_cd_0000000000000001.edge.tenants.auth0.com',
       verification: {
         methods: ['object'],
       },
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/custom-domains').reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.customDomains.create(data, () => {
-        done();
-      });
+      request = nock(API_URL).post('/custom-domains').reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.customDomains.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
+      customDomains.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -216,7 +203,7 @@ describe('CustomDomainsManager', () => {
 
       nock(API_URL).post('/custom-domains').reply(500);
 
-      this.customDomains.create(data).catch((err) => {
+      customDomains.create(data).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -224,9 +211,7 @@ describe('CustomDomainsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/custom-domains', function (done) {
-      const { request } = this;
-
-      this.customDomains.create(data).then(() => {
+      customDomains.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -236,9 +221,9 @@ describe('CustomDomainsManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/custom-domains', data).reply(200);
+      const request = nock(API_URL).post('/custom-domains', data).reply(200, {});
 
-      this.customDomains.create(data).then(() => {
+      customDomains.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -250,10 +235,10 @@ describe('CustomDomainsManager', () => {
 
       const request = nock(API_URL)
         .post('/custom-domains')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
 
-      this.customDomains.create(data).then(() => {
+      customDomains.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -263,23 +248,18 @@ describe('CustomDomainsManager', () => {
 
   describe('#delete', () => {
     const id = 'cd_0000000000000001';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/custom-domains/${id}`).reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      this.customDomains.delete({ id }, done.bind(null, null));
+      request = nock(API_URL).delete(`/custom-domains/${id}`).reply(200);
     });
 
     it('should return a promise when no callback is given', function (done) {
-      this.customDomains.delete({ id }).then(done.bind(null, null));
+      customDomains.delete({ id }).then(done.bind(null, null));
     });
 
     it(`should perform a delete request to /custom-domains/${id}`, function (done) {
-      const { request } = this;
-
-      this.customDomains.delete({ id }).then(() => {
+      customDomains.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -291,7 +271,7 @@ describe('CustomDomainsManager', () => {
 
       nock(API_URL).delete(`/custom-domains/${id}`).reply(500);
 
-      this.customDomains.delete({ id }).catch((err) => {
+      customDomains.delete({ id }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -303,10 +283,10 @@ describe('CustomDomainsManager', () => {
 
       const request = nock(API_URL)
         .delete(`/custom-domains/${id}`)
-        .matchHeader('authorization', `Bearer ${this.token}`)
+        .matchHeader('authorization', `Bearer ${token}`)
         .reply(200);
 
-      this.customDomains.delete({ id }).then(() => {
+      customDomains.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -315,29 +295,22 @@ describe('CustomDomainsManager', () => {
   });
 
   describe('#verify', () => {
+    const data = { id: 'cd_0000000000000001' };
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = { id: 'cd_0000000000000001' };
-
-      this.request = nock(API_URL)
-        .post(`/custom-domains/${this.data.id}/verify`)
-        .reply(200, this.data);
-    });
-
-    it('should accept a callback', function (done) {
-      this.customDomains.verify({ id: this.data.id }, done.bind(null, null));
+      request = nock(API_URL).post(`/custom-domains/${data.id}/verify`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.customDomains
-        .verify({ id: this.data.id }, {})
+      customDomains
+        .verify({ id: data.id }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/custom-domains/cd_0000000000000001/verify', function (done) {
-      const { request } = this;
-
-      this.customDomains.verify({ id: this.data.id }).then(() => {
+      customDomains.verify({ id: data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -347,9 +320,9 @@ describe('CustomDomainsManager', () => {
     it('should include the new data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post(`/custom-domains/${this.data.id}/verify`).reply(200);
+      const request = nock(API_URL).post(`/custom-domains/${data.id}/verify`).reply(200, {});
 
-      this.customDomains.verify({ id: this.data.id }).then(() => {
+      customDomains.verify({ id: data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -359,9 +332,9 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/custom-domains/${this.data.id}/verify`).reply(500);
+      nock(API_URL).post(`/custom-domains/${data.id}/verify`).reply(500);
 
-      this.customDomains.verify({ id: this.data.id }).catch((err) => {
+      customDomains.verify({ id: data.id }).catch((err) => {
         expect(err).to.exist;
 
         done();

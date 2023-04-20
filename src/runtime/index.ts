@@ -1,4 +1,4 @@
-import fetch, { RequestInit, Response } from 'node-fetch';
+import fetch, { RequestInit, RequestInfo, Response } from 'node-fetch';
 
 export interface Configuration {
   baseUrl: string; // override base path
@@ -103,7 +103,7 @@ export class BaseAPI {
     return { url, init };
   }
 
-  private fetch: typeof fetch = async (url: URL, init: RequestInit) => {
+  private fetch = async (url: URL | RequestInfo, init: RequestInit) => {
     let fetchParams = { url, init };
     for (const middleware of this.middleware) {
       if (middleware.pre) {
@@ -123,8 +123,7 @@ export class BaseAPI {
           response =
             (await middleware.onError({
               fetch: this.fetchApi,
-              url: fetchParams.url,
-              init: fetchParams.init,
+              ...fetchParams,
               error: e,
               response: response ? response.clone() : undefined,
             })) || response;
@@ -146,8 +145,7 @@ export class BaseAPI {
         response =
           (await middleware.post({
             fetch: this.fetchApi,
-            url: fetchParams.url,
-            init: fetchParams.init,
+            ...fetchParams,
             response: response.clone(),
           })) || response;
       }
@@ -234,7 +232,7 @@ export type InitOverrideFunction = (requestContext: {
 export type InitOverride = RequestInit | InitOverrideFunction;
 
 export interface FetchParams {
-  url: URL;
+  url: URL | RequestInfo;
   init: RequestInit;
 }
 
@@ -301,20 +299,20 @@ export interface Consume {
 
 export interface RequestContext {
   fetch: FetchAPI;
-  url: URL;
+  url: URL | RequestInfo;
   init: RequestInit;
 }
 
 export interface ResponseContext {
   fetch: FetchAPI;
-  url: URL;
+  url: URL | RequestInfo;
   init: RequestInit;
   response: Response;
 }
 
 export interface ErrorContext {
   fetch: FetchAPI;
-  url: URL;
+  url: URL | RequestInfo;
   init: RequestInit;
   error: unknown;
   response?: Response;

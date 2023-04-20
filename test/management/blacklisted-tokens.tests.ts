@@ -9,13 +9,15 @@ import { ManagementClient } from '../../src/management';
 const { expect } = chai;
 
 describe('BlacklistedTokensManager', () => {
+  const token = 'TOKEN';
+  let blacklistedTokens: BlacklistsManager;
+
   before(function () {
-    this.token = 'TOKEN';
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
-      token: this.token,
+      token: token,
     });
-    this.blacklistedTokens = client.blacklists;
+    blacklistedTokens = client.blacklists;
   });
 
   describe('instance', () => {
@@ -23,7 +25,7 @@ describe('BlacklistedTokensManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.blacklistedTokens[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((blacklistedTokens as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
@@ -43,14 +45,16 @@ describe('BlacklistedTokensManager', () => {
   });
 
   describe('#getAll', () => {
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL)
+      request = nock(API_URL)
         .get('/blacklists/tokens')
         .reply(200, [{ aud: 'abc', jti: '123' }]);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.blacklistedTokens.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
+      blacklistedTokens.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -58,7 +62,7 @@ describe('BlacklistedTokensManager', () => {
 
       nock(API_URL).get('/blacklists/tokens').reply(500);
 
-      this.blacklistedTokens.getAll().catch((err) => {
+      blacklistedTokens.getAll().catch((err) => {
         expect(err).to.exist;
         done();
       });
@@ -70,7 +74,7 @@ describe('BlacklistedTokensManager', () => {
       const data = [{ aud: 'abc', jti: '123' }];
       nock(API_URL).get('/blacklists/tokens').reply(200, data);
 
-      this.blacklistedTokens.getAll().then((blacklistedTokens) => {
+      blacklistedTokens.getAll().then((blacklistedTokens) => {
         expect(blacklistedTokens.data).to.be.an.instanceOf(Array);
 
         expect(blacklistedTokens.data.length).to.equal(data.length);
@@ -82,9 +86,7 @@ describe('BlacklistedTokensManager', () => {
     });
 
     it('should perform a GET request to /api/v2/blacklists/tokens', function (done) {
-      const { request } = this;
-
-      this.blacklistedTokens.getAll().then(() => {
+      blacklistedTokens.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -95,10 +97,10 @@ describe('BlacklistedTokensManager', () => {
 
       const request = nock(API_URL)
         .get('/blacklists/tokens')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, [{ aud: 'abc', jti: '123' }]);
 
-      this.blacklistedTokens.getAll().then(() => {
+      blacklistedTokens.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -114,7 +116,7 @@ describe('BlacklistedTokensManager', () => {
         })
         .reply(200, [{ aud: 'abc', jti: '123' }]);
 
-      this.blacklistedTokens.getAll({ aud: 'abc' }).then(() => {
+      blacklistedTokens.getAll({ aud: 'abc' }).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -127,15 +129,14 @@ describe('BlacklistedTokensManager', () => {
       jti: '',
     };
 
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL).post('/blacklists/tokens').reply(200, tokenData);
+      request = nock(API_URL).post('/blacklists/tokens').reply(200, tokenData);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.blacklistedTokens
-        .add(tokenData)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      blacklistedTokens.add(tokenData).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -143,16 +144,14 @@ describe('BlacklistedTokensManager', () => {
 
       nock(API_URL).post('/blacklists/tokens').reply(500);
 
-      this.blacklistedTokens.add(tokenData).catch((err) => {
+      blacklistedTokens.add(tokenData).catch((err) => {
         expect(err).to.exist;
         done();
       });
     });
 
     it('should perform a POST request to /api/v2/blacklists/tokens', function (done) {
-      const { request } = this;
-
-      this.blacklistedTokens.add(tokenData).then(() => {
+      blacklistedTokens.add(tokenData).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });
@@ -163,7 +162,7 @@ describe('BlacklistedTokensManager', () => {
 
       const request = nock(API_URL).post('/blacklists/tokens', tokenData).reply(200);
 
-      this.blacklistedTokens.add(tokenData).then(() => {
+      blacklistedTokens.add(tokenData).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -175,10 +174,10 @@ describe('BlacklistedTokensManager', () => {
 
       const request = nock(API_URL)
         .post('/blacklists/tokens')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, tokenData);
 
-      this.blacklistedTokens.add(tokenData).then(() => {
+      blacklistedTokens.add(tokenData).then(() => {
         expect(request.isDone()).to.be.true;
         done();
       });

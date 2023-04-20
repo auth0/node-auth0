@@ -12,9 +12,9 @@ export interface Configuration extends Omit<BaseConfiguration, 'baseUrl'> {
 export default class BaseAuthAPI extends BaseAPI {
   domain: string;
   clientId: string;
-  clientSecret: string;
-  clientAssertionSigningKey: string;
-  clientAssertionSigningAlg: string;
+  clientSecret?: string;
+  clientAssertionSigningKey?: string;
+  clientAssertionSigningAlg?: string;
 
   constructor(configuration: Configuration) {
     super({ ...configuration, baseUrl: `https://${configuration.domain}` });
