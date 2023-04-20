@@ -1,5 +1,5 @@
 import chai from 'chai';
-import nock from 'nock';
+import nock, { RequestBodyMatcher } from 'nock';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as path from 'path';
@@ -10,22 +10,28 @@ const __dirname = path.dirname(__filename);
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { BrandingManager, Configuration } from '../../src/management/__generated/index';
+import {
+  BrandingManager,
+  Configuration,
+  DeleteBrandingThemeRequest,
+  PatchBrandingRequest,
+  PatchBrandingThemeRequest,
+  PostBrandingThemeRequest,
+} from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;
 
 describe('BrandingManager', () => {
-  let branding: BrandingManager, token: string;
+  let branding: BrandingManager;
+  const token = 'TOKEN';
 
   before(function () {
-    this.token = 'TOKEN';
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
-      token: this.token,
+      token: token,
     });
-    this.branding = client.branding;
-    ({ branding, token } = this);
+    branding = client.branding;
   });
 
   describe('instance', () => {
@@ -41,7 +47,7 @@ describe('BrandingManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(this.branding[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((branding as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
@@ -71,13 +77,14 @@ describe('BrandingManager', () => {
         url: 'https://example.com/font.ttf',
       },
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).get('/branding').reply(200, data);
+      request = nock(API_URL).get('/branding').reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.branding.getSettings().then(done.bind(null, null)).catch(done.bind(null, null));
+      branding.getSettings().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -85,7 +92,7 @@ describe('BrandingManager', () => {
 
       nock(API_URL).get('/branding').reply(500);
 
-      this.branding.getSettings().catch((err) => {
+      branding.getSettings().catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -105,9 +112,7 @@ describe('BrandingManager', () => {
     });
 
     it('should perform a GET request to /api/v2/branding', function (done) {
-      const { request } = this;
-
-      this.branding.getSettings().then(() => {
+      branding.getSettings().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -119,10 +124,10 @@ describe('BrandingManager', () => {
 
       const request = nock(API_URL)
         .get('/branding')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, data);
 
-      this.branding.getSettings().then(() => {
+      branding.getSettings().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -141,9 +146,10 @@ describe('BrandingManager', () => {
         url: 'https://example.com/font.ttf',
       },
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).patch('/branding').reply(200, data);
+      request = nock(API_URL).patch('/branding').reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -163,8 +169,6 @@ describe('BrandingManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/branding', function (done) {
-      const { request } = this;
-
       branding.updateSettings(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -189,7 +193,7 @@ describe('BrandingManager', () => {
 
       const request = nock(API_URL)
         .patch('/branding')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, data);
 
       branding.updateSettings(data).then(() => {
@@ -201,8 +205,10 @@ describe('BrandingManager', () => {
   });
 
   describe('#getUniversalLoginTemplate', () => {
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL)
+      request = nock(API_URL)
         .get('/branding/templates/universal-login')
         .reply(200, { body: 'test' });
     });
@@ -242,8 +248,6 @@ describe('BrandingManager', () => {
     });
 
     it('should perform a GET request to /api/v2/branding', function (done) {
-      const { request } = this;
-
       branding.getUniversalLoginTemplate().then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -256,10 +260,10 @@ describe('BrandingManager', () => {
 
       const request = nock(API_URL)
         .get('/branding/templates/universal-login')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, { body: 'test' });
 
-      this.branding.getUniversalLoginTemplate().then(() => {
+      branding.getUniversalLoginTemplate().then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -268,8 +272,10 @@ describe('BrandingManager', () => {
   });
 
   describe('#setUniversalLoginTemplate', () => {
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL).put('/branding/templates/universal-login').reply(200);
+      request = nock(API_URL).put('/branding/templates/universal-login').reply(200);
     });
 
     afterEach(() => {
@@ -277,8 +283,8 @@ describe('BrandingManager', () => {
     });
 
     it('should return a promise if no callback is given', function (done) {
-      this.branding
-        .setUniversalLoginTemplate({}, {})
+      branding
+        .setUniversalLoginTemplate({ template: '' })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -296,8 +302,6 @@ describe('BrandingManager', () => {
     });
 
     it('should perform a PUT request to /api/v2/branding/templates/universal-login', function (done) {
-      const { request } = this;
-
       branding.setUniversalLoginTemplate({ template: '' }).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -310,7 +314,7 @@ describe('BrandingManager', () => {
 
       const request = nock(API_URL)
         .put('/branding/templates/universal-login')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
       branding.setUniversalLoginTemplate({ template: '' }).then(() => {
@@ -322,8 +326,10 @@ describe('BrandingManager', () => {
   });
 
   describe('#deleteUniversalLoginTemplate', () => {
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL).delete('/branding/templates/universal-login').reply(200);
+      request = nock(API_URL).delete('/branding/templates/universal-login').reply(200);
     });
 
     afterEach(() => {
@@ -350,8 +356,6 @@ describe('BrandingManager', () => {
     });
 
     it('should perform a DELETE request to /api/v2/branding/templates/universal-login', function (done) {
-      const { request } = this;
-
       branding.deleteUniversalLoginTemplate().then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -364,7 +368,7 @@ describe('BrandingManager', () => {
 
       const request = nock(API_URL)
         .delete('/branding/templates/universal-login')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
       branding.deleteUniversalLoginTemplate().then(() => {
@@ -376,8 +380,6 @@ describe('BrandingManager', () => {
   });
 
   describe('#getTheme', () => {
-    beforeEach(() => {});
-
     it('should return a promise if no callback is given', async () => {
       nock(API_URL)
         .get('/branding/themes/themeid1')
@@ -394,7 +396,7 @@ describe('BrandingManager', () => {
 
       try {
         await branding.getTheme({ themeId: 'themeid1' });
-      } catch (err) {
+      } catch (err: any) {
         expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
@@ -427,8 +429,6 @@ describe('BrandingManager', () => {
   });
 
   describe('#getDefaultTheme', () => {
-    beforeEach(() => {});
-
     it('should return a promise if no callback is given', async () => {
       const data = JSON.parse(
         (await util.promisify(fs.readFile)(
@@ -449,7 +449,7 @@ describe('BrandingManager', () => {
 
       try {
         await branding.getDefaultTheme();
-      } catch (err) {
+      } catch (err: any) {
         expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
@@ -491,7 +491,8 @@ describe('BrandingManager', () => {
   });
 
   describe('#createTheme', () => {
-    let data;
+    let data: PostBrandingThemeRequest & { themeId: string };
+
     beforeEach(async () => {
       data = JSON.parse(
         (await util.promisify(fs.readFile)(
@@ -501,7 +502,9 @@ describe('BrandingManager', () => {
     });
 
     it('should return a promise if no callback is given', async () => {
-      nock(API_URL).post(`/branding/themes`, data).reply(201, data);
+      nock(API_URL)
+        .post(`/branding/themes`, data as unknown as RequestBodyMatcher)
+        .reply(201, data);
 
       const promise = branding.createTheme(data);
       expect(promise.then).to.exist;
@@ -510,25 +513,31 @@ describe('BrandingManager', () => {
     });
 
     it('should pass any errors to the promise catch handler', async () => {
-      nock(API_URL).post(`/branding/themes`, data).reply(409);
+      nock(API_URL)
+        .post(`/branding/themes`, data as unknown as RequestBodyMatcher)
+        .reply(409);
 
       try {
         await branding.createTheme(data);
-      } catch (err) {
+      } catch (err: any) {
         expect(err.response.status).to.eq(409);
         expect(err).to.exist;
       }
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
-      nock(API_URL).post(`/branding/themes`, data).reply(201, data);
+      nock(API_URL)
+        .post(`/branding/themes`, data as unknown as RequestBodyMatcher)
+        .reply(201, data);
 
       const theme = await branding.createTheme(data);
       expect(theme.data.themeId).to.equal(data.themeId);
     });
 
     it('should perform a POST request to /branding/themes', async () => {
-      const request = nock(API_URL).post(`/branding/themes`, data).reply(201, data);
+      const request = nock(API_URL)
+        .post(`/branding/themes`, data as unknown as RequestBodyMatcher)
+        .reply(201, data);
 
       await branding.createTheme(data);
       expect(request.isDone()).to.be.true;
@@ -536,7 +545,7 @@ describe('BrandingManager', () => {
 
     it('should include the token in the Authorization header', async () => {
       const request = nock(API_URL)
-        .post('/branding/themes', data)
+        .post('/branding/themes', data as unknown as RequestBodyMatcher)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(201, data);
 
@@ -546,18 +555,21 @@ describe('BrandingManager', () => {
   });
 
   describe('#updateTheme', () => {
-    let data, themeId, params;
+    let data: PostBrandingThemeRequest, themeId: string, params: PatchBrandingThemeRequest;
+
     beforeEach(async () => {
       ({ themeId, ...data } = JSON.parse(
         (await util.promisify(fs.readFile)(
           path.join(__dirname, '../data/theme.json')
         )) as unknown as string
-      ));
+      ) as PostBrandingThemeRequest & { themeId: string });
       params = { themeId: themeId };
     });
 
     it('should return a promise if no callback is given', async () => {
-      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
+      nock(API_URL)
+        .patch(`/branding/themes/${themeId}`, data as unknown as RequestBodyMatcher)
+        .reply(200, data);
 
       const promise = branding.updateTheme(params, data);
       expect(promise.then).to.exist;
@@ -566,25 +578,33 @@ describe('BrandingManager', () => {
     });
 
     it('should pass any errors to the promise catch handler', async () => {
-      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(404);
+      nock(API_URL)
+        .patch(`/branding/themes/${themeId}`, data as unknown as RequestBodyMatcher)
+        .reply(404);
 
       try {
         await branding.updateTheme(params, data);
-      } catch (err) {
+      } catch (err: any) {
         expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
-      nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
+      nock(API_URL)
+        .patch(`/branding/themes/${themeId}`, data as unknown as RequestBodyMatcher)
+        .reply(200, data);
 
       const theme = await branding.updateTheme(params, data);
-      expect(theme.data.themeId).to.equal(data.themeId);
+      expect(theme.data.page_background.background_color).to.equal(
+        data.page_background.background_color
+      );
     });
 
     it('should perform a PATCH request to /api/v2/branding/themes/:theme_id', async () => {
-      const request = nock(API_URL).patch(`/branding/themes/${themeId}`, data).reply(200, data);
+      const request = nock(API_URL)
+        .patch(`/branding/themes/${themeId}`, data as unknown as RequestBodyMatcher)
+        .reply(200, data);
 
       await branding.updateTheme(params, data);
       expect(request.isDone()).to.be.true;
@@ -592,7 +612,7 @@ describe('BrandingManager', () => {
 
     it('should include the token in the Authorization header', async () => {
       const request = nock(API_URL)
-        .patch(`/branding/themes/${themeId}`, data)
+        .patch(`/branding/themes/${themeId}`, data as unknown as RequestBodyMatcher)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, data);
 
@@ -602,7 +622,8 @@ describe('BrandingManager', () => {
   });
 
   describe('#deleteTheme', () => {
-    let themeId, params;
+    let themeId: string, params: DeleteBrandingThemeRequest;
+
     beforeEach(async () => {
       themeId = 'themeid1';
       params = { themeId: themeId };
@@ -622,7 +643,7 @@ describe('BrandingManager', () => {
 
       try {
         await branding.deleteTheme(params);
-      } catch (err) {
+      } catch (err: any) {
         expect(err.response.status).to.eq(404);
         expect(err).to.exist;
       }

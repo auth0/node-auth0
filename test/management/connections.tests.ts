@@ -17,12 +17,12 @@ const { expect } = chai;
 
 describe('ConnectionsManager', () => {
   let connections: ConnectionsManager;
+  const token = 'TOKEN';
 
   before(function () {
-    this.token = 'TOKEN';
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
-      token: this.token,
+      token: token,
     });
     connections = client.connections;
   });
@@ -32,7 +32,7 @@ describe('ConnectionsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(connections[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((connections as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
@@ -73,8 +73,10 @@ describe('ConnectionsManager', () => {
   });
 
   describe('#getAll', () => {
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL).get('/connections').reply(200, []);
+      request = nock(API_URL).get('/connections').reply(200, []);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -111,8 +113,6 @@ describe('ConnectionsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/connections', function (done) {
-      const { request } = this;
-
       connections.getAll().then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -125,7 +125,7 @@ describe('ConnectionsManager', () => {
 
       const request = nock(API_URL)
         .get('/connections')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, []);
 
       connections.getAll().then(() => {
@@ -159,9 +159,10 @@ describe('ConnectionsManager', () => {
       id: params.id,
       display_name: 'Test connection',
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).get(`/connections/${data.id}`).reply(200, data);
+      request = nock(API_URL).get(`/connections/${data.id}`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -193,8 +194,6 @@ describe('ConnectionsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/connections/:id', function (done) {
-      const { request } = this;
-
       connections.get(params).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -207,7 +206,7 @@ describe('ConnectionsManager', () => {
 
       const request = nock(API_URL)
         .get('/connections')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, {});
 
       connections.getAll().then(() => {
@@ -242,9 +241,10 @@ describe('ConnectionsManager', () => {
       name: 'Test connection',
       strategy: ConnectionCreateStrategyEnum.auth0,
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/connections').reply(200, data);
+      request = nock(API_URL).post('/connections').reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -264,8 +264,6 @@ describe('ConnectionsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/connections', function (done) {
-      const { request } = this;
-
       connections.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -290,7 +288,7 @@ describe('ConnectionsManager', () => {
 
       const request = nock(API_URL)
         .post('/connections')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, {});
 
       connections.create(data).then(() => {
@@ -308,9 +306,10 @@ describe('ConnectionsManager', () => {
       name: 'Test connection',
       options: {},
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).patch(`/connections/${data.id}`).reply(200, data);
+      request = nock(API_URL).patch(`/connections/${data.id}`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -330,8 +329,6 @@ describe('ConnectionsManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/connections/:id', function (done) {
-      const { request } = this;
-
       connections.update(params, data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -356,7 +353,7 @@ describe('ConnectionsManager', () => {
 
       const request = nock(API_URL)
         .patch(`/connections/${data.id}`)
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, {});
 
       connections.update(params, data).then(() => {
@@ -369,9 +366,10 @@ describe('ConnectionsManager', () => {
 
   describe('#delete', () => {
     const id = '5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/connections/${id}`).reply(200, {});
+      request = nock(API_URL).delete(`/connections/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -379,8 +377,6 @@ describe('ConnectionsManager', () => {
     });
 
     it(`should perform a DELETE request to /connections/${id}`, function (done) {
-      const { request } = this;
-
       connections.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -405,7 +401,7 @@ describe('ConnectionsManager', () => {
 
       const request = nock(API_URL)
         .delete(`/connections/${id}`)
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
       connections.delete({ id }).then(() => {
@@ -422,9 +418,10 @@ describe('ConnectionsManager', () => {
       id: params.id,
       name: 'Test connection',
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).get(`/connections/${data.id}/status`).reply(200);
+      request = nock(API_URL).get(`/connections/${data.id}/status`).reply(200);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -459,9 +456,10 @@ describe('ConnectionsManager', () => {
     const id = '5';
     const email = 'user@domain.com';
     const endpoint = `/connections/${id}/users?email=${encodeURIComponent(email)}`;
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(endpoint).reply(200);
+      request = nock(API_URL).delete(endpoint).reply(200);
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -469,8 +467,6 @@ describe('ConnectionsManager', () => {
     });
 
     it(`should perform a DELETE request to ${endpoint}`, function (done) {
-      const { request } = this;
-
       connections.deleteUserByEmail({ id, email }).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -509,7 +505,7 @@ describe('ConnectionsManager', () => {
 
       const request = nock(API_URL)
         .delete(endpoint)
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
       connections.deleteUserByEmail({ id, email }).then(() => {

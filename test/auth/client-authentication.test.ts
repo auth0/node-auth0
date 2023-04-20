@@ -29,18 +29,13 @@ const sign = async (
 };
 
 describe('client-authentication', () => {
-  let path;
-  let body;
-  let headers;
-  let clientAssertion;
+  const path = jest.fn();
+  const body = jest.fn();
+  const headers = jest.fn();
+  const clientAssertion = jest.fn();
 
   beforeEach(() => {
-    path = jest.fn();
-    body = jest.fn();
-    headers = jest.fn();
-    clientAssertion = jest.fn();
-
-    async function handler(pathIn, bodyIn) {
+    async function handler(this: any, pathIn: unknown, bodyIn: string) {
       const bodyParsed = Object.fromEntries(new URLSearchParams(bodyIn));
       path(pathIn);
       body(bodyParsed);
@@ -58,10 +53,7 @@ describe('client-authentication', () => {
 
   afterEach(() => {
     nock.cleanAll();
-    path = null;
-    body = null;
-    headers = null;
-    clientAssertion = null;
+    jest.clearAllMocks();
   });
 
   it('should do client credentials grant with a client secret', async () => {

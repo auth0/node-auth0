@@ -15,14 +15,13 @@ const { expect } = chai;
 
 describe('ClientGrantsManager', () => {
   let grants: ClientGrantsManager;
-
+  const token = 'TOKEN';
   before(function () {
-    this.token = 'TOKEN';
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
-      token: this.token,
+      token: token,
     });
-    this.grants = grants = client.clientGrants;
+    grants = client.clientGrants;
   });
 
   afterEach(() => {
@@ -34,7 +33,7 @@ describe('ClientGrantsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, function () {
-        expect(grants[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((grants as any)[method]).to.exist.to.be.an.instanceOf(Function);
       });
     });
   });
@@ -76,8 +75,10 @@ describe('ClientGrantsManager', () => {
 
   describe('#getAll', () => {
     const data = [{ id: '1', client_id: '123' }];
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.request = nock(API_URL).get('/client-grants').reply(200, data);
+      request = nock(API_URL).get('/client-grants').reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -111,8 +112,6 @@ describe('ClientGrantsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/client-grants', function (done) {
-      const { request } = this;
-
       grants.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
@@ -124,7 +123,7 @@ describe('ClientGrantsManager', () => {
 
       const request = nock(API_URL)
         .get('/client-grants')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, data);
 
       grants.getAll().then(() => {
@@ -157,9 +156,10 @@ describe('ClientGrantsManager', () => {
       audience: 'AUDIENCE',
       scope: ['user'],
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).post('/client-grants').reply(201, data);
+      request = nock(API_URL).post('/client-grants').reply(201, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -167,8 +167,6 @@ describe('ClientGrantsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/client-grants', function (done) {
-      const { request } = this;
-
       grants.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -181,7 +179,7 @@ describe('ClientGrantsManager', () => {
 
       const request = nock(API_URL)
         .post('/client-grants')
-        .matchHeader('Authorization', `Bearer ${this.token}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(201, data);
 
       grants.create(data).then(() => {
@@ -210,9 +208,10 @@ describe('ClientGrantsManager', () => {
       audience: 'AUDIENCE',
       scope: ['user'],
     };
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).patch(`/client-grants/5`).reply(200, data);
+      request = nock(API_URL).patch(`/client-grants/5`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -220,8 +219,6 @@ describe('ClientGrantsManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/client-grants/5', function (done) {
-      const { request } = this;
-
       grants.update({ id: '5' }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -244,9 +241,10 @@ describe('ClientGrantsManager', () => {
 
   describe('#delete', () => {
     const id = '5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/client-grants/${id}`).reply(200);
+      request = nock(API_URL).delete(`/client-grants/${id}`).reply(200);
     });
 
     it('should accept a callback', function (done) {
@@ -258,8 +256,6 @@ describe('ClientGrantsManager', () => {
     });
 
     it(`should perform a DELETE request to /client-grants/${id}`, function (done) {
-      const { request } = this;
-
       grants.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
