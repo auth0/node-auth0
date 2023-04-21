@@ -66,10 +66,6 @@ describe('EmailTemplatesManager', () => {
       request = nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(200, DEFAULT_DATA);
     });
 
-    it('should accept a callback', function (done) {
-      emailTemplates.get(DEFAULT_PARAMS, done.bind(null, null));
-    });
-
     it('should return a promise if no callback is given', function (done) {
       emailTemplates.get(DEFAULT_PARAMS).then(done.bind(null, null)).catch(done.bind(null, null));
     });
@@ -175,10 +171,6 @@ describe('EmailTemplatesManager', () => {
 
     beforeEach(function () {
       request = nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(200, DEFAULT_DATA);
-    });
-
-    it('should accept a callback', function (done) {
-      emailTemplates.update(DEFAULT_PARAMS, {}, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function (done) {

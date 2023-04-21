@@ -133,10 +133,6 @@ describe('GrantsManager', () => {
       request = nock(API_URL).delete(`/grants/${id}`).reply(200);
     });
 
-    it('should accept a callback', function (done) {
-      grants.delete({ id }, done.bind(null, null));
-    });
-
     it('should return a promise when no callback is given', function (done) {
       grants.delete({ id }).then(done.bind(null, null));
     });

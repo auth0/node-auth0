@@ -202,10 +202,6 @@ describe('DeviceCredentialsManager', () => {
       request = nock(API_URL).delete(`/device-credentials/${id}`).reply(200);
     });
 
-    it('should accept a callback', function (done) {
-      credentials.delete({ id }, done.bind(null, null));
-    });
-
     it('should return a promise when no callback is given', function (done) {
       credentials.delete({ id }).then(done.bind(null, null));
     });

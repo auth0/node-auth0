@@ -155,10 +155,6 @@ describe('RulesConfigsManager', () => {
       request = nock(API_URL).delete(`/rules-configs/${key}`).reply(200);
     });
 
-    it('should accept a callback', function (done) {
-      rulesConfigs.delete({ key }, done.bind(null, null));
-    });
-
     it('should return a promise when no callback is given', function () {
       expect(rulesConfigs.delete({ key })).instanceOf(Promise);
     });

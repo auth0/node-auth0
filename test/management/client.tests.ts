@@ -249,10 +249,6 @@ describe('ClientsManager', () => {
       request = nock(API_URL).delete(`/clients/${id}`).reply(200);
     });
 
-    it('should accept a callback', (done) => {
-      clients.delete({ id }, done.bind(null, null));
-    });
-
     it('should return a promise when no callback is given', (done) => {
       clients.delete({ id }).then(done.bind(null, null));
     });
