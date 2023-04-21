@@ -431,7 +431,7 @@ export function applyQueryParams<
         }
       }
 
-      return value ? { ...acc, [key]: value } : acc;
+      return value !== undefined ? { ...acc, [key]: value } : acc;
     },
     {}
   ) as Pick<TRequestParams, ReadonlyArray<Key>[number]>;

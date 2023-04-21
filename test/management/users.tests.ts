@@ -135,29 +135,38 @@ describe('UsersManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock.cleanAll();
 
+      const params = { email: 'test' };
       const data = [{ family_name: 'test' }];
-      nock(API_URL).get('/users-by-email').reply(200, data);
+      nock(API_URL).get('/users-by-email').query(params).reply(200, data);
 
-      const users = await usersByEmailManager.getByEmail({ email: '' });
+      const users = await usersByEmailManager.getByEmail(params);
       expect(users.data).to.be.an.instanceOf(Array);
       expect(users.data.length).to.equal(data.length);
       expect(users.data[0].family_name).to.equal(data[0].family_name);
     });
 
     it('should perform a GET request to /api/v2/users-by-email', async () => {
-      await usersByEmailManager.getByEmail({ email: '' });
+      nock.cleanAll();
+      const params = { email: 'test' };
+      const data = [{ family_name: 'test' }];
+      nock(API_URL).get('/users-by-email').query(params).reply(200, data);
+
+      await usersByEmailManager.getByEmail(params);
+
       expect(scope.isDone()).to.be.true;
     });
 
     it('should include the token in the Authorization header', async () => {
       nock.cleanAll();
 
+      const params = { email: 'test' };
       const request = nock(API_URL)
         .get('/users-by-email')
+        .query(params)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, []);
 
-      await usersByEmailManager.getByEmail({ email: '' });
+      await usersByEmailManager.getByEmail(params);
       expect(request.isDone()).to.be.true;
     });
 
@@ -561,9 +570,14 @@ describe('UsersManager', () => {
         .patch(`/users/${data.id}`, {
           user_metadata: data,
         })
-        .reply(200);
+        .reply(200, {});
 
-      await usersManager.update({ id: '5' }, data);
+      await usersManager.update(
+        { id: '5' },
+        {
+          user_metadata: data,
+        }
+      );
       expect(request.isDone()).to.be.true;
     });
 
@@ -1064,7 +1078,9 @@ describe('UsersManager', () => {
     it('should pass the data in the body of the request', async () => {
       nock.cleanAll();
 
-      const request = nock(API_URL).post(`/users/${data.id}/permissions`, body).reply(200, 'Test');
+      const request = nock(API_URL)
+        .post(`/users/${data.id}/permissions`, { permissions: [body] })
+        .reply(200, 'Test');
 
       await usersManager.assignPermissions(data, { permissions: [body] });
       expect(request.isDone()).to.be.true;
