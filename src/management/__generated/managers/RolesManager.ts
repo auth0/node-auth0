@@ -195,7 +195,7 @@ export class RolesManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPermissions(
-    requestParameters: GetRolePermissionRequest,
+    requestParameters: GetRolePermissionRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRolePermission200ResponseOneOf>>;
   async getPermissions(
@@ -258,7 +258,7 @@ export class RolesManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getUsers(
-    requestParameters: GetRoleUserRequest,
+    requestParameters: GetRoleUserRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRoleUser200ResponseOneOf>>;
   async getUsers(

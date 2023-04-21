@@ -445,7 +445,7 @@ export class OrganizationsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getEnabledConnections(
-    requestParameters: GetEnabledConnectionsRequest,
+    requestParameters: GetEnabledConnectionsRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEnabledConnections200ResponseOneOf>>;
   async getEnabledConnections(
@@ -518,7 +518,7 @@ export class OrganizationsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getInvitations(
-    requestParameters: GetInvitationsRequest,
+    requestParameters: GetInvitationsRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetInvitations200ResponseOneOf>>;
   async getInvitations(
@@ -629,7 +629,7 @@ export class OrganizationsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getMembers(
-    requestParameters: GetMembersRequest,
+    requestParameters: GetMembersRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMembers200ResponseOneOf>>;
   async getMembers(
@@ -713,7 +713,7 @@ export class OrganizationsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getMemberRoles(
-    requestParameters: GetOrganizationMemberRolesRequest,
+    requestParameters: GetOrganizationMemberRolesRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOf>>;
   async getMemberRoles(

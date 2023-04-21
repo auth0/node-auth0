@@ -383,7 +383,6 @@ export class UsersManager extends BaseAPI {
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
-
     const response = await this.request(
       {
         path: `/users/{id}/authenticators`.replace(
@@ -430,7 +429,7 @@ export class UsersManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async deletePermissiojs(
+  async deletePermissions(
     requestParameters: DeletePermissionsOperationRequest,
     bodyParameters: DeletePermissionsRequest,
     initOverrides?: InitOverride
@@ -542,7 +541,7 @@ export class UsersManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getAuthenticationMethods(
-    requestParameters: GetAuthenticationMethodsRequest,
+    requestParameters: GetAuthenticationMethodsRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetAuthenticationMethods200ResponseOneOf>>;
   async getAuthenticationMethods(
@@ -651,7 +650,7 @@ export class UsersManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getLogs(
-    requestParameters: GetLogsByUserRequest,
+    requestParameters: GetLogsByUserRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetLogs200ResponseOneOf>>;
   async getLogs(
@@ -702,7 +701,7 @@ export class UsersManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getPermissions(
-    requestParameters: GetPermissionsRequest,
+    requestParameters: GetPermissionsRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPermissions200ResponseOneOf>>;
   async getPermissions(
@@ -753,7 +752,7 @@ export class UsersManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getUserOrganizations(
-    requestParameters: GetUserOrganizationsRequest,
+    requestParameters: GetUserOrganizationsRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
   async getUserOrganizations(
@@ -803,7 +802,7 @@ export class UsersManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getRoles(
-    requestParameters: GetUserRolesRequest,
+    requestParameters: GetUserRolesRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetOrganizationMemberRoles200ResponseOneOf>>;
   async getRoles(
