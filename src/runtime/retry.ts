@@ -8,6 +8,7 @@ const MAX_NUMBER_RETRIES = 10;
 const BASE_DELAY = 250;
 
 /**
+ * @private
  * Function that returns a random int between a configurable min and max.
  * @param min The min value
  * @param max  The max value
