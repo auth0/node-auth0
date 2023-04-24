@@ -1,10 +1,6 @@
 import fetch, { RequestInit, RequestInfo, Response } from 'node-fetch';
-import { retry } from './retry';
+import { RetryConfiguration, retry } from './retry';
 
-export interface RetryConfiguration {
-  enabled?: boolean;
-  maxRetries?: number;
-}
 export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation

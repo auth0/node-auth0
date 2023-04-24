@@ -30,11 +30,32 @@ async function pause(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
+export interface RetryConfiguration {
+  /**
+   * Configure the usage of retries.
+   * Defaults to true.
+   */
+  enabled?: boolean;
+  /**
+   * Configure the max amount of retries the SDK should do.
+   * Defaults to 3.
+   */
+  maxRetries?: number;
+  /**
+   * Status Code on which the SDK should trigger retries.
+   * Defaults to 429.
+   */
+  retryWhen?: number;
+}
+
 /**
  * @private
  * Function that retries the provided action callback for a configurable amount of time, defaults to 3.
  */
-export function retry(action: () => Promise<Response>, { maxRetries }: { maxRetries?: number }) {
+export function retry(
+  action: () => Promise<Response>,
+  { maxRetries, retryWhen }: RetryConfiguration
+) {
   const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
   let nrOfTries = 0;
 
@@ -43,7 +64,7 @@ export function retry(action: () => Promise<Response>, { maxRetries }: { maxRetr
 
     result = await action();
 
-    if (result.status === 429 && nrOfTries < nrOfTriesToAttempt) {
+    if (result.status === (retryWhen || 429) && nrOfTries < nrOfTriesToAttempt) {
       nrOfTries++;
 
       let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);

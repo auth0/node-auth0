@@ -127,6 +127,32 @@ describe('Runtime', () => {
     }
   });
 
+  it('should retry using a configrable status code', async () => {
+    const request = nock(URL, { encodedQueryParams: true })
+      .get('/clients')
+      .times(2)
+      .reply(428)
+      .get('/clients')
+      .reply(200, [{ client_id: '123' }]);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      retry: {
+        retryWhen: 428,
+      },
+    });
+
+    const response = await client.testRequest({
+      path: `/clients`,
+      method: 'GET',
+    });
+
+    const data = (await response.json()) as Array<{ client_id: string }>;
+
+    expect(data[0].client_id).toBe('123');
+    expect(request.isDone()).toBe(true);
+  });
+
   it('should not retry if not enabled', async () => {
     const request = nock(URL, { encodedQueryParams: true })
       .get('/clients')
