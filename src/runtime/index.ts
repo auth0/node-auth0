@@ -1,11 +1,17 @@
 import fetch, { RequestInit, RequestInfo, Response } from 'node-fetch';
+import { retry } from './retry';
 
+export interface RetryConfiguration {
+  enabled?: boolean;
+  maxRetries?: number;
+}
 export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation
   middleware?: Middleware[]; // middleware to apply before/after fetch requests
   queryParamsStringify?: (params: HTTPQuery) => string; // stringify function for query strings
   headers?: HTTPHeaders; //header params we want to use on every request
+  retry?: RetryConfiguration;
 }
 
 /**
@@ -100,7 +106,12 @@ export class BaseAPI {
     }
     let response: Response | undefined = undefined;
     try {
-      response = await this.fetchApi(fetchParams.url, fetchParams.init);
+      response =
+        this.configuration.retry?.enabled !== false
+          ? await retry(() => this.fetchApi(fetchParams.url, fetchParams.init), {
+              ...this.configuration.retry,
+            })
+          : await this.fetchApi(fetchParams.url, fetchParams.init);
     } catch (e) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
