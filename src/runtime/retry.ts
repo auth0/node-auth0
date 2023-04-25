@@ -42,10 +42,10 @@ export interface RetryConfiguration {
    */
   maxRetries?: number;
   /**
-   * Status Code on which the SDK should trigger retries.
-   * Defaults to 429.
+   * Status Codes on which the SDK should trigger retries.
+   * Defaults to [429].
    */
-  retryWhen?: number;
+  retryWhen?: number[];
 }
 
 /**
@@ -64,7 +64,7 @@ export function retry(
 
     result = await action();
 
-    if (result.status === (retryWhen || 429) && nrOfTries < nrOfTriesToAttempt) {
+    if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
       nrOfTries++;
 
       let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);

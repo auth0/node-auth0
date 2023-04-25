@@ -127,7 +127,7 @@ describe('Runtime', () => {
     }
   });
 
-  it('should retry using a configrable status code', async () => {
+  it('should retry using a configurable status code', async () => {
     const request = nock(URL, { encodedQueryParams: true })
       .get('/clients')
       .times(2)
@@ -138,7 +138,7 @@ describe('Runtime', () => {
     const client = new TestClient({
       baseUrl: URL,
       retry: {
-        retryWhen: 428,
+        retryWhen: [428],
       },
     });
 
@@ -151,6 +151,67 @@ describe('Runtime', () => {
 
     expect(data[0].client_id).toBe('123');
     expect(request.isDone()).toBe(true);
+  });
+
+  it('should retry using multiple configurable status code', async () => {
+    const request = nock(URL, { encodedQueryParams: true })
+      .get('/clients')
+      .reply(428)
+      .get('/clients')
+      .reply(429)
+      .get('/clients')
+      .reply(200, [{ client_id: '123' }]);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      retry: {
+        retryWhen: [428, 429],
+      },
+    });
+
+    const response = await client.testRequest({
+      path: `/clients`,
+      method: 'GET',
+    });
+
+    const data = (await response.json()) as Array<{ client_id: string }>;
+
+    expect(data[0].client_id).toBe('123');
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should only retry configured status codes', async () => {
+    const request = nock(URL, { encodedQueryParams: true })
+      .get('/clients')
+      .reply(428)
+      .get('/clients')
+      .reply(429)
+      .get('/clients')
+      .reply(200, [{ client_id: '123' }]);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      retry: {
+        retryWhen: [428],
+      },
+    });
+
+    try {
+      await client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      });
+
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.response.status).toBe(429);
+        expect(request.isDone()).toBe(false);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
   });
 
   it('should not retry if not enabled', async () => {
