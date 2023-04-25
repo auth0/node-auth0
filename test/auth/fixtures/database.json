@@ -1,0 +1,54 @@
+[
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/dbconnections/signup",
+    "body": {
+      "client_id": "test-client-id",
+      "email": "test-email@example.com",
+      "password": "test-password",
+      "connection": "Username-Password-Authentication"
+    },
+    "status": 200,
+    "response": {
+      "_id": "test-id",
+      "email_verified": false,
+      "email": "test-email@example.com"
+    },
+    "rawHeaders": [],
+    "responseIsBinary": false
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/dbconnections/signup",
+    "body": {
+      "client_id": "test-client-id",
+      "email": "test-email@example.com",
+      "password": "test-password",
+      "connection": "Username-Password-Authentication"
+    },
+    "status": 200,
+    "response": {
+      "_id": "test-id",
+      "email_verified": false,
+      "email": "test-email@example.com"
+    },
+    "rawHeaders": [],
+    "responseIsBinary": false
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/dbconnections/change_password",
+    "body": {
+      "client_id": "test-client-id",
+      "email": "test-email@example.com",
+      "connection": "Username-Password-Authentication"
+    },
+    "status": 200,
+    "response": "We've just sent you an email to reset your password.",
+    "rawHeaders": [],
+    "responseIsBinary": false
+  }
+]
