@@ -11,6 +11,7 @@ export class ManagementClient extends ManagementClientBase {
     options: ManagementClientOptionsWithToken | ManagementClientOptionsWithClientCredentials
   ) {
     super({
+      ...options,
       baseUrl: `https://${options.domain}/api/v2`,
       middleware: [
         ...(options.middleware || []),
