@@ -15,10 +15,17 @@ export class TestClient extends BaseAPI {
 
 describe('Runtime', () => {
   const URL = 'https://tenant.auth0.com/api/v2';
+  let _setTimeout: typeof setTimeout;
+
+  beforeEach(() => {
+    _setTimeout = setTimeout;
+    (global as any).setTimeout = (fn: () => void, _timeout: number): void => fn();
+  });
 
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
+    (global as any).setTimeout = _setTimeout;
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -245,125 +252,116 @@ describe('Runtime', () => {
       }
     }
   });
-});
 
-describe('Runtime for ManagementClient', () => {
-  const URL = 'https://tenant.auth0.com/api/v2';
+  describe('Runtime for ManagementClient', () => {
+    const URL = 'https://tenant.auth0.com/api/v2';
 
-  afterEach(() => {
-    nock.cleanAll();
-    jest.clearAllMocks();
-  });
+    it('should retry if enabled', async () => {
+      const request = nock(URL, { encodedQueryParams: true })
+        .get('/clients')
+        .times(2)
+        .reply(429)
+        .get('/clients')
+        .reply(200, [{ client_id: '123' }]);
 
-  it('should retry if enabled', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
-      .get('/clients')
-      .times(2)
-      .reply(429)
-      .get('/clients')
-      .reply(200, [{ client_id: '123' }]);
+      const token = 'TOKEN';
+      const client = new ManagementClient({
+        domain: 'tenant.auth0.com',
+        token: token,
+      });
+      const response = await client.clients.getAll();
 
-    const token = 'TOKEN';
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-    });
-    const response = await client.clients.getAll();
-
-    expect(response.data[0].client_id).toBe('123');
-    expect(request.isDone()).toBe(true);
-  });
-
-  it('should not retry if not enabled', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
-      .get('/clients')
-      .reply(429)
-      .get('/clients')
-      .reply(200, [{ client_id: '123' }]);
-
-    const token = 'TOKEN';
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-      retry: {
-        enabled: false,
-      },
+      expect(response.data[0].client_id).toBe('123');
+      expect(request.isDone()).toBe(true);
     });
 
-    try {
-      await client.clients.getAll();
+    it('should not retry if not enabled', async () => {
+      const request = nock(URL, { encodedQueryParams: true })
+        .get('/clients')
+        .reply(429)
+        .get('/clients')
+        .reply(200, [{ client_id: '123' }]);
 
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
+      const token = 'TOKEN';
+      const client = new ManagementClient({
+        domain: 'tenant.auth0.com',
+        token: token,
+        retry: {
+          enabled: false,
+        },
+      });
+
+      try {
+        await client.clients.getAll();
+
+        // Should not reach this
+        expect(true).toBeFalsy();
+      } catch (e: any) {
+        if (e instanceof ResponseError) {
+          expect(e.response.status).toBe(429);
+          expect(request.isDone()).toBe(false);
+        } else {
+          expect(e).toBeInstanceOf(ResponseError);
+        }
       }
-    }
-  });
-});
-
-describe('Runtime for AuthenticationClient', () => {
-  const URL = 'https://tenant.auth0.com';
-  afterEach(() => {
-    nock.cleanAll();
-    jest.clearAllMocks();
+    });
   });
 
-  it('should retry if enabled', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
-      .post('/oauth/token')
-      .times(2)
-      .reply(429)
-      .post('/oauth/token')
-      .reply(200, { access_token: '123' });
+  describe('Runtime for AuthenticationClient', () => {
+    const URL = 'https://tenant.auth0.com';
 
-    const client = new AuthenticationClient({
-      domain: 'tenant.auth0.com',
-      clientId: '123',
-      clientSecret: '123',
-    });
-    const response = await client.oauth.clientCredentialsGrant({
-      audience: '123',
-    });
+    it('should retry if enabled', async () => {
+      const request = nock(URL, { encodedQueryParams: true })
+        .post('/oauth/token')
+        .times(2)
+        .reply(429)
+        .post('/oauth/token')
+        .reply(200, { access_token: '123' });
 
-    expect(response.data.access_token).toBe('123');
-    expect(request.isDone()).toBe(true);
-  });
-
-  it('should not retry if not enabled', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
-      .post('/oauth/token')
-      .reply(429)
-      .post('/oauth/token')
-      .reply(200, { access_token: '123' });
-
-    const client = new AuthenticationClient({
-      domain: 'tenant.auth0.com',
-      clientId: '123',
-      clientSecret: '123',
-      retry: {
-        enabled: false,
-      },
-    });
-
-    try {
-      await client.oauth.clientCredentialsGrant({
+      const client = new AuthenticationClient({
+        domain: 'tenant.auth0.com',
+        clientId: '123',
+        clientSecret: '123',
+      });
+      const response = await client.oauth.clientCredentialsGrant({
         audience: '123',
       });
 
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
+      expect(response.data.access_token).toBe('123');
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should not retry if not enabled', async () => {
+      const request = nock(URL, { encodedQueryParams: true })
+        .post('/oauth/token')
+        .reply(429)
+        .post('/oauth/token')
+        .reply(200, { access_token: '123' });
+
+      const client = new AuthenticationClient({
+        domain: 'tenant.auth0.com',
+        clientId: '123',
+        clientSecret: '123',
+        retry: {
+          enabled: false,
+        },
+      });
+
+      try {
+        await client.oauth.clientCredentialsGrant({
+          audience: '123',
+        });
+
+        // Should not reach this
+        expect(true).toBeFalsy();
+      } catch (e: any) {
+        if (e instanceof ResponseError) {
+          expect(e.response.status).toBe(429);
+          expect(request.isDone()).toBe(false);
+        } else {
+          expect(e).toBeInstanceOf(ResponseError);
+        }
       }
-    }
+    });
   });
 });
