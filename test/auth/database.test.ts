@@ -1,8 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { v4 as uuid } from 'uuid';
-import nock, { Definition, RequestBodyMatcher } from 'nock';
-import { jest, beforeAll, afterAll } from '@jest/globals';
+import nock from 'nock';
+import { beforeAll, afterAll } from '@jest/globals';
 import Database from '../../src/auth/Database';
 
 const { back: nockBack } = nock;
@@ -10,72 +9,21 @@ const { back: nockBack } = nock;
 nockBack.fixtures = `${path.dirname(fileURLToPath(import.meta.url))}/fixtures`;
 
 const DOMAIN = 'test-domain.auth0.com';
-const SCOPE = `https://${DOMAIN}`;
 const ID = 'test-id';
 const CLIENT_ID = 'test-client-id';
 const EMAIL = 'test-email@example.com';
 const PASSWORD = 'test-password';
 
-if (process.env.RECORD) {
-  nockBack.setMode('update');
-} else {
-  nockBack.setMode('lockdown');
-}
-
-const baseUrl = `https://${DOMAIN}`;
-
 const opts = {
-  domain: process.env.TEST_DOMAIN || DOMAIN,
-  baseUrl,
-  clientId: process.env.TEST_CLIENT_ID || CLIENT_ID,
-};
-
-const sanitizeFixture: any = (fixture: any, overrides = {}) => {
-  const sanitized = {
-    scope: SCOPE,
-    _id: ID,
-    client_id: CLIENT_ID,
-    email: EMAIL,
-    password: PASSWORD,
-    rawHeaders: [],
-    ...(fixture?.body && { body: sanitizeFixture(fixture.body, overrides) }),
-    ...(fixture?.response &&
-      typeof fixture.response !== 'string' && {
-        response: sanitizeFixture(fixture.response, overrides),
-      }),
-    ...overrides,
-  };
-
-  return Object.fromEntries(
-    Object.entries(fixture).reduce((memo, [key, value]) => {
-      return [...memo, [key, sanitized[key] || value]];
-    }, [] as any)
-  );
-};
-
-const getEmail = () => {
-  if (process.env.RECORD) {
-    return `${uuid()}@example.com`;
-  }
-  return EMAIL;
-};
-
-const getPassword = () => {
-  if (process.env.RECORD) {
-    return uuid();
-  }
-  return PASSWORD;
+  domain: DOMAIN,
+  clientId: CLIENT_ID,
 };
 
 describe('Database', () => {
   let nockDone: () => void;
 
   beforeAll(async () => {
-    ({ nockDone } = await nockBack('database.json', {
-      afterRecord(fixtures) {
-        return fixtures.map((fixture) => sanitizeFixture(fixture));
-      },
-    }));
+    ({ nockDone } = await nockBack('database.json'));
   });
 
   afterAll(() => {
@@ -85,10 +33,10 @@ describe('Database', () => {
   describe('#signUp', () => {
     it('should signup a user', async () => {
       const database = new Database(opts);
-      const email = getEmail();
+      const email = EMAIL;
       const { data } = await database.signUp({
         email,
-        password: getPassword(),
+        password: PASSWORD,
         connection: 'Username-Password-Authentication',
       });
       expect(data).toEqual({
@@ -102,8 +50,8 @@ describe('Database', () => {
       const database = new Database(opts);
       await expect(
         database.signUp({
-          email: getEmail(),
-          password: getPassword(),
+          email: EMAIL,
+          password: PASSWORD,
         } as any)
       ).rejects.toThrow('Required parameter requestParameters.connection was null or undefined.');
     });
@@ -113,10 +61,10 @@ describe('Database', () => {
     it('should send a change password email', async () => {
       const database = new Database(opts);
 
-      const email = getEmail();
+      const email = EMAIL;
       await database.signUp({
         email,
-        password: getPassword(),
+        password: PASSWORD,
         connection: 'Username-Password-Authentication',
       });
       const { data: txt } = await database.changePassword({

@@ -1,0 +1,43 @@
+[
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "code=test-valid-code&redirect_uri=https%3A%2F%2Fexample.com&grant_type=authorization_code&client_id=test-client-id&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "access_token": "my-access-token",
+      "expires_in": 86400,
+      "token_type": "Bearer"
+    },
+    "rawHeaders": [],
+    "responseIsBinary": false
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "code=test-invalid-code&redirect_uri=https%3A%2F%2Fexample.com&grant_type=authorization_code&client_id=test-client-id&client_secret=test-client-secret",
+    "status": 403,
+    "response": {
+      "error": "invalid_grant",
+      "error_description": "Invalid authorization code"
+    },
+    "rawHeaders": [],
+    "responseIsBinary": false
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "audience=https%3A%2F%2Ftest-domain.auth0.com%2Fapi%2Fv2%2F&grant_type=client_credentials&client_id=test-client-id&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "access_token": "my-access-token",
+      "expires_in": 86400,
+      "token_type": "Bearer"
+    },
+    "rawHeaders": [],
+    "responseIsBinary": false
+  }
+]
