@@ -6,24 +6,19 @@ import Database from '../../src/auth/Database';
 
 const { back: nockBack } = nock;
 
-nockBack.fixtures = `${path.dirname(fileURLToPath(import.meta.url))}/fixtures`;
-
-const DOMAIN = 'test-domain.auth0.com';
-const ID = 'test-id';
-const CLIENT_ID = 'test-client-id';
 const EMAIL = 'test-email@example.com';
 const PASSWORD = 'test-password';
 
 const opts = {
-  domain: DOMAIN,
-  clientId: CLIENT_ID,
+  domain: 'test-domain.auth0.com',
+  clientId: 'test-client-id',
 };
 
 describe('Database', () => {
   let nockDone: () => void;
 
   beforeAll(async () => {
-    ({ nockDone } = await nockBack('database.json'));
+    ({ nockDone } = await nockBack('auth/fixtures/database.json'));
   });
 
   afterAll(() => {
@@ -40,7 +35,7 @@ describe('Database', () => {
         connection: 'Username-Password-Authentication',
       });
       expect(data).toEqual({
-        _id: ID,
+        _id: 'test-id',
         email_verified: false,
         email,
       });
