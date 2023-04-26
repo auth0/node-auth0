@@ -1,6 +1,5 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { v4 as uuid } from 'uuid';
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
 import Passwordless from '../../src/auth/Passwordless';
@@ -14,11 +13,7 @@ const CLIENT_ID = 'test-client-id';
 const EMAIL = 'test-email@example.com';
 const PHONE_NUMBER = '01234';
 
-if (process.env.RECORD) {
-  nockBack.setMode('update');
-} else {
-  nockBack.setMode('lockdown');
-}
+nockBack.setMode('lockdown');
 
 const baseUrl = `https://${DOMAIN}`;
 
@@ -28,50 +23,11 @@ const opts = {
   clientId: process.env.TEST_CLIENT_ID || CLIENT_ID,
 };
 
-const sanitizeFixture: any = (fixture: any, overrides = {}) => {
-  const sanitized = {
-    client_id: CLIENT_ID,
-    email: EMAIL,
-    phone_number: PHONE_NUMBER,
-    rawHeaders: [],
-    ...(fixture?.body && { body: sanitizeFixture(fixture.body, overrides) }),
-    ...(fixture?.response &&
-      typeof fixture.response !== 'string' && {
-        response: sanitizeFixture(fixture.response, overrides),
-      }),
-    ...overrides,
-  };
-
-  return Object.fromEntries(
-    Object.entries(fixture).reduce((memo, [key, value]) => {
-      return [...memo, [key, sanitized[key] || value]];
-    }, [] as any)
-  );
-};
-
-const getEmail = () => {
-  if (process.env.RECORD) {
-    return `${uuid()}@example.com`;
-  }
-  return EMAIL;
-};
-
-const getPhoneNumber = () => {
-  if (process.env.RECORD) {
-    return uuid();
-  }
-  return PHONE_NUMBER;
-};
-
 describe('Passwordless', () => {
   let nockDone: () => void;
 
   beforeAll(async () => {
-    ({ nockDone } = await nockBack('passwordless.json', {
-      afterRecord(fixtures) {
-        return fixtures.map((fixture) => sanitizeFixture(fixture));
-      },
-    }));
+    ({ nockDone } = await nockBack('passwordless.json'));
   });
 
   afterAll(() => {
@@ -81,9 +37,8 @@ describe('Passwordless', () => {
   describe('#sendEmail', () => {
     it('should start passwordless using an email', async () => {
       const passwordless = new Passwordless(opts);
-      const email = getEmail();
       const response = await passwordless.sendEmail({
-        email,
+        email: EMAIL,
       });
 
       expect(response.status).toBe(200);
@@ -100,9 +55,8 @@ describe('Passwordless', () => {
   describe('#sendSMS', () => {
     it('should start passwordless using an SMS', async () => {
       const passwordless = new Passwordless(opts);
-      const phone_number = getPhoneNumber();
       const response = await passwordless.sendSMS({
-        phone_number,
+        phone_number: PHONE_NUMBER,
       });
 
       expect(response.status).toBe(200);
