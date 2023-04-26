@@ -11,7 +11,6 @@ nockBack.fixtures = `${path.dirname(fileURLToPath(import.meta.url))}/fixtures`;
 
 const DOMAIN = 'test-domain.auth0.com';
 const CLIENT_ID = 'test-client-id';
-const CLIENT_SECRET = 'test-client-secret';
 const EMAIL = 'test-email@example.com';
 const PHONE_NUMBER = '01234';
 
@@ -27,7 +26,6 @@ const opts = {
   domain: process.env.TEST_DOMAIN || DOMAIN,
   baseUrl,
   clientId: process.env.TEST_CLIENT_ID || CLIENT_ID,
-  clientSecret: process.env.TEST_CLIENT_SECRET || CLIENT_SECRET,
 };
 
 const sanitizeFixture: any = (fixture: any, overrides = {}) => {

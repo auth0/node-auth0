@@ -87,7 +87,7 @@ export default class Passwordless extends BaseAuthAPI {
         },
         body: (await this.addClientAuthentication(
           { connection: 'email', ...bodyParameters },
-          true
+          false
         )) as Record<string, string>,
       },
       initOverrides
@@ -127,7 +127,7 @@ export default class Passwordless extends BaseAuthAPI {
         },
         body: (await this.addClientAuthentication(
           { connection: 'sms', ...bodyParameters },
-          true
+          false
         )) as Record<string, string>,
       },
       initOverrides
