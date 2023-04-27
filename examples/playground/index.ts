@@ -9,16 +9,15 @@ if (process.env.RECORD) {
   type Definition = nock.Definition & { rawHeaders: string[]; responseIsBinary: boolean };
 
   const parseNockDef = (def: Definition) => {
-    const headers = def.rawHeaders;
+    const { rawHeaders, reqheaders, responseIsBinary, ...ret } = def;
     // nock doesn't handle Brotli compression.
-    if (headers[headers.indexOf('Content-Encoding') + 1] === 'br') {
+    if (rawHeaders[rawHeaders.indexOf('Content-Encoding') + 1] === 'br') {
       def.response = JSON.parse(
         zlib
           .brotliDecompressSync(Buffer.from((def.response as string[]).join(''), 'hex'))
           .toString('utf-8')
       );
     }
-    const { rawHeaders, reqheaders, responseIsBinary, ...ret } = def;
     return ret;
   };
 
