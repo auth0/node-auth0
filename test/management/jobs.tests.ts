@@ -297,7 +297,6 @@ describe('JobsManager', () => {
           // Validate the connection id.
           expect(parts.connection_id).to.exist.to.be.a('string').to.equal(data.connection_id);
 
-          //console.log(parts.users);
           // Validate the upsert param - default is false
           expect(parts.upsert).to.exist.to.be.a('string').to.equal('false');
 
