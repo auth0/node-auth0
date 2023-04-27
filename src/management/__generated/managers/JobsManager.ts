@@ -27,7 +27,7 @@ export interface PostUsersImportsData {
   /**
    *
    */
-  users: Blob;
+  users: typeof runtime.Blob;
   /**
    * connection_id of the connection to which users will be imported.
    */
@@ -140,7 +140,7 @@ export class JobsManager extends BaseAPI {
     // use FormData to transmit files using content-type "multipart/form-data"
     useForm = runtime.canConsumeForm(consumes);
     if (useForm) {
-      formParams = new FormData();
+      formParams = new runtime.FormData();
     } else {
       formParams = new URLSearchParams();
     }
