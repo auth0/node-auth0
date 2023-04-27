@@ -1,5 +1,7 @@
-import fetch, { RequestInit, RequestInfo, Response } from 'node-fetch';
+import fetch, { RequestInit, RequestInfo, Response, Blob, FormData } from 'node-fetch';
 import { RetryConfiguration, retry } from './retry';
+
+export { Blob, FormData } from 'node-fetch';
 
 export interface Configuration {
   baseUrl: string; // override base path
@@ -85,7 +87,6 @@ export class BaseAPI {
           ? overriddenInit.body
           : JSON.stringify(overriddenInit.body),
     };
-
     return { url, init };
   }
 
