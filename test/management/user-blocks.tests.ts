@@ -1,55 +1,45 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenants.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const UserBlocksManager = require(`../../src/management/UserBlocksManager`);
-const { ArgumentError } = require('rest-facade');
+import { RequiredError, UserBlocksManager } from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('UserBlocksManager', () => {
+  let userBlocks: UserBlocksManager;
+  const token = 'TOKEN';
+
   before(function () {
-    this.token = 'TOKEN';
-    this.userBlocks = new UserBlocksManager({
-      headers: { authorization: `Bearer ${this.token}` },
-      baseUrl: API_URL,
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
-  });
-
-  describe('instance', () => {
-    const methods = ['get', 'delete', 'getByIdentifier', 'deleteByIdentifier'];
-
-    methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect(this.userBlocks[method]).to.exist.to.be.an.instanceOf(Function);
-      });
-    });
+    userBlocks = client.userBlocks;
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new UserBlocksManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new UserBlocksManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new UserBlocksManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new UserBlocksManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#get', () => {
     const id = 'USER_5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).get(`/user-blocks/${id}`).reply(200);
+      request = nock(API_URL).get(`/user-blocks/${id}`).reply(200, []);
     });
 
     afterEach(() => {
@@ -57,25 +47,18 @@ describe('UserBlocksManager', () => {
     });
 
     it('should throw an error when no id is provided', function () {
-      const { userBlocks } = this;
-
-      expect(() => {
-        userBlocks.get({});
-      }).to.throw(ArgumentError, 'You must provide an user id for the get method');
-    });
-
-    it('should accept a callback', function (done) {
-      this.userBlocks.get({ id }, done.bind(null, null));
+      expect(userBlocks.get({} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should return a promise when no callback is given', function () {
-      expect(this.userBlocks.get({ id })).instanceOf(Promise);
+      expect(userBlocks.get({ id })).instanceOf(Promise);
     });
 
     it(`should perform a get request to /user-blocks/${id}`, async function () {
-      const { request } = this;
-
-      await this.userBlocks.get({ id });
+      await userBlocks.get({ id });
       expect(request.isDone()).to.be.true;
     });
 
@@ -84,7 +67,7 @@ describe('UserBlocksManager', () => {
 
       nock(API_URL).get(`/user-blocks/${id}`).reply(500);
 
-      this.userBlocks
+      userBlocks
         .get({ id })
         .catch((err) => {
           expect(err).to.exist;
@@ -99,19 +82,20 @@ describe('UserBlocksManager', () => {
 
       const request = nock(API_URL)
         .get(`/user-blocks/${id}`)
-        .matchHeader('authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, []);
 
-      await this.userBlocks.get({ id });
+      await userBlocks.get({ id });
       expect(request.isDone()).to.be.true;
     });
   });
 
   describe('#delete', () => {
     const id = 'USER_5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/user-blocks/${id}`).reply(200);
+      request = nock(API_URL).delete(`/user-blocks/${id}`).reply(200);
     });
 
     afterEach(() => {
@@ -119,25 +103,22 @@ describe('UserBlocksManager', () => {
     });
 
     it('should throw an error when no id is provided', function () {
-      const { userBlocks } = this;
-
-      expect(() => {
-        userBlocks.delete({});
-      }).to.throw(ArgumentError, 'You must provide an user id for the delete method');
+      expect(userBlocks.delete({} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should accept a callback', function (done) {
-      this.userBlocks.delete({ id }, done.bind(null, null));
+      userBlocks.delete({ id }, done.bind(null, null));
     });
 
     it('should return a promise when no callback is given', function () {
-      expect(this.userBlocks.delete({ id })).instanceOf(Promise);
+      expect(userBlocks.delete({ id })).instanceOf(Promise);
     });
 
     it(`should perform a delete request to /user-blocks/${id}`, async function () {
-      const { request } = this;
-
-      await this.userBlocks.delete({ id });
+      await userBlocks.delete({ id });
       expect(request.isDone()).to.be.true;
     });
 
@@ -146,7 +127,7 @@ describe('UserBlocksManager', () => {
 
       nock(API_URL).delete(`/user-blocks/${id}`).reply(500);
 
-      this.userBlocks
+      userBlocks
         .delete({ id })
         .catch((err) => {
           expect(err).to.exist;
@@ -161,19 +142,20 @@ describe('UserBlocksManager', () => {
 
       const request = nock(API_URL)
         .delete(`/user-blocks/${id}`)
-        .matchHeader('authorization', `Bearer ${this.token}`)
+        .matchHeader('authorization', `Bearer ${token}`)
         .reply(200);
 
-      await this.userBlocks.delete({ id });
+      await userBlocks.delete({ id });
       expect(request.isDone()).to.be.true;
     });
   });
 
-  describe('#getByIdentifier', () => {
+  describe('#getAll', () => {
     const identifier = 'USER_5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).get('/user-blocks').query({ identifier }).reply(200);
+      request = nock(API_URL).get('/user-blocks').query({ identifier }).reply(200, []);
     });
 
     afterEach(() => {
@@ -181,28 +163,18 @@ describe('UserBlocksManager', () => {
     });
 
     it('should throw an error when no identifier is provided', function () {
-      const { userBlocks } = this;
-
-      expect(() => {
-        userBlocks.getByIdentifier({});
-      }).to.throw(
-        ArgumentError,
-        'You must provide an user identifier for the getByIdentifier method'
+      expect(userBlocks.getAll({} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.identifier was null or undefined.`
       );
     });
 
-    it('should accept a callback', function (done) {
-      this.userBlocks.getByIdentifier({ identifier }, done.bind(null, null));
-    });
-
     it('should return a promise when no callback is given', function () {
-      expect(this.userBlocks.getByIdentifier({ identifier })).instanceOf(Promise);
+      expect(userBlocks.getAll({ identifier })).instanceOf(Promise);
     });
 
     it('should perform a get request to /user-blocks', async function () {
-      const { request } = this;
-
-      await this.userBlocks.getByIdentifier({ identifier });
+      await userBlocks.getAll({ identifier });
       expect(request.isDone()).to.be.true;
     });
 
@@ -211,8 +183,8 @@ describe('UserBlocksManager', () => {
 
       nock(API_URL).get('/user-blocks').query({ identifier }).reply(500);
 
-      this.userBlocks
-        .getByIdentifier({ identifier })
+      userBlocks
+        .getAll({ identifier })
         .catch((err) => {
           expect(err).to.exist;
 
@@ -227,19 +199,20 @@ describe('UserBlocksManager', () => {
       const request = nock(API_URL)
         .get('/user-blocks')
         .query({ identifier })
-        .matchHeader('authorization', `Bearer ${this.token}`)
-        .reply(200);
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, []);
 
-      await this.userBlocks.getByIdentifier({ identifier });
+      await userBlocks.getAll({ identifier });
       expect(request.isDone()).to.be.true;
     });
   });
 
   describe('#deleteByIdentifier', () => {
     const identifier = 'USER_5';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete('/user-blocks').query({ identifier }).reply(200);
+      request = nock(API_URL).delete('/user-blocks').query({ identifier }).reply(200);
     });
 
     afterEach(() => {
@@ -247,28 +220,18 @@ describe('UserBlocksManager', () => {
     });
 
     it('should throw an error when no identifier is provided', function () {
-      const { userBlocks } = this;
-
-      expect(() => {
-        userBlocks.deleteByIdentifier({});
-      }).to.throw(
-        ArgumentError,
-        'You must provide an user identifier for the deleteByIdentifier method'
+      expect(userBlocks.deleteAll({} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.identifier was null or undefined.`
       );
     });
 
-    it('should accept a callback', function (done) {
-      this.userBlocks.deleteByIdentifier({ identifier }, done.bind(null, null));
-    });
-
     it('should return a promise when no callback is given', function () {
-      expect(this.userBlocks.deleteByIdentifier({ identifier })).instanceOf(Promise);
+      expect(userBlocks.deleteAll({ identifier })).instanceOf(Promise);
     });
 
     it('should perform a delete request to /user-blocks', async function () {
-      const { request } = this;
-
-      await this.userBlocks.deleteByIdentifier({ identifier });
+      await userBlocks.deleteAll({ identifier });
       expect(request.isDone()).to.be.true;
     });
 
@@ -277,8 +240,8 @@ describe('UserBlocksManager', () => {
 
       nock(API_URL).delete('/user-blocks').query({ identifier }).reply(500);
 
-      this.userBlocks
-        .deleteByIdentifier({ identifier })
+      userBlocks
+        .deleteAll({ identifier })
         .catch((err) => {
           expect(err).to.exist;
 
@@ -293,10 +256,10 @@ describe('UserBlocksManager', () => {
       const request = nock(API_URL)
         .delete('/user-blocks')
         .query({ identifier })
-        .matchHeader('authorization', `Bearer ${this.token}`)
+        .matchHeader('authorization', `Bearer ${token}`)
         .reply(200);
 
-      await this.userBlocks.deleteByIdentifier({ identifier });
+      await userBlocks.deleteAll({ identifier });
       expect(request.isDone()).to.be.true;
     });
   });
