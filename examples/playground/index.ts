@@ -1,63 +1,41 @@
 import * as dotenv from 'dotenv';
+import { v4 as uuid } from 'uuid';
+
 dotenv.config({
   path: './examples/playground/.env',
 });
 
-import {
-  ManagementClient,
-  ManagementClientOptionsWithClientAssertion,
-  ManagementClientOptionsWithClientSecret,
-} from '../../src/management/index';
+import { ManagementClient } from '../../src/management/index';
 
-const opts = {
-  domain: process.env.AUTH0_DOMAIN as string,
-  clientId: process.env.AUTH0_CLIENT_ID as string,
-};
+import { program } from 'commander';
 
-if (process.env.AUTH0_CLIENT_SECRET) {
-  (opts as ManagementClientOptionsWithClientSecret).clientSecret = process.env.AUTH0_CLIENT_SECRET;
-}
-
-if (process.env.AUTH0_CLIENT_ASSERTION_SIGING_KEY) {
-  (opts as ManagementClientOptionsWithClientAssertion).clientAssertionSigningKey =
-    process.env.AUTH0_CLIENT_ASSERTION_SIGING_KEY;
-}
-
-const mgmntClient = new ManagementClient(
-  opts as ManagementClientOptionsWithClientAssertion | ManagementClientOptionsWithClientSecret
-);
-
-async function testClients() {
-  const { data: newClient } = await mgmntClient.clients.create({
-    name: 'Test',
-  });
-
-  console.log('Create a client: ' + newClient.name);
-
-  const { data: client } = await mgmntClient.clients.get({
-    id: newClient.client_id as string,
-  });
-
-  console.log('Get the client: ' + client.name);
-
-  const { data: updatedClient } = await mgmntClient.clients.update(
-    {
-      id: client.client_id as string,
-    },
-    { name: 'Test2' }
+program
+  .name('node-auth0-playground')
+  .option('--domain <domain>', 'your domain', process.env.AUTH0_DOMAIN)
+  .option('--client-id <client-id>', 'your client id', process.env.AUTH0_CLIENT_ID)
+  .option('--client-secret <client-secret>', 'your client secret', process.env.AUTH0_CLIENT_SECRET)
+  .option(
+    '--client-assertion-siging-key <client-assertion-siging-key>',
+    'your client assertion siging key',
+    process.env.AUTH0_CLIENT_ASSERTION_SIGING_KEY
   );
 
-  console.log('Updated the client: ' + updatedClient.name);
-
-  await mgmntClient.clients.delete({
-    id: newClient.client_id as string,
+program
+  .command('clients')
+  .description('Test CRUD on the clients endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+    const { data: newClient } = await mgmntClient.clients.create({ name: uuid() });
+    console.log('Create a client: ' + newClient.name);
+    const { data: client } = await mgmntClient.clients.get({ id: newClient.client_id as string });
+    console.log('Get the client: ' + client.name);
+    const { data: updatedClient } = await mgmntClient.clients.update(
+      { id: client.client_id as string },
+      { name: uuid() }
+    );
+    console.log('Updated the client: ' + updatedClient.name);
+    await mgmntClient.clients.delete({ id: newClient.client_id as string });
+    console.log('Removed the client: ' + updatedClient.name);
   });
 
-  console.log('Removed the client: ' + updatedClient.name);
-}
-
-async function main() {
-  await testClients();
-}
-
-main();
+await program.parseAsync(process.argv);
