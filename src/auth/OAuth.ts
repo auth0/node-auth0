@@ -158,7 +158,8 @@ export interface TokenExchangeGrantRequest {
  */
 export default class OAuth extends BaseAuthAPI {
   /**
-   *
+   * Perform an OAuth 2.0 grant.
+   * (You should only need this if you can't find the grant you need in this class.)
    */
   async grant<T = TokenSet>(
     grantType: string,
