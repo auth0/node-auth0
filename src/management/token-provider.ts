@@ -47,8 +47,8 @@ export class TokenProvider {
     if (!('clientSecret' in params) && !('clientAssertionSigningKey' in params)) {
       throw new Error('Must provide a clientSecret or a clientAssertionSigningKey');
     } else if (
-      ('clientSecret' in params && params.clientSecret?.length === 0) ||
-      ('clientAssertionSigningKey' in params && params.clientAssertionSigningKey?.length === 0)
+      ('clientSecret' in params && params.clientSecret.length === 0) ||
+      ('clientAssertionSigningKey' in params && params.clientAssertionSigningKey.length === 0)
     ) {
       throw new Error('Must provide a clientSecret or a clientAssertionSigningKey');
     }
