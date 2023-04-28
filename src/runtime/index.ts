@@ -3,6 +3,42 @@ import { RetryConfiguration, retry } from './retry';
 
 export { Blob, FormData } from 'node-fetch';
 
+interface ApiErrorResponse {
+  errorCode: string;
+  error: string;
+  message: string;
+  statusCode: number;
+}
+
+async function parseError(response: Response) {
+  // Errors typically have a specific format:
+  // {
+  //    errorCode: 'invalid_body',
+  //    error: 'Bad Request',
+  //    message: 'Payload validation failed ...',
+  //    statusCode: 400
+  // }
+
+  let data: ApiErrorResponse;
+
+  try {
+    data = (await response.json()) as ApiErrorResponse;
+  } catch (_) {
+    return new ResponseError(response, response.status, 'Response returned an error code');
+  }
+
+  if (data.errorCode && data.error && data.message) {
+    return new ApiError(
+      data.errorCode,
+      data.error,
+      data.statusCode || response.status,
+      data.message
+    );
+  } else {
+    return new ResponseError(response, response.status, 'Response returned an error code');
+  }
+}
+
 export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation
@@ -43,7 +79,9 @@ export class BaseAPI {
     if (response && response.status >= 200 && response.status < 300) {
       return response;
     }
-    throw new ResponseError(response, 'Response returned an error code');
+
+    const error = await parseError(response);
+    throw error;
   }
 
   private async createFetchParams(
@@ -165,9 +203,21 @@ function isFormData(value: unknown): value is FormData {
   return typeof FormData !== 'undefined' && value instanceof FormData;
 }
 
+export class ApiError extends Error {
+  override name = 'ApiError' as const;
+  constructor(
+    public errorCode: string,
+    public error: string,
+    public statusCode: number,
+    msg?: string
+  ) {
+    super(msg);
+  }
+}
+
 export class ResponseError extends Error {
   override name = 'ResponseError' as const;
-  constructor(public response: Response, msg?: string) {
+  constructor(public response: Response, public statusCode: number, msg?: string) {
     super(msg);
   }
 }

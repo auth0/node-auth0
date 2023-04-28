@@ -395,7 +395,7 @@ describe('BrandingManager', () => {
       try {
         await branding.getTheme({ themeId: 'themeid1' });
       } catch (err: any) {
-        expect(err.response.status).to.eq(404);
+        expect(err.statusCode).to.eq(404);
         expect(err).to.exist;
       }
     });
@@ -448,7 +448,7 @@ describe('BrandingManager', () => {
       try {
         await branding.getDefaultTheme();
       } catch (err: any) {
-        expect(err.response.status).to.eq(404);
+        expect(err.statusCode).to.eq(404);
         expect(err).to.exist;
       }
     });
@@ -518,7 +518,7 @@ describe('BrandingManager', () => {
       try {
         await branding.createTheme(data);
       } catch (err: any) {
-        expect(err.response.status).to.eq(409);
+        expect(err.statusCode).to.eq(409);
         expect(err).to.exist;
       }
     });
@@ -583,7 +583,7 @@ describe('BrandingManager', () => {
       try {
         await branding.updateTheme(params, data);
       } catch (err: any) {
-        expect(err.response.status).to.eq(404);
+        expect(err.statusCode).to.eq(404);
         expect(err).to.exist;
       }
     });
@@ -642,7 +642,7 @@ describe('BrandingManager', () => {
       try {
         await branding.deleteTheme(params);
       } catch (err: any) {
-        expect(err.response.status).to.eq(404);
+        expect(err.statusCode).to.eq(404);
         expect(err).to.exist;
       }
     });
