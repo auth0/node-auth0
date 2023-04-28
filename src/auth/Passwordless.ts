@@ -234,7 +234,7 @@ export default class Passwordless extends BaseAuthAPI {
    *    clientSecret: 'myClientSecret'
    * });
    *
-   * await auth0.passwordless.loginWithEmailCode({
+   * await auth0.passwordless.loginWithSMSCode({
    *   phone_number: '0777777777',
    *   code: 'ABC123'
    * });
