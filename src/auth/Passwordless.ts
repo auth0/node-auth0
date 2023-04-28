@@ -1,5 +1,6 @@
 import { InitOverride, VoidApiResponse, validateRequiredRequestParams } from '../runtime';
-import BaseAuthAPI from './BaseAuthApi';
+import BaseAuthAPI, { Configuration } from './BaseAuthApi';
+import OAuth, { ClientCredentials } from './OAuth';
 
 export interface SendEmailLinkRequest {
   /**
@@ -33,6 +34,35 @@ export interface SendEmailCodeRequest {
 export type SendEmailRequest = SendEmailLinkRequest | SendEmailCodeRequest;
 
 export interface SendSmsRequest {
+  /**
+   * The users phone number.
+   */
+  phone_number: string;
+}
+
+export interface LoginWithEmailCodeRequest extends ClientCredentials {
+  /**
+   * The user's email address.
+   */
+  email: string;
+  /**
+   * The user's verification code.
+   */
+  code: string;
+  /**
+   * API Identifier of the API for which you want to get an Access Token.
+   */
+  audience?: string;
+  /**
+   * Use openid to get an ID Token, or openid profile email to also include user profile information in the ID Token.
+   */
+  scope?: string;
+}
+
+export interface LoginWithSmsCodeRequest extends Omit<LoginWithEmailCodeRequest, 'email'> {
+  /**
+   * The user's phone number.
+   */
   phone_number: string;
 }
 
@@ -40,37 +70,47 @@ export interface SendSmsRequest {
  * Handles passwordless flows using Email and SMS.
  */
 export default class Passwordless extends BaseAuthAPI {
+  private oauth: OAuth;
+  constructor(configuration: Configuration) {
+    super(configuration);
+    this.oauth = new OAuth(configuration);
+  }
+
   /**
    * Start passwordless flow sending an email.
    *
-   * @example <caption>
-   *   Given the user `email` address, it will send an email with:
+   * Given the user `email` address, it will send an email with:
    *
-   *   <ul>
-   *     <li>A link (default, `send:"link"`). You can then authenticate with this
-   *       user opening the link and he will be automatically logged in to the
-   *       application. Optionally, you can append/override parameters to the link
-   *       (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
-   *       `authParams` object.
-   *     </li>
-   *     <li>
-   *       A verification code (`send:"code"`). You can then authenticate with
-   *       this user using the `/oauth/ro` endpoint specifying `email` as
-   *       `username` and `code` as `password`.
-   *     </li>
-   *   </ul>
+   * <ul>
+   *   <li>A link (default, `send:"link"`). You can then authenticate with this
+   *     user opening the link and he will be automatically logged in to the
+   *     application. Optionally, you can append/override parameters to the link
+   *     (like `scope`, `redirect_uri`, `protocol`, `response_type`, etc.) using
+   *     `authParams` object.
+   *   </li>
+   *   <li>
+   *     A verification code (`send:"code"`). You can then authenticate with
+   *     this user using the `/oauth/token` endpoint specifying `email` as
+   *     `username` and `code` as `password`.
+   *   </li>
+   * </ul>
    *
-   *   Find more information in the
-   *   <a href="https://auth0.com/docs/auth-api#!#post--with_email">API Docs</a>
-   * </caption>
+   * See: https://auth0.com/docs/api/authentication#get-code-or-link
    *
-   * var data = {
+   * @example
+   * ```js
+   * const auth0 = new AuthenticationApi({
+   *    domain: 'my-domain.auth0.com',
+   *    clientId: 'myClientId',
+   *    clientSecret: 'myClientSecret'
+   * });
+   *
+   * await auth0.passwordless.sendEmail({
    *   email: '{EMAIL}',
    *   send: 'link',
    *   authParams: {} // Optional auth params.
-   * };
-   *
-   * auth0.passwordless.sendEmail(data);
+   * });
+   * ```
    */
   async sendEmail(
     bodyParameters: SendEmailRequest,
@@ -99,18 +139,25 @@ export default class Passwordless extends BaseAuthAPI {
   /**
    * Start passwordless flow sending an SMS.
    *
-   * @example <caption>
-   *   Given the user `phone_number`, it will send a SMS message with a
-   *   verification code. You can then authenticate with this user using the
-   *   `/oauth/ro` endpoint specifying `phone_number` as `username` and `code` as
-   *   `password`:
-   * </caption>
+   * Given the user `phone_number`, it will send a SMS message with a
+   * verification code. You can then authenticate with this user using the
+   * `/oauth/token` endpoint specifying `phone_number` as `username` and `code` as
+   * `password`:
    *
-   * const data = {
+   * See: https://auth0.com/docs/api/authentication#get-code-or-link
+   *
+   * @example
+   * ```js
+   * const auth0 = new AuthenticationApi({
+   *    domain: 'my-domain.auth0.com',
+   *    clientId: 'myClientId',
+   *    clientSecret: 'myClientSecret'
+   * });
+   *
+   * await auth0.passwordless.sendSMS({
    *   phone_number: '{PHONE}'
-   * };
-   *
-   * auth0.passwordless.sendSMS(data);
+   * });
+   * ```
    */
   async sendSMS(
     bodyParameters: SendSmsRequest,
@@ -134,5 +181,85 @@ export default class Passwordless extends BaseAuthAPI {
     );
 
     return VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Once you have a verification code, use this endpoint to login the user with their email and verification code.
+   *
+   * @example
+   * ```js
+   * const auth0 = new AuthenticationApi({
+   *    domain: 'my-domain.auth0.com',
+   *    clientId: 'myClientId',
+   *    clientSecret: 'myClientSecret'
+   * });
+   *
+   * await auth0.passwordless.loginWithEmailCode({
+   *   email: 'foo@example.com',
+   *   code: 'ABC123'
+   * });
+   * ```
+   */
+  async loginWithEmailCode(
+    bodyParameters: LoginWithEmailCodeRequest,
+    initOverrides?: InitOverride
+  ): Promise<VoidApiResponse> {
+    validateRequiredRequestParams(bodyParameters, ['email', 'code']);
+
+    const { email: username, code: otp, ...otherParams } = bodyParameters;
+
+    return this.oauth.grant(
+      'http://auth0.com/oauth/grant-type/passwordless/otp',
+      await this.addClientAuthentication(
+        {
+          username,
+          otp,
+          realm: 'email',
+          ...otherParams,
+        },
+        false
+      ),
+      initOverrides
+    );
+  }
+
+  /**
+   * Once you have a verification code, use this endpoint to login the user with their phone number and verification code.
+   *
+   * @example
+   * ```js
+   * const auth0 = new AuthenticationApi({
+   *    domain: 'my-domain.auth0.com',
+   *    clientId: 'myClientId',
+   *    clientSecret: 'myClientSecret'
+   * });
+   *
+   * await auth0.passwordless.loginWithEmailCode({
+   *   phone_number: '0777777777',
+   *   code: 'ABC123'
+   * });
+   * ```
+   */
+  async loginWithSMSCode(
+    bodyParameters: LoginWithSmsCodeRequest,
+    initOverrides?: InitOverride
+  ): Promise<VoidApiResponse> {
+    validateRequiredRequestParams(bodyParameters, ['phone_number', 'code']);
+
+    const { phone_number: username, code: otp, ...otherParams } = bodyParameters;
+
+    return this.oauth.grant(
+      'http://auth0.com/oauth/grant-type/passwordless/otp',
+      await this.addClientAuthentication(
+        {
+          username,
+          otp,
+          realm: 'sms',
+          ...otherParams,
+        },
+        false
+      ),
+      initOverrides
+    );
   }
 }

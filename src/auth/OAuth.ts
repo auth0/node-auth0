@@ -24,7 +24,7 @@ export interface TokenSet {
   expires_in: number;
 }
 
-interface ClientCredentials {
+export interface ClientCredentials {
   /**
    * Specify this to override the parent class's `clientId`
    */
