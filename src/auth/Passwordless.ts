@@ -125,10 +125,10 @@ export default class Passwordless extends BaseAuthAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: (await this.addClientAuthentication(
+        body: await this.addClientAuthentication(
           { client_id: this.clientId, connection: 'email', ...bodyParameters },
           false
-        )) as Record<string, string>,
+        ),
       },
       initOverrides
     );
@@ -172,10 +172,10 @@ export default class Passwordless extends BaseAuthAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: (await this.addClientAuthentication(
+        body: await this.addClientAuthentication(
           { client_id: this.clientId, connection: 'sms', ...bodyParameters },
           false
-        )) as Record<string, string>,
+        ),
       },
       initOverrides
     );

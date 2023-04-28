@@ -98,7 +98,12 @@ async function testAuth() {
     const { data: newTokenSet } = await auth.oauth.refreshTokenGrant({
       refresh_token: tokenSet.refresh_token as string,
     });
-    console.log('refreshed tokens with refresh grant', newTokenSet.id_token);
+    console.log('Refreshed tokens with refresh grant', newTokenSet.id_token);
+    const token = (newTokenSet.refresh_token || tokenSet.refresh_token) as string;
+    await auth.oauth.revokeRefreshToken({
+      token,
+    });
+    console.log('Revoked refresh token', token);
   }
 
   if (process.env.PASSWORDLESS_EMAIL) {

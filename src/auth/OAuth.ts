@@ -1,4 +1,9 @@
-import { InitOverride, JSONApiResponse, validateRequiredRequestParams } from '../runtime';
+import {
+  InitOverride,
+  JSONApiResponse,
+  VoidApiResponse,
+  validateRequiredRequestParams,
+} from '../runtime';
 import BaseAuthAPI from './BaseAuthApi';
 
 export interface TokenSet {
@@ -122,6 +127,18 @@ export interface RefreshTokenGrantRequest extends ClientCredentials {
    * If not sent, the original scopes will be used; otherwise you can request a reduced set of scopes.
    */
   scope?: string;
+}
+
+export interface RevokeRefreshTokenRequest extends ClientCredentials {
+  /**
+   * Specify this to override the parent class's `clientId`
+   */
+  client_id?: string;
+
+  /**
+   * The Refresh Token you want to revoke.
+   */
+  token: string;
 }
 
 export interface TokenExchangeGrantRequest {
@@ -350,5 +367,50 @@ export default class OAuth extends BaseAuthAPI {
       await this.addClientAuthentication(bodyParameters, false),
       initOverrides
     );
+  }
+
+  /**
+   * Use this endpoint to invalidate a Refresh Token if it has been compromised.
+   *
+   * The behaviour of this endpoint depends on the state of the <a href="https://auth0.com/docs/secure/tokens/refresh-tokens/revoke-refresh-tokens#refresh-tokens-and-grants">Refresh Token Revocation Deletes Grant</a> toggle.
+   * If this toggle is enabled, then each revocation request invalidates not only the specific token, but all other tokens based on the same authorization grant.
+   * This means that all Refresh Tokens that have been issued for the same user, application, and audience will be revoked.
+   * If this toggle is disabled, then only the refresh token is revoked, while the grant is left intact.
+   *
+   * See: https://auth0.com/docs/api/authentication#revoke-refresh-token
+   *
+   * @example
+   * ```js
+   * const auth0 = new AuthenticationApi({
+   *    domain: 'my-domain.auth0.com',
+   *    clientId: 'myClientId'
+   *    clientSecret: 'myClientSecret'
+   * });
+   *
+   * await auth0.oauth.revokeRefreshToken({ token: 'myrefreshtoken' })
+   * ```
+   */
+  async revokeRefreshToken(
+    bodyParameters: RevokeRefreshTokenRequest,
+    initOverrides?: InitOverride
+  ): Promise<VoidApiResponse> {
+    validateRequiredRequestParams(bodyParameters, ['token']);
+
+    const response = await this.request(
+      {
+        path: '/oauth/revoke',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: await this.addClientAuthentication(
+          { client_id: this.clientId, ...bodyParameters },
+          false
+        ),
+      },
+      initOverrides
+    );
+
+    return VoidApiResponse.fromResponse(response);
   }
 }
