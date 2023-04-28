@@ -11,8 +11,8 @@ import {
   PostUsersImportsData,
   FetchError,
 } from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
-import { ApiError, Blob } from '../../src/runtime';
+import { ManagementClient, ManagementApiError } from '../../src/management';
+import { Blob } from '../../src/runtime';
 import { extractParts } from '../utils/extractParts';
 import { fileURLToPath } from 'url';
 
@@ -233,7 +233,7 @@ describe('JobsManager', () => {
       nock(API_URL).post('/jobs/users-imports').reply(500);
 
       jobs.importUsers(data).catch((err) => {
-        expect((err as ApiError).statusCode).to.equal(500);
+        expect((err as ManagementApiError).statusCode).to.equal(500);
         done();
       });
     });
@@ -249,7 +249,7 @@ describe('JobsManager', () => {
       });
 
       jobs.importUsers(data).catch((err) => {
-        const responseError = err as ApiError;
+        const responseError = err as ManagementApiError;
         expect(responseError.statusCode).to.equal(428);
         expect(responseError.message).to.equal('There are 4 active import users jobs');
         done();

@@ -1,14 +1,10 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
 import { AuthenticationClient, ManagementClient } from '../../src';
-import {
-  ApiError,
-  BaseAPI,
-  InitOverrideFunction,
-  RequestOpts,
-  ResponseError,
-} from '../../src/runtime';
+import { BaseAPI, InitOverrideFunction, RequestOpts, ResponseError } from '../../src/runtime';
 import { RequestInit, Response } from 'node-fetch';
+import { AuthApiError } from '../../src/auth/BaseAuthApi';
+import { ManagementApiError } from '../../src/management';
 
 export class TestClient extends BaseAPI {
   public async testRequest(
@@ -251,113 +247,6 @@ describe('Runtime', () => {
       }
     }
   });
-
-  it('should throw a ResponseError when response does not provide payload', async () => {
-    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428);
-
-    const client = new TestClient({
-      baseUrl: URL,
-    });
-
-    try {
-      await client.testRequest({
-        path: `/clients`,
-        method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
-  });
-
-  it('should throw a ResponseError when backend does not provide known error details', async () => {
-    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, { err: 'test error' });
-
-    const client = new TestClient({
-      baseUrl: URL,
-    });
-
-    try {
-      await client.testRequest({
-        path: `/clients`,
-        method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
-  });
-
-  it('should throw an ApiError when backend provides known error details', async () => {
-    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, {
-      error: 'test error',
-      errorCode: 'test error code',
-      message: 'test message',
-      statusCode: 401,
-    });
-
-    const client = new TestClient({
-      baseUrl: URL,
-    });
-
-    try {
-      await client.testRequest({
-        path: `/clients`,
-        method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ApiError) {
-        expect(e.error).toBe('test error');
-        expect(e.errorCode).toBe('test error code');
-        expect(e.message).toBe('test message');
-        expect(e.statusCode).toBe(401);
-      } else {
-        expect(e).toBeInstanceOf(ApiError);
-      }
-    }
-  });
-
-  it('should throw an ApiError and fallback to the response status code when statusCode omitted from response', async () => {
-    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, {
-      error: 'test error',
-      errorCode: 'test error code',
-      message: 'test message',
-    });
-
-    const client = new TestClient({
-      baseUrl: URL,
-    });
-
-    try {
-      await client.testRequest({
-        path: `/clients`,
-        method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ApiError) {
-        expect(e.error).toBe('test error');
-        expect(e.errorCode).toBe('test error code');
-        expect(e.message).toBe('test message');
-        expect(e.statusCode).toBe(428);
-      } else {
-        expect(e).toBeInstanceOf(ApiError);
-      }
-    }
-  });
 });
 
 describe('Runtime for ManagementClient', () => {
@@ -414,6 +303,109 @@ describe('Runtime for ManagementClient', () => {
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw a ResponseError when response does not provide payload', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.response.status).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw a ResponseError when backend does not provide known error details', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, { err: 'test error' });
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.response.status).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw an ManagementApiError when backend provides known error details', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, {
+      error: 'test error',
+      errorCode: 'test error code',
+      message: 'test message',
+      statusCode: 401,
+    });
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ManagementApiError) {
+        expect(e.error).toBe('test error');
+        expect(e.errorCode).toBe('test error code');
+        expect(e.message).toBe('test message');
+        expect(e.statusCode).toBe(401);
+      } else {
+        expect(e).toBeInstanceOf(ManagementApiError);
+      }
+    }
+  });
+
+  it('should throw an ManagementApiError and fallback to the response status code when statusCode omitted from response', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, {
+      error: 'test error',
+      errorCode: 'test error code',
+      message: 'test message',
+    });
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ManagementApiError) {
+        expect(e.error).toBe('test error');
+        expect(e.errorCode).toBe('test error code');
+        expect(e.message).toBe('test message');
+        expect(e.statusCode).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ManagementApiError);
       }
     }
   });
@@ -476,6 +468,82 @@ describe('Runtime for AuthenticationClient', () => {
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw a ResponseError when response does not provide payload', async () => {
+    nock(URL, { encodedQueryParams: true }).post('/oauth/token').reply(428);
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    try {
+      await client.oauth.clientCredentialsGrant({
+        audience: '123',
+      });
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.response.status).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw a ResponseError when backend does not provide known error details', async () => {
+    nock(URL, { encodedQueryParams: true }).post('/oauth/token').reply(428, { err: 'test error' });
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    try {
+      await client.oauth.clientCredentialsGrant({
+        audience: '123',
+      });
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.response.status).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw an ManagementApiError when backend provides known error details', async () => {
+    nock(URL, { encodedQueryParams: true })
+      .post('/oauth/token')
+      .reply(428, { error: 'test error', error_description: 'test error description' });
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    try {
+      await client.oauth.clientCredentialsGrant({
+        audience: '123',
+      });
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof AuthApiError) {
+        expect(e.error).toBe('test error');
+        expect(e.error_description).toBe('test error description');
+        expect(e.message).toBe('test error description');
+      } else {
+        expect(e).toBeInstanceOf(AuthApiError);
       }
     }
   });

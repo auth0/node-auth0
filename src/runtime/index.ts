@@ -3,42 +3,6 @@ import { RetryConfiguration, retry } from './retry';
 
 export { Blob, FormData } from 'node-fetch';
 
-interface ApiErrorResponse {
-  errorCode: string;
-  error: string;
-  message: string;
-  statusCode: number;
-}
-
-async function parseError(response: Response) {
-  // Errors typically have a specific format:
-  // {
-  //    errorCode: 'invalid_body',
-  //    error: 'Bad Request',
-  //    message: 'Payload validation failed ...',
-  //    statusCode: 400
-  // }
-
-  let data: ApiErrorResponse;
-
-  try {
-    data = (await response.json()) as ApiErrorResponse;
-  } catch (_) {
-    return new ResponseError(response, response.status, 'Response returned an error code');
-  }
-
-  if (data.errorCode && data.error && data.message) {
-    return new ApiError(
-      data.errorCode,
-      data.error,
-      data.statusCode || response.status,
-      data.message
-    );
-  } else {
-    return new ResponseError(response, response.status, 'Response returned an error code');
-  }
-}
-
 export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation
@@ -46,6 +10,7 @@ export interface Configuration {
   queryParamsStringify?: (params: HTTPQuery) => string; // stringify function for query strings
   headers?: HTTPHeaders; //header params we want to use on every request
   retry?: RetryConfiguration;
+  parseError?: (response: Response) => Promise<Error>;
 }
 
 /**
@@ -55,6 +20,7 @@ export class BaseAPI {
   private middleware: Middleware[];
   private queryParamsStringify: (params: HTTPQuery) => string;
   private fetchApi: FetchAPI;
+  private parseError: (response: Response) => Promise<Error> | Error;
 
   constructor(protected configuration: Configuration) {
     if (configuration.baseUrl === null || configuration.baseUrl === undefined) {
@@ -68,6 +34,10 @@ export class BaseAPI {
     this.middleware = configuration.middleware || [];
     this.queryParamsStringify = this.configuration.queryParamsStringify || querystring;
     this.fetchApi = configuration.fetchApi || fetch;
+    this.parseError =
+      configuration.parseError ||
+      ((response: Response) =>
+        new ResponseError(response, response.status, 'Response returned an error code'));
   }
 
   protected async request(
@@ -80,7 +50,7 @@ export class BaseAPI {
       return response;
     }
 
-    const error = await parseError(response);
+    const error = await this.parseError(response);
     throw error;
   }
 
@@ -201,18 +171,6 @@ function isBlob(value: unknown): value is Blob {
 
 function isFormData(value: unknown): value is FormData {
   return typeof FormData !== 'undefined' && value instanceof FormData;
-}
-
-export class ApiError extends Error {
-  override name = 'ApiError' as const;
-  constructor(
-    public errorCode: string,
-    public error: string,
-    public statusCode: number,
-    msg?: string
-  ) {
-    super(msg);
-  }
 }
 
 export class ResponseError extends Error {
