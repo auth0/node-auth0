@@ -14,7 +14,7 @@ module.exports = {
     'plugin:promise/recommended',
     'plugin:prettier/recommended',
   ],
-  plugins: ['jsdoc', '@typescript-eslint'],
+  plugins: ['jsdoc', '@typescript-eslint', 'import'],
   parserOptions: {
     ecmaVersion: 9,
   },
@@ -29,5 +29,6 @@ module.exports = {
 
     'promise/catch-or-return': 'off',
     'promise/always-return': 'off',
+    'import/no-default-export': 'error',
   },
 };

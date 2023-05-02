@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import Database from '../../src/auth/Database';
+import { Database } from '../../src/auth/Database';
 
 const { back: nockBack } = nock;
 

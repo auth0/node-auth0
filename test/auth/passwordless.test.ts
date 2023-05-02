@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import Passwordless from '../../src/auth/Passwordless';
+import { Passwordless } from '../../src/auth/Passwordless';
 
 const { back: nockBack } = nock;
 

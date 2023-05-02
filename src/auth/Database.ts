@@ -4,7 +4,7 @@ import {
   TextApiResponse,
   validateRequiredRequestParams,
 } from '../runtime';
-import BaseAuthAPI from './BaseAuthApi';
+import { BaseAuthAPI } from './BaseAuthApi';
 
 export interface SignUpRequest {
   /**
@@ -117,7 +117,7 @@ export interface ChangePasswordRequest {
 /**
  * Sign-up and change-password for Database & Active Directory authentication services.
  */
-export default class Database extends BaseAuthAPI {
+export class Database extends BaseAuthAPI {
   /**
    * Given a user's credentials, and a connection, this endpoint will create a new user using active authentication.
    *
