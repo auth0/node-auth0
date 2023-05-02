@@ -39,7 +39,7 @@ export interface SendSmsRequest {
 /**
  * Handles passwordless flows using Email and SMS.
  */
-export default class Passwordless extends BaseAuthAPI {
+export class Passwordless extends BaseAuthAPI {
   /**
    * Start passwordless flow sending an email.
    *

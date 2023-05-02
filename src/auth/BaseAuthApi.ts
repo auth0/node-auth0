@@ -9,7 +9,7 @@ export interface Configuration extends Omit<BaseConfiguration, 'baseUrl'> {
   clientAssertionSigningAlg?: string;
 }
 
-export default class BaseAuthAPI extends BaseAPI {
+export class BaseAuthAPI extends BaseAPI {
   domain: string;
   clientId: string;
   clientSecret?: string;
