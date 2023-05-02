@@ -108,11 +108,6 @@ export interface DeviceCodeGrantRequest {
 
 export interface RefreshTokenGrantRequest extends ClientCredentials {
   /**
-   * Specify this to override the parent class's `clientId`
-   */
-  client_id?: string;
-
-  /**
    * The Refresh Token to use.
    */
   refresh_token: string;
