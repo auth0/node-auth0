@@ -86,7 +86,7 @@ export default class Passwordless extends BaseAuthAPI {
           'Content-Type': 'application/json',
         },
         body: (await this.addClientAuthentication(
-          { connection: 'email', ...bodyParameters },
+          { client_id: this.clientId, connection: 'email', ...bodyParameters },
           false
         )) as Record<string, string>,
       },
@@ -126,7 +126,7 @@ export default class Passwordless extends BaseAuthAPI {
           'Content-Type': 'application/json',
         },
         body: (await this.addClientAuthentication(
-          { connection: 'sms', ...bodyParameters },
+          { client_id: this.clientId, connection: 'sms', ...bodyParameters },
           false
         )) as Record<string, string>,
       },
