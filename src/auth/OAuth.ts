@@ -126,11 +126,6 @@ export interface RefreshTokenGrantRequest extends ClientCredentials {
 
 export interface RevokeRefreshTokenRequest extends ClientCredentials {
   /**
-   * Specify this to override the parent class's `clientId`
-   */
-  client_id?: string;
-
-  /**
    * The Refresh Token you want to revoke.
    */
   token: string;
