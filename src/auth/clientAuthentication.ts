@@ -6,7 +6,7 @@ export interface AddClientAuthenticationPayload {
   client_secret?: string;
   client_assertion?: string;
   client_assertion_type?: string;
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 interface AddClientAuthenticationOptions {
@@ -36,7 +36,7 @@ export const addClientAuthentication = async ({
   clientAssertionSigningAlg,
   clientSecret,
 }: AddClientAuthenticationOptions): Promise<Record<string, unknown>> => {
-  payload.client_id = payload.client_id || clientId;
+  const cid = payload.client_id || clientId;
   if (clientAssertionSigningKey && !payload.client_assertion) {
     const alg = clientAssertionSigningAlg || 'RS256';
     const privateKey = await jose.importPKCS8(clientAssertionSigningKey, alg);
@@ -44,9 +44,9 @@ export const addClientAuthentication = async ({
     payload.client_assertion = await new jose.SignJWT({})
       .setProtectedHeader({ alg })
       .setIssuedAt()
-      .setSubject(payload.client_id)
+      .setSubject(cid)
       .setJti(uuid())
-      .setIssuer(payload.client_id)
+      .setIssuer(cid)
       .setAudience(`https://${domain}/`)
       .setExpirationTime('2mins')
       .sign(privateKey);

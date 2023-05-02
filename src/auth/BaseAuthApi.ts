@@ -56,7 +56,7 @@ async function parseError(response: Response) {
     );
   }
 }
-export default class BaseAuthAPI extends BaseAPI {
+export class BaseAuthAPI extends BaseAPI {
   domain: string;
   clientId: string;
   clientSecret?: string;

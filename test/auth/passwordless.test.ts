@@ -2,11 +2,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import Passwordless from '../../src/auth/Passwordless';
+import { Passwordless } from '../../src/auth/Passwordless';
 
 const { back: nockBack } = nock;
-
-nockBack.fixtures = `${path.dirname(fileURLToPath(import.meta.url))}/fixtures`;
 
 const DOMAIN = 'test-domain.auth0.com';
 const CLIENT_ID = 'test-client-id';
@@ -27,7 +25,7 @@ describe('Passwordless', () => {
   let nockDone: () => void;
 
   beforeAll(async () => {
-    ({ nockDone } = await nockBack('passwordless.json'));
+    ({ nockDone } = await nockBack('auth/fixtures/passwordless.json'));
   });
 
   afterAll(() => {

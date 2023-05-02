@@ -1,5 +1,5 @@
 import { InitOverride, VoidApiResponse, validateRequiredRequestParams } from '../runtime';
-import BaseAuthAPI from './BaseAuthApi';
+import { BaseAuthAPI } from './BaseAuthApi';
 
 export interface SendEmailLinkRequest {
   /**
@@ -39,7 +39,7 @@ export interface SendSmsRequest {
 /**
  * Handles passwordless flows using Email and SMS.
  */
-export default class Passwordless extends BaseAuthAPI {
+export class Passwordless extends BaseAuthAPI {
   /**
    * Start passwordless flow sending an email.
    *
@@ -86,7 +86,7 @@ export default class Passwordless extends BaseAuthAPI {
           'Content-Type': 'application/json',
         },
         body: (await this.addClientAuthentication(
-          { connection: 'email', ...bodyParameters },
+          { client_id: this.clientId, connection: 'email', ...bodyParameters },
           false
         )) as Record<string, string>,
       },
@@ -126,7 +126,7 @@ export default class Passwordless extends BaseAuthAPI {
           'Content-Type': 'application/json',
         },
         body: (await this.addClientAuthentication(
-          { connection: 'sms', ...bodyParameters },
+          { client_id: this.clientId, connection: 'sms', ...bodyParameters },
           false
         )) as Record<string, string>,
       },

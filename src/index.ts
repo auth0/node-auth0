@@ -5,5 +5,5 @@
  * {@link https://github.com/ngonzalvez/rest-facade}
  */
 
-export { ManagementClient } from './management';
-export { AuthenticationClient } from './auth';
+export * from './management';
+export * from './auth';

@@ -17,10 +17,17 @@ export class TestClient extends BaseAPI {
 
 describe('Runtime', () => {
   const URL = 'https://tenant.auth0.com/api/v2';
+  let _setTimeout: typeof setTimeout;
+
+  beforeEach(() => {
+    _setTimeout = setTimeout;
+    (global as any).setTimeout = (fn: () => void, _timeout: number): void => fn();
+  });
 
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
+    (global as any).setTimeout = _setTimeout;
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -327,6 +334,7 @@ describe('Runtime for ManagementClient', () => {
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
+    //(global as any).setTimeout = _setTimeout;
   });
 
   it('should retry if enabled', async () => {
@@ -463,9 +471,11 @@ describe('Runtime for ManagementClient', () => {
 
 describe('Runtime for AuthenticationClient', () => {
   const URL = 'https://tenant.auth0.com';
+
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
+    //(global as any).setTimeout = _setTimeout;
   });
 
   it('should retry if enabled', async () => {
@@ -546,7 +556,7 @@ describe('Runtime for AuthenticationClient', () => {
     }
   });
 
-  it('should throw an ManagementApiError when backend provides known error details', async () => {
+  it('should throw an AuthApiError when backend provides known error details', async () => {
     nock(URL, { encodedQueryParams: true })
       .post('/oauth/token')
       .reply(428, { error: 'test error', error_description: 'test error description' });
