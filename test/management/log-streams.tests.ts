@@ -33,7 +33,7 @@ describe('LogStreamsManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new LogStreamsManager({ baseUrl: '' });
+        new LogStreamsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

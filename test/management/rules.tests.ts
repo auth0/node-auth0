@@ -39,7 +39,7 @@ describe('RulesManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new RulesManager({ baseUrl: '' });
+        new RulesManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

@@ -42,7 +42,7 @@ describe('JobsManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new JobsManager({ baseUrl: '' });
+        new JobsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

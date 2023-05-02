@@ -14,7 +14,7 @@ import {
   PatchActionOperationRequest,
   PatchBindingsRequest,
 } from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+import { ManagementApiError, ManagementClient } from '../../src/management';
 
 const { expect } = chai;
 describe('ActionsManager', () => {
@@ -65,7 +65,7 @@ describe('ActionsManager', () => {
       expect(() => {
         new ActionsManager({
           baseUrl: '',
-        });
+        } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

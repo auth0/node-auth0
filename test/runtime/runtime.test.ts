@@ -33,6 +33,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
     });
 
     const response = await client.testRequest({
@@ -56,6 +65,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
     });
 
     try {
@@ -85,6 +103,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         maxRetries: 4,
       },
@@ -110,6 +137,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
     });
 
     try {
@@ -139,6 +175,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         retryWhen: [428],
       },
@@ -166,6 +211,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         retryWhen: [428, 429],
       },
@@ -193,6 +247,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         retryWhen: [428],
       },
@@ -225,6 +288,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         enabled: false,
       },

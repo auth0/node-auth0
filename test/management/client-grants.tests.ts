@@ -44,7 +44,7 @@ describe('ClientGrantsManager', () => {
       expect(() => {
         new ClientGrantsManager({
           baseUrl: '',
-        });
+        } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

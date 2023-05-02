@@ -49,7 +49,7 @@ describe('ClientsManager', () => {
       expect(() => {
         new ClientsManager({
           baseUrl: '',
-        });
+        } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

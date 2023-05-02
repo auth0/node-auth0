@@ -10,7 +10,7 @@ export interface Configuration {
   queryParamsStringify?: (params: HTTPQuery) => string; // stringify function for query strings
   headers?: HTTPHeaders; //header params we want to use on every request
   retry?: RetryConfiguration;
-  parseError?: (response: Response) => Promise<Error>;
+  parseError: (response: Response) => Promise<Error>;
 }
 
 /**
@@ -34,17 +34,7 @@ export class BaseAPI {
     this.middleware = configuration.middleware || [];
     this.queryParamsStringify = this.configuration.queryParamsStringify || querystring;
     this.fetchApi = configuration.fetchApi || fetch;
-    this.parseError =
-      configuration.parseError ||
-      (async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      });
+    this.parseError = configuration.parseError;
   }
 
   protected async request(
