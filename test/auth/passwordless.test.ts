@@ -1,6 +1,7 @@
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import Passwordless, {
+import {
+  Passwordless,
   LoginWithEmailRequest,
   LoginWithSMSRequest,
 } from '../../src/auth/Passwordless';

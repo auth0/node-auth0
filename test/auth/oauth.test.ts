@@ -2,7 +2,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import nock from 'nock';
 
-import OAuth, {
+import {
+  OAuth,
   AuthorizationCodeGrantRequest,
   AuthorizationCodeGrantWithPKCERequest,
   ClientCredentialsGrantRequest,
