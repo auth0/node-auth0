@@ -115,7 +115,7 @@ async function testAuth() {
   }
 
   if (process.env.PASSWORDLESS_CODE) {
-    const { data: tokenSet } = await auth.passwordless.loginWithEmailCode({
+    const { data: tokenSet } = await auth.passwordless.loginWithEmail({
       email: process.env.PASSWORDLESS_EMAIL as string,
       code: process.env.PASSWORDLESS_CODE,
     });

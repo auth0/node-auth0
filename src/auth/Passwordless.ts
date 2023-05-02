@@ -40,7 +40,7 @@ export interface SendSmsRequest {
   phone_number: string;
 }
 
-export interface LoginWithEmailCodeRequest extends ClientCredentials {
+export interface LoginWithEmailRequest extends ClientCredentials {
   /**
    * The user's email address.
    */
@@ -59,7 +59,7 @@ export interface LoginWithEmailCodeRequest extends ClientCredentials {
   scope?: string;
 }
 
-export interface LoginWithSmsCodeRequest extends Omit<LoginWithEmailCodeRequest, 'email'> {
+export interface LoginWithSMSRequest extends Omit<LoginWithEmailRequest, 'email'> {
   /**
    * The user's phone number.
    */
@@ -194,14 +194,14 @@ export default class Passwordless extends BaseAuthAPI {
    *    clientSecret: 'myClientSecret'
    * });
    *
-   * await auth0.passwordless.loginWithEmailCode({
+   * await auth0.passwordless.loginWithEmail({
    *   email: 'foo@example.com',
    *   code: 'ABC123'
    * });
    * ```
    */
-  async loginWithEmailCode(
-    bodyParameters: LoginWithEmailCodeRequest,
+  async loginWithEmail(
+    bodyParameters: LoginWithEmailRequest,
     initOverrides?: InitOverride
   ): Promise<VoidApiResponse> {
     validateRequiredRequestParams(bodyParameters, ['email', 'code']);
@@ -234,14 +234,14 @@ export default class Passwordless extends BaseAuthAPI {
    *    clientSecret: 'myClientSecret'
    * });
    *
-   * await auth0.passwordless.loginWithSMSCode({
+   * await auth0.passwordless.loginWithSMS({
    *   phone_number: '0777777777',
    *   code: 'ABC123'
    * });
    * ```
    */
-  async loginWithSMSCode(
-    bodyParameters: LoginWithSmsCodeRequest,
+  async loginWithSMS(
+    bodyParameters: LoginWithSMSRequest,
     initOverrides?: InitOverride
   ): Promise<VoidApiResponse> {
     validateRequiredRequestParams(bodyParameters, ['phone_number', 'code']);

@@ -1,8 +1,8 @@
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
 import Passwordless, {
-  LoginWithEmailCodeRequest,
-  LoginWithSmsCodeRequest,
+  LoginWithEmailRequest,
+  LoginWithSMSRequest,
 } from '../../src/auth/Passwordless';
 
 const { back: nockBack } = nock;
@@ -69,17 +69,17 @@ describe('Passwordless', () => {
     });
   });
 
-  describe('#loginWithEmailCode', () => {
+  describe('#loginWithEmail', () => {
     it('should require email', async () => {
       const passwordless = new Passwordless(opts);
       await expect(
-        passwordless.loginWithEmailCode({ code: 'foo' } as LoginWithEmailCodeRequest)
+        passwordless.loginWithEmail({ code: 'foo' } as LoginWithEmailRequest)
       ).rejects.toThrow('Required parameter requestParameters.email was null or undefined.');
     });
 
     it('should login with code from email', async () => {
       const passwordless = new Passwordless({ ...opts, clientSecret: 'test-client-secret' });
-      const response = await passwordless.loginWithEmailCode({
+      const response = await passwordless.loginWithEmail({
         email: 'test-email@example.com',
         code: 'test-code',
       });
@@ -95,17 +95,17 @@ describe('Passwordless', () => {
     });
   });
 
-  describe('#loginWithSMSCode', () => {
+  describe('#loginWithSMS', () => {
     it('should require phone_number', async () => {
       const passwordless = new Passwordless(opts);
       await expect(
-        passwordless.loginWithSMSCode({ code: 'foo' } as LoginWithSmsCodeRequest)
+        passwordless.loginWithSMS({ code: 'foo' } as LoginWithSMSRequest)
       ).rejects.toThrow('Required parameter requestParameters.phone_number was null or undefined.');
     });
 
     it('should login with code from SMS', async () => {
       const passwordless = new Passwordless({ ...opts, clientSecret: 'test-client-secret' });
-      const response = await passwordless.loginWithSMSCode({
+      const response = await passwordless.loginWithSMS({
         phone_number: 'test-phone-number',
         code: 'test-code',
       });
