@@ -1,7 +1,7 @@
 import { Configuration } from './BaseAuthApi';
-import Database from './Database';
-import OAuth from './OAuth';
-import Passwordless from './Passwordless';
+import { Database } from './Database';
+import { OAuth } from './OAuth';
+import { Passwordless } from './Passwordless';
 
 export class AuthenticationClient {
   database: Database;

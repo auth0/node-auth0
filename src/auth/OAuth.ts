@@ -1,5 +1,5 @@
 import { InitOverride, JSONApiResponse, validateRequiredRequestParams } from '../runtime';
-import BaseAuthAPI from './BaseAuthApi';
+import { BaseAuthAPI } from './BaseAuthApi';
 
 export interface TokenSet {
   /**
@@ -151,7 +151,7 @@ export interface TokenExchangeGrantRequest {
 /**
  *  OAuth 2.0 flows.
  */
-export default class OAuth extends BaseAuthAPI {
+export class OAuth extends BaseAuthAPI {
   /**
    * Perform an OAuth 2.0 grant.
    * (You should only need this if you can't find the grant you need in this class.)
