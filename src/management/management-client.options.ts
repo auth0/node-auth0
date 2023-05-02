@@ -1,4 +1,4 @@
-import { Configuration } from '../runtime';
+import { Configuration } from '../lib/runtime';
 
 export interface ManagementClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
   domain: string;

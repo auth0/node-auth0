@@ -3,7 +3,7 @@ import {
   JSONApiResponse,
   TextApiResponse,
   validateRequiredRequestParams,
-} from '../runtime';
+} from '../lib/runtime';
 import { BaseAuthAPI } from './BaseAuthApi';
 
 export interface SignUpRequest {

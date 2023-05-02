@@ -3,6 +3,11 @@ import { Database } from './Database';
 import { OAuth } from './OAuth';
 import { Passwordless } from './Passwordless';
 
+export * from './Database';
+export * from './OAuth';
+export * from './Passwordless';
+export { AuthApiError } from './BaseAuthApi';
+
 export class AuthenticationClient {
   database: Database;
   oauth: OAuth;

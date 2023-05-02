@@ -1,4 +1,4 @@
-import { BaseAPI, Configuration as BaseConfiguration, ResponseError } from '../runtime';
+import { BaseAPI, Configuration as BaseConfiguration, ResponseError } from '../lib';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
 import { Response, Headers } from 'node-fetch';
 

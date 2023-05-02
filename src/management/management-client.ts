@@ -4,7 +4,7 @@ import {
   ManagementClientOptionsWithToken,
 } from './management-client.options';
 import { TokenProviderMiddleware } from './TokenProviderMiddleware';
-import { ResponseError } from './../runtime/index';
+import { ResponseError } from '../lib';
 import { Response, Headers } from 'node-fetch';
 
 interface ManagementApiErrorResponse {

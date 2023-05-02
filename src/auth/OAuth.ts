@@ -3,7 +3,7 @@ import {
   JSONApiResponse,
   VoidApiResponse,
   validateRequiredRequestParams,
-} from '../runtime';
+} from '../lib/runtime';
 import { BaseAuthAPI, Options } from './BaseAuthApi';
 import { IDTokenValidateOptions, IDTokenValidator } from './IdTokenValidator';
 
