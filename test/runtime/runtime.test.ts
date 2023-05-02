@@ -334,7 +334,6 @@ describe('Runtime for ManagementClient', () => {
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
-    //(global as any).setTimeout = _setTimeout;
   });
 
   it('should retry if enabled', async () => {
@@ -475,7 +474,6 @@ describe('Runtime for AuthenticationClient', () => {
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
-    //(global as any).setTimeout = _setTimeout;
   });
 
   it('should retry if enabled', async () => {
