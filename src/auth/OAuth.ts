@@ -1,5 +1,5 @@
 import { InitOverride, JSONApiResponse, validateRequiredRequestParams } from '../runtime';
-import BaseAuthAPI from './BaseAuthApi';
+import { BaseAuthAPI } from './BaseAuthApi';
 
 export interface TokenSet {
   /**
