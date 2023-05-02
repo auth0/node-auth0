@@ -6,7 +6,7 @@ import {
 import { tokenProviderFactory } from './management-client.utils';
 import { TokenProviderMiddleware } from './token-provider.middleware';
 import { ResponseError } from './../runtime/index';
-import { Response } from 'node-fetch';
+import { Response, Headers } from 'node-fetch';
 
 interface ManagementApiErrorResponse {
   errorCode: string;
@@ -21,7 +21,9 @@ export class ManagementApiError extends Error {
     public errorCode: string,
     public error: string,
     public statusCode: number,
-    msg?: string
+    public body: string,
+    public headers: Headers,
+    public msg: string
   ) {
     super(msg);
   }
@@ -36,23 +38,26 @@ async function parseError(response: Response) {
   //    statusCode: 400
   // }
 
+  const body = await response.text();
   let data: ManagementApiErrorResponse;
 
   try {
-    data = (await response.json()) as ManagementApiErrorResponse;
-  } catch (_) {
-    return new ResponseError(response, response.status, 'Response returned an error code');
-  }
-
-  if (data.errorCode && data.error && data.message) {
+    data = JSON.parse(body) as ManagementApiErrorResponse;
     return new ManagementApiError(
       data.errorCode,
       data.error,
       data.statusCode || response.status,
+      body,
+      response.headers,
       data.message
     );
-  } else {
-    return new ResponseError(response, response.status, 'Response returned an error code');
+  } catch (_) {
+    return new ResponseError(
+      response.status,
+      body,
+      response.headers,
+      'Response returned an error code'
+    );
   }
 }
 

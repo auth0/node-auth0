@@ -1,6 +1,6 @@
 import { BaseAPI, Configuration as BaseConfiguration, ResponseError } from '../runtime';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
-import { Response } from 'node-fetch';
+import { Response, Headers } from 'node-fetch';
 
 export interface Configuration extends Omit<BaseConfiguration, 'baseUrl' | 'parseError'> {
   domain: string;
@@ -17,8 +17,14 @@ interface AuthApiErrorResponse {
 
 export class AuthApiError extends Error {
   override name = 'AuthApiError' as const;
-  constructor(public error: string, public error_description: string) {
-    super(error_description);
+  constructor(
+    public error: string,
+    public error_description: string,
+    public statusCode: number,
+    public body: string,
+    public headers: Headers
+  ) {
+    super(error_description || error);
   }
 }
 
@@ -29,18 +35,25 @@ async function parseError(response: Response) {
   //    error_description: 'Bad Request',
   // }
 
+  const body = await response.text();
   let data: AuthApiErrorResponse;
 
   try {
-    data = (await response.json()) as AuthApiErrorResponse;
+    data = JSON.parse(body) as AuthApiErrorResponse;
+    return new AuthApiError(
+      data.error,
+      data.error_description,
+      response.status,
+      body,
+      response.headers
+    );
   } catch (_) {
-    return new ResponseError(response, response.status, 'Response returned an error code');
-  }
-
-  if (data.error && data.error_description) {
-    return new AuthApiError(data.error, data.error_description);
-  } else {
-    return new ResponseError(response, response.status, 'Response returned an error code');
+    return new ResponseError(
+      response.status,
+      body,
+      response.headers,
+      'Response returned an error code'
+    );
   }
 }
 export default class BaseAuthAPI extends BaseAPI {

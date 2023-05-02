@@ -36,8 +36,15 @@ export class BaseAPI {
     this.fetchApi = configuration.fetchApi || fetch;
     this.parseError =
       configuration.parseError ||
-      ((response: Response) =>
-        new ResponseError(response, response.status, 'Response returned an error code'));
+      (async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      });
   }
 
   protected async request(
@@ -175,7 +182,12 @@ function isFormData(value: unknown): value is FormData {
 
 export class ResponseError extends Error {
   override name = 'ResponseError' as const;
-  constructor(public response: Response, public statusCode: number, msg?: string) {
+  constructor(
+    public statusCode: number,
+    public body: string,
+    public headers: Headers,
+    msg?: string
+  ) {
     super(msg);
   }
 }

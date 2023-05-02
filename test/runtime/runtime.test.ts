@@ -67,7 +67,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -121,7 +121,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
+        expect(e.statusCode).toBe(428);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -208,7 +208,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -240,7 +240,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -299,7 +299,7 @@ describe('Runtime for ManagementClient', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -322,29 +322,7 @@ describe('Runtime for ManagementClient', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
-  });
-
-  it('should throw a ResponseError when backend does not provide known error details', async () => {
-    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, { err: 'test error' });
-
-    const token = 'TOKEN';
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-    });
-
-    try {
-      await client.clients.getAll();
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
+        expect(e.statusCode).toBe(428);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
       }
@@ -464,7 +442,7 @@ describe('Runtime for AuthenticationClient', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -489,31 +467,7 @@ describe('Runtime for AuthenticationClient', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
-  });
-
-  it('should throw a ResponseError when backend does not provide known error details', async () => {
-    nock(URL, { encodedQueryParams: true }).post('/oauth/token').reply(428, { err: 'test error' });
-
-    const client = new AuthenticationClient({
-      domain: 'tenant.auth0.com',
-      clientId: '123',
-      clientSecret: '123',
-    });
-
-    try {
-      await client.oauth.clientCredentialsGrant({
-        audience: '123',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
+        expect(e.statusCode).toBe(428);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
       }
