@@ -12,7 +12,7 @@ if (process.env.RECORD) {
     const { rawHeaders, reqheaders, responseIsBinary, ...ret } = def;
     // nock doesn't handle Brotli compression.
     if (rawHeaders[rawHeaders.indexOf('Content-Encoding') + 1] === 'br') {
-      def.response = JSON.parse(
+      ret.response = JSON.parse(
         zlib
           .brotliDecompressSync(Buffer.from((def.response as string[]).join(''), 'hex'))
           .toString('utf-8')
@@ -98,7 +98,28 @@ async function testAuth() {
     const { data: newTokenSet } = await auth.oauth.refreshTokenGrant({
       refresh_token: tokenSet.refresh_token as string,
     });
-    console.log('refreshed tokens with refresh grant', newTokenSet.id_token);
+    console.log('Refreshed tokens with refresh grant', newTokenSet.id_token);
+    const token = (newTokenSet.refresh_token || tokenSet.refresh_token) as string;
+    await auth.oauth.revokeRefreshToken({
+      token,
+    });
+    console.log('Revoked refresh token', token);
+  }
+
+  if (process.env.PASSWORDLESS_EMAIL) {
+    await auth.passwordless.sendEmail({
+      email: process.env.PASSWORDLESS_EMAIL,
+      send: 'code',
+    });
+    console.log('Send code to', process.env.PASSWORDLESS_EMAIL);
+  }
+
+  if (process.env.PASSWORDLESS_CODE) {
+    const { data: tokenSet } = await auth.passwordless.loginWithEmail({
+      email: process.env.PASSWORDLESS_EMAIL as string,
+      code: process.env.PASSWORDLESS_CODE,
+    });
+    console.log('Logged in with passwordless', tokenSet);
   }
 }
 
