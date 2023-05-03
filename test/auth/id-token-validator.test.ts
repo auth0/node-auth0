@@ -259,6 +259,7 @@ describe('id-token-validator', () => {
       /\(iat\) claim must be a number present in the ID token/
     );
   });
+
   it('allows iat skew', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -268,6 +269,7 @@ describe('id-token-validator', () => {
     const jwt = await sign({ iat: now() + 1000 });
     await expect(idTokenValidator.validate(jwt)).resolves.not.toThrowError();
   });
+
   it('verifies exp is a number', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -279,6 +281,7 @@ describe('id-token-validator', () => {
       /\(exp\) claim must be a number present in the ID token/
     );
   });
+
   it('verifies exp is in the future', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -291,6 +294,7 @@ describe('id-token-validator', () => {
       /\(exp\) claim error in the ID token; current time \(.*?\) is after expiration time \(.*?\)/
     );
   });
+
   it('allows exp skew', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -301,6 +305,7 @@ describe('id-token-validator', () => {
     const jwt = await sign({ exp: now() - 5 });
     await expect(idTokenValidator.validate(jwt)).resolves.not.toThrowError();
   });
+
   it('passes when auth_time is within max_age', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -310,6 +315,7 @@ describe('id-token-validator', () => {
     const jwt = await sign({ payload: { auth_time: now() - 100 } });
     await expect(idTokenValidator.validate(jwt, { maxAge: 200 })).resolves.not.toThrowError();
   });
+
   it('verifies auth_time did not exceed max_age', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -321,6 +327,7 @@ describe('id-token-validator', () => {
       /\(auth_time\) claim in the ID token indicates that too much time has passed/
     );
   });
+
   it('allows auth_time skew', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
@@ -331,6 +338,7 @@ describe('id-token-validator', () => {
     const jwt = await sign({ payload: { auth_time: now() - 250 } });
     await expect(idTokenValidator.validate(jwt, { maxAge: 200 })).resolves.not.toThrowError();
   });
+
   it('verifies auth_time is a number when maxAge is passed', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,
