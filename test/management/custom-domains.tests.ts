@@ -44,7 +44,7 @@ describe('CustomDomainsManager', () => {
       expect(() => {
         new CustomDomainsManager({
           baseUrl: '',
-        });
+        } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

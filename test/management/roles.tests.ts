@@ -29,7 +29,7 @@ describe('RolesManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new RolesManager({ baseUrl: '' });
+        new RolesManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

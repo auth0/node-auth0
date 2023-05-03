@@ -64,7 +64,7 @@ describe('OAuth', () => {
         })
       ).rejects.toThrowError(
         expect.objectContaining({
-          response: expect.anything(),
+          body: expect.anything(),
         })
       );
     });
@@ -109,7 +109,7 @@ describe('OAuth', () => {
         })
       ).rejects.toThrowError(
         expect.objectContaining({
-          response: expect.anything(),
+          body: expect.anything(),
         })
       );
     });

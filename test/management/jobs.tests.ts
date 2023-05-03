@@ -9,10 +9,9 @@ import {
   JobsManager,
   GetErrors200ResponseOneOfInner,
   PostUsersImportsData,
-  ResponseError,
   FetchError,
 } from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+import { ManagementClient, ManagementApiError } from '../../src/management';
 import { Blob } from '../../src/runtime';
 import { extractParts } from '../utils/extractParts';
 import { fileURLToPath } from 'url';
@@ -43,14 +42,14 @@ describe('JobsManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new JobsManager({ baseUrl: '' });
+        new JobsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#get', () => {
     let request: nock.Scope;
-    let id = '1';
+    const id = '1';
 
     beforeEach(function () {
       request = nock(API_URL).get(`/jobs/${id}`).reply(200, {});
@@ -234,27 +233,26 @@ describe('JobsManager', () => {
       nock(API_URL).post('/jobs/users-imports').reply(500);
 
       jobs.importUsers(data).catch((err) => {
-        expect((err as ResponseError).response.status).to.equal(500);
+        expect((err as ManagementApiError).statusCode).to.equal(500);
         done();
       });
     });
 
-    it('xxshould pass rest-api json error messages to the promise catch handler', function (done) {
+    it('should pass rest-api json error messages to the promise catch handler', function (done) {
       nock.cleanAll();
 
       nock(API_URL).post('/jobs/users-imports').reply(428, {
         statusCode: 428,
         error: 'Too Many Requests',
+        errorCode: 'too_many_requests',
         message: 'There are 4 active import users jobs',
       });
 
       jobs.importUsers(data).catch((err) => {
-        expect(err.response.status).to.equal(428);
-        // TEMPORARY UNTILL FIXED ERROR HANDLING
-        (err as ResponseError).response.json().then((x: any) => {
-          expect(x.message).to.equal('There are 4 active import users jobs');
-          done();
-        });
+        const responseError = err as ManagementApiError;
+        expect(responseError.statusCode).to.equal(428);
+        expect(responseError.message).to.equal('There are 4 active import users jobs');
+        done();
       });
     });
 

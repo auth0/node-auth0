@@ -36,7 +36,7 @@ describe('PromptsManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new PromptsManager({ baseUrl: '' });
+        new PromptsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

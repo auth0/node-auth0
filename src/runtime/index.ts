@@ -10,6 +10,7 @@ export interface Configuration {
   queryParamsStringify?: (params: HTTPQuery) => string; // stringify function for query strings
   headers?: HTTPHeaders; //header params we want to use on every request
   retry?: RetryConfiguration;
+  parseError: (response: Response) => Promise<Error>;
 }
 
 /**
@@ -19,6 +20,7 @@ export class BaseAPI {
   private middleware: Middleware[];
   private queryParamsStringify: (params: HTTPQuery) => string;
   private fetchApi: FetchAPI;
+  private parseError: (response: Response) => Promise<Error> | Error;
 
   constructor(protected configuration: Configuration) {
     if (configuration.baseUrl === null || configuration.baseUrl === undefined) {
@@ -32,6 +34,7 @@ export class BaseAPI {
     this.middleware = configuration.middleware || [];
     this.queryParamsStringify = this.configuration.queryParamsStringify || querystring;
     this.fetchApi = configuration.fetchApi || fetch;
+    this.parseError = configuration.parseError;
   }
 
   protected async request(
@@ -43,7 +46,9 @@ export class BaseAPI {
     if (response && response.status >= 200 && response.status < 300) {
       return response;
     }
-    throw new ResponseError(response, 'Response returned an error code');
+
+    const error = await this.parseError(response);
+    throw error;
   }
 
   private async createFetchParams(
@@ -167,7 +172,12 @@ function isFormData(value: unknown): value is FormData {
 
 export class ResponseError extends Error {
   override name = 'ResponseError' as const;
-  constructor(public response: Response, msg?: string) {
+  constructor(
+    public statusCode: number,
+    public body: string,
+    public headers: Headers,
+    msg?: string
+  ) {
     super(msg);
   }
 }
