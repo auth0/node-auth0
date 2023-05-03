@@ -98,5 +98,17 @@
       "id_token": "my-id-token",
       "scope": "openid profile email address phone offline_access"
     }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/revoke",
+    "body": {
+      "client_id": "test-client-id",
+      "token": "test-refresh-token",
+      "client_secret": "test-client-secret"
+    },
+    "status": 200,
+    "response": ""
   }
 ]
