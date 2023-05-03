@@ -29,7 +29,7 @@ export class IDTokenValidator {
     idTokenSigningAlg = 'RS256',
     clockTolerance = DEFAULT_CLOCK_TOLERANCE,
   }: Options) {
-    this.jwks = jose.createRemoteJWKSet(new URL(`https://${domain}`));
+    this.jwks = jose.createRemoteJWKSet(new URL(`https://${domain}/.well-known/jwks.json`));
 
     this.alg = idTokenSigningAlg;
     this.audience = clientId;
@@ -38,16 +38,16 @@ export class IDTokenValidator {
     this.clockTolerance = clockTolerance;
   }
 
-  async validate(idToken: string, { nonce, maxAge, organization }: ValidateOptions) {
+  async validate(idToken: string, { nonce, maxAge, organization }: ValidateOptions = {}) {
     const secret = this.alg === 'HS256' ? this.secret : this.jwks;
-    const { protectedHeader: header, payload } = await jose.jwtVerify(idToken, secret as any, {
-      issuer: this.issuer,
-      audience: this.audience,
-    });
+
+    const header = jose.decodeProtectedHeader(idToken);
+    const payload = jose.decodeJwt(idToken);
+
     // Check algorithm
-    if (header.alg !== this.alg) {
-      throw new IdTokenValidatorError(
-        `Signature algorithm of "${header.alg}" is not supported. Expected the ID token to be signed with "${this.alg}".`
+    if (header.alg !== 'RS256' && header.alg !== 'HS256') {
+      throw new Error(
+        `Signature algorithm of "${header.alg}" is not supported. Expected the ID token to be signed with "RS256" or "HS256".`
       );
     }
     // Issuer
@@ -102,7 +102,7 @@ export class IDTokenValidator {
       }
     }
 
-    // --Time validation (epoch)--
+    // Time validation (epoch)
     const now = Math.floor(Date.now() / 1000);
 
     // Expires at
@@ -120,6 +120,7 @@ export class IDTokenValidator {
     }
 
     // Issued at
+    // FIXME? more iat validation
     if (!payload.iat || typeof payload.iat !== 'number') {
       throw new IdTokenValidatorError(
         'Issued At (iat) claim must be a number present in the ID token'
@@ -127,7 +128,7 @@ export class IDTokenValidator {
     }
 
     // Nonce
-    if (nonce) {
+    if (nonce || payload.nonce) {
       if (!payload.nonce || typeof payload.nonce !== 'string') {
         throw new IdTokenValidatorError(
           'Nonce (nonce) claim must be a string present in the ID token'
@@ -141,6 +142,7 @@ export class IDTokenValidator {
     }
 
     // Authorized party
+    // FIX ME? more azp validation? https://github.com/panva/node-openid-client/blob/main/lib/client.js#L966-L1010
     if (Array.isArray(payload.aud) && payload.aud.length > 1) {
       if (!payload.azp || typeof payload.azp !== 'string') {
         throw new IdTokenValidatorError(
@@ -170,6 +172,16 @@ export class IDTokenValidator {
       }
     }
 
-    return payload;
+    // FIXME? nbf validation https://github.com/panva/node-openid-client/blob/main/lib/client.js#L926-L946
+    // FIXME? at_hash validation https://github.com/panva/node-openid-client/blob/main/lib/client.js#L792-L856
+    // FIXME? c_hash validation https://github.com/panva/node-openid-client/blob/main/lib/client.js#L858-L870
+
+    await jose.jwtVerify(idToken, secret as any, {
+      issuer: this.issuer,
+      audience: this.audience,
+      clockTolerance: this.clockTolerance,
+      maxTokenAge: maxAge,
+      algorithms: ['HS256', 'RS256'],
+    });
   }
 }
