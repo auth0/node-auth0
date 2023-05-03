@@ -1,15 +1,8 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { Token } from '../models';
+import type { Token, GetTokensRequest } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetTokensRequest {
-  /**
-   * Optional filter on the JWT's aud claim (the client_id to which the JWT was issued).
-   */
-  aud?: string;
-}
 
 /**
  *

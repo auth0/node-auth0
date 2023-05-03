@@ -6,53 +6,13 @@ import type {
   ResourceServer,
   ResourceServerUpdate,
   GetResourceServers200ResponseOneOf,
+  DeleteResourceServersByIdRequest,
+  GetResourceServersRequest,
+  GetResourceServersByIdRequest,
+  PatchResourceServersByIdRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteResourceServersByIdRequest {
-  /**
-   * ID or the audience of the resource server to delete.
-   */
-  id: string;
-}
-
-export interface GetResourceServersRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
-
-export interface GetResourceServersByIdRequest {
-  /**
-   * ID or audience of the resource server to retrieve.
-   */
-  id: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
-
-export interface PatchResourceServersByIdRequest {
-  /**
-   * ID or audience of the resource server to update.
-   */
-  id: string;
-}
 
 /**
  *

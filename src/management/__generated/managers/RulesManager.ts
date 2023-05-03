@@ -6,65 +6,13 @@ import type {
   RuleCreate,
   RuleUpdate,
   GetRules200ResponseOneOf,
+  DeleteRulesByIdRequest,
+  GetRulesRequest,
+  GetRulesByIdRequest,
+  PatchRulesByIdRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteRulesByIdRequest {
-  /**
-   * ID of the rule to delete.
-   */
-  id: string;
-}
-
-export interface GetRulesRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional filter on whether a rule is enabled (true) or disabled (false).
-   */
-  enabled?: boolean;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
-
-export interface GetRulesByIdRequest {
-  /**
-   * ID of the rule to retrieve.
-   */
-  id: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
-
-export interface PatchRulesByIdRequest {
-  /**
-   * ID of the rule to retrieve.
-   */
-  id: string;
-}
 
 /**
  *

@@ -15,141 +15,21 @@ import type {
   PostDeployDraftVersionRequest,
   PostTestAction200Response,
   PostTestActionRequest,
+  DeleteActionRequest,
+  GetActionRequest,
+  GetActionVersionRequest,
+  GetActionVersionsRequest,
+  GetActionsRequest,
+  GetBindingsRequest,
+  GetExecutionRequest,
+  PatchActionOperationRequest,
+  PatchBindingsOperationRequest,
+  PostDeployActionRequest,
+  PostDeployDraftVersionOperationRequest,
+  PostTestActionOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteActionRequest {
-  /**
-   * The ID of the action to delete.
-   */
-  id: string;
-  /**
-   * Force action deletion detaching bindings
-   */
-  force?: boolean;
-}
-
-export interface GetActionRequest {
-  /**
-   * The ID of the action to retrieve.
-   */
-  id: string;
-}
-
-export interface GetActionVersionRequest {
-  /**
-   * The ID of the action.
-   */
-  actionId: string;
-  /**
-   * The ID of the action version.
-   */
-  id: string;
-}
-
-export interface GetActionVersionsRequest {
-  /**
-   * The ID of the action.
-   */
-  actionId: string;
-  /**
-   * Use this field to request a specific page of the list results.
-   */
-  page?: number;
-  /**
-   * This field specify the maximum number of results to be returned by the server. 20 by default
-   */
-  per_page?: number;
-}
-
-export interface GetActionsRequest {
-  /**
-   * An actions extensibility point.
-   */
-  triggerId?: GetActionsTriggerIdEnum;
-  /**
-   * The name of the action to retrieve.
-   */
-  actionName?: string;
-  /**
-   * Optional filter to only retrieve actions that are deployed.
-   */
-  deployed?: boolean;
-  /**
-   * Use this field to request a specific page of the list results.
-   */
-  page?: number;
-  /**
-   * The maximum number of results to be returned by the server in single response. 20 by default
-   */
-  per_page?: number;
-  /**
-   * Optional. When true, return only installed actions. When false, return only custom actions. Returns all actions by default.
-   */
-  installed?: boolean;
-}
-
-export interface GetBindingsRequest {
-  /**
-   * An actions extensibility point.
-   */
-  triggerId: GetBindingsTriggerIdEnum;
-  /**
-   * Use this field to request a specific page of the list results.
-   */
-  page?: number;
-  /**
-   * The maximum number of results to be returned in a single request. 20 by default
-   */
-  per_page?: number;
-}
-
-export interface GetExecutionRequest {
-  /**
-   * The ID of the execution to retrieve.
-   */
-  id: string;
-}
-
-export interface PatchActionOperationRequest {
-  /**
-   * The id of the action to update.
-   */
-  id: string;
-}
-
-export interface PatchBindingsOperationRequest {
-  /**
-   * An actions extensibility point.
-   */
-  triggerId: PatchBindingsOperationTriggerIdEnum;
-}
-
-export interface PostDeployActionRequest {
-  /**
-   * The ID of an action.
-   */
-  id: string;
-}
-
-export interface PostDeployDraftVersionOperationRequest {
-  /**
-   * The ID of an action version.
-   */
-  id: string;
-  /**
-   * The ID of an action.
-   */
-  actionId: string;
-}
-
-export interface PostTestActionOperationRequest {
-  /**
-   * The id of the action to test.
-   */
-  id: string;
-}
 
 /**
  *
@@ -621,48 +501,3 @@ export class ActionsManager extends BaseAPI {
     return runtime.JSONApiResponse.fromResponse(response);
   }
 }
-
-export const GetActionsTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-} as const;
-export type GetActionsTriggerIdEnum =
-  (typeof GetActionsTriggerIdEnum)[keyof typeof GetActionsTriggerIdEnum];
-
-export const GetBindingsTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-} as const;
-export type GetBindingsTriggerIdEnum =
-  (typeof GetBindingsTriggerIdEnum)[keyof typeof GetBindingsTriggerIdEnum];
-
-export const PatchBindingsOperationTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-} as const;
-export type PatchBindingsOperationTriggerIdEnum =
-  (typeof PatchBindingsOperationTriggerIdEnum)[keyof typeof PatchBindingsOperationTriggerIdEnum];

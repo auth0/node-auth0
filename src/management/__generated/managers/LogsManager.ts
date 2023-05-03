@@ -1,54 +1,14 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetLogs200Response, Log, GetLogs200ResponseOneOf } from '../models';
+import type {
+  GetLogs200Response,
+  Log,
+  GetLogs200ResponseOneOf,
+  GetLogsRequest,
+  GetLogsByIdRequest,
+} from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetLogsRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   *  Number of results per page. Paging is disabled if parameter not sent. Default: <code>50</code>. Max value: <code>100</code>
-   */
-  per_page?: number;
-  /**
-   * Field to use for sorting appended with <code>:1</code>  for ascending and <code>:-1</code> for descending. e.g. <code>date:-1</code>
-   */
-  sort?: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for <code>include_fields</code>) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (<code>true</code>) or excluded (<code>false</code>)
-   */
-  include_fields?: boolean;
-  /**
-   * Return results as an array when false (default). Return results inside an object that also contains a total result count when true.
-   */
-  include_totals?: boolean;
-  /**
-   * Log Event Id from which to start selection from.
-   */
-  from?: string;
-  /**
-   * Number of entries to retrieve when using the <code>from</code> parameter. Default <code>50</code>, max <code>100</code>
-   */
-  take?: number;
-  /**
-   * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>.
-   */
-  q?: string;
-}
-
-export interface GetLogsByIdRequest {
-  /**
-   * log_id of the log to retrieve.
-   */
-  id: string;
-}
 
 /**
  *

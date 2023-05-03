@@ -1,19 +1,8 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { TenantSettings, TenantSettingsUpdate } from '../models';
+import type { TenantSettings, TenantSettingsUpdate, TenantSettingsRouteRequest } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface TenantSettingsRouteRequest {
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
 
 /**
  *

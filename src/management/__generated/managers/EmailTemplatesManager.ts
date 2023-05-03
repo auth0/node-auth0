@@ -4,30 +4,12 @@ import type {
   EmailTemplateUpdate,
   GetEmailTemplatesByTemplateName200Response,
   PostEmailTemplatesRequest,
+  GetEmailTemplatesByTemplateNameRequest,
+  PatchEmailTemplatesByTemplateNameRequest,
+  PutEmailTemplatesByTemplateNameRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetEmailTemplatesByTemplateNameRequest {
-  /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
-   */
-  templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
-}
-
-export interface PatchEmailTemplatesByTemplateNameRequest {
-  /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
-   */
-  templateName: PatchEmailTemplatesByTemplateNameTemplateNameEnum;
-}
-
-export interface PutEmailTemplatesByTemplateNameRequest {
-  /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
-   */
-  templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
-}
 
 /**
  *
@@ -152,51 +134,3 @@ export class EmailTemplatesManager extends BaseAPI {
     return runtime.JSONApiResponse.fromResponse(response);
   }
 }
-
-export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
-  verify_email: 'verify_email',
-  verify_email_by_code: 'verify_email_by_code',
-  reset_email: 'reset_email',
-  welcome_email: 'welcome_email',
-  blocked_account: 'blocked_account',
-  stolen_credentials: 'stolen_credentials',
-  enrollment_email: 'enrollment_email',
-  mfa_oob_code: 'mfa_oob_code',
-  user_invitation: 'user_invitation',
-  change_password: 'change_password',
-  password_reset: 'password_reset',
-} as const;
-export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
-  (typeof GetEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof GetEmailTemplatesByTemplateNameTemplateNameEnum];
-
-export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
-  verify_email: 'verify_email',
-  verify_email_by_code: 'verify_email_by_code',
-  reset_email: 'reset_email',
-  welcome_email: 'welcome_email',
-  blocked_account: 'blocked_account',
-  stolen_credentials: 'stolen_credentials',
-  enrollment_email: 'enrollment_email',
-  mfa_oob_code: 'mfa_oob_code',
-  user_invitation: 'user_invitation',
-  change_password: 'change_password',
-  password_reset: 'password_reset',
-} as const;
-export type PatchEmailTemplatesByTemplateNameTemplateNameEnum =
-  (typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum];
-
-export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
-  verify_email: 'verify_email',
-  verify_email_by_code: 'verify_email_by_code',
-  reset_email: 'reset_email',
-  welcome_email: 'welcome_email',
-  blocked_account: 'blocked_account',
-  stolen_credentials: 'stolen_credentials',
-  enrollment_email: 'enrollment_email',
-  mfa_oob_code: 'mfa_oob_code',
-  user_invitation: 'user_invitation',
-  change_password: 'change_password',
-  password_reset: 'password_reset',
-} as const;
-export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
-  (typeof PutEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PutEmailTemplatesByTemplateNameTemplateNameEnum];

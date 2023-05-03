@@ -22,30 +22,12 @@ import type {
   SnsFactorProvider,
   TemplateMessages,
   TwilioFactorProvider,
+  DeleteEnrollmentsByIdRequest,
+  GetEnrollmentsByIdRequest,
+  PutFactorsByNameOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteEnrollmentsByIdRequest {
-  /**
-   * ID of the enrollment to be deleted.
-   */
-  id: string;
-}
-
-export interface GetEnrollmentsByIdRequest {
-  /**
-   * ID of the enrollment to be retrieve.
-   */
-  id: string;
-}
-
-export interface PutFactorsByNameOperationRequest {
-  /**
-   * Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
-   */
-  name: PutFactorsByNameOperationNameEnum;
-}
 
 /**
  *
@@ -813,16 +795,3 @@ export class GuardianManager extends BaseAPI {
     return runtime.JSONApiResponse.fromResponse(response);
   }
 }
-
-export const PutFactorsByNameOperationNameEnum = {
-  push_notification: 'push-notification',
-  sms: 'sms',
-  email: 'email',
-  duo: 'duo',
-  otp: 'otp',
-  webauthn_roaming: 'webauthn-roaming',
-  webauthn_platform: 'webauthn-platform',
-  recovery_code: 'recovery-code',
-} as const;
-export type PutFactorsByNameOperationNameEnum =
-  (typeof PutFactorsByNameOperationNameEnum)[keyof typeof PutFactorsByNameOperationNameEnum];

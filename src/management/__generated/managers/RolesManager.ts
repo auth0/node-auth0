@@ -14,116 +14,18 @@ import type {
   GetRoleUser200ResponseOneOf,
   GetMembers200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
+  DeleteRolePermissionAssignmentRequest,
+  DeleteRolesByIdRequest,
+  GetRolePermissionRequest,
+  GetRoleUserRequest,
+  GetRolesRequest,
+  GetRolesByIdRequest,
+  PatchRolesByIdRequest,
+  PostRolePermissionAssignmentOperationRequest,
+  PostRoleUsersOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteRolePermissionAssignmentRequest {
-  /**
-   * ID of the role to remove permissions from.
-   */
-  id: string;
-}
-
-export interface DeleteRolesByIdRequest {
-  /**
-   * ID of the role to delete.
-   */
-  id: string;
-}
-
-export interface GetRolePermissionRequest {
-  /**
-   * ID of the role to list granted permissions.
-   */
-  id: string;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetRoleUserRequest {
-  /**
-   * ID of the role to retrieve a list of users associated with.
-   */
-  id: string;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional Id from which to start selection.
-   */
-  from?: string;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  take?: number;
-}
-
-export interface GetRolesRequest {
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional filter on name (case-insensitive).
-   */
-  name_filter?: string;
-}
-
-export interface GetRolesByIdRequest {
-  /**
-   * ID of the role to retrieve.
-   */
-  id: string;
-}
-
-export interface PatchRolesByIdRequest {
-  /**
-   * ID of the role to update.
-   */
-  id: string;
-}
-
-export interface PostRolePermissionAssignmentOperationRequest {
-  /**
-   * ID of the role to add permissions to.
-   */
-  id: string;
-}
-
-export interface PostRoleUsersOperationRequest {
-  /**
-   * ID of the role to assign users to.
-   */
-  id: string;
-}
 
 /**
  *

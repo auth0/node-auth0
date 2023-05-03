@@ -6,37 +6,13 @@ import type {
   PostCustomDomains201Response,
   PostCustomDomainsRequest,
   PostVerify200Response,
+  DeleteCustomDomainsByIdRequest,
+  GetCustomDomainsByIdRequest,
+  PatchCustomDomainsByIdOperationRequest,
+  PostVerifyRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteCustomDomainsByIdRequest {
-  /**
-   * ID of the custom domain to delete.
-   */
-  id: string;
-}
-
-export interface GetCustomDomainsByIdRequest {
-  /**
-   * ID of the custom domain to retrieve.
-   */
-  id: string;
-}
-
-export interface PatchCustomDomainsByIdOperationRequest {
-  /**
-   * The id of the custom domain to update
-   */
-  id: string;
-}
-
-export interface PostVerifyRequest {
-  /**
-   * ID of the custom domain to verify.
-   */
-  id: string;
-}
 
 /**
  *

@@ -7,30 +7,12 @@ import type {
   PostBrandingTheme200Response,
   PostBrandingThemeRequest,
   PutUniversalLoginRequest,
+  DeleteBrandingThemeRequest,
+  GetBrandingThemeRequest,
+  PatchBrandingThemeRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteBrandingThemeRequest {
-  /**
-   * The ID of the theme
-   */
-  themeId: string;
-}
-
-export interface GetBrandingThemeRequest {
-  /**
-   * The ID of the theme
-   */
-  themeId: string;
-}
-
-export interface PatchBrandingThemeRequest {
-  /**
-   * The ID of the theme
-   */
-  themeId: string;
-}
 
 /**
  *

@@ -1,21 +1,8 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
+import type { DeleteIpsByIdRequest, GetIpsByIdRequest } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteIpsByIdRequest {
-  /**
-   * IP address to unblock.
-   */
-  id: string;
-}
-
-export interface GetIpsByIdRequest {
-  /**
-   * IP address to check.
-   */
-  id: string;
-}
 
 /**
  *

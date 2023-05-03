@@ -6,87 +6,15 @@ import type {
   ConnectionUpdate,
   GetConnections200Response,
   GetConnections200ResponseOneOf,
+  DeleteConnectionsByIdRequest,
+  DeleteUsersByEmailRequest,
+  GetConnectionsRequest,
+  GetConnectionsByIdRequest,
+  GetStatusRequest,
+  PatchConnectionsByIdRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteConnectionsByIdRequest {
-  /**
-   * The id of the connection to delete
-   */
-  id: string;
-}
-
-export interface DeleteUsersByEmailRequest {
-  /**
-   * The id of the connection (currently only database connections are supported)
-   */
-  id: string;
-  /**
-   * The email of the user to delete
-   */
-  email: string;
-}
-
-export interface GetConnectionsRequest {
-  /**
-   * The amount of entries per page. Default: no paging is used, all connections are returned
-   */
-  per_page?: number;
-  /**
-   * The page number. Zero based
-   */
-  page?: number;
-  /**
-   * true if a query summary must be included in the result, false otherwise. Default <code>false</code>.
-   */
-  include_totals?: boolean;
-  /**
-   * Provide strategies to only retrieve connections with such strategies
-   */
-  strategy?: Array<GetConnectionsStrategyEnum>;
-  /**
-   * Provide the name of the connection to retrieve
-   */
-  name?: string;
-  /**
-   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
-   */
-  fields?: string;
-  /**
-   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
-   */
-  include_fields?: boolean;
-}
-
-export interface GetConnectionsByIdRequest {
-  /**
-   * The id of the connection to retrieve
-   */
-  id: string;
-  /**
-   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
-   */
-  fields?: string;
-  /**
-   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
-   */
-  include_fields?: boolean;
-}
-
-export interface GetStatusRequest {
-  /**
-   * ID of the connection to check
-   */
-  id: string;
-}
-
-export interface PatchConnectionsByIdRequest {
-  /**
-   * The id of the connection to retrieve
-   */
-  id: string;
-}
 
 /**
  *
@@ -340,70 +268,3 @@ export class ConnectionsManager extends BaseAPI {
     return runtime.JSONApiResponse.fromResponse(response);
   }
 }
-
-export const GetConnectionsStrategyEnum = {
-  ad: 'ad',
-  adfs: 'adfs',
-  amazon: 'amazon',
-  apple: 'apple',
-  dropbox: 'dropbox',
-  bitbucket: 'bitbucket',
-  aol: 'aol',
-  auth0_oidc: 'auth0-oidc',
-  auth0: 'auth0',
-  baidu: 'baidu',
-  bitly: 'bitly',
-  box: 'box',
-  custom: 'custom',
-  daccount: 'daccount',
-  dwolla: 'dwolla',
-  email: 'email',
-  evernote_sandbox: 'evernote-sandbox',
-  evernote: 'evernote',
-  exact: 'exact',
-  facebook: 'facebook',
-  fitbit: 'fitbit',
-  flickr: 'flickr',
-  github: 'github',
-  google_apps: 'google-apps',
-  google_oauth2: 'google-oauth2',
-  instagram: 'instagram',
-  ip: 'ip',
-  line: 'line',
-  linkedin: 'linkedin',
-  miicard: 'miicard',
-  oauth1: 'oauth1',
-  oauth2: 'oauth2',
-  office365: 'office365',
-  oidc: 'oidc',
-  okta: 'okta',
-  paypal: 'paypal',
-  paypal_sandbox: 'paypal-sandbox',
-  pingfederate: 'pingfederate',
-  planningcenter: 'planningcenter',
-  renren: 'renren',
-  salesforce_community: 'salesforce-community',
-  salesforce_sandbox: 'salesforce-sandbox',
-  salesforce: 'salesforce',
-  samlp: 'samlp',
-  sharepoint: 'sharepoint',
-  shopify: 'shopify',
-  sms: 'sms',
-  soundcloud: 'soundcloud',
-  thecity_sandbox: 'thecity-sandbox',
-  thecity: 'thecity',
-  thirtysevensignals: 'thirtysevensignals',
-  twitter: 'twitter',
-  untappd: 'untappd',
-  vkontakte: 'vkontakte',
-  waad: 'waad',
-  weibo: 'weibo',
-  windowslive: 'windowslive',
-  wordpress: 'wordpress',
-  yahoo: 'yahoo',
-  yammer: 'yammer',
-  yandex: 'yandex',
-  auth0_adldap: 'auth0-adldap',
-} as const;
-export type GetConnectionsStrategyEnum =
-  (typeof GetConnectionsStrategyEnum)[keyof typeof GetConnectionsStrategyEnum];

@@ -25,277 +25,29 @@ import type {
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetOrganizations200ResponseOneOf,
+  DeleteEnabledConnectionsByConnectionIdRequest,
+  DeleteInvitationsByInvitationIdRequest,
+  DeleteMembersOperationRequest,
+  DeleteOrganizationMemberRolesOperationRequest,
+  DeleteOrganizationsByIdRequest,
+  GetEnabledConnectionsRequest,
+  GetEnabledConnectionsByConnectionIdRequest,
+  GetInvitationsRequest,
+  GetInvitationsByInvitationIdRequest,
+  GetMembersRequest,
+  GetNameByNameRequest,
+  GetOrganizationMemberRolesRequest,
+  GetOrganizationsRequest,
+  GetOrganizationsByIdRequest,
+  PatchEnabledConnectionsByConnectionIdOperationRequest,
+  PatchOrganizationsByIdOperationRequest,
+  PostEnabledConnectionsOperationRequest,
+  PostInvitationsOperationRequest,
+  PostMembersOperationRequest,
+  PostOrganizationMemberRolesOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteEnabledConnectionsByConnectionIdRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * Connection identifier
-   */
-  connectionId: string;
-}
-
-export interface DeleteInvitationsByInvitationIdRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * The id of the user invitation.
-   */
-  invitation_id: string;
-}
-
-export interface DeleteMembersOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-}
-
-export interface DeleteOrganizationMemberRolesOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * User ID of the organization member to remove roles from.
-   */
-  user_id: string;
-}
-
-export interface DeleteOrganizationsByIdRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-}
-
-export interface GetEnabledConnectionsRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetEnabledConnectionsByConnectionIdRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * Connection identifier
-   */
-  connectionId: string;
-}
-
-export interface GetInvitationsRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * When true, return results inside an object that also contains the start and limit.  When false (default), a direct array of results is returned.  We do not yet support returning the total invitations count.
-   */
-  include_totals?: boolean;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-   */
-  include_fields?: boolean;
-  /**
-   * Field to sort by. Use field:order where order is 1 for ascending and -1 for descending Defaults to created_at:-1.
-   */
-  sort?: string;
-}
-
-export interface GetInvitationsByInvitationIdRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * The id of the user invitation.
-   */
-  invitation_id: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-   */
-  include_fields?: boolean;
-}
-
-export interface GetMembersRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional Id from which to start selection.
-   */
-  from?: string;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  take?: number;
-}
-
-export interface GetNameByNameRequest {
-  /**
-   * name of the organization to retrieve.
-   */
-  name: string;
-}
-
-export interface GetOrganizationMemberRolesRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * ID of the user to associate roles with.
-   */
-  user_id: string;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetOrganizationsRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional Id from which to start selection.
-   */
-  from?: string;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  take?: number;
-  /**
-   * Field to sort by. Use &lt;code&gt;field:order&lt;/code&gt; where order is &lt;code&gt;1&lt;/code&gt; for ascending and &lt;code&gt;-1&lt;/code&gt; for descending. e.g. &lt;code&gt;created_at:1&lt;/code&gt;. We currently support sorting by the following fields: &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;display_name&lt;/code&gt; and &lt;code&gt;created_at&lt;/code&gt;.
-   */
-  sort?: string;
-}
-
-export interface GetOrganizationsByIdRequest {
-  /**
-   * ID of the organization to retrieve.
-   */
-  id: string;
-}
-
-export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * Connection identifier
-   */
-  connectionId: string;
-}
-
-export interface PatchOrganizationsByIdOperationRequest {
-  /**
-   * ID of the organization to update.
-   */
-  id: string;
-}
-
-export interface PostEnabledConnectionsOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-}
-
-export interface PostInvitationsOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-}
-
-export interface PostMembersOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-}
-
-export interface PostOrganizationMemberRolesOperationRequest {
-  /**
-   * Organization identifier
-   */
-  id: string;
-  /**
-   * ID of the user to associate roles with.
-   */
-  user_id: string;
-}
 
 /**
  *
