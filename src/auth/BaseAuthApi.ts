@@ -1,13 +1,16 @@
 import { BaseAPI, Configuration as BaseConfiguration, ResponseError } from '../runtime';
+import { IdTokenValidatorMiddleware } from './IdTokenValidatorMiddleware';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
 import { Response, Headers } from 'node-fetch';
 
-export interface Configuration extends Omit<BaseConfiguration, 'baseUrl' | 'parseError'> {
+export interface Options extends Omit<BaseConfiguration, 'baseUrl' | 'parseError'> {
   domain: string;
   clientId: string;
   clientSecret?: string;
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
+  idTokenSigningAlg?: string; // default 'RS256'
+  clockTolerance?: number; // default 60s,
 }
 
 interface AuthApiErrorResponse {
@@ -63,14 +66,19 @@ export class BaseAuthAPI extends BaseAPI {
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
 
-  constructor(configuration: Configuration) {
-    super({ ...configuration, baseUrl: `https://${configuration.domain}`, parseError });
+  constructor(options: Options) {
+    super({
+      ...options,
+      baseUrl: `https://${options.domain}`,
+      middleware: [new IdTokenValidatorMiddleware(options), ...(options.middleware || [])],
+      parseError,
+    });
 
-    this.domain = configuration.domain;
-    this.clientId = configuration.clientId;
-    this.clientSecret = configuration.clientSecret;
-    this.clientAssertionSigningKey = configuration.clientAssertionSigningKey;
-    this.clientAssertionSigningAlg = configuration.clientAssertionSigningAlg;
+    this.domain = options.domain;
+    this.clientId = options.clientId;
+    this.clientSecret = options.clientSecret;
+    this.clientAssertionSigningKey = options.clientAssertionSigningKey;
+    this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
   }
 
   protected async addClientAuthentication(

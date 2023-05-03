@@ -1,5 +1,5 @@
 import { InitOverride, VoidApiResponse, validateRequiredRequestParams } from '../runtime';
-import { BaseAuthAPI, Configuration } from './BaseAuthApi';
+import { BaseAuthAPI, Options } from './BaseAuthApi';
 import { OAuth, ClientCredentials } from './OAuth';
 
 export interface SendEmailLinkRequest {
@@ -71,7 +71,7 @@ export interface LoginWithSMSRequest extends Omit<LoginWithEmailRequest, 'email'
  */
 export class Passwordless extends BaseAuthAPI {
   private oauth: OAuth;
-  constructor(configuration: Configuration) {
+  constructor(configuration: Options) {
     super(configuration);
     this.oauth = new OAuth(configuration);
   }
