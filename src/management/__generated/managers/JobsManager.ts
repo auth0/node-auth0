@@ -5,46 +5,12 @@ import type {
   Job,
   PostUsersExportsRequest,
   PostVerificationEmailRequest,
+  GetErrorsRequest,
+  GetJobsByIdRequest,
+  PostUsersImportsData,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetErrorsRequest {
-  /**
-   * ID of the job.
-   */
-  id: string;
-}
-
-export interface GetJobsByIdRequest {
-  /**
-   * ID of the job.
-   */
-  id: string;
-}
-
-export interface PostUsersImportsData {
-  /**
-   *
-   */
-  users: typeof runtime.Blob;
-  /**
-   * connection_id of the connection to which users will be imported.
-   */
-  connection_id: string;
-  /**
-   * Whether to update users if they already exist (true) or to ignore them (false).
-   */
-  upsert?: boolean;
-  /**
-   * Customer-defined ID.
-   */
-  external_id?: string;
-  /**
-   * Whether to send a completion email to all tenant owners when the job is finished (true) or not (false).
-   */
-  send_completion_email?: boolean;
-}
 
 /**
  *

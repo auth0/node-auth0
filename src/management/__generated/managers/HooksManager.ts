@@ -6,89 +6,17 @@ import type {
   HookCreate,
   HookUpdate,
   GetHooks200ResponseOneOf,
+  DeleteHooksByIdRequest,
+  DeleteSecretsRequest,
+  GetHooksRequest,
+  GetHooksByIdRequest,
+  GetSecretsRequest,
+  PatchHooksByIdRequest,
+  PatchSecretsRequest,
+  PostSecretsRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteHooksByIdRequest {
-  /**
-   * ID of the hook to delete.
-   */
-  id: string;
-}
-
-export interface DeleteSecretsRequest {
-  /**
-   * ID of the hook whose secrets to delete.
-   */
-  id: string;
-}
-
-export interface GetHooksRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional filter on whether a hook is enabled (true) or disabled (false).
-   */
-  enabled?: boolean;
-  /**
-   * Comma-separated list of fields to include in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Retrieves hooks that match the trigger
-   */
-  triggerId?: GetHooksTriggerIdEnum;
-}
-
-export interface GetHooksByIdRequest {
-  /**
-   * ID of the hook to retrieve.
-   */
-  id: string;
-  /**
-   * Comma-separated list of fields to include in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-}
-
-export interface GetSecretsRequest {
-  /**
-   * ID of the hook to retrieve secrets from.
-   */
-  id: string;
-}
-
-export interface PatchHooksByIdRequest {
-  /**
-   * ID of the hook to update.
-   */
-  id: string;
-}
-
-export interface PatchSecretsRequest {
-  /**
-   * ID of the hook whose secrets to update.
-   */
-  id: string;
-}
-
-export interface PostSecretsRequest {
-  /**
-   * The id of the hook to retrieve
-   */
-  id: string;
-}
 
 /**
  *
@@ -395,13 +323,3 @@ export class HooksManager extends BaseAPI {
     return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 }
-
-export const GetHooksTriggerIdEnum = {
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-} as const;
-export type GetHooksTriggerIdEnum =
-  (typeof GetHooksTriggerIdEnum)[keyof typeof GetHooksTriggerIdEnum];

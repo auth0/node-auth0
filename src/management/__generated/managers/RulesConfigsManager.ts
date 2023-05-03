@@ -4,23 +4,11 @@ import type {
   GetRulesConfigs200ResponseInner,
   PutRulesConfigsByKey200Response,
   PutRulesConfigsByKeyRequest,
+  DeleteRulesConfigsByKeyRequest,
+  PutRulesConfigsByKeyOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteRulesConfigsByKeyRequest {
-  /**
-   * Key of the rules config variable to delete.
-   */
-  key: string;
-}
-
-export interface PutRulesConfigsByKeyOperationRequest {
-  /**
-   * Key of the rules config variable to set (max length: 127 characters).
-   */
-  key: string;
-}
 
 /**
  *

@@ -1,23 +1,8 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetUsers200ResponseOneOfInner } from '../models';
+import type { GetUsers200ResponseOneOfInner, GetUsersByEmailRequest } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetUsersByEmailRequest {
-  /**
-   * Email address to search for (case-sensitive).
-   */
-  email: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-   */
-  include_fields?: boolean;
-}
 
 /**
  *

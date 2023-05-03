@@ -1,44 +1,14 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { UserBlock } from '../models';
+import type {
+  UserBlock,
+  DeleteUserBlocksRequest,
+  DeleteUserBlocksByIdRequest,
+  GetUserBlocksRequest,
+  GetUserBlocksByIdRequest,
+} from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteUserBlocksRequest {
-  /**
-   * Should be any of a username, phone number, or email.
-   */
-  identifier: string;
-}
-
-export interface DeleteUserBlocksByIdRequest {
-  /**
-   * The user_id of the user to update.
-   */
-  id: string;
-}
-
-export interface GetUserBlocksRequest {
-  /**
-   * Should be any of a username, phone number, or email.
-   */
-  identifier: string;
-  /**
-   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
-   */
-  consider_brute_force_enablement?: boolean;
-}
-
-export interface GetUserBlocksByIdRequest {
-  /**
-   * user_id of the user blocks to retrieve.
-   */
-  id: string;
-  /**
-   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
-   */
-  consider_brute_force_enablement?: boolean;
-}
 
 /**
  *

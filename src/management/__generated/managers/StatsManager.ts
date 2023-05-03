@@ -1,19 +1,8 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { StatsEntry } from '../models';
+import type { StatsEntry, GetDailyRequest } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetDailyRequest {
-  /**
-   * Optional first day of the date range (inclusive) in YYYYMMDD format.
-   */
-  from?: string;
-  /**
-   * Optional last day of the date range (inclusive) in YYYYMMDD format.
-   */
-  to?: string;
-}
 
 /**
  *

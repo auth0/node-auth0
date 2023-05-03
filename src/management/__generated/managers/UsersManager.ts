@@ -35,312 +35,34 @@ import type {
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetUsers200ResponseOneOf,
+  DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
+  DeleteAuthenticatorsRequest,
+  DeleteMultifactorByProviderRequest,
+  DeletePermissionsOperationRequest,
+  DeleteUserIdentityByUserIdRequest,
+  DeleteUserRolesOperationRequest,
+  DeleteUsersByIdRequest,
+  GetAuthenticationMethodsRequest,
+  GetAuthenticationMethodsByAuthenticationMethodIdRequest,
+  GetEnrollmentsRequest,
+  GetLogsByUserRequest,
+  GetPermissionsRequest,
+  GetUserOrganizationsRequest,
+  GetUserRolesRequest,
+  GetUsersRequest,
+  GetUsersByIdRequest,
+  PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
+  PatchUsersByIdRequest,
+  PostAuthenticationMethodsOperationRequest,
+  PostIdentitiesOperationRequest,
+  PostInvalidateRememberBrowserRequest,
+  PostPermissionsOperationRequest,
+  PostRecoveryCodeRegenerationRequest,
+  PostUserRolesOperationRequest,
+  PutAuthenticationMethodsRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteAuthenticationMethodsByAuthenticationMethodIdRequest {
-  /**
-   * The ID of the user in question.
-   */
-  id: string;
-  /**
-   * The ID of the authentication method to delete.
-   */
-  authentication_method_id: string;
-}
-
-export interface DeleteAuthenticatorsRequest {
-  /**
-   * ID of the user to delete.
-   */
-  id: string;
-}
-
-export interface DeleteMultifactorByProviderRequest {
-  /**
-   * ID of the user to remove a multifactor configuration from.
-   */
-  id: string;
-  /**
-   * The multi-factor provider. Supported values 'duo' or 'google-authenticator'
-   */
-  provider: DeleteMultifactorByProviderProviderEnum;
-}
-
-export interface DeletePermissionsOperationRequest {
-  /**
-   * ID of the user to remove permissions from.
-   */
-  id: string;
-}
-
-export interface DeleteUserIdentityByUserIdRequest {
-  /**
-   * ID of the primary user account.
-   */
-  id: string;
-  /**
-   * Identity provider name of the secondary linked account (e.g. `google-oauth2`).
-   */
-  provider: DeleteUserIdentityByUserIdProviderEnum;
-  /**
-   * ID of the secondary linked account (e.g. `123456789081523216417` part after the `|` in `google-oauth2|123456789081523216417`).
-   */
-  user_id: string;
-}
-
-export interface DeleteUserRolesOperationRequest {
-  /**
-   * ID of the user to remove roles from.
-   */
-  id: string;
-}
-
-export interface DeleteUsersByIdRequest {
-  /**
-   * ID of the user to delete.
-   */
-  id: string;
-}
-
-export interface GetAuthenticationMethodsRequest {
-  /**
-   * The ID of the user in question.
-   */
-  id: string;
-  /**
-   * Page index of the results to return. First page is 0. Default is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Default is 50.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
-  /**
-   * The ID of the user in question.
-   */
-  id: string;
-  /**
-   * The ID of the authentication methods in question.
-   */
-  authentication_method_id: string;
-}
-
-export interface GetEnrollmentsRequest {
-  /**
-   * ID of the user to list enrollments for.
-   */
-  id: string;
-}
-
-export interface GetLogsByUserRequest {
-  /**
-   * ID of the user of the logs to retrieve
-   */
-  id: string;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Field to sort by. Use `fieldname:1` for ascending order and `fieldname:-1` for descending.
-   */
-  sort?: string;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetPermissionsRequest {
-  /**
-   * ID of the user to retrieve the permissions for.
-   */
-  id: string;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetUserOrganizationsRequest {
-  /**
-   * ID of the user to retrieve the organizations for.
-   */
-  id: string;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Defaults to 50.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetUserRolesRequest {
-  /**
-   * ID of the user to list roles for.
-   */
-  id: string;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-}
-
-export interface GetUsersRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Field to sort by. Use <code>field:order</code> where order is <code>1</code> for ascending and <code>-1</code> for descending. e.g. <code>created_at:1</code>
-   */
-  sort?: string;
-  /**
-   * Connection filter. Only applies when using <code>search_engine=v1</code>. To filter by connection with <code>search_engine=v2|v3</code>, use <code>q=identities.connection:"connection_name"</code>
-   */
-  connection?: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-  /**
-   * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://manage.local.dev.auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>.
-   */
-  q?: string;
-  /**
-   * The version of the search engine
-   */
-  search_engine?: GetUsersSearchEngineEnum;
-}
-
-export interface GetUsersByIdRequest {
-  /**
-   * ID of the user to retrieve.
-   */
-  id: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
-
-export interface PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest {
-  /**
-   * The ID of the user in question.
-   */
-  id: string;
-  /**
-   * The ID of the authentication method to update.
-   */
-  authentication_method_id: string;
-}
-
-export interface PatchUsersByIdRequest {
-  /**
-   * ID of the user to update.
-   */
-  id: string;
-}
-
-export interface PostAuthenticationMethodsOperationRequest {
-  /**
-   * The ID of the user to whom the new authentication method will be assigned.
-   */
-  id: string;
-}
-
-export interface PostIdentitiesOperationRequest {
-  /**
-   * ID of the primary user account to link a second user account to.
-   */
-  id: string;
-}
-
-export interface PostInvalidateRememberBrowserRequest {
-  /**
-   * ID of the user to invalidate all remembered browsers and authentication factors for.
-   */
-  id: string;
-}
-
-export interface PostPermissionsOperationRequest {
-  /**
-   * ID of the user to assign permissions to.
-   */
-  id: string;
-}
-
-export interface PostRecoveryCodeRegenerationRequest {
-  /**
-   * ID of the user to regenerate a multi-factor authentication recovery code for.
-   */
-  id: string;
-}
-
-export interface PostUserRolesOperationRequest {
-  /**
-   * ID of the user to associate roles with.
-   */
-  id: string;
-}
-
-export interface PutAuthenticationMethodsRequest {
-  /**
-   * The ID of the user in question.
-   */
-  id: string;
-}
 
 /**
  *
@@ -383,6 +105,7 @@ export class UsersManager extends BaseAPI {
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
     const response = await this.request(
       {
         path: `/users/{id}/authenticators`.replace(
@@ -1361,84 +1084,3 @@ export class UsersManager extends BaseAPI {
     return runtime.VoidApiResponse.fromResponse(response);
   }
 }
-
-export const DeleteMultifactorByProviderProviderEnum = {
-  duo: 'duo',
-  google_authenticator: 'google-authenticator',
-} as const;
-export type DeleteMultifactorByProviderProviderEnum =
-  (typeof DeleteMultifactorByProviderProviderEnum)[keyof typeof DeleteMultifactorByProviderProviderEnum];
-
-export const DeleteUserIdentityByUserIdProviderEnum = {
-  ad: 'ad',
-  adfs: 'adfs',
-  amazon: 'amazon',
-  apple: 'apple',
-  dropbox: 'dropbox',
-  bitbucket: 'bitbucket',
-  aol: 'aol',
-  auth0_oidc: 'auth0-oidc',
-  auth0: 'auth0',
-  baidu: 'baidu',
-  bitly: 'bitly',
-  box: 'box',
-  custom: 'custom',
-  daccount: 'daccount',
-  dwolla: 'dwolla',
-  email: 'email',
-  evernote_sandbox: 'evernote-sandbox',
-  evernote: 'evernote',
-  exact: 'exact',
-  facebook: 'facebook',
-  fitbit: 'fitbit',
-  flickr: 'flickr',
-  github: 'github',
-  google_apps: 'google-apps',
-  google_oauth2: 'google-oauth2',
-  instagram: 'instagram',
-  ip: 'ip',
-  line: 'line',
-  linkedin: 'linkedin',
-  miicard: 'miicard',
-  oauth1: 'oauth1',
-  oauth2: 'oauth2',
-  office365: 'office365',
-  oidc: 'oidc',
-  okta: 'okta',
-  paypal: 'paypal',
-  paypal_sandbox: 'paypal-sandbox',
-  pingfederate: 'pingfederate',
-  planningcenter: 'planningcenter',
-  renren: 'renren',
-  salesforce_community: 'salesforce-community',
-  salesforce_sandbox: 'salesforce-sandbox',
-  salesforce: 'salesforce',
-  samlp: 'samlp',
-  sharepoint: 'sharepoint',
-  shopify: 'shopify',
-  sms: 'sms',
-  soundcloud: 'soundcloud',
-  thecity_sandbox: 'thecity-sandbox',
-  thecity: 'thecity',
-  thirtysevensignals: 'thirtysevensignals',
-  twitter: 'twitter',
-  untappd: 'untappd',
-  vkontakte: 'vkontakte',
-  waad: 'waad',
-  weibo: 'weibo',
-  windowslive: 'windowslive',
-  wordpress: 'wordpress',
-  yahoo: 'yahoo',
-  yammer: 'yammer',
-  yandex: 'yandex',
-} as const;
-export type DeleteUserIdentityByUserIdProviderEnum =
-  (typeof DeleteUserIdentityByUserIdProviderEnum)[keyof typeof DeleteUserIdentityByUserIdProviderEnum];
-
-export const GetUsersSearchEngineEnum = {
-  v1: 'v1',
-  v2: 'v2',
-  v3: 'v3',
-} as const;
-export type GetUsersSearchEngineEnum =
-  (typeof GetUsersSearchEngineEnum)[keyof typeof GetUsersSearchEngineEnum];

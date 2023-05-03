@@ -1,49 +1,15 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { GetGrants200Response, GetGrants200ResponseOneOf, UserGrant } from '../models';
+import type {
+  GetGrants200Response,
+  GetGrants200ResponseOneOf,
+  UserGrant,
+  DeleteRequest,
+  DeleteGrantsByIdRequest,
+  GetGrantsRequest,
+} from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteRequest {
-  /**
-   * user_id of the grant to delete.
-   */
-  user_id?: string;
-}
-
-export interface DeleteGrantsByIdRequest {
-  /**
-   * ID of the grant to delete.
-   */
-  id: string;
-}
-
-export interface GetGrantsRequest {
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * user_id of the grants to retrieve.
-   */
-  user_id?: string;
-  /**
-   * client_id of the grants to retrieve.
-   */
-  client_id?: string;
-  /**
-   * audience of the grants to retrieve.
-   */
-  audience?: string;
-}
 
 /**
  *

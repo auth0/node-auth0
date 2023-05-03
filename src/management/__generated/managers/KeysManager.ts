@@ -4,23 +4,11 @@ import type {
   GetSigningKeys200ResponseInner,
   PostSigningKeys201Response,
   PutSigningKeys200Response,
+  GetSigningKeyRequest,
+  PutSigningKeysRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetSigningKeyRequest {
-  /**
-   * Key id of the key to retrieve
-   */
-  kid: string;
-}
-
-export interface PutSigningKeysRequest {
-  /**
-   * Key id of the key to revoke
-   */
-  kid: string;
-}
 
 /**
  *

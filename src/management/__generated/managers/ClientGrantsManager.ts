@@ -6,46 +6,12 @@ import type {
   GetClientGrants200Response,
   PatchClientGrantsByIdRequest,
   GetClientGrants200ResponseOneOf,
+  DeleteClientGrantsByIdRequest,
+  GetClientGrantsRequest,
+  PatchClientGrantsByIdOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteClientGrantsByIdRequest {
-  /**
-   * ID of the client grant to delete.
-   */
-  id: string;
-}
-
-export interface GetClientGrantsRequest {
-  /**
-   * Number of results per page. Paging is disabled if parameter not sent.
-   */
-  per_page?: number;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional filter on audience.
-   */
-  audience?: string;
-  /**
-   * Optional filter on client_id.
-   */
-  client_id?: string;
-}
-
-export interface PatchClientGrantsByIdOperationRequest {
-  /**
-   * ID of the client grant to update.
-   */
-  id: string;
-}
 
 /**
  *

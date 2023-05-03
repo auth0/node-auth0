@@ -1,19 +1,13 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { EmailProvider, PatchProviderRequest, PostProviderRequest } from '../models';
+import type {
+  EmailProvider,
+  PatchProviderRequest,
+  PostProviderRequest,
+  GetProviderRequest,
+} from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface GetProviderRequest {
-  /**
-   * Comma-separated list of fields to include or exclude (dependent upon include_fields) from the result. Leave empty to retrieve `name` and `enabled`. Additional fields available include `credentials`, `default_from_address`, and `settings`.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
 
 /**
  *

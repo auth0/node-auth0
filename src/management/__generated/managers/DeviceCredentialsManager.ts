@@ -6,51 +6,11 @@ import type {
   PostDeviceCredentials201Response,
   GetDeviceCredentials200ResponseOneOf,
   DeviceCredential,
+  DeleteDeviceCredentialsByIdRequest,
+  GetDeviceCredentialsRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteDeviceCredentialsByIdRequest {
-  /**
-   * ID of the credential to delete.
-   */
-  id: string;
-}
-
-export interface GetDeviceCredentialsRequest {
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page.  There is a maximum of 1000 results allowed from this endpoint.
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-  /**
-   * user_id of the devices to retrieve.
-   */
-  user_id?: string;
-  /**
-   * client_id of the devices to retrieve.
-   */
-  client_id?: string;
-  /**
-   * Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested
-   */
-  type?: GetDeviceCredentialsTypeEnum;
-}
 
 /**
  *
@@ -182,11 +142,3 @@ export class DeviceCredentialsManager extends BaseAPI {
     return runtime.JSONApiResponse.fromResponse(response);
   }
 }
-
-export const GetDeviceCredentialsTypeEnum = {
-  public_key: 'public_key',
-  refresh_token: 'refresh_token',
-  rotating_refresh_token: 'rotating_refresh_token',
-} as const;
-export type GetDeviceCredentialsTypeEnum =
-  (typeof GetDeviceCredentialsTypeEnum)[keyof typeof GetDeviceCredentialsTypeEnum];

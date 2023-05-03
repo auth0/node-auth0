@@ -1,79 +1,17 @@
 import * as runtime from '../../runtime';
 import type { InitOverride, ApiResponse } from '../../runtime';
-import type { Client, ClientCreate, ClientUpdate } from '../models';
+import type {
+  Client,
+  ClientCreate,
+  ClientUpdate,
+  DeleteClientsByIdRequest,
+  GetClientsRequest,
+  GetClientsByIdRequest,
+  PatchClientsByIdRequest,
+  PostRotateSecretRequest,
+} from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteClientsByIdRequest {
-  /**
-   * ID of the client to delete.
-   */
-  id: string;
-}
-
-export interface GetClientsRequest {
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-  /**
-   * Page index of the results to return. First page is 0.
-   */
-  page?: number;
-  /**
-   * Number of results per page. Default value is 50, maximum value is 100
-   */
-  per_page?: number;
-  /**
-   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-   */
-  include_totals?: boolean;
-  /**
-   * Optional filter on the global client parameter.
-   */
-  is_global?: boolean;
-  /**
-   * Optional filter on whether or not a client is a first-party client.
-   */
-  is_first_party?: boolean;
-  /**
-   * Optional filter by a comma-separated list of application types.
-   */
-  app_type?: string;
-}
-
-export interface GetClientsByIdRequest {
-  /**
-   * ID of the client to retrieve.
-   */
-  id: string;
-  /**
-   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-   */
-  fields?: string;
-  /**
-   * Whether specified fields are to be included (true) or excluded (false).
-   */
-  include_fields?: boolean;
-}
-
-export interface PatchClientsByIdRequest {
-  /**
-   * ID of the client to update.
-   */
-  id: string;
-}
-
-export interface PostRotateSecretRequest {
-  /**
-   * ID of the client that will rotate secrets.
-   */
-  id: string;
-}
 
 /**
  *

@@ -4,30 +4,12 @@ import type {
   GetLogStreams200ResponseInner,
   PatchLogStreamsByIdRequest,
   PostLogStreamsRequest,
+  DeleteLogStreamsByIdRequest,
+  GetLogStreamsByIdRequest,
+  PatchLogStreamsByIdOperationRequest,
 } from '../models';
 
 const { BaseAPI } = runtime;
-
-export interface DeleteLogStreamsByIdRequest {
-  /**
-   * The id of the log stream to delete
-   */
-  id: string;
-}
-
-export interface GetLogStreamsByIdRequest {
-  /**
-   * The id of the log stream to get
-   */
-  id: string;
-}
-
-export interface PatchLogStreamsByIdOperationRequest {
-  /**
-   * The id of the log stream to get
-   */
-  id: string;
-}
 
 /**
  *
