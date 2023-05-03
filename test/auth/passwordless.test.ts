@@ -1,8 +1,10 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import { Passwordless } from '../../src/auth/Passwordless';
+import {
+  Passwordless,
+  LoginWithEmailRequest,
+  LoginWithSMSRequest,
+} from '../../src/auth/Passwordless';
 
 const { back: nockBack } = nock;
 
@@ -65,6 +67,58 @@ describe('Passwordless', () => {
       await expect(passwordless.sendEmail({} as any)).rejects.toThrow(
         'Required parameter requestParameters.email was null or undefined.'
       );
+    });
+  });
+
+  describe('#loginWithEmail', () => {
+    it('should require email', async () => {
+      const passwordless = new Passwordless(opts);
+      await expect(
+        passwordless.loginWithEmail({ code: 'foo' } as LoginWithEmailRequest)
+      ).rejects.toThrow('Required parameter requestParameters.email was null or undefined.');
+    });
+
+    it('should login with code from email', async () => {
+      const passwordless = new Passwordless({ ...opts, clientSecret: 'test-client-secret' });
+      const response = await passwordless.loginWithEmail({
+        email: 'test-email@example.com',
+        code: 'test-code',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.data).toMatchObject({
+        access_token: 'my-access-token',
+        expires_in: 86400,
+        token_type: 'Bearer',
+        id_token: 'my-id-token',
+        scope: 'openid profile email address phone',
+      });
+    });
+  });
+
+  describe('#loginWithSMS', () => {
+    it('should require phone_number', async () => {
+      const passwordless = new Passwordless(opts);
+      await expect(
+        passwordless.loginWithSMS({ code: 'foo' } as LoginWithSMSRequest)
+      ).rejects.toThrow('Required parameter requestParameters.phone_number was null or undefined.');
+    });
+
+    it('should login with code from SMS', async () => {
+      const passwordless = new Passwordless({ ...opts, clientSecret: 'test-client-secret' });
+      const response = await passwordless.loginWithSMS({
+        phone_number: 'test-phone-number',
+        code: 'test-code',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.data).toMatchObject({
+        access_token: 'my-access-token',
+        expires_in: 86400,
+        token_type: 'Bearer',
+        id_token: 'my-id-token',
+        scope: 'openid profile email address phone',
+      });
     });
   });
 });
