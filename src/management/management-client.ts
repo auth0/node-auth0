@@ -3,20 +3,18 @@ import {
   ManagementClientOptionsWithClientCredentials,
   ManagementClientOptionsWithToken,
 } from './management-client.options';
-import { tokenProviderFactory } from './management-client.utils';
-import { TokenProviderMiddleware } from './token-provider.middleware';
+import { TokenProviderMiddleware } from './TokenProviderMiddleware';
 
 export class ManagementClient extends ManagementClientBase {
+  constructor(options: ManagementClientOptionsWithToken);
+  constructor(options: ManagementClientOptionsWithClientCredentials);
   constructor(
     options: ManagementClientOptionsWithToken | ManagementClientOptionsWithClientCredentials
   ) {
     super({
       ...options,
       baseUrl: `https://${options.domain}/api/v2`,
-      middleware: [
-        ...(options.middleware || []),
-        new TokenProviderMiddleware(tokenProviderFactory(options)),
-      ],
+      middleware: [...(options.middleware || []), new TokenProviderMiddleware(options)],
     });
   }
 }

@@ -47,7 +47,6 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "jose": "^4.13.2",
-    "lru-memoizer": "^2.2.0",
     "node-fetch": "^3.3.1",
     "rest-facade": "^1.16.3",
     "retry": "^0.13.1",
