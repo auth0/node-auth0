@@ -4,7 +4,8 @@ import {
   VoidApiResponse,
   validateRequiredRequestParams,
 } from '../runtime';
-import { BaseAuthAPI } from './BaseAuthApi';
+import { BaseAuthAPI, Options } from './BaseAuthApi';
+import { IDTokenValidateOptions, IDTokenValidator } from './IdTokenValidator';
 
 export interface TokenSet {
   /**
@@ -27,6 +28,16 @@ export interface TokenSet {
    * The duration in secs that that the access token is valid.
    */
   expires_in: number;
+}
+
+export interface GrantOptions {
+  idTokenValidateOptions?: Pick<IDTokenValidateOptions, 'organization'>;
+  initOverrides?: InitOverride;
+}
+
+export interface AuthorizationCodeGrantOptions {
+  idTokenValidateOptions?: IDTokenValidateOptions;
+  initOverrides?: InitOverride;
 }
 
 export interface ClientCredentials {
@@ -164,15 +175,31 @@ export interface TokenExchangeGrantRequest {
  *  OAuth 2.0 flows.
  */
 export class OAuth extends BaseAuthAPI {
+  private idTokenValidator: IDTokenValidator;
+  constructor(options: Options) {
+    super(options);
+    this.idTokenValidator = new IDTokenValidator(options);
+  }
+
+  private async validateIdToken(
+    tokenSet: TokenSet,
+    idTokenValidateOptions?: IDTokenValidateOptions
+  ): Promise<void> {
+    const { id_token: idToken } = tokenSet;
+    if (idToken) {
+      await this.idTokenValidator.validate(idToken, idTokenValidateOptions);
+    }
+  }
+
   /**
    * Perform an OAuth 2.0 grant.
-   * (You should only need this if you can't find the grant you need in this class.)
+   * (You should only need this if you can't find the grant you need in this library.)
    */
-  async grant<T = TokenSet>(
+  async grant(
     grantType: string,
     bodyParameters: Record<string, any>,
-    initOverrides?: InitOverride
-  ): Promise<JSONApiResponse<T>> {
+    { idTokenValidateOptions, initOverrides }: GrantOptions = {}
+  ): Promise<JSONApiResponse<TokenSet>> {
     const response = await this.request(
       {
         path: '/oauth/token',
@@ -189,7 +216,9 @@ export class OAuth extends BaseAuthAPI {
       initOverrides
     );
 
-    return JSONApiResponse.fromResponse(response);
+    const res: JSONApiResponse<TokenSet> = await JSONApiResponse.fromResponse(response);
+    await this.validateIdToken(res.data, idTokenValidateOptions);
+    return res;
   }
 
   /**
@@ -212,14 +241,14 @@ export class OAuth extends BaseAuthAPI {
    */
   async authorizationCodeGrant(
     bodyParameters: AuthorizationCodeGrantRequest,
-    initOverrides?: InitOverride
+    options: AuthorizationCodeGrantOptions = {}
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['code']);
 
     return this.grant(
       'authorization_code',
       await this.addClientAuthentication(bodyParameters, true),
-      initOverrides
+      options
     );
   }
 
@@ -246,14 +275,14 @@ export class OAuth extends BaseAuthAPI {
    */
   async authorizationCodeGrantWithPKCE(
     bodyParameters: AuthorizationCodeGrantWithPKCERequest,
-    initOverrides?: InitOverride
+    options: AuthorizationCodeGrantOptions = {}
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['code', 'code_verifier']);
 
     return this.grant(
       'authorization_code',
       await this.addClientAuthentication(bodyParameters, false),
-      initOverrides
+      options
     );
   }
 
@@ -278,14 +307,14 @@ export class OAuth extends BaseAuthAPI {
    */
   async clientCredentialsGrant(
     bodyParameters: ClientCredentialsGrantRequest,
-    initOverrides?: InitOverride
+    options: { initOverrides?: InitOverride } = {}
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['audience']);
 
     return this.grant(
       'client_credentials',
       await this.addClientAuthentication(bodyParameters, true),
-      initOverrides
+      options
     );
   }
 
@@ -319,14 +348,14 @@ export class OAuth extends BaseAuthAPI {
    */
   async passwordGrant(
     bodyParameters: PasswordGrantRequest,
-    initOverrides?: InitOverride
+    options: GrantOptions = {}
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['username', 'password']);
 
     return this.grant(
       bodyParameters.realm ? 'http://auth0.com/oauth/grant-type/password-realm' : 'password',
       await this.addClientAuthentication(bodyParameters, false),
-      initOverrides
+      options
     );
   }
 
@@ -348,14 +377,14 @@ export class OAuth extends BaseAuthAPI {
    */
   async refreshTokenGrant(
     bodyParameters: RefreshTokenGrantRequest,
-    initOverrides?: InitOverride
+    options: GrantOptions = {}
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['refresh_token']);
 
     return this.grant(
       'refresh_token',
       await this.addClientAuthentication(bodyParameters, false),
-      initOverrides
+      options
     );
   }
 
@@ -382,7 +411,7 @@ export class OAuth extends BaseAuthAPI {
    */
   async revokeRefreshToken(
     bodyParameters: RevokeRefreshTokenRequest,
-    initOverrides?: InitOverride
+    options: { initOverrides?: InitOverride } = {}
   ): Promise<VoidApiResponse> {
     validateRequiredRequestParams(bodyParameters, ['token']);
 
@@ -398,7 +427,7 @@ export class OAuth extends BaseAuthAPI {
           false
         ),
       },
-      initOverrides
+      options.initOverrides
     );
 
     return VoidApiResponse.fromResponse(response);

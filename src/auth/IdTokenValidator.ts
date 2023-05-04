@@ -5,7 +5,7 @@ const DEFAULT_CLOCK_TOLERANCE = 60; // secs
 
 export class IdTokenValidatorError extends Error {}
 
-interface ValidateOptions {
+export interface IDTokenValidateOptions {
   nonce?: string;
   maxAge?: number;
   organization?: string;
@@ -38,7 +38,7 @@ export class IDTokenValidator {
     this.clockTolerance = clockTolerance;
   }
 
-  async validate(idToken: string, { nonce, maxAge, organization }: ValidateOptions = {}) {
+  async validate(idToken: string, { nonce, maxAge, organization }: IDTokenValidateOptions = {}) {
     const secret = this.alg === 'HS256' ? this.secret : this.jwks;
 
     const header = jose.decodeProtectedHeader(idToken);
@@ -120,7 +120,6 @@ export class IDTokenValidator {
     }
 
     // Issued at
-    // FIXME? more iat validation
     if (!payload.iat || typeof payload.iat !== 'number') {
       throw new IdTokenValidatorError(
         'Issued At (iat) claim must be a number present in the ID token'
@@ -142,7 +141,6 @@ export class IDTokenValidator {
     }
 
     // Authorized party
-    // FIX ME? more azp validation? https://github.com/panva/node-openid-client/blob/main/lib/client.js#L966-L1010
     if (Array.isArray(payload.aud) && payload.aud.length > 1) {
       if (!payload.azp || typeof payload.azp !== 'string') {
         throw new IdTokenValidatorError(
@@ -171,10 +169,6 @@ export class IDTokenValidator {
         );
       }
     }
-
-    // FIXME? nbf validation https://github.com/panva/node-openid-client/blob/main/lib/client.js#L926-L946
-    // FIXME? at_hash validation https://github.com/panva/node-openid-client/blob/main/lib/client.js#L792-L856
-    // FIXME? c_hash validation https://github.com/panva/node-openid-client/blob/main/lib/client.js#L858-L870
 
     await jose.jwtVerify(idToken, secret as any, {
       issuer: this.issuer,

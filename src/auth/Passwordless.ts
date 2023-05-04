@@ -1,6 +1,11 @@
-import { InitOverride, VoidApiResponse, validateRequiredRequestParams } from '../runtime';
+import {
+  InitOverride,
+  JSONApiResponse,
+  VoidApiResponse,
+  validateRequiredRequestParams,
+} from '../runtime';
 import { BaseAuthAPI, Options } from './BaseAuthApi';
-import { OAuth, ClientCredentials } from './OAuth';
+import { OAuth, ClientCredentials, GrantOptions, TokenSet } from './OAuth';
 
 export interface SendEmailLinkRequest {
   /**
@@ -202,8 +207,8 @@ export class Passwordless extends BaseAuthAPI {
    */
   async loginWithEmail(
     bodyParameters: LoginWithEmailRequest,
-    initOverrides?: InitOverride
-  ): Promise<VoidApiResponse> {
+    options: GrantOptions = {}
+  ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['email', 'code']);
 
     const { email: username, code: otp, ...otherParams } = bodyParameters;
@@ -219,7 +224,7 @@ export class Passwordless extends BaseAuthAPI {
         },
         false
       ),
-      initOverrides
+      options
     );
   }
 
@@ -242,8 +247,8 @@ export class Passwordless extends BaseAuthAPI {
    */
   async loginWithSMS(
     bodyParameters: LoginWithSMSRequest,
-    initOverrides?: InitOverride
-  ): Promise<VoidApiResponse> {
+    options: GrantOptions = {}
+  ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['phone_number', 'code']);
 
     const { phone_number: username, code: otp, ...otherParams } = bodyParameters;
@@ -259,7 +264,7 @@ export class Passwordless extends BaseAuthAPI {
         },
         false
       ),
-      initOverrides
+      options
     );
   }
 }

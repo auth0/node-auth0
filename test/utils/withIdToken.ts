@@ -5,14 +5,16 @@ export const withIdToken = async ({
   domain,
   clientId,
   clientSecret,
+  payload = {},
 }: {
   domain: string;
   clientId: string;
   clientSecret: string;
+  payload?: Record<string, any>;
 }) => {
   const secret = new TextEncoder().encode(clientSecret);
 
-  const idToken = await new jose.SignJWT({ 'urn:example:claim': true })
+  const idToken = await new jose.SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setIssuer(`https://${domain}/`)

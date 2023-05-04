@@ -1,5 +1,4 @@
 import { BaseAPI, Configuration as BaseConfiguration, ResponseError } from '../runtime';
-import { IdTokenValidatorMiddleware } from './IdTokenValidatorMiddleware';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
 import { Response, Headers } from 'node-fetch';
 
@@ -70,7 +69,6 @@ export class BaseAuthAPI extends BaseAPI {
     super({
       ...options,
       baseUrl: `https://${options.domain}`,
-      middleware: [new IdTokenValidatorMiddleware(options), ...(options.middleware || [])],
       parseError,
     });
 
