@@ -1,91 +1,45 @@
-const { expect } = require('chai');
-const nock = require('nock');
+import chai from 'chai';
+import nock from 'nock';
 
-const API_URL = 'https://tenant.auth0.com';
+const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const OrganizationsManager = require(`../../src/management/OrganizationsManager`);
-const { ArgumentError } = require('rest-facade');
+import { OrganizationsManager, RequiredError } from '../../src/management/__generated/index';
+import { ManagementClient } from '../../src/management';
+
+const { expect } = chai;
 
 describe('OrganizationsManager', () => {
-  /**
-   * @type {OrganizationsManager}
-   */
-  let organizations;
+  let organizations: OrganizationsManager;
 
-  /**
-   * @type {string}
-   */
-  let token;
+  const token = 'TOKEN';
 
-  before(() => {
-    token = 'TOKEN';
-    organizations = new OrganizationsManager({
-      headers: { authorization: `Bearer ${token}` },
-      baseUrl: API_URL,
+  before(function () {
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
     });
-  });
-
-  describe('instance', () => {
-    const methods = [
-      'getByID',
-      'getByName',
-      'getAll',
-      'create',
-      'update',
-      'delete',
-      'getEnabledConnections',
-      'getEnabledConnection',
-      'addEnabledConnection',
-      'updateEnabledConnection',
-      'removeEnabledConnection',
-      'getMembers',
-      'addMembers',
-      'removeMembers',
-      'getMemberRoles',
-      'addMemberRoles',
-      'removeMemberRoles',
-      'getInvitations',
-      'getInvitation',
-      'createInvitation',
-      'deleteInvitation',
-    ];
-
-    methods.forEach((method) => {
-      it(`should have a ${method} method`, () => {
-        expect(organizations[method]).to.exist.to.be.an.instanceOf(Function);
-      });
-    });
+    organizations = client.organizations;
   });
 
   describe('#constructor', () => {
-    it('should error when no options are provided', () => {
-      expect(() => {
-        new OrganizationsManager();
-      }).to.throw(ArgumentError, 'Must provide manager options');
-    });
-
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
-        new OrganizationsManager({});
-      }).to.throw(ArgumentError, 'Must provide a base URL for the API');
+        new OrganizationsManager({} as any);
+      }).to.throw(Error, 'Must provide a base URL for the API');
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new OrganizationsManager({ baseUrl: '' });
-      }).to.throw(ArgumentError, 'The provided base URL is invalid');
+        new OrganizationsManager({ baseUrl: '' } as any);
+      }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
-    beforeEach(function () {
-      this.request = nock(API_URL).get('/organizations').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getAll(() => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).get('/organizations').reply(200, []);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -106,23 +60,21 @@ describe('OrganizationsManager', () => {
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
-      const data = [{ test: true }];
+      const data = [{ name: 'org 1' }];
       nock(API_URL).get('/organizations').reply(200, data);
 
-      organizations.getAll().then((credentials) => {
-        expect(credentials).to.be.an.instanceOf(Array);
+      organizations.getAll().then((result) => {
+        expect(result.data).to.be.an.instanceOf(Array);
 
-        expect(credentials.length).to.equal(data.length);
+        expect(result.data.length).to.equal(data.length);
 
-        expect(credentials[0].test).to.equal(data[0].test);
+        expect(result.data[0].name).to.equal(data[0].name);
 
         done();
       });
     });
 
     it('should perform a GET request to /api/v2/organizations', function (done) {
-      const { request } = this;
-
       organizations.getAll().then(() => {
         expect(request.isDone()).to.be.true;
         done();
@@ -135,7 +87,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .get('/organizations')
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, []);
 
       organizations.getAll().then(() => {
         expect(request.isDone()).to.be.true;
@@ -147,10 +99,10 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const params = {
-        include_fields: true,
-        fields: 'test',
+        page: 0,
+        per_page: 5,
       };
-      const request = nock(API_URL).get('/organizations').query(params).reply(200);
+      const request = nock(API_URL).get('/organizations').query(params).reply(200, []);
 
       organizations.getAll(params).then(() => {
         expect(request.isDone()).to.be.true;
@@ -161,33 +113,29 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#getByID', () => {
-    beforeEach(function () {
-      this.data = {
-        id: 'org_123456',
-        name: 'organizations',
-        display_name: 'My organization',
-      };
+    const data = {
+      id: 'org_123456',
+      name: 'organizations',
+      display_name: 'My organization',
+    };
+    let request: nock.Scope;
 
-      this.request = nock(API_URL).get(`/organizations/${this.data.id}`).reply(200, this.data);
+    beforeEach(function () {
+      request = nock(API_URL).get(`/organizations/${data.id}`).reply(200, data);
     });
 
     it('should accept a callback', function (done) {
-      const params = { id: this.data.id };
+      const params = { id: data.id };
 
-      organizations.getByID(params, done.bind(null, null));
+      organizations.get(params, done.bind(null, null));
     });
 
     it('should return a promise if no callback is given', function (done) {
-      organizations
-        .getByID({ id: this.data.id })
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      organizations.get({ id: data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a GET request to /api/v2/organizations/:id', function (done) {
-      const { request } = this;
-
-      organizations.getByID({ id: this.data.id }).then(() => {
+      organizations.get({ id: data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -197,9 +145,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${this.data.id}`).reply(500);
+      nock(API_URL).get(`/organizations/${data.id}`).reply(500);
 
-      organizations.getByID({ id: this.data.id }).catch((err) => {
+      organizations.get({ id: data.id }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -210,11 +158,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get(`/organizations/${this.data.id}`)
+        .get(`/organizations/${data.id}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
-      organizations.getByID({ id: this.data.id }).then(() => {
+      organizations.get({ id: data.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -223,35 +171,26 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#getByName', () => {
+    const data = {
+      id: 'org_123456',
+      name: 'organizations',
+      display_name: 'My organization',
+    };
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123456',
-        name: 'organizations',
-        display_name: 'My organization',
-      };
-
-      this.request = nock(API_URL)
-        .get(`/organizations/name/${this.data.name}`)
-        .reply(200, this.data);
-    });
-
-    it('should accept a callback', function (done) {
-      const params = { name: this.data.name };
-
-      organizations.getByName(params, done.bind(null, null));
+      request = nock(API_URL).get(`/organizations/name/${data.name}`).reply(200, data);
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .getByName({ name: this.data.name })
+        .getByName({ name: data.name })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it('should perform a GET request to /api/v2/organizations/name/:name', function (done) {
-      const { request } = this;
-
-      organizations.getByName({ name: this.data.name }).then(() => {
+      organizations.getByName({ name: data.name }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -261,9 +200,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${this.data.name}`).reply(500);
+      nock(API_URL).get(`/organizations/${data.name}`).reply(500);
 
-      organizations.getByName({ name: this.data.name }).catch((err) => {
+      organizations.getByName({ name: data.name }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -274,11 +213,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get(`/organizations/name/${this.data.name}`)
+        .get(`/organizations/name/${data.name}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
-      organizations.getByName({ name: this.data.name }).then(() => {
+      organizations.getByName({ name: data.name }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -293,14 +232,10 @@ describe('OrganizationsManager', () => {
       display_name: 'My Organization',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL).post('/organizations').reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.create(data, () => {
-        done();
-      });
+    beforeEach(function () {
+      request = nock(API_URL).post('/organizations').reply(200, data);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -320,8 +255,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/organizations', function (done) {
-      const { request } = this;
-
       organizations.create(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -332,7 +265,7 @@ describe('OrganizationsManager', () => {
     it('should pass the data in the body of the request', (done) => {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/organizations', data).reply(200);
+      const request = nock(API_URL).post('/organizations', data).reply(200, data);
 
       organizations.create(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -347,7 +280,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .post('/organizations')
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.create(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -358,10 +291,11 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#update', () => {
-    beforeEach(function () {
-      this.data = { id: 'org_123' };
+    const data = { id: 'org_123' };
+    let request: nock.Scope;
 
-      this.request = nock(API_URL).patch(`/organizations/${this.data.id}`).reply(200, this.data);
+    beforeEach(function () {
+      request = nock(API_URL).patch(`/organizations/${data.id}`).reply(200, data);
     });
 
     it('should accept a callback', (done) => {
@@ -376,8 +310,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/organizations/org_123', function (done) {
-      const { request } = this;
-
       organizations.update({ id: 'org_123' }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -388,9 +320,11 @@ describe('OrganizationsManager', () => {
     it('should include the new data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).patch(`/organizations/${this.data.id}`, this.data).reply(200);
+      const request = nock(API_URL)
+        .patch(`/organizations/${data.id}`, { name: 'test' })
+        .reply(200, {});
 
-      organizations.update({ id: 'org_123' }, this.data).then(() => {
+      organizations.update({ id: 'org_123' }, { name: 'test' }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -400,9 +334,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/organizations/${this.data.id}`).reply(500);
+      nock(API_URL).patch(`/organizations/${data.id}`).reply(500);
 
-      organizations.update({ id: this.data.id }, this.data).catch((err) => {
+      organizations.update({ id: data.id }, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -412,13 +346,10 @@ describe('OrganizationsManager', () => {
 
   describe('#delete', () => {
     const id = 'rol_ID';
+    let request: nock.Scope;
 
     beforeEach(function () {
-      this.request = nock(API_URL).delete(`/organizations/${id}`).reply(200);
-    });
-
-    it('should accept a callback', (done) => {
-      organizations.delete({ id }, done.bind(null, null));
+      request = nock(API_URL).delete(`/organizations/${id}`).reply(200);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -426,8 +357,6 @@ describe('OrganizationsManager', () => {
     });
 
     it(`should perform a delete request to /organizations/${id}`, function (done) {
-      const { request } = this;
-
       organizations.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -469,12 +398,10 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL).get(`/organizations/${data.id}/enabled_connections`).reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getEnabledConnections(data, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL).get(`/organizations/${data.id}/enabled_connections`).reply(200, []);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -482,8 +409,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/organizations/org_id/enabled_connections', function (done) {
-      const { request } = this;
-
       organizations.getEnabledConnections(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -509,7 +434,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .get(`/organizations/${data.id}/enabled_connections`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, []);
 
       organizations.getEnabledConnections(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -522,17 +447,15 @@ describe('OrganizationsManager', () => {
   describe('#getEnabledConnection', () => {
     const data = {
       id: 'org_id',
-      connection_id: 'conn_id',
+      connectionId: 'conn_id',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .get(`/organizations/${data.id}/enabled_connections/${data.connection_id}`)
-        .reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getEnabledConnection(data, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
+        .reply(200, {});
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -540,8 +463,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/organizations/rol_ID/enabled_connections/con_id', function (done) {
-      const { request } = this;
-
       organizations.getEnabledConnection(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -553,7 +474,7 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       nock(API_URL)
-        .get(`/organizations/${data.id}/enabled_connections/${data.connection_id}`)
+        .get(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .reply(500);
 
       organizations.getEnabledConnection(data).catch((err) => {
@@ -567,9 +488,9 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get(`/organizations/${data.id}/enabled_connections/${data.connection_id}`)
+        .get(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.getEnabledConnection(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -580,26 +501,21 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#addEnabledConnection', () => {
+    const data = {
+      id: 'org_123',
+    };
+
+    const body = { connection_id: '123', assign_membership_on_login: false };
+
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-      };
-      this.body = { connection_id: '123', assign_membership_on_login: false };
-
-      this.request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/enabled_connections`)
-        .reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      organizations.addEnabledConnection(this.data, {}, () => {
-        done();
-      });
+      request = nock(API_URL).post(`/organizations/${data.id}/enabled_connections`).reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .addEnabledConnection(this.data, {})
+        .addEnabledConnection(data, { connection_id: '' })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -607,9 +523,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${this.data.id}/enabled_connections`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/enabled_connections`).reply(500);
 
-      organizations.addEnabledConnection(this.data, {}).catch((err) => {
+      organizations.addEnabledConnection(data, { connection_id: '' }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -617,35 +533,21 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/organizations/org_id/enabled_connections', function (done) {
-      const { request } = this;
-
-      organizations.addEnabledConnection(this.data, this.body).then(() => {
+      organizations.addEnabledConnection(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addEnabledConnection({ id: null }, {}, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not a string', () => {
-      expect(() => {
-        organizations.addEnabledConnection({ id: 123 }, {}, () => {});
-      }).to.throw('The organization ID has to be a string');
-    });
-
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/enabled_connections`, this.body)
-        .reply(200);
+        .post(`/organizations/${data.id}/enabled_connections`, body)
+        .reply(200, {});
 
-      organizations.addEnabledConnection(this.data, this.body).then(() => {
+      organizations.addEnabledConnection(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -656,11 +558,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/enabled_connections`)
+        .post(`/organizations/${data.id}/enabled_connections`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
-      organizations.addEnabledConnection(this.data, {}).then(() => {
+      organizations.addEnabledConnection(data, { connection_id: '' }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -669,27 +571,22 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#updateEnabledConnection', () => {
+    const data = {
+      id: 'org_123',
+      connectionId: '123',
+    };
+    const body = { assign_membership_on_login: false };
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-        connection_id: '123',
-      };
-      this.body = { assign_membership_on_login: false };
-
-      this.request = nock(API_URL)
-        .patch(`/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`)
-        .reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      organizations.updateEnabledConnection(this.data, this.body, () => {
-        done();
-      });
+      request = nock(API_URL)
+        .patch(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
+        .reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .updateEnabledConnection(this.data, this.body)
+        .updateEnabledConnection(data, body)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -698,10 +595,10 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       nock(API_URL)
-        .patch(`/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`)
+        .patch(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .reply(500);
 
-      organizations.updateEnabledConnection(this.data, this.body).catch((err) => {
+      organizations.updateEnabledConnection(data, body).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -709,9 +606,7 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/organizations/org_id/enabled_connections/conn_id', function (done) {
-      const { request } = this;
-
-      organizations.updateEnabledConnection(this.data, this.body).then(() => {
+      organizations.updateEnabledConnection(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -719,40 +614,29 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.updateEnabledConnection({ id: null }, {}, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
+      expect(organizations.updateEnabledConnection({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
-    it('should return error when id is not a string', () => {
-      expect(() => {
-        organizations.updateEnabledConnection({ id: 123 }, {}, () => {});
-      }).to.throw('The organization ID has to be a string');
-    });
-
-    it('should return error when connection_id is not sent', () => {
-      expect(() => {
-        organizations.updateEnabledConnection({ id: 'org_123', connection_id: null }, {}, () => {});
-      }).to.throw('The connection ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when connection_id is not a string', () => {
-      expect(() => {
-        organizations.updateEnabledConnection({ id: 'org_123', connection_id: 123 }, {}, () => {});
-      }).to.throw('The connection ID has to be a string');
+    it('should return error when connectionId is not sent', () => {
+      expect(
+        organizations.updateEnabledConnection({ id: 'test' } as any, {} as any)
+      ).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.connectionId was null or undefined.`
+      );
     });
 
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .patch(
-          `/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`,
-          this.body
-        )
-        .reply(200);
+        .patch(`/organizations/${data.id}/enabled_connections/${data.connectionId}`, body)
+        .reply(200, {});
 
-      organizations.updateEnabledConnection(this.data, this.body).then(() => {
+      organizations.updateEnabledConnection(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -763,11 +647,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .patch(`/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`)
+        .patch(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
-      organizations.updateEnabledConnection(this.data, this.body).then(() => {
+      organizations.updateEnabledConnection(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -776,52 +660,38 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#removeEnabledConnection', () => {
-    beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-        connection_id: '123',
-      };
+    const data = {
+      id: 'org_123',
+      connectionId: '123',
+    };
 
-      this.request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`, {})
+    let request: nock.Scope;
+
+    beforeEach(function () {
+      request = nock(API_URL)
+        .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .reply(200);
     });
 
     it('should validate empty organizationId', () => {
-      expect(() => {
-        organizations.removeEnabledConnection({ id: null }, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
+      expect(organizations.removeEnabledConnection({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should validate empty connectionId', function () {
-      const _this = this;
-      expect(() => {
-        organizations.removeEnabledConnection({ id: _this.data.id }, () => {});
-      }).to.throw('The connection ID passed in params cannot be null or undefined');
-    });
-
-    it('should validate non-string organizationId', () => {
-      expect(() => {
-        organizations.removeEnabledConnection({ id: 123 }, () => {});
-      }).to.throw('The organization ID has to be a string');
-    });
-
-    it('should validate non-string connectionId', function () {
-      const _this = this;
-      expect(() => {
-        organizations.removeEnabledConnection({ id: _this.data.id, connection_id: 123 }, () => {});
-      }).to.throw('The connection ID has to be a string');
-    });
-
-    it('should accept a callback', function (done) {
-      organizations.removeEnabledConnection(this.data, () => {
-        done();
-      });
+      expect(
+        organizations.removeEnabledConnection({ id: '123' } as any, {} as any)
+      ).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.connectionId was null or undefined.`
+      );
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .removeEnabledConnection(this.data)
+        .removeEnabledConnection(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -830,10 +700,10 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       nock(API_URL)
-        .delete(`/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`)
+        .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .reply(500);
 
-      organizations.removeEnabledConnection(this.data, {}).catch((err) => {
+      organizations.removeEnabledConnection(data, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -841,9 +711,7 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a DELETE request to /api/v2/organizations/organization_id/enabled_connections/connection_id', function (done) {
-      const { request } = this;
-
-      organizations.removeEnabledConnection(this.data).then(() => {
+      organizations.removeEnabledConnection(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -854,11 +722,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/enabled_connections/${this.data.connection_id}`)
+        .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.removeEnabledConnection(this.data, {}).then(() => {
+      organizations.removeEnabledConnection(data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -872,12 +740,10 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL).get(`/organizations/${data.id}/members`).reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getMembers(data, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL).get(`/organizations/${data.id}/members`).reply(200, []);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -885,8 +751,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/organizations/org_ID/members', function (done) {
-      const { request } = this;
-
       organizations.getMembers(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -912,7 +776,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .get(`/organizations/${data.id}/members`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, []);
 
       organizations.getMembers(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -923,24 +787,19 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#addMembers', () => {
+    const data = {
+      id: 'org_123',
+    };
+    const body = { members: [] };
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-      };
-      this.body = ['user_id'];
-
-      this.request = nock(API_URL).post(`/organizations/${this.data.id}/members`, {}).reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      organizations.addMembers(this.data, {}, () => {
-        done();
-      });
+      request = nock(API_URL).post(`/organizations/${data.id}/members`).reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .addMembers(this.data, {})
+        .addMembers(data, { members: [] })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -948,9 +807,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${this.data.id}/members`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/members`).reply(500);
 
-      organizations.addMembers(this.data, {}).catch((err) => {
+      organizations.addMembers(data, { members: [] }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -958,9 +817,7 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/organizations/org_id/members', function (done) {
-      const { request } = this;
-
-      organizations.addMembers(this.data, {}).then(() => {
+      organizations.addMembers(data, { members: [] }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -968,25 +825,18 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addMembers({ id: null }, {}, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addMembers({ id: 123 }, {}, () => {});
-      }).to.throw('The organization ID has to be a string');
+      expect(organizations.addMembers({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/members`, this.body)
-        .reply(200);
+      const request = nock(API_URL).post(`/organizations/${data.id}/members`, body).reply(200);
 
-      organizations.addMembers(this.data, this.body).then(() => {
+      organizations.addMembers(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -997,11 +847,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/members`)
+        .post(`/organizations/${data.id}/members`)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.addMembers(this.data, {}).then(() => {
+      organizations.addMembers(data, { members: [] }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1010,32 +860,24 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#removeMembers', () => {
+    const data = { id: 'org_123' };
+    const body = { members: ['user_id'] };
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-      };
-
-      this.body = ['user_id'];
-
-      this.request = nock(API_URL).delete(`/organizations/${this.data.id}/members`, {}).reply(200);
+      request = nock(API_URL).delete(`/organizations/${data.id}/members`, {}).reply(200);
     });
 
     it('should validate empty organizationId', () => {
-      expect(function () {
-        organizations.removeMembers({ id: null }, this.body, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
-    });
-
-    it('should validate non-string organizationId', function () {
-      const _this = this;
-      expect(() => {
-        organizations.removeMembers({ id: 123 }, _this.body, () => {});
-      }).to.throw('The organization ID has to be a string');
+      expect(organizations.deleteMembers({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .removeMembers(this.data, this.body)
+        .deleteMembers(data, body)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -1043,9 +885,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/organizations/${this.data.id}/members`).reply(500);
+      nock(API_URL).delete(`/organizations/${data.id}/members`).reply(500);
 
-      organizations.removeMembers(this.data, this.body).catch((err) => {
+      organizations.deleteMembers(data, body).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -1053,11 +895,9 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a DELETE request to /api/v2/organizations/organization_id/members', function (done) {
-      const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/members`, this.body)
-        .reply(200);
+      const request = nock(API_URL).delete(`/organizations/${data.id}/members`, body).reply(200);
 
-      organizations.removeMembers(this.data, this.body, () => {
+      organizations.deleteMembers(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1068,11 +908,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/members`, this.body)
+        .delete(`/organizations/${data.id}/members`, body)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.removeMembers(this.data, this.body).then(() => {
+      organizations.deleteMembers(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1087,14 +927,12 @@ describe('OrganizationsManager', () => {
       user_id: 'user_123',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .get(`/organizations/${data.id}/members/${data.user_id}/roles`)
-        .reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getMemberRoles(data, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/members/${data.user_id}/roles`)
+        .reply(200, []);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -1102,8 +940,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/organizations/org_ID/members/user_id/roles', function (done) {
-      const { request } = this;
-
       organizations.getMemberRoles(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -1129,7 +965,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .get(`/organizations/${data.id}/members/${data.user_id}/roles`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, []);
 
       organizations.getMemberRoles(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1140,27 +976,23 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#addMemberRoles', () => {
+    const data = {
+      id: 'org_123',
+      user_id: 'user_id',
+    };
+    const body = { roles: ['user_id'] };
+
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-        user_id: 'user_id',
-      };
-      this.body = { roles: ['user_id'] };
-
-      this.request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`, this.body)
+      request = nock(API_URL)
+        .post(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
         .reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      organizations.addMemberRoles(this.data, this.body, () => {
-        done();
-      });
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .addMemberRoles(this.data, this.body)
+        .addMemberRoles(data, body)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -1168,11 +1000,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL)
-        .post(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`)
-        .reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500);
 
-      organizations.addMemberRoles(this.data, {}).catch((err) => {
+      organizations.addMemberRoles(data, { roles: [] }).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -1180,9 +1010,7 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a POST request to /api/v2/organizations/org_id/members/user_id/roles', function (done) {
-      const { request } = this;
-
-      organizations.addMemberRoles(this.data, this.body).then(() => {
+      organizations.addMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1190,37 +1018,27 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addMemberRoles({ id: null }, {}, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
+      expect(organizations.addMemberRoles({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addMemberRoles({ id: 123 }, {}, () => {});
-      }).to.throw('The organization ID has to be a string');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addMemberRoles({ id: 'org_123', user_id: null }, {}, () => {});
-      }).to.throw('The user ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.addMemberRoles({ id: 'org_123', user_id: 123 }, {}, () => {});
-      }).to.throw('The user ID has to be a string');
+    it('should return error when user_id is not sent', () => {
+      expect(organizations.deleteMembers({ id: '123' }, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.user_id was null or undefined.`
+      );
     });
 
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`, this.body)
+        .post(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
         .reply(200);
 
-      organizations.addMemberRoles(this.data, this.body).then(() => {
+      organizations.addMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1231,11 +1049,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`)
+        .post(`/organizations/${data.id}/members/${data.user_id}/roles`)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.addMemberRoles(this.data, {}).then(() => {
+      organizations.addMemberRoles(data, { roles: [] }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1243,36 +1061,32 @@ describe('OrganizationsManager', () => {
     });
   });
 
-  describe('#removeMemberRoles', () => {
+  describe('#deleteMemberRoles', () => {
+    const data = {
+      id: 'org_123',
+      user_id: 'user_123',
+    };
+
+    const body = { roles: ['user_id'] };
+
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-        user_id: 'user_123',
-      };
-
-      this.body = { roles: ['user_id'] };
-
-      this.request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`, {})
+      request = nock(API_URL)
+        .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, {})
         .reply(200);
     });
 
-    it('should validate empty organizationId', () => {
-      expect(function () {
-        organizations.removeMemberRoles({ id: null }, this.body, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
-    });
-
-    it('should validate non-string organizationId', function () {
-      const _this = this;
-      expect(() => {
-        organizations.removeMemberRoles({ id: 123 }, _this.body, () => {});
-      }).to.throw('The organization ID has to be a string');
+    it('should validate empty id', () => {
+      expect(organizations.deleteMemberRoles({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .removeMemberRoles(this.data, this.body)
+        .deleteMemberRoles(data, body)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -1280,35 +1094,28 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL)
-        .delete(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`)
-        .reply(500);
+      nock(API_URL).delete(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500);
 
-      organizations.removeMemberRoles(this.data, this.body).catch((err) => {
+      organizations.deleteMemberRoles(data, body).catch((err) => {
         expect(err).to.exist;
 
         done();
       });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.removeMemberRoles({ id: 'org_123', user_id: null }, {}, () => {});
-      }).to.throw('The user ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.removeMemberRoles({ id: 'org_123', user_id: 123 }, {}, () => {});
-      }).to.throw('The user ID has to be a string');
+    it('should return error when user_id is not sent', () => {
+      expect(organizations.deleteMemberRoles({ id: 'org_1' } as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.user_id was null or undefined.`
+      );
     });
 
     it('should perform a DELETE request to /api/v2/organizations/organization_id/members/user_id/roles', function (done) {
       const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`, this.body)
+        .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
         .reply(200);
 
-      organizations.removeMemberRoles(this.data, this.body, () => {
+      organizations.deleteMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1319,11 +1126,11 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/members/${this.data.user_id}/roles`, this.body)
+        .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.removeMemberRoles(this.data, this.body).then(() => {
+      organizations.deleteMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -1337,12 +1144,10 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL).get(`/organizations/${data.id}/invitations`).reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getInvitations(data, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL).get(`/organizations/${data.id}/invitations`).reply(200, []);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -1350,8 +1155,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/organizations/org_ID/invitations', function (done) {
-      const { request } = this;
-
       organizations.getInvitations(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -1377,7 +1180,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .get(`/organizations/${data.id}/invitations`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, []);
 
       organizations.getInvitations(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1393,14 +1196,12 @@ describe('OrganizationsManager', () => {
       invitation_id: 'inv_123',
     };
 
-    beforeEach(function () {
-      this.request = nock(API_URL)
-        .get(`/organizations/${data.id}/invitations/${data.invitation_id}`)
-        .reply(200);
-    });
+    let request: nock.Scope;
 
-    it('should accept a callback', (done) => {
-      organizations.getInvitation(data, done.bind(null, null));
+    beforeEach(function () {
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/invitations/${data.invitation_id}`)
+        .reply(200, {});
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -1408,8 +1209,6 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a GET request to /api/v2/organizations/rol_ID/invitations/inv_id', function (done) {
-      const { request } = this;
-
       organizations.getInvitation(data).then(() => {
         expect(request.isDone()).to.be.true;
 
@@ -1430,27 +1229,17 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.getInvitation({ id: null }, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
+      expect(organizations.getInvitation({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.getInvitation({ id: 123 }, () => {});
-      }).to.throw('The organization ID has to be a string');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.getInvitation({ id: 'org_123', invitation_id: null }, () => {});
-      }).to.throw('The invitation ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.getInvitation({ id: 'org_123', invitation_id: 123 }, () => {});
-      }).to.throw('The invitation ID has to be a string');
+    it('should return error when invitation_id is not sent', () => {
+      expect(organizations.getInvitation({ id: '123' } as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.invitation_id was null or undefined.`
+      );
     });
 
     it('should include the token in the authorization header', (done) => {
@@ -1459,7 +1248,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .get(`/organizations/${data.id}/invitations/${data.invitation_id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.getInvitation(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1470,29 +1259,27 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#createInvitation', () => {
+    const data = {
+      id: 'org_123',
+    };
+    const body = {
+      invitee: 'inv',
+      client_id: 'cid',
+    };
+
+    let request: nock.Scope;
+
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-      };
-      this.body = {
-        invitee: 'inv',
-        client_id: 'cid',
-      };
-
-      this.request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/invitations`, {})
-        .reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      organizations.createInvitation(this.data, {}, () => {
-        done();
-      });
+      request = nock(API_URL).post(`/organizations/${data.id}/invitations`).reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .createInvitation(this.data, {})
+        .createInvitation(data, {
+          client_id: '123',
+          invitee: { email: '12' },
+          inviter: { name: '12' },
+        })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -1500,106 +1287,119 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${this.data.id}/invitations`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/invitations`).reply(500);
 
-      organizations.createInvitation(this.data, {}).catch((err) => {
-        expect(err).to.exist;
+      organizations
+        .createInvitation(data, {
+          client_id: '123',
+          invitee: { email: '12' },
+          inviter: { name: '12' },
+        })
+        .catch((err) => {
+          expect(err).to.exist;
 
-        done();
-      });
+          done();
+        });
     });
 
     it('should perform a POST request to /api/v2/organizations/org_id/invitations', function (done) {
-      const { request } = this;
+      organizations
+        .createInvitation(data, {
+          client_id: '123',
+          invitee: { email: '12' },
+          inviter: { name: '12' },
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
 
-      organizations.createInvitation(this.data, {}).then(() => {
-        expect(request.isDone()).to.be.true;
-
-        done();
-      });
+          done();
+        });
     });
 
     it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.createInvitation({ id: null }, {}, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.createInvitation({ id: 123 }, {}, () => {});
-      }).to.throw('The organization ID has to be a string');
+      expect(organizations.createInvitation({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/invitations`, this.body)
-        .reply(200);
+        .post(`/organizations/${data.id}/invitations`, {
+          client_id: '123',
+          invitee: { email: '12' },
+          inviter: { name: '12' },
+        })
+        .reply(200, {});
 
-      organizations.createInvitation(this.data, this.body).then(() => {
-        expect(request.isDone()).to.be.true;
+      organizations
+        .createInvitation(data, {
+          client_id: '123',
+          invitee: { email: '12' },
+          inviter: { name: '12' },
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
 
-        done();
-      });
+          done();
+        });
     });
 
     it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .post(`/organizations/${this.data.id}/invitations`)
+        .post(`/organizations/${data.id}/invitations`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
-      organizations.createInvitation(this.data, {}).then(() => {
-        expect(request.isDone()).to.be.true;
+      organizations
+        .createInvitation(data, {
+          client_id: '123',
+          invitee: { email: '12' },
+          inviter: { name: '12' },
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
 
-        done();
-      });
+          done();
+        });
     });
   });
 
   describe('#deleteInvitation', () => {
+    const data = {
+      id: 'org_123',
+      invitation_id: 'inv_123',
+    };
+    let request: nock.Scope;
     beforeEach(function () {
-      this.data = {
-        id: 'org_123',
-        invitation_id: 'inv_123',
-      };
-
-      this.request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/invitations/${this.data.invitation_id}`, {})
+      request = nock(API_URL)
+        .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)
         .reply(200);
     });
 
-    it('should validate empty organizationId', () => {
-      expect(() => {
-        organizations.deleteInvitation({ id: null }, () => {});
-      }).to.throw('The organization ID passed in params cannot be null or undefined');
-    });
-
-    it('should validate non-string organizationId', () => {
-      expect(() => {
-        organizations.deleteInvitation({ id: 123 }, () => {});
-      }).to.throw('The organization ID has to be a string');
+    it('should validate empty id', () => {
+      expect(organizations.deleteInvitation({} as any, {} as any)).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.id was null or undefined.`
+      );
     });
 
     it('should return a promise if no callback is given', function (done) {
-      organizations
-        .removeMembers(this.data)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
+      organizations.deleteInvitation(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
       nock(API_URL)
-        .delete(`/organizations/${this.data.id}/invitations/${this.data.invitation_id}`, {})
+        .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`, {})
         .reply(500);
 
-      organizations.deleteInvitation(this.data).catch((err) => {
+      organizations.deleteInvitation(data).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -1610,37 +1410,34 @@ describe('OrganizationsManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/invitations/${this.data.invitation_id}`, {})
+        .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)
         .reply(200);
 
-      organizations.deleteInvitation(this.data, () => {
+      organizations.deleteInvitation(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
       });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.deleteInvitation({ id: 'org_123', invitation_id: null }, () => {});
-      }).to.throw('The invitation ID passed in params cannot be null or undefined');
-    });
-
-    it('should return error when id is not sent', () => {
-      expect(() => {
-        organizations.deleteInvitation({ id: 'org_123', invitation_id: 123 }, () => {});
-      }).to.throw('The invitation ID has to be a string');
+    it('should return error when invitation_id is not sent', () => {
+      expect(
+        organizations.deleteInvitation({ id: 'org_123' } as any, {} as any)
+      ).to.be.rejectedWith(
+        RequiredError,
+        `Required parameter requestParameters.invitation_id was null or undefined.`
+      );
     });
 
     it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .delete(`/organizations/${this.data.id}/invitations/${this.data.invitation_id}`, {})
+        .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.deleteInvitation(this.data).then(() => {
+      organizations.deleteInvitation(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
