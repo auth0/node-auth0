@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.4.0](https://github.com/auth0/node-auth0/tree/v3.4.0) (2023-05-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.3.0...v3.4.0)
+
+**Added**
+
+- feat: allow to pass a method as token [\#793](https://github.com/auth0/node-auth0/pull/793) ([KillianHmyd](https://github.com/KillianHmyd))
+
+**Fixed**
+
+- Fix ESM [\#828](https://github.com/auth0/node-auth0/pull/828) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v3.3.0](https://github.com/auth0/node-auth0/tree/v3.3.0) (2023-03-14)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.2.0...v3.3.0)
