@@ -1,4 +1,4 @@
-import { FetchParams, Middleware, RequestContext } from './__generated';
+import { FetchParams, Middleware, RequestContext } from '../lib/runtime';
 import {
   ManagementClientOptionsWithClientAssertion,
   ManagementClientOptionsWithClientCredentials,

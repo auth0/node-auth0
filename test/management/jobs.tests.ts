@@ -9,12 +9,12 @@ import {
   JobsManager,
   GetErrors200ResponseOneOfInner,
   PostUsersImportsData,
-  FetchError,
 } from '../../src/management/__generated/index';
 import { ManagementClient, ManagementApiError } from '../../src/management';
-import { Blob } from '../../src/runtime';
+import { Blob } from '../../src/lib/runtime';
 import { extractParts } from '../utils/extractParts';
 import { fileURLToPath } from 'url';
+import { FetchError } from '../../src/lib/errors';
 
 const { expect } = chai;
 
