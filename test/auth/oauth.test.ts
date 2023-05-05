@@ -1,7 +1,4 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import nock from 'nock';
-
 import {
   OAuth,
   AuthorizationCodeGrantRequest,
@@ -11,6 +8,7 @@ import {
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
 } from '../../src/auth/OAuth';
+import { withIdToken } from '../utils/withIdToken';
 
 const { back: nockBack } = nock;
 
@@ -18,13 +16,16 @@ const opts = {
   domain: 'test-domain.auth0.com',
   clientId: 'test-client-id',
   clientSecret: 'test-client-secret',
+  idTokenSigningAlg: 'HS256',
 };
 
 describe('OAuth', () => {
   let nockDone: () => void;
 
   beforeAll(async () => {
-    ({ nockDone } = await nockBack('auth/fixtures/oauth.json'));
+    ({ nockDone } = await nockBack('auth/fixtures/oauth.json', {
+      before: await withIdToken(opts),
+    }));
   });
 
   afterAll(() => {
@@ -152,7 +153,7 @@ describe('OAuth', () => {
           access_token: 'my-access-token',
           expires_in: 86400,
           token_type: 'Bearer',
-          id_token: 'my-id-token',
+          id_token: expect.any(String),
           scope: 'openid profile email address phone',
         },
       });
@@ -171,7 +172,7 @@ describe('OAuth', () => {
           access_token: 'my-access-token',
           expires_in: 86400,
           token_type: 'Bearer',
-          id_token: 'my-id-token',
+          id_token: expect.any(String),
           scope: 'openid profile email address phone',
         },
       });
@@ -195,7 +196,7 @@ describe('OAuth', () => {
           access_token: 'my-access-token',
           expires_in: 86400,
           token_type: 'Bearer',
-          id_token: 'my-id-token',
+          id_token: expect.any(String),
           scope: 'openid profile email address phone offline_access',
         },
       });
@@ -218,5 +219,64 @@ describe('OAuth', () => {
         status: 200,
       });
     });
+  });
+});
+
+describe('OAuth (with ID Token validation)', () => {
+  it('should throw for invalid nonce', async () => {
+    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
+      before: await withIdToken({ ...opts, payload: { nonce: 'foo' } }),
+    });
+    const oauth = new OAuth(opts);
+    await expect(
+      oauth.authorizationCodeGrant(
+        {
+          code: 'test-valid-code',
+          redirect_uri: 'https://example.com',
+        },
+        { idTokenValidateOptions: { nonce: 'bar' } }
+      )
+    ).rejects.toThrowError(/\(nonce\) claim mismatch in the ID token/);
+    nockDone();
+  });
+
+  it('should throw for invalid maxAge', async () => {
+    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
+      before: await withIdToken({
+        ...opts,
+        payload: { auth_time: Math.floor(Date.now() / 1000) - 500 },
+      }),
+    });
+    const oauth = new OAuth(opts);
+    await expect(
+      oauth.authorizationCodeGrantWithPKCE(
+        {
+          code: 'test-code',
+          code_verifier: 'test-valid-code-verifier',
+          redirect_uri: 'https://example.com',
+        },
+        { idTokenValidateOptions: { maxAge: 100 } }
+      )
+    ).rejects.toThrowError(
+      /\(auth_time\) claim in the ID token indicates that too much time has passed/
+    );
+    nockDone();
+  });
+
+  it('should throw for invalid organization', async () => {
+    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
+      before: await withIdToken({
+        ...opts,
+        payload: { org_id: 'foo' },
+      }),
+    });
+    const oauth = new OAuth(opts);
+    await expect(
+      oauth.refreshTokenGrant(
+        { refresh_token: 'test-refresh-token' },
+        { idTokenValidateOptions: { organization: 'bar' } }
+      )
+    ).rejects.toThrowError(/\(org_id\) claim value mismatch in the ID token/);
+    nockDone();
   });
 });

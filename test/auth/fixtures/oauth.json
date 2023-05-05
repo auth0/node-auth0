@@ -8,7 +8,9 @@
     "response": {
       "access_token": "my-access-token",
       "expires_in": 86400,
-      "token_type": "Bearer"
+      "token_type": "Bearer",
+      "id_token": "my-id-token",
+      "scope": "openid profile email address phone"
     }
   },
   {
@@ -31,7 +33,9 @@
     "response": {
       "access_token": "my-access-token",
       "expires_in": 86400,
-      "token_type": "Bearer"
+      "token_type": "Bearer",
+      "id_token": "my-id-token",
+      "scope": "openid profile email address phone"
     }
   },
   {
