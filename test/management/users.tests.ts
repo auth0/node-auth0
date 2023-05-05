@@ -6,11 +6,11 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 import {
   UsersManager,
   UsersByEmailManager,
-  RequiredError,
   PostIdentitiesRequestProviderEnum,
   DeleteUserIdentityByUserIdProviderEnum,
   DeleteMultifactorByProviderProviderEnum,
 } from '../../src/management/__generated/index';
+import { RequiredError } from '../../src/lib/errors';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;

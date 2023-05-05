@@ -9,8 +9,8 @@ import {
   PromptsManager,
   PromptsSettingsUniversalLoginExperienceEnum,
   PromptsSettingsUpdateUniversalLoginExperienceEnum,
-  RequiredError,
 } from '../../src/management/__generated/index';
+import { RequiredError } from '../../src/lib/errors';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;

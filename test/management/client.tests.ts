@@ -4,8 +4,9 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { ClientsManager, RequiredError } from '../../src/management/__generated/index';
+import { ClientsManager } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
+import { RequiredError } from '../../src/lib/errors';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;

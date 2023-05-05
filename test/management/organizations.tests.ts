@@ -3,7 +3,8 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { OrganizationsManager, RequiredError } from '../../src/management/__generated/index';
+import { OrganizationsManager } from '../../src/management/__generated/index';
+import { RequiredError } from '../../src/lib/errors';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;
