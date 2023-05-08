@@ -5,16 +5,18 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 
 import {
   ActionsManager,
-  GetActionVersionRequest,
+  GetActionVersions200ResponseVersionsInner,
   GetActions200ResponseActionsInner,
+  GetActions200ResponseActionsInnerSupportedTriggersInner,
   GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum,
   GetActionsTriggerIdEnum,
   GetBindings200ResponseBindingsInner,
   GetExecution200Response,
-  PatchActionOperationRequest,
+  PatchActionRequest,
   PatchBindingsRequest,
+  PostActionRequest,
 } from '../../src/management/__generated/index';
-import { ManagementApiError, ManagementClient } from '../../src/management';
+import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;
 describe('ActionsManager', () => {
@@ -72,12 +74,29 @@ describe('ActionsManager', () => {
 
   describe('#actions', () => {
     let request: nock.Scope;
-
     describe('#getAll', () => {
+      const data = [
+        {
+          id: '1',
+          name: 'tets action',
+          code: 'code here',
+          dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
+          supported_triggers: [
+            { id: 'post-login', version: 'v1', status: 'pending', runtimes: ['node12'] },
+          ],
+          runtime: 'node12',
+          secrets: [{ name: 'secret1', updated_at: new Date().toISOString() }],
+          installed_integration_id: '1',
+          integration: {
+            id: '1',
+          },
+          status: 'building',
+          all_changes_deployed: true,
+        },
+      ];
+
       beforeEach(function () {
-        request = nock(API_URL)
-          .get('/actions/actions')
-          .reply(200, [{ test: true }]);
+        request = nock(API_URL).get('/actions/actions').reply(200, data);
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -98,15 +117,46 @@ describe('ActionsManager', () => {
       it('should pass the body of the response to the "then" handler', function (done) {
         nock.cleanAll();
 
-        const data = { actions: [{ id: '123' }] };
-        nock(API_URL).get('/actions/actions').reply(200, data);
+        nock(API_URL).get('/actions/actions').reply(200, { actions: data });
 
         actions.getAll().then((credentials) => {
           expect(credentials.data.actions).to.be.an.instanceOf(Array);
 
-          expect(credentials.data.actions?.length).to.equal(data.actions.length);
+          expect(credentials.data.actions?.length).to.equal(data.length);
 
-          expect(credentials.data.actions?.[0].id).to.equal(data.actions[0].id);
+          expect(credentials.data.actions?.[0].id).to.equal(data[0].id);
+          expect(credentials.data.actions?.[0].name).to.equal(data[0].name);
+          expect(credentials.data.actions?.[0].supported_triggers?.length).to.equal(
+            data[0].supported_triggers.length
+          );
+          expect(credentials.data.actions?.[0].supported_triggers?.[0].id).to.equal(
+            data[0].supported_triggers[0].id
+          );
+          expect(credentials.data.actions?.[0].supported_triggers?.[0].version).to.equal(
+            data[0].supported_triggers[0].version
+          );
+          expect(credentials.data.actions?.[0].supported_triggers?.[0].status).to.equal(
+            data[0].supported_triggers[0].status
+          );
+          expect(credentials.data.actions?.[0].supported_triggers?.[0].runtimes?.[0]).to.equal(
+            data[0].supported_triggers[0].runtimes[0]
+          );
+          expect(credentials.data.actions?.[0].code).to.equal(data[0].code);
+          expect(credentials.data.actions?.[0].dependencies?.[0].name).to.equal(
+            data[0].dependencies[0].name
+          );
+          expect(credentials.data.actions?.[0].runtime).to.equal(data[0].runtime);
+          expect(credentials.data.actions?.[0].secrets?.[0].name).to.equal(data[0].secrets[0].name);
+          expect(credentials.data.actions?.[0].secrets?.[0].updated_at).to.equal(
+            data[0].secrets[0].updated_at
+          );
+          expect(credentials.data.actions?.[0].installed_integration_id).to.equal(
+            data[0].installed_integration_id
+          );
+          expect(credentials.data.actions?.[0].integration?.id).to.equal(data[0].integration.id);
+          expect(credentials.data.actions?.[0].all_changes_deployed).to.equal(
+            data[0].all_changes_deployed
+          );
 
           done();
         });
@@ -151,21 +201,26 @@ describe('ActionsManager', () => {
     });
 
     describe('#get', () => {
-      let data: GetActions200ResponseActionsInner;
+      const data: GetActions200ResponseActionsInner = {
+        id: '0d565aa1-d8ce-4802-83e7-82e3d2040222',
+        name: 'Test Action',
+        code: 'code here',
+        dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
+        supported_triggers: [
+          { id: 'post-login', version: 'v1', status: 'pending', runtimes: ['node12'] },
+        ],
+        runtime: 'node12',
+        secrets: [{ name: 'secret1', updated_at: new Date().toISOString() }],
+        installed_integration_id: '1',
+        integration: {
+          id: '1',
+        },
+        status: 'building',
+        all_changes_deployed: true,
+        created_at: '2020-07-29T19:45:15.725999098Z',
+        updated_at: '2020-07-29T19:45:15.725999098Z',
+      };
       beforeEach(function () {
-        data = {
-          id: '0d565aa1-d8ce-4802-83e7-82e3d2040222',
-          name: 'Test Action',
-          supported_triggers: [
-            {
-              id: 'post-login',
-              version: 'v1',
-            },
-          ],
-          created_at: '2020-07-29T19:45:15.725999098Z',
-          updated_at: '2020-07-29T19:45:15.725999098Z',
-        };
-
         request = nock(API_URL).get(`/actions/actions/${data.id}`).reply(200, data);
       });
 
@@ -196,6 +251,42 @@ describe('ActionsManager', () => {
         });
       });
 
+      it('should pass the body of the response to the "then" handler', function (done) {
+        nock.cleanAll();
+
+        nock(API_URL).get(`/actions/actions/${data.id}`).reply(200, data);
+
+        actions.get({ id: data.id as string }).then((credentials) => {
+          expect(credentials.data.id).to.equal(data.id);
+          expect(credentials.data.name).to.equal(data.name);
+          expect(credentials.data.supported_triggers?.length).to.equal(
+            data.supported_triggers?.length
+          );
+          expect(credentials.data.supported_triggers?.[0].id).to.equal(
+            data.supported_triggers?.[0].id
+          );
+          expect(credentials.data.supported_triggers?.[0].version).to.equal(
+            data.supported_triggers?.[0].version
+          );
+          expect(credentials.data.supported_triggers?.[0].status).to.equal(
+            data.supported_triggers?.[0].status
+          );
+          expect(credentials.data.supported_triggers?.[0].runtimes?.[0]).to.equal(
+            data.supported_triggers?.[0].runtimes?.[0]
+          );
+          expect(credentials.data.code).to.equal(data.code);
+          expect(credentials.data.dependencies?.[0].name).to.equal(data.dependencies?.[0].name);
+          expect(credentials.data.runtime).to.equal(data.runtime);
+          expect(credentials.data.secrets?.[0].name).to.equal(data.secrets?.[0].name);
+          expect(credentials.data.secrets?.[0].updated_at).to.equal(data.secrets?.[0].updated_at);
+          expect(credentials.data.installed_integration_id).to.equal(data.installed_integration_id);
+          expect(credentials.data.integration?.id).to.equal(data.integration?.id);
+          expect(credentials.data.all_changes_deployed).to.equal(data.all_changes_deployed);
+
+          done();
+        });
+      });
+
       it('should include the token in the Authorization header', function (done) {
         nock.cleanAll();
 
@@ -213,18 +304,24 @@ describe('ActionsManager', () => {
     });
 
     describe('#create', () => {
-      const data = {
-        name: 'my-action-13',
+      const data: PostActionRequest = {
+        name: 'Test Action',
+        code: 'code here',
+        dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
         supported_triggers: [
           {
             id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
             version: 'v1',
+            status: 'pending',
+            runtimes: ['node12'],
           },
         ],
+        runtime: 'node12',
+        secrets: [{ name: 'secret1' }],
       };
 
       beforeEach(function () {
-        request = nock(API_URL).post('/actions/actions').reply(201, {});
+        request = nock(API_URL).post('/actions/actions').reply(201, data);
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -252,10 +349,35 @@ describe('ActionsManager', () => {
       it('should pass the data in the body of the request', function (done) {
         nock.cleanAll();
 
-        const request = nock(API_URL).post('/actions/actions', data).reply(200, {});
+        const request = nock(API_URL)
+          .post('/actions/actions', data as any)
+          .reply(200, {});
 
         actions.create(data).then(() => {
           expect(request.isDone()).to.be.true;
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        actions.create(data).then((action) => {
+          expect(action.data.name).to.equal(data.name);
+          expect(action.data.code).to.equal(data.code);
+          expect(action.data.dependencies?.[0].name).to.equal(data.dependencies?.[0].name);
+          expect(action.data.dependencies?.[0].version).to.equal(data.dependencies?.[0].version);
+          expect(action.data.supported_triggers?.[0].id).to.equal(data.supported_triggers[0].id);
+          expect(action.data.supported_triggers?.[0].version).to.equal(
+            data.supported_triggers[0].version
+          );
+          expect(action.data.supported_triggers?.[0].status).to.equal(
+            data.supported_triggers[0].status
+          );
+          expect(action.data.supported_triggers?.[0].runtimes?.[0]).to.equal(
+            data.supported_triggers[0].runtimes?.[0]
+          );
+          expect(action.data.runtime).to.equal(data.runtime);
+          expect(action.data.secrets?.[0].name).to.equal(data.secrets?.[0].name);
+
           done();
         });
       });
@@ -277,24 +399,34 @@ describe('ActionsManager', () => {
     });
 
     describe('#update', () => {
-      let data: PatchActionOperationRequest;
+      const id = 'ACTION_ID';
+      const data: PatchActionRequest = {
+        name: 'Test Action',
+        code: 'code here',
+        dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
+        supported_triggers: [
+          {
+            id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
+            version: 'v1',
+            status: 'pending',
+            runtimes: ['node12'],
+          },
+        ],
+        runtime: 'node12',
+        secrets: [{ name: 'secret1' }],
+      };
       beforeEach(function () {
-        data = { id: 'ACTION_ID' };
-
         request = nock(API_URL)
-          .patch(`/actions/actions/${data.id}`, { name: 'my-new-action-name' })
+          .patch(`/actions/actions/${id}`, data as any)
           .reply(200, data);
       });
 
       it('should return a promise if no callback is given', function (done) {
-        actions
-          .update({ id: 'ACTION_ID' }, { name: 'my-new-action-name' })
-          .then(done.bind(null, null))
-          .catch(done.bind(null, null));
+        actions.update({ id }, data).then(done.bind(null, null)).catch(done.bind(null, null));
       });
 
       it('should perform a PATCH request', function (done) {
-        actions.update({ id: 'ACTION_ID' }, { name: 'my-new-action-name' }).then(() => {
+        actions.update({ id }, data).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -305,11 +437,34 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const request = nock(API_URL)
-          .patch(`/actions/actions/${data.id}`, { name: 'my-new-action-name' })
+          .patch(`/actions/actions/${id}`, data as any)
           .reply(200, {});
 
-        actions.update({ id: 'ACTION_ID' }, { name: 'my-new-action-name' }).then(() => {
+        actions.update({ id }, data).then(() => {
           expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        actions.update({ id }, data).then((action) => {
+          expect(action.data.name).to.equal(data.name);
+          expect(action.data.code).to.equal(data.code);
+          expect(action.data.dependencies?.[0].name).to.equal(data.dependencies?.[0].name);
+          expect(action.data.dependencies?.[0].version).to.equal(data.dependencies?.[0].version);
+          expect(action.data.supported_triggers?.[0].id).to.equal(data.supported_triggers?.[0].id);
+          expect(action.data.supported_triggers?.[0].version).to.equal(
+            data.supported_triggers?.[0].version
+          );
+          expect(action.data.supported_triggers?.[0].status).to.equal(
+            data.supported_triggers?.[0].status
+          );
+          expect(action.data.supported_triggers?.[0].runtimes?.[0]).to.equal(
+            data.supported_triggers?.[0].runtimes?.[0]
+          );
+          expect(action.data.runtime).to.equal(data.runtime);
+          expect(action.data.secrets?.[0].name).to.equal(data.secrets?.[0].name);
 
           done();
         });
@@ -318,9 +473,9 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(`/actions/actions/${data.id}`).reply(500);
+        nock(API_URL).patch(`/actions/actions/${id}`).reply(500);
 
-        actions.update({ id: data.id }, { name: 'my-new-action-name' }).catch((err) => {
+        actions.update({ id }, data).catch((err) => {
           expect(err).to.exist;
 
           done();
@@ -473,29 +628,36 @@ describe('ActionsManager', () => {
 
   describe('action versions', () => {
     describe('#getVersions', () => {
-      let data: GetActionVersionRequest;
+      const actionId = '123';
+      const id = '0d565aa1-d8ce-4802-83e7-82e3d2040222';
+      const data: GetActionVersions200ResponseVersionsInner[] = [
+        {
+          id: id,
+          action_id: actionId,
+          code: 'code here',
+          dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
+          supported_triggers: [
+            { id: 'post-login', version: 'v1', status: 'pending', runtimes: ['node12'] },
+          ],
+          runtime: 'node12',
+          secrets: [{ name: 'secret1', updated_at: new Date().toISOString() }],
+          deployed: true,
+        },
+      ];
       let request: nock.Scope;
 
       beforeEach(function () {
         nock.cleanAll();
 
-        data = {
-          id: '0d565aa1-d8ce-4802-83e7-82e3d2040222',
-          actionId: '123',
-        };
-
-        request = nock(API_URL).get(`/actions/actions/${data.id}/versions`).reply(200, data);
+        request = nock(API_URL).get(`/actions/actions/${actionId}/versions`).reply(200, data);
       });
 
       it('should return a promise if no callback is given', function (done) {
-        actions
-          .getVersion({ actionId: data.id, id: '123' })
-          .then(done.bind(null, null))
-          .catch(done.bind(null, null));
+        actions.getVersions({ actionId }).then(done.bind(null, null)).catch(done.bind(null, null));
       });
 
       it('should perform a GET request', function (done) {
-        actions.getVersions({ actionId: data.id }).then(() => {
+        actions.getVersions({ actionId }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -505,10 +667,48 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/actions/${data.id}/versions`).reply(500);
+        nock(API_URL).get(`/actions/actions/${actionId}/versions`).reply(500);
 
-        actions.getVersions({ actionId: data.id }).catch((err) => {
+        actions.getVersions({ actionId }).catch((err) => {
           expect(err).to.exist;
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        nock.cleanAll();
+
+        nock(API_URL).get(`/actions/actions/${actionId}/versions`).reply(200, { versions: data });
+
+        actions.getVersions({ actionId }).then((versions) => {
+          expect(versions.data.versions).to.be.an.instanceOf(Array);
+
+          expect(versions.data.versions?.length).to.equal(data.length);
+
+          expect(versions.data.versions?.[0].id).to.equal(data[0].id);
+          expect(versions.data.versions?.[0].action_id).to.equal(data[0].action_id);
+          expect(versions.data.versions?.[0].supported_triggers?.length).to.equal(
+            data[0].supported_triggers?.length
+          );
+          expect(versions.data.versions?.[0].supported_triggers?.[0].id).to.equal(
+            data[0].supported_triggers?.[0].id
+          );
+          expect(versions.data.versions?.[0].supported_triggers?.[0].version).to.equal(
+            data[0].supported_triggers?.[0].version
+          );
+          expect(versions.data.versions?.[0].supported_triggers?.[0].status).to.equal(
+            data[0].supported_triggers?.[0].status
+          );
+          expect(versions.data.versions?.[0].supported_triggers?.[0].runtimes?.[0]).to.equal(
+            data[0].supported_triggers?.[0].runtimes?.[0]
+          );
+          expect(versions.data.versions?.[0].code).to.equal(data[0].code);
+          expect(versions.data.versions?.[0].dependencies?.[0].name).to.equal(
+            data[0].dependencies?.[0].name
+          );
+          expect(versions.data.versions?.[0].runtime).to.equal(data[0].runtime);
+          expect(versions.data.versions?.[0].secrets?.[0].name).to.equal(data[0].secrets?.[0].name);
 
           done();
         });
@@ -518,11 +718,11 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const request = nock(API_URL)
-          .get(`/actions/actions/${data.id}/versions`)
+          .get(`/actions/actions/${actionId}/versions`)
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200, {});
 
-        actions.getVersions({ actionId: data.id }).then(() => {
+        actions.getVersions({ actionId }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -531,31 +731,37 @@ describe('ActionsManager', () => {
     });
 
     describe('#getVersion', () => {
-      let data: GetActionVersionRequest;
+      const actionId = '0d565aa1-d8ce-4802-83e7-82e3d2040222';
+      const id = '7asd8sd9-d8ce-4802-83e7-82e3d2040222';
+      const data: GetActionVersions200ResponseVersionsInner = {
+        id: id,
+        action_id: actionId,
+        code: 'code here',
+        dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
+        supported_triggers: [
+          { id: 'post-login', version: 'v1', status: 'pending', runtimes: ['node12'] },
+        ],
+        runtime: 'node12',
+        secrets: [{ name: 'secret1', updated_at: new Date().toISOString() }],
+        deployed: true,
+      };
       let request: nock.Scope;
 
       beforeEach(function () {
         nock.cleanAll();
 
-        data = {
-          actionId: '0d565aa1-d8ce-4802-83e7-82e3d2040222',
-          id: '7asd8sd9-d8ce-4802-83e7-82e3d2040222',
-        };
-
-        request = nock(API_URL)
-          .get(`/actions/actions/${data.actionId}/versions/${data.id}`)
-          .reply(200, data);
+        request = nock(API_URL).get(`/actions/actions/${actionId}/versions/${id}`).reply(200, data);
       });
 
       it('should return a promise if no callback is given', function (done) {
         actions
-          .getVersion({ actionId: data.actionId, id: data.id })
+          .getVersion({ actionId, id })
           .then(done.bind(null, null))
           .catch(done.bind(null, null));
       });
 
       it('should perform a GET request', function (done) {
-        actions.getVersion({ actionId: data.actionId, id: data.id }).then(() => {
+        actions.getVersion({ actionId, id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -565,10 +771,38 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/actions/${data.actionId}/versions/${data.id}`).reply(500);
+        nock(API_URL).get(`/actions/actions/${actionId}/versions/${id}`).reply(500);
 
-        actions.getVersion({ actionId: data.actionId, id: data.id }).catch((err) => {
+        actions.getVersion({ actionId, id }).catch((err) => {
           expect(err).to.exist;
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        nock.cleanAll();
+
+        nock(API_URL).get(`/actions/actions/${actionId}/versions/${id}`).reply(200, data);
+
+        actions.getVersion({ actionId, id }).then((version) => {
+          expect(version.data.id).to.equal(data.id);
+          expect(version.data.action_id).to.equal(data.action_id);
+          expect(version.data.supported_triggers?.length).to.equal(data.supported_triggers?.length);
+          expect(version.data.supported_triggers?.[0].id).to.equal(data.supported_triggers?.[0].id);
+          expect(version.data.supported_triggers?.[0].version).to.equal(
+            data.supported_triggers?.[0].version
+          );
+          expect(version.data.supported_triggers?.[0].status).to.equal(
+            data.supported_triggers?.[0].status
+          );
+          expect(version.data.supported_triggers?.[0].runtimes?.[0]).to.equal(
+            data.supported_triggers?.[0].runtimes?.[0]
+          );
+          expect(version.data.code).to.equal(data.code);
+          expect(version.data.dependencies?.[0].name).to.equal(data.dependencies?.[0].name);
+          expect(version.data.runtime).to.equal(data.runtime);
+          expect(version.data.secrets?.[0].name).to.equal(data.secrets?.[0].name);
 
           done();
         });
@@ -578,11 +812,11 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const request = nock(API_URL)
-          .get(`/actions/actions/${data.actionId}/versions/${data.id}`)
+          .get(`/actions/actions/${actionId}/versions/${id}`)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200, {});
+          .reply(200, data);
 
-        actions.getVersion({ actionId: data.actionId, id: data.id }).then(() => {
+        actions.getVersion({ actionId, id }).then(() => {
           expect(request.isDone()).to.be.true;
 
           done();
@@ -649,7 +883,12 @@ describe('ActionsManager', () => {
   });
 
   describe('executions', () => {
-    let data: GetExecution200Response;
+    let data: GetExecution200Response = {
+      id: '0d565aa1-d8ce-4802-83e7',
+      trigger_id: 'credentials-exchange',
+      status: 'final',
+      results: [{ action_name: 'test_action' }],
+    };
     let request: nock.Scope;
 
     describe('#getExecution', () => {
@@ -693,6 +932,21 @@ describe('ActionsManager', () => {
         });
       });
 
+      it('should pass the body of the response to the "then" handler', function (done) {
+        nock.cleanAll();
+
+        nock(API_URL).get(`/actions/executions/${data.id}`).reply(200, data);
+
+        actions.getExecution({ id: data.id as string }).then((execution) => {
+          expect(execution.data.id).to.equal(data.id);
+          expect(execution.data.trigger_id).to.equal(data.trigger_id);
+          expect(execution.data.status).to.equal(data.status);
+          expect(execution.data.results?.[0].action_name).to.equal(data.results?.[0].action_name);
+
+          done();
+        });
+      });
+
       it('should include the token in the Authorization header', function (done) {
         nock.cleanAll();
 
@@ -711,12 +965,20 @@ describe('ActionsManager', () => {
   });
 
   describe('triggers', () => {
-    const params = { per_page: 2 };
     let request: nock.Scope;
 
     describe('#getAllTriggers', () => {
+      const data: GetActions200ResponseActionsInnerSupportedTriggersInner[] = [
+        {
+          id: 'post-login',
+          version: 'v1',
+          status: 'building',
+          runtimes: ['node12'],
+          default_runtime: 'node12',
+        },
+      ];
       beforeEach(function () {
-        request = nock(API_URL).get('/actions/triggers').reply(200, {});
+        request = nock(API_URL).get('/actions/triggers').reply(200, { triggers: data });
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -737,15 +999,18 @@ describe('ActionsManager', () => {
       it('should pass the body of the response to the "then" handler', function (done) {
         nock.cleanAll();
 
-        const data = { triggers: [{ id: 'trigger1' }] };
-        nock(API_URL).get('/actions/triggers').reply(200, data);
+        nock(API_URL).get('/actions/triggers').reply(200, { triggers: data });
 
         actions.getAllTriggers().then((triggers) => {
           expect(triggers.data.triggers).to.be.an.instanceOf(Array);
 
-          expect(triggers.data.triggers?.length).to.equal(data.triggers.length);
+          expect(triggers.data.triggers?.length).to.equal(data.length);
 
-          expect(triggers.data.triggers?.[0].id).to.equal(data.triggers[0].id);
+          expect(triggers.data.triggers?.[0].id).to.equal(data[0].id);
+          expect(triggers.data.triggers?.[0].version).to.equal(data[0].version);
+          expect(triggers.data.triggers?.[0].status).to.equal(data[0].status);
+          expect(triggers.data.triggers?.[0].runtimes?.[0]).to.equal(data[0].runtimes?.[0]);
+          expect(triggers.data.triggers?.[0].default_runtime).to.equal(data[0].default_runtime);
 
           done();
         });
@@ -775,12 +1040,28 @@ describe('ActionsManager', () => {
 
     describe('#updateTriggerBindings', () => {
       const trigger_id = 'post-login';
-      let data: PatchBindingsRequest;
+      const data: PatchBindingsRequest = {
+        bindings: [
+          {
+            ref: { type: 'action_id', value: '' },
+            display_name: 'test',
+            secrets: [{ name: 'test_secret', value: 'secret' }],
+          },
+        ],
+      };
+      const response = {
+        bindings: [
+          {
+            id: '123',
+            trigger_id: 'post-login',
+            display_name: 'test trigger',
+            action: { id: 'test-action', name: 'test action' },
+          },
+        ],
+      };
 
       beforeEach(function () {
-        data = { bindings: [] };
-
-        nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(200, data);
+        nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(200, response);
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -802,12 +1083,27 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const request = nock(API_URL)
-          .patch(`/actions/triggers/${trigger_id}/bindings`)
+          .patch(`/actions/triggers/${trigger_id}/bindings`, data as any)
           .reply(200, {});
 
         actions.updateTriggerBindings({ triggerId: trigger_id }, data).then(() => {
           expect(request.isDone()).to.be.true;
 
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        actions.updateTriggerBindings({ triggerId: trigger_id }, data).then((binding) => {
+          expect(binding.data.bindings?.[0].id).to.equal(response.bindings[0].id);
+          expect(binding.data.bindings?.[0].trigger_id).to.equal(response.bindings[0].trigger_id);
+          expect(binding.data.bindings?.[0].display_name).to.equal(
+            response.bindings[0].display_name
+          );
+          expect(binding.data.bindings?.[0].action?.id).to.equal(response.bindings[0].action.id);
+          expect(binding.data.bindings?.[0].action?.name).to.equal(
+            response.bindings[0].action.name
+          );
           done();
         });
       });
@@ -827,13 +1123,20 @@ describe('ActionsManager', () => {
 
     describe('#getTriggerBindings', () => {
       const trigger_id = 'post-login';
-      let data: GetBindings200ResponseBindingsInner[];
+      const data: GetBindings200ResponseBindingsInner[] = [
+        {
+          id: '123',
+          trigger_id: 'iga-approval',
+          display_name: 'test',
+          action: { id: 'action-id', name: 'test action' },
+        },
+      ];
       let request: nock.Scope;
 
       beforeEach(function () {
-        data = [];
-
-        request = nock(API_URL).get(`/actions/triggers/${trigger_id}/bindings`).reply(200, data);
+        request = nock(API_URL)
+          .get(`/actions/triggers/${trigger_id}/bindings`)
+          .reply(200, { bindings: data });
       });
 
       it('should return a promise if no callback is given', function (done) {
@@ -861,6 +1164,18 @@ describe('ActionsManager', () => {
         actions.getTriggerBindings({ triggerId: trigger_id }).then(() => {
           expect(request.isDone()).to.be.true;
 
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        actions.getTriggerBindings({ triggerId: trigger_id }).then((bindings) => {
+          expect(bindings.data.bindings?.[0].id).to.equal(data[0].id);
+
+          expect(bindings.data.bindings?.[0].trigger_id).to.equal(data[0].trigger_id);
+          expect(bindings.data.bindings?.[0].display_name).to.equal(data[0].display_name);
+          expect(bindings.data.bindings?.[0].action?.id).to.equal(data[0].action?.id);
+          expect(bindings.data.bindings?.[0].action?.name).to.equal(data[0].action?.name);
           done();
         });
       });
