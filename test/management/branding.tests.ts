@@ -13,7 +13,9 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 import {
   BrandingManager,
   DeleteBrandingThemeRequest,
+  GetBranding200Response,
   PatchBrandingThemeRequest,
+  PostBrandingTheme200Response,
   PostBrandingThemeRequest,
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
@@ -65,9 +67,10 @@ describe('BrandingManager', () => {
   });
 
   describe('#getSettings', () => {
-    const data = {
+    const data: GetBranding200Response = {
       colors: {
         primary: '#FFF',
+        page_background: '#000',
       },
       favicon_url: 'https://example.com/favicon.ico',
       logo_url: 'https://example.com/logo.png',
@@ -103,7 +106,11 @@ describe('BrandingManager', () => {
       nock(API_URL).get('/branding').reply(200, data);
 
       branding.getSettings().then((provider) => {
+        expect(provider.data.colors?.primary).to.equal(data.colors?.primary);
+        expect(provider.data.colors?.page_background).to.equal(data.colors?.page_background);
+        expect(provider.data.favicon_url).to.equal(data.favicon_url);
         expect(provider.data.logo_url).to.equal(data.logo_url);
+        expect(provider.data.font?.url).to.equal(data.font?.url);
 
         done();
       });
@@ -137,6 +144,7 @@ describe('BrandingManager', () => {
     const data = {
       colors: {
         primary: '#FFF',
+        page_background: '#000',
       },
       favicon_url: 'https://example.com/favicon.ico',
       logo_url: 'https://example.com/logo.png',
@@ -181,6 +189,18 @@ describe('BrandingManager', () => {
 
       branding.updateSettings(data).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      branding.updateSettings(data).then((provider) => {
+        expect(provider.data.colors?.primary).to.equal(data.colors?.primary);
+        expect(provider.data.colors?.page_background).to.equal(data.colors?.page_background);
+        expect(provider.data.favicon_url).to.equal(data.favicon_url);
+        expect(provider.data.logo_url).to.equal(data.logo_url);
+        expect(provider.data.font?.url).to.equal(data.font?.url);
 
         done();
       });
@@ -307,6 +327,20 @@ describe('BrandingManager', () => {
       });
     });
 
+    it('should pass the data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .put('/branding/templates/universal-login', { template: 'test' })
+        .reply(200);
+
+      branding.setUniversalLoginTemplate({ template: 'test' }).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
     it('should include the token in the Authorization header', function (done) {
       nock.cleanAll();
 
@@ -401,11 +435,24 @@ describe('BrandingManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
-      const data = { themeId: 1 };
+      const data = JSON.parse(
+        (await util.promisify(fs.readFile)(
+          path.join(__dirname, '../data/theme.json')
+        )) as unknown as string
+      ) as PostBrandingTheme200Response;
       nock(API_URL).get('/branding/themes/themeid1').reply(200, data);
 
       const theme = await branding.getTheme({ themeId: 'themeid1' });
       expect(theme.data.themeId).to.equal(data.themeId);
+      expect(theme.data.colors.error).to.equal(data.colors.error);
+      expect(theme.data.colors.header).to.equal(data.colors.header);
+      expect(theme.data.colors.icons).to.equal(data.colors.icons);
+      expect(theme.data.borders.button_border_radius).to.equal(data.borders.button_border_radius);
+      expect(theme.data.borders.button_border_weight).to.equal(data.borders.button_border_weight);
+      expect(theme.data.fonts.body_text.bold).to.equal(data.fonts.body_text.bold);
+      expect(theme.data.fonts.body_text.size).to.equal(data.fonts.body_text.size);
+      expect(theme.data.fonts.buttons_text.bold).to.equal(data.fonts.buttons_text.bold);
+      expect(theme.data.fonts.buttons_text.size).to.equal(data.fonts.buttons_text.size);
     });
 
     it('should perform a GET request to /api/v2/branding/themes/:theme_id', async () => {
@@ -463,6 +510,15 @@ describe('BrandingManager', () => {
 
       const theme = await branding.getDefaultTheme();
       expect(theme.data.themeId).to.equal(data.themeId);
+      expect(theme.data.colors.error).to.equal(data.colors.error);
+      expect(theme.data.colors.header).to.equal(data.colors.header);
+      expect(theme.data.colors.icons).to.equal(data.colors.icons);
+      expect(theme.data.borders.button_border_radius).to.equal(data.borders.button_border_radius);
+      expect(theme.data.borders.button_border_weight).to.equal(data.borders.button_border_weight);
+      expect(theme.data.fonts.body_text.bold).to.equal(data.fonts.body_text.bold);
+      expect(theme.data.fonts.body_text.size).to.equal(data.fonts.body_text.size);
+      expect(theme.data.fonts.buttons_text.bold).to.equal(data.fonts.buttons_text.bold);
+      expect(theme.data.fonts.buttons_text.size).to.equal(data.fonts.buttons_text.size);
     });
 
     it('should perform a GET request to /api/v2/branding/themes/default', async () => {
@@ -530,6 +586,15 @@ describe('BrandingManager', () => {
 
       const theme = await branding.createTheme(data);
       expect(theme.data.themeId).to.equal(data.themeId);
+      expect(theme.data.colors.error).to.equal(data.colors.error);
+      expect(theme.data.colors.header).to.equal(data.colors.header);
+      expect(theme.data.colors.icons).to.equal(data.colors.icons);
+      expect(theme.data.borders.button_border_radius).to.equal(data.borders.button_border_radius);
+      expect(theme.data.borders.button_border_weight).to.equal(data.borders.button_border_weight);
+      expect(theme.data.fonts.body_text.bold).to.equal(data.fonts.body_text.bold);
+      expect(theme.data.fonts.body_text.size).to.equal(data.fonts.body_text.size);
+      expect(theme.data.fonts.buttons_text.bold).to.equal(data.fonts.buttons_text.bold);
+      expect(theme.data.fonts.buttons_text.size).to.equal(data.fonts.buttons_text.size);
     });
 
     it('should perform a POST request to /branding/themes', async () => {
@@ -594,9 +659,15 @@ describe('BrandingManager', () => {
         .reply(200, data);
 
       const theme = await branding.updateTheme(params, data);
-      expect(theme.data.page_background.background_color).to.equal(
-        data.page_background.background_color
-      );
+      expect(theme.data.colors.error).to.equal(data.colors.error);
+      expect(theme.data.colors.header).to.equal(data.colors.header);
+      expect(theme.data.colors.icons).to.equal(data.colors.icons);
+      expect(theme.data.borders.button_border_radius).to.equal(data.borders.button_border_radius);
+      expect(theme.data.borders.button_border_weight).to.equal(data.borders.button_border_weight);
+      expect(theme.data.fonts.body_text.bold).to.equal(data.fonts.body_text.bold);
+      expect(theme.data.fonts.body_text.size).to.equal(data.fonts.body_text.size);
+      expect(theme.data.fonts.buttons_text.bold).to.equal(data.fonts.buttons_text.bold);
+      expect(theme.data.fonts.buttons_text.size).to.equal(data.fonts.buttons_text.size);
     });
 
     it('should perform a PATCH request to /api/v2/branding/themes/:theme_id', async () => {
