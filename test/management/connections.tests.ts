@@ -51,9 +51,21 @@ describe('ConnectionsManager', () => {
 
   describe('#getAll', () => {
     let request: nock.Scope;
-
+    const response = [
+      {
+        name: 'test_connection',
+        display_name: 'Test Connection',
+        id: 'test_connection_id',
+        strategy: 'auth0',
+        realms: ['test'],
+        is_domain_connection: false,
+        metadata: {
+          test: 'test value',
+        },
+      },
+    ];
     beforeEach(function () {
-      request = nock(API_URL).get('/connections').reply(200, []);
+      request = nock(API_URL).get('/connections').reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -75,15 +87,20 @@ describe('ConnectionsManager', () => {
     it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      const data = [{ display_name: 'my connection' }];
-      nock(API_URL).get('/connections').reply(200, data);
+      nock(API_URL).get('/connections').reply(200, response);
 
       connections.getAll().then((connections) => {
         expect(connections.data).to.be.an.instanceOf(Array);
 
-        expect(connections.data.length).to.equal(data.length);
+        expect(connections.data.length).to.equal(response.length);
 
-        expect(connections.data[0].display_name).to.equal(data[0].display_name);
+        expect(connections.data[0].display_name).to.equal(response[0].display_name);
+        expect(connections.data[0].name).to.equal(response[0].name);
+        expect(connections.data[0].id).to.equal(response[0].id);
+        expect(connections.data[0].strategy).to.equal(response[0].strategy);
+        expect(connections.data[0].realms?.[0]).to.equal(response[0].realms[0]);
+        expect(connections.data[0].is_domain_connection).to.equal(response[0].is_domain_connection);
+        expect(connections.data[0].metadata?.test).to.equal(response[0].metadata.test);
 
         done();
       });
@@ -132,14 +149,21 @@ describe('ConnectionsManager', () => {
 
   describe('#get', () => {
     const params = { id: '5' };
-    const data = {
-      id: params.id,
-      display_name: 'Test connection',
-    };
     let request: nock.Scope;
 
+    const response = {
+      name: 'test_connection',
+      display_name: 'Test Connection',
+      id: 'test_connection_id',
+      strategy: 'auth0',
+      realms: ['test'],
+      is_domain_connection: false,
+      metadata: {
+        test: 'test value',
+      },
+    };
     beforeEach(function () {
-      request = nock(API_URL).get(`/connections/${data.id}`).reply(200, data);
+      request = nock(API_URL).get(`/connections/${params.id}`).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -161,10 +185,16 @@ describe('ConnectionsManager', () => {
     it('should pass the body of the response to the "then" handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/connections/${params.id}`).reply(200, data);
+      nock(API_URL).get(`/connections/${params.id}`).reply(200, response);
 
       connections.get(params).then((connection) => {
-        expect(connection.data.id).to.equal(data.id);
+        expect(connection.data.display_name).to.equal(response.display_name);
+        expect(connection.data.name).to.equal(response.name);
+        expect(connection.data.id).to.equal(response.id);
+        expect(connection.data.strategy).to.equal(response.strategy);
+        expect(connection.data.realms?.[0]).to.equal(response.realms[0]);
+        expect(connection.data.is_domain_connection).to.equal(response.is_domain_connection);
+        expect(connection.data.metadata?.test).to.equal(response.metadata.test);
 
         done();
       });
@@ -218,10 +248,23 @@ describe('ConnectionsManager', () => {
       name: 'Test connection',
       strategy: ConnectionCreateStrategyEnum.auth0,
     };
+
+    const response = {
+      name: 'test_connection',
+      display_name: 'Test Connection',
+      id: 'test_connection_id',
+      strategy: 'auth0',
+      realms: ['test'],
+      is_domain_connection: false,
+      metadata: {
+        test: 'test value',
+      },
+    };
+
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).post('/connections').reply(200, data);
+      request = nock(API_URL).post('/connections', data).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -249,12 +292,22 @@ describe('ConnectionsManager', () => {
     });
 
     it('should pass the data in the body of the request', function (done) {
-      nock.cleanAll();
-
-      const request = nock(API_URL).post('/connections', data).reply(200, {});
-
       connections.create(data).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      connections.create(data).then((connection) => {
+        expect(connection.data.display_name).to.equal(response.display_name);
+        expect(connection.data.name).to.equal(response.name);
+        expect(connection.data.id).to.equal(response.id);
+        expect(connection.data.strategy).to.equal(response.strategy);
+        expect(connection.data.realms?.[0]).to.equal(response.realms[0]);
+        expect(connection.data.is_domain_connection).to.equal(response.is_domain_connection);
+        expect(connection.data.metadata?.test).to.equal(response.metadata.test);
 
         done();
       });
@@ -266,7 +319,7 @@ describe('ConnectionsManager', () => {
       const request = nock(API_URL)
         .post('/connections')
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200, {});
+        .reply(200, response);
 
       connections.create(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -283,10 +336,21 @@ describe('ConnectionsManager', () => {
       name: 'Test connection',
       options: {},
     };
+    const response = {
+      name: 'test_connection',
+      display_name: 'Test Connection',
+      id: 'test_connection_id',
+      strategy: 'auth0',
+      realms: ['test'],
+      is_domain_connection: false,
+      metadata: {
+        test: 'test value',
+      },
+    };
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).patch(`/connections/${data.id}`).reply(200, data);
+      request = nock(API_URL).patch(`/connections/${data.id}`, data).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -314,12 +378,22 @@ describe('ConnectionsManager', () => {
     });
 
     it('should pass the data in the body of the request', function (done) {
-      nock.cleanAll();
-
-      const request = nock(API_URL).patch(`/connections/${data.id}`, data).reply(200, {});
-
       connections.update(params, data).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      connections.update(params, data).then((connection) => {
+        expect(connection.data.display_name).to.equal(response.display_name);
+        expect(connection.data.name).to.equal(response.name);
+        expect(connection.data.id).to.equal(response.id);
+        expect(connection.data.strategy).to.equal(response.strategy);
+        expect(connection.data.realms?.[0]).to.equal(response.realms[0]);
+        expect(connection.data.is_domain_connection).to.equal(response.is_domain_connection);
+        expect(connection.data.metadata?.test).to.equal(response.metadata.test);
 
         done();
       });
@@ -406,10 +480,6 @@ describe('ConnectionsManager', () => {
     });
 
     it('should report success', function (done) {
-      nock.cleanAll();
-
-      nock(API_URL).get(`/connections/${params.id}/status`).reply(200);
-
       connections.checkStatus(params).then((response) => {
         expect(response).to.exist;
         done();
