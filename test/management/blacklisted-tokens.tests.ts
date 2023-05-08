@@ -80,6 +80,7 @@ describe('BlacklistedTokensManager', () => {
         expect(blacklistedTokens.data.length).to.equal(data.length);
 
         expect(blacklistedTokens.data[0].aud).to.equal(data[0].aud);
+        expect(blacklistedTokens.data[0].jti).to.equal(data[0].jti);
 
         done();
       });
