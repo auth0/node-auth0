@@ -5,7 +5,7 @@ import pkg from '../package.json' assert { type: 'json' };
  * @param {object} json Json data
  * @returns {string}
  */
-export const jsonToBase64 = (json) => {
+export const jsonToBase64 = (json: unknown) => {
   const bytes = Buffer.from(JSON.stringify(json));
 
   return bytes.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -25,19 +25,24 @@ export const generateClientInfo = () => ({
   },
 });
 
-export const containsUnsafeChars = (s) => {
+export const containsUnsafeChars = (s: string) => {
   const safeChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$-_.+!*'(),%";
   return !!s.split('').find((c) => !safeChars.includes(c));
 };
 
-export const maybeDecode = (url) => {
+export const maybeDecode = (url: string) => {
   if (containsUnsafeChars(url)) {
     return encodeURIComponent(url);
   }
   return url;
 };
 
-export const sanitizeArguments = function (optionsCandidate, cbCandidate) {
+export const sanitizeArguments = function (
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  optionsCandidate: Function | unknown,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  cbCandidate: Function | undefined
+) {
   if (optionsCandidate instanceof Function) {
     return {
       cb: optionsCandidate,

@@ -4,6 +4,11 @@ import { FetchError, RequiredError } from './errors';
 
 export { Blob, FormData } from 'node-fetch';
 
+export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
+  telemetry?: boolean;
+  clientInfo?: { name: string; [key: string]: unknown };
+}
+
 export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation

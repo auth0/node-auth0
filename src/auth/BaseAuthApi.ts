@@ -1,8 +1,8 @@
-import { BaseAPI, Configuration as BaseConfiguration, ResponseError } from '../lib';
+import { BaseAPI, ClientOptions, ResponseError } from '../lib';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
 import { Response, Headers } from 'node-fetch';
 
-export interface Options extends Omit<BaseConfiguration, 'baseUrl' | 'parseError'> {
+export interface Options extends ClientOptions {
   domain: string;
   clientId: string;
   clientSecret?: string;
