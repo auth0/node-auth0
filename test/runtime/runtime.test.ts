@@ -15,19 +15,38 @@ export class TestClient extends BaseAPI {
   }
 }
 
+const parseError = async (response: Response) => {
+  const body = await response.text();
+  return new ResponseError(
+    response.status,
+    body,
+    response.headers,
+    'Response returned an error code'
+  );
+};
+
+const waitForRetries = async (count: number) => {
+  while (count--) {
+    await new Promise((resolve) => {
+      (jest.requireActual('timers') as any).setTimeout(resolve, 20);
+    });
+    jest.advanceTimersByTime(1000);
+  }
+};
+
 describe('Runtime', () => {
   const URL = 'https://tenant.auth0.com/api/v2';
-  let _setTimeout: typeof setTimeout;
 
   beforeEach(() => {
-    _setTimeout = setTimeout;
-    (global as any).setTimeout = (fn: () => void, _timeout: number): void => fn();
+    jest.useFakeTimers({
+      doNotFake: ['nextTick'],
+    });
   });
 
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
-    (global as any).setTimeout = _setTimeout;
+    jest.useRealTimers();
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -40,22 +59,16 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
     });
 
-    const response = await client.testRequest({
+    const promise = client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
+    await waitForRetries(2);
+    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -72,32 +85,18 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
     });
 
-    try {
-      await client.testRequest({
+    expect.assertions(1);
+    const promise = client
+      .testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+      .catch((e) => expect(e.statusCode).toBe(429));
+    await waitForRetries(4);
+    await promise;
   });
 
   it('should retry 429 the configured amount of times', async () => {
@@ -110,25 +109,19 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         maxRetries: 4,
       },
     });
 
-    const response = await client.testRequest({
+    const promise = client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
+    await waitForRetries(4);
+    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -144,15 +137,7 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
     });
 
     try {
@@ -182,25 +167,19 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         retryWhen: [428],
       },
     });
 
-    const response = await client.testRequest({
+    const promise = client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
+    await waitForRetries(2);
+    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -218,25 +197,19 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         retryWhen: [428, 429],
       },
     });
 
-    const response = await client.testRequest({
+    const promise = client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
+    await waitForRetries(2);
+    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -254,36 +227,21 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         retryWhen: [428],
       },
     });
 
-    try {
-      await client.testRequest({
+    expect.assertions(1);
+    const promise = client
+      .testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+      .catch((e) => expect(e.statusCode).toBe(429));
+    await waitForRetries(2);
+    await promise;
   });
 
   it('should not retry if not enabled', async () => {
@@ -295,15 +253,7 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         enabled: false,
       },

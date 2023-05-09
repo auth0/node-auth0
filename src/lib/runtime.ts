@@ -1,17 +1,40 @@
-import fetch, { RequestInit, RequestInfo, Response, Blob, FormData } from 'node-fetch';
+import fetch, { RequestInit, RequestInfo, Response, Blob, FormData, AbortError } from 'node-fetch';
 import { RetryConfiguration, retry } from './retry';
-import { FetchError, RequiredError } from './errors';
+import { FetchError, RequiredError, TimeoutError } from './errors';
 
 export { Blob, FormData } from 'node-fetch';
 
 export interface Configuration {
   baseUrl: string; // override base path
-  fetchApi?: FetchAPI; // override for fetch implementation
-  middleware?: Middleware[]; // middleware to apply before/after fetch requests
-  queryParamsStringify?: (params: HTTPQuery) => string; // stringify function for query strings
-  headers?: HTTPHeaders; //header params we want to use on every request
+  parseError: (response: Response) => Promise<Error>; // Custom error parser
+  /**
+   * Provide your own fetch implementation.
+   */
+  fetchApi?: FetchAPI;
+  /**
+   * Provide a middleware that will run either before the request, after the request or when the request fails.
+   */
+  middleware?: Middleware[];
+  /**
+   * stringify function for query strings
+   */
+  queryParamsStringify?: (params: HTTPQuery) => string;
+  /**
+   * Pass your own http agent to support proxies.
+   */
+  agent?: RequestInit['agent'];
+  /**
+   * Custom headers that will be added to every request.
+   */
+  headers?: HTTPHeaders;
+  /**
+   * Timeout in ms before aborting the request (default 10,000)
+   */
+  timeoutDuration?: number;
+  /**
+   * Retry configuration.
+   */
   retry?: RetryConfiguration;
-  parseError: (response: Response) => Promise<Error>;
 }
 
 /**
@@ -23,6 +46,7 @@ export class BaseAPI {
   private queryParamsStringify: (params: HTTPQuery) => string;
   private fetchApi: FetchAPI;
   private parseError: (response: Response) => Promise<Error> | Error;
+  private timeoutDuration: number;
 
   constructor(protected configuration: Configuration) {
     if (configuration.baseUrl === null || configuration.baseUrl === undefined) {
@@ -37,6 +61,8 @@ export class BaseAPI {
     this.queryParamsStringify = this.configuration.queryParamsStringify || querystring;
     this.fetchApi = configuration.fetchApi || fetch;
     this.parseError = configuration.parseError;
+    this.timeoutDuration =
+      typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
   }
 
   protected async request(
@@ -75,6 +101,7 @@ export class BaseAPI {
       method: context.method,
       headers,
       body: context.body,
+      agent: this.configuration.agent,
     };
 
     const overriddenInit: RequestInit = {
@@ -97,13 +124,30 @@ export class BaseAPI {
     return { url, init };
   }
 
+  private fetchWithTimeout = async (url: URL | RequestInfo, init: RequestInit) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, this.timeoutDuration);
+    try {
+      return this.fetchApi(url, { signal: controller.signal, ...init });
+    } catch (e) {
+      if (e instanceof AbortError) {
+        throw new TimeoutError();
+      }
+      throw e;
+    } finally {
+      clearTimeout(timeout);
+    }
+  };
+
   private fetch = async (url: URL | RequestInfo, init: RequestInit) => {
     let fetchParams = { url, init };
     for (const middleware of this.middleware) {
       if (middleware.pre) {
         fetchParams =
           (await middleware.pre({
-            fetch: this.fetchApi,
+            fetch: this.fetchWithTimeout,
             ...fetchParams,
           })) || fetchParams;
       }
@@ -112,16 +156,16 @@ export class BaseAPI {
     try {
       response =
         this.configuration.retry?.enabled !== false
-          ? await retry(() => this.fetchApi(fetchParams.url, fetchParams.init), {
+          ? await retry(() => this.fetchWithTimeout(fetchParams.url, fetchParams.init), {
               ...this.configuration.retry,
             })
-          : await this.fetchApi(fetchParams.url, fetchParams.init);
+          : await this.fetchWithTimeout(fetchParams.url, fetchParams.init);
     } catch (e) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
           response =
             (await middleware.onError({
-              fetch: this.fetchApi,
+              fetch: this.fetchWithTimeout,
               ...fetchParams,
               error: e,
               response: response ? response.clone() : undefined,
@@ -151,17 +195,6 @@ export class BaseAPI {
     }
     return response;
   };
-
-  /**
-   * Create a shallow clone of `this` by constructing a new instance
-   * and then shallow cloning data members.
-   */
-  private clone<T extends BaseAPI>(this: T): T {
-    const constructor = this.constructor as any;
-    const next = new constructor(this.configuration);
-    next.middleware = this.middleware.slice();
-    return next;
-  }
 }
 
 function isBlob(value: unknown): value is Blob {
@@ -185,7 +218,7 @@ export const COLLECTION_FORMATS = {
 /**
  * @private
  */
-export type FetchAPI = typeof fetch;
+export type FetchAPI = (url: URL | RequestInfo, init: RequestInit) => Promise<Response>;
 
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';
 
