@@ -36,9 +36,20 @@ describe('HooksManager', () => {
 
   describe('#getAll', () => {
     let request: nock.Scope;
+    const response = [
+      {
+        triggerId: 'abc',
+        id: '00001',
+        name: 'hook',
+        enabled: true,
+        script:
+          'module.exports = function(client, scope, audience, context, cb) cb(null, access_token); };',
+        dependencies: {},
+      },
+    ];
 
     beforeEach(function () {
-      request = nock(API_URL).get('/hooks').reply(200, []);
+      request = nock(API_URL).get('/hooks').reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -57,17 +68,16 @@ describe('HooksManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', function (done) {
-      nock.cleanAll();
-
-      const data = [{ id: '1' }];
-      nock(API_URL).get('/hooks').reply(200, data);
-
       hooks.getAll().then((credentials) => {
         expect(credentials.data).to.be.an.instanceOf(Array);
 
-        expect(credentials.data.length).to.equal(data.length);
+        expect(credentials.data.length).to.equal(response.length);
 
-        expect(credentials.data[0].id).to.equal(data[0].id);
+        expect(credentials.data[0].id).to.equal(response[0].id);
+        expect(credentials.data[0].triggerId).to.equal(response[0].triggerId);
+        expect(credentials.data[0].name).to.equal(response[0].name);
+        expect(credentials.data[0].enabled).to.equal(response[0].enabled);
+        expect(credentials.data[0].script).to.equal(response[0].script);
 
         done();
       });
@@ -111,25 +121,26 @@ describe('HooksManager', () => {
   });
 
   describe('#get', () => {
-    const data = {
+    const response = {
       id: '5',
       name: 'Test hook',
+      triggerId: 'abc',
       enabled: true,
       script: "function (user, contest, callback) { console.log('Test'); }",
-      stage: 'login_success',
+      dependencies: {},
     };
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).get(`/hooks/${data.id}`).reply(200, data);
+      request = nock(API_URL).get(`/hooks/${response.id}`).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      hooks.get({ id: data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
+      hooks.get({ id: response.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/hooks/5', function (done) {
-      hooks.get({ id: data.id }).then(() => {
+      hooks.get({ id: response.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -139,10 +150,22 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/hooks/${data.id}`).reply(500);
+      nock(API_URL).get(`/hooks/${response.id}`).reply(500);
 
-      hooks.get({ id: data.id }).catch((err) => {
+      hooks.get({ id: response.id }).catch((err) => {
         expect(err).to.exist;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      hooks.get({ id: response.id }).then((hook) => {
+        expect(hook.data.id).to.equal(response.id);
+        expect(hook.data.triggerId).to.equal(response.triggerId);
+        expect(hook.data.name).to.equal(response.name);
+        expect(hook.data.enabled).to.equal(response.enabled);
+        expect(hook.data.script).to.equal(response.script);
 
         done();
       });
@@ -152,11 +175,11 @@ describe('HooksManager', () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get(`/hooks/${data.id}`)
+        .get(`/hooks/${response.id}`)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, {});
 
-      hooks.get({ id: data.id }).then(() => {
+      hooks.get({ id: response.id }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -166,17 +189,25 @@ describe('HooksManager', () => {
 
   describe('#create', () => {
     const data = {
+      name: 'Test hook',
+      enabled: true,
+      script: "function (user, contest, callback) { console.log('Test'); }",
+      triggerId: HookCreateTriggerIdEnum.credentials_exchange,
+      dependencies: {},
+    };
+
+    const response = {
       id: '5',
       name: 'Test hook',
       enabled: true,
       script: "function (user, contest, callback) { console.log('Test'); }",
       triggerId: HookCreateTriggerIdEnum.credentials_exchange,
-      stage: 'login_success',
+      dependencies: {},
     };
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).post('/hooks').reply(200, data);
+      request = nock(API_URL).post('/hooks', data).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -204,12 +235,20 @@ describe('HooksManager', () => {
     });
 
     it('should pass the data in the body of the request', function (done) {
-      nock.cleanAll();
-
-      const request = nock(API_URL).post('/hooks', data).reply(200, data);
-
       hooks.create(data).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      hooks.create(data).then((hook) => {
+        expect(hook.data.id).to.equal(response.id);
+        expect(hook.data.triggerId).to.equal(response.triggerId);
+        expect(hook.data.name).to.equal(response.name);
+        expect(hook.data.enabled).to.equal(response.enabled);
+        expect(hook.data.script).to.equal(response.script);
 
         done();
       });
@@ -221,7 +260,7 @@ describe('HooksManager', () => {
       const request = nock(API_URL)
         .post('/hooks')
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200, {});
+        .reply(200, response);
 
       hooks.create(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -232,19 +271,36 @@ describe('HooksManager', () => {
   });
 
   describe('#update', () => {
-    const data = { id: '5' };
+    const id = '5';
     let request: nock.Scope;
 
+    const data = {
+      name: 'Test hook',
+      enabled: true,
+      script: "function (user, contest, callback) { console.log('Test'); }",
+      triggerId: HookCreateTriggerIdEnum.credentials_exchange,
+      dependencies: {},
+    };
+
+    const response = {
+      id: '5',
+      name: 'Test hook',
+      enabled: true,
+      script: "function (user, contest, callback) { console.log('Test'); }",
+      triggerId: HookCreateTriggerIdEnum.credentials_exchange,
+      dependencies: {},
+    };
+
     beforeEach(function () {
-      request = nock(API_URL).patch(`/hooks/${data.id}`).reply(200, data);
+      request = nock(API_URL).patch(`/hooks/${id}`, data).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      hooks.update({ id: '5' }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
+      hooks.update({ id }, data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should perform a PATCH request to /api/v2/hooks/5', function (done) {
-      hooks.update({ id: '5' }, {}).then(() => {
+      hooks.update({ id }, data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -252,12 +308,20 @@ describe('HooksManager', () => {
     });
 
     it('should include the new data in the body of the request', function (done) {
-      nock.cleanAll();
-
-      const request = nock(API_URL).patch(`/hooks/${data.id}`, { name: 'test' }).reply(200, data);
-
-      hooks.update({ id: '5' }, { name: 'test' }).then(() => {
+      hooks.update({ id }, data).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      hooks.update({ id }, data).then((hook) => {
+        expect(hook.data.id).to.equal(response.id);
+        expect(hook.data.triggerId).to.equal(response.triggerId);
+        expect(hook.data.name).to.equal(response.name);
+        expect(hook.data.enabled).to.equal(response.enabled);
+        expect(hook.data.script).to.equal(response.script);
 
         done();
       });
@@ -266,9 +330,9 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/hooks/${data.id}`).reply(500);
+      nock(API_URL).patch(`/hooks/${id}`).reply(500);
 
-      hooks.update({ id: data.id }, { name: '' }).catch((err) => {
+      hooks.update({ id }, data).catch((err) => {
         expect(err).to.exist;
 
         done();
