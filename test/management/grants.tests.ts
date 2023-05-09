@@ -80,8 +80,6 @@ describe('GrantsManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', function (done) {
-      nock.cleanAll();
-
       grants.getAll().then((grants) => {
         expect(grants.data).to.be.an.instanceOf(Array);
 
