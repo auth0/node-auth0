@@ -1,5 +1,5 @@
-import * as runtime from '../../runtime';
-import type { InitOverride, ApiResponse } from '../../runtime';
+import * as runtime from '../../../lib/runtime';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime';
 import type {
   Enrollment,
   EnrollmentCreate,
