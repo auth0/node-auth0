@@ -25,19 +25,12 @@ const parseError = async (response: Response) => {
   );
 };
 
-const waitForRetries = async (count: number) => {
-  while (count--) {
-    await new Promise((resolve) => {
-      (jest.requireActual('timers') as any).setTimeout(resolve, 20);
-    });
-    jest.advanceTimersByTime(1000);
-  }
-};
-
 describe('Runtime', () => {
   const URL = 'https://tenant.auth0.com/api/v2';
+  let interval: NodeJS.Timer;
 
   beforeEach(() => {
+    interval = setInterval(() => jest.advanceTimersByTime(1000), 10);
     jest.useFakeTimers({
       doNotFake: ['nextTick'],
     });
@@ -47,6 +40,7 @@ describe('Runtime', () => {
     nock.cleanAll();
     jest.clearAllMocks();
     jest.useRealTimers();
+    clearInterval(interval);
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -62,13 +56,11 @@ describe('Runtime', () => {
       parseError,
     });
 
-    const promise = client.testRequest({
+    const response = await client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
-    await waitForRetries(2);
-    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -88,15 +80,12 @@ describe('Runtime', () => {
       parseError,
     });
 
-    expect.assertions(1);
-    const promise = client
-      .testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
       })
-      .catch((e) => expect(e.statusCode).toBe(429));
-    await waitForRetries(4);
-    await promise;
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
   });
 
   it('should retry 429 the configured amount of times', async () => {
@@ -115,13 +104,11 @@ describe('Runtime', () => {
       },
     });
 
-    const promise = client.testRequest({
+    const response = await client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
-    await waitForRetries(4);
-    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -129,7 +116,7 @@ describe('Runtime', () => {
   });
 
   it('should not retry if not 429', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
+    nock(URL, { encodedQueryParams: true })
       .get('/clients')
       .reply(428)
       .get('/clients')
@@ -140,21 +127,12 @@ describe('Runtime', () => {
       parseError,
     });
 
-    try {
-      await client.testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(428);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 428 }));
   });
 
   it('should retry using a configurable status code', async () => {
@@ -173,13 +151,11 @@ describe('Runtime', () => {
       },
     });
 
-    const promise = client.testRequest({
+    const response = await client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
 
-    await waitForRetries(2);
-    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -203,13 +179,10 @@ describe('Runtime', () => {
       },
     });
 
-    const promise = client.testRequest({
+    const response = await client.testRequest({
       path: `/clients`,
       method: 'GET',
     });
-
-    await waitForRetries(2);
-    const response = await promise;
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -233,15 +206,12 @@ describe('Runtime', () => {
       },
     });
 
-    expect.assertions(1);
-    const promise = client
-      .testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
       })
-      .catch((e) => expect(e.statusCode).toBe(429));
-    await waitForRetries(2);
-    await promise;
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
   });
 
   it('should not retry if not enabled', async () => {
@@ -259,22 +229,12 @@ describe('Runtime', () => {
       },
     });
 
-    try {
-      await client.testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
   });
 });
 
