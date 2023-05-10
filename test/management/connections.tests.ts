@@ -136,10 +136,28 @@ describe('ConnectionsManager', () => {
         .query({
           include_fields: true,
           fields: 'test',
+          strategy: ['ad', 'adfs'],
         })
         .reply(200, []);
 
-      connections.getAll({ include_fields: true, fields: 'test' }).then(() => {
+      connections
+        .getAll({ include_fields: true, fields: 'test', strategy: ['ad', 'adfs'] })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+    });
+
+    it('should pass exploded array parameters in the query-string', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get('/connections?strategy=ad&strategy=adfs')
+
+        .reply(200, []);
+
+      connections.getAll({ strategy: ['ad', 'adfs'] }).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

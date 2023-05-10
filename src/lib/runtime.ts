@@ -13,7 +13,6 @@ export interface Configuration {
   baseUrl: string; // override base path
   fetchApi?: FetchAPI; // override for fetch implementation
   middleware?: Middleware[]; // middleware to apply before/after fetch requests
-  queryParamsStringify?: (params: HTTPQuery) => string; // stringify function for query strings
   headers?: HTTPHeaders; //header params we want to use on every request
   retry?: RetryConfiguration;
   parseError: (response: Response) => Promise<Error>;
@@ -25,7 +24,6 @@ export interface Configuration {
  */
 export class BaseAPI {
   private middleware: Middleware[];
-  private queryParamsStringify: (params: HTTPQuery) => string;
   private fetchApi: FetchAPI;
   private parseError: (response: Response) => Promise<Error> | Error;
 
@@ -39,7 +37,6 @@ export class BaseAPI {
     }
 
     this.middleware = configuration.middleware || [];
-    this.queryParamsStringify = this.configuration.queryParamsStringify || querystring;
     this.fetchApi = configuration.fetchApi || fetch;
     this.parseError = configuration.parseError;
   }
@@ -67,7 +64,7 @@ export class BaseAPI {
       // only add the querystring to the URL if there are query parameters.
       // this is done to avoid urls ending with a "?" character which buggy webservers
       // do not handle correctly sometimes.
-      url += `?${this.queryParamsStringify(context.query)}`;
+      url += `?${querystring(context.query)}`;
     }
 
     const headers = Object.assign({}, this.configuration.headers, context.headers);
@@ -206,7 +203,6 @@ export type HTTPQuery = {
     | null
     | boolean
     | Array<string | number | null | boolean>
-    | Set<string | number | null | boolean>
     | HTTPQuery;
 };
 
@@ -252,9 +248,9 @@ export interface RequestOpts {
 /**
  * @private
  */
-export function querystring(params: HTTPQuery, prefix = ''): string {
+export function querystring(params: HTTPQuery): string {
   return Object.keys(params)
-    .map((key) => querystringSingleKey(key, params[key], prefix))
+    .map((key) => querystringSingleKey(key, params[key]))
     .filter((part) => part.length > 0)
     .join('&');
 }
@@ -268,28 +264,15 @@ function querystringSingleKey(
     | undefined
     | boolean
     | Array<string | number | null | boolean>
-    | Set<string | number | null | boolean>
-    | HTTPQuery,
-  keyPrefix = ''
+    | HTTPQuery
 ): string {
-  const fullKey = keyPrefix + (keyPrefix.length ? `[${key}]` : key);
   if (value instanceof Array) {
     const multiValue = value
       .map((singleValue) => encodeURIComponent(String(singleValue)))
-      .join(`&${encodeURIComponent(fullKey)}=`);
-    return `${encodeURIComponent(fullKey)}=${multiValue}`;
+      .join(`&${encodeURIComponent(key)}=`);
+    return `${encodeURIComponent(key)}=${multiValue}`;
   }
-  if (value instanceof Set) {
-    const valueAsArray = Array.from(value);
-    return querystringSingleKey(key, valueAsArray, keyPrefix);
-  }
-  if (value instanceof Date) {
-    return `${encodeURIComponent(fullKey)}=${encodeURIComponent(value.toISOString())}`;
-  }
-  if (value instanceof Object) {
-    return querystring(value as HTTPQuery, fullKey);
-  }
-  return `${encodeURIComponent(fullKey)}=${encodeURIComponent(String(value))}`;
+  return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
 }
 
 /**
@@ -429,8 +412,6 @@ type QueryParamConfig = {
   isArray?: boolean;
   isCollectionFormatMulti?: boolean;
   collectionFormat?: keyof typeof COLLECTION_FORMATS;
-  isDateTimeType?: boolean;
-  isDateType?: boolean;
 };
 
 /**
@@ -469,13 +450,7 @@ export function applyQueryParams<
         }
       } else {
         if (requestParameters[key] !== undefined) {
-          if (config.isDateTimeType) {
-            value = requestParameters[key].toISOString();
-          } else if (config.isDateType) {
-            value = requestParameters[key].toISOString().substr(0, 10);
-          } else {
-            value = requestParameters[key];
-          }
+          value = requestParameters[key];
         }
       }
 
