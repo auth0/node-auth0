@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 import { AuthenticationClient, ManagementClient } from '../../src';
 import { BaseAPI, InitOverrideFunction, RequestOpts, ResponseError } from '../../src/lib';
 import { RequestInit, Response } from 'node-fetch';
-import { AuthApiError } from '../../src/auth/BaseAuthApi';
+import { AuthApiError } from '../../src/auth/base-auth-api';
 import { ManagementApiError } from '../../src/management';
 
 import * as utils from '../../src/utils';

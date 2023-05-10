@@ -35,7 +35,7 @@ import {
   UsersByEmailManager,
 } from './managers';
 
-import { Configuration } from '../runtime';
+import { Configuration } from '../../lib/runtime';
 
 export abstract class ManagementClientBase {
   public readonly actions = new ActionsManager(this.configuration);

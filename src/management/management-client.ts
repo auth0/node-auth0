@@ -3,10 +3,10 @@ import {
   ManagementClientOptionsWithClientCredentials,
   ManagementClientOptionsWithToken,
 } from './management-client.options';
-import { TokenProviderMiddleware } from './TokenProviderMiddleware';
+import { TokenProviderMiddleware } from './token-provider-middleware';
 import { ResponseError } from '../lib';
 import { Response, Headers } from 'node-fetch';
-import { TelemetryMiddleware } from '../lib/middleware/TelemetryMiddleware';
+import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware';
 
 interface ManagementApiErrorResponse {
   errorCode: string;
