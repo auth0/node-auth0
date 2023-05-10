@@ -1,9 +1,5 @@
-import {
-  InitOverride,
-  JSONApiResponse,
-  TextApiResponse,
-  validateRequiredRequestParams,
-} from '../lib/runtime';
+import { InitOverride, JSONApiResponse, TextApiResponse } from '../lib/models';
+import { validateRequiredRequestParams } from '../lib/runtime';
 import { BaseAuthAPI } from './base-auth-api';
 
 export interface SignUpRequest {

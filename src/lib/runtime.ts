@@ -1,8 +1,10 @@
 import fetch, { RequestInit, RequestInfo, Response, Blob, FormData } from 'node-fetch';
 import { RetryConfiguration, retry } from './retry';
 import { FetchError, RequiredError } from './errors';
+import { HTTPHeaders, RequestOpts, InitOverrideFunction, HTTPQuery } from './models';
 
 export { Blob, FormData } from 'node-fetch';
+export * from './models';
 
 export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
   telemetry?: boolean;
@@ -153,17 +155,6 @@ export class BaseAPI {
     }
     return response;
   };
-
-  /**
-   * Create a shallow clone of `this` by constructing a new instance
-   * and then shallow cloning data members.
-   */
-  private clone<T extends BaseAPI>(this: T): T {
-    const constructor = this.constructor as any;
-    const next = new constructor(this.configuration);
-    next.middleware = this.middleware.slice();
-    return next;
-  }
 }
 
 function isBlob(value: unknown): value is Blob {
@@ -189,42 +180,10 @@ export const COLLECTION_FORMATS = {
  */
 export type FetchAPI = typeof fetch;
 
-export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';
-
-export type HTTPHeaders = { [key: string]: string };
-
-/**
- * @private
- */
-export type HTTPQuery = {
-  [key: string]:
-    | string
-    | number
-    | null
-    | boolean
-    | Array<string | number | null | boolean>
-    | HTTPQuery;
-};
-
-export type HTTPBody = any | FormData | URLSearchParams;
-
-export type HTTPRequestInit = {
-  headers?: HTTPHeaders;
-  method: HTTPMethod;
-  credentials?: RequestCredentials;
-  body?: HTTPBody;
-};
-
 /**
  * @private
  */
 export type ModelPropertyNaming = 'camelCase' | 'snake_case' | 'PascalCase' | 'original';
-
-export type InitOverrideFunction = (requestContext: {
-  init: HTTPRequestInit;
-  context: RequestOpts;
-}) => Promise<RequestInit>;
-export type InitOverride = RequestInit | InitOverrideFunction;
 
 /**
  * @private
@@ -237,18 +196,7 @@ export interface FetchParams {
 /**
  * @private
  */
-export interface RequestOpts {
-  path: string;
-  method: HTTPMethod;
-  headers?: HTTPHeaders;
-  query?: HTTPQuery;
-  body?: HTTPBody;
-}
-
-/**
- * @private
- */
-export function querystring(params: HTTPQuery): string {
+function querystring(params: HTTPQuery): string {
   return Object.keys(params)
     .map((key) => querystringSingleKey(key, params[key]))
     .filter((part) => part.length > 0)
@@ -331,64 +279,6 @@ export interface Middleware {
   pre?(context: RequestContext): Promise<FetchParams | void>;
   post?(context: ResponseContext): Promise<Response | void>;
   onError?(context: ErrorContext): Promise<Response | void>;
-}
-
-export interface ApiResponse<T> {
-  data: T;
-  headers: Headers;
-  status: number;
-  statusText: string;
-}
-
-export class JSONApiResponse<T> implements ApiResponse<T> {
-  constructor(
-    public data: T,
-    public headers: Headers,
-    readonly status: number,
-    readonly statusText: string
-  ) {}
-
-  static async fromResponse<T = unknown>(raw: Response) {
-    const value = (await raw.json()) as T;
-    return new JSONApiResponse<T>(value, raw.headers, raw.status, raw.statusText);
-  }
-}
-
-export class VoidApiResponse implements ApiResponse<undefined> {
-  public data: undefined;
-  constructor(public headers: Headers, readonly status: number, readonly statusText: string) {}
-
-  static async fromResponse(raw: Response) {
-    return new VoidApiResponse(raw.headers, raw.status, raw.statusText);
-  }
-}
-
-export class BlobApiResponse implements ApiResponse<Blob> {
-  constructor(
-    public data: Blob,
-    public headers: Headers,
-    readonly status: number,
-    readonly statusText: string
-  ) {}
-
-  static async fromResponse(raw: Response) {
-    const value = await raw.blob();
-    return new BlobApiResponse(value, raw.headers, raw.status, raw.statusText);
-  }
-}
-
-export class TextApiResponse implements ApiResponse<string> {
-  constructor(
-    public data: string,
-    public headers: Headers,
-    readonly status: number,
-    readonly statusText: string
-  ) {}
-
-  static async fromResponse(raw: Response) {
-    const value = await raw.text();
-    return new TextApiResponse(value, raw.headers, raw.status, raw.statusText);
-  }
 }
 
 /**
