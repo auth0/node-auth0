@@ -416,7 +416,7 @@ describe('RolesManager', () => {
     });
   });
 
-  describe('#removePermissions', () => {
+  describe('#deletePermissions', () => {
     const data = {
       id: 'rol_ID',
     };
@@ -432,14 +432,14 @@ describe('RolesManager', () => {
     });
 
     it('should validate empty roleId', function () {
-      expect(roles.removePermissions({} as any, body)).to.be.rejectedWith(
+      expect(roles.deletePermissions({} as any, body)).to.be.rejectedWith(
         RequiredError,
         `Required parameter requestParameters.id was null or undefined.`
       );
     });
 
     it('should return a promise if no callback is given', function (done) {
-      roles.removePermissions(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
+      roles.deletePermissions(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', function (done) {
@@ -447,7 +447,7 @@ describe('RolesManager', () => {
 
       nock(API_URL).post(`/roles/${data.id}/permissions`).reply(500);
 
-      roles.removePermissions(data, body).catch((err) => {
+      roles.deletePermissions(data, body).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -455,7 +455,7 @@ describe('RolesManager', () => {
     });
 
     it('should perform a DELETE request to /api/v2/roles/rol_ID/permissions', function (done) {
-      roles.removePermissions(data, body).then(() => {
+      roles.deletePermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -467,7 +467,7 @@ describe('RolesManager', () => {
 
       const request = nock(API_URL).delete(`/roles/${data.id}/permissions`, body).reply(200);
 
-      roles.removePermissions(data, body).then(() => {
+      roles.deletePermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -482,7 +482,7 @@ describe('RolesManager', () => {
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      roles.removePermissions(data, body).then(() => {
+      roles.deletePermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

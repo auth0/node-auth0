@@ -7,7 +7,7 @@ import {
   PasswordGrantRequest,
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
-} from '../../src/auth/OAuth';
+} from '../../src/auth/oauth';
 import { withIdToken } from '../utils/withIdToken';
 
 const { back: nockBack } = nock;
