@@ -58,7 +58,7 @@ export class OrganizationsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async removeEnabledConnection(
+  async deleteEnabledConnection(
     requestParameters: DeleteEnabledConnectionsByConnectionIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {

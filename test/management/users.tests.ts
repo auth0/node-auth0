@@ -1099,7 +1099,7 @@ describe('UsersManager', () => {
     });
   });
 
-  describe('#removePermissions', () => {
+  describe('#deletePermissions', () => {
     const data = {
       id: 'user_id',
     };

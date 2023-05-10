@@ -660,7 +660,7 @@ describe('OrganizationsManager', () => {
     });
   });
 
-  describe('#removeEnabledConnection', () => {
+  describe('#deleteEnabledConnection', () => {
     const data = {
       id: 'org_123',
       connectionId: '123',
@@ -675,7 +675,7 @@ describe('OrganizationsManager', () => {
     });
 
     it('should validate empty organizationId', () => {
-      expect(organizations.removeEnabledConnection({} as any, {} as any)).to.be.rejectedWith(
+      expect(organizations.deleteEnabledConnection({} as any, {} as any)).to.be.rejectedWith(
         RequiredError,
         `Required parameter requestParameters.id was null or undefined.`
       );
@@ -683,7 +683,7 @@ describe('OrganizationsManager', () => {
 
     it('should validate empty connectionId', function () {
       expect(
-        organizations.removeEnabledConnection({ id: '123' } as any, {} as any)
+        organizations.deleteEnabledConnection({ id: '123' } as any, {} as any)
       ).to.be.rejectedWith(
         RequiredError,
         `Required parameter requestParameters.connectionId was null or undefined.`
@@ -692,7 +692,7 @@ describe('OrganizationsManager', () => {
 
     it('should return a promise if no callback is given', function (done) {
       organizations
-        .removeEnabledConnection(data)
+        .deleteEnabledConnection(data)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -704,7 +704,7 @@ describe('OrganizationsManager', () => {
         .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .reply(500);
 
-      organizations.removeEnabledConnection(data, {}).catch((err) => {
+      organizations.deleteEnabledConnection(data, {}).catch((err) => {
         expect(err).to.exist;
 
         done();
@@ -712,7 +712,7 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a DELETE request to /api/v2/organizations/organization_id/enabled_connections/connection_id', function (done) {
-      organizations.removeEnabledConnection(data).then(() => {
+      organizations.deleteEnabledConnection(data).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -727,7 +727,7 @@ describe('OrganizationsManager', () => {
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      organizations.removeEnabledConnection(data, {}).then(() => {
+      organizations.deleteEnabledConnection(data, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();

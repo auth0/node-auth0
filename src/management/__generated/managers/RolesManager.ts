@@ -38,7 +38,7 @@ export class RolesManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async removePermissions(
+  async deletePermissions(
     requestParameters: DeleteRolePermissionAssignmentRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
     initOverrides?: InitOverride
