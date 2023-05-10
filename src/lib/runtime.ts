@@ -412,8 +412,6 @@ type QueryParamConfig = {
   isArray?: boolean;
   isCollectionFormatMulti?: boolean;
   collectionFormat?: keyof typeof COLLECTION_FORMATS;
-  isDateTimeType?: boolean;
-  isDateType?: boolean;
 };
 
 /**
