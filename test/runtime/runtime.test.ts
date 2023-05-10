@@ -239,6 +239,43 @@ describe('Runtime', () => {
       })
     ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
   });
+
+  it('should timeout after default time', async () => {
+    const request = nock(URL).get('/clients').delayConnection(10000).reply(200, []);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+    });
+
+    await expect(
+      client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      })
+    ).rejects.toThrowError(
+      expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
+    );
+  });
+
+  it('should timeout after configured time', async () => {
+    const request = nock(URL).get('/clients').delayConnection(100).reply(200, []);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+      timeoutDuration: 50,
+    });
+
+    await expect(
+      client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      })
+    ).rejects.toThrowError(
+      expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
+    );
+  });
 });
 
 describe('Runtime for ManagementClient', () => {

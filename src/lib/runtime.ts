@@ -135,7 +135,7 @@ export class BaseAPI {
       controller.abort();
     }, this.timeoutDuration);
     try {
-      return this.fetchApi(url, { signal: controller.signal, ...init });
+      return await this.fetchApi(url, { signal: controller.signal, ...init });
     } catch (e) {
       if (e instanceof AbortError) {
         throw new TimeoutError();
