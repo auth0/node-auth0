@@ -5,7 +5,7 @@ import {
   validateRequiredRequestParams,
 } from '../lib/runtime';
 import { BaseAuthAPI, Options } from './base-auth-api';
-import { OAuth, ClientCredentials, GrantOptions, TokenSet } from './oauth-';
+import { OAuth, ClientCredentials, GrantOptions, TokenSet } from './oauth';
 
 export interface SendEmailLinkRequest {
   /**

@@ -1,12 +1,12 @@
 import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware';
 import { Options } from './base-auth-api';
-import { Database } from './database-';
-import { OAuth } from './oauth-';
-import { Passwordless } from './passwordless-';
+import { Database } from './database';
+import { OAuth } from './oauth';
+import { Passwordless } from './passwordless';
 
-export * from './database-';
-export * from './oauth-';
-export * from './passwordless-';
+export * from './database';
+export * from './oauth';
+export * from './passwordless';
 export { AuthApiError } from './base-auth-api';
 
 export class AuthenticationClient {
