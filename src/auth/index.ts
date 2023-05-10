@@ -7,7 +7,8 @@ import { Passwordless } from './passwordless';
 export * from './database';
 export * from './oauth';
 export * from './passwordless';
-export { AuthApiError } from './base-auth-api';
+export { IDTokenValidateOptions, IdTokenValidatorError } from './id-token-validator';
+export { AuthApiError, Options } from './base-auth-api';
 
 export class AuthenticationClient {
   database: Database;

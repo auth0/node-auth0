@@ -24,7 +24,6 @@
     "test:jest": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:ci": "c8 npm run test",
     "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 './test/**/*.tests.js' './test/*.tests.js' --watch",
-    "jsdoc:generate": "jsdoc --configure .jsdoc.json --verbose",
     "precommit": "pretty-quick --staged",
     "lint": "eslint ./src --ext ts",
     "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm examples/playground/index.ts"
@@ -76,7 +75,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "husky": "^3.0.1",
     "jest": "^29.5.0",
-    "jsdoc": "^3.6.7",
     "json-loader": "^0.5.7",
     "jws": "^3.2.2",
     "minami": "^1.2.3",

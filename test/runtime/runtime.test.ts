@@ -1,7 +1,9 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
 import { AuthenticationClient, ManagementClient } from '../../src';
-import { BaseAPI, InitOverrideFunction, RequestOpts, ResponseError } from '../../src/lib';
+import { ResponseError } from '../../src/lib/errors';
+import { InitOverrideFunction, RequestOpts } from '../../src/lib/models';
+import { BaseAPI } from '../../src/lib/runtime';
 import { RequestInit, Response } from 'node-fetch';
 import { AuthApiError } from '../../src/auth/base-auth-api';
 import { ManagementApiError } from '../../src/management';
