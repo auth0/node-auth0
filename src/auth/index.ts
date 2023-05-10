@@ -1,3 +1,4 @@
+import { TelemetryMiddleware } from '../lib/middleware/TelemetryMiddleware';
 import { Options } from './BaseAuthApi';
 import { Database } from './Database';
 import { OAuth } from './OAuth';
@@ -14,6 +15,10 @@ export class AuthenticationClient {
   passwordless: Passwordless;
 
   constructor(options: Options) {
+    if (options.telemetry !== false) {
+      options.middleware = [...(options.middleware || []), new TelemetryMiddleware(options)];
+    }
+
     this.database = new Database(options);
     this.oauth = new OAuth(options);
     this.passwordless = new Passwordless(options);

@@ -6,6 +6,7 @@ import {
 import { TokenProviderMiddleware } from './TokenProviderMiddleware';
 import { ResponseError } from '../lib';
 import { Response, Headers } from 'node-fetch';
+import { TelemetryMiddleware } from '../lib/middleware/TelemetryMiddleware';
 
 interface ManagementApiErrorResponse {
   errorCode: string;
@@ -69,7 +70,11 @@ export class ManagementClient extends ManagementClientBase {
     super({
       ...options,
       baseUrl: `https://${options.domain}/api/v2`,
-      middleware: [...(options.middleware || []), new TokenProviderMiddleware(options)],
+      middleware: [
+        ...(options.middleware || []),
+        new TokenProviderMiddleware(options),
+        ...(options.telemetry !== false ? [new TelemetryMiddleware(options)] : []),
+      ],
       parseError,
     });
   }

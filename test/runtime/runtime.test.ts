@@ -6,6 +6,9 @@ import { RequestInit, Response } from 'node-fetch';
 import { AuthApiError } from '../../src/auth/BaseAuthApi';
 import { ManagementApiError } from '../../src/management';
 
+import * as utils from '../../src/utils';
+import { base64url } from 'jose';
+
 export class TestClient extends BaseAPI {
   public async testRequest(
     context: RequestOpts,
@@ -466,6 +469,57 @@ describe('Runtime for ManagementClient', () => {
       }
     }
   });
+
+  it('should add the telemetry by default', async () => {
+    const request = nock(URL)
+      .get('/clients')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
+      .reply(200, []);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+    await client.clients.getAll();
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should add custom telemetry when provided', async () => {
+    const mockClientInfo = { name: 'test', version: '12', env: { node: '16' } };
+
+    const request = nock(URL)
+      .get('/clients')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
+      .reply(200, []);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+      clientInfo: mockClientInfo,
+    });
+    await client.clients.getAll();
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should not add the telemetry when disabled', async () => {
+    const request = nock(URL, { badheaders: ['Auth0-Client'] })
+      .get('/clients')
+      .reply(200, []);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+      telemetry: false,
+    });
+    await client.clients.getAll();
+
+    expect(request.isDone()).toBe(true);
+  });
 });
 
 describe('Runtime for AuthenticationClient', () => {
@@ -580,5 +634,65 @@ describe('Runtime for AuthenticationClient', () => {
         expect(e).toBeInstanceOf(AuthApiError);
       }
     }
+  });
+
+  it('should add the telemetry by default', async () => {
+    const request = nock(URL)
+      .post('/oauth/token')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
+      .reply(200, {});
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    await client.oauth.clientCredentialsGrant({
+      audience: '123',
+    });
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should add custom telemetry when provided', async () => {
+    const mockClientInfo = { name: 'test', version: '12', env: { node: '16' } };
+
+    const request = nock(URL)
+      .post('/oauth/token')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
+      .reply(200, []);
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+      clientInfo: mockClientInfo,
+    });
+
+    await client.oauth.clientCredentialsGrant({
+      audience: '123',
+    });
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should not add the telemetry when disabled', async () => {
+    const request = nock(URL, { badheaders: ['Auth0-Client'] })
+      .post('/oauth/token')
+      .reply(200, []);
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+      telemetry: false,
+    });
+
+    await client.oauth.clientCredentialsGrant({
+      audience: '123',
+    });
+
+    expect(request.isDone()).toBe(true);
   });
 });

@@ -11,7 +11,8 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "module": "ESNext",
-    "strict": true
+    "strict": true,
+    "resolveJsonModule": true
   },
   "include": ["src"]
 }
