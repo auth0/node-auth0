@@ -4,7 +4,7 @@ import {
   TextApiResponse,
   validateRequiredRequestParams,
 } from '../lib/runtime';
-import { BaseAuthAPI } from './BaseAuthApi';
+import { BaseAuthAPI } from './base-auth-api';
 
 export interface SignUpRequest {
   /**

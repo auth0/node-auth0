@@ -1,5 +1,5 @@
 import { AuthenticationClient } from '../auth';
-import { TokenSet } from '../auth/OAuth';
+import { TokenSet } from '../auth/oauth-';
 import { JSONApiResponse } from '../lib/runtime';
 
 const LEEWAY = 10 * 1000;

@@ -1,5 +1,5 @@
 import { BaseAPI, ClientOptions, ResponseError } from '../lib';
-import { AddClientAuthenticationPayload, addClientAuthentication } from './clientAuthentication';
+import { AddClientAuthenticationPayload, addClientAuthentication } from './client-authentication';
 import { Response, Headers } from 'node-fetch';
 
 export interface Options extends ClientOptions {

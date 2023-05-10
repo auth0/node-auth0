@@ -5,7 +5,7 @@ import {
   ManagementClientOptionsWithClientSecret,
   ManagementClientOptionsWithToken,
 } from './management-client.options';
-import { TokenProvider } from './TokenProvider';
+import { TokenProvider } from './token-provider';
 
 export class TokenProviderMiddleware implements Middleware {
   private tokenProvider: { getAccessToken: () => Promise<string> };

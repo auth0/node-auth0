@@ -1,5 +1,5 @@
 import * as jose from 'jose';
-import { Options } from './BaseAuthApi';
+import { Options } from './base-auth-api';
 
 const DEFAULT_CLOCK_TOLERANCE = 60; // secs
 

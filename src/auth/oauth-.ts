@@ -4,8 +4,8 @@ import {
   VoidApiResponse,
   validateRequiredRequestParams,
 } from '../lib/runtime';
-import { BaseAuthAPI, Options } from './BaseAuthApi';
-import { IDTokenValidateOptions, IDTokenValidator } from './IdTokenValidator';
+import { BaseAuthAPI, Options } from './base-auth-api';
+import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator';
 
 export interface TokenSet {
   /**
