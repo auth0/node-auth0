@@ -1,4 +1,5 @@
-import { BaseAPI, ClientOptions, ResponseError } from '../lib';
+import { ResponseError } from '../lib/errors';
+import { BaseAPI, ClientOptions } from '../lib/runtime';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './client-authentication';
 import { Response, Headers } from 'node-fetch';
 
@@ -75,6 +76,9 @@ export class BaseAuthAPI extends BaseAPI {
     this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
   }
 
+  /**
+   * @private
+   */
   protected async addClientAuthentication(
     payload: AddClientAuthenticationPayload,
     required: boolean
