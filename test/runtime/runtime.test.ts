@@ -256,6 +256,7 @@ describe('Runtime', () => {
     ).rejects.toThrowError(
       expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
     );
+    nock.abortPendingRequests();
   });
 
   it('should timeout after configured time', async () => {
@@ -275,6 +276,7 @@ describe('Runtime', () => {
     ).rejects.toThrowError(
       expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
     );
+    nock.abortPendingRequests();
   });
 });
 
