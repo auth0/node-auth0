@@ -1,24 +1,17 @@
 import fetch, { RequestInit, RequestInfo, Response, Blob, FormData } from 'node-fetch';
-import { RetryConfiguration, retry } from './retry';
+import { retry } from './retry';
 import { FetchError, RequiredError } from './errors';
-import { HTTPHeaders, RequestOpts, InitOverrideFunction, HTTPQuery } from './models';
+import {
+  RequestOpts,
+  InitOverrideFunction,
+  HTTPQuery,
+  Configuration,
+  Middleware,
+  FetchAPI,
+} from './models';
 
 export { Blob, FormData } from 'node-fetch';
 export * from './models';
-
-export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
-  telemetry?: boolean;
-  clientInfo?: { name: string; [key: string]: unknown };
-}
-
-export interface Configuration {
-  baseUrl: string; // override base path
-  fetchApi?: FetchAPI; // override for fetch implementation
-  middleware?: Middleware[]; // middleware to apply before/after fetch requests
-  headers?: HTTPHeaders; //header params we want to use on every request
-  retry?: RetryConfiguration;
-  parseError: (response: Response) => Promise<Error>;
-}
 
 /**
  * @private
@@ -178,20 +171,7 @@ export const COLLECTION_FORMATS = {
 /**
  * @private
  */
-export type FetchAPI = typeof fetch;
-
-/**
- * @private
- */
 export type ModelPropertyNaming = 'camelCase' | 'snake_case' | 'PascalCase' | 'original';
-
-/**
- * @private
- */
-export interface FetchParams {
-  url: URL | RequestInfo;
-  init: RequestInit;
-}
 
 /**
  * @private
@@ -240,45 +220,6 @@ export function canConsumeForm(consumes: Consume[]): boolean {
  */
 export interface Consume {
   contentType: string;
-}
-
-/**
- * @private
- */
-export interface RequestContext {
-  fetch: FetchAPI;
-  url: URL | RequestInfo;
-  init: RequestInit;
-}
-
-/**
- * @private
- */
-export interface ResponseContext {
-  fetch: FetchAPI;
-  url: URL | RequestInfo;
-  init: RequestInit;
-  response: Response;
-}
-
-/**
- * @private
- */
-export interface ErrorContext {
-  fetch: FetchAPI;
-  url: URL | RequestInfo;
-  init: RequestInit;
-  error: unknown;
-  response?: Response;
-}
-
-/**
- * @private
- */
-export interface Middleware {
-  pre?(context: RequestContext): Promise<FetchParams | void>;
-  post?(context: ResponseContext): Promise<Response | void>;
-  onError?(context: ErrorContext): Promise<Response | void>;
 }
 
 /**

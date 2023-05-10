@@ -1,4 +1,24 @@
-import { RequestInit, Response } from 'node-fetch';
+import fetch, { RequestInit, RequestInfo, Response } from 'node-fetch';
+import { RetryConfiguration } from './retry';
+
+/**
+ * @private
+ */
+export type FetchAPI = typeof fetch;
+
+export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
+  telemetry?: boolean;
+  clientInfo?: { name: string; [key: string]: unknown };
+}
+
+export interface Configuration {
+  baseUrl: string; // override base path
+  fetchApi?: FetchAPI; // override for fetch implementation
+  middleware?: Middleware[]; // middleware to apply before/after fetch requests
+  headers?: HTTPHeaders; //header params we want to use on every request
+  retry?: RetryConfiguration;
+  parseError: (response: Response) => Promise<Error>;
+}
 
 export interface RequestOpts {
   path: string;
@@ -93,4 +113,36 @@ export class TextApiResponse implements ApiResponse<string> {
     const value = await raw.text();
     return new TextApiResponse(value, raw.headers, raw.status, raw.statusText);
   }
+}
+
+export interface FetchParams {
+  url: URL | RequestInfo;
+  init: RequestInit;
+}
+
+export interface RequestContext {
+  fetch: FetchAPI;
+  url: URL | RequestInfo;
+  init: RequestInit;
+}
+
+export interface ResponseContext {
+  fetch: FetchAPI;
+  url: URL | RequestInfo;
+  init: RequestInit;
+  response: Response;
+}
+
+export interface ErrorContext {
+  fetch: FetchAPI;
+  url: URL | RequestInfo;
+  init: RequestInit;
+  error: unknown;
+  response?: Response;
+}
+
+export interface Middleware {
+  pre?(context: RequestContext): Promise<FetchParams | void>;
+  post?(context: ResponseContext): Promise<Response | void>;
+  onError?(context: ErrorContext): Promise<Response | void>;
 }
