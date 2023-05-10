@@ -1,5 +1,6 @@
-import { generateClientInfo, jsonToBase64 } from '../../utils';
+import { generateClientInfo } from '../../utils';
 import { Middleware, ClientOptions, FetchParams, RequestContext } from '../runtime';
+import { base64url } from 'jose';
 
 /**
  * @private
@@ -15,7 +16,7 @@ export class TelemetryMiddleware implements Middleware {
     if ('string' === typeof this.clientInfo.name && this.clientInfo.name.length > 0) {
       context.init.headers = {
         ...context.init.headers,
-        'Auth0-Client': jsonToBase64(this.clientInfo),
+        'Auth0-Client': base64url.encode(JSON.stringify(this.clientInfo)),
       };
     }
 
