@@ -2,7 +2,7 @@ import nock from 'nock';
 import { jest } from '@jest/globals';
 import * as jose from 'jose';
 import { TEST_PUBLIC_KEY, TEST_PRIVATE_KEY } from '../constants';
-import { IDTokenValidator } from '../../src/auth/IdTokenValidator';
+import { IDTokenValidator } from '../../src/auth/id-token-validator';
 
 const DOMAIN = 'tenant.auth0.com';
 const URL = `https://${DOMAIN}/`;
@@ -51,8 +51,6 @@ const sign = async ({
 
 describe('id-token-validator', () => {
   const spy = jest.fn();
-
-  beforeEach(() => {});
 
   afterEach(() => {
     nock.cleanAll();
