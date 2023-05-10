@@ -76,6 +76,9 @@ export class BaseAuthAPI extends BaseAPI {
     this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
   }
 
+  /**
+   * @private
+   */
   protected async addClientAuthentication(
     payload: AddClientAuthenticationPayload,
     required: boolean
