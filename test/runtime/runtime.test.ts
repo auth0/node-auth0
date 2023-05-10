@@ -7,6 +7,7 @@ import { AuthApiError } from '../../src/auth/BaseAuthApi';
 import { ManagementApiError } from '../../src/management';
 
 import * as utils from '../../src/utils';
+import { base64url } from 'jose';
 
 export class TestClient extends BaseAPI {
   public async testRequest(
@@ -472,7 +473,7 @@ describe('Runtime for ManagementClient', () => {
   it('should add the telemetry by default', async () => {
     const request = nock(URL)
       .get('/clients')
-      .matchHeader('Auth0-Client', utils.jsonToBase64(utils.generateClientInfo()))
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
       .reply(200, []);
 
     const token = 'TOKEN';
@@ -490,7 +491,7 @@ describe('Runtime for ManagementClient', () => {
 
     const request = nock(URL)
       .get('/clients')
-      .matchHeader('Auth0-Client', utils.jsonToBase64(mockClientInfo))
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
       .reply(200, []);
 
     const token = 'TOKEN';
@@ -638,7 +639,7 @@ describe('Runtime for AuthenticationClient', () => {
   it('should add the telemetry by default', async () => {
     const request = nock(URL)
       .post('/oauth/token')
-      .matchHeader('Auth0-Client', utils.jsonToBase64(utils.generateClientInfo()))
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
       .reply(200, {});
 
     const client = new AuthenticationClient({
@@ -659,7 +660,7 @@ describe('Runtime for AuthenticationClient', () => {
 
     const request = nock(URL)
       .post('/oauth/token')
-      .matchHeader('Auth0-Client', utils.jsonToBase64(mockClientInfo))
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
       .reply(200, []);
 
     const client = new AuthenticationClient({
