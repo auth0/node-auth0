@@ -191,7 +191,6 @@ describe('AttackProtectionManager', () => {
       enabled: true,
       shields: ['admin_notification', 'block'],
       allowlist: ['1.1.1.0'],
-      // TODO SDK-4227
       stage: {
         'pre-login': {
           max_attempts: 1,
@@ -201,7 +200,7 @@ describe('AttackProtectionManager', () => {
           max_attempts: 1,
           rate: 864000,
         },
-      } as PatchSuspiciousIpThrottlingRequestStage,
+      },
     };
 
     describe('#getSuspiciousIpThrottlingConfig', () => {
