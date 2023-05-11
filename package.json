@@ -3,7 +3,6 @@
   "version": "3.3.0",
   "description": "SDK for Auth0 API v2",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "dist/typings/index.d.ts",
   "type": "module",
   "exports": {
@@ -20,10 +19,10 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc --options typedoc.cjs",
-    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' mocha && npm run test:jest",
+    "test": "npm run test:mocha && npm run test:jest",
+    "test:mocha": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' mocha",
     "test:jest": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:ci": "c8 npm run test",
-    "test:watch": "cross-env NODE_ENV=test mocha --timeout 5000 './test/**/*.tests.js' './test/*.tests.js' --watch",
     "precommit": "pretty-quick --staged",
     "lint": "eslint ./src --ext ts",
     "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm examples/playground/index.ts"
@@ -48,14 +47,12 @@
   "dependencies": {
     "jose": "^4.13.2",
     "node-fetch": "^3.3.1",
-    "rest-facade": "^1.16.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/jest": "^29.5.0",
-    "@types/lru-cache": "4.1.1",
     "@types/mocha": "^10.0.1",
     "@types/node-fetch": "^2.6.3",
     "@types/uuid": "^9.0.1",
