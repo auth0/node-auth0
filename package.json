@@ -49,7 +49,6 @@
     "jose": "^4.13.2",
     "node-fetch": "^3.3.1",
     "rest-facade": "^1.16.3",
-    "retry": "^0.13.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

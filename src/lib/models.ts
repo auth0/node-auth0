@@ -4,7 +4,7 @@ import { RetryConfiguration } from './retry';
 /**
  * @private
  */
-export type FetchAPI = typeof fetch;
+export type FetchAPI = (url: URL | RequestInfo, init: RequestInit) => Promise<Response>;
 
 export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
   telemetry?: boolean;
@@ -13,11 +13,31 @@ export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseErr
 
 export interface Configuration {
   baseUrl: string; // override base path
-  fetchApi?: FetchAPI; // override for fetch implementation
-  middleware?: Middleware[]; // middleware to apply before/after fetch requests
-  headers?: HTTPHeaders; //header params we want to use on every request
+  parseError: (response: Response) => Promise<Error>; // Custom error parser
+  /**
+   * Provide your own fetch implementation.
+   */
+  fetchApi?: FetchAPI;
+  /**
+   * Provide a middleware that will run either before the request, after the request or when the request fails.
+   */
+  middleware?: Middleware[];
+  /**
+   * Pass your own http agent to support proxies.
+   */
+  agent?: RequestInit['agent'];
+  /**
+   * Custom headers that will be added to every request.
+   */
+  headers?: HTTPHeaders;
+  /**
+   * Timeout in ms before aborting the request (default 10,000)
+   */
+  timeoutDuration?: number;
+  /**
+   * Retry configuration.
+   */
   retry?: RetryConfiguration;
-  parseError: (response: Response) => Promise<Error>;
 }
 
 export interface RequestOpts {
