@@ -10,7 +10,6 @@
 
 ## Documentation
 
-- [FAQs](https://github.com/auth0/node-auth0/blob/master/FAQ.md) - frequently asked questions about node-auth0.
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
 
 ## Getting Started
