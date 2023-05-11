@@ -62,8 +62,6 @@ var management = new ManagementClient({
 });
 ```
 
-For other examples see the [EXAMPLES.md](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md) document.
-
 ## API Reference
 
 - [AuthenticationClient](https://auth0.github.io/node-auth0/AuthenticationClient.html)
