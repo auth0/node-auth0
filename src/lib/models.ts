@@ -1,4 +1,4 @@
-import fetch, { RequestInit, RequestInfo, Response } from 'node-fetch';
+import { RequestInit, RequestInfo, Response } from 'node-fetch';
 import { RetryConfiguration } from './retry';
 
 /**
