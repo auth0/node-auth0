@@ -127,6 +127,7 @@ export class BaseAPI {
       }
     }
     let response: Response | undefined = undefined;
+    let error: Error | undefined = undefined;
     try {
       response =
         this.configuration.retry?.enabled !== false
@@ -134,40 +135,41 @@ export class BaseAPI {
               ...this.configuration.retry,
             })
           : await this.fetchWithTimeout(fetchParams.url, fetchParams.init);
-    } catch (e) {
+    } catch (e: any) {
+      error = e;
+    }
+    if (error || !(response as Response).ok) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
           response =
             (await middleware.onError({
               fetch: this.fetchWithTimeout,
               ...fetchParams,
-              error: e,
+              error,
               response: response ? response.clone() : undefined,
             })) || response;
         }
       }
       if (response === undefined) {
-        if (e instanceof Error) {
-          throw new FetchError(
-            e,
-            'The request failed and the interceptors did not return an alternative response'
-          );
-        } else {
-          throw e;
+        throw new FetchError(
+          error as Error,
+          'The request failed and the interceptors did not return an alternative response'
+        );
+      }
+    } else {
+      for (const middleware of this.middleware) {
+        if (middleware.post) {
+          response =
+            (await middleware.post({
+              fetch: this.fetchApi,
+              ...fetchParams,
+              response: (response as Response).clone(),
+            })) || response;
         }
       }
     }
-    for (const middleware of this.middleware) {
-      if (middleware.post) {
-        response =
-          (await middleware.post({
-            fetch: this.fetchApi,
-            ...fetchParams,
-            response: response.clone(),
-          })) || response;
-      }
-    }
-    return response;
+
+    return response as Response;
   };
 }
 
