@@ -2,7 +2,12 @@ import nock from 'nock';
 import { jest } from '@jest/globals';
 import { AuthenticationClient, ManagementClient } from '../../src';
 import { ResponseError } from '../../src/lib/errors';
-import { InitOverrideFunction, RequestOpts } from '../../src/lib/models';
+import {
+  ErrorContext,
+  InitOverrideFunction,
+  RequestOpts,
+  ResponseContext,
+} from '../../src/lib/models';
 import { BaseAPI } from '../../src/lib/runtime';
 import { RequestInit, Response } from 'node-fetch';
 import { AuthApiError } from '../../src/auth/base-auth-api';
@@ -279,6 +284,53 @@ describe('Runtime', () => {
       expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
     );
     nock.abortPendingRequests();
+  });
+
+  it('should execute onError middleware', async () => {
+    nock(URL).get('/clients').reply(500, {});
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+      timeoutDuration: 50,
+      middleware: [
+        {
+          onError(context: ErrorContext) {
+            return new Response(null, { status: 418 });
+          },
+        },
+      ],
+    });
+
+    await expect(
+      client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 418 }));
+  });
+
+  it('should execute post middleware', async () => {
+    nock(URL).get('/clients').reply(200, { foo: 'bar' });
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+      timeoutDuration: 50,
+      middleware: [
+        {
+          post() {
+            return Response.json({ bar: 'foo' }, { status: 200 });
+          },
+        },
+      ],
+    });
+
+    const resonse = client.testRequest({
+      path: `/clients`,
+      method: 'GET',
+    });
+    await expect((await resonse).json()).resolves.toMatchObject({ bar: 'foo' });
   });
 });
 

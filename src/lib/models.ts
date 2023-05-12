@@ -107,20 +107,6 @@ export class VoidApiResponse implements ApiResponse<undefined> {
   }
 }
 
-export class BlobApiResponse implements ApiResponse<Blob> {
-  constructor(
-    public data: Blob,
-    public headers: Headers,
-    readonly status: number,
-    readonly statusText: string
-  ) {}
-
-  static async fromResponse(raw: Response) {
-    const value = await raw.blob();
-    return new BlobApiResponse(value, raw.headers, raw.status, raw.statusText);
-  }
-}
-
 export class TextApiResponse implements ApiResponse<string> {
   constructor(
     public data: string,
@@ -162,7 +148,7 @@ export interface ErrorContext {
 }
 
 export interface Middleware {
-  pre?(context: RequestContext): Promise<FetchParams | void>;
-  post?(context: ResponseContext): Promise<Response | void>;
-  onError?(context: ErrorContext): Promise<Response | void>;
+  pre?(context: RequestContext): Promise<FetchParams | void> | FetchParams | void;
+  post?(context: ResponseContext): Promise<Response | void> | Response | void;
+  onError?(context: ErrorContext): Promise<Response | void> | Response | void;
 }
