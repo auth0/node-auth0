@@ -237,6 +237,13 @@ program
 
     console.log(`Created client grant ${newClientGrant[0].id}`);
 
+    const { data: updatedClientGrant } = await mgmntClient.clientGrants.update(
+      { id: newClientGrant[0].id as string },
+      { scope: ['openid', 'profile'] }
+    );
+
+    console.log(`Updated client grant to use scopes '${updatedClientGrant.scope?.join(', ')}'`);
+
     // Delete API for testing
     await mgmntClient.resourceServers.delete({ id: api?.id as string });
 
@@ -260,6 +267,123 @@ program
     console.log('Updated the client: ' + updatedClient.name);
     await mgmntClient.clients.delete({ id: newClient.client_id as string });
     console.log('Removed the client: ' + updatedClient.name);
+  });
+
+program
+  .command('connections')
+  .description('Test the connections endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+    const { data: newConnection } = await mgmntClient.connections.create({
+      name: uuid(),
+      display_name: uuid(),
+      strategy: 'auth0',
+    });
+    console.log('Create a connection: ' + newConnection.display_name);
+    const { data: connection } = await mgmntClient.connections.get({
+      id: newConnection.id as string,
+    });
+    console.log('Get the connection: ' + connection.display_name);
+    const { data: updatedConnection } = await mgmntClient.connections.update(
+      { id: connection.id as string },
+      { display_name: uuid() }
+    );
+    console.log('Updated the connection: ' + updatedConnection.display_name);
+    await mgmntClient.connections.delete({ id: newConnection.id as string });
+    console.log('Removed the connection: ' + updatedConnection.display_name);
+  });
+
+program
+  .command('custom-domains')
+  .description('Test the custom-domains endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+    const { data: newDomain } = await mgmntClient.customDomains.create({
+      domain: 'www.test.com',
+      type: 'self_managed_certs',
+    });
+    console.log('Create a custom domain: ' + newDomain.domain);
+    const { data: domain } = await mgmntClient.customDomains.get({
+      id: newDomain.custom_domain_id,
+    });
+    console.log('Get the custom domain: ' + domain.domain);
+    const { data: updatedDomain } = await mgmntClient.customDomains.update(
+      { id: domain.custom_domain_id as string },
+      { custom_client_ip_header: 'cf-connecting-ip' }
+    );
+    console.log('Updated the custom domain: ' + updatedDomain.domain);
+    await mgmntClient.customDomains.delete({ id: newDomain.custom_domain_id as string });
+    console.log('Removed the custom domain: ' + updatedDomain.domain);
+  });
+
+program
+  .command('email-templates')
+  .description('Test the email-templates endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    try {
+      const { data: newEmailTemplate } = await mgmntClient.emailTemplates.create({
+        template: 'verify_email',
+        body: 'test_body',
+        from: 'new@email.com',
+        resultUrl: 'test_url',
+        subject: 'test_subject',
+        syntax: 'liquid',
+        urlLifetimeInSeconds: 50,
+        includeEmailInRedirect: false,
+        enabled: false,
+      });
+      console.log('Create an email template with body: ' + newEmailTemplate.body);
+    } catch (e) {
+      const err = e as ManagementApiError;
+
+      if (err.msg === 'Template verify_email already exists.') {
+        console.log('Template already exists, skipping creation');
+      }
+    }
+
+    const { data: emailTemplate } = await mgmntClient.emailTemplates.get({
+      templateName: 'verify_email',
+    });
+    console.log(`Get email template: ${emailTemplate.template}`);
+
+    const { data: updatedEmailTemplate } = await mgmntClient.emailTemplates.update(
+      { templateName: 'verify_email' },
+      { body: 'test2' }
+    );
+    console.log('Updated the email template with body: ' + updatedEmailTemplate.body);
+  });
+
+program
+  .command('emails')
+  .description('Test the emails endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    try {
+      const { data: newProvider } = await mgmntClient.emails.configure({
+        name: 'mandrill',
+        credentials: {
+          api_key: 'ABC',
+        },
+      });
+      console.log(`Configure an email provider: ${newProvider.name}`);
+    } catch (e) {
+      console.log('Email provider already configured, skipping configuring.');
+    }
+
+    const { data: provider } = await mgmntClient.emails.get();
+
+    console.log(`Get email provider: ${provider.name}`);
+
+    const { data: updatedProvider } = await mgmntClient.emails.update({
+      name: 'mandrill',
+      credentials: {
+        api_key: 'ABCD',
+      },
+    });
+    console.log(`Update an email provider: ${updatedProvider.name}`);
   });
 
 await program.parseAsync(process.argv);
