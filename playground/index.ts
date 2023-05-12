@@ -5,9 +5,16 @@ dotenv.config({
   path: './playground/.env',
 });
 
-import { ManagementApiError, ManagementClient } from '../src/management/index';
+import {
+  Connection,
+  ManagementApiError,
+  ManagementClient,
+  PutAuthenticationMethodsRequestInner,
+  ResourceServer,
+} from '../src/management/index';
 
 import { program } from 'commander';
+import { JSONApiResponse } from '../src/lib';
 
 program
   .name('node-auth0-playground')
@@ -384,6 +391,260 @@ program
       },
     });
     console.log(`Update an email provider: ${updatedProvider.name}`);
+  });
+
+program
+  .command('users')
+  .description('Test the users endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const email = `${uuid()}@example.com`;
+    const { data: createdUser } = await mgmntClient.users.create({
+      email,
+      password: uuid(),
+      email_verified: true,
+      connection: 'Username-Password-Authentication',
+    });
+    console.log('Created user:', createdUser.user_id);
+
+    const apiId = `api_${uuid()}`;
+    await mgmntClient.resourceServers.create({
+      identifier: apiId,
+      scopes: [{ value: 'foo' }, { value: 'bar' }],
+    });
+    const createdApi = (await mgmntClient.resourceServers.getAll()).data.find(
+      (api) => api.identifier === apiId
+    ) as ResourceServer;
+    console.log('Created api:', apiId);
+
+    try {
+      const { data: gotUser } = await mgmntClient.users.get({ id: createdUser.user_id as string });
+      console.log('Got user:', gotUser.user_id);
+
+      const {
+        data: [foundUser],
+      } = await mgmntClient.users.getAll({ q: `email:${email}` });
+      console.log('Found user:', foundUser.user_id);
+
+      const { data: updatedUser } = await mgmntClient.users.update(
+        { id: createdUser.user_id as string },
+        { email_verified: false }
+      );
+      console.log(
+        'Updated user.email_verified from:',
+        gotUser.email_verified,
+        'to',
+        updatedUser.email_verified
+      );
+
+      const { data: createdAuthMethod } = await mgmntClient.users.createAuthenticationMethod(
+        {
+          id: updatedUser.user_id as string,
+        },
+        { type: 'email', email: updatedUser.email, name: 'foo' }
+      );
+      console.log('Created auth method:', createdAuthMethod.id);
+
+      const { data: createdAuthMethod2 } = await mgmntClient.users.createAuthenticationMethod(
+        {
+          id: updatedUser.user_id as string,
+        },
+        { type: 'phone', phone_number: '+12344567890', name: 'foo2' }
+      );
+      console.log('Created another auth method:', createdAuthMethod2.id);
+
+      const { data: gotAuthMethod } = await mgmntClient.users.getAuthenticationMethod({
+        id: updatedUser.user_id as string,
+        authentication_method_id: createdAuthMethod.id as string,
+      });
+      console.log('Got auth method:', gotAuthMethod.id);
+
+      const { data: authMethods } = await mgmntClient.users.getAuthenticationMethods({
+        id: updatedUser.user_id as string,
+      });
+      console.log(
+        'Got auth methods:',
+        authMethods.map((x) => x.id)
+      );
+
+      await mgmntClient.users.updateAuthenticationMethod(
+        {
+          id: updatedUser.user_id as string,
+          authentication_method_id: createdAuthMethod.id as string,
+        },
+        { name: 'bar' }
+      );
+      console.log('Updated name on auth method:', createdAuthMethod.name, 'to', 'bar');
+
+      await mgmntClient.users.updateAuthenticationMethods(
+        {
+          id: updatedUser.user_id as string,
+        },
+        authMethods.map((authMethod, i) => {
+          const { authentication_methods, created_at, confirmed, id, ...props } = authMethod;
+          return {
+            ...props,
+            name: `baz${i}`,
+            ...(props.type === 'phone' && { phone_number: '+12344567890' }),
+            ...(props.type === 'email' && { email: updatedUser.email }),
+          } as PutAuthenticationMethodsRequestInner;
+        })
+      );
+      const { data: updatedAuthMethods } = await mgmntClient.users.getAuthenticationMethods({
+        id: updatedUser.user_id as string,
+      });
+      console.log(
+        'Updated all auth methods to names:',
+        updatedAuthMethods.map((x) => x.name)
+      );
+
+      await mgmntClient.users.deleteAuthenticationMethod({
+        id: updatedUser.user_id as string,
+        authentication_method_id: updatedAuthMethods[0].id as string,
+      });
+      console.log('Deleted auth method:', createdAuthMethod.id);
+
+      await mgmntClient.users.deleteAllAuthenticators({
+        id: updatedUser.user_id as string,
+      });
+      console.log('Deleted remaining auth methods:', [createdAuthMethod2.id]);
+
+      const { data: enrollments } = await mgmntClient.users.getEnrollments({
+        id: updatedUser.user_id as string,
+      });
+      console.log('Got enrollments for:', updatedUser.user_id, enrollments);
+
+      const { data: anotherUser } = await mgmntClient.users.create({
+        email: `${uuid()}@example.com`,
+        password: uuid(),
+        email_verified: true,
+        connection: 'Username-Password-Authentication',
+      });
+      console.log('Created another user:', anotherUser.user_id);
+
+      const { id: connectionId } = (await mgmntClient.connections.getAll()).data.find(
+        (conn) => conn.name === 'Username-Password-Authentication'
+      ) as Connection;
+      await mgmntClient.users.link(
+        { id: createdUser.user_id as string },
+        {
+          provider: 'auth0',
+          connection_id: connectionId as string,
+          user_id: anotherUser.user_id,
+        }
+      );
+      console.log('Linked user:', anotherUser.user_id, 'to', createdUser.user_id);
+
+      await mgmntClient.users.unlink({
+        id: createdUser.user_id as string,
+        provider: 'auth0',
+        user_id: anotherUser.user_id as string,
+      });
+      console.log('Unlinked users:', anotherUser.user_id, 'from', createdUser.user_id);
+
+      const { data: logEvents } = await mgmntClient.users.getLogs({
+        id: createdUser.user_id as string,
+        per_page: 2,
+      });
+      console.log(
+        'Got logs for user:',
+        createdUser.user_id,
+        logEvents.map((log) => log.type)
+      );
+
+      await mgmntClient.users.invalidateRememberBrowser({ id: createdUser.user_id as string });
+      console.log('Invalidated remembered browser for:', updatedUser.user_id);
+
+      const {
+        data: { recovery_code: code },
+      } = await mgmntClient.users.regenerateRecoveryCode({
+        id: createdUser.user_id as string,
+      });
+      console.log('Created recovery code for:', createdUser.user_id, code);
+
+      await mgmntClient.users.assignPermissions(
+        { id: createdUser.user_id as string },
+        { permissions: [{ resource_server_identifier: apiId, permission_name: 'foo' }] }
+      );
+      console.log('Assigned permission to:', createdUser.user_id, 'foo');
+
+      const { data: permissions } = await mgmntClient.users.getPermissions({
+        id: createdUser.user_id as string,
+      });
+      console.log(
+        'Got permissions for:',
+        createdUser.user_id,
+        permissions.map((p) => p.permission_name)
+      );
+
+      await mgmntClient.users.deletePermissions(
+        { id: createdUser.user_id as string },
+        { permissions: [{ resource_server_identifier: apiId, permission_name: 'foo' }] }
+      );
+      console.log('Deleted permissions for:', createdUser.user_id, ['foo']);
+
+      const { data: role } = await mgmntClient.roles.create({
+        name: uuid(),
+      });
+      await mgmntClient.users.assignRoles(
+        { id: createdUser.user_id as string },
+        { roles: [role.id as string] }
+      );
+      console.log('Assigned role for:', createdUser.user_id, role.id);
+
+      const { data: roles } = await mgmntClient.users.getRoles({
+        id: createdUser.user_id as string,
+      });
+      console.log(
+        'Got roles for:',
+        createdUser.user_id,
+        roles.map((r) => r.name)
+      );
+
+      await mgmntClient.users.deleteRoles(
+        { id: createdUser.user_id as string },
+        { roles: roles.map<string>((r) => r.id as string) }
+      );
+      console.log(
+        'Removed roles for:',
+        createdUser.user_id,
+        roles.map((r) => r.name)
+      );
+
+      await mgmntClient.roles.delete({
+        id: role.id as string,
+      });
+      console.log('Deleted rold: ', role.id);
+    } finally {
+      await mgmntClient.users.delete({
+        id: createdUser.user_id as string,
+      });
+      console.log('Deleted user:', createdUser.user_id);
+      await mgmntClient.resourceServers.delete({
+        id: createdApi.id as string,
+      });
+      console.log('Deleted api:', createdApi.id);
+    }
+  });
+
+program
+  .command('users-by-email')
+  .description('Test the users-by-email endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const {
+      data: [user],
+    } = await mgmntClient.users.getAll({ per_page: 1 });
+
+    const {
+      data: [userByEmail],
+    } = await mgmntClient.usersByEmail.getByEmail({
+      email: user.email as string,
+    });
+
+    console.log('Found user by email: ', userByEmail.email);
   });
 
 await program.parseAsync(process.argv);
