@@ -43,16 +43,25 @@ describe('GrantsManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new GrantsManager({ baseUrl: '' });
+        new GrantsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
     let request: nock.Scope;
+    const response = [
+      {
+        id: 'grant_id',
+        clientID: 'client_id',
+        user_id: 'user_id',
+        audience: 'audience',
+        scope: ['scope1'],
+      },
+    ];
 
     beforeEach(function () {
-      request = nock(API_URL).get('/grants').reply(200, []);
+      request = nock(API_URL).get('/grants').reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -71,17 +80,16 @@ describe('GrantsManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', function (done) {
-      nock.cleanAll();
-
-      const data = [{ id: '123' }];
-      nock(API_URL).get('/grants').reply(200, data);
-
       grants.getAll().then((grants) => {
         expect(grants.data).to.be.an.instanceOf(Array);
 
-        expect(grants.data.length).to.equal(data.length);
+        expect(grants.data.length).to.equal(response.length);
 
-        expect(grants.data[0].id).to.equal(data[0].id);
+        expect(grants.data[0].id).to.equal(response[0].id);
+        expect(grants.data[0].clientID).to.equal(response[0].clientID);
+        expect(grants.data[0].user_id).to.equal(response[0].user_id);
+        expect(grants.data[0].audience).to.equal(response[0].audience);
+        expect(grants.data[0].scope?.[0]).to.equal(response[0].scope[0]);
 
         done();
       });

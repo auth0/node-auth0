@@ -39,7 +39,7 @@ describe('BlacklistedTokensManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new BlacklistsManager({ baseUrl: '' });
+        new BlacklistsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
@@ -80,6 +80,7 @@ describe('BlacklistedTokensManager', () => {
         expect(blacklistedTokens.data.length).to.equal(data.length);
 
         expect(blacklistedTokens.data[0].aud).to.equal(data[0].aud);
+        expect(blacklistedTokens.data[0].jti).to.equal(data[0].jti);
 
         done();
       });

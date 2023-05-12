@@ -54,16 +54,27 @@ describe('EmailTemplatesManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new EmailTemplatesManager({ baseUrl: '' });
+        new EmailTemplatesManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#get', () => {
     let request: nock.Scope;
+    const response = {
+      template: 'verify_email',
+      body: 'test_body',
+      from: 'sender@test.com',
+      resultUrl: 'test_url',
+      subject: 'test_subject',
+      syntax: 'liquid',
+      urlLifetimeInSeconds: 50,
+      includeEmailInRedirect: false,
+      enabled: false,
+    };
 
     beforeEach(function () {
-      request = nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(200, DEFAULT_DATA);
+      request = nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -96,10 +107,26 @@ describe('EmailTemplatesManager', () => {
       const request = nock(API_URL)
         .get(`/email-templates/${TEMPLATE_NAME}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200, {});
+        .reply(200, response);
 
       emailTemplates.get(DEFAULT_PARAMS).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      emailTemplates.get(DEFAULT_PARAMS).then((template) => {
+        expect(template.data.template).to.equal(response.template);
+        expect(template.data.body).to.equal(response.body);
+        expect(template.data.from).to.equal(response.from);
+        expect(template.data.resultUrl).to.equal(response.resultUrl);
+        expect(template.data.subject).to.equal(response.subject);
+        expect(template.data.syntax).to.equal(response.syntax);
+        expect(template.data.urlLifetimeInSeconds).to.equal(response.urlLifetimeInSeconds);
+        expect(template.data.includeEmailInRedirect).to.equal(response.includeEmailInRedirect);
+        expect(template.data.enabled).to.equal(response.enabled);
 
         done();
       });
@@ -108,9 +135,20 @@ describe('EmailTemplatesManager', () => {
 
   describe('#create', () => {
     let request: nock.Scope;
+    const response = {
+      template: 'verify_email',
+      body: 'test_body',
+      from: 'sender@test.com',
+      resultUrl: 'test_url',
+      subject: 'test_subject',
+      syntax: 'liquid',
+      urlLifetimeInSeconds: 50,
+      includeEmailInRedirect: false,
+      enabled: false,
+    };
 
     beforeEach(function () {
-      request = nock(API_URL).post('/email-templates').reply(200, {});
+      request = nock(API_URL).post('/email-templates', DEFAULT_DATA).reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -138,12 +176,24 @@ describe('EmailTemplatesManager', () => {
     });
 
     it('should pass the data in the body of the request', function (done) {
-      nock.cleanAll();
-
-      const request = nock(API_URL).post('/email-templates', DEFAULT_DATA).reply(200, {});
-
       emailTemplates.create(DEFAULT_DATA).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      emailTemplates.create(DEFAULT_DATA).then((template) => {
+        expect(template.data.template).to.equal(response.template);
+        expect(template.data.body).to.equal(response.body);
+        expect(template.data.from).to.equal(response.from);
+        expect(template.data.resultUrl).to.equal(response.resultUrl);
+        expect(template.data.subject).to.equal(response.subject);
+        expect(template.data.syntax).to.equal(response.syntax);
+        expect(template.data.urlLifetimeInSeconds).to.equal(response.urlLifetimeInSeconds);
+        expect(template.data.includeEmailInRedirect).to.equal(response.includeEmailInRedirect);
+        expect(template.data.enabled).to.equal(response.enabled);
 
         done();
       });
@@ -168,20 +218,33 @@ describe('EmailTemplatesManager', () => {
   describe('#update', () => {
     const patchData = { from: 'new@email.com' };
     let request: nock.Scope;
+    const response = {
+      template: 'verify_email',
+      body: 'test_body',
+      from: 'new@email.com',
+      resultUrl: 'test_url',
+      subject: 'test_subject',
+      syntax: 'liquid',
+      urlLifetimeInSeconds: 50,
+      includeEmailInRedirect: false,
+      enabled: false,
+    };
 
     beforeEach(function () {
-      request = nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(200, DEFAULT_DATA);
+      request = nock(API_URL)
+        .patch(`/email-templates/${TEMPLATE_NAME}`, patchData)
+        .reply(200, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
       emailTemplates
-        .update(DEFAULT_PARAMS, {})
+        .update(DEFAULT_PARAMS, patchData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it(`should perform a PATCH request to /api/v2/email-templates/${TEMPLATE_NAME}`, function (done) {
-      emailTemplates.update(DEFAULT_PARAMS, {}).then(() => {
+      emailTemplates.update(DEFAULT_PARAMS, patchData).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -193,10 +256,26 @@ describe('EmailTemplatesManager', () => {
 
       const request = nock(API_URL)
         .patch(`/email-templates/${TEMPLATE_NAME}`, patchData)
-        .reply(200, {});
+        .reply(200, response);
 
       emailTemplates.update(DEFAULT_PARAMS, patchData).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', function (done) {
+      emailTemplates.update(DEFAULT_PARAMS, patchData).then((template) => {
+        expect(template.data.template).to.equal(response.template);
+        expect(template.data.body).to.equal(response.body);
+        expect(template.data.from).to.equal(response.from);
+        expect(template.data.resultUrl).to.equal(response.resultUrl);
+        expect(template.data.subject).to.equal(response.subject);
+        expect(template.data.syntax).to.equal(response.syntax);
+        expect(template.data.urlLifetimeInSeconds).to.equal(response.urlLifetimeInSeconds);
+        expect(template.data.includeEmailInRedirect).to.equal(response.includeEmailInRedirect);
+        expect(template.data.enabled).to.equal(response.enabled);
 
         done();
       });

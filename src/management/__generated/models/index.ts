@@ -1,3 +1,5 @@
+import * as runtime from '../../../lib/runtime';
+
 /**
  *
  */
@@ -10391,4 +10393,2685 @@ export interface UserUpdateAppMetadata {
   /**
    */
   updated_at?: any | null;
+}
+/**
+ *
+ */
+export interface DeleteActionRequest {
+  /**
+   * The ID of the action to delete.
+   *
+   */
+  id: string;
+  /**
+   * Force action deletion detaching bindings
+   *
+   */
+  force?: boolean;
+}
+/**
+ *
+ */
+export interface GetActionRequest {
+  /**
+   * The ID of the action to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetActionVersionRequest {
+  /**
+   * The ID of the action.
+   *
+   */
+  actionId: string;
+  /**
+   * The ID of the action version.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetActionVersionsRequest {
+  /**
+   * The ID of the action.
+   *
+   */
+  actionId: string;
+  /**
+   * Use this field to request a specific page of the list results.
+   *
+   */
+  page?: number;
+  /**
+   * This field specify the maximum number of results to be returned by the server. 20 by default
+   *
+   */
+  per_page?: number;
+}
+
+/**
+ *
+ */
+export const GetActionsTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  iga_approval: 'iga-approval',
+  iga_certification: 'iga-certification',
+  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+  iga_fulfillment_execution: 'iga-fulfillment-execution',
+} as const;
+export type GetActionsTriggerIdEnum =
+  (typeof GetActionsTriggerIdEnum)[keyof typeof GetActionsTriggerIdEnum];
+
+/**
+ *
+ */
+export interface GetActionsRequest {
+  /**
+   * An actions extensibility point.
+   *
+   */
+  triggerId?: GetActionsTriggerIdEnum;
+  /**
+   * The name of the action to retrieve.
+   *
+   */
+  actionName?: string;
+  /**
+   * Optional filter to only retrieve actions that are deployed.
+   *
+   */
+  deployed?: boolean;
+  /**
+   * Use this field to request a specific page of the list results.
+   *
+   */
+  page?: number;
+  /**
+   * The maximum number of results to be returned by the server in single response. 20 by default
+   *
+   */
+  per_page?: number;
+  /**
+   * Optional. When true, return only installed actions. When false, return only custom actions. Returns all actions by default.
+   *
+   */
+  installed?: boolean;
+}
+
+/**
+ *
+ */
+export const GetBindingsTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  iga_approval: 'iga-approval',
+  iga_certification: 'iga-certification',
+  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+  iga_fulfillment_execution: 'iga-fulfillment-execution',
+} as const;
+export type GetBindingsTriggerIdEnum =
+  (typeof GetBindingsTriggerIdEnum)[keyof typeof GetBindingsTriggerIdEnum];
+
+/**
+ *
+ */
+export interface GetBindingsRequest {
+  /**
+   * An actions extensibility point.
+   *
+   */
+  triggerId: GetBindingsTriggerIdEnum;
+  /**
+   * Use this field to request a specific page of the list results.
+   *
+   */
+  page?: number;
+  /**
+   * The maximum number of results to be returned in a single request. 20 by default
+   *
+   */
+  per_page?: number;
+}
+/**
+ *
+ */
+export interface GetExecutionRequest {
+  /**
+   * The ID of the execution to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchActionOperationRequest {
+  /**
+   * The id of the action to update.
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const PatchBindingsOperationTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  iga_approval: 'iga-approval',
+  iga_certification: 'iga-certification',
+  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+  iga_fulfillment_execution: 'iga-fulfillment-execution',
+} as const;
+export type PatchBindingsOperationTriggerIdEnum =
+  (typeof PatchBindingsOperationTriggerIdEnum)[keyof typeof PatchBindingsOperationTriggerIdEnum];
+
+/**
+ *
+ */
+export interface PatchBindingsOperationRequest {
+  /**
+   * An actions extensibility point.
+   *
+   */
+  triggerId: PatchBindingsOperationTriggerIdEnum;
+}
+/**
+ *
+ */
+export interface PostDeployActionRequest {
+  /**
+   * The ID of an action.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostDeployDraftVersionOperationRequest {
+  /**
+   * The ID of an action version.
+   *
+   */
+  id: string;
+  /**
+   * The ID of an action.
+   *
+   */
+  actionId: string;
+}
+/**
+ *
+ */
+export interface PostTestActionOperationRequest {
+  /**
+   * The id of the action to test.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteIpsByIdRequest {
+  /**
+   * IP address to unblock.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetIpsByIdRequest {
+  /**
+   * IP address to check.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetTokensRequest {
+  /**
+   * Optional filter on the JWT's aud claim (the client_id to which the JWT was issued).
+   *
+   */
+  aud?: string;
+}
+/**
+ *
+ */
+export interface DeleteBrandingThemeRequest {
+  /**
+   * The ID of the theme
+   *
+   */
+  themeId: string;
+}
+/**
+ *
+ */
+export interface GetBrandingThemeRequest {
+  /**
+   * The ID of the theme
+   *
+   */
+  themeId: string;
+}
+/**
+ *
+ */
+export interface PatchBrandingThemeRequest {
+  /**
+   * The ID of the theme
+   *
+   */
+  themeId: string;
+}
+/**
+ *
+ */
+export interface DeleteClientGrantsByIdRequest {
+  /**
+   * ID of the client grant to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetClientGrantsRequest {
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional filter on audience.
+   *
+   */
+  audience?: string;
+  /**
+   * Optional filter on client_id.
+   *
+   */
+  client_id?: string;
+}
+/**
+ *
+ */
+export interface PatchClientGrantsByIdOperationRequest {
+  /**
+   * ID of the client grant to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteClientsByIdRequest {
+  /**
+   * ID of the client to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetClientsRequest {
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Default value is 50, maximum value is 100
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional filter on the global client parameter.
+   *
+   */
+  is_global?: boolean;
+  /**
+   * Optional filter on whether or not a client is a first-party client.
+   *
+   */
+  is_first_party?: boolean;
+  /**
+   * Optional filter by a comma-separated list of application types.
+   *
+   */
+  app_type?: string;
+}
+/**
+ *
+ */
+export interface GetClientsByIdRequest {
+  /**
+   * ID of the client to retrieve.
+   *
+   */
+  id: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface PatchClientsByIdRequest {
+  /**
+   * ID of the client to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostRotateSecretRequest {
+  /**
+   * ID of the client that will rotate secrets.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteConnectionsByIdRequest {
+  /**
+   * The id of the connection to delete
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteUsersByEmailRequest {
+  /**
+   * The id of the connection (currently only database connections are supported)
+   *
+   */
+  id: string;
+  /**
+   * The email of the user to delete
+   *
+   */
+  email: string;
+}
+
+/**
+ *
+ */
+export const GetConnectionsStrategyEnum = {
+  ad: 'ad',
+  adfs: 'adfs',
+  amazon: 'amazon',
+  apple: 'apple',
+  dropbox: 'dropbox',
+  bitbucket: 'bitbucket',
+  aol: 'aol',
+  auth0_oidc: 'auth0-oidc',
+  auth0: 'auth0',
+  baidu: 'baidu',
+  bitly: 'bitly',
+  box: 'box',
+  custom: 'custom',
+  daccount: 'daccount',
+  dwolla: 'dwolla',
+  email: 'email',
+  evernote_sandbox: 'evernote-sandbox',
+  evernote: 'evernote',
+  exact: 'exact',
+  facebook: 'facebook',
+  fitbit: 'fitbit',
+  flickr: 'flickr',
+  github: 'github',
+  google_apps: 'google-apps',
+  google_oauth2: 'google-oauth2',
+  instagram: 'instagram',
+  ip: 'ip',
+  line: 'line',
+  linkedin: 'linkedin',
+  miicard: 'miicard',
+  oauth1: 'oauth1',
+  oauth2: 'oauth2',
+  office365: 'office365',
+  oidc: 'oidc',
+  okta: 'okta',
+  paypal: 'paypal',
+  paypal_sandbox: 'paypal-sandbox',
+  pingfederate: 'pingfederate',
+  planningcenter: 'planningcenter',
+  renren: 'renren',
+  salesforce_community: 'salesforce-community',
+  salesforce_sandbox: 'salesforce-sandbox',
+  salesforce: 'salesforce',
+  samlp: 'samlp',
+  sharepoint: 'sharepoint',
+  shopify: 'shopify',
+  sms: 'sms',
+  soundcloud: 'soundcloud',
+  thecity_sandbox: 'thecity-sandbox',
+  thecity: 'thecity',
+  thirtysevensignals: 'thirtysevensignals',
+  twitter: 'twitter',
+  untappd: 'untappd',
+  vkontakte: 'vkontakte',
+  waad: 'waad',
+  weibo: 'weibo',
+  windowslive: 'windowslive',
+  wordpress: 'wordpress',
+  yahoo: 'yahoo',
+  yammer: 'yammer',
+  yandex: 'yandex',
+  auth0_adldap: 'auth0-adldap',
+} as const;
+export type GetConnectionsStrategyEnum =
+  (typeof GetConnectionsStrategyEnum)[keyof typeof GetConnectionsStrategyEnum];
+
+/**
+ *
+ */
+export interface GetConnectionsRequest {
+  /**
+   * The amount of entries per page. Default: no paging is used, all connections are returned
+   *
+   */
+  per_page?: number;
+  /**
+   * The page number. Zero based
+   *
+   */
+  page?: number;
+  /**
+   * true if a query summary must be included in the result, false otherwise. Default <code>false</code>.
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Provide strategies to only retrieve connections with such strategies
+   *
+   */
+  strategy?: Array<GetConnectionsStrategyEnum>;
+  /**
+   * Provide the name of the connection to retrieve
+   *
+   */
+  name?: string;
+  /**
+   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
+   *
+   */
+  fields?: string;
+  /**
+   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface GetConnectionsByIdRequest {
+  /**
+   * The id of the connection to retrieve
+   *
+   */
+  id: string;
+  /**
+   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
+   *
+   */
+  fields?: string;
+  /**
+   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface GetStatusRequest {
+  /**
+   * ID of the connection to check
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchConnectionsByIdRequest {
+  /**
+   * The id of the connection to retrieve
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteCustomDomainsByIdRequest {
+  /**
+   * ID of the custom domain to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetCustomDomainsByIdRequest {
+  /**
+   * ID of the custom domain to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchCustomDomainsByIdOperationRequest {
+  /**
+   * The id of the custom domain to update
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostVerifyRequest {
+  /**
+   * ID of the custom domain to verify.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteDeviceCredentialsByIdRequest {
+  /**
+   * ID of the credential to delete.
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const GetDeviceCredentialsTypeEnum = {
+  public_key: 'public_key',
+  refresh_token: 'refresh_token',
+  rotating_refresh_token: 'rotating_refresh_token',
+} as const;
+export type GetDeviceCredentialsTypeEnum =
+  (typeof GetDeviceCredentialsTypeEnum)[keyof typeof GetDeviceCredentialsTypeEnum];
+
+/**
+ *
+ */
+export interface GetDeviceCredentialsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page.  There is a maximum of 1000 results allowed from this endpoint.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * user_id of the devices to retrieve.
+   *
+   */
+  user_id?: string;
+  /**
+   * client_id of the devices to retrieve.
+   *
+   */
+  client_id?: string;
+  /**
+   * Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested
+   *
+   */
+  type?: GetDeviceCredentialsTypeEnum;
+}
+
+/**
+ *
+ */
+export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
+  verify_email: 'verify_email',
+  verify_email_by_code: 'verify_email_by_code',
+  reset_email: 'reset_email',
+  welcome_email: 'welcome_email',
+  blocked_account: 'blocked_account',
+  stolen_credentials: 'stolen_credentials',
+  enrollment_email: 'enrollment_email',
+  mfa_oob_code: 'mfa_oob_code',
+  user_invitation: 'user_invitation',
+  change_password: 'change_password',
+  password_reset: 'password_reset',
+} as const;
+export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
+  (typeof GetEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof GetEmailTemplatesByTemplateNameTemplateNameEnum];
+
+/**
+ *
+ */
+export interface GetEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   *
+   */
+  templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
+}
+
+/**
+ *
+ */
+export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
+  verify_email: 'verify_email',
+  verify_email_by_code: 'verify_email_by_code',
+  reset_email: 'reset_email',
+  welcome_email: 'welcome_email',
+  blocked_account: 'blocked_account',
+  stolen_credentials: 'stolen_credentials',
+  enrollment_email: 'enrollment_email',
+  mfa_oob_code: 'mfa_oob_code',
+  user_invitation: 'user_invitation',
+  change_password: 'change_password',
+  password_reset: 'password_reset',
+} as const;
+export type PatchEmailTemplatesByTemplateNameTemplateNameEnum =
+  (typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum];
+
+/**
+ *
+ */
+export interface PatchEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   *
+   */
+  templateName: PatchEmailTemplatesByTemplateNameTemplateNameEnum;
+}
+
+/**
+ *
+ */
+export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
+  verify_email: 'verify_email',
+  verify_email_by_code: 'verify_email_by_code',
+  reset_email: 'reset_email',
+  welcome_email: 'welcome_email',
+  blocked_account: 'blocked_account',
+  stolen_credentials: 'stolen_credentials',
+  enrollment_email: 'enrollment_email',
+  mfa_oob_code: 'mfa_oob_code',
+  user_invitation: 'user_invitation',
+  change_password: 'change_password',
+  password_reset: 'password_reset',
+} as const;
+export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
+  (typeof PutEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PutEmailTemplatesByTemplateNameTemplateNameEnum];
+
+/**
+ *
+ */
+export interface PutEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   *
+   */
+  templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
+}
+/**
+ *
+ */
+export interface GetProviderRequest {
+  /**
+   * Comma-separated list of fields to include or exclude (dependent upon include_fields) from the result. Leave empty to retrieve `name` and `enabled`. Additional fields available include `credentials`, `default_from_address`, and `settings`.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface DeleteRequest {
+  /**
+   * user_id of the grant to delete.
+   *
+   */
+  user_id?: string;
+}
+/**
+ *
+ */
+export interface DeleteGrantsByIdRequest {
+  /**
+   * ID of the grant to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetGrantsRequest {
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * user_id of the grants to retrieve.
+   *
+   */
+  user_id?: string;
+  /**
+   * client_id of the grants to retrieve.
+   *
+   */
+  client_id?: string;
+  /**
+   * audience of the grants to retrieve.
+   *
+   */
+  audience?: string;
+}
+/**
+ *
+ */
+export interface DeleteEnrollmentsByIdRequest {
+  /**
+   * ID of the enrollment to be deleted.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetEnrollmentsByIdRequest {
+  /**
+   * ID of the enrollment to be retrieve.
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const PutFactorsByNameOperationNameEnum = {
+  push_notification: 'push-notification',
+  sms: 'sms',
+  email: 'email',
+  duo: 'duo',
+  otp: 'otp',
+  webauthn_roaming: 'webauthn-roaming',
+  webauthn_platform: 'webauthn-platform',
+  recovery_code: 'recovery-code',
+} as const;
+export type PutFactorsByNameOperationNameEnum =
+  (typeof PutFactorsByNameOperationNameEnum)[keyof typeof PutFactorsByNameOperationNameEnum];
+
+/**
+ *
+ */
+export interface PutFactorsByNameOperationRequest {
+  /**
+   * Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
+   *
+   */
+  name: PutFactorsByNameOperationNameEnum;
+}
+/**
+ *
+ */
+export interface DeleteHooksByIdRequest {
+  /**
+   * ID of the hook to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteSecretsRequest {
+  /**
+   * ID of the hook whose secrets to delete.
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const GetHooksTriggerIdEnum = {
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+} as const;
+export type GetHooksTriggerIdEnum =
+  (typeof GetHooksTriggerIdEnum)[keyof typeof GetHooksTriggerIdEnum];
+
+/**
+ *
+ */
+export interface GetHooksRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional filter on whether a hook is enabled (true) or disabled (false).
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Comma-separated list of fields to include in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Retrieves hooks that match the trigger
+   *
+   */
+  triggerId?: GetHooksTriggerIdEnum;
+}
+/**
+ *
+ */
+export interface GetHooksByIdRequest {
+  /**
+   * ID of the hook to retrieve.
+   *
+   */
+  id: string;
+  /**
+   * Comma-separated list of fields to include in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+}
+/**
+ *
+ */
+export interface GetSecretsRequest {
+  /**
+   * ID of the hook to retrieve secrets from.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchHooksByIdRequest {
+  /**
+   * ID of the hook to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchSecretsRequest {
+  /**
+   * ID of the hook whose secrets to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostSecretsRequest {
+  /**
+   * The id of the hook to retrieve
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetErrorsRequest {
+  /**
+   * ID of the job.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetJobsByIdRequest {
+  /**
+   * ID of the job.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostUsersImportsData {
+  /**
+   */
+  users: typeof runtime.Blob;
+  /**
+   * connection_id of the connection to which users will be imported.
+   *
+   */
+  connection_id: string;
+  /**
+   * Whether to update users if they already exist (true) or to ignore them (false).
+   *
+   */
+  upsert?: boolean;
+  /**
+   * Customer-defined ID.
+   *
+   */
+  external_id?: string;
+  /**
+   * Whether to send a completion email to all tenant owners when the job is finished (true) or not (false).
+   *
+   */
+  send_completion_email?: boolean;
+}
+/**
+ *
+ */
+export interface GetSigningKeyRequest {
+  /**
+   * Key id of the key to retrieve
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PutSigningKeysRequest {
+  /**
+   * Key id of the key to revoke
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface DeleteLogStreamsByIdRequest {
+  /**
+   * The id of the log stream to delete
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetLogStreamsByIdRequest {
+  /**
+   * The id of the log stream to get
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchLogStreamsByIdOperationRequest {
+  /**
+   * The id of the log stream to get
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetLogsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   *  Number of results per page. Paging is disabled if parameter not sent. Default: <code>50</code>. Max value: <code>100</code>
+   *
+   */
+  per_page?: number;
+  /**
+   * Field to use for sorting appended with <code>:1</code>  for ascending and <code>:-1</code> for descending. e.g. <code>date:-1</code>
+   *
+   */
+  sort?: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for <code>include_fields</code>) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (<code>true</code>) or excluded (<code>false</code>)
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Return results as an array when false (default). Return results inside an object that also contains a total result count when true.
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Log Event Id from which to start selection from.
+   *
+   */
+  from?: string;
+  /**
+   * Number of entries to retrieve when using the <code>from</code> parameter. Default <code>50</code>, max <code>100</code>
+   *
+   */
+  take?: number;
+  /**
+   * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>.
+   *
+   */
+  q?: string;
+}
+/**
+ *
+ */
+export interface GetLogsByIdRequest {
+  /**
+   * log_id of the log to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteEnabledConnectionsByConnectionIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Connection identifier
+   *
+   */
+  connectionId: string;
+}
+/**
+ *
+ */
+export interface DeleteInvitationsByInvitationIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The id of the user invitation.
+   *
+   */
+  invitation_id: string;
+}
+/**
+ *
+ */
+export interface DeleteMembersOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteOrganizationMemberRolesOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * User ID of the organization member to remove roles from.
+   *
+   */
+  user_id: string;
+}
+/**
+ *
+ */
+export interface DeleteOrganizationsByIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetEnabledConnectionsRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetEnabledConnectionsByConnectionIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Connection identifier
+   *
+   */
+  connectionId: string;
+}
+/**
+ *
+ */
+export interface GetInvitationsRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * When true, return results inside an object that also contains the start and limit.  When false (default), a direct array of results is returned.  We do not yet support returning the total invitations count.
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Field to sort by. Use field:order where order is 1 for ascending and -1 for descending Defaults to created_at:-1.
+   *
+   */
+  sort?: string;
+}
+/**
+ *
+ */
+export interface GetInvitationsByInvitationIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The id of the user invitation.
+   *
+   */
+  invitation_id: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface GetMembersRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetNameByNameRequest {
+  /**
+   * name of the organization to retrieve.
+   *
+   */
+  name: string;
+}
+/**
+ *
+ */
+export interface GetOrganizationMemberRolesRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * ID of the user to associate roles with.
+   *
+   */
+  user_id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetOrganizationsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * Field to sort by. Use &lt;code&gt;field:order&lt;/code&gt; where order is &lt;code&gt;1&lt;/code&gt; for ascending and &lt;code&gt;-1&lt;/code&gt; for descending. e.g. &lt;code&gt;created_at:1&lt;/code&gt;. We currently support sorting by the following fields: &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;display_name&lt;/code&gt; and &lt;code&gt;created_at&lt;/code&gt;.
+   *
+   */
+  sort?: string;
+}
+/**
+ *
+ */
+export interface GetOrganizationsByIdRequest {
+  /**
+   * ID of the organization to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Connection identifier
+   *
+   */
+  connectionId: string;
+}
+/**
+ *
+ */
+export interface PatchOrganizationsByIdOperationRequest {
+  /**
+   * ID of the organization to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostEnabledConnectionsOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostInvitationsOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostMembersOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostOrganizationMemberRolesOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * ID of the user to associate roles with.
+   *
+   */
+  user_id: string;
+}
+
+/**
+ *
+ */
+export const GetCustomTextByLanguagePromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  reset_password: 'reset-password',
+  consent: 'consent',
+  logout: 'logout',
+  mfa_push: 'mfa-push',
+  mfa_otp: 'mfa-otp',
+  mfa_voice: 'mfa-voice',
+  mfa_phone: 'mfa-phone',
+  mfa_webauthn: 'mfa-webauthn',
+  mfa_sms: 'mfa-sms',
+  mfa_email: 'mfa-email',
+  mfa_recovery_code: 'mfa-recovery-code',
+  mfa: 'mfa',
+  status: 'status',
+  device_flow: 'device-flow',
+  email_verification: 'email-verification',
+  email_otp_challenge: 'email-otp-challenge',
+  organizations: 'organizations',
+  invitation: 'invitation',
+  common: 'common',
+} as const;
+export type GetCustomTextByLanguagePromptEnum =
+  (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
+
+/**
+ *
+ */
+export const GetCustomTextByLanguageLanguageEnum = {
+  ar: 'ar',
+  bg: 'bg',
+  bs: 'bs',
+  cs: 'cs',
+  da: 'da',
+  de: 'de',
+  el: 'el',
+  en: 'en',
+  es: 'es',
+  et: 'et',
+  fi: 'fi',
+  fr: 'fr',
+  fr_CA: 'fr-CA',
+  fr_FR: 'fr-FR',
+  he: 'he',
+  hi: 'hi',
+  hr: 'hr',
+  hu: 'hu',
+  id: 'id',
+  is: 'is',
+  it: 'it',
+  ja: 'ja',
+  ko: 'ko',
+  lt: 'lt',
+  lv: 'lv',
+  nb: 'nb',
+  nl: 'nl',
+  pl: 'pl',
+  pt: 'pt',
+  pt_BR: 'pt-BR',
+  pt_PT: 'pt-PT',
+  ro: 'ro',
+  ru: 'ru',
+  sk: 'sk',
+  sl: 'sl',
+  sr: 'sr',
+  sv: 'sv',
+  th: 'th',
+  tr: 'tr',
+  uk: 'uk',
+  vi: 'vi',
+  zh_CN: 'zh-CN',
+  zh_TW: 'zh-TW',
+} as const;
+export type GetCustomTextByLanguageLanguageEnum =
+  (typeof GetCustomTextByLanguageLanguageEnum)[keyof typeof GetCustomTextByLanguageLanguageEnum];
+
+/**
+ *
+ */
+export interface GetCustomTextByLanguageRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: GetCustomTextByLanguagePromptEnum;
+  /**
+   * Language to update.
+   *
+   */
+  language: GetCustomTextByLanguageLanguageEnum;
+}
+
+/**
+ *
+ */
+export const PutCustomTextByLanguagePromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  reset_password: 'reset-password',
+  consent: 'consent',
+  logout: 'logout',
+  mfa_push: 'mfa-push',
+  mfa_otp: 'mfa-otp',
+  mfa_voice: 'mfa-voice',
+  mfa_phone: 'mfa-phone',
+  mfa_webauthn: 'mfa-webauthn',
+  mfa_sms: 'mfa-sms',
+  mfa_email: 'mfa-email',
+  mfa_recovery_code: 'mfa-recovery-code',
+  mfa: 'mfa',
+  status: 'status',
+  device_flow: 'device-flow',
+  email_verification: 'email-verification',
+  email_otp_challenge: 'email-otp-challenge',
+  organizations: 'organizations',
+  invitation: 'invitation',
+  common: 'common',
+} as const;
+export type PutCustomTextByLanguagePromptEnum =
+  (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
+
+/**
+ *
+ */
+export const PutCustomTextByLanguageLanguageEnum = {
+  ar: 'ar',
+  bg: 'bg',
+  bs: 'bs',
+  cs: 'cs',
+  da: 'da',
+  de: 'de',
+  el: 'el',
+  en: 'en',
+  es: 'es',
+  et: 'et',
+  fi: 'fi',
+  fr: 'fr',
+  fr_CA: 'fr-CA',
+  fr_FR: 'fr-FR',
+  he: 'he',
+  hi: 'hi',
+  hr: 'hr',
+  hu: 'hu',
+  id: 'id',
+  is: 'is',
+  it: 'it',
+  ja: 'ja',
+  ko: 'ko',
+  lt: 'lt',
+  lv: 'lv',
+  nb: 'nb',
+  nl: 'nl',
+  pl: 'pl',
+  pt: 'pt',
+  pt_BR: 'pt-BR',
+  pt_PT: 'pt-PT',
+  ro: 'ro',
+  ru: 'ru',
+  sk: 'sk',
+  sl: 'sl',
+  sr: 'sr',
+  sv: 'sv',
+  th: 'th',
+  tr: 'tr',
+  uk: 'uk',
+  vi: 'vi',
+  zh_CN: 'zh-CN',
+  zh_TW: 'zh-TW',
+} as const;
+export type PutCustomTextByLanguageLanguageEnum =
+  (typeof PutCustomTextByLanguageLanguageEnum)[keyof typeof PutCustomTextByLanguageLanguageEnum];
+
+/**
+ *
+ */
+export interface PutCustomTextByLanguageRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: PutCustomTextByLanguagePromptEnum;
+  /**
+   * Language to update.
+   *
+   */
+  language: PutCustomTextByLanguageLanguageEnum;
+}
+/**
+ *
+ */
+export interface DeleteResourceServersByIdRequest {
+  /**
+   * ID or the audience of the resource server to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetResourceServersRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface GetResourceServersByIdRequest {
+  /**
+   * ID or audience of the resource server to retrieve.
+   *
+   */
+  id: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface PatchResourceServersByIdRequest {
+  /**
+   * ID or audience of the resource server to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteRolePermissionAssignmentRequest {
+  /**
+   * ID of the role to remove permissions from.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteRolesByIdRequest {
+  /**
+   * ID of the role to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetRolePermissionRequest {
+  /**
+   * ID of the role to list granted permissions.
+   *
+   */
+  id: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetRoleUserRequest {
+  /**
+   * ID of the role to retrieve a list of users associated with.
+   *
+   */
+  id: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetRolesRequest {
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional filter on name (case-insensitive).
+   *
+   */
+  name_filter?: string;
+}
+/**
+ *
+ */
+export interface GetRolesByIdRequest {
+  /**
+   * ID of the role to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchRolesByIdRequest {
+  /**
+   * ID of the role to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostRolePermissionAssignmentOperationRequest {
+  /**
+   * ID of the role to add permissions to.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostRoleUsersOperationRequest {
+  /**
+   * ID of the role to assign users to.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteRulesByIdRequest {
+  /**
+   * ID of the rule to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetRulesRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional filter on whether a rule is enabled (true) or disabled (false).
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface GetRulesByIdRequest {
+  /**
+   * ID of the rule to retrieve.
+   *
+   */
+  id: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface PatchRulesByIdRequest {
+  /**
+   * ID of the rule to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteRulesConfigsByKeyRequest {
+  /**
+   * Key of the rules config variable to delete.
+   *
+   */
+  key: string;
+}
+/**
+ *
+ */
+export interface PutRulesConfigsByKeyOperationRequest {
+  /**
+   * Key of the rules config variable to set (max length: 127 characters).
+   *
+   */
+  key: string;
+}
+/**
+ *
+ */
+export interface GetDailyRequest {
+  /**
+   * Optional first day of the date range (inclusive) in YYYYMMDD format.
+   *
+   */
+  from?: string;
+  /**
+   * Optional last day of the date range (inclusive) in YYYYMMDD format.
+   *
+   */
+  to?: string;
+}
+/**
+ *
+ */
+export interface TenantSettingsRouteRequest {
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface DeleteUserBlocksRequest {
+  /**
+   * Should be any of a username, phone number, or email.
+   *
+   */
+  identifier: string;
+}
+/**
+ *
+ */
+export interface DeleteUserBlocksByIdRequest {
+  /**
+   * The user_id of the user to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetUserBlocksRequest {
+  /**
+   * Should be any of a username, phone number, or email.
+   *
+   */
+  identifier: string;
+  /**
+   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
+   *
+   */
+  consider_brute_force_enablement?: boolean;
+}
+/**
+ *
+ */
+export interface GetUserBlocksByIdRequest {
+  /**
+   * user_id of the user blocks to retrieve.
+   *
+   */
+  id: string;
+  /**
+   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
+   *
+   */
+  consider_brute_force_enablement?: boolean;
+}
+/**
+ *
+ */
+export interface DeleteAuthenticationMethodsByAuthenticationMethodIdRequest {
+  /**
+   * The ID of the user in question.
+   *
+   */
+  id: string;
+  /**
+   * The ID of the authentication method to delete.
+   *
+   */
+  authentication_method_id: string;
+}
+/**
+ *
+ */
+export interface DeleteAuthenticatorsRequest {
+  /**
+   * ID of the user to delete.
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const DeleteMultifactorByProviderProviderEnum = {
+  duo: 'duo',
+  google_authenticator: 'google-authenticator',
+} as const;
+export type DeleteMultifactorByProviderProviderEnum =
+  (typeof DeleteMultifactorByProviderProviderEnum)[keyof typeof DeleteMultifactorByProviderProviderEnum];
+
+/**
+ *
+ */
+export interface DeleteMultifactorByProviderRequest {
+  /**
+   * ID of the user to remove a multifactor configuration from.
+   *
+   */
+  id: string;
+  /**
+   * The multi-factor provider. Supported values 'duo' or 'google-authenticator'
+   *
+   */
+  provider: DeleteMultifactorByProviderProviderEnum;
+}
+/**
+ *
+ */
+export interface DeletePermissionsOperationRequest {
+  /**
+   * ID of the user to remove permissions from.
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const DeleteUserIdentityByUserIdProviderEnum = {
+  ad: 'ad',
+  adfs: 'adfs',
+  amazon: 'amazon',
+  apple: 'apple',
+  dropbox: 'dropbox',
+  bitbucket: 'bitbucket',
+  aol: 'aol',
+  auth0_oidc: 'auth0-oidc',
+  auth0: 'auth0',
+  baidu: 'baidu',
+  bitly: 'bitly',
+  box: 'box',
+  custom: 'custom',
+  daccount: 'daccount',
+  dwolla: 'dwolla',
+  email: 'email',
+  evernote_sandbox: 'evernote-sandbox',
+  evernote: 'evernote',
+  exact: 'exact',
+  facebook: 'facebook',
+  fitbit: 'fitbit',
+  flickr: 'flickr',
+  github: 'github',
+  google_apps: 'google-apps',
+  google_oauth2: 'google-oauth2',
+  instagram: 'instagram',
+  ip: 'ip',
+  line: 'line',
+  linkedin: 'linkedin',
+  miicard: 'miicard',
+  oauth1: 'oauth1',
+  oauth2: 'oauth2',
+  office365: 'office365',
+  oidc: 'oidc',
+  okta: 'okta',
+  paypal: 'paypal',
+  paypal_sandbox: 'paypal-sandbox',
+  pingfederate: 'pingfederate',
+  planningcenter: 'planningcenter',
+  renren: 'renren',
+  salesforce_community: 'salesforce-community',
+  salesforce_sandbox: 'salesforce-sandbox',
+  salesforce: 'salesforce',
+  samlp: 'samlp',
+  sharepoint: 'sharepoint',
+  shopify: 'shopify',
+  sms: 'sms',
+  soundcloud: 'soundcloud',
+  thecity_sandbox: 'thecity-sandbox',
+  thecity: 'thecity',
+  thirtysevensignals: 'thirtysevensignals',
+  twitter: 'twitter',
+  untappd: 'untappd',
+  vkontakte: 'vkontakte',
+  waad: 'waad',
+  weibo: 'weibo',
+  windowslive: 'windowslive',
+  wordpress: 'wordpress',
+  yahoo: 'yahoo',
+  yammer: 'yammer',
+  yandex: 'yandex',
+} as const;
+export type DeleteUserIdentityByUserIdProviderEnum =
+  (typeof DeleteUserIdentityByUserIdProviderEnum)[keyof typeof DeleteUserIdentityByUserIdProviderEnum];
+
+/**
+ *
+ */
+export interface DeleteUserIdentityByUserIdRequest {
+  /**
+   * ID of the primary user account.
+   *
+   */
+  id: string;
+  /**
+   * Identity provider name of the secondary linked account (e.g. `google-oauth2`).
+   *
+   */
+  provider: DeleteUserIdentityByUserIdProviderEnum;
+  /**
+   * ID of the secondary linked account (e.g. `123456789081523216417` part after the `|` in `google-oauth2|123456789081523216417`).
+   *
+   */
+  user_id: string;
+}
+/**
+ *
+ */
+export interface DeleteUserRolesOperationRequest {
+  /**
+   * ID of the user to remove roles from.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteUsersByIdRequest {
+  /**
+   * ID of the user to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetAuthenticationMethodsRequest {
+  /**
+   * The ID of the user in question.
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0. Default is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Default is 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
+  /**
+   * The ID of the user in question.
+   *
+   */
+  id: string;
+  /**
+   * The ID of the authentication methods in question.
+   *
+   */
+  authentication_method_id: string;
+}
+/**
+ *
+ */
+export interface GetEnrollmentsRequest {
+  /**
+   * ID of the user to list enrollments for.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetLogsByUserRequest {
+  /**
+   * ID of the user of the logs to retrieve
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Field to sort by. Use `fieldname:1` for ascending order and `fieldname:-1` for descending.
+   *
+   */
+  sort?: string;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetPermissionsRequest {
+  /**
+   * ID of the user to retrieve the permissions for.
+   *
+   */
+  id: string;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetUserOrganizationsRequest {
+  /**
+   * ID of the user to retrieve the organizations for.
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetUserRolesRequest {
+  /**
+   * ID of the user to list roles for.
+   *
+   */
+  id: string;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+
+/**
+ *
+ */
+export const GetUsersSearchEngineEnum = {
+  v1: 'v1',
+  v2: 'v2',
+  v3: 'v3',
+} as const;
+export type GetUsersSearchEngineEnum =
+  (typeof GetUsersSearchEngineEnum)[keyof typeof GetUsersSearchEngineEnum];
+
+/**
+ *
+ */
+export interface GetUsersRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Paging is disabled if parameter not sent.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Field to sort by. Use <code>field:order</code> where order is <code>1</code> for ascending and <code>-1</code> for descending. e.g. <code>created_at:1</code>
+   *
+   */
+  sort?: string;
+  /**
+   * Connection filter. Only applies when using <code>search_engine=v1</code>. To filter by connection with <code>search_engine=v2|v3</code>, use <code>q=identities.connection:"connection_name"</code>
+   *
+   */
+  connection?: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://manage.local.dev.auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>.
+   *
+   */
+  q?: string;
+  /**
+   * The version of the search engine
+   *
+   */
+  search_engine?: GetUsersSearchEngineEnum;
+}
+/**
+ *
+ */
+export interface GetUsersByIdRequest {
+  /**
+   * ID of the user to retrieve.
+   *
+   */
+  id: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest {
+  /**
+   * The ID of the user in question.
+   *
+   */
+  id: string;
+  /**
+   * The ID of the authentication method to update.
+   *
+   */
+  authentication_method_id: string;
+}
+/**
+ *
+ */
+export interface PatchUsersByIdRequest {
+  /**
+   * ID of the user to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostAuthenticationMethodsOperationRequest {
+  /**
+   * The ID of the user to whom the new authentication method will be assigned.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostIdentitiesOperationRequest {
+  /**
+   * ID of the primary user account to link a second user account to.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostInvalidateRememberBrowserRequest {
+  /**
+   * ID of the user to invalidate all remembered browsers and authentication factors for.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostPermissionsOperationRequest {
+  /**
+   * ID of the user to assign permissions to.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostRecoveryCodeRegenerationRequest {
+  /**
+   * ID of the user to regenerate a multi-factor authentication recovery code for.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostUserRolesOperationRequest {
+  /**
+   * ID of the user to associate roles with.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PutAuthenticationMethodsRequest {
+  /**
+   * The ID of the user in question.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetUsersByEmailRequest {
+  /**
+   * Email address to search for (case-sensitive).
+   *
+   */
+  email: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+   *
+   */
+  include_fields?: boolean;
 }

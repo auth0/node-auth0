@@ -9,8 +9,8 @@ import {
   PromptsManager,
   PromptsSettingsUniversalLoginExperienceEnum,
   PromptsSettingsUpdateUniversalLoginExperienceEnum,
-  RequiredError,
 } from '../../src/management/__generated/index';
+import { RequiredError } from '../../src/lib/errors';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;
@@ -36,7 +36,7 @@ describe('PromptsManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new PromptsManager({ baseUrl: '' });
+        new PromptsManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

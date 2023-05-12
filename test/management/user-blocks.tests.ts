@@ -3,7 +3,8 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { RequiredError, UserBlocksManager } from '../../src/management/__generated/index';
+import { UserBlocksManager } from '../../src/management/__generated/index';
+import { RequiredError } from '../../src/lib/errors';
 import { ManagementClient } from '../../src/management';
 
 const { expect } = chai;
@@ -29,7 +30,7 @@ describe('UserBlocksManager', () => {
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
-        new UserBlocksManager({ baseUrl: '' });
+        new UserBlocksManager({ baseUrl: '' } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });

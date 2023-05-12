@@ -1,6 +1,6 @@
-import { Configuration } from '../runtime';
+import { ClientOptions } from '../lib/runtime';
 
-export interface ManagementClientOptions extends Omit<Configuration, 'baseUrl'> {
+export interface ManagementClientOptions extends ClientOptions {
   domain: string;
   audience?: string;
 }

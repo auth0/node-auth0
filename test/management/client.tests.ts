@@ -4,8 +4,14 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { ClientsManager, RequiredError } from '../../src/management/__generated/index';
+import {
+  Client,
+  ClientCreate,
+  ClientUpdate,
+  ClientsManager,
+} from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
+import { RequiredError } from '../../src/lib/errors';
 
 chai.use(chaiAsPromised);
 const { expect } = chai;
@@ -49,18 +55,28 @@ describe('ClientsManager', () => {
       expect(() => {
         new ClientsManager({
           baseUrl: '',
-        });
+        } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
     let request: nock.Scope;
+    const response: Client[] = [
+      {
+        tenant: 'test_tenant',
+        client_id: '123',
+        name: 'test_name',
+        description: 'test_description',
+        global: false,
+        client_secret: 'tes_secret',
+        app_type: 'spa',
+        logo_uri: 'test_logo_uri',
+      },
+    ];
 
     beforeEach(function () {
-      request = nock(API_URL)
-        .get('/clients')
-        .reply(200, [{ client_id: '123' }]);
+      request = nock(API_URL).get('/clients').reply(200, response);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -79,17 +95,19 @@ describe('ClientsManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', (done) => {
-      nock.cleanAll();
-
-      const data = [{ client_id: '1' }];
-      nock(API_URL).get('/clients').reply(200, data);
-
       clients.getAll().then((clients) => {
         expect(clients.data).to.be.an.instanceOf(Array);
 
-        expect(clients.data.length).to.equal(data.length);
+        expect(clients.data.length).to.equal(response.length);
 
-        expect(clients.data[0].client_id).to.equal(data[0].client_id);
+        expect(clients.data[0].tenant).to.equal(response[0].tenant);
+        expect(clients.data[0].client_id).to.equal(response[0].client_id);
+        expect(clients.data[0].name).to.equal(response[0].name);
+        expect(clients.data[0].description).to.equal(response[0].description);
+        expect(clients.data[0].global).to.equal(response[0].global);
+        expect(clients.data[0].client_secret).to.equal(response[0].client_secret);
+        expect(clients.data[0].app_type).to.equal(response[0].app_type);
+        expect(clients.data[0].logo_uri).to.equal(response[0].logo_uri);
 
         done();
       });
@@ -137,11 +155,26 @@ describe('ClientsManager', () => {
   });
 
   describe('#create', () => {
-    const data = { name: 'Test client' };
+    const data: ClientCreate = {
+      name: 'test_name',
+      description: 'test_description',
+      app_type: 'spa',
+      logo_uri: 'test_logo_uri',
+    };
+    const response: Client = {
+      tenant: 'test_tenant',
+      client_id: '123',
+      name: data.name,
+      description: data.description,
+      global: false,
+      client_secret: 'test_secret',
+      app_type: data.app_type,
+      logo_uri: data.logo_uri,
+    };
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).post('/clients').reply(201, data);
+      request = nock(API_URL).post('/clients').reply(201, response);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -174,7 +207,9 @@ describe('ClientsManager', () => {
     it('should include the new client data in the request body', (done) => {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/clients', data).reply(201, data);
+      const request = nock(API_URL)
+        .post('/clients', data as any)
+        .reply(201, data);
 
       clients.create(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -182,27 +217,63 @@ describe('ClientsManager', () => {
         done();
       });
     });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients.create(data).then((client) => {
+        expect(client.data.client_id).to.equal(response.client_id);
+        expect(client.data.name).to.equal(response.name);
+        expect(client.data.description).to.equal(response.description);
+        expect(client.data.global).to.equal(response.global);
+        expect(client.data.client_secret).to.equal(response.client_secret);
+        expect(client.data.app_type).to.equal(response.app_type);
+        expect(client.data.logo_uri).to.equal(response.logo_uri);
+
+        done();
+      });
+    });
   });
 
   describe('#get', () => {
-    const data = {
-      id: '5',
-      name: 'John Doe',
-      email: 'john@doe.com',
+    const response: Client = {
+      tenant: 'test_tenant',
+      client_id: '123',
+      name: 'test_name',
+      description: 'test_description',
+      global: false,
+      client_secret: 'test_secret',
+      app_type: 'spa',
+      logo_uri: 'test_logo_uri',
     };
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).get(`/clients/${data.id}`).reply(201, data);
+      request = nock(API_URL).get(`/clients/${response.client_id}`).reply(201, response);
     });
 
     it('should return a promise if no callback is given', function (done) {
-      clients.get({ id: data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
+      clients
+        .get({ id: response.client_id as string })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/clients/5', function (done) {
-      clients.get({ id: data.id }).then(() => {
+      clients.get({ id: response.client_id as string }).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients.get({ id: response.client_id as string }).then((client) => {
+        expect(client.data.client_id).to.equal(response.client_id);
+        expect(client.data.name).to.equal(response.name);
+        expect(client.data.description).to.equal(response.description);
+        expect(client.data.global).to.equal(response.global);
+        expect(client.data.client_secret).to.equal(response.client_secret);
+        expect(client.data.app_type).to.equal(response.app_type);
+        expect(client.data.logo_uri).to.equal(response.logo_uri);
 
         done();
       });
@@ -210,18 +281,37 @@ describe('ClientsManager', () => {
   });
 
   describe('#update', () => {
-    const data = { id: '5' };
+    const data: ClientUpdate = {
+      name: 'test_name',
+      description: 'test_description',
+      app_type: 'spa',
+      logo_uri: 'test_logo_uri',
+    };
+    const response: Client = {
+      tenant: 'test_tenant',
+      client_id: '123',
+      name: data.name,
+      description: data.description,
+      global: false,
+      client_secret: 'test_secret',
+      app_type: data.app_type,
+      logo_uri: data.logo_uri,
+    };
+
     let request: nock.Scope;
     beforeEach(function () {
-      request = nock(API_URL).patch(`/clients/${data.id}`).reply(200, data);
+      request = nock(API_URL).patch(`/clients/${response.client_id}`).reply(200, response);
     });
 
     it('should return a promise if no callback is given', (done) => {
-      clients.update({ id: '5' }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
+      clients
+        .update({ id: response.client_id as string }, {})
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
     });
 
     it('should perform a PATCH request to /api/v2/clients/5', function (done) {
-      clients.update({ id: '5' }, {}).then(() => {
+      clients.update({ id: response.client_id as string }, {}).then(() => {
         expect(request.isDone()).to.be.true;
 
         done();
@@ -231,10 +321,26 @@ describe('ClientsManager', () => {
     it('should include the new data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).patch(`/clients/${data.id}`, data).reply(200, data);
+      const request = nock(API_URL)
+        .patch(`/clients/${response.client_id as string}`, data as any)
+        .reply(200, response);
 
-      clients.update({ id: '5' }, data as any).then(() => {
+      clients.update({ id: response.client_id as string }, data as any).then(() => {
         expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients.update({ id: response.client_id as string }, data as any).then((client) => {
+        expect(client.data.client_id).to.equal(response.client_id);
+        expect(client.data.name).to.equal(response.name);
+        expect(client.data.description).to.equal(response.description);
+        expect(client.data.global).to.equal(response.global);
+        expect(client.data.client_secret).to.equal(response.client_secret);
+        expect(client.data.app_type).to.equal(response.app_type);
+        expect(client.data.logo_uri).to.equal(response.logo_uri);
 
         done();
       });

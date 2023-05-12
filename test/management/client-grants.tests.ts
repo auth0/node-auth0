@@ -44,13 +44,13 @@ describe('ClientGrantsManager', () => {
       expect(() => {
         new ClientGrantsManager({
           baseUrl: '',
-        });
+        } as any);
       }).to.throw(Error, 'The provided base URL is invalid');
     });
   });
 
   describe('#getAll', () => {
-    const data = [{ id: '1', client_id: '123' }];
+    const data = [{ id: '1', client_id: '123', audience: 'abc', scope: ['openid'] }];
     let request: nock.Scope;
 
     beforeEach(function () {
@@ -82,6 +82,9 @@ describe('ClientGrantsManager', () => {
 
         expect((grants.data as Array<ClientGrant>).length).to.equal(data.length);
         expect((grants.data as Array<ClientGrant>)[0].id).to.equal(data[0].id);
+        expect((grants.data as Array<ClientGrant>)[0].client_id).to.equal(data[0].client_id);
+        expect((grants.data as Array<ClientGrant>)[0].audience).to.equal(data[0].audience);
+        expect((grants.data as Array<ClientGrant>)[0].scope?.[0]).to.equal(data[0].scope[0]);
 
         done();
       });

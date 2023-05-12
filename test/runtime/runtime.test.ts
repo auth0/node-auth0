@@ -1,8 +1,15 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
 import { AuthenticationClient, ManagementClient } from '../../src';
-import { BaseAPI, InitOverrideFunction, RequestOpts, ResponseError } from '../../src/runtime';
+import { ResponseError } from '../../src/lib/errors';
+import { InitOverrideFunction, RequestOpts } from '../../src/lib/models';
+import { BaseAPI } from '../../src/lib/runtime';
 import { RequestInit, Response } from 'node-fetch';
+import { AuthApiError } from '../../src/auth/base-auth-api';
+import { ManagementApiError } from '../../src/management';
+
+import * as utils from '../../src/utils';
+import { base64url } from 'jose';
 
 export class TestClient extends BaseAPI {
   public async testRequest(
@@ -15,10 +22,17 @@ export class TestClient extends BaseAPI {
 
 describe('Runtime', () => {
   const URL = 'https://tenant.auth0.com/api/v2';
+  let _setTimeout: typeof setTimeout;
+
+  beforeEach(() => {
+    _setTimeout = setTimeout;
+    (global as any).setTimeout = (fn: () => void, _timeout: number): void => fn();
+  });
 
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
+    (global as any).setTimeout = _setTimeout;
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -31,6 +45,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
     });
 
     const response = await client.testRequest({
@@ -54,6 +77,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
     });
 
     try {
@@ -65,7 +97,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -83,6 +115,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         maxRetries: 4,
       },
@@ -108,6 +149,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
     });
 
     try {
@@ -119,7 +169,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(428);
+        expect(e.statusCode).toBe(428);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -137,6 +187,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         retryWhen: [428],
       },
@@ -164,6 +223,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         retryWhen: [428, 429],
       },
@@ -191,6 +259,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         retryWhen: [428],
       },
@@ -206,7 +283,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -223,6 +300,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
+      parseError: async (response: Response) => {
+        const body = await response.text();
+        return new ResponseError(
+          response.status,
+          body,
+          response.headers,
+          'Response returned an error code'
+        );
+      },
       retry: {
         enabled: false,
       },
@@ -238,7 +324,7 @@ describe('Runtime', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
@@ -297,17 +383,150 @@ describe('Runtime for ManagementClient', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
       }
     }
   });
+
+  it('should throw a ResponseError when response does not provide payload', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.statusCode).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw an ManagementApiError when backend provides known error details', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, {
+      error: 'test error',
+      errorCode: 'test error code',
+      message: 'test message',
+      statusCode: 401,
+    });
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ManagementApiError) {
+        expect(e.error).toBe('test error');
+        expect(e.errorCode).toBe('test error code');
+        expect(e.message).toBe('test message');
+        expect(e.statusCode).toBe(401);
+      } else {
+        expect(e).toBeInstanceOf(ManagementApiError);
+      }
+    }
+  });
+
+  it('should throw an ManagementApiError and fallback to the response status code when statusCode omitted from response', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/clients').reply(428, {
+      error: 'test error',
+      errorCode: 'test error code',
+      message: 'test message',
+    });
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+
+    try {
+      await client.clients.getAll();
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ManagementApiError) {
+        expect(e.error).toBe('test error');
+        expect(e.errorCode).toBe('test error code');
+        expect(e.message).toBe('test message');
+        expect(e.statusCode).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ManagementApiError);
+      }
+    }
+  });
+
+  it('should add the telemetry by default', async () => {
+    const request = nock(URL)
+      .get('/clients')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
+      .reply(200, []);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+    });
+    await client.clients.getAll();
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should add custom telemetry when provided', async () => {
+    const mockClientInfo = { name: 'test', version: '12', env: { node: '16' } };
+
+    const request = nock(URL)
+      .get('/clients')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
+      .reply(200, []);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+      clientInfo: mockClientInfo,
+    });
+    await client.clients.getAll();
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should not add the telemetry when disabled', async () => {
+    const request = nock(URL, { badheaders: ['Auth0-Client'] })
+      .get('/clients')
+      .reply(200, []);
+
+    const token = 'TOKEN';
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      token: token,
+      telemetry: false,
+    });
+    await client.clients.getAll();
+
+    expect(request.isDone()).toBe(true);
+  });
 });
 
 describe('Runtime for AuthenticationClient', () => {
   const URL = 'https://tenant.auth0.com';
+
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
@@ -359,11 +578,123 @@ describe('Runtime for AuthenticationClient', () => {
       expect(true).toBeFalsy();
     } catch (e: any) {
       if (e instanceof ResponseError) {
-        expect(e.response.status).toBe(429);
+        expect(e.statusCode).toBe(429);
         expect(request.isDone()).toBe(false);
       } else {
         expect(e).toBeInstanceOf(ResponseError);
       }
     }
+  });
+
+  it('should throw a ResponseError when response does not provide payload', async () => {
+    nock(URL, { encodedQueryParams: true }).post('/oauth/token').reply(428);
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    try {
+      await client.oauth.clientCredentialsGrant({
+        audience: '123',
+      });
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.statusCode).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw an AuthApiError when backend provides known error details', async () => {
+    nock(URL, { encodedQueryParams: true })
+      .post('/oauth/token')
+      .reply(428, { error: 'test error', error_description: 'test error description' });
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    try {
+      await client.oauth.clientCredentialsGrant({
+        audience: '123',
+      });
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof AuthApiError) {
+        expect(e.error).toBe('test error');
+        expect(e.error_description).toBe('test error description');
+        expect(e.message).toBe('test error description');
+      } else {
+        expect(e).toBeInstanceOf(AuthApiError);
+      }
+    }
+  });
+
+  it('should add the telemetry by default', async () => {
+    const request = nock(URL)
+      .post('/oauth/token')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
+      .reply(200, {});
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+    });
+
+    await client.oauth.clientCredentialsGrant({
+      audience: '123',
+    });
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should add custom telemetry when provided', async () => {
+    const mockClientInfo = { name: 'test', version: '12', env: { node: '16' } };
+
+    const request = nock(URL)
+      .post('/oauth/token')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
+      .reply(200, []);
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+      clientInfo: mockClientInfo,
+    });
+
+    await client.oauth.clientCredentialsGrant({
+      audience: '123',
+    });
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should not add the telemetry when disabled', async () => {
+    const request = nock(URL, { badheaders: ['Auth0-Client'] })
+      .post('/oauth/token')
+      .reply(200, []);
+
+    const client = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId: '123',
+      clientSecret: '123',
+      telemetry: false,
+    });
+
+    await client.oauth.clientCredentialsGrant({
+      audience: '123',
+    });
+
+    expect(request.isDone()).toBe(true);
   });
 });
