@@ -5,7 +5,7 @@ import {
   LoginWithEmailRequest,
   LoginWithSMSRequest,
 } from '../../src/auth/passwordless';
-import { withIdToken } from '../utils/withIdToken';
+import { withIdToken } from '../utils';
 
 const { back: nockBack } = nock;
 

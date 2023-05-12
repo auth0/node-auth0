@@ -42,7 +42,6 @@ settings.json
 
 build
 **/.env
-out/
 test-results.xml
 .nyc_output
 dist/
