@@ -394,6 +394,208 @@ program
   });
 
 program
+  .command('guardian')
+  .description('Test the guardians endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient({ ...program.opts(), retry: { maxRetries: 9 } });
+
+    const { data: factors } = await mgmntClient.guardian.getFactors();
+
+    console.log(`Get ${factors.length} factors: ${factors.map((f) => f.name).join(', ')}`);
+
+    await mgmntClient.guardian.updateFactor({ name: 'sms' }, { enabled: false });
+
+    console.log(`Disabled SMS factor`);
+
+    const { data: smsTwilioConfiguration } =
+      await mgmntClient.guardian.getSmsFactorProviderTwilio();
+
+    console.log(`Get SMS Twilio Configuration, token: ${smsTwilioConfiguration.auth_token}`);
+
+    const { data: updatedSmsTwilioConfiguration } =
+      await mgmntClient.guardian.setSmsFactorProviderTwilio({
+        auth_token: uuid(),
+        from: '+123456789',
+        messaging_service_sid: uuid(),
+      });
+
+    console.log(
+      `Update SMS Twilio Configuration, token: ${updatedSmsTwilioConfiguration.auth_token}`
+    );
+
+    const { data: phoneTwilioConfiguration } =
+      await mgmntClient.guardian.getPhoneFactorProviderTwilio();
+
+    console.log(`Get phone Twilio Configuration, token: ${phoneTwilioConfiguration.auth_token}`);
+
+    const { data: updatedPhoneTwilioConfiguration } =
+      await mgmntClient.guardian.updatePhoneFactorProviderTwilio({
+        auth_token: uuid(),
+        from: '+123456789',
+        messaging_service_sid: uuid(),
+      });
+
+    console.log(
+      `Update Phone Twilio Configuration, token: ${updatedPhoneTwilioConfiguration.auth_token}`
+    );
+
+    const { data: pushNotificationAPNSConfiguration } =
+      await mgmntClient.guardian.getPushNotificationProviderAPNS();
+
+    console.log(
+      `Get Push Notification APNS Configuration, bundle_id: ${pushNotificationAPNSConfiguration.bundle_id}`
+    );
+
+    const { data: updatedPushNotificationAPNSConfiguration } =
+      await mgmntClient.guardian.updatePushNotificationProviderAPNS({
+        bundle_id: uuid(),
+      });
+
+    console.log(
+      `Update Push Notification APNS Configuration, token: ${updatedPushNotificationAPNSConfiguration.bundle_id}`
+    );
+
+    const { data: pushNotificationSNSConfiguration } =
+      await mgmntClient.guardian.getPushNotificationProviderSNS();
+
+    console.log(
+      `Get Push Notification SNS Configuration, aws_secret_access_key: ${pushNotificationSNSConfiguration.aws_secret_access_key}`
+    );
+
+    const { data: updatedPushNotificationSNSConfiguration } =
+      await mgmntClient.guardian.updatePushNotificationProviderSNS({
+        aws_secret_access_key: uuid(),
+      });
+
+    console.log(
+      `Update Push Notification SNS Configuration, aws_secret_access_key: ${updatedPushNotificationSNSConfiguration.aws_secret_access_key}`
+    );
+
+    const { data: pushNotificationFCMConfiguration } =
+      await mgmntClient.guardian.updatePushNotificationProviderFCM({ server_key: uuid() });
+
+    console.log(
+      `Update Push Notification FCM Configuration, server_key: ${pushNotificationFCMConfiguration.server_key}`
+    );
+
+    const { data: smsTemplates } = await mgmntClient.guardian.getSmsFactorTemplates();
+
+    console.log(`Get SMS enrollement message: ${smsTemplates.enrollment_message}`);
+    console.log(`Get SMS verification message: ${smsTemplates.verification_message}`);
+
+    const { data: updateSmsTemplates } = await mgmntClient.guardian.setSmsFactorTemplates({
+      enrollment_message: 'This is the encrollment message ' + uuid(),
+      verification_message: 'This is the verification message ' + uuid(),
+    });
+
+    console.log(`Update SMS enrollement message: ${updateSmsTemplates.enrollment_message}`);
+    console.log(`Update SMS verification message: ${updateSmsTemplates.verification_message}`);
+
+    const { data: phoneTemplates } = await mgmntClient.guardian.getPhoneFactorTemplates();
+
+    console.log(`Get phone enrollement message: ${phoneTemplates.enrollment_message}`);
+    console.log(`Get phone verification message: ${phoneTemplates.verification_message}`);
+
+    const { data: updatePhoneTemplates } = await mgmntClient.guardian.setPhoneFactorTemplates({
+      enrollment_message: 'This is the encrollment message ' + uuid(),
+      verification_message: 'This is the verification message ' + uuid(),
+    });
+
+    console.log(`Update phone enrollement message: ${updatePhoneTemplates.enrollment_message}`);
+    console.log(`Update phone verification message: ${updatePhoneTemplates.verification_message}`);
+
+    await mgmntClient.guardian.setSmsSelectedProvider({ provider: 'twilio' });
+
+    console.log(`Set SMS selected provider to Twilio`);
+
+    await mgmntClient.guardian.setPushNotificationSelectedProvider({ provider: 'sns' });
+
+    console.log(`Set Push Notification selected provider to SNS`);
+
+    const { data: newConnection } = await mgmntClient.connections.create({
+      name: 'TestConnection',
+      strategy: 'auth0',
+      enabled_clients: [program.opts().clientId],
+    });
+
+    const { data: newUser } = await mgmntClient.users.create({
+      connection: newConnection.name as string,
+      email: 'test@test.com',
+      email_verified: true,
+      password: 'jd78w3hku23134?',
+    });
+
+    const { data: newEnrollement } = await mgmntClient.guardian.createEnrollmentTicket({
+      user_id: newUser.user_id as string,
+      send_mail: false,
+    });
+
+    console.log(`create enrollment ticket with url ${newEnrollement.ticket_url}`);
+
+    await mgmntClient.users.delete({
+      id: newUser.user_id as string,
+    });
+    await mgmntClient.connections.delete({
+      id: newConnection.id as string,
+    });
+
+    const { data: phoneFactorMessageTypes } =
+      await mgmntClient.guardian.getPhoneFactorMessageTypes();
+
+    console.log(
+      'Get phone factor message types: ' + phoneFactorMessageTypes.message_types?.join(', ')
+    );
+
+    const { data: updatePhoneFactorMessageTypes } =
+      await mgmntClient.guardian.updatePhoneFactorMessageTypes({
+        message_types: ['sms'],
+      });
+
+    console.log(
+      'Update phone factor message types: ' +
+        updatePhoneFactorMessageTypes.message_types?.join(', ')
+    );
+
+    const { data: phoneFactorSelectedProvider } =
+      await mgmntClient.guardian.getPhoneFactorSelectedProvider();
+
+    console.log('Get phone factor selected provider: ' + phoneFactorSelectedProvider.provider);
+
+    const { data: updatePhoneFactorSelectedProvider } =
+      await mgmntClient.guardian.updatePhoneFactorSelectedProvider({
+        provider: 'auth0',
+      });
+
+    console.log(
+      'Update phone factor selected provider: ' + updatePhoneFactorSelectedProvider.provider
+    );
+
+    const { data: smsSelectedProvider } = await mgmntClient.guardian.getSmsSelectedProvider();
+
+    console.log('Get sms factor selected provider: ' + smsSelectedProvider.provider);
+
+    const { data: updateSmsSelectedProvider } = await mgmntClient.guardian.setSmsSelectedProvider({
+      provider: 'auth0',
+    });
+
+    console.log('Update sms factor selected provider: ' + updateSmsSelectedProvider.provider);
+
+    const { data: policies } = await mgmntClient.guardian.getPolicies();
+
+    console.log(`Get policies: ${policies.join(', ')}`);
+
+    const { data: updatedPolicies } = await mgmntClient.guardian.updatePolicies([
+      'all-applications',
+    ]);
+
+    console.log(`Update policies: ${updatedPolicies.join(', ')}`);
+
+    const { data: resetPolicies } = await mgmntClient.guardian.updatePolicies([]);
+
+    console.log(`Reset policies back to original: ${resetPolicies.join(', ')}`);
+  });
+
+program
   .command('users')
   .description('Test the users endpoints')
   .action(async () => {
