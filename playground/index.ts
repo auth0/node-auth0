@@ -9,6 +9,7 @@ import {
   Connection,
   ManagementApiError,
   ManagementClient,
+  ManagementClientOptionsWithClientCredentials,
   PutAuthenticationMethodsRequestInner,
   ResourceServer,
 } from '../src/management/index';
@@ -596,6 +597,187 @@ program
   });
 
 program
+  .command('rules')
+  .description('Test the rules endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const script = `function (user, context, callback) {
+      callback(null, user, context);
+    }`;
+
+    const { data: createdRule } = await mgmntClient.rules.create({
+      name: `tmp${uuid().replace(/-/g, '')}`,
+      script,
+      enabled: false,
+    });
+    console.log('Created rule:', createdRule.name);
+
+    const { data: gotRule } = await mgmntClient.rules.get({
+      id: createdRule.id as string,
+    });
+    console.log('Got rule:', gotRule.name);
+
+    const { data: gotRules } = await mgmntClient.rules.getAll();
+    console.log(
+      'Got rules:',
+      gotRules.map((x) => x.name)
+    );
+
+    const { data: updatedRule } = await mgmntClient.rules.update(
+      {
+        id: createdRule.id as string,
+      },
+      { enabled: true }
+    );
+    console.log(
+      'Updated rule enabled:',
+      createdRule.name,
+      'from',
+      createdRule.enabled,
+      'to',
+      updatedRule.enabled
+    );
+
+    await mgmntClient.rules.delete({
+      id: createdRule.id as string,
+    });
+    console.log('Deleted rule:', createdRule.name);
+  });
+
+program
+  .command('rules-configs')
+  .description('Test the rules-configs endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: rulesConfigs } = await mgmntClient.rulesConfigs.set(
+      { key: 'foo' },
+      { value: 'bar' }
+    );
+    console.log('Set rules config:', rulesConfigs.key, 'to', rulesConfigs.value);
+
+    const { data: gotRulesConfigs } = await mgmntClient.rulesConfigs.getAll();
+    console.log('Got rules configs:', gotRulesConfigs);
+
+    await mgmntClient.rulesConfigs.delete({ key: rulesConfigs.key });
+    console.log('Deleted rules config:', rulesConfigs.key);
+  });
+
+program
+  .command('stats')
+  .description('Test the stats endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: usersCount } = await mgmntClient.stats.getActiveUsersCount();
+    console.log('Got number of active users that logged in during the last 30 days', usersCount);
+
+    const {
+      data: [stats],
+    } = await mgmntClient.stats.getDaily();
+    console.log('Got stats for:', stats.created_at);
+  });
+
+program
+  .command('tickets')
+  .description('Test the tickets endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const email = `${uuid()}@example.com`;
+    const { data: createdUser } = await mgmntClient.users.create({
+      email,
+      password: uuid(),
+      email_verified: true,
+      connection: 'Username-Password-Authentication',
+    });
+    console.log('Created user:', createdUser.user_id);
+
+    const { data: verifyEmailTicket } = await mgmntClient.tickets.verifyEmail({
+      user_id: createdUser.user_id as string,
+    });
+    console.log('Created verify email ticket', verifyEmailTicket.ticket);
+
+    const { data: changePasswordTicket } = await mgmntClient.tickets.changePassword({
+      user_id: createdUser.user_id as string,
+    });
+    console.log('Created verify email ticket', changePasswordTicket.ticket);
+
+    await mgmntClient.users.delete({
+      id: createdUser.user_id as string,
+    });
+    console.log('Deleted user:', createdUser.user_id);
+  });
+
+program
+  .command('tenants')
+  .description('Test the tenants endpoints')
+  .action(async () => {
+    const opts: ManagementClientOptionsWithClientCredentials = program.opts();
+    const mgmntClient = new ManagementClient(opts);
+
+    const { data: tenant } = await mgmntClient.tenants.getSettings();
+    console.log('Got setting session_lifetime for', opts.domain, tenant.session_lifetime);
+
+    const { data: updatedTenant } = await mgmntClient.tenants.updateSettings({
+      session_lifetime: (tenant.session_lifetime as number) + 1,
+    });
+    console.log(
+      'Updated setting session_lifetime for',
+      opts.domain,
+      updatedTenant.session_lifetime
+    );
+    const { data: revertedTenant } = await mgmntClient.tenants.updateSettings({
+      session_lifetime: tenant.session_lifetime as number,
+    });
+    console.log(
+      'Reverted setting session_lifetime for',
+      opts.domain,
+      revertedTenant.session_lifetime
+    );
+  });
+
+program
+  .command('user-blocks')
+  .description('Test the user-blocks endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const email = `${uuid()}@example.com`;
+    const { data: createdUser } = await mgmntClient.users.create({
+      email,
+      password: uuid(),
+      email_verified: true,
+      connection: 'Username-Password-Authentication',
+    });
+    console.log('Created user:', createdUser.user_id);
+
+    const { data: userBlock } = await mgmntClient.userBlocks.getAll({ identifier: email });
+    console.log('Got user block for:', email, userBlock.blocked_for);
+
+    await mgmntClient.userBlocks.deleteAll({
+      identifier: email,
+    });
+    console.log('Deleted user blocks for:', email);
+
+    const { data: userBlock2 } = await mgmntClient.userBlocks.get({
+      id: createdUser.user_id as string,
+    });
+    console.log('Got user block for:', createdUser.user_id, userBlock2.blocked_for);
+
+    await mgmntClient.userBlocks.delete({
+      id: createdUser.user_id as string,
+    });
+    console.log('Deleted user block for:', createdUser.user_id);
+
+    await mgmntClient.users.delete({
+      id: createdUser.user_id as string,
+    });
+    console.log('Deleted user:', createdUser.user_id);
+  });
+
+program
   .command('users')
   .description('Test the users endpoints')
   .action(async () => {
@@ -817,7 +999,7 @@ program
       await mgmntClient.roles.delete({
         id: role.id as string,
       });
-      console.log('Deleted rold: ', role.id);
+      console.log('Deleted role: ', role.id);
     } finally {
       await mgmntClient.users.delete({
         id: createdUser.user_id as string,
