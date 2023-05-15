@@ -1,5 +1,11 @@
 import * as dotenv from 'dotenv';
 import { v4 as uuid } from 'uuid';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config({
   path: './playground/.env',
@@ -398,6 +404,7 @@ program
   .command('guardian')
   .description('Test the guardians endpoints')
   .action(async () => {
+    // Increase the maxRetries, as there are a lot of calls happening.
     const mgmntClient = new ManagementClient({ ...program.opts(), retry: { maxRetries: 9 } });
 
     const { data: factors } = await mgmntClient.guardian.getFactors();
@@ -594,6 +601,146 @@ program
     const { data: resetPolicies } = await mgmntClient.guardian.updatePolicies([]);
 
     console.log(`Reset policies back to original: ${resetPolicies.join(', ')}`);
+  });
+
+program
+  .command('hooks')
+  .description('Test the hooks endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: newHook } = await mgmntClient.hooks.create({
+      name: 'Test Hook',
+      script: `console.log('hello')`,
+      triggerId: 'pre-user-registration',
+    });
+
+    console.log(`Create hook: ${newHook.name}`);
+
+    const { data: updatedHook } = await mgmntClient.hooks.update(
+      {
+        id: newHook.id as string,
+      },
+      { name: 'Test Hook 2' }
+    );
+
+    console.log(`Update hook: ${updatedHook.name}`);
+
+    const { data: hook } = await mgmntClient.hooks.get({ id: updatedHook.id as string });
+
+    console.log(`Get hook: ${hook.name}`);
+
+    await mgmntClient.hooks.addSecrets(
+      {
+        id: newHook.id as string,
+      },
+      { 'test-key': 'test-value', 'test-key-2': 'test-value-2' }
+    );
+
+    console.log(`Add secrets`);
+
+    const { data: secrets } = await mgmntClient.hooks.getSecrets({
+      id: updatedHook.id as string,
+    });
+
+    console.log(`Get secrets: ${JSON.stringify(secrets)} }`);
+
+    await mgmntClient.hooks.updateSecrets(
+      {
+        id: newHook.id as string,
+      },
+      {
+        'test-key': 'test-value-updated',
+        'test-key-2': 'test-value-2',
+      }
+    );
+
+    console.log(`Update secrets`);
+
+    await mgmntClient.hooks.deleteSecrets(
+      {
+        id: newHook.id as string,
+      },
+      ['test-key']
+    );
+
+    console.log(`Delete secret 'test-key'`);
+
+    const { data: secretsAfterDelete } = await mgmntClient.hooks.getSecrets({
+      id: updatedHook.id as string,
+    });
+
+    console.log(`Get secrets after deleting one: ${JSON.stringify(secretsAfterDelete)} }`);
+
+    await mgmntClient.hooks.delete({
+      id: newHook.id as string,
+    });
+
+    console.log('Delete hook');
+  });
+
+program
+  .command('jobs')
+  .description('Test the custom-domains endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    // Create test connection
+
+    const { data: connection } = await mgmntClient.connections.create({
+      name: 'ConnectionTest',
+      strategy: 'auth0',
+      enabled_clients: [program.opts().clientId],
+    });
+
+    const usersFilePath = path.join(__dirname, '../test/data/users.json');
+    const usersFileData = fs.readFileSync(usersFilePath, 'utf-8');
+
+    const { data: createImportJob } = await mgmntClient.jobs.importUsers({
+      users: new Blob([usersFileData], {
+        type: 'application/json',
+      }),
+      connection_id: connection.id as string,
+    });
+
+    console.log(`Import users: ${createImportJob.id}`);
+
+    let isDone = false;
+
+    while (!isDone) {
+      const { data: importJob } = await mgmntClient.jobs.get({
+        id: createImportJob.id,
+      });
+      console.log(`Get import job: ${importJob.id} - ${importJob.status}`);
+
+      if (importJob.status === 'completed' || importJob.status === 'failed') {
+        isDone = true;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+
+    const { data: createExportJob } = await mgmntClient.jobs.exportUsers({
+      connection_id: connection.id,
+    });
+
+    console.log(`Export users: ${createExportJob.id}`);
+
+    isDone = false;
+    while (!isDone) {
+      const { data: exportJob } = await mgmntClient.jobs.get({
+        id: createExportJob.id,
+      });
+      console.log(`Get export job: ${exportJob.id} - ${exportJob.status}`);
+
+      if (exportJob.status === 'completed' || exportJob.status === 'failed') {
+        isDone = true;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+
+    await mgmntClient.connections.delete({ id: connection.id as string });
   });
 
 program
