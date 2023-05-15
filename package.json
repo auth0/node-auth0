@@ -25,7 +25,7 @@
     "test:ci": "c8 npm run test",
     "precommit": "pretty-quick --staged",
     "lint": "eslint ./src --ext ts",
-    "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm examples/playground/index.ts"
+    "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm playground/index.ts"
   },
   "repository": {
     "type": "git",
@@ -61,6 +61,7 @@
     "c8": "^7.13.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "commander": "^10.0.1",
     "dotenv": "^16.0.3",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.8.0",
