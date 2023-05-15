@@ -1095,7 +1095,7 @@ export async function roles() {
     await mgmntClient.resourceServers.delete({
       id: createdApi.id as string,
     });
-    console.log('Deleted api:', createdApi.name);
+    console.log('Deleted api:', createdApi.id);
     await mgmntClient.users.delete({
       id: createdUser.user_id as string,
     });
