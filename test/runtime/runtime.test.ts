@@ -70,7 +70,7 @@ describe('Runtime', () => {
   it('should only retry until default configured attempts', async () => {
     const request = nock(URL, { encodedQueryParams: true })
       .get('/clients')
-      .times(4)
+      .times(6)
       .reply(429)
       .get('/clients')
       .reply(200, [{ client_id: '123' }]);
@@ -108,7 +108,7 @@ describe('Runtime', () => {
   it('should retry 429 the configured amount of times', async () => {
     const request = nock(URL, { encodedQueryParams: true })
       .get('/clients')
-      .times(4)
+      .times(6)
       .reply(429)
       .get('/clients')
       .reply(200, [{ client_id: '123' }]);
@@ -125,7 +125,7 @@ describe('Runtime', () => {
         );
       },
       retry: {
-        maxRetries: 4,
+        maxRetries: 6,
       },
     });
 
