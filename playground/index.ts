@@ -397,6 +397,7 @@ program
   .command('guardian')
   .description('Test the guardians endpoints')
   .action(async () => {
+    // Increase the maxRetries, as there are a lot of calls happening.
     const mgmntClient = new ManagementClient({ ...program.opts(), retry: { maxRetries: 9 } });
 
     const { data: factors } = await mgmntClient.guardian.getFactors();
@@ -593,6 +594,82 @@ program
     const { data: resetPolicies } = await mgmntClient.guardian.updatePolicies([]);
 
     console.log(`Reset policies back to original: ${resetPolicies.join(', ')}`);
+  });
+
+program
+  .command('hooks')
+  .description('Test the hooks endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: newHook } = await mgmntClient.hooks.create({
+      name: 'Test Hook',
+      script: `console.log('hello')`,
+      triggerId: 'pre-user-registration',
+    });
+
+    console.log(`Create hook: ${newHook.name}`);
+
+    const { data: updatedHook } = await mgmntClient.hooks.update(
+      {
+        id: newHook.id as string,
+      },
+      { name: 'Test Hook 2' }
+    );
+
+    console.log(`Update hook: ${updatedHook.name}`);
+
+    const { data: hook } = await mgmntClient.hooks.get({ id: updatedHook.id as string });
+
+    console.log(`Get hook: ${hook.name}`);
+
+    await mgmntClient.hooks.addSecrets(
+      {
+        id: newHook.id as string,
+      },
+      { 'test-key': 'test-value', 'test-key-2': 'test-value-2' }
+    );
+
+    console.log(`Add secrets`);
+
+    const { data: secrets } = await mgmntClient.hooks.getSecrets({
+      id: updatedHook.id as string,
+    });
+
+    console.log(`Get secrets: ${JSON.stringify(secrets)} }`);
+
+    await mgmntClient.hooks.updateSecrets(
+      {
+        id: newHook.id as string,
+      },
+      {
+        'test-key': 'test-value-updated',
+        'test-key-2': 'test-value-2',
+      }
+    );
+
+    console.log(`Update secrets`);
+
+    await mgmntClient.hooks.deleteSecrets(
+      {
+        id: newHook.id as string,
+      },
+      ['test-key']
+    );
+
+    console.log(`Delete secret 'test-key'`);
+
+    const { data: secretsAfterDelete } = await mgmntClient.hooks.getSecrets({
+      id: updatedHook.id as string,
+    });
+
+    console.log(`Get secrets after deleting one: ${JSON.stringify(secretsAfterDelete)} }`);
+
+    await mgmntClient.hooks.delete({
+      id: newHook.id as string,
+    });
+
+    console.log('Delete hook');
   });
 
 program
