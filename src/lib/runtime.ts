@@ -1,4 +1,5 @@
-import fetch, { RequestInit, RequestInfo, Response, Blob, FormData, AbortError } from 'node-fetch';
+import type { RequestInit, RequestInfo } from 'node-fetch';
+import { Response } from 'node-fetch';
 import { retry } from './retry';
 import { FetchError, RequiredError, TimeoutError } from './errors';
 import {
@@ -9,8 +10,16 @@ import {
   Middleware,
   FetchAPI,
 } from './models';
+import fetch from 'node-fetch';
+import { AbortSignal } from 'node-fetch/externals';
+import FormData from 'form-data';
 
-export { Blob, FormData } from 'node-fetch';
+// const { constructor: _Blob } = await new Response().blob();
+// TODO: We need to figure out the correct type here.
+// Using any for now, as it does work at run-time.
+export const Blob = {} as any;
+
+export { FormData };
 export * from './models';
 
 /**
@@ -104,9 +113,9 @@ export class BaseAPI {
       controller.abort();
     }, this.timeoutDuration);
     try {
-      return await this.fetchApi(url, { signal: controller.signal, ...init });
-    } catch (e) {
-      if (e instanceof AbortError) {
+      return await this.fetchApi(url, { signal: controller.signal as AbortSignal, ...init });
+    } catch (e: any) {
+      if (e.name === 'AbortError') {
         throw new TimeoutError();
       }
       throw e;

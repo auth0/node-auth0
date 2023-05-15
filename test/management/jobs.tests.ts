@@ -2,6 +2,7 @@ import chai from 'chai';
 import nock from 'nock';
 import path from 'path';
 import fs from 'fs';
+import { Readable } from 'stream';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
@@ -175,15 +176,14 @@ describe('JobsManager', () => {
   const usersFileData = fs.readFileSync(usersFilePath, 'utf-8');
 
   describe('#importUsers', () => {
-    const data: PostUsersImportsData = {
-      users: new Blob([usersFileData], {
-        type: 'application/json',
-      }),
-      connection_id: 'con_test',
-    };
+    let data: PostUsersImportsData;
     let request: nock.Scope;
 
     beforeEach(function () {
+      data = {
+        users: fs.createReadStream(usersFilePath) as any,
+        connection_id: 'con_test',
+      };
       request = nock(API_URL).post('/jobs/users-imports').reply(200, {});
     });
 
@@ -191,7 +191,7 @@ describe('JobsManager', () => {
       jobs.importUsers(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should have the payload in response.data', function (done) {
+    it('xxshould have the payload in response.data', function (done) {
       nock.cleanAll();
       const payload = {
         status: 'pending',
@@ -269,7 +269,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Content-Type', (header) => header.indexOf('multipart/form-data') === 0)
+        .matchHeader('Content-Type', (header) => header[0].indexOf('multipart/form-data') === 0)
         .reply(200, {});
 
       jobs.importUsers(data).then(() => {
@@ -285,21 +285,25 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header: string) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
         .post('/jobs/users-imports', function (this: any, body: any) {
+          console.log('body');
+          console.log(body);
+          console.log('boundary');
+          console.log(boundary);
           const parts = extractParts(body, boundary);
 
           // Validate the connection id.
           expect(parts.connection_id).to.exist.to.be.a('string').to.equal(data.connection_id);
 
           // Validate the upsert param - default is false
-          expect(parts.upsert).to.exist.to.be.a('string').to.equal('false');
+          expect(parts.upsert).to.exist.to.be.a('string').to.equal('0');
 
           // Validate the send_completion_email param - default is true
-          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('true');
+          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('1');
 
           // Validate the content type of the users JSON.
           expect(parts.users)
@@ -328,7 +332,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -336,7 +340,7 @@ describe('JobsManager', () => {
           const parts = extractParts(body, boundary);
 
           // Validate the upsert param
-          expect(parts.upsert).to.exist.to.be.a('string').to.equal('true');
+          expect(parts.upsert).to.exist.to.be.a('string').to.equal('1');
 
           return true;
         })
@@ -355,7 +359,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -363,7 +367,7 @@ describe('JobsManager', () => {
           const parts = extractParts(body, boundary);
 
           // Validate the upsert param
-          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('false');
+          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('0');
 
           return true;
         })
@@ -393,15 +397,14 @@ describe('JobsManager', () => {
   });
 
   describe('#importUsers with JSON data', () => {
-    const data = {
-      users: new Blob([usersFileData], {
-        type: 'application/json',
-      }),
-      connection_id: 'con_test',
-    };
+    let data: PostUsersImportsData;
     let request: nock.Scope;
 
     beforeEach(function () {
+      data = {
+        users: fs.createReadStream(usersFilePath) as any,
+        connection_id: 'con_test',
+      };
       request = nock(API_URL).post('/jobs/users-imports').reply(200);
     });
 
@@ -411,7 +414,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })

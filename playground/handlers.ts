@@ -160,7 +160,7 @@ export async function branding() {
     },
     widget: {
       logo_position: 'center',
-      logo_url: '',
+      logo_url: 'https://cdn.auth0.com/website/bob/press/shield-dark.png',
       logo_height: 52,
       header_text_alignment: 'center',
       social_buttons_layout: 'bottom',
@@ -634,12 +634,9 @@ export async function jobs() {
   });
 
   const usersFilePath = path.join(__dirname, '../test/data/users.json');
-  const usersFileData = fs.readFileSync(usersFilePath, 'utf-8');
 
   const { data: createImportJob } = await mgmntClient.jobs.importUsers({
-    users: new Blob([usersFileData], {
-      type: 'application/json',
-    }),
+    users: fs.createReadStream(usersFilePath),
     connection_id: connection.id as string,
   });
 

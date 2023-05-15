@@ -4,7 +4,7 @@ import {
   VoidApiResponse,
   validateRequiredRequestParams,
 } from '../lib/runtime';
-import { BaseAuthAPI, Options } from './base-auth-api';
+import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api';
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator';
 
 export interface TokenSet {
@@ -176,7 +176,7 @@ export interface TokenExchangeGrantRequest {
  */
 export class OAuth extends BaseAuthAPI {
   private idTokenValidator: IDTokenValidator;
-  constructor(options: Options) {
+  constructor(options: AuthenticationClientOptions) {
     super(options);
     this.idTokenValidator = new IDTokenValidator(options);
   }

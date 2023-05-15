@@ -7,8 +7,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
       "types": "./dist/typings/index.d.ts"
     }
   },
@@ -17,7 +17,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "prebuild": "rm -rf dist",
+    "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json && echo '{\"type\": \"commonjs\"}'> dist/cjs/package.json",
     "docs": "typedoc --options typedoc.cjs",
     "test": "npm run test:mocha && npm run test:jest",
     "test:mocha": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' mocha",
@@ -46,7 +47,7 @@
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
     "jose": "^4.13.2",
-    "node-fetch": "^3.3.1",
+    "node-fetch": "^2.6.7",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

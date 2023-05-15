@@ -1,9 +1,9 @@
 import { ResponseError } from '../lib/errors';
 import { BaseAPI, ClientOptions } from '../lib/runtime';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './client-authentication';
-import { Response, Headers } from 'node-fetch';
+import type { Response, Headers } from 'node-fetch';
 
-export interface Options extends ClientOptions {
+export interface AuthenticationClientOptions extends ClientOptions {
   domain: string;
   clientId: string;
   clientSecret?: string;
@@ -66,7 +66,7 @@ export class BaseAuthAPI extends BaseAPI {
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
 
-  constructor(options: Options) {
+  constructor(options: AuthenticationClientOptions) {
     super({ ...options, baseUrl: `https://${options.domain}`, parseError });
 
     this.domain = options.domain;
