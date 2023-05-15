@@ -744,6 +744,59 @@ program
   });
 
 program
+  .command('resource-servers')
+  .description('Test the resource-servers endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const apiId = `api_${uuid()}`;
+    await mgmntClient.resourceServers.create({
+      identifier: apiId,
+      scopes: [{ value: 'foo' }],
+    });
+    const createdApi = (await mgmntClient.resourceServers.getAll()).data.find(
+      (api) => api.identifier === apiId
+    ) as ResourceServer;
+    console.log('Created api:', createdApi.id);
+
+    try {
+      const { data: gotApi } = await mgmntClient.resourceServers.get({
+        id: createdApi.id as string,
+      });
+      console.log('Got API: ', gotApi.id);
+
+      const { data: gotApis } = await mgmntClient.resourceServers.getAll();
+      console.log(
+        'Got APIs: ',
+        gotApis.map((api) => api.id)
+      );
+
+      await mgmntClient.resourceServers.update(
+        {
+          id: createdApi.id as string,
+        },
+        { token_lifetime: (createdApi.token_lifetime as number) + 1 }
+      );
+      const { data: gotUpdatedApi } = await mgmntClient.resourceServers.get({
+        id: createdApi.id as string,
+      });
+      console.log(
+        'Updated API token_lifetime from:',
+        createdApi.token_lifetime,
+        'to',
+        gotUpdatedApi.token_lifetime
+      );
+    } catch (e) {
+      throw e;
+    } finally {
+      await mgmntClient.resourceServers.delete({
+        id: createdApi.id as string,
+      });
+      console.log('Deleted api:', createdApi.id);
+    }
+  });
+
+program
   .command('roles')
   .description('Test the roles endpoints')
   .action(async () => {
@@ -818,7 +871,7 @@ program
         { id: createdRole.id as string },
         { users: [createdUser.user_id as string] }
       );
-      console.log('Assigned role:', createdRole.id, 'to', createdUser.id);
+      console.log('Assigned role:', createdRole.id, 'to', createdUser.user_id);
 
       const { data: users } = await mgmntClient.roles.getUsers({ id: createdRole.id as string });
       console.log(
@@ -837,7 +890,7 @@ program
       await mgmntClient.resourceServers.delete({
         id: createdApi.id as string,
       });
-      console.log('Deleted api:', createdRole.name);
+      console.log('Deleted api:', createdApi.name);
       await mgmntClient.users.delete({
         id: createdUser.user_id as string,
       });
