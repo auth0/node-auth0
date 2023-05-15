@@ -1,9 +1,9 @@
 import { Response } from 'node-fetch';
 
 const MAX_REQUEST_RETRY_JITTER = 250;
-const MAX_REQUEST_RETRY_DELAY = 1000;
+const MAX_REQUEST_RETRY_DELAY = 10000;
 const MIN_REQUEST_RETRY_DELAY = 250;
-const DEFAULT_NUMBER_RETRIES = 3;
+const DEFAULT_NUMBER_RETRIES = 5;
 const MAX_NUMBER_RETRIES = 10;
 const BASE_DELAY = 250;
 
@@ -42,7 +42,7 @@ export interface RetryConfiguration {
   enabled?: boolean;
   /**
    * Configure the max amount of retries the SDK should do.
-   * Defaults to 3.
+   * Defaults to 5.
    */
   maxRetries?: number;
   /**
