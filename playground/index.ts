@@ -13,6 +13,9 @@ dotenv.config({
 
 import {
   Connection,
+  GetOrganizationMemberRoles200ResponseOneOfInner,
+  GetUsers200ResponseOneOf,
+  GetUsers200ResponseOneOfInner,
   ManagementApiError,
   ManagementClient,
   ManagementClientOptionsWithClientCredentials,
@@ -681,7 +684,7 @@ program
 
 program
   .command('jobs')
-  .description('Test the custom-domains endpoints')
+  .description('Test the jobs endpoints')
   .action(async () => {
     const mgmntClient = new ManagementClient(program.opts());
 
@@ -741,6 +744,244 @@ program
     }
 
     await mgmntClient.connections.delete({ id: connection.id as string });
+  });
+
+program
+  .command('log-streams')
+  .description('Test the log streams endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: createdLogStream } = await mgmntClient.logStreams.create({
+      name: 'Test Log Stream',
+      type: 'http',
+      sink: {
+        httpEndpoint: 'https://my-stream.com',
+        httpContentType: 'application/json',
+        httpContentFormat: 'JSONOBJECT',
+        httpAuthorization: 'http-auth',
+      },
+    });
+
+    console.log(
+      `Create log streams ${createdLogStream.id}, isPaused: ${createdLogStream.status === 'paused'}`
+    );
+
+    const { data: updatedLogStream } = await mgmntClient.logStreams.update(
+      {
+        id: createdLogStream.id as string,
+      },
+      { status: 'paused' }
+    );
+
+    console.log(
+      `Update log streams ${updatedLogStream.id}, isPaused: ${updatedLogStream.status === 'paused'}`
+    );
+
+    const { data: logStream } = await mgmntClient.logStreams.get({
+      id: updatedLogStream.id as string,
+    });
+
+    console.log(`Get log streams ${logStream.id}, isPaused: ${logStream.status === 'paused'}`);
+
+    await mgmntClient.logStreams.delete({ id: logStream.id as string });
+
+    console.log('Delete log streams');
+  });
+
+program
+  .command('logs')
+  .description('Test the logs endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: logs } = await mgmntClient.logs.getAll();
+
+    console.log(`Get all logs, count: ${logs.length}`);
+
+    const { data: log } = await mgmntClient.logs.get({ id: logs[0].log_id as string });
+
+    console.log(`Get log ${log.log_id}`);
+  });
+
+program
+  .command('organizations')
+  .description('Test the organizations endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    let connection: Connection | undefined = undefined;
+    let role: GetOrganizationMemberRoles200ResponseOneOfInner | undefined = undefined;
+    let user: GetUsers200ResponseOneOfInner | undefined = undefined;
+
+    try {
+      const { data: connectionData } = await mgmntClient.connections.create({
+        name: 'OrganizationConnection',
+        strategy: 'auth0',
+        enabled_clients: [program.opts().clientId],
+      });
+
+      const { data: userData } = await mgmntClient.users.create({
+        connection: connectionData.name as string,
+        name: 'TestUser',
+        email: 'test@foo.com',
+        email_verified: true,
+        password: uuid(),
+      });
+
+      const { data: roleData } = await mgmntClient.roles.create({
+        name: 'TestRole',
+      });
+
+      connection = connectionData;
+      user = userData;
+      role = roleData;
+
+      const { data: newOrganization } = await mgmntClient.organizations.create({
+        name: 'organization',
+      });
+
+      console.log(`Create organization: ${newOrganization.name}`);
+
+      const { data: updatedOrganization } = await mgmntClient.organizations.update(
+        {
+          id: newOrganization.id as string,
+        },
+        { name: 'organization-2' }
+      );
+
+      console.log(`Update organization: ${updatedOrganization.name}`);
+
+      const { data: organization } = await mgmntClient.organizations.get({
+        id: newOrganization.id as string,
+      });
+
+      console.log(`Get organization: ${organization.name}`);
+
+      const { data: newEnabledConnection } = await mgmntClient.organizations.addEnabledConnection(
+        {
+          id: organization.id as string,
+        },
+        { connection_id: connection.id as string, assign_membership_on_login: true }
+      );
+
+      console.log(
+        `Enable connection: assign_membership_on_login: ${newEnabledConnection.assign_membership_on_login}`
+      );
+
+      const { data: updatedEnabledConnection } =
+        await mgmntClient.organizations.updateEnabledConnection(
+          {
+            id: organization.id as string,
+            connectionId: connection.id as string,
+          },
+          { assign_membership_on_login: false }
+        );
+
+      console.log(
+        `Update enabled connection: assign_membership_on_login: ${updatedEnabledConnection.assign_membership_on_login}`
+      );
+
+      const { data: enabledConnections } = await mgmntClient.organizations.getEnabledConnections({
+        id: organization.id as string,
+      });
+
+      console.log(`Get enabled connections:`);
+
+      const { data: enabledConnection } = await mgmntClient.organizations.getEnabledConnection({
+        id: organization.id as string,
+        connectionId: enabledConnections[0].connection_id as string,
+      });
+
+      console.log(
+        `Get enabled connection: assign_membership_on_login: ${enabledConnection.assign_membership_on_login}`
+      );
+
+      console.log(connection.id + ' - ' + enabledConnection.connection_id);
+
+      await mgmntClient.organizations.addMembers(
+        {
+          id: organization.id as string,
+        },
+        { members: [user.user_id] }
+      );
+
+      console.log(`Add member to organization`);
+
+      const { data: members } = await mgmntClient.organizations.getMembers({
+        id: organization.id as string,
+      });
+
+      console.log(`Get members to organization ${members.map((m) => m.name).join(',')}`);
+
+      await mgmntClient.organizations.addMemberRoles(
+        {
+          id: organization.id as string,
+          user_id: user.user_id as string,
+        },
+        { roles: [role.id as string] }
+      );
+
+      console.log(`Add member role to organization user`);
+
+      const { data: memberRoles } = await mgmntClient.organizations.getMemberRoles({
+        id: organization.id as string,
+        user_id: user.user_id as string,
+      });
+
+      console.log(
+        `Get member roles for organization user ${memberRoles.map((m) => m.name).join(',')}`
+      );
+
+      await mgmntClient.organizations.deleteMemberRoles(
+        {
+          id: organization.id as string,
+          user_id: user.user_id as string,
+        },
+        { roles: [role.id as string] }
+      );
+
+      const { data: removedMemberRoles } = await mgmntClient.organizations.getMemberRoles({
+        id: organization.id as string,
+        user_id: user.user_id as string,
+      });
+
+      console.log(
+        `Remove member roles for organization user ${removedMemberRoles
+          .map((m) => m.name)
+          .join(',')}`
+      );
+
+      await mgmntClient.organizations.deleteMembers(
+        {
+          id: organization.id as string,
+        },
+        { members: [user.user_id as string] }
+      );
+
+      const { data: removedMembers } = await mgmntClient.organizations.getMembers({
+        id: organization.id as string,
+      });
+
+      console.log(
+        `Remove members from organization ${removedMembers.map((m) => m.name).join(',')}`
+      );
+
+      await mgmntClient.organizations.delete({ id: organization.id as string });
+      console.log('Remove organization');
+    } finally {
+      if (role) {
+        await mgmntClient.roles.delete({ id: role.id as string });
+      }
+
+      if (user) {
+        await mgmntClient.users.delete({ id: user.user_id as string });
+      }
+
+      if (connection) {
+        await mgmntClient.connections.delete({ id: connection.id as string });
+      }
+    }
   });
 
 program
@@ -931,8 +1172,6 @@ program
         'for',
         createdRole.id
       );
-    } catch (e) {
-      throw e;
     } finally {
       await mgmntClient.roles.delete({
         id: createdRole.id as string,
