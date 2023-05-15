@@ -6200,7 +6200,7 @@ export type PatchBreachedPasswordDetectionRequestMethodEnum =
 export interface PatchBreachedPasswordDetectionRequestStage {
   /**
    */
-  pre_user_registration?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
+  'pre-user-registration'?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
 }
 /**
  *
@@ -6509,10 +6509,10 @@ export type PatchSuspiciousIpThrottlingRequestShieldsEnum =
 export interface PatchSuspiciousIpThrottlingRequestStage {
   /**
    */
-  pre_login?: PatchSuspiciousIpThrottlingRequestStagePreLogin;
+  'pre-login'?: PatchSuspiciousIpThrottlingRequestStagePreLogin;
   /**
    */
-  pre_user_registration?: PatchSuspiciousIpThrottlingRequestStagePreUserRegistration;
+  'pre-user-registration'?: PatchSuspiciousIpThrottlingRequestStagePreUserRegistration;
 }
 /**
  * Configuration options that apply before every login attempt.

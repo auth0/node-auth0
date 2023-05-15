@@ -26,10 +26,17 @@ export class IDTokenValidator {
     domain,
     clientId,
     clientSecret,
+    agent,
+    headers,
+    timeoutDuration,
     idTokenSigningAlg = 'RS256',
     clockTolerance = DEFAULT_CLOCK_TOLERANCE,
   }: Options) {
-    this.jwks = jose.createRemoteJWKSet(new URL(`https://${domain}/.well-known/jwks.json`));
+    this.jwks = jose.createRemoteJWKSet(new URL(`https://${domain}/.well-known/jwks.json`), {
+      timeoutDuration,
+      agent,
+      headers,
+    });
 
     this.alg = idTokenSigningAlg;
     this.audience = clientId;

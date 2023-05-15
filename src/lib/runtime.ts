@@ -1,6 +1,6 @@
-import fetch, { RequestInit, RequestInfo, Response, Blob, FormData } from 'node-fetch';
+import fetch, { RequestInit, RequestInfo, Response, Blob, FormData, AbortError } from 'node-fetch';
 import { retry } from './retry';
-import { FetchError, RequiredError } from './errors';
+import { FetchError, RequiredError, TimeoutError } from './errors';
 import {
   RequestOpts,
   InitOverrideFunction,
@@ -21,6 +21,7 @@ export class BaseAPI {
   private middleware: Middleware[];
   private fetchApi: FetchAPI;
   private parseError: (response: Response) => Promise<Error> | Error;
+  private timeoutDuration: number;
 
   constructor(protected configuration: Configuration) {
     if (configuration.baseUrl === null || configuration.baseUrl === undefined) {
@@ -34,6 +35,8 @@ export class BaseAPI {
     this.middleware = configuration.middleware || [];
     this.fetchApi = configuration.fetchApi || fetch;
     this.parseError = configuration.parseError;
+    this.timeoutDuration =
+      typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
   }
 
   protected async request(
@@ -72,6 +75,7 @@ export class BaseAPI {
       method: context.method,
       headers,
       body: context.body,
+      agent: this.configuration.agent,
     };
 
     const overriddenInit: RequestInit = {
@@ -94,59 +98,78 @@ export class BaseAPI {
     return { url, init };
   }
 
+  private fetchWithTimeout = async (url: URL | RequestInfo, init: RequestInit) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, this.timeoutDuration);
+    try {
+      return await this.fetchApi(url, { signal: controller.signal, ...init });
+    } catch (e) {
+      if (e instanceof AbortError) {
+        throw new TimeoutError();
+      }
+      throw e;
+    } finally {
+      clearTimeout(timeout);
+    }
+  };
+
   private fetch = async (url: URL | RequestInfo, init: RequestInit) => {
     let fetchParams = { url, init };
     for (const middleware of this.middleware) {
       if (middleware.pre) {
         fetchParams =
           (await middleware.pre({
-            fetch: this.fetchApi,
+            fetch: this.fetchWithTimeout,
             ...fetchParams,
           })) || fetchParams;
       }
     }
     let response: Response | undefined = undefined;
+    let error: Error | undefined = undefined;
     try {
       response =
         this.configuration.retry?.enabled !== false
-          ? await retry(() => this.fetchApi(fetchParams.url, fetchParams.init), {
+          ? await retry(() => this.fetchWithTimeout(fetchParams.url, fetchParams.init), {
               ...this.configuration.retry,
             })
-          : await this.fetchApi(fetchParams.url, fetchParams.init);
-    } catch (e) {
+          : await this.fetchWithTimeout(fetchParams.url, fetchParams.init);
+    } catch (e: any) {
+      error = e;
+    }
+    if (error || !(response as Response).ok) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
           response =
             (await middleware.onError({
-              fetch: this.fetchApi,
+              fetch: this.fetchWithTimeout,
               ...fetchParams,
-              error: e,
+              error,
               response: response ? response.clone() : undefined,
             })) || response;
         }
       }
       if (response === undefined) {
-        if (e instanceof Error) {
-          throw new FetchError(
-            e,
-            'The request failed and the interceptors did not return an alternative response'
-          );
-        } else {
-          throw e;
+        throw new FetchError(
+          error as Error,
+          'The request failed and the interceptors did not return an alternative response'
+        );
+      }
+    } else {
+      for (const middleware of this.middleware) {
+        if (middleware.post) {
+          response =
+            (await middleware.post({
+              fetch: this.fetchApi,
+              ...fetchParams,
+              response: (response as Response).clone(),
+            })) || response;
         }
       }
     }
-    for (const middleware of this.middleware) {
-      if (middleware.post) {
-        response =
-          (await middleware.post({
-            fetch: this.fetchApi,
-            ...fetchParams,
-            response: response.clone(),
-          })) || response;
-      }
-    }
-    return response;
+
+    return response as Response;
   };
 }
 

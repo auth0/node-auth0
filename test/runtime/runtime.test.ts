@@ -2,7 +2,12 @@ import nock from 'nock';
 import { jest } from '@jest/globals';
 import { AuthenticationClient, ManagementClient } from '../../src';
 import { ResponseError } from '../../src/lib/errors';
-import { InitOverrideFunction, RequestOpts } from '../../src/lib/models';
+import {
+  ErrorContext,
+  InitOverrideFunction,
+  RequestOpts,
+  ResponseContext,
+} from '../../src/lib/models';
 import { BaseAPI } from '../../src/lib/runtime';
 import { RequestInit, Response } from 'node-fetch';
 import { AuthApiError } from '../../src/auth/base-auth-api';
@@ -20,19 +25,32 @@ export class TestClient extends BaseAPI {
   }
 }
 
+const parseError = async (response: Response) => {
+  const body = await response.text();
+  return new ResponseError(
+    response.status,
+    body,
+    response.headers,
+    'Response returned an error code'
+  );
+};
+
 describe('Runtime', () => {
   const URL = 'https://tenant.auth0.com/api/v2';
-  let _setTimeout: typeof setTimeout;
+  let interval: NodeJS.Timer;
 
   beforeEach(() => {
-    _setTimeout = setTimeout;
-    (global as any).setTimeout = (fn: () => void, _timeout: number): void => fn();
+    interval = setInterval(() => jest.advanceTimersByTime(1000), 10);
+    jest.useFakeTimers({
+      doNotFake: ['nextTick'],
+    });
   });
 
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
-    (global as any).setTimeout = _setTimeout;
+    jest.useRealTimers();
+    clearInterval(interval);
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -45,15 +63,7 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
     });
 
     const response = await client.testRequest({
@@ -77,32 +87,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
     });
 
-    try {
-      await client.testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
   });
 
   it('should retry 429 the configured amount of times', async () => {
@@ -115,15 +108,7 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         maxRetries: 4,
       },
@@ -141,7 +126,7 @@ describe('Runtime', () => {
   });
 
   it('should not retry if not 429', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
+    nock(URL, { encodedQueryParams: true })
       .get('/clients')
       .reply(428)
       .get('/clients')
@@ -149,32 +134,15 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
     });
 
-    try {
-      await client.testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(428);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 428 }));
   });
 
   it('should retry using a configurable status code', async () => {
@@ -187,15 +155,7 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         retryWhen: [428],
       },
@@ -223,15 +183,7 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         retryWhen: [428, 429],
       },
@@ -241,7 +193,6 @@ describe('Runtime', () => {
       path: `/clients`,
       method: 'GET',
     });
-
     const data = (await response.json()) as Array<{ client_id: string }>;
 
     expect(data[0].client_id).toBe('123');
@@ -259,36 +210,18 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         retryWhen: [428],
       },
     });
 
-    try {
-      await client.testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
-      });
-
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
   });
 
   it('should not retry if not enabled', async () => {
@@ -300,36 +233,104 @@ describe('Runtime', () => {
 
     const client = new TestClient({
       baseUrl: URL,
-      parseError: async (response: Response) => {
-        const body = await response.text();
-        return new ResponseError(
-          response.status,
-          body,
-          response.headers,
-          'Response returned an error code'
-        );
-      },
+      parseError,
       retry: {
         enabled: false,
       },
     });
 
-    try {
-      await client.testRequest({
+    await expect(
+      client.testRequest({
         path: `/clients`,
         method: 'GET',
-      });
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
+  });
 
-      // Should not reach this
-      expect(true).toBeFalsy();
-    } catch (e: any) {
-      if (e instanceof ResponseError) {
-        expect(e.statusCode).toBe(429);
-        expect(request.isDone()).toBe(false);
-      } else {
-        expect(e).toBeInstanceOf(ResponseError);
-      }
-    }
+  it('should timeout after default time', async () => {
+    const request = nock(URL).get('/clients').delayConnection(10000).reply(200, []);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+    });
+
+    await expect(
+      client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      })
+    ).rejects.toThrowError(
+      expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
+    );
+    nock.abortPendingRequests();
+  });
+
+  it('should timeout after configured time', async () => {
+    const request = nock(URL).get('/clients').delayConnection(100).reply(200, []);
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+      timeoutDuration: 50,
+    });
+
+    await expect(
+      client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      })
+    ).rejects.toThrowError(
+      expect.objectContaining({ cause: expect.objectContaining({ name: 'TimeoutError' }) })
+    );
+    nock.abortPendingRequests();
+  });
+
+  it('should execute onError middleware', async () => {
+    nock(URL).get('/clients').reply(500, {});
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+      timeoutDuration: 50,
+      middleware: [
+        {
+          onError(context: ErrorContext) {
+            return new Response(null, { status: 418 });
+          },
+        },
+      ],
+    });
+
+    await expect(
+      client.testRequest({
+        path: `/clients`,
+        method: 'GET',
+      })
+    ).rejects.toThrowError(expect.objectContaining({ statusCode: 418 }));
+  });
+
+  it('should execute post middleware', async () => {
+    nock(URL).get('/clients').reply(200, { foo: 'bar' });
+
+    const client = new TestClient({
+      baseUrl: URL,
+      parseError,
+      timeoutDuration: 50,
+      middleware: [
+        {
+          post() {
+            return Response.json({ bar: 'foo' }, { status: 200 });
+          },
+        },
+      ],
+    });
+
+    const resonse = client.testRequest({
+      path: `/clients`,
+      method: 'GET',
+    });
+    await expect((await resonse).json()).resolves.toMatchObject({ bar: 'foo' });
   });
 });
 

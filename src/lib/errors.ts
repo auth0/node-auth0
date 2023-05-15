@@ -14,6 +14,16 @@ export class ResponseError extends Error {
 }
 
 /**
+ * Error thrown when the request is aborted due to a timeout.
+ */
+export class TimeoutError extends Error {
+  override name = 'TimeoutError' as const;
+  constructor() {
+    super('The request was timed out.');
+  }
+}
+
+/**
  * Error thrown when there is a network error.
  */
 export class FetchError extends Error {
