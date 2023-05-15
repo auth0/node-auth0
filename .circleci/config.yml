@@ -38,6 +38,7 @@ workflows:
             parameters:
               node-version: ["16.18", "18.12", "20.0"]
       - ship/node-publish:
+          publish-command: npm publish --tag beta
           requires:
             - build-and-test
           context:
@@ -46,4 +47,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - beta

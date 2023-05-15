@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.0.0-beta.0](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.0) (2023-05-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v4.0.0-beta.0)
+
+- Rewritten from the ground up in TypeScript
+- Full TypeScript coverage of methods, request paramters, bodies, errors and responses
+- Customisable modern networking stack
+
 ## [v3.3.0](https://github.com/auth0/node-auth0/tree/v3.3.0) (2023-03-14)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.2.0...v3.3.0)
