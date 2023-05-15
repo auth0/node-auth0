@@ -744,6 +744,57 @@ program
   });
 
 program
+  .command('prompts')
+  .description('Test the prompts endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: prompts } = await mgmntClient.prompts.get();
+    console.log('Got prompts:', prompts);
+
+    const { data: updatedPrompts } = await mgmntClient.prompts.update({
+      universal_login_experience:
+        prompts.universal_login_experience === 'classic' ? 'new' : 'classic',
+    });
+    console.log(
+      'Updated universal_login_experience from:',
+      prompts.universal_login_experience,
+      'to',
+      updatedPrompts.universal_login_experience
+    );
+
+    const { data: revertedPrompts } = await mgmntClient.prompts.update({
+      universal_login_experience:
+        prompts.universal_login_experience === 'classic' ? 'new' : 'classic',
+    });
+    console.log(
+      'Reverted universal_login_experience from:',
+      updatedPrompts.universal_login_experience,
+      'to',
+      revertedPrompts.universal_login_experience
+    );
+
+    const { data: customText } = await mgmntClient.prompts.getCustomTextByLanguage({
+      prompt: 'login',
+      language: 'en',
+    });
+    console.log('Got custom text for login in en:', customText);
+
+    await mgmntClient.prompts.updateCustomTextByLanguage(
+      {
+        prompt: 'login',
+        language: 'en',
+      },
+      { login: { title: 'Welcome' } }
+    );
+    const { data } = await mgmntClient.prompts.getCustomTextByLanguage({
+      prompt: 'login',
+      language: 'en',
+    });
+    console.log('Updated custom test for login in en to:', data);
+  });
+
+program
   .command('resource-servers')
   .description('Test the resource-servers endpoints')
   .action(async () => {
