@@ -1,5 +1,11 @@
 import * as dotenv from 'dotenv';
 import { v4 as uuid } from 'uuid';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config({
   path: './playground/.env',
@@ -670,6 +676,70 @@ program
     });
 
     console.log('Delete hook');
+  });
+
+program
+  .command('jobs')
+  .description('Test the custom-domains endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    // Create test connection
+
+    const { data: connection } = await mgmntClient.connections.create({
+      name: 'ConnectionTest',
+      strategy: 'auth0',
+      enabled_clients: [program.opts().clientId],
+    });
+
+    const usersFilePath = path.join(__dirname, '../test/data/users.json');
+    const usersFileData = fs.readFileSync(usersFilePath, 'utf-8');
+
+    const { data: createImportJob } = await mgmntClient.jobs.importUsers({
+      users: new Blob([usersFileData], {
+        type: 'application/json',
+      }),
+      connection_id: connection.id as string,
+    });
+
+    console.log(`Import users: ${createImportJob.id}`);
+
+    let isDone = false;
+
+    while (!isDone) {
+      const { data: importJob } = await mgmntClient.jobs.get({
+        id: createImportJob.id,
+      });
+      console.log(`Get import job: ${importJob.id} - ${importJob.status}`);
+
+      if (importJob.status === 'completed' || importJob.status === 'failed') {
+        isDone = true;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+
+    const { data: createExportJob } = await mgmntClient.jobs.exportUsers({
+      connection_id: connection.id,
+    });
+
+    console.log(`Export users: ${createExportJob.id}`);
+
+    isDone = false;
+    while (!isDone) {
+      const { data: exportJob } = await mgmntClient.jobs.get({
+        id: createExportJob.id,
+      });
+      console.log(`Get export job: ${exportJob.id} - ${exportJob.status}`);
+
+      if (exportJob.status === 'completed' || exportJob.status === 'failed') {
+        isDone = true;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+
+    await mgmntClient.connections.delete({ id: connection.id as string });
   });
 
 program
