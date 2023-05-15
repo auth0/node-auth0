@@ -744,6 +744,108 @@ program
   });
 
 program
+  .command('roles')
+  .description('Test the roles endpoints')
+  .action(async () => {
+    const mgmntClient = new ManagementClient(program.opts());
+
+    const { data: createdRole } = await mgmntClient.roles.create({
+      name: uuid(),
+    });
+    console.log('Created role:', createdRole.name);
+
+    const apiId = `api_${uuid()}`;
+    await mgmntClient.resourceServers.create({
+      identifier: apiId,
+      scopes: [{ value: 'foo' }],
+    });
+    const createdApi = (await mgmntClient.resourceServers.getAll()).data.find(
+      (api) => api.identifier === apiId
+    ) as ResourceServer;
+    console.log('Created api:', createdApi.id);
+
+    const email = `${uuid()}@example.com`;
+    const { data: createdUser } = await mgmntClient.users.create({
+      email,
+      password: uuid(),
+      email_verified: true,
+      connection: 'Username-Password-Authentication',
+    });
+    console.log('Created user:', createdUser.user_id);
+
+    try {
+      const { data: gotRole } = await mgmntClient.roles.get({
+        id: createdRole.id as string,
+      });
+      console.log('Got role:', gotRole.name);
+
+      const { data: gotRoles } = await mgmntClient.roles.getAll();
+      console.log(
+        'Got roles:',
+        gotRoles.map((role) => role.name)
+      );
+
+      const { data: updatedRole } = await mgmntClient.roles.update(
+        { id: createdRole.id as string },
+        { name: uuid() }
+      );
+      console.log('Updated role name from:', gotRole.name, 'to', updatedRole.name);
+
+      const { data: addedPermisions } = await mgmntClient.roles.addPermissions(
+        { id: createdRole.id as string },
+        {
+          permissions: [{ permission_name: 'foo', resource_server_identifier: apiId }],
+        }
+      );
+      console.log('Added permissions:', addedPermisions, 'to', updatedRole.name);
+
+      const { data: gotPermissions } = await mgmntClient.roles.getPermissions({
+        id: createdRole.id as string,
+      });
+      console.log(
+        'Got permission for:',
+        createdRole.id,
+        gotPermissions.map((permission) => permission.permission_name)
+      );
+
+      await mgmntClient.roles.deletePermissions(
+        { id: createdRole.id as string },
+        { permissions: [{ permission_name: 'foo', resource_server_identifier: apiId }] }
+      );
+      console.log('Deleted permission foo for:', createdRole.id);
+
+      await mgmntClient.roles.assignUsers(
+        { id: createdRole.id as string },
+        { users: [createdUser.user_id as string] }
+      );
+      console.log('Assigned role:', createdRole.id, 'to', createdUser.id);
+
+      const { data: users } = await mgmntClient.roles.getUsers({ id: createdRole.id as string });
+      console.log(
+        'Got users:',
+        users.map((user) => user.email),
+        'for',
+        createdRole.id
+      );
+    } catch (e) {
+      throw e;
+    } finally {
+      await mgmntClient.roles.delete({
+        id: createdRole.id as string,
+      });
+      console.log('Deleted role:', createdRole.name);
+      await mgmntClient.resourceServers.delete({
+        id: createdApi.id as string,
+      });
+      console.log('Deleted api:', createdRole.name);
+      await mgmntClient.users.delete({
+        id: createdUser.user_id as string,
+      });
+      console.log('Deleted user:', createdUser.user_id);
+    }
+  });
+
+program
   .command('rules')
   .description('Test the rules endpoints')
   .action(async () => {
@@ -1146,7 +1248,7 @@ program
       await mgmntClient.roles.delete({
         id: role.id as string,
       });
-      console.log('Deleted role: ', role.id);
+      console.log('Deleted role:', role.id);
     } finally {
       await mgmntClient.users.delete({
         id: createdUser.user_id as string,
@@ -1175,7 +1277,7 @@ program
       email: user.email as string,
     });
 
-    console.log('Found user by email: ', userByEmail.email);
+    console.log('Found user by email:', userByEmail.email);
   });
 
 await program.parseAsync(process.argv);
