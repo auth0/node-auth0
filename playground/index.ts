@@ -1610,17 +1610,27 @@ program
   .action(async () => {
     const mgmntClient = new ManagementClient(program.opts());
 
-    const {
-      data: [user],
-    } = await mgmntClient.users.getAll({ per_page: 1 });
+    const email = `${uuid()}@example.com`;
+    const { data: createdUser } = await mgmntClient.users.create({
+      email,
+      password: uuid(),
+      email_verified: true,
+      connection: 'Username-Password-Authentication',
+    });
+    console.log('Created user:', createdUser.user_id);
 
     const {
       data: [userByEmail],
     } = await mgmntClient.usersByEmail.getByEmail({
-      email: user.email as string,
+      email,
     });
 
     console.log('Found user by email:', userByEmail.email);
+
+    await mgmntClient.users.delete({
+      id: createdUser.user_id as string,
+    });
+    console.log('Deleted user:', createdUser.user_id);
   });
 
 await program.parseAsync(process.argv);
