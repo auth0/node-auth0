@@ -73,7 +73,7 @@ describe('TokenProviderMiddleware', () => {
     );
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
-        authorization: 'Bearer token',
+        authorization: ['Bearer token'],
       })
     );
   });
@@ -84,7 +84,7 @@ describe('TokenProviderMiddleware', () => {
     ).resolves.toMatchObject({});
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
-        authorization: 'Bearer my-access-token',
+        authorization: ['Bearer my-access-token'],
       })
     );
   });

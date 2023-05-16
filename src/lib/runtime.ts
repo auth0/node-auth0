@@ -14,10 +14,6 @@ import fetch from 'node-fetch';
 import { AbortSignal } from 'node-fetch/externals';
 import FormData from 'form-data';
 
-// const { constructor: _Blob } = await new Response().blob();
-// TODO: We need to figure out the correct type here.
-// Using any for now, as it does work at run-time.
-
 export { FormData, BlobType as Blob };
 export * from './models';
 
