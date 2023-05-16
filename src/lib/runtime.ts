@@ -313,3 +313,12 @@ export function applyQueryParams<
     {}
   ) as Pick<TRequestParams, ReadonlyArray<Key>[number]>;
 }
+
+/**
+ * @private
+ */
+export function parseFormParam(originalValue: unknown) {
+  let value = originalValue;
+  value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
+  return value;
+}
