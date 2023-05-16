@@ -1,4 +1,4 @@
-import type { RequestInit, RequestInfo } from 'node-fetch';
+import type { RequestInit, RequestInfo, Blob as BlobType } from 'node-fetch';
 import { Response } from 'node-fetch';
 import { retry } from './retry';
 import { FetchError, RequiredError, TimeoutError } from './errors';
@@ -17,9 +17,8 @@ import FormData from 'form-data';
 // const { constructor: _Blob } = await new Response().blob();
 // TODO: We need to figure out the correct type here.
 // Using any for now, as it does work at run-time.
-export const Blob = {} as any;
 
-export { FormData };
+export { FormData, BlobType as Blob };
 export * from './models';
 
 /**
@@ -100,7 +99,7 @@ export class BaseAPI {
       body:
         isFormData(overriddenInit.body) ||
         overriddenInit.body instanceof URLSearchParams ||
-        isBlob(overriddenInit.body)
+        overriddenInit.body instanceof (await new Response().blob()).constructor
           ? overriddenInit.body
           : JSON.stringify(overriddenInit.body),
     };
@@ -180,10 +179,6 @@ export class BaseAPI {
 
     return response as Response;
   };
-}
-
-function isBlob(value: unknown): value is Blob {
-  return typeof Blob !== 'undefined' && value instanceof Blob;
 }
 
 function isFormData(value: unknown): value is FormData {
