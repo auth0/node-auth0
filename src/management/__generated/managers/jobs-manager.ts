@@ -112,33 +112,32 @@ export class JobsManager extends BaseAPI {
     }
 
     if (bodyParameters.users !== undefined) {
-      let value = bodyParameters.users as any;
-      value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-      formParams.append('users', value);
+      formParams.append('users', runtime.parseFormParam(bodyParameters.users as unknown));
     }
 
     if (bodyParameters.connection_id !== undefined) {
-      let value = bodyParameters.connection_id as any;
-      value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-      formParams.append('connection_id', value);
+      formParams.append(
+        'connection_id',
+        runtime.parseFormParam(bodyParameters.connection_id as unknown)
+      );
     }
 
     if (bodyParameters.upsert !== undefined) {
-      let value = bodyParameters.upsert as any;
-      value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-      formParams.append('upsert', value);
+      formParams.append('upsert', runtime.parseFormParam(bodyParameters.upsert as unknown));
     }
 
     if (bodyParameters.external_id !== undefined) {
-      let value = bodyParameters.external_id as any;
-      value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-      formParams.append('external_id', value);
+      formParams.append(
+        'external_id',
+        runtime.parseFormParam(bodyParameters.external_id as unknown)
+      );
     }
 
     if (bodyParameters.send_completion_email !== undefined) {
-      let value = bodyParameters.send_completion_email as any;
-      value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-      formParams.append('send_completion_email', value);
+      formParams.append(
+        'send_completion_email',
+        runtime.parseFormParam(bodyParameters.send_completion_email as unknown)
+      );
     }
 
     const response = await this.request(
