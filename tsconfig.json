@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
     "allowJs": true,
     "target": "ES2017",
     "allowSyntheticDefaultImports": true,
@@ -11,8 +10,7 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "module": "ESNext",
-    "strict": true,
-    "resolveJsonModule": true
+    "strict": true
   },
-  "include": ["src"]
+  "include": ["./src"]
 }

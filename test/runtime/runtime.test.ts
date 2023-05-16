@@ -296,7 +296,7 @@ describe('Runtime', () => {
       middleware: [
         {
           onError(context: ErrorContext) {
-            return new Response(null, { status: 418 });
+            return new Response(undefined, { status: 418 });
           },
         },
       ],
@@ -320,7 +320,9 @@ describe('Runtime', () => {
       middleware: [
         {
           post() {
-            return Response.json({ bar: 'foo' }, { status: 200 });
+            return new Response(JSON.stringify({ bar: 'foo' }), {
+              status: 200,
+            });
           },
         },
       ],

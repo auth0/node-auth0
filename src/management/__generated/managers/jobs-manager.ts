@@ -112,23 +112,32 @@ export class JobsManager extends BaseAPI {
     }
 
     if (bodyParameters.users !== undefined) {
-      formParams.append('users', bodyParameters.users as any);
+      formParams.append('users', runtime.parseFormParam(bodyParameters.users as unknown));
     }
 
     if (bodyParameters.connection_id !== undefined) {
-      formParams.append('connection_id', bodyParameters.connection_id as any);
+      formParams.append(
+        'connection_id',
+        runtime.parseFormParam(bodyParameters.connection_id as unknown)
+      );
     }
 
     if (bodyParameters.upsert !== undefined) {
-      formParams.append('upsert', bodyParameters.upsert as any);
+      formParams.append('upsert', runtime.parseFormParam(bodyParameters.upsert as unknown));
     }
 
     if (bodyParameters.external_id !== undefined) {
-      formParams.append('external_id', bodyParameters.external_id as any);
+      formParams.append(
+        'external_id',
+        runtime.parseFormParam(bodyParameters.external_id as unknown)
+      );
     }
 
     if (bodyParameters.send_completion_email !== undefined) {
-      formParams.append('send_completion_email', bodyParameters.send_completion_email as any);
+      formParams.append(
+        'send_completion_email',
+        runtime.parseFormParam(bodyParameters.send_completion_email as unknown)
+      );
     }
 
     const response = await this.request(

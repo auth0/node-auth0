@@ -1,11 +1,11 @@
-import pkg from '../package.json' assert { type: 'json' };
+import { version } from './version';
 
 /**
  * @private
  */
 export const generateClientInfo = () => ({
   name: 'node-auth0',
-  version: pkg.version,
+  version: version,
   env: {
     node: process.version.replace('v', ''),
   },
