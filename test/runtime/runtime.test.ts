@@ -9,7 +9,7 @@ import {
   ResponseContext,
 } from '../../src/lib/models';
 import { BaseAPI } from '../../src/lib/runtime';
-import { RequestInit, Response } from 'node-fetch';
+import { RequestInit, Response } from '../../src/lib/fetch';
 import { AuthApiError } from '../../src/auth/base-auth-api';
 import { ManagementApiError } from '../../src/management';
 

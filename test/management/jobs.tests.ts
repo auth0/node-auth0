@@ -11,7 +11,7 @@ import {
   PostUsersImportsData,
 } from '../../src/management/__generated/index';
 import { ManagementClient, ManagementApiError } from '../../src/management';
-import { Blob } from '../../src/lib/runtime';
+import { Blob } from '../../src/lib/fetch';
 import { extractParts } from '../utils/extractParts';
 import { fileURLToPath } from 'url';
 import { FetchError } from '../../src/lib/errors';

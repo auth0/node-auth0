@@ -1,7 +1,7 @@
 import { ResponseError } from '../lib/errors';
 import { BaseAPI, ClientOptions } from '../lib/runtime';
+import type { Response, Headers } from '../lib/fetch';
 import { AddClientAuthenticationPayload, addClientAuthentication } from './client-authentication';
-import { Response, Headers } from 'node-fetch';
 
 export interface Options extends ClientOptions {
   domain: string;

@@ -1,4 +1,4 @@
-import fetch, { RequestInit, RequestInfo, Response, Blob, FormData, AbortError } from 'node-fetch';
+import { fetch, RequestInit, RequestInfo, Response, Blob, FormData, AbortError } from './fetch';
 import { retry } from './retry';
 import { FetchError, RequiredError, TimeoutError } from './errors';
 import {
@@ -10,7 +10,7 @@ import {
   FetchAPI,
 } from './models';
 
-export { Blob, FormData } from 'node-fetch';
+export { FormData, Blob };
 export * from './models';
 
 /**

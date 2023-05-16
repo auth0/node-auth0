@@ -1,7 +1,6 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { RequestInit, Response } from 'node-fetch';
-import { TokenProvider } from '../../src/management/token-provider';
+import { RequestInit, Response } from '../../src/lib/fetch';
 import { RequestOpts, InitOverrideFunction } from '../../src/lib';
 import { BaseAPI } from '../../src/lib/runtime';
 import { TokenProviderMiddleware } from '../../src/management/token-provider-middleware';

@@ -1,4 +1,4 @@
-import { Response } from 'node-fetch';
+import { Response } from './fetch';
 
 const MAX_REQUEST_RETRY_JITTER = 250;
 const MAX_REQUEST_RETRY_DELAY = 10000;
