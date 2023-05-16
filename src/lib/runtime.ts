@@ -16,8 +16,8 @@ import FormData from 'form-data';
 
 // const { constructor: _Blob } = await new Response().blob();
 // TODO: We need to figure out the correct type here.
-// Using any for now, as it does work at run-time.
-export const Blob = {} as any;
+// Using something random for now, as it does work at run-time.
+export class Blob {}
 
 export { FormData };
 export * from './models';

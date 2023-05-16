@@ -300,10 +300,10 @@ describe('JobsManager', () => {
           expect(parts.connection_id).to.exist.to.be.a('string').to.equal(data.connection_id);
 
           // Validate the upsert param - default is false
-          expect(parts.upsert).to.exist.to.be.a('string').to.equal('0');
+          expect(parts.upsert).to.exist.to.be.a('string').to.equal('false');
 
           // Validate the send_completion_email param - default is true
-          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('1');
+          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('true');
 
           // Validate the content type of the users JSON.
           expect(parts.users)
@@ -340,7 +340,7 @@ describe('JobsManager', () => {
           const parts = extractParts(body, boundary);
 
           // Validate the upsert param
-          expect(parts.upsert).to.exist.to.be.a('string').to.equal('1');
+          expect(parts.upsert).to.exist.to.be.a('string').to.equal('true');
 
           return true;
         })
@@ -367,7 +367,7 @@ describe('JobsManager', () => {
           const parts = extractParts(body, boundary);
 
           // Validate the upsert param
-          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('0');
+          expect(parts.send_completion_email).to.exist.to.be.a('string').to.equal('false');
 
           return true;
         })
