@@ -1,5 +1,5 @@
 import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware';
-import { Options } from './base-auth-api';
+import { AuthenticationClientOptions } from './base-auth-api';
 import { Database } from './database';
 import { OAuth } from './oauth';
 import { Passwordless } from './passwordless';
@@ -8,14 +8,14 @@ export * from './database';
 export * from './oauth';
 export * from './passwordless';
 export { IDTokenValidateOptions, IdTokenValidatorError } from './id-token-validator';
-export { AuthApiError, Options } from './base-auth-api';
+export { AuthApiError, AuthenticationClientOptions } from './base-auth-api';
 
 export class AuthenticationClient {
   database: Database;
   oauth: OAuth;
   passwordless: Passwordless;
 
-  constructor(options: Options) {
+  constructor(options: AuthenticationClientOptions) {
     if (options.telemetry !== false) {
       options.middleware = [...(options.middleware || []), new TelemetryMiddleware(options)];
     }

@@ -1,4 +1,5 @@
-import fetch, { RequestInit, RequestInfo, Response, Blob, FormData, AbortError } from 'node-fetch';
+import type { RequestInit, RequestInfo, Blob as BlobType } from 'node-fetch';
+import { Response } from 'node-fetch';
 import { retry } from './retry';
 import { FetchError, RequiredError, TimeoutError } from './errors';
 import {
@@ -9,8 +10,11 @@ import {
   Middleware,
   FetchAPI,
 } from './models';
+import fetch from 'node-fetch';
+import { AbortSignal } from 'node-fetch/externals';
+import FormData from 'form-data';
 
-export { Blob, FormData } from 'node-fetch';
+export { FormData, BlobType as Blob };
 export * from './models';
 
 /**
@@ -91,7 +95,7 @@ export class BaseAPI {
       body:
         isFormData(overriddenInit.body) ||
         overriddenInit.body instanceof URLSearchParams ||
-        isBlob(overriddenInit.body)
+        overriddenInit.body instanceof (await new Response().blob()).constructor
           ? overriddenInit.body
           : JSON.stringify(overriddenInit.body),
     };
@@ -104,9 +108,9 @@ export class BaseAPI {
       controller.abort();
     }, this.timeoutDuration);
     try {
-      return await this.fetchApi(url, { signal: controller.signal, ...init });
-    } catch (e) {
-      if (e instanceof AbortError) {
+      return await this.fetchApi(url, { signal: controller.signal as AbortSignal, ...init });
+    } catch (e: any) {
+      if (e.name === 'AbortError') {
         throw new TimeoutError();
       }
       throw e;
@@ -171,10 +175,6 @@ export class BaseAPI {
 
     return response as Response;
   };
-}
-
-function isBlob(value: unknown): value is Blob {
-  return typeof Blob !== 'undefined' && value instanceof Blob;
 }
 
 function isFormData(value: unknown): value is FormData {
@@ -312,4 +312,13 @@ export function applyQueryParams<
     },
     {}
   ) as Pick<TRequestParams, ReadonlyArray<Key>[number]>;
+}
+
+/**
+ * @private
+ */
+export function parseFormParam(originalValue: unknown) {
+  let value = originalValue;
+  value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
+  return value;
 }

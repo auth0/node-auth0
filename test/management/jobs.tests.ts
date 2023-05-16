@@ -2,6 +2,7 @@ import chai from 'chai';
 import nock from 'nock';
 import path from 'path';
 import fs from 'fs';
+import { Readable } from 'stream';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
@@ -175,15 +176,14 @@ describe('JobsManager', () => {
   const usersFileData = fs.readFileSync(usersFilePath, 'utf-8');
 
   describe('#importUsers', () => {
-    const data: PostUsersImportsData = {
-      users: new Blob([usersFileData], {
-        type: 'application/json',
-      }),
-      connection_id: 'con_test',
-    };
+    let data: PostUsersImportsData;
     let request: nock.Scope;
 
     beforeEach(function () {
+      data = {
+        users: fs.createReadStream(usersFilePath) as any,
+        connection_id: 'con_test',
+      };
       request = nock(API_URL).post('/jobs/users-imports').reply(200, {});
     });
 
@@ -269,7 +269,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Content-Type', (header) => header.indexOf('multipart/form-data') === 0)
+        .matchHeader('Content-Type', (header) => header[0].indexOf('multipart/form-data') === 0)
         .reply(200, {});
 
       jobs.importUsers(data).then(() => {
@@ -285,7 +285,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header: string) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -328,7 +328,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -355,7 +355,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -393,15 +393,14 @@ describe('JobsManager', () => {
   });
 
   describe('#importUsers with JSON data', () => {
-    const data = {
-      users: new Blob([usersFileData], {
-        type: 'application/json',
-      }),
-      connection_id: 'con_test',
-    };
+    let data: PostUsersImportsData;
     let request: nock.Scope;
 
     beforeEach(function () {
+      data = {
+        users: fs.createReadStream(usersFilePath) as any,
+        connection_id: 'con_test',
+      };
       request = nock(API_URL).post('/jobs/users-imports').reply(200);
     });
 
@@ -411,7 +410,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })

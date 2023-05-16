@@ -11476,7 +11476,7 @@ export interface GetJobsByIdRequest {
 export interface PostUsersImportsData {
   /**
    */
-  users: typeof runtime.Blob;
+  users: runtime.Blob;
   /**
    * connection_id of the connection to which users will be imported.
    *

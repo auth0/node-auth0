@@ -5,7 +5,7 @@ import {
 } from './management-client.options';
 import { TokenProviderMiddleware } from './token-provider-middleware';
 import { ResponseError } from '../lib';
-import { Response, Headers } from 'node-fetch';
+import type { Response, Headers } from 'node-fetch';
 import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware';
 
 interface ManagementApiErrorResponse {

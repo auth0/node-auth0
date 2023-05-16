@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { RequestInit, Response } from 'node-fetch';
+import type { RequestInit, Response } from 'node-fetch';
 import { TokenProvider } from '../../src/management/token-provider';
 import { RequestOpts, InitOverrideFunction } from '../../src/lib';
 import { BaseAPI } from '../../src/lib/runtime';
@@ -73,7 +73,7 @@ describe('TokenProviderMiddleware', () => {
     );
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
-        authorization: 'Bearer token',
+        authorization: ['Bearer token'],
       })
     );
   });
@@ -84,7 +84,7 @@ describe('TokenProviderMiddleware', () => {
     ).resolves.toMatchObject({});
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
-        authorization: 'Bearer my-access-token',
+        authorization: ['Bearer my-access-token'],
       })
     );
   });

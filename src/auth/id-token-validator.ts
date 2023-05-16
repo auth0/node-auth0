@@ -1,5 +1,5 @@
 import * as jose from 'jose';
-import { Options } from './base-auth-api';
+import { AuthenticationClientOptions } from './base-auth-api';
 
 const DEFAULT_CLOCK_TOLERANCE = 60; // secs
 
@@ -31,7 +31,7 @@ export class IDTokenValidator {
     timeoutDuration,
     idTokenSigningAlg = 'RS256',
     clockTolerance = DEFAULT_CLOCK_TOLERANCE,
-  }: Options) {
+  }: AuthenticationClientOptions) {
     this.jwks = jose.createRemoteJWKSet(new URL(`https://${domain}/.well-known/jwks.json`), {
       timeoutDuration,
       agent,
