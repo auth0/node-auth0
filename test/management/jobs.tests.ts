@@ -191,7 +191,7 @@ describe('JobsManager', () => {
       jobs.importUsers(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('xxshould have the payload in response.data', function (done) {
+    it('should have the payload in response.data', function (done) {
       nock.cleanAll();
       const payload = {
         status: 'pending',
@@ -290,10 +290,6 @@ describe('JobsManager', () => {
           return true;
         })
         .post('/jobs/users-imports', function (this: any, body: any) {
-          console.log('body');
-          console.log(body);
-          console.log('boundary');
-          console.log(boundary);
           const parts = extractParts(body, boundary);
 
           // Validate the connection id.
