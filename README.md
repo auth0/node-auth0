@@ -27,7 +27,7 @@ This library supports the following tooling versions:
 Using [npm](https://npmjs.org) in your project directory run the following command:
 
 ```bash
-npm install auth0
+npm install auth0@beta
 ```
 
 ### Configure the SDK
