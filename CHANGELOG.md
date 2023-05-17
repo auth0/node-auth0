@@ -1,8 +1,8 @@
 # Change Log
 
-## [v4.0.0-beta.0](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.0) (2023-05-15)
+## [v4.0.0-beta.1](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.1) (2023-05-15)
 
-[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v4.0.0-beta.0)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v4.0.0-beta.1)
 
 - Rewritten from the ground up in TypeScript
 - Full TypeScript coverage of methods, request paramters, bodies, errors and responses
