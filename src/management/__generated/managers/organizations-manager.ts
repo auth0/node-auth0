@@ -45,7 +45,7 @@ import type {
   PostInvitationsOperationRequest,
   PostMembersOperationRequest,
   PostOrganizationMemberRolesOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

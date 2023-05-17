@@ -12,7 +12,7 @@ import type {
   GetConnectionsByIdRequest,
   GetStatusRequest,
   PatchConnectionsByIdRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

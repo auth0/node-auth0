@@ -7,7 +7,7 @@ import type {
   DeleteLogStreamsByIdRequest,
   GetLogStreamsByIdRequest,
   PatchLogStreamsByIdOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

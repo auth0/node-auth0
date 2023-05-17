@@ -1,6 +1,10 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
-import type { TenantSettings, TenantSettingsUpdate, TenantSettingsRouteRequest } from '../models';
+import type {
+  TenantSettings,
+  TenantSettingsUpdate,
+  TenantSettingsRouteRequest,
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

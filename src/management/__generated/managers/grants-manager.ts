@@ -7,7 +7,7 @@ import type {
   DeleteRequest,
   DeleteGrantsByIdRequest,
   GetGrantsRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

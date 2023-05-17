@@ -1,6 +1,6 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
-import type { GetUsers200ResponseOneOfInner, GetUsersByEmailRequest } from '../models';
+import type { GetUsers200ResponseOneOfInner, GetUsersByEmailRequest } from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

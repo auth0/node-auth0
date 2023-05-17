@@ -8,7 +8,7 @@ import type {
   GetErrorsRequest,
   GetJobsByIdRequest,
   PostUsersImportsData,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

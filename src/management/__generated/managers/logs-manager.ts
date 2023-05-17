@@ -6,7 +6,7 @@ import type {
   GetLogs200ResponseOneOf,
   GetLogsRequest,
   GetLogsByIdRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

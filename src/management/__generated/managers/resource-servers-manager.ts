@@ -10,7 +10,7 @@ import type {
   GetResourceServersRequest,
   GetResourceServersByIdRequest,
   PatchResourceServersByIdRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

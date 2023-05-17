@@ -10,7 +10,7 @@ import type {
   GetCustomDomainsByIdRequest,
   PatchCustomDomainsByIdOperationRequest,
   PostVerifyRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

@@ -25,7 +25,7 @@ import type {
   DeleteEnrollmentsByIdRequest,
   GetEnrollmentsByIdRequest,
   PutFactorsByNameOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

@@ -14,7 +14,7 @@ import type {
   PatchHooksByIdRequest,
   PatchSecretsRequest,
   PostSecretsRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

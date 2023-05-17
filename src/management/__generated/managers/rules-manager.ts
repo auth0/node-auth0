@@ -10,7 +10,7 @@ import type {
   GetRulesRequest,
   GetRulesByIdRequest,
   PatchRulesByIdRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

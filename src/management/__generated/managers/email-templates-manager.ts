@@ -7,7 +7,7 @@ import type {
   GetEmailTemplatesByTemplateNameRequest,
   PatchEmailTemplatesByTemplateNameRequest,
   PutEmailTemplatesByTemplateNameRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

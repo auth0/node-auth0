@@ -1,6 +1,6 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
-import type { DeleteIpsByIdRequest, GetIpsByIdRequest } from '../models';
+import type { DeleteIpsByIdRequest, GetIpsByIdRequest } from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

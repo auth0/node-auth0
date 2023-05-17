@@ -5,7 +5,7 @@ import type {
   PatchProviderRequest,
   PostProviderRequest,
   GetProviderRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

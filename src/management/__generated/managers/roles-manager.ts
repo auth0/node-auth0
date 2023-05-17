@@ -23,7 +23,7 @@ import type {
   PatchRolesByIdRequest,
   PostRolePermissionAssignmentOperationRequest,
   PostRoleUsersOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

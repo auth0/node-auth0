@@ -60,7 +60,7 @@ import type {
   PostRecoveryCodeRegenerationRequest,
   PostUserRolesOperationRequest,
   PutAuthenticationMethodsRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

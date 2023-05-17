@@ -5,7 +5,7 @@ import type {
   PostEmailVerificationRequest,
   PostPasswordChange201Response,
   PostPasswordChangeRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

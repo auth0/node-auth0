@@ -9,7 +9,7 @@ import type {
   DeleteClientGrantsByIdRequest,
   GetClientGrantsRequest,
   PatchClientGrantsByIdOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

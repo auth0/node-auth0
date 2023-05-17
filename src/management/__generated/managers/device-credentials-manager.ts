@@ -8,7 +8,7 @@ import type {
   DeviceCredential,
   DeleteDeviceCredentialsByIdRequest,
   GetDeviceCredentialsRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

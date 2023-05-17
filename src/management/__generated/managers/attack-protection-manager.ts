@@ -4,7 +4,7 @@ import type {
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
   PatchSuspiciousIpThrottlingRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

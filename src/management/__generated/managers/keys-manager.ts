@@ -6,7 +6,7 @@ import type {
   PutSigningKeys200Response,
   GetSigningKeyRequest,
   PutSigningKeysRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

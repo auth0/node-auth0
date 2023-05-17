@@ -5,7 +5,7 @@ import type {
   PromptsSettingsUpdate,
   GetCustomTextByLanguageRequest,
   PutCustomTextByLanguageRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

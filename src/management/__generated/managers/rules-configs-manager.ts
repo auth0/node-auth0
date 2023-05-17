@@ -6,7 +6,7 @@ import type {
   PutRulesConfigsByKeyRequest,
   DeleteRulesConfigsByKeyRequest,
   PutRulesConfigsByKeyOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

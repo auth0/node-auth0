@@ -6,7 +6,7 @@ import type {
   DeleteUserBlocksByIdRequest,
   GetUserBlocksRequest,
   GetUserBlocksByIdRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

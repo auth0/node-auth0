@@ -27,7 +27,7 @@ import type {
   PostDeployActionRequest,
   PostDeployDraftVersionOperationRequest,
   PostTestActionOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 
