@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/:license-mit-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 ![CircleCI](https://img.shields.io/circleci/build/github/auth0/node-auth0)
 
-📚 [Documentation](#documentation) - 🚀 [Getting Started](#getting-started) - 💻 [API Reference](#api-reference) - 💬 [Feedback](#feedback)
+📚 [Documentation](#documentation) - 🚀 [Getting Started](#getting-started) - 💬 [Feedback](#feedback)
 
 ## Documentation
 
@@ -73,11 +73,6 @@ var management = new ManagementClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
 });
 ```
-
-## API Reference
-
-- [AuthenticationClient](https://auth0.github.io/node-auth0/AuthenticationClient.html)
-- [ManagementClient](https://auth0.github.io/node-auth0/ManagementClient.html)
 
 ## Feedback
 
