@@ -1,5 +1,5 @@
 import type { RequestInit, RequestInfo, Response, Headers } from 'node-fetch';
-import { RetryConfiguration } from './retry';
+import { RetryConfiguration } from './retry.js';
 
 /**
  * @private

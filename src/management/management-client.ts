@@ -1,12 +1,12 @@
-import { ManagementClientBase } from './__generated';
+import { ManagementClientBase } from './__generated/index.js';
 import {
   ManagementClientOptionsWithClientCredentials,
   ManagementClientOptionsWithToken,
-} from './management-client.options';
-import { TokenProviderMiddleware } from './token-provider-middleware';
-import { ResponseError } from '../lib';
+} from './management-client-options.js';
+import { TokenProviderMiddleware } from './token-provider-middleware.js';
+import { ResponseError } from '../lib/index.js';
 import type { Response, Headers } from 'node-fetch';
-import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware';
+import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 
 interface ManagementApiErrorResponse {
   errorCode: string;

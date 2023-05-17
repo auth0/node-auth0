@@ -1,7 +1,7 @@
 import type { RequestInit, RequestInfo, Blob as BlobType } from 'node-fetch';
 import { Response } from 'node-fetch';
-import { retry } from './retry';
-import { FetchError, RequiredError, TimeoutError } from './errors';
+import { retry } from './retry.js';
+import { FetchError, RequiredError, TimeoutError } from './errors.js';
 import {
   RequestOpts,
   InitOverrideFunction,
@@ -9,13 +9,14 @@ import {
   Configuration,
   Middleware,
   FetchAPI,
-} from './models';
+} from './models.js';
 import fetch from 'node-fetch';
+// eslint-disable-next-line import/extensions
 import { AbortSignal } from 'node-fetch/externals';
 import FormData from 'form-data';
 
 export { FormData, BlobType as Blob };
-export * from './models';
+export * from './models.js';
 
 /**
  * @private

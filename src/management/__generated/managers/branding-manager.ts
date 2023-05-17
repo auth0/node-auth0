@@ -1,5 +1,5 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   GetBranding200Response,
   GetUniversalLogin200Response,
@@ -10,7 +10,7 @@ import type {
   DeleteBrandingThemeRequest,
   GetBrandingThemeRequest,
   PatchBrandingThemeRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

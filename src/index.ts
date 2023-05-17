@@ -1,2 +1,2 @@
-export * from './management';
-export * from './auth';
+export * from './management/index.js';
+export * from './auth/index.js';

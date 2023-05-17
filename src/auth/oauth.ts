@@ -3,9 +3,9 @@ import {
   JSONApiResponse,
   VoidApiResponse,
   validateRequiredRequestParams,
-} from '../lib/runtime';
-import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api';
-import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator';
+} from '../lib/runtime.js';
+import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api.js';
+import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
 
 export interface TokenSet {
   /**

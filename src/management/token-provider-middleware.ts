@@ -1,11 +1,11 @@
-import { FetchParams, Middleware, RequestContext } from '../lib/runtime';
+import { FetchParams, Middleware, RequestContext } from '../lib/runtime.js';
 import {
   ManagementClientOptionsWithClientAssertion,
   ManagementClientOptionsWithClientCredentials,
   ManagementClientOptionsWithClientSecret,
   ManagementClientOptionsWithToken,
-} from './management-client.options';
-import { TokenProvider } from './token-provider';
+} from './management-client-options.js';
+import { TokenProvider } from './token-provider.js';
 
 export class TokenProviderMiddleware implements Middleware {
   private tokenProvider: { getAccessToken: () => Promise<string> };
