@@ -1,3 +1,3 @@
-export * from './management-client.options';
-export * from './management-client';
-export * from './__generated';
+export * from './management-client-options.js';
+export * from './management-client.js';
+export * from './__generated/index.js';

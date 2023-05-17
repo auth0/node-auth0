@@ -1,5 +1,5 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type { StatsEntry, GetDailyRequest } from '../models';
 
 const { BaseAPI } = runtime;

@@ -1,6 +1,6 @@
-import { InitOverride, JSONApiResponse, TextApiResponse } from '../lib/models';
-import { validateRequiredRequestParams } from '../lib/runtime';
-import { BaseAuthAPI } from './base-auth-api';
+import { InitOverride, JSONApiResponse, TextApiResponse } from '../lib/models.js';
+import { validateRequiredRequestParams } from '../lib/runtime.js';
+import { BaseAuthAPI } from './base-auth-api.js';
 
 export interface SignUpRequest {
   /**
