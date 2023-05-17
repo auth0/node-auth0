@@ -1,5 +1,5 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   CustomDomain,
   PatchCustomDomainsByIdRequest,
@@ -10,7 +10,7 @@ import type {
   GetCustomDomainsByIdRequest,
   PatchCustomDomainsByIdOperationRequest,
   PostVerifyRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

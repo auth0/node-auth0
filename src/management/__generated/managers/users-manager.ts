@@ -1,5 +1,5 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   DeletePermissionsRequest,
   DeleteUserIdentityByUserId200ResponseInner,
@@ -60,7 +60,7 @@ import type {
   PostRecoveryCodeRegenerationRequest,
   PostUserRolesOperationRequest,
   PutAuthenticationMethodsRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

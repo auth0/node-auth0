@@ -1,12 +1,12 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   GetLogs200Response,
   Log,
   GetLogs200ResponseOneOf,
   GetLogsRequest,
   GetLogsByIdRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

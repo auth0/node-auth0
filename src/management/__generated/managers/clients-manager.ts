@@ -1,5 +1,5 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   Client,
   ClientCreate,
@@ -9,7 +9,7 @@ import type {
   GetClientsByIdRequest,
   PatchClientsByIdRequest,
   PostRotateSecretRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

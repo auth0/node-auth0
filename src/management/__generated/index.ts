@@ -1,5 +1,5 @@
-export * from './managers';
-export * from './models';
+export * from './managers/index.js';
+export * from './models/index.js';
 
 import {
   ActionsManager,
@@ -33,9 +33,9 @@ import {
   UserBlocksManager,
   UsersManager,
   UsersByEmailManager,
-} from './managers';
+} from './managers/index.js';
 
-import { Configuration } from '../../lib/runtime';
+import { Configuration } from '../../lib/runtime.js';
 
 export abstract class ManagementClientBase {
   public readonly actions = new ActionsManager(this.configuration);

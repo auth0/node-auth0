@@ -46,6 +46,7 @@
   },
   "homepage": "https://github.com/auth0/node-auth0",
   "dependencies": {
+    "form-data": "^4.0.0",
     "jose": "^4.13.2",
     "node-fetch": "^2.6.7",
     "uuid": "^9.0.0"

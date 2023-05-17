@@ -1,6 +1,6 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
-import type { Token, GetTokensRequest } from '../models';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
+import type { Token, GetTokensRequest } from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

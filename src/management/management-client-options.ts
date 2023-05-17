@@ -1,4 +1,4 @@
-import { ClientOptions } from '../lib/runtime';
+import { ClientOptions } from '../lib/runtime.js';
 
 export interface ManagementClientOptions extends ClientOptions {
   domain: string;

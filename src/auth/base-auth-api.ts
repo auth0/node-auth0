@@ -1,6 +1,9 @@
-import { ResponseError } from '../lib/errors';
-import { BaseAPI, ClientOptions } from '../lib/runtime';
-import { AddClientAuthenticationPayload, addClientAuthentication } from './client-authentication';
+import { ResponseError } from '../lib/errors.js';
+import { BaseAPI, ClientOptions } from '../lib/runtime.js';
+import {
+  AddClientAuthenticationPayload,
+  addClientAuthentication,
+} from './client-authentication.js';
 import type { Response, Headers } from 'node-fetch';
 
 export interface AuthenticationClientOptions extends ClientOptions {

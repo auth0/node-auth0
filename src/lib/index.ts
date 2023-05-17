@@ -1,3 +1,3 @@
-export * from './errors';
-export * from './models';
-export { RetryConfiguration } from './retry';
+export * from './errors.js';
+export * from './models.js';
+export { RetryConfiguration } from './retry.js';

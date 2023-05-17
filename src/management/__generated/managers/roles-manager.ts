@@ -1,5 +1,5 @@
-import * as runtime from '../../../lib/runtime';
-import type { InitOverride, ApiResponse } from '../../../lib/runtime';
+import * as runtime from '../../../lib/runtime.js';
+import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   GetOrganizationMemberRoles200Response,
   GetOrganizationMemberRoles200ResponseOneOfInner,
@@ -23,7 +23,7 @@ import type {
   PatchRolesByIdRequest,
   PostRolePermissionAssignmentOperationRequest,
   PostRoleUsersOperationRequest,
-} from '../models';
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 

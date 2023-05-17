@@ -3,9 +3,9 @@ import {
   JSONApiResponse,
   VoidApiResponse,
   validateRequiredRequestParams,
-} from '../lib/runtime';
-import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api';
-import { OAuth, ClientCredentials, GrantOptions, TokenSet } from './oauth';
+} from '../lib/runtime.js';
+import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api.js';
+import { OAuth, ClientCredentials, GrantOptions, TokenSet } from './oauth.js';
 
 export interface SendEmailLinkRequest {
   /**
