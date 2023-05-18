@@ -16,7 +16,7 @@
 <li><a href="auth.html">auth</a></li></ul>
 <h1>Module auth</h1></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/18db827/src/auth/index.ts#L1">src/auth/index.ts:1</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/fab3ce2/src/auth/index.ts#L1">src/auth/index.ts:1</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <h3 class="tsd-index-heading uppercase">Index</h3>
@@ -31,7 +31,8 @@
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Interfaces</h3>
-<div class="tsd-index-list"><a href="../interfaces/auth.AuthorizationCodeGrantOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>Options</span></a>
+<div class="tsd-index-list"><a href="../interfaces/auth.AuthenticationClientOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg><span>Authentication<wbr/>Client<wbr/>Options</span></a>
+<a href="../interfaces/auth.AuthorizationCodeGrantOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>Options</span></a>
 <a href="../interfaces/auth.AuthorizationCodeGrantRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>Request</span></a>
 <a href="../interfaces/auth.AuthorizationCodeGrantWithPKCERequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>WithPKCERequest</span></a>
 <a href="../interfaces/auth.ChangePasswordRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Change<wbr/>Password<wbr/>Request</span></a>
@@ -42,7 +43,6 @@
 <a href="../interfaces/auth.IDTokenValidateOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>IDToken<wbr/>Validate<wbr/>Options</span></a>
 <a href="../interfaces/auth.LoginWithEmailRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Login<wbr/>With<wbr/>Email<wbr/>Request</span></a>
 <a href="../interfaces/auth.LoginWithSMSRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Login<wbr/>WithSMSRequest</span></a>
-<a href="../interfaces/auth.Options.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Options</span></a>
 <a href="../interfaces/auth.PasswordGrantRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Password<wbr/>Grant<wbr/>Request</span></a>
 <a href="../interfaces/auth.RefreshTokenGrantRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Refresh<wbr/>Token<wbr/>Grant<wbr/>Request</span></a>
 <a href="../interfaces/auth.RevokeRefreshTokenRequest.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Revoke<wbr/>Refresh<wbr/>Token<wbr/>Request</span></a>
@@ -97,6 +97,7 @@
 <details class="tsd-index-accordion" data-key="auth$Interfaces"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4.93896 8.531L12 15.591L19.061 8.531L16.939 6.409L12 11.349L7.06098 6.409L4.93896 8.531Z" fill="var(--color-text)"></path></svg><span>Interfaces</span></summary>
 <div class="tsd-accordion-details">
 <ul class="tsd-nested-navigation">
+<li><a href="../interfaces/auth.AuthenticationClientOptions.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authentication<wbr/>Client<wbr/>Options</span></a></li>
 <li><a href="../interfaces/auth.AuthorizationCodeGrantOptions.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>Options</span></a></li>
 <li><a href="../interfaces/auth.AuthorizationCodeGrantRequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>Request</span></a></li>
 <li><a href="../interfaces/auth.AuthorizationCodeGrantWithPKCERequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Authorization<wbr/>Code<wbr/>Grant<wbr/>WithPKCERequest</span></a></li>
@@ -108,7 +109,6 @@
 <li><a href="../interfaces/auth.IDTokenValidateOptions.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>IDToken<wbr/>Validate<wbr/>Options</span></a></li>
 <li><a href="../interfaces/auth.LoginWithEmailRequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Login<wbr/>With<wbr/>Email<wbr/>Request</span></a></li>
 <li><a href="../interfaces/auth.LoginWithSMSRequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Login<wbr/>WithSMSRequest</span></a></li>
-<li><a href="../interfaces/auth.Options.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Options</span></a></li>
 <li><a href="../interfaces/auth.PasswordGrantRequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Password<wbr/>Grant<wbr/>Request</span></a></li>
 <li><a href="../interfaces/auth.RefreshTokenGrantRequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Refresh<wbr/>Token<wbr/>Grant<wbr/>Request</span></a></li>
 <li><a href="../interfaces/auth.RevokeRefreshTokenRequest.html"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg><span>Revoke<wbr/>Refresh<wbr/>Token<wbr/>Request</span></a></li>
