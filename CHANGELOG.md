@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.0.0-beta.3](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.3) (2023-05-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.2...v4.0.0-beta.3)
+
+**Fixed**
+
+- Fix void responses in Beta types [\#864](https://github.com/auth0/node-auth0/pull/864) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v4.0.0-beta.2](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.2) (2023-05-18)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.1...v4.0.0-beta.2)
