@@ -115,7 +115,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .get(bruteForcePath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.getBruteForceConfig().then(() => {
           expect(request.isDone()).to.be.true;
@@ -175,7 +175,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .patch(bruteForcePath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.updateBruteForceConfig(data).then(() => {
           expect(request.isDone()).to.be.true;
@@ -245,7 +245,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .get(suspiciousIpPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.getSuspiciousIpThrottlingConfig().then(() => {
           expect(request.isDone()).to.be.true;
@@ -307,7 +307,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .patch(suspiciousIpPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.updateSuspiciousIpThrottlingConfig(data).then(() => {
           expect(request.isDone()).to.be.true;
@@ -369,7 +369,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .get(breachedPasswordDetectionPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.getBreachedPasswordDetectionConfig().then(() => {
           expect(request.isDone()).to.be.true;
@@ -431,7 +431,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .patch(breachedPasswordDetectionPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.updateBreachedPasswordDetectionConfig({}, data).then(() => {
           expect(request.isDone()).to.be.true;
