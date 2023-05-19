@@ -65,6 +65,89 @@ export async function actions() {
   console.log('Removed the action: ' + updatedAction.name);
 }
 
+export async function attackProtection() {
+  const mgmntClient = new ManagementClient(program.opts());
+
+  const { data: breachedPasswordDetectionSettings } =
+    await mgmntClient.attackProtection.getBreachedPasswordDetectionConfig();
+  console.log(
+    'Got Breached password detection settings, enabled',
+    breachedPasswordDetectionSettings.enabled
+  );
+
+  const { data: updatedBreachedPasswordDetectionSettings } =
+    await mgmntClient.attackProtection.updateBreachedPasswordDetectionConfig({
+      enabled: !breachedPasswordDetectionSettings.enabled,
+    });
+  console.log(
+    'Updated Breached password detection settings, enabled, from',
+    breachedPasswordDetectionSettings.enabled,
+    'to',
+    updatedBreachedPasswordDetectionSettings.enabled
+  );
+
+  const { data: revertedBreachedPasswordDetectionSettings } =
+    await mgmntClient.attackProtection.updateBreachedPasswordDetectionConfig({
+      enabled: !updatedBreachedPasswordDetectionSettings.enabled,
+    });
+  console.log(
+    'Reverted Breached password detection settings, enabled, from',
+    updatedBreachedPasswordDetectionSettings.enabled,
+    'to',
+    revertedBreachedPasswordDetectionSettings.enabled
+  );
+
+  const { data: bruteForceConfig } = await mgmntClient.attackProtection.getBruteForceConfig();
+  console.log('Got Suspicious IP throttling config, enabled', bruteForceConfig.enabled);
+
+  const { data: updatedBruteForceConfig } =
+    await mgmntClient.attackProtection.updateBruteForceConfig({
+      enabled: !bruteForceConfig.enabled,
+    });
+  console.log(
+    'Updated Breached password detection settings, enabled, from',
+    bruteForceConfig.enabled,
+    'to',
+    updatedBruteForceConfig.enabled
+  );
+
+  const { data: revertedBruteForceConfig } =
+    await mgmntClient.attackProtection.updateBruteForceConfig({
+      enabled: !updatedBruteForceConfig.enabled,
+    });
+  console.log(
+    'Reverted Breached password detection settings, enabled, from',
+    updatedBruteForceConfig.enabled,
+    'to',
+    revertedBruteForceConfig.enabled
+  );
+
+  const { data: suspiciousIpThrottlingConfig } =
+    await mgmntClient.attackProtection.getSuspiciousIpThrottlingConfig();
+  console.log('Got Suspicious IP throttling config, enabled', suspiciousIpThrottlingConfig.enabled);
+
+  const { data: updatedSuspiciousIpThrottlingConfig } =
+    await mgmntClient.attackProtection.updateSuspiciousIpThrottlingConfig({
+      enabled: !suspiciousIpThrottlingConfig.enabled,
+    });
+  console.log(
+    'Updated Breached password detection settings, enabled, from',
+    suspiciousIpThrottlingConfig.enabled,
+    'to',
+    updatedSuspiciousIpThrottlingConfig.enabled
+  );
+
+  const { data: revertedSuspiciousIpThrottlingConfig } =
+    await mgmntClient.attackProtection.updateSuspiciousIpThrottlingConfig({
+      enabled: !updatedSuspiciousIpThrottlingConfig.enabled,
+    });
+  console.log(
+    'Reverted Breached password detection settings, enabled, from',
+    updatedSuspiciousIpThrottlingConfig.enabled,
+    'to',
+    revertedSuspiciousIpThrottlingConfig.enabled
+  );
+}
 export async function anomaly() {
   const mgmntClient = new ManagementClient(program.opts());
   try {
@@ -207,21 +290,21 @@ export async function clientGrants() {
     (api) => api.identifier === 'ClientGrantTests'
   );
 
-  await mgmntClient.clientGrants.create({
+  const { data: clientGrant } = await mgmntClient.clientGrants.create({
     client_id: program.opts().clientId,
     audience: api?.identifier as string,
     scope: ['openid'],
   });
+  console.log(`Created client grant ${clientGrant.id}`);
 
-  const { data: newClientGrant } = await mgmntClient.clientGrants.getAll({
-    audience: api?.identifier as string,
+  const { data: clientGrants } = await mgmntClient.clientGrants.getAll({
     client_id: program.opts().clientId,
   });
 
-  console.log(`Created client grant ${newClientGrant[0].id}`);
+  console.log(`Got client grants ${clientGrants.map((clientGrant) => clientGrant.id)}`);
 
   const { data: updatedClientGrant } = await mgmntClient.clientGrants.update(
-    { id: newClientGrant[0].id as string },
+    { id: clientGrant.id as string },
     { scope: ['openid', 'profile'] }
   );
 
@@ -230,8 +313,8 @@ export async function clientGrants() {
   // Delete API for testing
   await mgmntClient.resourceServers.delete({ id: api?.id as string });
 
-  await mgmntClient.clientGrants.delete({ id: newClientGrant[0].id as string });
-  console.log('Removed the client grant: ' + newClientGrant[0].id);
+  await mgmntClient.clientGrants.delete({ id: clientGrant.id as string });
+  console.log('Removed the client grant: ' + clientGrant.id);
 }
 
 export async function clients() {
@@ -636,7 +719,7 @@ export async function jobs() {
   const usersFilePath = path.join(__dirname, '../test/data/users.json');
 
   const { data: createImportJob } = await mgmntClient.jobs.importUsers({
-    users: fs.createReadStream(usersFilePath),
+    users: fs.createReadStream(usersFilePath) as any,
     connection_id: connection.id as string,
   });
 
@@ -957,13 +1040,10 @@ export async function resourceServers() {
   const mgmntClient = new ManagementClient(program.opts());
 
   const apiId = `api_${uuid()}`;
-  await mgmntClient.resourceServers.create({
+  const { data: createdApi } = await mgmntClient.resourceServers.create({
     identifier: apiId,
     scopes: [{ value: 'foo' }],
   });
-  const createdApi = (await mgmntClient.resourceServers.getAll()).data.find(
-    (api) => api.identifier === apiId
-  ) as ResourceServer;
   console.log('Created api:', createdApi.id);
 
   try {
@@ -978,15 +1058,12 @@ export async function resourceServers() {
       gotApis.map((api) => api.id)
     );
 
-    await mgmntClient.resourceServers.update(
+    const { data: gotUpdatedApi } = await mgmntClient.resourceServers.update(
       {
         id: createdApi.id as string,
       },
       { token_lifetime: (createdApi.token_lifetime as number) + 1 }
     );
-    const { data: gotUpdatedApi } = await mgmntClient.resourceServers.get({
-      id: createdApi.id as string,
-    });
     console.log(
       'Updated API token_lifetime from:',
       createdApi.token_lifetime,
@@ -1340,7 +1417,7 @@ export async function users() {
     );
     console.log('Updated name on auth method:', createdAuthMethod.name, 'to', 'bar');
 
-    await mgmntClient.users.updateAuthenticationMethods(
+    const { data: updatedAuthMethods } = await mgmntClient.users.updateAuthenticationMethods(
       {
         id: updatedUser.user_id as string,
       },
@@ -1354,12 +1431,9 @@ export async function users() {
         } as PutAuthenticationMethodsRequestInner;
       })
     );
-    const { data: updatedAuthMethods } = await mgmntClient.users.getAuthenticationMethods({
-      id: updatedUser.user_id as string,
-    });
     console.log(
       'Updated all auth methods to names:',
-      updatedAuthMethods.map((x) => x.name)
+      updatedAuthMethods.map((x: any) => x.name)
     );
 
     await mgmntClient.users.deleteAuthenticationMethod({

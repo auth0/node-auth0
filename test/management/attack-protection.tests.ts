@@ -115,7 +115,58 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .get(bruteForcePath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
+
+        attackProtection.getBruteForceConfig().then(() => {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+    });
+
+    describe('#getBruteForceDefaults', () => {
+      let request: Scope;
+
+      beforeEach(function () {
+        request = nock(API_URL).get(`${bruteForcePath}/defaults`).reply(200, data);
+      });
+
+      it('should pass any errors to the promise catch handler', function (done) {
+        nock.cleanAll();
+
+        nock(API_URL).get(bruteForcePath).reply(500);
+
+        attackProtection.getBruteForceDefaults().catch((err) => {
+          expect(err).to.exist;
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', function (done) {
+        attackProtection.getBruteForceDefaults().then((bruteForceConfig) => {
+          expect(bruteForceConfig.data).to.deep.equal(data);
+
+          done();
+        });
+      });
+
+      it(`should perform a GET request to /api/v2${bruteForcePath}`, function (done) {
+        attackProtection.getBruteForceDefaults().then(() => {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', function (done) {
+        nock.cleanAll();
+
+        const request = nock(API_URL)
+          .get(bruteForcePath)
+          .matchHeader('Authorization', `Bearer ${token}`)
+          .reply(200, {});
 
         attackProtection.getBruteForceConfig().then(() => {
           expect(request.isDone()).to.be.true;
@@ -162,8 +213,7 @@ describe('AttackProtectionManager', () => {
 
       it('should pass the body of the response to the "then" handler', function (done) {
         attackProtection.updateBruteForceConfig(data).then((bruteForceConfig) => {
-          // TODO: body should contain data
-          // expect(bruteForceConfig).to.deep.equal(data);
+          expect(bruteForceConfig.data).to.deep.equal(data);
 
           done();
         });
@@ -175,7 +225,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .patch(bruteForcePath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.updateBruteForceConfig(data).then(() => {
           expect(request.isDone()).to.be.true;
@@ -224,8 +274,7 @@ describe('AttackProtectionManager', () => {
 
       it('should pass the body of the response to the "then" handler', function (done) {
         attackProtection.getSuspiciousIpThrottlingConfig().then((suspiciousIpThrottlingConfig) => {
-          // TODO: body should contain data
-          // expect(suspiciousIpThrottlingConfig).to.deep.equal(data);
+          expect(suspiciousIpThrottlingConfig.data).to.deep.equal(data);
 
           done();
         });
@@ -245,7 +294,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .get(suspiciousIpPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.getSuspiciousIpThrottlingConfig().then(() => {
           expect(request.isDone()).to.be.true;
@@ -294,8 +343,7 @@ describe('AttackProtectionManager', () => {
         attackProtection
           .updateSuspiciousIpThrottlingConfig(data)
           .then((suspiciousIpThrottlingConfig) => {
-            // TODO: body should contain data
-            // expect(suspiciousIpThrottlingConfig).to.deep.equal(data);
+            expect(suspiciousIpThrottlingConfig.data).to.deep.equal(data);
 
             done();
           });
@@ -307,7 +355,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .patch(suspiciousIpPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.updateSuspiciousIpThrottlingConfig(data).then(() => {
           expect(request.isDone()).to.be.true;
@@ -348,8 +396,7 @@ describe('AttackProtectionManager', () => {
         attackProtection
           .getBreachedPasswordDetectionConfig()
           .then((breachedPasswordDetectionConfig) => {
-            // TODO: body should contain data
-            // expect(breachedPasswordDetectionConfig).to.deep.equal(data);
+            expect(breachedPasswordDetectionConfig.data).to.deep.equal(data);
 
             done();
           });
@@ -369,7 +416,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .get(breachedPasswordDetectionPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.getBreachedPasswordDetectionConfig().then(() => {
           expect(request.isDone()).to.be.true;
@@ -418,8 +465,7 @@ describe('AttackProtectionManager', () => {
         attackProtection
           .updateBreachedPasswordDetectionConfig({}, data)
           .then((breachedPasswordDetectionConfig) => {
-            // TODO: body should contain data
-            // expect(breachedPasswordDetectionConfig).to.deep.equal(data);
+            expect(breachedPasswordDetectionConfig.data).to.deep.equal(data);
 
             done();
           });
@@ -431,7 +477,7 @@ describe('AttackProtectionManager', () => {
         const request = nock(API_URL)
           .patch(breachedPasswordDetectionPath)
           .matchHeader('Authorization', `Bearer ${token}`)
-          .reply(200);
+          .reply(200, {});
 
         attackProtection.updateBreachedPasswordDetectionConfig({}, data).then(() => {
           expect(request.isDone()).to.be.true;
