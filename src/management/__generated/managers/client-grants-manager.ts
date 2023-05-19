@@ -139,7 +139,7 @@ export class ClientGrantsManager extends BaseAPI {
   async create(
     bodyParameters: ClientGrantCreate,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<ClientGrant>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -154,6 +154,6 @@ export class ClientGrantsManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

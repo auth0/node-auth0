@@ -7,6 +7,7 @@ dotenv.config({
 import { program } from 'commander';
 import {
   actions,
+  attackProtection,
   anomaly,
   blacklists,
   branding,
@@ -51,6 +52,7 @@ program
   .description('Test all endpoints')
   .action(async () => {
     await actions();
+    await attackProtection();
     await anomaly();
     await blacklists();
     await branding();
@@ -80,6 +82,11 @@ program
   });
 
 program.command('actions').description('Test CRUD on the actions endpoints').action(actions);
+
+program
+  .command('attack-protection')
+  .description('Test CRUD on the attack protection endpoints')
+  .action(attackProtection);
 
 program.command('anomaly').description('Test the anomaly endpoints').action(anomaly);
 

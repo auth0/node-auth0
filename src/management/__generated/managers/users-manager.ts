@@ -692,7 +692,7 @@ export class UsersManager extends BaseAPI {
     requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
     bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -714,7 +714,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -1061,7 +1061,7 @@ export class UsersManager extends BaseAPI {
     requestParameters: PutAuthenticationMethodsRequest,
     bodyParameters: Array<PutAuthenticationMethodsRequestInner>,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<Array<{ [key: string]: any }>>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -1081,6 +1081,6 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 }

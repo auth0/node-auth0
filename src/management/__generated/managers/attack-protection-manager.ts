@@ -19,7 +19,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async getBreachedPasswordDetectionConfig(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const response = await this.request(
       {
         path: `/attack-protection/breached-password-detection`,
@@ -28,7 +28,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -36,7 +36,9 @@ export class AttackProtectionManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getBruteForceConfig(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
+  async getBruteForceConfig(
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const response = await this.request(
       {
         path: `/attack-protection/brute-force-protection`,
@@ -45,7 +47,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -53,7 +55,9 @@ export class AttackProtectionManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getBruteForceDefaults(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
+  async getBruteForceDefaults(
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const response = await this.request(
       {
         path: `/attack-protection/brute-force-protection/defaults`,
@@ -62,7 +66,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -70,7 +74,9 @@ export class AttackProtectionManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getSuspiciousIpThrottlingConfig(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
+  async getSuspiciousIpThrottlingConfig(
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const response = await this.request(
       {
         path: `/attack-protection/suspicious-ip-throttling`,
@@ -79,7 +85,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -90,7 +96,7 @@ export class AttackProtectionManager extends BaseAPI {
   async updateBreachedPasswordDetectionConfig(
     bodyParameters: PatchBreachedPasswordDetectionRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -105,7 +111,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -116,7 +122,7 @@ export class AttackProtectionManager extends BaseAPI {
   async updateBruteForceConfig(
     bodyParameters: PatchBruteForceProtectionRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -131,7 +137,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 
   /**
@@ -142,7 +148,7 @@ export class AttackProtectionManager extends BaseAPI {
   async updateSuspiciousIpThrottlingConfig(
     bodyParameters: PatchSuspiciousIpThrottlingRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -157,6 +163,6 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse<any>(response);
   }
 }

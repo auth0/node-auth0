@@ -137,7 +137,7 @@ export class ResourceServersManager extends BaseAPI {
     requestParameters: PatchResourceServersByIdRequest,
     bodyParameters: ResourceServerUpdate,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<ResourceServer>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -157,7 +157,7 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -169,7 +169,7 @@ export class ResourceServersManager extends BaseAPI {
   async create(
     bodyParameters: PostResourceServersRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<ResourceServer>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -184,6 +184,6 @@ export class ResourceServersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }
