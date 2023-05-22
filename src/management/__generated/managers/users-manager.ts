@@ -35,6 +35,7 @@ import type {
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetUsers200ResponseOneOf,
+  DeleteAuthenticationMethodsRequest,
   DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
   DeleteAuthenticatorsRequest,
   DeleteMultifactorByProviderRequest,
@@ -68,6 +69,31 @@ const { BaseAPI } = runtime;
  *
  */
 export class UsersManager extends BaseAPI {
+  /**
+   * Deletes all authentication methods for the given user
+   *
+   * @throws {RequiredError}
+   */
+  async deleteAuthenticationMethods(
+    requestParameters: DeleteAuthenticationMethodsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{id}/authentication-methods`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
   /**
    * Deletes an authentication method by ID
    *
@@ -817,7 +843,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Creates an authentication method for a given user.
+   * Creates an authentication method for a given user. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
    *
    * @throws {RequiredError}
    */

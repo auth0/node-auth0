@@ -44,12 +44,10 @@ export class ClientsManager extends BaseAPI {
    * Retrieve clients (applications and SSO integrations) matching provided filters. A list of fields to include or exclude
    * may also be specified. Note:
    * <ul>
-   *   <li>
-   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
+   *   <li><code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
    *     any scope.
    *   </li>
-   *   <li>
-   *     <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
+   *   <li><code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
    *     <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
    *     <code>callback_url_template</code>, <code>jwt_configuration</code>,
    *     <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
@@ -65,8 +63,7 @@ export class ClientsManager extends BaseAPI {
    *     <code>organization_require_behavior</code> properties can only be retrieved with the <code>read:clients</code> or
    *     <code>read:client_keys</code> scope.
    *   </li>
-   *   <li>
-   *     <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
+   *   <li><code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
    *     <code>client_secret</code>, and <code>signing_key</code> properties can only be retrieved with the
    *     <code>read:client_keys</code> scope.
    *   </li>
@@ -130,12 +127,10 @@ export class ClientsManager extends BaseAPI {
   /**
    * Retrieve client details. A list of fields to include or exclude may also be specified. Note:
    * <ul>
-   *   <li>
-   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
+   *   <li><code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
    *     the any of the scopes.
    *   </li>
-   *   <li>
-   *     <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
+   *   <li><code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
    *     <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
    *     <code>callback_url_template</code>, <code>jwt_configuration</code>,
    *     <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
@@ -151,8 +146,7 @@ export class ClientsManager extends BaseAPI {
    *     <code>organization_require_behavior</code> properties can only be retrieved with the <code>read:clients</code> or
    *     <code>read:client_keys</code> scope.
    *   </li>
-   *   <li>
-   *     <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
+   *   <li><code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
    *     <code>client_secret</code>, and <code>signing_key</code> properties can only be retrieved with the
    *     <code>read:client_keys</code> scope.
    *   </li>

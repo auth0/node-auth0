@@ -4,8 +4,8 @@ import type {
   GetGrants200Response,
   GetGrants200ResponseOneOf,
   UserGrant,
-  DeleteRequest,
   DeleteGrantsByIdRequest,
+  DeleteGrantsByUserIdRequest,
   GetGrantsRequest,
 } from '../models/index.js';
 
@@ -15,35 +15,6 @@ const { BaseAPI } = runtime;
  *
  */
 export class GrantsManager extends BaseAPI {
-  /**
-   * Delete a grant associated with your account.
-   * Delete a grant by user_id
-   *
-   * @throws {RequiredError}
-   */
-  async deleteByUserId(
-    requestParameters: DeleteRequest = {},
-    initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
-    const queryParameters = runtime.applyQueryParams(requestParameters, [
-      {
-        key: 'user_id',
-        config: {},
-      },
-    ]);
-
-    const response = await this.request(
-      {
-        path: `/grants/`,
-        method: 'DELETE',
-        query: queryParameters,
-      },
-      initOverrides
-    );
-
-    return runtime.VoidApiResponse.fromResponse(response);
-  }
-
   /**
    * Delete a grant associated with your account.
    * Delete a grant by id
@@ -60,6 +31,35 @@ export class GrantsManager extends BaseAPI {
       {
         path: `/grants/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
         method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Delete a grant associated with your account.
+   * Delete a grant by user_id
+   *
+   * @throws {RequiredError}
+   */
+  async deleteByUserId(
+    requestParameters: DeleteGrantsByUserIdRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'user_id',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/grants/`,
+        method: 'DELETE',
+        query: queryParameters,
       },
       initOverrides
     );

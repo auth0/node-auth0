@@ -1345,6 +1345,23 @@ describe('UsersManager', () => {
     });
   });
 
+  describe('#deleteAuthenticationMethods', () => {
+    const params = {
+      id: 'user_id',
+    };
+
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).delete(`/users/${params.id}/authentication-methods`).reply(200);
+    });
+
+    it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods', async () => {
+      await usersManager.deleteAuthenticationMethods(params);
+      expect(scope.isDone()).to.be.true;
+    });
+  });
+
   describe('#deleteAuthenticationMethodById', () => {
     const params = {
       id: 'user_id',
