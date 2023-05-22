@@ -114,6 +114,11 @@ export interface Client {
    */
   sso_disabled?: boolean;
   /**
+   * Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false).
+   *
+   */
+  cross_origin_authentication?: boolean;
+  /**
    * URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page.
    *
    */
@@ -147,7 +152,7 @@ export interface Client {
    */
   token_endpoint_auth_method?: ClientTokenEndpointAuthMethodEnum;
   /**
-   * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()><@	[Tab] [Space]
+   * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
   client_metadata?: { [key: string]: any };
@@ -885,7 +890,7 @@ export interface ClientCreate {
    * Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false).
    *
    */
-  cross_origin_auth?: boolean;
+  cross_origin_authentication?: boolean;
   /**
    * URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page.
    *
@@ -920,7 +925,7 @@ export interface ClientCreate {
    */
   addons?: ClientAddons;
   /**
-   * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()><@	[Tab] [Space]
+   * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
   client_metadata?: { [key: string]: any };
@@ -1430,6 +1435,11 @@ export interface ClientUpdate {
    */
   sso?: boolean;
   /**
+   * <code>true</code> if this client can be used to make cross-origin authentication requests, <code>false</code> otherwise if cross origin is disabled
+   *
+   */
+  cross_origin_authentication?: boolean;
+  /**
    * URL for the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page.
    *
    */
@@ -1481,7 +1491,7 @@ export interface ClientUpdate {
    */
   addons?: ClientUpdateAddons | null;
   /**
-   * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()><@	[Tab] [Space]
+   * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
   client_metadata?: { [key: string]: any };
@@ -2514,7 +2524,7 @@ export interface DraftUpdate {
  */
 export interface EmailProvider {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, or `smtp`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
    *
    */
   name?: string;
@@ -3091,11 +3101,13 @@ export interface GetActions200ResponseActionsInnerDependenciesInner {
   registry_url?: string;
 }
 /**
- * Integration defines a self contained functioning unit which partners<br/>publish. A partner may create one or many of these integrations.
+ * Integration defines a self contained functioning unit which partners
+ * publish. A partner may create one or many of these integrations.
  */
 export interface GetActions200ResponseActionsInnerIntegration {
   /**
-   * id is a system generated GUID. This same ID is designed to be federated in<br/>all the applicable localities.
+   * id is a system generated GUID. This same ID is designed to be federated in
+   * all the applicable localities.
    *
    */
   id?: string;
@@ -3110,17 +3122,23 @@ export interface GetActions200ResponseActionsInnerIntegration {
    */
   url_slug?: string;
   /**
-   * partner_id is the foreign key reference to the partner account this<br/>integration belongs to.
+   * partner_id is the foreign key reference to the partner account this
+   * integration belongs to.
    *
    */
   partner_id?: string;
   /**
-   * name is the integration name, which will be used for display purposes in<br/>the marketplace.<br/><br/>To start we're going to make sure the display name is at least 3<br/>characters. Can adjust this easily later.
+   * name is the integration name, which will be used for display purposes in
+   * the marketplace.
+   *
+   * To start we're going to make sure the display name is at least 3
+   * characters. Can adjust this easily later.
    *
    */
   name?: string;
   /**
-   * description adds more text for the integration name -- also relevant for<br/>the marketplace listing.
+   * description adds more text for the integration name -- also relevant for
+   * the marketplace listing.
    *
    */
   description?: string;
@@ -3184,7 +3202,8 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentRelease {
    */
   semver?: GetActions200ResponseActionsInnerIntegrationCurrentReleaseSemver;
   /**
-   * required_secrets declares all the necessary secrets for an integration to<br/>work.
+   * required_secrets declares all the necessary secrets for an integration to
+   * work.
    *
    */
   required_secrets?: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
@@ -3195,7 +3214,12 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentRelease {
   required_configuration?: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
 }
 /**
- * Param are form input values, primarily utilized when specifying secrets and<br/>configuration values for actions.<br/><br/>These are especially important for partner integrations -- but can be<br/>exposed to tenant admins as well if they want to parameterize their custom<br/>actions.
+ * Param are form input values, primarily utilized when specifying secrets and
+ * configuration values for actions.
+ *
+ * These are especially important for partner integrations -- but can be
+ * exposed to tenant admins as well if they want to parameterize their custom
+ * actions.
  */
 export interface GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner {
   /**
@@ -3453,7 +3477,7 @@ export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner {
    * The authentication method preferred for phone authenticators.
    *
    */
-  preferred_authentication_method?: string;
+  preferred_authentication_method?: GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum;
   /**
    * The ID of a linked authentication method. Linked authentication methods will be deleted together.
    *
@@ -3509,6 +3533,14 @@ export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum
 } as const;
 export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum =
   (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum];
+
+export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum =
+  {
+    sms: 'sms',
+    voice: 'voice',
+  } as const;
+export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum =
+  (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum];
 
 /**
  *
@@ -3722,7 +3754,17 @@ export interface GetBranding200ResponseColors {
   page_background?: GetBranding200ResponseColorsPageBackground;
 }
 /**
- * Page Background Color or Gradient.<br/>Property contains either <code>null</code> to unset, a solid color as a string value <code>#FFFFFF</code>, or a gradient as an object.<br/><br/><code><br/>{<br/>  type: 'linear-gradient',<br/>  start: '#FFFFFF',<br/>  end: '#000000',<br/>  angle_deg: 35<br/>}<br/></code><br/>
+ * Page Background Color or Gradient.
+ * Property contains either <code>null</code> to unset, a solid color as a string value <code>#FFFFFF</code>, or a gradient as an object.
+ *
+ * <code>
+ * {
+ *   type: 'linear-gradient',
+ *   start: '#FFFFFF',
+ *   end: '#000000',
+ *   angle_deg: 35
+ * }
+ * </code>
  */
 export type GetBranding200ResponseColorsPageBackground = string | { [key: string]: any };
 /**
@@ -6004,21 +6046,6 @@ export interface PatchAuthenticationMethodsByAuthenticationMethodIdRequest {
    */
   name?: string;
   /**
-   * Base32 encoded secret for TOTP generation.
-   *
-   */
-  totp_secret?: string;
-  /**
-   * Applies to email authentication methods only. The email address used to send verification messages.
-   *
-   */
-  email?: string;
-  /**
-   * Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice.
-   *
-   */
-  phone_number?: string;
-  /**
    * Preferred phone authentication method
    *
    */
@@ -6151,17 +6178,20 @@ export interface PatchBreachedPasswordDetectionRequest {
    */
   enabled?: boolean;
   /**
-   * Action to take when a breached password is detected during a login.<br/>      Possible values: <code>block</code>, <code>user_notification</code>, <code>admin_notification</code>.
+   * Action to take when a breached password is detected during a login.
+   *       Possible values: <code>block</code>, <code>user_notification</code>, <code>admin_notification</code>.
    *
    */
   shields?: Array<PatchBreachedPasswordDetectionRequestShieldsEnum>;
   /**
-   * When "admin_notification" is enabled, determines how often email notifications are sent.<br/>        Possible values: <code>immediately</code>, <code>daily</code>, <code>weekly</code>, <code>monthly</code>.
+   * When "admin_notification" is enabled, determines how often email notifications are sent.
+   *         Possible values: <code>immediately</code>, <code>daily</code>, <code>weekly</code>, <code>monthly</code>.
    *
    */
   admin_notification_frequency?: Array<PatchBreachedPasswordDetectionRequestAdminNotificationFrequencyEnum>;
   /**
-   * The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard.<br/>        Possible values: <code>standard</code>, <code>enhanced</code>.
+   * The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard.
+   *         Possible values: <code>standard</code>, <code>enhanced</code>.
    *
    */
   method?: PatchBreachedPasswordDetectionRequestMethodEnum;
@@ -6207,7 +6237,8 @@ export interface PatchBreachedPasswordDetectionRequestStage {
  */
 export interface PatchBreachedPasswordDetectionRequestStagePreUserRegistration {
   /**
-   * Action to take when a breached password is detected during a signup.<br/>              Possible values: <code>block</code>, <code>admin_notification</code>.
+   * Action to take when a breached password is detected during a signup.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
    *
    */
   shields?: Array<PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum>;
@@ -6230,7 +6261,8 @@ export interface PatchBruteForceProtectionRequest {
    */
   enabled?: boolean;
   /**
-   * Action to take when a brute force protection threshold is violated.<br/>        Possible values: <code>block</code>, <code>user_notification</code>.
+   * Action to take when a brute force protection threshold is violated.
+   *         Possible values: <code>block</code>, <code>user_notification</code>.
    *
    */
   shields?: Array<PatchBruteForceProtectionRequestShieldsEnum>;
@@ -6240,7 +6272,8 @@ export interface PatchBruteForceProtectionRequest {
    */
   allowlist?: Array<PatchBruteForceProtectionRequestAllowlistInner>;
   /**
-   * Account Lockout: Determines whether or not IP address is used when counting failed attempts.<br/>          Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
+   * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
+   *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
    *
    */
   mode?: PatchBruteForceProtectionRequestModeEnum;
@@ -6437,7 +6470,7 @@ export interface PatchOrganizationsByIdRequestBranding {
  */
 export interface PatchProviderRequest {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, or `smtp`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
    *
    */
   name?: PatchProviderRequestNameEnum;
@@ -6468,6 +6501,8 @@ export const PatchProviderRequestNameEnum = {
   ses: 'ses',
   sparkpost: 'sparkpost',
   smtp: 'smtp',
+  azure_cs: 'azure_cs',
+  ms365: 'ms365',
 } as const;
 export type PatchProviderRequestNameEnum =
   (typeof PatchProviderRequestNameEnum)[keyof typeof PatchProviderRequestNameEnum];
@@ -6482,7 +6517,8 @@ export interface PatchSuspiciousIpThrottlingRequest {
    */
   enabled?: boolean;
   /**
-   * Action to take when a suspicious IP throttling threshold is violated.<br/>          Possible values: <code>block</code>, <code>admin_notification</code>.
+   * Action to take when a suspicious IP throttling threshold is violated.
+   *           Possible values: <code>block</code>, <code>admin_notification</code>.
    *
    */
   shields?: Array<PatchSuspiciousIpThrottlingRequestShieldsEnum>;
@@ -8177,7 +8213,7 @@ export interface PostPermissionsRequest {
  */
 export interface PostProviderRequest {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, or `smtp`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
    *
    */
   name: PostProviderRequestNameEnum;
@@ -8208,6 +8244,8 @@ export const PostProviderRequestNameEnum = {
   ses: 'ses',
   sparkpost: 'sparkpost',
   smtp: 'smtp',
+  azure_cs: 'azure_cs',
+  ms365: 'ms365',
 } as const;
 export type PostProviderRequestNameEnum =
   (typeof PostProviderRequestNameEnum)[keyof typeof PostProviderRequestNameEnum];
@@ -9367,6 +9405,9 @@ export interface TenantSettings {
   /**
    */
   session_cookie?: TenantSettingsSessionCookie | null;
+  /**
+   */
+  sessions?: TenantSettingsSessions | null;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
@@ -9584,6 +9625,11 @@ export interface TenantSettingsFlags {
    *
    */
   disable_fields_map_fix?: boolean;
+  /**
+   * Used to allow users to pick what factor to enroll of the available MFA factors.
+   *
+   */
+  mfa_show_factor_list_on_enrollment?: boolean;
 }
 /**
  * Guardian page customization.
@@ -9618,6 +9664,16 @@ export const TenantSettingsSessionCookieModeEnum = {
 export type TenantSettingsSessionCookieModeEnum =
   (typeof TenantSettingsSessionCookieModeEnum)[keyof typeof TenantSettingsSessionCookieModeEnum];
 
+/**
+ * Sessions related settings for tenant
+ */
+export interface TenantSettingsSessions {
+  /**
+   * Whether to bypass prompting logic (false) when performing OIDC Logout
+   *
+   */
+  oidc_logout_prompt_enabled?: boolean;
+}
 /**
  *
  */
@@ -9700,6 +9756,9 @@ export interface TenantSettingsUpdate {
   /**
    */
   session_cookie?: TenantSettingsSessionCookie | null;
+  /**
+   */
+  sessions?: TenantSettingsSessions | null;
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
@@ -9892,6 +9951,11 @@ export interface TenantSettingsUpdateFlags {
    *
    */
   disable_fields_map_fix?: boolean;
+  /**
+   * Used to allow users to pick what factor to enroll of the available MFA factors.
+   *
+   */
+  mfa_show_factor_list_on_enrollment?: boolean;
 }
 
 export const TenantSettingsUpdateFlagsChangePwdFlowV1Enum = {
@@ -11227,22 +11291,22 @@ export interface GetProviderRequest {
 /**
  *
  */
-export interface DeleteRequest {
-  /**
-   * user_id of the grant to delete.
-   *
-   */
-  user_id?: string;
-}
-/**
- *
- */
 export interface DeleteGrantsByIdRequest {
   /**
    * ID of the grant to delete.
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface DeleteGrantsByUserIdRequest {
+  /**
+   * user_id of the grant to delete.
+   *
+   */
+  user_id?: string;
 }
 /**
  *
@@ -12532,7 +12596,10 @@ export interface GetUserBlocksRequest {
    */
   identifier: string;
   /**
-   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
+   *
+   *           If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
+   *           If true and Brute Force Protection is disabled, will return an empty list.
+   *
    *
    */
   consider_brute_force_enablement?: boolean;
@@ -12547,10 +12614,23 @@ export interface GetUserBlocksByIdRequest {
    */
   id: string;
   /**
-   * <br/>          If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.<br/>          If true and Brute Force Protection is disabled, will return an empty list.<br/>
+   *
+   *           If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
+   *           If true and Brute Force Protection is disabled, will return an empty list.
+   *
    *
    */
   consider_brute_force_enablement?: boolean;
+}
+/**
+ *
+ */
+export interface DeleteAuthenticationMethodsRequest {
+  /**
+   * The ID of the user in question.
+   *
+   */
+  id: string;
 }
 /**
  *
