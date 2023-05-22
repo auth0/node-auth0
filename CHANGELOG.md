@@ -7,6 +7,7 @@
 **Fixed**
 
 - Fix void responses in Beta types [\#864](https://github.com/auth0/node-auth0/pull/864) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Fix: add missing endpoint and model properties [\#866](https://github.com/auth0/node-auth0/pull/866) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.2](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.2) (2023-05-18)
 
