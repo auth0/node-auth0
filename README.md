@@ -63,6 +63,8 @@ var management = new ManagementClient({
 });
 ```
 
+> Note: The domain should not include `https://` the ManagementClient will prepend that to the string.
+
 For other examples see the [EXAMPLES.md](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md) document.
 
 ## API Reference

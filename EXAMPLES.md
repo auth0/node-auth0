@@ -17,6 +17,8 @@ var auth0 = new ManagementClient({
 
 > Make sure your `clientId` is allowed to request tokens from Management API in [Auth0 Dashboard](https://manage.auth0.com/#/apis)
 
+> Note: The domain should not include `https://` the ManagementClient will prepend that to the string.
+
 ### Obtaining Management API Token from Node.js backend
 
 To obtain a Management API token from your node backend, you can use Client Credentials Grant using your registered Auth0 Non Interactive Clients
