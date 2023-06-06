@@ -8,10 +8,13 @@ function getParamsFromOptions(options) {
   if (!options || typeof options !== 'object') {
     return params;
   }
-  if (options.forwardedFor) {
-    params._requestCustomizer = function (req) {
+  params._requestCustomizer = function (req) {
+    if (options.forwardedFor) {
       req.set('auth0-forwarded-for', options.forwardedFor);
     };
+    if (options.requestLanuage) {
+      req.set('x-request-language', options.requestLanguage);
+    }
   }
   return params;
 }
