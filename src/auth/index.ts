@@ -3,6 +3,7 @@ import { AuthenticationClientOptions } from './base-auth-api.js';
 import { Database } from './database.js';
 import { OAuth } from './oauth.js';
 import { Passwordless } from './passwordless.js';
+import { Users } from './users.js';
 
 export * from './database.js';
 export * from './oauth.js';
@@ -14,6 +15,7 @@ export class AuthenticationClient {
   database: Database;
   oauth: OAuth;
   passwordless: Passwordless;
+  users: Users;
 
   constructor(options: AuthenticationClientOptions) {
     if (options.telemetry !== false) {
@@ -23,5 +25,6 @@ export class AuthenticationClient {
     this.database = new Database(options);
     this.oauth = new OAuth(options);
     this.passwordless = new Passwordless(options);
+    this.users = new Users(options);
   }
 }

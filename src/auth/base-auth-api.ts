@@ -15,7 +15,7 @@ export interface AuthenticationClientOptions extends ClientOptions {
   clockTolerance?: number; // default 60s,
 }
 
-interface AuthApiErrorResponse {
+export interface AuthApiErrorResponse {
   error_description: string;
   error: string;
 }
@@ -33,7 +33,7 @@ export class AuthApiError extends Error {
   }
 }
 
-async function parseError(response: Response) {
+export async function parseError(response: Response) {
   // Errors typically have a specific format:
   // {
   //    error: 'invalid_body',
