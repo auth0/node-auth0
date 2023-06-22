@@ -8,9 +8,10 @@ function getParamsFromOptions(options) {
   if (!options || typeof options !== 'object') {
     return params;
   }
-  if (options.forwardedFor) {
+  if (options.forwardedFor || options.requestLanguage) {
     params._requestCustomizer = function (req) {
-      req.set('auth0-forwarded-for', options.forwardedFor);
+      options.forwardedFor && req.set('auth0-forwarded-for', options.forwardedFor);
+      options.requestLanguage && req.set('x-request-language', options.requestLanguage);
     };
   }
   return params;
@@ -214,6 +215,7 @@ class PasswordlessAuthenticator {
    * @param   {string}    userData.send           The type of email to be sent.
    * @param   {object}    [options]              Additional options.
    * @param   {string}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
+   * @param   {string}    [options.requestLanguage] Specify a language for the message area.
    * @param   {Function}  [cb]                    Method callback.
    * @returns  {Promise|undefined}
    */
@@ -270,6 +272,7 @@ class PasswordlessAuthenticator {
    * @param   {string}    userData.phone_number   User phone number.
    * @param   {object}    [options]              Additional options.
    * @param   {string}    [options.forwardedFor] Value to be used for auth0-forwarded-for header
+   * @param   {string}    [options.requestLanguage] Specify a language for the message area.
    * @param   {Function}  [cb]                    Method callback.
    * @returns  {Promise|undefined}
    */

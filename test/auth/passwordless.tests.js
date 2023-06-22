@@ -736,6 +736,25 @@ describe('PasswordlessAuthenticator', () => {
         .catch(done);
     });
 
+    it('should make it possible to pass x-request-language header', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(path, function () {
+          return this.headers['x-request-language'] === 'fr';
+        })
+        .reply(200);
+
+      this.authenticator
+        .sendEmail(userData, { requestLanguage: 'fr' })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
     it('should make request with proxy', async () => {
       nock.cleanAll();
 
@@ -908,6 +927,25 @@ describe('PasswordlessAuthenticator', () => {
 
       this.authenticator
         .sendSMS(userData, options)
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should make it possible to pass x-request-language header', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(path, function () {
+          return this.headers['x-request-language'] === 'fr';
+        })
+        .reply(200);
+
+      this.authenticator
+        .sendSMS(userData, { requestLanguage: 'fr' })
         .then(() => {
           expect(request.isDone()).to.be.true;
 
