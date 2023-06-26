@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.5.0](https://github.com/auth0/node-auth0/tree/v3.5.0) (2023-06-26)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v3.5.0)
+
+**Added**
+
+- Add option to pass x-request-language header for passwordless [\#873](https://github.com/auth0/node-auth0/pull/873) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v3.4.0](https://github.com/auth0/node-auth0/tree/v3.4.0) (2023-05-05)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.3.0...v3.4.0)
