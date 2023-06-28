@@ -50,7 +50,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get('/organizations').reply(500);
+      nock(API_URL).get('/organizations').reply(500, {});
 
       organizations.getAll().catch((err) => {
         expect(err).to.exist;
@@ -125,12 +125,6 @@ describe('OrganizationsManager', () => {
       request = nock(API_URL).get(`/organizations/${data.id}`).reply(200, data);
     });
 
-    it('should accept a callback', function (done) {
-      const params = { id: data.id };
-
-      organizations.get(params, done.bind(null, null));
-    });
-
     it('should return a promise if no callback is given', function (done) {
       organizations.get({ id: data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
@@ -146,7 +140,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.id}`).reply(500);
+      nock(API_URL).get(`/organizations/${data.id}`).reply(500, {});
 
       organizations.get({ id: data.id }).catch((err) => {
         expect(err).to.exist;
@@ -201,7 +195,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.name}`).reply(500);
+      nock(API_URL).get(`/organizations/${data.name}`).reply(500, {});
 
       organizations.getByName({ name: data.name }).catch((err) => {
         expect(err).to.exist;
@@ -246,7 +240,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).post('/organizations').reply(500);
+      nock(API_URL).post('/organizations').reply(500, {});
 
       organizations.create(data).catch((err) => {
         expect(err).to.exist;
@@ -335,7 +329,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/organizations/${data.id}`).reply(500);
+      nock(API_URL).patch(`/organizations/${data.id}`).reply(500, {});
 
       organizations.update({ id: data.id }, {}).catch((err) => {
         expect(err).to.exist;
@@ -350,7 +344,7 @@ describe('OrganizationsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/organizations/${id}`).reply(200);
+      request = nock(API_URL).delete(`/organizations/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -368,7 +362,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/organizations/${id}`).reply(500);
+      nock(API_URL).delete(`/organizations/${id}`).reply(500, {});
 
       organizations.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -383,7 +377,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .delete(`/organizations/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
@@ -420,7 +414,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.id}/enabled_connections`).reply(500);
+      nock(API_URL).get(`/organizations/${data.id}/enabled_connections`).reply(500, {});
 
       organizations.getEnabledConnections(data).catch((err) => {
         expect(err).to.exist;
@@ -476,7 +470,7 @@ describe('OrganizationsManager', () => {
 
       nock(API_URL)
         .get(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
-        .reply(500);
+        .reply(500, {});
 
       organizations.getEnabledConnection(data).catch((err) => {
         expect(err).to.exist;
@@ -524,7 +518,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${data.id}/enabled_connections`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/enabled_connections`).reply(500, {});
 
       organizations.addEnabledConnection(data, { connection_id: '' }).catch((err) => {
         expect(err).to.exist;
@@ -597,7 +591,7 @@ describe('OrganizationsManager', () => {
 
       nock(API_URL)
         .patch(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
-        .reply(500);
+        .reply(500, {});
 
       organizations.updateEnabledConnection(data, body).catch((err) => {
         expect(err).to.exist;
@@ -671,7 +665,7 @@ describe('OrganizationsManager', () => {
     beforeEach(function () {
       request = nock(API_URL)
         .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
-        .reply(200);
+        .reply(200, {});
     });
 
     it('should validate empty organizationId', () => {
@@ -702,7 +696,7 @@ describe('OrganizationsManager', () => {
 
       nock(API_URL)
         .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
-        .reply(500);
+        .reply(500, {});
 
       organizations.deleteEnabledConnection(data, {}).catch((err) => {
         expect(err).to.exist;
@@ -725,7 +719,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.deleteEnabledConnection(data, {}).then(() => {
         expect(request.isDone()).to.be.true;
@@ -762,7 +756,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.id}/members`).reply(500);
+      nock(API_URL).get(`/organizations/${data.id}/members`).reply(500, {});
 
       organizations.getMembers(data).catch((err) => {
         expect(err).to.exist;
@@ -808,7 +802,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${data.id}/members`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/members`).reply(500, {});
 
       organizations.addMembers(data, { members: [] }).catch((err) => {
         expect(err).to.exist;
@@ -835,7 +829,7 @@ describe('OrganizationsManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post(`/organizations/${data.id}/members`, body).reply(200);
+      const request = nock(API_URL).post(`/organizations/${data.id}/members`, body).reply(200, {});
 
       organizations.addMembers(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -850,7 +844,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .post(`/organizations/${data.id}/members`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.addMembers(data, { members: [] }).then(() => {
         expect(request.isDone()).to.be.true;
@@ -866,7 +860,7 @@ describe('OrganizationsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/organizations/${data.id}/members`, {}).reply(200);
+      request = nock(API_URL).delete(`/organizations/${data.id}/members`, {}).reply(200, {});
     });
 
     it('should validate empty organizationId', () => {
@@ -886,7 +880,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/organizations/${data.id}/members`).reply(500);
+      nock(API_URL).delete(`/organizations/${data.id}/members`).reply(500, {});
 
       organizations.deleteMembers(data, body).catch((err) => {
         expect(err).to.exist;
@@ -896,7 +890,9 @@ describe('OrganizationsManager', () => {
     });
 
     it('should perform a DELETE request to /api/v2/organizations/organization_id/members', function (done) {
-      const request = nock(API_URL).delete(`/organizations/${data.id}/members`, body).reply(200);
+      const request = nock(API_URL)
+        .delete(`/organizations/${data.id}/members`, body)
+        .reply(200, {});
 
       organizations.deleteMembers(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -911,7 +907,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .delete(`/organizations/${data.id}/members`, body)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.deleteMembers(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -951,7 +947,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500);
+      nock(API_URL).get(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500, {});
 
       organizations.getMemberRoles(data).catch((err) => {
         expect(err).to.exist;
@@ -988,7 +984,7 @@ describe('OrganizationsManager', () => {
     beforeEach(function () {
       request = nock(API_URL)
         .post(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
-        .reply(200);
+        .reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -1001,7 +997,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500, {});
 
       organizations.addMemberRoles(data, { roles: [] }).catch((err) => {
         expect(err).to.exist;
@@ -1037,7 +1033,7 @@ describe('OrganizationsManager', () => {
 
       const request = nock(API_URL)
         .post(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
-        .reply(200);
+        .reply(200, {});
 
       organizations.addMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1052,7 +1048,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .post(`/organizations/${data.id}/members/${data.user_id}/roles`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.addMemberRoles(data, { roles: [] }).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1075,7 +1071,7 @@ describe('OrganizationsManager', () => {
     beforeEach(function () {
       request = nock(API_URL)
         .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, {})
-        .reply(200);
+        .reply(200, {});
     });
 
     it('should validate empty id', () => {
@@ -1095,7 +1091,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/organizations/${data.id}/members/${data.user_id}/roles`).reply(500);
+      nock(API_URL)
+        .delete(`/organizations/${data.id}/members/${data.user_id}/roles`)
+        .reply(500, {});
 
       organizations.deleteMemberRoles(data, body).catch((err) => {
         expect(err).to.exist;
@@ -1114,7 +1112,7 @@ describe('OrganizationsManager', () => {
     it('should perform a DELETE request to /api/v2/organizations/organization_id/members/user_id/roles', function (done) {
       const request = nock(API_URL)
         .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
-        .reply(200);
+        .reply(200, {});
 
       organizations.deleteMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1129,7 +1127,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, body)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.deleteMemberRoles(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1166,7 +1164,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.id}/invitations`).reply(500);
+      nock(API_URL).get(`/organizations/${data.id}/invitations`).reply(500, {});
 
       organizations.getInvitations(data).catch((err) => {
         expect(err).to.exist;
@@ -1220,7 +1218,9 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/organizations/${data.id}/invitations/${data.invitation_id}`).reply(500);
+      nock(API_URL)
+        .get(`/organizations/${data.id}/invitations/${data.invitation_id}`)
+        .reply(500, {});
 
       organizations.getInvitation(data).catch((err) => {
         expect(err).to.exist;
@@ -1288,7 +1288,7 @@ describe('OrganizationsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/organizations/${data.id}/invitations`).reply(500);
+      nock(API_URL).post(`/organizations/${data.id}/invitations`).reply(500, {});
 
       organizations
         .createInvitation(data, {
@@ -1379,7 +1379,7 @@ describe('OrganizationsManager', () => {
     beforeEach(function () {
       request = nock(API_URL)
         .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)
-        .reply(200);
+        .reply(200, {});
     });
 
     it('should validate empty id', () => {
@@ -1398,7 +1398,7 @@ describe('OrganizationsManager', () => {
 
       nock(API_URL)
         .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`, {})
-        .reply(500);
+        .reply(500, {});
 
       organizations.deleteInvitation(data).catch((err) => {
         expect(err).to.exist;
@@ -1412,7 +1412,7 @@ describe('OrganizationsManager', () => {
 
       const request = nock(API_URL)
         .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.deleteInvitation(data).then(() => {
         expect(request.isDone()).to.be.true;
@@ -1436,7 +1436,7 @@ describe('OrganizationsManager', () => {
       const request = nock(API_URL)
         .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       organizations.deleteInvitation(data).then(() => {
         expect(request.isDone()).to.be.true;

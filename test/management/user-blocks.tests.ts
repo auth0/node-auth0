@@ -54,8 +54,8 @@ describe('UserBlocksManager', () => {
       );
     });
 
-    it('should return a promise when no callback is given', function () {
-      expect(userBlocks.get({ id })).instanceOf(Promise);
+    it('should return a promise when no callback is given', function (done) {
+      expect(userBlocks.get({ id }).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a get request to /user-blocks/${id}`, async function () {
@@ -66,7 +66,7 @@ describe('UserBlocksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/user-blocks/${id}`).reply(500);
+      nock(API_URL).get(`/user-blocks/${id}`).reply(500, {});
 
       userBlocks
         .get({ id })
@@ -96,7 +96,7 @@ describe('UserBlocksManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/user-blocks/${id}`).reply(200);
+      request = nock(API_URL).delete(`/user-blocks/${id}`).reply(200, {});
     });
 
     afterEach(() => {
@@ -110,12 +110,8 @@ describe('UserBlocksManager', () => {
       );
     });
 
-    it('should accept a callback', function (done) {
-      userBlocks.delete({ id }, done.bind(null, null));
-    });
-
-    it('should return a promise when no callback is given', function () {
-      expect(userBlocks.delete({ id })).instanceOf(Promise);
+    it('should return a promise when no callback is given', function (done) {
+      expect(userBlocks.delete({ id }).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a delete request to /user-blocks/${id}`, async function () {
@@ -126,7 +122,7 @@ describe('UserBlocksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/user-blocks/${id}`).reply(500);
+      nock(API_URL).delete(`/user-blocks/${id}`).reply(500, {});
 
       userBlocks
         .delete({ id })
@@ -144,7 +140,7 @@ describe('UserBlocksManager', () => {
       const request = nock(API_URL)
         .delete(`/user-blocks/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await userBlocks.delete({ id });
       expect(request.isDone()).to.be.true;
@@ -170,8 +166,8 @@ describe('UserBlocksManager', () => {
       );
     });
 
-    it('should return a promise when no callback is given', function () {
-      expect(userBlocks.getAll({ identifier })).instanceOf(Promise);
+    it('should return a promise when no callback is given', function (done) {
+      expect(userBlocks.getAll({ identifier }).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a get request to /user-blocks', async function () {
@@ -182,7 +178,7 @@ describe('UserBlocksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/user-blocks').query({ identifier }).reply(500);
+      nock(API_URL).get('/user-blocks').query({ identifier }).reply(500, {});
 
       userBlocks
         .getAll({ identifier })
@@ -213,7 +209,7 @@ describe('UserBlocksManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete('/user-blocks').query({ identifier }).reply(200);
+      request = nock(API_URL).delete('/user-blocks').query({ identifier }).reply(200, {});
     });
 
     afterEach(() => {
@@ -227,8 +223,8 @@ describe('UserBlocksManager', () => {
       );
     });
 
-    it('should return a promise when no callback is given', function () {
-      expect(userBlocks.deleteAll({ identifier })).instanceOf(Promise);
+    it('should return a promise when no callback is given', function (done) {
+      expect(userBlocks.deleteAll({ identifier }).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a delete request to /user-blocks', async function () {
@@ -239,7 +235,7 @@ describe('UserBlocksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete('/user-blocks').query({ identifier }).reply(500);
+      nock(API_URL).delete('/user-blocks').query({ identifier }).reply(500, {});
 
       userBlocks
         .deleteAll({ identifier })
@@ -258,7 +254,7 @@ describe('UserBlocksManager', () => {
         .delete('/user-blocks')
         .query({ identifier })
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await userBlocks.deleteAll({ identifier });
       expect(request.isDone()).to.be.true;

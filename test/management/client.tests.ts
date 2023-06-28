@@ -86,7 +86,7 @@ describe('ClientsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get('/clients').reply(500);
+      nock(API_URL).get('/clients').reply(500, {});
 
       clients.getAll().catch((err) => {
         expect(err).to.exist;
@@ -352,7 +352,7 @@ describe('ClientsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/clients/${id}`).reply(200);
+      request = nock(API_URL).delete(`/clients/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -415,7 +415,7 @@ describe('ClientsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/clients/${id}/rotate-secret`).reply(500);
+      nock(API_URL).post(`/clients/${id}/rotate-secret`).reply(500, {});
 
       clients.rotateClientSecret({ id }).catch((err) => {
         expect(err).to.exist;

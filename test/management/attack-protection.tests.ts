@@ -83,7 +83,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(bruteForcePath).reply(500);
+        nock(API_URL).get(bruteForcePath).reply(500, {});
 
         attackProtection.getBruteForceConfig().catch((err) => {
           expect(err).to.exist;
@@ -135,7 +135,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(bruteForcePath).reply(500);
+        nock(API_URL).get(bruteForcePath).reply(500, {});
 
         attackProtection.getBruteForceDefaults().catch((err) => {
           expect(err).to.exist;
@@ -186,7 +186,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(bruteForcePath).reply(500);
+        nock(API_URL).patch(bruteForcePath).reply(500, {});
 
         attackProtection.updateBruteForceConfig(data).catch((err) => {
           expect(err).to.exist.to.be.an.instanceOf(Error);
@@ -263,7 +263,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(suspiciousIpPath).reply(500);
+        nock(API_URL).get(suspiciousIpPath).reply(500, {});
 
         attackProtection.getSuspiciousIpThrottlingConfig().catch((err) => {
           expect(err).to.exist;
@@ -314,7 +314,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(suspiciousIpPath).reply(500);
+        nock(API_URL).patch(suspiciousIpPath).reply(500, {});
 
         attackProtection.updateSuspiciousIpThrottlingConfig(data).catch((err) => {
           expect(err).to.exist.to.be.an.instanceOf(Error);
@@ -383,7 +383,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(breachedPasswordDetectionPath).reply(500);
+        nock(API_URL).get(breachedPasswordDetectionPath).reply(500, {});
 
         attackProtection.getBreachedPasswordDetectionConfig().catch((err) => {
           expect(err).to.exist;
@@ -436,7 +436,7 @@ describe('AttackProtectionManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(breachedPasswordDetectionPath).reply(500);
+        nock(API_URL).patch(breachedPasswordDetectionPath).reply(500, {});
 
         attackProtection.updateBreachedPasswordDetectionConfig(data).catch((err) => {
           expect(err).to.exist.to.be.an.instanceOf(Error);

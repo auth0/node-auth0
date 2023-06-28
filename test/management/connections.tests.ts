@@ -75,7 +75,7 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/connections').reply(500);
+      nock(API_URL).get('/connections').reply(500, {});
 
       connections.getAll().catch((err) => {
         expect(err).to.exist;
@@ -191,7 +191,7 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/connections/${params.id}`).reply(500);
+      nock(API_URL).get(`/connections/${params.id}`).reply(500, {});
 
       connections.get(params).catch((err) => {
         expect(err).to.exist;
@@ -292,7 +292,7 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/connections').reply(500);
+      nock(API_URL).post('/connections').reply(500, {});
 
       connections.create(data).catch((err) => {
         expect(err).to.exist;
@@ -378,7 +378,7 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/connections/${data.id}`).reply(500);
+      nock(API_URL).patch(`/connections/${data.id}`).reply(500, {});
 
       connections.update(params, data).catch((err) => {
         expect(err).to.exist.to.be.an.instanceOf(Error);
@@ -456,7 +456,7 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/connections/${id}`).reply(500);
+      nock(API_URL).delete(`/connections/${id}`).reply(500, {});
 
       connections.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -471,7 +471,7 @@ describe('ConnectionsManager', () => {
       const request = nock(API_URL)
         .delete(`/connections/${id}`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       connections.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
@@ -490,7 +490,7 @@ describe('ConnectionsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).get(`/connections/${data.id}/status`).reply(200);
+      request = nock(API_URL).get(`/connections/${data.id}/status`).reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -507,7 +507,7 @@ describe('ConnectionsManager', () => {
     it('should report failure', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/connections/${params.id}/status`).reply(500);
+      nock(API_URL).get(`/connections/${params.id}/status`).reply(500, {});
 
       connections.checkStatus(params).catch((err) => {
         expect(err).to.exist;
@@ -524,7 +524,7 @@ describe('ConnectionsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(endpoint).reply(200);
+      request = nock(API_URL).delete(endpoint).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -542,7 +542,7 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(endpoint, {}).reply(500);
+      nock(API_URL).delete(endpoint, {}).reply(500, {});
 
       connections.deleteUserByEmail({ id, email }).catch((err) => {
         expect(err).to.exist;
@@ -571,7 +571,7 @@ describe('ConnectionsManager', () => {
       const request = nock(API_URL)
         .delete(endpoint)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       connections.deleteUserByEmail({ id, email }).then(() => {
         expect(request.isDone()).to.be.true;

@@ -1,4 +1,4 @@
-import * as runtime from '../../../lib/runtime.js';
+import type { ReadStream } from 'fs';
 
 /**
  *
@@ -11540,7 +11540,7 @@ export interface GetJobsByIdRequest {
 export interface PostUsersImportsData {
   /**
    */
-  users: runtime.Blob;
+  users: Blob | ReadStream;
   /**
    * connection_id of the connection to which users will be imported.
    *

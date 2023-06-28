@@ -1,10 +1,9 @@
-import type { RequestInit, RequestInfo, Response, Headers } from 'node-fetch';
 import { RetryConfiguration } from './retry.js';
 
 /**
  * @private
  */
-export type FetchAPI = (url: URL | RequestInfo, init: RequestInit) => Promise<Response>;
+export type FetchAPI = (url: URL | RequestInfo, init?: RequestInit) => Promise<Response>;
 
 export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
   telemetry?: boolean;
@@ -25,7 +24,8 @@ export interface Configuration {
   /**
    * Pass your own http agent to support proxies.
    */
-  agent?: RequestInit['agent'];
+  // https://github.com/octokit/types.ts/blob/v10.0.0/src/RequestRequestOptions.ts#L13
+  agent?: unknown;
   /**
    * Custom headers that will be added to every request.
    */

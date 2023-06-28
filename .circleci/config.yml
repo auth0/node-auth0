@@ -36,7 +36,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["16.18", "18.12", "20.0"]
+              node-version: ["16.18", "18.12", "20.3"]
       - ship/node-publish:
           publish-command: npm run build && npm publish --tag beta
           requires:

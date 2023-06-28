@@ -58,7 +58,7 @@ describe('TenantManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/tenants/settings').reply(500);
+      nock(API_URL).get('/tenants/settings').reply(500, {});
 
       tenant.getSettings().catch((err) => {
         expect(err).to.exist;
@@ -127,7 +127,7 @@ describe('TenantManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch('/tenants/settings').reply(500);
+      nock(API_URL).patch('/tenants/settings').reply(500, {});
 
       tenant.updateSettings(data).catch((err) => {
         expect(err).to.exist;

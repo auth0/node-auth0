@@ -58,7 +58,7 @@ describe('PromptsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/prompts').reply(500);
+      nock(API_URL).get('/prompts').reply(500, {});
 
       prompts.get().catch((err) => {
         expect(err).to.exist;
@@ -120,7 +120,7 @@ describe('PromptsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/prompts`).reply(500);
+      nock(API_URL).patch(`/prompts`).reply(500, {});
 
       prompts.update(data).catch((err) => {
         expect(err).to.exist.to.be.an.instanceOf(Error);
@@ -200,7 +200,7 @@ describe('PromptsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/prompts/consent/custom-text/en').reply(500);
+      nock(API_URL).get('/prompts/consent/custom-text/en').reply(500, {});
 
       prompts.getCustomTextByLanguage(params).catch((err) => {
         expect(err).to.exist;
@@ -270,7 +270,7 @@ describe('PromptsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).put('/prompts/consent/custom-text/en').reply(500);
+      nock(API_URL).put('/prompts/consent/custom-text/en').reply(500, {});
 
       prompts.updateCustomTextByLanguage(params, params.body).catch((err) => {
         expect(err).to.exist;

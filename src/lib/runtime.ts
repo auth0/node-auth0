@@ -1,5 +1,4 @@
-import type { RequestInit, RequestInfo, Blob as BlobType } from 'node-fetch';
-import { Response } from 'node-fetch';
+import type { ReadStream } from 'fs';
 import { retry } from './retry.js';
 import { FetchError, RequiredError, TimeoutError } from './errors.js';
 import {
@@ -10,12 +9,18 @@ import {
   Middleware,
   FetchAPI,
 } from './models.js';
-import fetch from 'node-fetch';
-// eslint-disable-next-line import/extensions
-import { AbortSignal } from 'node-fetch/externals';
-import FormData from 'form-data';
 
-export { FormData, BlobType as Blob };
+/**
+ * @private
+ */
+const nodeFetch = (...args: Parameters<FetchAPI>) =>
+  import('node-fetch').then(({ default: fetch }) => (fetch as FetchAPI)(...args));
+
+/**
+ * @private
+ */
+export const getFormDataCls = async () => import('node-fetch').then(({ FormData }) => FormData);
+
 export * from './models.js';
 
 /**
@@ -38,7 +43,7 @@ export class BaseAPI {
     }
 
     this.middleware = configuration.middleware || [];
-    this.fetchApi = configuration.fetchApi || fetch;
+    this.fetchApi = configuration.fetchApi || nodeFetch;
     this.parseError = configuration.parseError;
     this.timeoutDuration =
       typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
@@ -91,19 +96,20 @@ export class BaseAPI {
       })),
     };
 
+    const { Blob } = await import('node-fetch');
     const init: RequestInit = {
       ...overriddenInit,
       body:
-        isFormData(overriddenInit.body) ||
+        (await isFormData(overriddenInit.body)) ||
         overriddenInit.body instanceof URLSearchParams ||
-        overriddenInit.body instanceof (await new Response().blob()).constructor
+        overriddenInit.body instanceof Blob
           ? overriddenInit.body
           : JSON.stringify(overriddenInit.body),
     };
     return { url, init };
   }
 
-  private fetchWithTimeout = async (url: URL | RequestInfo, init: RequestInit) => {
+  private fetchWithTimeout: FetchAPI = async (url, init) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => {
       controller.abort();
@@ -178,7 +184,8 @@ export class BaseAPI {
   };
 }
 
-function isFormData(value: unknown): value is FormData {
+async function isFormData(value: unknown): Promise<boolean> {
+  const FormData = await getFormDataCls();
   return typeof FormData !== 'undefined' && value instanceof FormData;
 }
 
@@ -225,18 +232,6 @@ function querystringSingleKey(
     return `${encodeURIComponent(key)}=${multiValue}`;
   }
   return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
-}
-
-/**
- * @private
- */
-export function canConsumeForm(consumes: Consume[]): boolean {
-  for (const consume of consumes) {
-    if ('multipart/form-data' === consume.contentType) {
-      return true;
-    }
-  }
-  return false;
 }
 
 /**
@@ -318,8 +313,18 @@ export function applyQueryParams<
 /**
  * @private
  */
-export function parseFormParam(originalValue: unknown) {
+export async function parseFormParam(
+  originalValue: number | boolean | string | Blob | ReadStream
+): Promise<string | Blob> {
   let value = originalValue;
   value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-  return value;
+  if (
+    typeof originalValue === 'object' &&
+    'path' in originalValue &&
+    typeof originalValue.path === 'string'
+  ) {
+    const { fileFrom } = await import('node-fetch');
+    value = await fileFrom(originalValue.path, 'application/json');
+  }
+  return value as string | Blob;
 }

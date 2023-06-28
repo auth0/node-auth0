@@ -115,7 +115,7 @@ describe('GuardianManager', () => {
     let request: Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/guardian/enrollments/${data.id}`).reply(200);
+      request = nock(API_URL).delete(`/guardian/enrollments/${data.id}`).reply(200, {});
     });
 
     it('should perform a DELETE request to /guardian/enrollments/:id', async () => {

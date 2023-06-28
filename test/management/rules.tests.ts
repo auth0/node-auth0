@@ -58,7 +58,7 @@ describe('RulesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/rules').reply(500);
+      nock(API_URL).get('/rules').reply(500, {});
 
       rules.getAll().catch((err) => {
         expect(err).to.exist;
@@ -136,7 +136,7 @@ describe('RulesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/rules/${data.id}`).reply(500);
+      nock(API_URL).get(`/rules/${data.id}`).reply(500, {});
 
       rules.get({ id: data.id }).catch((err) => {
         expect(err).to.exist;
@@ -179,7 +179,7 @@ describe('RulesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/rules').reply(500);
+      nock(API_URL).post('/rules').reply(500, {});
 
       rules.create(data).catch((err) => {
         expect(err).to.exist;
@@ -244,7 +244,7 @@ describe('RulesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/rules/${data.id}`).reply(500);
+      nock(API_URL).patch(`/rules/${data.id}`).reply(500, {});
 
       rules.update({ id: data.id }, { name: 'new name' }).catch((err) => {
         expect(err).to.exist;
@@ -259,11 +259,11 @@ describe('RulesManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/rules/${id}`).reply(200);
+      request = nock(API_URL).delete(`/rules/${id}`).reply(200, {});
     });
 
-    it('should return a promise when no callback is given', function () {
-      expect(rules.delete({ id })).instanceOf(Promise);
+    it('should return a promise when no callback is given', function (done) {
+      expect(rules.delete({ id }).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a delete request to /rules/${id}`, async function () {
@@ -274,7 +274,7 @@ describe('RulesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/rules/${id}`).reply(500);
+      nock(API_URL).delete(`/rules/${id}`).reply(500, {});
 
       rules.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -289,7 +289,7 @@ describe('RulesManager', () => {
       const request = nock(API_URL)
         .delete(`/rules/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await rules.delete({ id });
       expect(request.isDone()).to.be.true;

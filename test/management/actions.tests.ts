@@ -106,7 +106,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get('/actions/actions').reply(500);
+        nock(API_URL).get('/actions/actions').reply(500, {});
 
         actions.getAll().catch((err) => {
           expect(err).to.exist;
@@ -242,7 +242,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/actions/${data.id}`).reply(500);
+        nock(API_URL).get(`/actions/actions/${data.id}`).reply(500, {});
 
         actions.get({ id: data.id as string }).catch((err) => {
           expect(err).to.exist;
@@ -331,7 +331,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).post('/actions/actions/').reply(500);
+        nock(API_URL).post('/actions/actions/').reply(500, {});
 
         actions.create(data).catch((err) => {
           expect(err).to.exist;
@@ -473,7 +473,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(`/actions/actions/${id}`).reply(500);
+        nock(API_URL).patch(`/actions/actions/${id}`).reply(500, {});
 
         actions.update({ id }, data).catch((err) => {
           expect(err).to.exist;
@@ -505,7 +505,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).post(`/actions/actions/${action_id}/deploy`).reply(500);
+        nock(API_URL).post(`/actions/actions/${action_id}/deploy`).reply(500, {});
 
         actions.deploy({ id: action_id }).catch((err) => {
           expect(err).to.exist;
@@ -553,7 +553,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).post(`/actions/actions/${action_id}/test`).reply(500);
+        nock(API_URL).post(`/actions/actions/${action_id}/test`).reply(500, {});
 
         actions.test({ id: action_id }, { payload }).catch((err) => {
           expect(err).to.exist;
@@ -582,7 +582,7 @@ describe('ActionsManager', () => {
       const action_id = 'action-id-1';
 
       beforeEach(function () {
-        request = nock(API_URL).delete(`/actions/actions/${action_id}`).reply(200);
+        request = nock(API_URL).delete(`/actions/actions/${action_id}`).reply(200, {});
       });
 
       it('should return a promise when no callback is given', function (done) {
@@ -600,7 +600,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).delete(`/actions/actions/${action_id}`).reply(500);
+        nock(API_URL).delete(`/actions/actions/${action_id}`).reply(500, {});
 
         actions.delete({ id: action_id }).catch((err) => {
           expect(err).to.exist;
@@ -667,7 +667,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/actions/${actionId}/versions`).reply(500);
+        nock(API_URL).get(`/actions/actions/${actionId}/versions`).reply(500, {});
 
         actions.getVersions({ actionId }).catch((err) => {
           expect(err).to.exist;
@@ -771,7 +771,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/actions/${actionId}/versions/${id}`).reply(500);
+        nock(API_URL).get(`/actions/actions/${actionId}/versions/${id}`).reply(500, {});
 
         actions.getVersion({ actionId, id }).catch((err) => {
           expect(err).to.exist;
@@ -856,7 +856,7 @@ describe('ActionsManager', () => {
 
         nock(API_URL)
           .post(`/actions/actions/${action_id}/versions/${version_id}/deploy`)
-          .reply(500);
+          .reply(500, {});
 
         actions.deployVersion({ actionId: action_id, id: version_id }, {}).catch((err) => {
           expect(err).to.exist;
@@ -923,7 +923,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get(`/actions/executions/${data.id}`).reply(500);
+        nock(API_URL).get(`/actions/executions/${data.id}`).reply(500, {});
 
         actions.getExecution({ id: data.id as string }).catch((err) => {
           expect(err).to.exist;
@@ -988,7 +988,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).get('/actions/triggers').reply(500);
+        nock(API_URL).get('/actions/triggers').reply(500, {});
 
         actions.getAllTriggers().catch((err) => {
           expect(err).to.exist;
@@ -1111,7 +1111,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(500);
+        nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(500, {});
 
         actions.updateTriggerBindings({ triggerId: trigger_id }, data).catch((err) => {
           expect(err).to.exist;
@@ -1183,7 +1183,7 @@ describe('ActionsManager', () => {
       it('should pass any errors to the promise catch handler', function (done) {
         nock.cleanAll();
 
-        nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(500);
+        nock(API_URL).patch(`/actions/triggers/${trigger_id}/bindings`).reply(500, {});
 
         actions.getTriggerBindings({ triggerId: trigger_id }).catch((err) => {
           expect(err).to.exist;

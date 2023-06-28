@@ -51,7 +51,7 @@ describe('ResourceServersManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/resource-servers').reply(500);
+      nock(API_URL).get('/resource-servers').reply(500, {});
 
       resourceServers.getAll().catch((err) => {
         expect(err).to.exist;
@@ -119,7 +119,7 @@ describe('ResourceServersManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/resource-servers/${params.id}`).reply(500);
+      nock(API_URL).get(`/resource-servers/${params.id}`).reply(500, {});
 
       resourceServers.get(params).catch((err) => {
         expect(err).to.exist;
@@ -183,7 +183,7 @@ describe('ResourceServersManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/resource-servers').reply(500);
+      nock(API_URL).post('/resource-servers').reply(500, {});
 
       resourceServers.create(data).catch((err) => {
         expect(err).to.exist;
@@ -248,7 +248,7 @@ describe('ResourceServersManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/resource-servers/${data.id}`).reply(500);
+      nock(API_URL).patch(`/resource-servers/${data.id}`).reply(500, {});
 
       resourceServers.update(params, data).catch((err) => {
         expect(err).to.exist.to.be.an.instanceOf(Error);
@@ -298,11 +298,7 @@ describe('ResourceServersManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/resource-servers/${id}`).reply(200);
-    });
-
-    it('should accept a callback', function (done) {
-      resourceServers.delete({ id }, done.bind(null, null));
+      request = nock(API_URL).delete(`/resource-servers/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -320,7 +316,7 @@ describe('ResourceServersManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/resource-servers/${id}`).reply(500);
+      nock(API_URL).delete(`/resource-servers/${id}`).reply(500, {});
 
       resourceServers.delete({ id }).catch((err) => {
         expect(err).to.exist;

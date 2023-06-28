@@ -66,7 +66,7 @@ describe('TicketsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/tickets/email-verification').reply(500);
+      nock(API_URL).post('/tickets/email-verification').reply(500, {});
 
       tickets.verifyEmail(data).catch((err) => {
         expect(err).to.exist;
@@ -126,7 +126,7 @@ describe('TicketsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/tickets/email-verification').reply(500);
+      nock(API_URL).post('/tickets/email-verification').reply(500, {});
 
       tickets.changePassword(data).catch((err) => {
         expect(err).to.exist;
