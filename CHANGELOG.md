@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.0.0-beta.4](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.4) (2023-06-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.3...v4.0.0-beta.4)
+
+**Added**
+
+- Upgrade to fetch 3 [\#876](https://github.com/auth0/node-auth0/pull/876) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v4.0.0-beta.3](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.3) (2023-05-19)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.2...v4.0.0-beta.3)
