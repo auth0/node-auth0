@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.0.0-beta.5](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.5) (2023-06-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.4...v4.0.0-beta.5)
+
+**Fixed**
+
+- Fix issue with TS rewriting fetch dynamic imports [\#878](https://github.com/auth0/node-auth0/pull/878) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v4.0.0-beta.4](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.4) (2023-06-28)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.3...v4.0.0-beta.4)
