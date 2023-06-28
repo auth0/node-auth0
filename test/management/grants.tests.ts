@@ -71,7 +71,7 @@ describe('GrantsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/grants').reply(500);
+      nock(API_URL).get('/grants').reply(500, {});
 
       grants.getAll().catch((err) => {
         expect(err).to.exist;
@@ -138,7 +138,7 @@ describe('GrantsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/grants/${id}`).reply(200);
+      request = nock(API_URL).delete(`/grants/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {

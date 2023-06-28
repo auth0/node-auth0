@@ -47,7 +47,7 @@ describe('StatsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/stats/daily').reply(500);
+      nock(API_URL).get('/stats/daily').reply(500, {});
 
       stats.getDaily().catch((err) => {
         expect(err).to.exist;
@@ -117,7 +117,7 @@ describe('StatsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/stats/active-users').reply(500);
+      nock(API_URL).get('/stats/active-users').reply(500, {});
 
       stats.getActiveUsersCount().catch((err) => {
         expect(err).to.exist;

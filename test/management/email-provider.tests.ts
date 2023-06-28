@@ -80,7 +80,7 @@ describe('EmailProviderManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/emails/provider').reply(500);
+      nock(API_URL).get('/emails/provider').reply(500, {});
 
       emails.get().catch((err) => {
         expect(err).to.exist;
@@ -193,7 +193,7 @@ describe('EmailProviderManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/emails/provider').reply(500);
+      nock(API_URL).post('/emails/provider').reply(500, {});
 
       emails.configure(data).catch((err) => {
         expect(err).to.exist;
@@ -297,7 +297,7 @@ describe('EmailProviderManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/emails/provider`).reply(500);
+      nock(API_URL).patch(`/emails/provider`).reply(500, {});
 
       emails.update(data).catch((err) => {
         expect(err).to.exist.to.be.an.instanceOf(Error);

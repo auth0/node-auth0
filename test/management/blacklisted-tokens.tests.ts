@@ -60,7 +60,7 @@ describe('BlacklistedTokensManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/blacklists/tokens').reply(500);
+      nock(API_URL).get('/blacklists/tokens').reply(500, {});
 
       blacklistedTokens.getAll().catch((err) => {
         expect(err).to.exist;
@@ -143,7 +143,7 @@ describe('BlacklistedTokensManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/blacklists/tokens').reply(500);
+      nock(API_URL).post('/blacklists/tokens').reply(500, {});
 
       blacklistedTokens.add(tokenData).catch((err) => {
         expect(err).to.exist;
@@ -161,7 +161,7 @@ describe('BlacklistedTokensManager', () => {
     it('should pass the token data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post('/blacklists/tokens', tokenData).reply(200);
+      const request = nock(API_URL).post('/blacklists/tokens', tokenData).reply(200, {});
 
       blacklistedTokens.add(tokenData).then(() => {
         expect(request.isDone()).to.be.true;

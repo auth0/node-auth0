@@ -92,7 +92,7 @@ describe('EmailTemplatesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(500);
+      nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(500, {});
 
       emailTemplates.get(DEFAULT_PARAMS).catch((err) => {
         expect(err).to.exist;
@@ -158,7 +158,7 @@ describe('EmailTemplatesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/email-templates').reply(500);
+      nock(API_URL).post('/email-templates').reply(500, {});
 
       emailTemplates.create(DEFAULT_DATA).catch((err) => {
         expect(err).to.exist;
@@ -284,7 +284,7 @@ describe('EmailTemplatesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(500);
+      nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(500, {});
 
       emailTemplates.update(DEFAULT_PARAMS, patchData).catch((err) => {
         expect(err).to.exist;

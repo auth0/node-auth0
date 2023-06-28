@@ -77,7 +77,7 @@ describe('TokenProvider', () => {
     const url = `https://${domain}`;
     const tp = new TokenProvider({ ...opts, domain });
 
-    nock(url).post('/oauth/token').reply(500);
+    nock(url).post('/oauth/token').reply(500, {});
     nock(url).post('/oauth/token').reply(200, spy);
 
     await expect(tp.getAccessToken()).rejects.toThrowError();

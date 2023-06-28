@@ -50,14 +50,14 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get('/users').reply(200, []);
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.getAll()).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.getAll().then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get('/users').reply(500);
+      nock(API_URL).get('/users').reply(500, {});
 
       try {
         await usersManager.getAll();
@@ -113,17 +113,21 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).get('/users-by-email').reply(200, {});
+      scope = nock(API_URL)
+        .get('/users-by-email?email=')
+        .reply(200, () => {
+          return {};
+        });
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersByEmailManager.getByEmail({ email: '' })).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersByEmailManager.getByEmail({ email: '' }).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get('/users-by-email').reply(500);
+      nock(API_URL).get('/users-by-email?email=').reply(500, {});
 
       try {
         await usersByEmailManager.getByEmail({ email: '' });
@@ -212,8 +216,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get(`/users/${data.id}`).reply(200, data);
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.get({ id: data.id })).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.get({ id: data.id }).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a POST request to /api/v2/users/5', async () => {
@@ -224,7 +228,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/users/${data.id}`).reply(500);
+      nock(API_URL).get(`/users/${data.id}`).reply(500, {});
 
       try {
         await usersManager.get({ id: data.id });
@@ -267,7 +271,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post('/users').reply(500);
+      nock(API_URL).post('/users').reply(500, {});
 
       try {
         await usersManager.create(data);
@@ -312,8 +316,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).patch(`/users/${data.id}`).reply(200, data);
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.update({ id: '5' }, {})).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.update({ id: '5' }, {}).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a PATCH request to /api/v2/users/5', async () => {
@@ -334,7 +338,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/users/${data.id}`).reply(500);
+      nock(API_URL).patch(`/users/${data.id}`).reply(500, {});
 
       try {
         await usersManager.update({ id: data.id }, data);
@@ -349,11 +353,11 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).delete(`/users/${id}`).reply(200);
+      scope = nock(API_URL).delete(`/users/${id}`).reply(200, {});
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.delete({ id })).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.delete({ id }).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a delete request to /users/${id}`, async () => {
@@ -364,7 +368,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/users/${id}`).reply(500);
+      nock(API_URL).delete(`/users/${id}`).reply(500, {});
 
       try {
         await usersManager.delete({ id });
@@ -379,7 +383,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .delete(`/users/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.delete({ id });
       expect(request.isDone()).to.be.true;
@@ -405,14 +409,14 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.link({ id: userId }, data)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.link({ id: userId }, data).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${userId}/identities`).reply(500);
+      nock(API_URL).post(`/users/${userId}/identities`).reply(500, {});
 
       try {
         await usersManager.link({ id: userId }, data);
@@ -462,8 +466,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).delete(url).reply(200, []);
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.unlink(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.unlink(data).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a DELETE request to ${url}`, async () => {
@@ -474,10 +478,10 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).delete(url).reply(500);
+      nock(API_URL).delete(url).reply(500, {});
 
       try {
-        usersManager.unlink(data);
+        await usersManager.unlink(data);
       } catch (err) {
         expect(err).to.exist;
       }
@@ -505,11 +509,11 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).delete(url).reply(200);
+      scope = nock(API_URL).delete(url).reply(200, {});
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.deleteMultifactorProvider(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.deleteMultifactorProvider(data).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a DELETE request to ${url}`, async () => {
@@ -520,7 +524,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).delete(url).reply(500);
+      nock(API_URL).delete(url).reply(500, {});
 
       try {
         await usersManager.deleteMultifactorProvider(data);
@@ -535,7 +539,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .delete(url)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.deleteMultifactorProvider(data);
       expect(request.isDone()).to.be.true;
@@ -554,8 +558,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).patch(`/users/${data.id}`).reply(200, data);
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.update({ id: '5' }, {})).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.update({ id: '5' }, {}).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a PATCH request to /api/v2/users/5', async () => {
@@ -584,7 +588,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/users/${data.id}`).reply(500);
+      nock(API_URL).patch(`/users/${data.id}`).reply(500, {});
 
       try {
         await usersManager.update({ id: data.id }, data);
@@ -605,8 +609,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get(url).reply(200, []);
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.getLogs(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getLogs(data).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a GET request to ${url}`, async () => {
@@ -617,7 +621,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get(url).reply(500);
+      nock(API_URL).get(url).reply(500, {});
 
       try {
         await usersManager.getLogs(data);
@@ -680,8 +684,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get(`/users/${data.id}/enrollments`).reply(200, []);
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.getEnrollments(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getEnrollments(data).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/5/enrollments', async () => {
@@ -692,7 +696,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/users/${data.id}/enrollments`).reply(500);
+      nock(API_URL).get(`/users/${data.id}/enrollments`).reply(500, {});
 
       try {
         await usersManager.getEnrollments(data);
@@ -732,14 +736,14 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.regenerateRecoveryCode(data)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.regenerateRecoveryCode(data).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${data.id}/recovery-code-regeneration`).reply(500);
+      nock(API_URL).post(`/users/${data.id}/recovery-code-regeneration`).reply(500, {});
 
       try {
         await usersManager.regenerateRecoveryCode(data);
@@ -776,7 +780,7 @@ describe('UsersManager', () => {
     beforeEach(() => {
       scope = nock(API_URL)
         .post(`/users/${data.id}/multifactor/actions/invalidate-remember-browser`)
-        .reply(204);
+        .reply(204, {});
     });
 
     it('should validate empty id', () => {
@@ -786,8 +790,8 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.invalidateRememberBrowser(data)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.invalidateRememberBrowser(data).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -795,7 +799,7 @@ describe('UsersManager', () => {
 
       nock(API_URL)
         .post(`/users/${data.id}/multifactor/actions/invalidate-remember-browser`)
-        .reply(500);
+        .reply(500, {});
 
       try {
         await usersManager.invalidateRememberBrowser(data);
@@ -815,7 +819,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .post(`/users/${data.id}/multifactor/actions/invalidate-remember-browser`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.invalidateRememberBrowser(data);
       expect(request.isDone()).to.be.true;
@@ -832,8 +836,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get(`/users/${data.id}/roles`).reply(200, []);
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.getRoles(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getRoles(data).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/user_id/roles', async () => {
@@ -844,7 +848,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/users/${data.id}/roles`).reply(500);
+      nock(API_URL).get(`/users/${data.id}/roles`).reply(500, {});
 
       try {
         await usersManager.getRoles(data);
@@ -875,7 +879,7 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).post(`/users/${data.id}/roles`).reply(200);
+      scope = nock(API_URL).post(`/users/${data.id}/roles`).reply(200, {});
     });
 
     it('should validate empty id', () => {
@@ -885,14 +889,14 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.assignRoles(data, {} as any)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.assignRoles(data, {} as any).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${data.id}/roles`).reply(500);
+      nock(API_URL).post(`/users/${data.id}/roles`).reply(500, {});
 
       try {
         usersManager.assignRoles(data, {} as any);
@@ -909,7 +913,7 @@ describe('UsersManager', () => {
     it('should pass the data in the body of the request', async () => {
       nock.cleanAll();
 
-      const request = nock(API_URL).post(`/users/${data.id}/roles`, body).reply(200);
+      const request = nock(API_URL).post(`/users/${data.id}/roles`, body).reply(200, {});
 
       await usersManager.assignRoles(data, body);
       expect(request.isDone()).to.be.true;
@@ -921,7 +925,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .post(`/users/${data.id}/roles`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.assignRoles(data, {} as any);
       expect(request.isDone()).to.be.true;
@@ -937,7 +941,7 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).delete(`/users/${data.id}/roles`, {}).reply(200);
+      scope = nock(API_URL).delete(`/users/${data.id}/roles`, {}).reply(200, {});
     });
 
     it('should validate empty id', () => {
@@ -947,14 +951,14 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.deleteRoles(data, {} as any)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.deleteRoles(data, {} as any).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${data.id}/roles`).reply(500);
+      nock(API_URL).post(`/users/${data.id}/roles`).reply(500, {});
 
       try {
         await usersManager.deleteRoles(data, {} as any);
@@ -971,7 +975,7 @@ describe('UsersManager', () => {
     it('should pass the data in the body of the request', async () => {
       nock.cleanAll();
 
-      const request = nock(API_URL).delete(`/users/${data.id}/roles`, body).reply(200);
+      const request = nock(API_URL).delete(`/users/${data.id}/roles`, body).reply(200, {});
 
       await usersManager.deleteRoles(data, body);
       expect(request.isDone()).to.be.true;
@@ -983,7 +987,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .delete(`/users/${data.id}/roles`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.deleteRoles(data, {} as any);
       expect(request.isDone()).to.be.true;
@@ -1001,8 +1005,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get(`/users/${data.id}/permissions`).reply(200, []);
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.getPermissions(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getPermissions(data).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/user_id/permissions', async () => {
@@ -1013,10 +1017,10 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/users/${data.id}/permissions`).reply(500);
+      nock(API_URL).get(`/users/${data.id}/permissions`).reply(500, {});
 
       try {
-        usersManager.getPermissions(data);
+        await usersManager.getPermissions(data);
       } catch (err) {
         expect(err).to.exist;
       }
@@ -1054,14 +1058,16 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.assignPermissions(data, {} as any)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.assignPermissions(data, {} as any).then(() => done())).instanceOf(
+        Promise
+      );
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${data.id}/permissions`).reply(500);
+      nock(API_URL).post(`/users/${data.id}/permissions`).reply(500, {});
 
       try {
         await usersManager.assignPermissions(data, {} as any);
@@ -1107,7 +1113,7 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).delete(`/users/${data.id}/permissions`, {}).reply(200);
+      scope = nock(API_URL).delete(`/users/${data.id}/permissions`, {}).reply(200, {});
     });
 
     it('should validate empty id', () => {
@@ -1117,14 +1123,16 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.deletePermissions(data, {} as any)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.deletePermissions(data, {} as any).then(() => done())).instanceOf(
+        Promise
+      );
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${data.id}/permissions`).reply(500);
+      nock(API_URL).post(`/users/${data.id}/permissions`).reply(500, {});
 
       try {
         await usersManager.deletePermissions(data, {} as any);
@@ -1141,7 +1149,7 @@ describe('UsersManager', () => {
     it('should pass the data in the body of the request', async () => {
       nock.cleanAll();
 
-      const request = nock(API_URL).delete(`/users/${data.id}/permissions`, body).reply(200);
+      const request = nock(API_URL).delete(`/users/${data.id}/permissions`, body).reply(200, {});
 
       await usersManager.deletePermissions(data, body as any);
       expect(request.isDone()).to.be.true;
@@ -1153,7 +1161,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .delete(`/users/${data.id}/permissions`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.deletePermissions(data, {} as any);
       expect(request.isDone()).to.be.true;
@@ -1167,7 +1175,7 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).delete(`/users/${params.id}/authenticators`).reply(200);
+      scope = nock(API_URL).delete(`/users/${params.id}/authenticators`).reply(200, {});
     });
 
     it('should validate empty id', async () => {
@@ -1177,14 +1185,14 @@ describe('UsersManager', () => {
       );
     });
 
-    it('should return a promise if no callback is given', () => {
-      expect(usersManager.deleteAllAuthenticators(params)).instanceOf(Promise);
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.deleteAllAuthenticators(params).then(() => done())).instanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).post(`/users/${params.id}/authenticators`).reply(500);
+      nock(API_URL).post(`/users/${params.id}/authenticators`).reply(500, {});
 
       try {
         await usersManager.deleteAllAuthenticators(params);
@@ -1204,7 +1212,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL)
         .delete(`/users/${params.id}/authenticators`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await usersManager.deleteAllAuthenticators(params);
       expect(request.isDone()).to.be.true;
@@ -1222,8 +1230,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).get(`/users/${data.id}/organizations`).reply(200, []);
     });
 
-    it('should return a promise when no callback is given', () => {
-      expect(usersManager.getUserOrganizations(data)).instanceOf(Promise);
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getUserOrganizations(data).then(() => done())).instanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/user_id/organizations', async () => {
@@ -1234,7 +1242,7 @@ describe('UsersManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
-      nock(API_URL).get(`/users/${data.id}/organizations`).reply(500);
+      nock(API_URL).get(`/users/${data.id}/organizations`).reply(500, {});
 
       try {
         await usersManager.getUserOrganizations(data);
@@ -1353,7 +1361,7 @@ describe('UsersManager', () => {
     let scope: nock.Scope;
 
     beforeEach(() => {
-      scope = nock(API_URL).delete(`/users/${params.id}/authentication-methods`).reply(200);
+      scope = nock(API_URL).delete(`/users/${params.id}/authentication-methods`).reply(200, {});
     });
 
     it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods', async () => {
@@ -1373,7 +1381,7 @@ describe('UsersManager', () => {
     beforeEach(() => {
       scope = nock(API_URL)
         .delete(`/users/${params.id}/authentication-methods/${params.authentication_method_id}`)
-        .reply(200);
+        .reply(200, {});
     });
 
     it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {

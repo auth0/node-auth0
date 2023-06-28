@@ -59,7 +59,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/hooks').reply(500);
+      nock(API_URL).get('/hooks').reply(500, {});
 
       hooks.getAll().catch((err) => {
         expect(err).to.exist;
@@ -150,7 +150,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/hooks/${response.id}`).reply(500);
+      nock(API_URL).get(`/hooks/${response.id}`).reply(500, {});
 
       hooks.get({ id: response.id }).catch((err) => {
         expect(err).to.exist;
@@ -217,7 +217,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/hooks').reply(500);
+      nock(API_URL).post('/hooks').reply(500, {});
 
       hooks.create(data).catch((err) => {
         expect(err).to.exist;
@@ -330,7 +330,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/hooks/${id}`).reply(500);
+      nock(API_URL).patch(`/hooks/${id}`).reply(500, {});
 
       hooks.update({ id }, data).catch((err) => {
         expect(err).to.exist;
@@ -345,7 +345,7 @@ describe('HooksManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/hooks/${id}`).reply(200);
+      request = nock(API_URL).delete(`/hooks/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -363,7 +363,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/hooks/${id}`).reply(500);
+      nock(API_URL).delete(`/hooks/${id}`).reply(500, {});
 
       hooks.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -414,7 +414,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/hooks/${data.id}/secrets`).reply(500);
+      nock(API_URL).get(`/hooks/${data.id}/secrets`).reply(500, {});
 
       hooks.getSecrets(data).catch((err) => {
         expect(err).to.exist;
@@ -458,7 +458,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/hooks/${data.id}/secrets`).reply(500);
+      nock(API_URL).post(`/hooks/${data.id}/secrets`).reply(500, {});
 
       hooks.addSecrets(data, {}).catch((err) => {
         expect(err).to.exist;
@@ -523,7 +523,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/hooks/${data.id}/secrets`).reply(500);
+      nock(API_URL).patch(`/hooks/${data.id}/secrets`).reply(500, {});
 
       hooks.updateSecrets(data, {}).catch((err) => {
         expect(err).to.exist;
@@ -586,7 +586,7 @@ describe('HooksManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/hooks/${data.id}/secrets`).reply(500);
+      nock(API_URL).post(`/hooks/${data.id}/secrets`).reply(500, {});
 
       hooks.deleteSecrets(data, body).catch((err) => {
         expect(err).to.exist;
@@ -621,7 +621,7 @@ describe('HooksManager', () => {
       const request = nock(API_URL)
         .delete(`/hooks/${data.id}/secrets`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       hooks.deleteSecrets(data, body).then(() => {
         expect(request.isDone()).to.be.true;

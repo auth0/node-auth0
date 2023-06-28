@@ -62,7 +62,7 @@ describe('LogsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/logs').reply(500);
+      nock(API_URL).get('/logs').reply(500, {});
 
       logs.getAll().catch((err) => {
         expect(err).to.exist;
@@ -148,7 +148,7 @@ describe('LogsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/logs/${params.id}`).reply(500);
+      nock(API_URL).get(`/logs/${params.id}`).reply(500, {});
 
       logs.get(params).catch((err) => {
         expect(err).to.exist;

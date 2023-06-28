@@ -49,7 +49,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/roles').reply(500);
+      nock(API_URL).get('/roles').reply(500, {});
 
       roles.getAll().catch((err) => {
         expect(err).to.exist;
@@ -113,12 +113,6 @@ describe('RolesManager', () => {
       request = nock(API_URL).get(`/roles/${data.id}`).reply(200, data);
     });
 
-    it('should accept a callback', function (done) {
-      const params = { id: data.id };
-
-      roles.get(params, done.bind(null, null));
-    });
-
     it('should return a promise if no callback is given', function (done) {
       roles.get({ id: data.id }).then(done.bind(null, null)).catch(done.bind(null, null));
     });
@@ -131,7 +125,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/roles/${data.id}`).reply(500);
+      nock(API_URL).get(`/roles/${data.id}`).reply(500, {});
 
       roles.get({ id: data.id }).catch((err) => {
         expect(err).to.exist;
@@ -175,7 +169,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/roles').reply(500);
+      nock(API_URL).post('/roles').reply(500, {});
 
       roles.create(data).catch((err) => {
         expect(err).to.exist;
@@ -250,7 +244,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/roles/${data.id}`).reply(500);
+      nock(API_URL).patch(`/roles/${data.id}`).reply(500, {});
 
       roles.update({ id: data.id }, { name: '' }).catch((err) => {
         expect(err).to.exist;
@@ -265,15 +259,11 @@ describe('RolesManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/roles/${id}`).reply(200);
+      request = nock(API_URL).delete(`/roles/${id}`).reply(200, {});
     });
 
-    it('should accept a callback', function (done) {
-      roles.delete({ id }, done.bind(null, null));
-    });
-
-    it('should return a promise when no callback is given', function () {
-      expect(roles.delete({ id })).instanceOf(Promise);
+    it('should return a promise when no callback is given', function (done) {
+      expect(roles.delete({ id }).then(() => done())).instanceOf(Promise);
     });
 
     it(`should perform a delete request to /roles/${id}`, async function () {
@@ -284,7 +274,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/roles/${id}`).reply(500);
+      nock(API_URL).delete(`/roles/${id}`).reply(500, {});
 
       roles.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -299,7 +289,7 @@ describe('RolesManager', () => {
       const request = nock(API_URL)
         .delete(`/roles/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       await roles.delete({ id });
       expect(request.isDone()).to.be.true;
@@ -332,7 +322,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/roles/${data.id}/permissions`).reply(500);
+      nock(API_URL).get(`/roles/${data.id}/permissions`).reply(500, {});
 
       roles.getPermissions(data).catch((err) => {
         expect(err).to.exist;
@@ -364,7 +354,7 @@ describe('RolesManager', () => {
     };
 
     beforeEach(function () {
-      request = nock(API_URL).post(`/roles/${data.id}/permissions`).reply(200);
+      request = nock(API_URL).post(`/roles/${data.id}/permissions`).reply(200, {});
     });
 
     it('should return a promise if no callback is given', function (done) {
@@ -374,7 +364,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/roles/${data.id}/permissions`).reply(500);
+      nock(API_URL).post(`/roles/${data.id}/permissions`).reply(500, {});
 
       roles.addPermissions(data, body).catch((err) => {
         expect(err).to.exist;
@@ -391,7 +381,7 @@ describe('RolesManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post(`/roles/${data.id}/permissions`, body).reply(200);
+      const request = nock(API_URL).post(`/roles/${data.id}/permissions`, body).reply(200, {});
 
       roles.addPermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -406,7 +396,7 @@ describe('RolesManager', () => {
       const request = nock(API_URL)
         .post(`/roles/${data.id}/permissions`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       roles.addPermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -445,7 +435,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/roles/${data.id}/permissions`).reply(500);
+      nock(API_URL).post(`/roles/${data.id}/permissions`).reply(500, {});
 
       roles.deletePermissions(data, body).catch((err) => {
         expect(err).to.exist;
@@ -465,7 +455,7 @@ describe('RolesManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).delete(`/roles/${data.id}/permissions`, body).reply(200);
+      const request = nock(API_URL).delete(`/roles/${data.id}/permissions`, body).reply(200, {});
 
       roles.deletePermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -480,7 +470,7 @@ describe('RolesManager', () => {
       const request = nock(API_URL)
         .delete(`/roles/${data.id}/permissions`)
         .matchHeader('Authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       roles.deletePermissions(data, body).then(() => {
         expect(request.isDone()).to.be.true;
@@ -516,7 +506,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/roles/${data.id}/users`).reply(500);
+      nock(API_URL).get(`/roles/${data.id}/users`).reply(500, {});
 
       roles.getUsers(data).catch((err) => {
         expect(err).to.exist;
@@ -566,7 +556,7 @@ describe('RolesManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/roles/${data.id}/users`).reply(500);
+      nock(API_URL).post(`/roles/${data.id}/users`).reply(500, {});
 
       roles.assignUsers(data, body).catch((err) => {
         expect(err).to.exist;
@@ -586,7 +576,7 @@ describe('RolesManager', () => {
     it('should pass the data in the body of the request', function (done) {
       nock.cleanAll();
 
-      const request = nock(API_URL).post(`/roles/${data.id}/users`, body).reply(200);
+      const request = nock(API_URL).post(`/roles/${data.id}/users`, body).reply(200, {});
 
       roles.assignUsers(data, body).then(() => {
         expect(request.isDone()).to.be.true;

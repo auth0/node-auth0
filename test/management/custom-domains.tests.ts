@@ -85,7 +85,7 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/custom-domains').reply(500);
+      nock(API_URL).get('/custom-domains').reply(500, {});
 
       customDomains.getAll().catch((err) => {
         expect(err).to.exist;
@@ -190,7 +190,7 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/custom-domains/${response.custom_domain_id}`).reply(500);
+      nock(API_URL).get(`/custom-domains/${response.custom_domain_id}`).reply(500, {});
 
       customDomains.get({ id: response.custom_domain_id }).catch((err) => {
         expect(err).to.exist;
@@ -286,7 +286,7 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/custom-domains').reply(500);
+      nock(API_URL).post('/custom-domains').reply(500, {});
 
       customDomains.create(data).catch((err) => {
         expect(err).to.exist;
@@ -357,7 +357,7 @@ describe('CustomDomainsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/custom-domains/${id}`).reply(200);
+      request = nock(API_URL).delete(`/custom-domains/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -375,7 +375,7 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/custom-domains/${id}`).reply(500);
+      nock(API_URL).delete(`/custom-domains/${id}`).reply(500, {});
 
       customDomains.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -390,7 +390,7 @@ describe('CustomDomainsManager', () => {
       const request = nock(API_URL)
         .delete(`/custom-domains/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       customDomains.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
@@ -478,7 +478,7 @@ describe('CustomDomainsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post(`/custom-domains/${data.id}/verify`).reply(500);
+      nock(API_URL).post(`/custom-domains/${data.id}/verify`).reply(500, {});
 
       customDomains.verify({ id: data.id }).catch((err) => {
         expect(err).to.exist;

@@ -71,7 +71,7 @@ describe('DeviceCredentialsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/device-credentials').reply(500);
+      nock(API_URL).get('/device-credentials').reply(500, {});
 
       credentials.getAll().catch((err) => {
         expect(err).to.exist;
@@ -159,7 +159,7 @@ describe('DeviceCredentialsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/device-credentials').reply(500);
+      nock(API_URL).post('/device-credentials').reply(500, {});
 
       credentials.createPublicKey(data).catch((err) => {
         expect(err).to.exist;
@@ -213,7 +213,7 @@ describe('DeviceCredentialsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/device-credentials/${id}`).reply(200);
+      request = nock(API_URL).delete(`/device-credentials/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -231,7 +231,7 @@ describe('DeviceCredentialsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/device-credentials/${id}`).reply(500);
+      nock(API_URL).delete(`/device-credentials/${id}`).reply(500, {});
 
       credentials.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -246,7 +246,7 @@ describe('DeviceCredentialsManager', () => {
       const request = nock(API_URL)
         .delete(`/device-credentials/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       credentials.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;

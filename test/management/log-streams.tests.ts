@@ -52,7 +52,7 @@ describe('LogStreamsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get('/log-streams').reply(500);
+      nock(API_URL).get('/log-streams').reply(500, {});
 
       logStreams.getAll().catch((err) => {
         expect(err).to.exist;
@@ -120,7 +120,7 @@ describe('LogStreamsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).get(`/log-streams/${params.id}`).reply(500);
+      nock(API_URL).get(`/log-streams/${params.id}`).reply(500, {});
 
       logStreams.get(params).catch((err) => {
         expect(err).to.exist;
@@ -189,7 +189,7 @@ describe('LogStreamsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).post('/log-streams').reply(500);
+      nock(API_URL).post('/log-streams').reply(500, {});
 
       logStreams.create(data).catch((err) => {
         expect(err).to.exist;
@@ -273,7 +273,7 @@ describe('LogStreamsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).patch(`/log-streams/${data.id}`).reply(500);
+      nock(API_URL).patch(`/log-streams/${data.id}`).reply(500, {});
 
       logStreams.update({ id: data.id }, {}).catch((err) => {
         expect(err).to.exist;
@@ -289,7 +289,7 @@ describe('LogStreamsManager', () => {
     let request: nock.Scope;
 
     beforeEach(function () {
-      request = nock(API_URL).delete(`/log-streams/${id}`).reply(200);
+      request = nock(API_URL).delete(`/log-streams/${id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', function (done) {
@@ -307,7 +307,7 @@ describe('LogStreamsManager', () => {
     it('should pass any errors to the promise catch handler', function (done) {
       nock.cleanAll();
 
-      nock(API_URL).delete(`/log-streams/${id}`).reply(500);
+      nock(API_URL).delete(`/log-streams/${id}`).reply(500, {});
 
       logStreams.delete({ id }).catch((err) => {
         expect(err).to.exist;
@@ -322,7 +322,7 @@ describe('LogStreamsManager', () => {
       const request = nock(API_URL)
         .delete(`/log-streams/${id}`)
         .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200);
+        .reply(200, {});
 
       logStreams.delete({ id }).then(() => {
         expect(request.isDone()).to.be.true;
