@@ -709,32 +709,55 @@ export async function jobs() {
   const mgmntClient = new ManagementClient(program.opts());
 
   // Create test connection
-
-  const { data: connection } = await mgmntClient.connections.create({
-    name: 'ConnectionTest',
-    strategy: 'auth0',
-    enabled_clients: [program.opts().clientId],
-  });
+  let connection: any;
+  try {
+    ({ data: connection } = await mgmntClient.connections.create({
+      name: 'ConnectionTest',
+      strategy: 'auth0',
+      enabled_clients: [program.opts().clientId],
+    }));
+  } catch (e) {
+    ({
+      data: [connection],
+    } = await mgmntClient.connections.getAll({
+      name: 'ConnectionTest',
+    }));
+  }
 
   const usersFilePath = path.join(__dirname, '../test/data/users.json');
+  const ids = [];
 
   const { data: createImportJob } = await mgmntClient.jobs.importUsers({
-    users: fs.createReadStream(usersFilePath) as any,
+    users: fs.createReadStream(usersFilePath),
     connection_id: connection.id as string,
   });
 
   console.log(`Import users: ${createImportJob.id}`);
+  ids.push(createImportJob.id);
 
-  let isDone = false;
+  if (typeof Blob !== 'undefined') {
+    // Node >=18
+    const { data: createImportJobFromBlob } = await mgmntClient.jobs.importUsers({
+      users: new Blob([fs.readFileSync(usersFilePath).toString()], {
+        type: 'application/json',
+      }),
+      connection_id: connection.id as string,
+    });
 
-  while (!isDone) {
+    console.log(`Import users from blob: ${createImportJobFromBlob.id}`);
+    ids.push(createImportJobFromBlob.id);
+  }
+
+  let doneCount = 0;
+
+  while (doneCount < ids.length) {
     const { data: importJob } = await mgmntClient.jobs.get({
-      id: createImportJob.id,
+      id: ids[doneCount],
     });
     console.log(`Get import job: ${importJob.id} - ${importJob.status}`);
 
     if (importJob.status === 'completed' || importJob.status === 'failed') {
-      isDone = true;
+      doneCount++;
     } else {
       await new Promise((resolve) => setTimeout(resolve, 3000));
     }
@@ -746,7 +769,7 @@ export async function jobs() {
 
   console.log(`Export users: ${createExportJob.id}`);
 
-  isDone = false;
+  let isDone = false;
   while (!isDone) {
     const { data: exportJob } = await mgmntClient.jobs.get({
       id: createExportJob.id,

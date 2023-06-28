@@ -4,7 +4,7 @@ import { AuthenticationClient, ManagementClient } from '../../src';
 import { ResponseError } from '../../src/lib/errors';
 import { ErrorContext, InitOverrideFunction, RequestOpts } from '../../src/lib/models';
 import { BaseAPI } from '../../src/lib/runtime';
-import { RequestInit, Response } from 'node-fetch';
+import { Response as NodeResponse } from 'node-fetch';
 import { AuthApiError } from '../../src/auth/base-auth-api';
 import { ManagementApiError } from '../../src/management';
 
@@ -291,7 +291,7 @@ describe('Runtime', () => {
       middleware: [
         {
           onError(context: ErrorContext) {
-            return new Response(undefined, { status: 418 });
+            return new NodeResponse(undefined, { status: 418 }) as Response;
           },
         },
       ],
@@ -315,9 +315,9 @@ describe('Runtime', () => {
       middleware: [
         {
           post() {
-            return new Response(JSON.stringify({ bar: 'foo' }), {
+            return new NodeResponse(JSON.stringify({ bar: 'foo' }), {
               status: 200,
-            });
+            }) as Response;
           },
         },
       ],

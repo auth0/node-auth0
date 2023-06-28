@@ -4,7 +4,6 @@ import {
   AddClientAuthenticationPayload,
   addClientAuthentication,
 } from './client-authentication.js';
-import type { Response, Headers } from 'node-fetch';
 
 export interface AuthenticationClientOptions extends ClientOptions {
   domain: string;

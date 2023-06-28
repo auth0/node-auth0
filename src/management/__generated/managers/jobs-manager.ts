@@ -99,44 +99,31 @@ export class JobsManager extends BaseAPI {
     bodyParameters: PostUsersImportsData,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
-    const consumes: runtime.Consume[] = [{ contentType: 'multipart/form-data' }];
-
-    let formParams: { append(param: string, value: any): any };
-    let useForm = false;
-    // use FormData to transmit files using content-type "multipart/form-data"
-    useForm = runtime.canConsumeForm(consumes);
-    if (useForm) {
-      formParams = new runtime.FormData();
-    } else {
-      formParams = new URLSearchParams();
-    }
+    const formParams = new (await runtime.getFormDataCls())();
 
     if (bodyParameters.users !== undefined) {
-      formParams.append('users', runtime.parseFormParam(bodyParameters.users as unknown));
+      formParams.append('users', await runtime.parseFormParam(bodyParameters.users));
     }
 
     if (bodyParameters.connection_id !== undefined) {
       formParams.append(
         'connection_id',
-        runtime.parseFormParam(bodyParameters.connection_id as unknown)
+        await runtime.parseFormParam(bodyParameters.connection_id)
       );
     }
 
     if (bodyParameters.upsert !== undefined) {
-      formParams.append('upsert', runtime.parseFormParam(bodyParameters.upsert as unknown));
+      formParams.append('upsert', await runtime.parseFormParam(bodyParameters.upsert));
     }
 
     if (bodyParameters.external_id !== undefined) {
-      formParams.append(
-        'external_id',
-        runtime.parseFormParam(bodyParameters.external_id as unknown)
-      );
+      formParams.append('external_id', await runtime.parseFormParam(bodyParameters.external_id));
     }
 
     if (bodyParameters.send_completion_email !== undefined) {
       formParams.append(
         'send_completion_email',
-        runtime.parseFormParam(bodyParameters.send_completion_email as unknown)
+        await runtime.parseFormParam(bodyParameters.send_completion_email)
       );
     }
 

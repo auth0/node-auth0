@@ -2,7 +2,6 @@ import chai from 'chai';
 import nock from 'nock';
 import path from 'path';
 import fs from 'fs';
-import { Readable } from 'stream';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
@@ -12,7 +11,6 @@ import {
   PostUsersImportsData,
 } from '../../src/management/__generated/index';
 import { ManagementClient, ManagementApiError } from '../../src/management';
-import { Blob } from '../../src/lib/runtime';
 import { extractParts } from '../utils/extractParts';
 import { fileURLToPath } from 'url';
 import { FetchError } from '../../src/lib/errors';
@@ -269,7 +267,9 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .post('/jobs/users-imports')
-        .matchHeader('Content-Type', (header) => header[0].indexOf('multipart/form-data') === 0)
+        .matchHeader('Content-Type', (header) => {
+          return header.startsWith('multipart/form-data');
+        })
         .reply(200, {});
 
       jobs.importUsers(data).then(() => {
@@ -285,7 +285,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header: string) => {
-          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -328,7 +328,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -355,7 +355,7 @@ describe('JobsManager', () => {
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -401,16 +401,16 @@ describe('JobsManager', () => {
         users: fs.createReadStream(usersFilePath) as any,
         connection_id: 'con_test',
       };
-      request = nock(API_URL).post('/jobs/users-imports').reply(200);
+      request = nock(API_URL).post('/jobs/users-imports').reply(200, {});
     });
 
-    it('should correctly include user JSON', function (done) {
+    it('should correctly include user JSON from ReadStream', function (done) {
       nock.cleanAll();
       let boundary: string | null = null;
 
       const request = nock(API_URL)
         .matchHeader('Content-Type', (header) => {
-          boundary = `--${header[0].match(/boundary=([^\n]*)/)?.[1]}`;
+          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
 
           return true;
         })
@@ -437,6 +437,50 @@ describe('JobsManager', () => {
         done();
       });
     });
+
+    (typeof Blob === 'undefined' ? it.skip : it)(
+      'should correctly include user JSON from Blob',
+      function (done) {
+        nock.cleanAll();
+        let boundary: string | null = null;
+
+        const request = nock(API_URL)
+          .matchHeader('Content-Type', (header) => {
+            boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+
+            return true;
+          })
+          .post('/jobs/users-imports', (body) => {
+            const parts = extractParts(body, boundary);
+
+            // Validate the content type of the users JSON.
+            expect(parts.users)
+              .to.exist.to.be.a('string')
+              .to.contain('Content-Type: application/json');
+
+            // Validate the content of the users JSON.
+            const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
+            expect(users.length).to.equal(2);
+            expect(users[0].email).to.equal('jane.doe@contoso.com');
+
+            return true;
+          })
+          .reply(200, {});
+
+        jobs
+          .importUsers({
+            ...data,
+            users: new Blob([fs.readFileSync(usersFilePath).toString()], {
+              type: 'application/json',
+            }),
+          })
+          .then(() => {
+            expect(request.isDone()).to.be.true;
+
+            done();
+          });
+      }
+    );
   });
 
   describe('#exportUsers', () => {

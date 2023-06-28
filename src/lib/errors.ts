@@ -1,4 +1,3 @@
-import type { Headers } from 'node-fetch';
 /**
  * Error thrown when the API returns an error response that can't be parsed to a more specific Error instance.
  */
