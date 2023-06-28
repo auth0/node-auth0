@@ -21,7 +21,7 @@
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json && echo '{\"type\": \"commonjs\"}'> dist/cjs/package.json",
     "docs": "typedoc --options typedoc.cjs",
     "test": "npm run test:mocha && npm run test:jest",
-    "test:mocha": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' mocha",
+    "test:mocha": "TS_NODE_COMPILER_OPTIONS='{\"moduleResolution\":\"node\"}' NODE_OPTIONS='--experimental-vm-modules --no-warnings' mocha",
     "test:jest": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:ci": "c8 npm run test",
     "precommit": "pretty-quick --staged",
