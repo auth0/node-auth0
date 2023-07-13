@@ -9,6 +9,10 @@ import {
   ClientCreate,
   ClientUpdate,
   ClientsManager,
+  GetCredentials200ResponseInner,
+  PatchCredentialsByCredentialIdRequest,
+  PostCredentialsOperationRequest,
+  PostCredentialsRequest,
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 import { RequiredError } from '../../src/lib/errors';
@@ -419,6 +423,339 @@ describe('ClientsManager', () => {
 
       clients.rotateClientSecret({ id }).catch((err) => {
         expect(err).to.exist;
+
+        done();
+      });
+    });
+  });
+
+  describe('#getCredentials', () => {
+    let request: nock.Scope;
+    const response: GetCredentials200ResponseInner[] = [
+      {
+        id: 'cred_1m7sfABoNTTKYwTQ8qt6tX',
+        name: '',
+        kid: 'IZSSTECp...',
+        alg: 'RS256',
+        credential_type: '',
+        created_at: '',
+        updated_at: '',
+        expires_at: '',
+      },
+    ];
+
+    beforeEach(function () {
+      request = nock(API_URL).get('/clients/123/credentials').reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      clients
+        .getCredentials({
+          client_id: '123',
+        })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/clients/123/credentials').reply(500, {});
+
+      clients.getCredentials({ client_id: '123' }).catch((err) => {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients
+        .getCredentials({
+          client_id: '123',
+        })
+        .then((credentials) => {
+          expect(credentials.data).to.be.an.instanceOf(Array);
+
+          expect(credentials.data.length).to.equal(response.length);
+
+          expect(credentials.data[0].kid).to.equal(response[0].kid);
+
+          done();
+        });
+    });
+
+    it('should perform a GET request to /api/v2/clients/123/credentials', function (done) {
+      clients
+        .getCredentials({
+          client_id: '123',
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      const data = [{ client_id: '1' }];
+      const request = nock(API_URL)
+        .get('/clients/123/credentials')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
+
+      clients
+        .getCredentials({
+          client_id: '123',
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+  });
+
+  describe('#getCredential', () => {
+    let request: nock.Scope;
+    const response: GetCredentials200ResponseInner = {
+      id: 'cred_1m7sfABoNTTKYwTQ8qt6tX',
+      name: '',
+      kid: 'IZSSTECp...',
+      alg: 'RS256',
+      credential_type: '',
+      created_at: '',
+      updated_at: '',
+      expires_at: '',
+    };
+    beforeEach(function () {
+      request = nock(API_URL).get('/clients/123/credentials/abc').reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      clients
+        .getCredential({
+          client_id: '123',
+          credential_id: 'abc',
+        })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/clients/123/credentials/abc').reply(500, {});
+
+      clients
+        .getCredential({
+          client_id: '123',
+          credential_id: 'abc',
+        })
+        .catch((err) => {
+          expect(err).to.exist;
+          done();
+        });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients
+        .getCredential({
+          client_id: '123',
+          credential_id: 'abc',
+        })
+        .then((credentials) => {
+          expect(credentials.data.kid).to.equal(response.kid);
+
+          done();
+        });
+    });
+
+    it('should perform a GET request to /api/v2/clients/123/credentials/abc', function (done) {
+      clients
+        .getCredential({
+          client_id: '123',
+          credential_id: 'abc',
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      const data = [{ client_id: '1' }];
+      const request = nock(API_URL)
+        .get('/clients/123/credentials/abc')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
+
+      clients
+        .getCredential({
+          client_id: '123',
+          credential_id: 'abc',
+        })
+        .then(() => {
+          expect(request.isDone()).to.be.true;
+          done();
+        });
+    });
+  });
+
+  describe('#createCredential', () => {
+    const data: PostCredentialsOperationRequest = {
+      client_id: '123',
+    };
+    const body: PostCredentialsRequest = {
+      name: '',
+      alg: 'RS256',
+      credential_type: 'public_key',
+      pem: '123',
+    };
+    const response: GetCredentials200ResponseInner = {
+      id: 'cred_1m7sfABoNTTKYwTQ8qt6tX',
+      name: '',
+      kid: 'IZSSTECp...',
+      alg: 'RS256',
+      credential_type: 'public_key',
+      created_at: '',
+      updated_at: '',
+      expires_at: '',
+    };
+    let request: nock.Scope;
+
+    beforeEach(function () {
+      request = nock(API_URL).post('/clients/123/credentials').reply(201, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      clients.createCredential(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should perform a POST request to /api/v2/clients/123/credentials', function (done) {
+      clients.createCredential(data, body).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post('/clients/123/credentials')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(201, data);
+
+      clients.createCredential(data, body).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new credential data in the request body', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post('/clients/123/credentials', body as any)
+        .reply(201, data);
+
+      clients.createCredential(data, body).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients.createCredential(data, body).then((credential) => {
+        expect(credential.data.kid).to.equal(response.kid);
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateCredential', () => {
+    const data: PatchCredentialsByCredentialIdRequest = {};
+    const response: GetCredentials200ResponseInner = {
+      id: 'cred_1m7sfABoNTTKYwTQ8qt6tX',
+      name: '',
+      kid: 'IZSSTECp...',
+      alg: 'RS256',
+      credential_type: 'public_key',
+      created_at: '',
+      updated_at: '',
+      expires_at: '',
+    };
+
+    let request: nock.Scope;
+    beforeEach(function () {
+      request = nock(API_URL)
+        .patch(`/clients/123/credentials/abc`, data as any)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      clients
+        .updateCredential({ client_id: '123', credential_id: 'abc' }, data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a PATCH request to /api/v2/clients/123/credentials/abc', function (done) {
+      clients.updateCredential({ client_id: '123', credential_id: 'abc' }, data).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should include the new data in the body of the request', function (done) {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/clients/123/credentials/abc`, data as any)
+        .reply(200, response);
+
+      clients.updateCredential({ client_id: '123', credential_id: 'abc' }, data).then(() => {
+        expect(request.isDone()).to.be.true;
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      clients
+        .updateCredential({ client_id: '123', credential_id: 'abc' }, data)
+        .then((credential) => {
+          expect(credential.data.kid).to.equal(response.kid);
+
+          done();
+        });
+    });
+  });
+
+  describe('#deleteCredential', () => {
+    const id = '123';
+    let request: nock.Scope;
+
+    beforeEach(function () {
+      request = nock(API_URL).delete(`/clients/123/credentials/abc`).reply(200, {});
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      clients
+        .deleteCredential({ client_id: '123', credential_id: 'abc' })
+        .then(done.bind(null, null));
+    });
+
+    it(`should perform a DELETE request to /clients/${id}`, function (done) {
+      clients.deleteCredential({ client_id: '123', credential_id: 'abc' }).then(() => {
+        expect(request.isDone()).to.be.true;
 
         done();
       });
