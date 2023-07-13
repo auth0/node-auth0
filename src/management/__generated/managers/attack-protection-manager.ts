@@ -51,25 +51,6 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Get the brute force configuration defaults
-   *
-   * @throws {RequiredError}
-   */
-  async getBruteForceDefaults(
-    initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
-    const response = await this.request(
-      {
-        path: `/attack-protection/brute-force-protection/defaults`,
-        method: 'GET',
-      },
-      initOverrides
-    );
-
-    return runtime.JSONApiResponse.fromResponse<any>(response);
-  }
-
-  /**
    * Get the suspicious IP throttling configuration
    *
    * @throws {RequiredError}
