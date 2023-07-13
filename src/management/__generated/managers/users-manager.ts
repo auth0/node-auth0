@@ -19,6 +19,7 @@ import type {
   PostPermissionsRequest,
   PostRecoveryCodeRegeneration200Response,
   PostUserRolesRequest,
+  PutAuthenticationMethods200ResponseInner,
   PutAuthenticationMethodsRequestInner,
   UserCreate,
   UserEnrollment,
@@ -718,7 +719,7 @@ export class UsersManager extends BaseAPI {
     requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
     bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<PutAuthenticationMethods200ResponseInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -740,7 +741,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -970,7 +971,7 @@ export class UsersManager extends BaseAPI {
     requestParameters: PostPermissionsOperationRequest,
     bodyParameters: PostPermissionsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -990,7 +991,7 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.TextApiResponse.fromResponse(response) as any;
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -1087,7 +1088,7 @@ export class UsersManager extends BaseAPI {
     requestParameters: PutAuthenticationMethodsRequest,
     bodyParameters: Array<PutAuthenticationMethodsRequestInner>,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<{ [key: string]: any }>>> {
+  ): Promise<ApiResponse<Array<PutAuthenticationMethods200ResponseInner>>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -1107,6 +1108,6 @@ export class UsersManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }
