@@ -81,7 +81,23 @@ export class ConnectionsManager extends BaseAPI {
 
   /**
    * Retrieves every connection matching the specified strategy. All connections are retrieved if no strategy is being specified. Accepts a list of fields to include or exclude in the resulting list of connection objects.
+   * This endpoint supports two types of pagination:
+   * - Offset pagination
+   * - Checkpoint pagination
    *
+   * Checkpoint pagination should be used if you need to retrieve more than 1000 connections.
+   *
+   * <h2>Checkpoint Pagination</h2>
+   *
+   * To search by checkpoint, use the following parameters:
+   * - from: Optional id from which to start selection.
+   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   *
+   * The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter.
+   * If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls.
+   * When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   *
+   * Note: The <code>include_totals</code> parameter is not supported when using checkpoint pagination.
    * Get all connections
    *
    * @throws {RequiredError}
@@ -109,6 +125,14 @@ export class ConnectionsManager extends BaseAPI {
       },
       {
         key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
         config: {},
       },
       {
