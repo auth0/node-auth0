@@ -426,6 +426,6 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_name: 'testorg' } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).resolves.not.toThrow();
+    expect(idTokenValidator.validate(jwt, { organization: 'testOrg' })).resolves.not.toThrow();
   });
 });
