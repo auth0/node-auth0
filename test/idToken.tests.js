@@ -259,27 +259,55 @@ describe('idToken.validate', () => {
       'Authentication Time (auth_time) claim in the ID token indicates that too much time has passed since the last end-user authentication.'
     );
   });
-  it('should throw when organization is in options, but org_id missing from claim', () => {
-    expectedOptions.organization = 'testorg';
+  it('should throw when organization id is in options, but org_id missing from claim', () => {
+    expectedOptions.organization = 'org_123';
 
     expect(() => {
       idToken.validate(generateJWT({ org_id: undefined }), expectedOptions);
     }).to.throw('Organization Id (org_id) claim must be a string present in the ID token');
   });
-  it('should throw when org claim doesnt match org expected', () => {
+
+  it('should throw when organization name is in options, but org_name missing from claim', () => {
     expectedOptions.organization = 'testorg';
 
     expect(() => {
-      idToken.validate(generateJWT({ org_id: 'notExpectedOrg' }), expectedOptions);
+      idToken.validate(generateJWT({ org_name: undefined }), expectedOptions);
+    }).to.throw('Organization Name (org_name) claim must be a string present in the ID token');
+  });
+
+  it('should throw when org id claim doesnt match org expected', () => {
+    expectedOptions.organization = 'org_123';
+
+    expect(() => {
+      idToken.validate(generateJWT({ org_id: 'org_1234' }), expectedOptions);
     }).to.throw(
-      'Organization Id (org_id) claim value mismatch in the ID token; expected "testorg", found "notExpectedOrg'
+      'Organization Id (org_id) claim value mismatch in the ID token; expected "org_123", found "org_1234'
     );
   });
-  it('should NOT throw when org_id matches expected organization', () => {
+
+  it('should throw when org name claim doesnt match org expected', () => {
     expectedOptions.organization = 'testorg';
 
     expect(() => {
-      idToken.validate(generateJWT({ org_id: 'testorg' }), expectedOptions);
+      idToken.validate(generateJWT({ org_name: 'notExpectedOrg' }), expectedOptions);
+    }).to.throw(
+      'Organization Name (org_name) claim value mismatch in the ID token; expected "testorg", found "notExpectedOrg'
+    );
+  });
+
+  it('should NOT throw when org_id matches expected organization', () => {
+    expectedOptions.organization = 'org_123';
+
+    expect(() => {
+      idToken.validate(generateJWT({ org_id: 'org_123' }), expectedOptions);
+    }).not.to.throw();
+  });
+
+  it('should NOT throw when org_name matches expected organization', () => {
+    expectedOptions.organization = 'testorg';
+
+    expect(() => {
+      idToken.validate(generateJWT({ org_name: 'testorg' }), expectedOptions);
     }).not.to.throw();
   });
 });

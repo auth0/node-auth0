@@ -84,14 +84,28 @@ const validate = function (token, options) {
 
   // Organization
   if (options.organization) {
-    if (!payload.org_id || typeof payload.org_id !== 'string') {
-      throw new Error('Organization Id (org_id) claim must be a string present in the ID token');
-    }
+    if (options.organization.indexOf('org_') === 0) {
+      if (!payload.org_id || typeof payload.org_id !== 'string') {
+        throw new Error('Organization Id (org_id) claim must be a string present in the ID token');
+      }
 
-    if (payload.org_id !== options.organization) {
-      throw new Error(
-        `Organization Id (org_id) claim value mismatch in the ID token; expected "${options.organization}", found "${payload.org_id}"'`
-      );
+      if (payload.org_id !== options.organization) {
+        throw new Error(
+          `Organization Id (org_id) claim value mismatch in the ID token; expected "${options.organization}", found "${payload.org_id}"'`
+        );
+      }
+    } else {
+      if (!payload.org_name || typeof payload.org_name !== 'string') {
+        throw new Error(
+          'Organization Name (org_name) claim must be a string present in the ID token'
+        );
+      }
+
+      if (payload.org_name.toLowerCase() !== options.organization.toLowerCase()) {
+        throw new Error(
+          `Organization Name (org_name) claim value mismatch in the ID token; expected "${options.organization}", found "${payload.org_name}"'`
+        );
+      }
     }
   }
 
