@@ -348,4 +348,84 @@ describe('id-token-validator', () => {
       /\(auth_time\) claim must be a number present in the ID token/
     );
   });
+
+  it('should throw when organization id is in options, but org_id missing from claim', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+
+    const jwt = await sign({ payload: { org_id: undefined } });
+
+    expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).rejects.toThrow(
+      'Organization Id (org_id) claim must be a string present in the ID token'
+    );
+  });
+
+  it('should throw when organization name is in options, but org_name missing from claim', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+
+    const jwt = await sign({ payload: { org_name: undefined } });
+
+    expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).rejects.toThrow(
+      'Organization Name (org_name) claim must be a string present in the ID token'
+    );
+  });
+
+  it('should throw when org id claim doesnt match org expected', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+
+    const jwt = await sign({ payload: { org_id: 'org_1234' } });
+
+    expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).rejects.toThrow(
+      'Organization Id (org_id) claim value mismatch in the ID token; expected "org_123", found "org_1234'
+    );
+  });
+
+  it('should throw when org name claim doesnt match org expected', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+
+    const jwt = await sign({ payload: { org_name: 'notExpectedOrg' } });
+
+    expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).rejects.toThrow(
+      'Organization Name (org_name) claim value mismatch in the ID token; expected "testorg", found "notExpectedOrg'
+    );
+  });
+
+  it('should NOT throw when org_id matches expected organization', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+
+    const jwt = await sign({ payload: { org_id: 'org_123' } });
+
+    expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).resolves.not.toThrow();
+  });
+
+  it('should NOT throw when org_name matches expected organization', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+
+    const jwt = await sign({ payload: { org_name: 'testorg' } });
+
+    expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).resolves.not.toThrow();
+  });
 });
