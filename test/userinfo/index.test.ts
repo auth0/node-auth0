@@ -12,7 +12,7 @@ describe('Users', () => {
   let nockDone: () => void;
 
   beforeAll(async () => {
-    ({ nockDone } = await nockBack('auth/fixtures/users.json'));
+    ({ nockDone } = await nockBack('userinfo/fixtures/userinfo.json'));
   });
 
   afterAll(() => {
