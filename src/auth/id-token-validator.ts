@@ -115,7 +115,7 @@ export class IDTokenValidator {
           );
         }
 
-        if (payload.org_name.toLowerCase() !== organization.toLowerCase()) {
+        if (payload.org_name !== organization.toLowerCase()) {
           throw new Error(
             `Organization Name (org_name) claim value mismatch in the ID token; expected "${organization}", found "${payload.org_name}"'`
           );
