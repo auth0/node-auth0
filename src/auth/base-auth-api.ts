@@ -37,13 +37,13 @@ function parseErrorBody(body: any): AuthApiErrorResponse {
   const rawData = JSON.parse(body);
   let data: AuthApiErrorResponse;
 
-  if (rawData.code) {
+  if (rawData.error) {
+    data = rawData as AuthApiErrorResponse;
+  } else {
     data = {
       error: rawData.code,
       error_description: rawData.description,
     };
-  } else {
-    data = rawData as AuthApiErrorResponse;
   }
 
   return data;
