@@ -42,7 +42,7 @@ export class RolesManager extends BaseAPI {
     requestParameters: DeleteRolePermissionAssignmentRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -62,7 +62,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.TextApiResponse.fromResponse(response) as any;
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -324,7 +324,7 @@ export class RolesManager extends BaseAPI {
     requestParameters: PostRolePermissionAssignmentOperationRequest,
     bodyParameters: PostRolePermissionAssignmentRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -344,7 +344,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.TextApiResponse.fromResponse(response) as any;
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -357,7 +357,7 @@ export class RolesManager extends BaseAPI {
     requestParameters: PostRoleUsersOperationRequest,
     bodyParameters: PostRoleUsersRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -374,7 +374,7 @@ export class RolesManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.TextApiResponse.fromResponse(response) as any;
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**

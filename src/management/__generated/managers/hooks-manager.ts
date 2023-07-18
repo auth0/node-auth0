@@ -238,7 +238,7 @@ export class HooksManager extends BaseAPI {
     requestParameters: PatchSecretsRequest,
     bodyParameters: { [key: string]: any },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -258,7 +258,7 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
@@ -300,7 +300,7 @@ export class HooksManager extends BaseAPI {
     requestParameters: PostSecretsRequest,
     bodyParameters: { [key: string]: any },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -320,6 +320,6 @@ export class HooksManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }

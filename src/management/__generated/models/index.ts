@@ -176,10 +176,13 @@ export interface Client {
    */
   organization_usage?: ClientOrganizationUsageEnum;
   /**
-   * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default) or `pre_login_prompt`.
+   * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`. `post_login_prompt` requires `oidc_conformant: true`.
    *
    */
   organization_require_behavior?: ClientOrganizationRequireBehaviorEnum;
+  /**
+   */
+  client_authentication_methods?: ClientClientAuthenticationMethods | null;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -799,6 +802,34 @@ export interface ClientAddonsZoom {
   account?: string;
 }
 /**
+ * Defines client authentication methods.
+ */
+export interface ClientClientAuthenticationMethods {
+  /**
+   */
+  private_key_jwt: ClientClientAuthenticationMethodsPrivateKeyJwt;
+}
+/**
+ * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
+ */
+export interface ClientClientAuthenticationMethodsPrivateKeyJwt {
+  /**
+   * The list of unique credential IDs that are enabled on the client for Private Key JWT authentication.
+   *
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
+}
+/**
+ *
+ */
+export interface ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner {
+  /**
+   * Credential ID
+   *
+   */
+  id: string;
+}
+/**
  *
  */
 export interface ClientCreate {
@@ -949,10 +980,13 @@ export interface ClientCreate {
    */
   organization_usage?: ClientCreateOrganizationUsageEnum;
   /**
-   * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default) or `pre_login_prompt`.
+   * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`. `post_login_prompt` requires `oidc_conformant: true`.
    *
    */
   organization_require_behavior?: ClientCreateOrganizationRequireBehaviorEnum;
+  /**
+   */
+  client_authentication_methods?: ClientCreateClientAuthenticationMethods;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -1006,6 +1040,24 @@ export const ClientCreateOrganizationRequireBehaviorEnum = {
 export type ClientCreateOrganizationRequireBehaviorEnum =
   (typeof ClientCreateOrganizationRequireBehaviorEnum)[keyof typeof ClientCreateOrganizationRequireBehaviorEnum];
 
+/**
+ * Defines client authentication methods.
+ */
+export interface ClientCreateClientAuthenticationMethods {
+  /**
+   */
+  private_key_jwt: ClientCreateClientAuthenticationMethodsPrivateKeyJwt;
+}
+/**
+ * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
+ */
+export interface ClientCreateClientAuthenticationMethodsPrivateKeyJwt {
+  /**
+   * Fully defined credentials that will be enabled on the client for Private Key JWT authentication.
+   *
+   */
+  credentials: Array<PostCredentialsRequest>;
+}
 /**
  * Encryption used for WsFed responses with this client.
  */
@@ -1515,10 +1567,13 @@ export interface ClientUpdate {
    */
   organization_usage?: ClientUpdateOrganizationUsageEnum;
   /**
-   * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default) or `pre_login_prompt`.
+   * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`. `post_login_prompt` requires `oidc_conformant: true`.
    *
    */
   organization_require_behavior?: ClientUpdateOrganizationRequireBehaviorEnum;
+  /**
+   */
+  client_authentication_methods?: ClientUpdateClientAuthenticationMethods | null;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
@@ -1674,6 +1729,24 @@ export interface ClientUpdateAddons {
   /**
    */
   sso_integration?: ClientAddonsSsoIntegration;
+}
+/**
+ * Defines client authentication methods.
+ */
+export interface ClientUpdateClientAuthenticationMethods {
+  /**
+   */
+  private_key_jwt: ClientUpdateClientAuthenticationMethodsPrivateKeyJwt;
+}
+/**
+ * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
+ */
+export interface ClientUpdateClientAuthenticationMethodsPrivateKeyJwt {
+  /**
+   * A list of unique credential IDs that will be enabled on the client for Private Key JWT authentication. The credentials must be previously created.
+   *
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  * The client's encryption key
@@ -2149,7 +2222,7 @@ export interface ConnectionCreateOptionsValidationUsername {
  */
 export interface ConnectionUpdate {
   /**
-   * Connection name used in the new universal login experience
+   * The connection name used in the new universal login experience. If display_name is not included in the request, the field will be overwritten with the name value.
    *
    */
   display_name?: string;
@@ -3367,6 +3440,7 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum =
   (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum];
@@ -3399,6 +3473,7 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTr
     iga_certification: 'iga-certification',
     iga_fulfillment_assignment: 'iga-fulfillment-assignment',
     iga_fulfillment_execution: 'iga-fulfillment-execution',
+    password_reset_post_challenge: 'password-reset-post-challenge',
   } as const;
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
   (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum];
@@ -3715,6 +3790,7 @@ export const GetBindings200ResponseBindingsInnerTriggerIdEnum = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetBindings200ResponseBindingsInnerTriggerIdEnum =
   (typeof GetBindings200ResponseBindingsInnerTriggerIdEnum)[keyof typeof GetBindings200ResponseBindingsInnerTriggerIdEnum];
@@ -3757,14 +3833,12 @@ export interface GetBranding200ResponseColors {
  * Page Background Color or Gradient.
  * Property contains either <code>null</code> to unset, a solid color as a string value <code>#FFFFFF</code>, or a gradient as an object.
  *
- * <code>
- * {
+ * <pre><code>{
  *   type: 'linear-gradient',
  *   start: '#FFFFFF',
  *   end: '#000000',
  *   angle_deg: 35
- * }
- * </code>
+ * }</code></pre>
  */
 export type GetBranding200ResponseColorsPageBackground = string | { [key: string]: any };
 /**
@@ -3819,6 +3893,60 @@ export interface GetConnections200ResponseOneOf {
    */
   connections?: Array<Connection>;
 }
+/**
+ *
+ */
+export interface GetCredentials200ResponseInner {
+  /**
+   * ID of the credential. Generated on creation.
+   *
+   */
+  id?: string;
+  /**
+   * The name given to the credential by the user.
+   *
+   */
+  name?: string;
+  /**
+   * The key identifier of the credential, generated on creation.
+   *
+   */
+  kid?: string;
+  /**
+   * Algorithm which will be used with the credential. Supported algorithms: RS256,RS384,PS256
+   *
+   */
+  alg?: GetCredentials200ResponseInnerAlgEnum;
+  /**
+   * The type of credential. Supported types: public_key.
+   *
+   */
+  credential_type?: string;
+  /**
+   * The ISO 8601 formatted date the credential was created.
+   *
+   */
+  created_at?: string;
+  /**
+   * The ISO 8601 formatted date the credential was updated.
+   *
+   */
+  updated_at?: string;
+  /**
+   * The ISO 8601 formatted date representing the expiration of the credential.
+   *
+   */
+  expires_at?: string;
+}
+
+export const GetCredentials200ResponseInnerAlgEnum = {
+  RS256: 'RS256',
+  RS384: 'RS384',
+  PS256: 'PS256',
+} as const;
+export type GetCredentials200ResponseInnerAlgEnum =
+  (typeof GetCredentials200ResponseInnerAlgEnum)[keyof typeof GetCredentials200ResponseInnerAlgEnum];
+
 /**
  *
  */
@@ -4049,6 +4177,7 @@ export const GetExecution200ResponseTriggerIdEnum = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetExecution200ResponseTriggerIdEnum =
   (typeof GetExecution200ResponseTriggerIdEnum)[keyof typeof GetExecution200ResponseTriggerIdEnum];
@@ -6315,6 +6444,16 @@ export interface PatchClientGrantsByIdRequest {
 /**
  *
  */
+export interface PatchCredentialsByCredentialIdRequest {
+  /**
+   * The ISO 8601 formatted date representing the expiration of the credential.
+   *
+   */
+  expires_at?: string | null;
+}
+/**
+ *
+ */
 export interface PatchCustomDomainsByIdRequest {
   /**
    * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
@@ -6390,21 +6529,81 @@ export type PatchLogStreamsByIdRequestStatusEnum =
  *
  */
 export type PatchLogStreamsByIdRequestSink =
-  | GetLogStreams200ResponseInnerOneOf3Sink
-  | GetLogStreams200ResponseInnerOneOf4Sink
   | GetLogStreams200ResponseInnerOneOf5Sink
-  | GetLogStreams200ResponseInnerOneOf6Sink
   | GetLogStreams200ResponseInnerOneOfSink
-  | PatchLogStreamsByIdRequestSinkOneOf;
+  | PatchLogStreamsByIdRequestSinkOneOf
+  | PatchLogStreamsByIdRequestSinkOneOf1
+  | PatchLogStreamsByIdRequestSinkOneOf2
+  | PatchLogStreamsByIdRequestSinkOneOf3;
 /**
  *
  */
 export interface PatchLogStreamsByIdRequestSinkOneOf {
   /**
+   * Datadog API Key
+   *
+   */
+  datadogApiKey?: string;
+  /**
+   * Datadog region
+   *
+   */
+  datadogRegion: PatchLogStreamsByIdRequestSinkOneOfDatadogRegionEnum;
+}
+
+export const PatchLogStreamsByIdRequestSinkOneOfDatadogRegionEnum = {
+  us: 'us',
+  eu: 'eu',
+  us3: 'us3',
+  us5: 'us5',
+} as const;
+export type PatchLogStreamsByIdRequestSinkOneOfDatadogRegionEnum =
+  (typeof PatchLogStreamsByIdRequestSinkOneOfDatadogRegionEnum)[keyof typeof PatchLogStreamsByIdRequestSinkOneOfDatadogRegionEnum];
+
+/**
+ *
+ */
+export interface PatchLogStreamsByIdRequestSinkOneOf1 {
+  /**
+   * Splunk URL Endpoint
+   *
+   */
+  splunkDomain: string;
+  /**
+   * Port
+   *
+   */
+  splunkPort: string;
+  /**
+   * Splunk token
+   *
+   */
+  splunkToken?: string;
+  /**
+   * Verify TLS certificate
+   *
+   */
+  splunkSecure: boolean;
+}
+/**
+ *
+ */
+export interface PatchLogStreamsByIdRequestSinkOneOf2 {
+  /**
+   * Segment write key
+   *
+   */
+  segmentWriteKey?: string;
+}
+/**
+ *
+ */
+export interface PatchLogStreamsByIdRequestSinkOneOf3 {
+  /**
    * Mixpanel Region
    *
    */
-  mixpanelRegion: PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum;
+  mixpanelRegion: PatchLogStreamsByIdRequestSinkOneOf3MixpanelRegionEnum;
   /**
    * Mixpanel Project Id
    *
@@ -6422,12 +6621,12 @@ export interface PatchLogStreamsByIdRequestSinkOneOf {
   mixpanelServiceAccountPassword?: string;
 }
 
-export const PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum = {
+export const PatchLogStreamsByIdRequestSinkOneOf3MixpanelRegionEnum = {
   us: 'us',
   eu: 'eu',
 } as const;
-export type PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum =
-  (typeof PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum)[keyof typeof PatchLogStreamsByIdRequestSinkOneOfMixpanelRegionEnum];
+export type PatchLogStreamsByIdRequestSinkOneOf3MixpanelRegionEnum =
+  (typeof PatchLogStreamsByIdRequestSinkOneOf3MixpanelRegionEnum)[keyof typeof PatchLogStreamsByIdRequestSinkOneOf3MixpanelRegionEnum];
 
 /**
  *
@@ -6689,7 +6888,7 @@ export interface PostAuthenticationMethods201Response {
   email?: string;
   /**
    */
-  authentication_methods?: Array<PostAuthenticationMethods201ResponseAuthenticationMethodsInner>;
+  authentication_methods?: Array<PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInner>;
   /**
    * Preferred phone authentication method
    *
@@ -6732,27 +6931,6 @@ export const PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEn
 } as const;
 export type PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum =
   (typeof PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum)[keyof typeof PostAuthenticationMethods201ResponsePreferredAuthenticationMethodEnum];
-
-/**
- *
- */
-export interface PostAuthenticationMethods201ResponseAuthenticationMethodsInner {
-  /**
-   */
-  id?: string;
-  /**
-   */
-  type?: PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum;
-}
-
-export const PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum = {
-  totp: 'totp',
-  push: 'push',
-  sms: 'sms',
-  voice: 'voice',
-} as const;
-export type PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum =
-  (typeof PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum)[keyof typeof PostAuthenticationMethods201ResponseAuthenticationMethodsInnerTypeEnum];
 
 /**
  *
@@ -7255,6 +7433,56 @@ export const PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum = {
 } as const;
 export type PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum =
   (typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum)[keyof typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum];
+
+/**
+ *
+ */
+export interface PostCredentialsRequest {
+  /**
+   * Credential type. Supported types: public_key.
+   *
+   */
+  credential_type: PostCredentialsRequestCredentialTypeEnum;
+  /**
+   * Friendly name for a credential.
+   *
+   */
+  name?: string;
+  /**
+   * PEM-formatted public key (SPKI and PKCS1) or X509 certificate. Must be JSON escaped.
+   *
+   */
+  pem: string;
+  /**
+   * Algorithm which will be used with the credential. Can be one of RS256, RS384, PS256. If not specified, RS256 will be used.
+   *
+   */
+  alg?: PostCredentialsRequestAlgEnum;
+  /**
+   * Parse expiry from x509 certificate. If true, attempts to parse the expiry date from the provided PEM.
+   *
+   */
+  parse_expiry_from_cert?: boolean;
+  /**
+   * The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires.
+   *
+   */
+  expires_at?: string;
+}
+
+export const PostCredentialsRequestCredentialTypeEnum = {
+  public_key: 'public_key',
+} as const;
+export type PostCredentialsRequestCredentialTypeEnum =
+  (typeof PostCredentialsRequestCredentialTypeEnum)[keyof typeof PostCredentialsRequestCredentialTypeEnum];
+
+export const PostCredentialsRequestAlgEnum = {
+  RS256: 'RS256',
+  RS384: 'RS384',
+  PS256: 'PS256',
+} as const;
+export type PostCredentialsRequestAlgEnum =
+  (typeof PostCredentialsRequestAlgEnum)[keyof typeof PostCredentialsRequestAlgEnum];
 
 /**
  *
@@ -8083,7 +8311,7 @@ export interface PostMembersRequest {
    * List of user IDs to add to the organization as members.
    *
    */
-  members: Array<any>;
+  members: Array<string>;
 }
 /**
  *
@@ -8736,6 +8964,106 @@ export interface PutApnsRequest {
    */
   p12?: string | null;
 }
+/**
+ * The successfully created authentication method.
+ */
+export interface PutAuthenticationMethods200ResponseInner {
+  [key: string]: any | any;
+  /**
+   * The ID of the newly created authentication method (automatically generated by the application)
+   *
+   */
+  id?: string;
+  /**
+   */
+  type: PutAuthenticationMethods200ResponseInnerTypeEnum;
+  /**
+   * A human-readable label to identify the authentication method.
+   *
+   */
+  name?: string;
+  /**
+   * Base32 encoded secret for TOTP generation
+   *
+   */
+  totp_secret?: string;
+  /**
+   * Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice.
+   *
+   */
+  phone_number?: string;
+  /**
+   * Applies to email authentication methods only. The email address used to send verification messages.
+   *
+   */
+  email?: string;
+  /**
+   */
+  authentication_methods?: Array<PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInner>;
+  /**
+   * Preferred phone authentication method
+   *
+   */
+  preferred_authentication_method?: PutAuthenticationMethods200ResponseInnerPreferredAuthenticationMethodEnum;
+  /**
+   * Applies to webauthn authenticators only. The id of the credential.
+   *
+   */
+  key_id?: string;
+  /**
+   * Applies to webauthn authenticators only. The public key.
+   *
+   */
+  public_key?: string;
+  /**
+   * Applies to webauthn authenticators only. The relying party identifier.
+   *
+   */
+  relying_party_identifier?: string;
+  /**
+   * Authentication method creation date
+   *
+   */
+  created_at?: string;
+}
+
+export const PutAuthenticationMethods200ResponseInnerTypeEnum = {
+  phone: 'phone',
+  email: 'email',
+  totp: 'totp',
+  webauthn_roaming: 'webauthn-roaming',
+} as const;
+export type PutAuthenticationMethods200ResponseInnerTypeEnum =
+  (typeof PutAuthenticationMethods200ResponseInnerTypeEnum)[keyof typeof PutAuthenticationMethods200ResponseInnerTypeEnum];
+
+export const PutAuthenticationMethods200ResponseInnerPreferredAuthenticationMethodEnum = {
+  voice: 'voice',
+  sms: 'sms',
+} as const;
+export type PutAuthenticationMethods200ResponseInnerPreferredAuthenticationMethodEnum =
+  (typeof PutAuthenticationMethods200ResponseInnerPreferredAuthenticationMethodEnum)[keyof typeof PutAuthenticationMethods200ResponseInnerPreferredAuthenticationMethodEnum];
+
+/**
+ *
+ */
+export interface PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInner {
+  /**
+   */
+  id?: string;
+  /**
+   */
+  type?: PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInnerTypeEnum;
+}
+
+export const PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInnerTypeEnum = {
+  totp: 'totp',
+  push: 'push',
+  sms: 'sms',
+  voice: 'voice',
+} as const;
+export type PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInnerTypeEnum =
+  (typeof PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInnerTypeEnum)[keyof typeof PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInnerTypeEnum];
+
 /**
  *
  */
@@ -9414,17 +9742,21 @@ export const TenantSettingsEnabledLocalesEnum = {
   ar: 'ar',
   bg: 'bg',
   bs: 'bs',
+  ca_ES: 'ca-ES',
   cs: 'cs',
+  cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
   es: 'es',
   et: 'et',
+  eu_ES: 'eu-ES',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
+  gl_ES: 'gl-ES',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
@@ -9438,6 +9770,8 @@ export const TenantSettingsEnabledLocalesEnum = {
   lv: 'lv',
   nb: 'nb',
   nl: 'nl',
+  nn: 'nn',
+  no: 'no',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -9759,23 +10093,32 @@ export interface TenantSettingsUpdate {
   /**
    */
   sessions?: TenantSettingsSessions | null;
+  /**
+   * Whether to accept an organization name instead of an ID on auth endpoints
+   *
+   */
+  allow_organization_name_in_authentication_api?: boolean | null;
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
   ar: 'ar',
   bg: 'bg',
   bs: 'bs',
+  ca_ES: 'ca-ES',
   cs: 'cs',
+  cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
   es: 'es',
   et: 'et',
+  eu_ES: 'eu-ES',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
+  gl_ES: 'gl-ES',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
@@ -9789,6 +10132,8 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   lv: 'lv',
   nb: 'nb',
   nl: 'nl',
+  nn: 'nn',
+  no: 'no',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -10533,6 +10878,7 @@ export const GetActionsTriggerIdEnum = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetActionsTriggerIdEnum =
   (typeof GetActionsTriggerIdEnum)[keyof typeof GetActionsTriggerIdEnum];
@@ -10587,6 +10933,7 @@ export const GetBindingsTriggerIdEnum = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetBindingsTriggerIdEnum =
   (typeof GetBindingsTriggerIdEnum)[keyof typeof GetBindingsTriggerIdEnum];
@@ -10646,6 +10993,7 @@ export const PatchBindingsOperationTriggerIdEnum = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type PatchBindingsOperationTriggerIdEnum =
   (typeof PatchBindingsOperationTriggerIdEnum)[keyof typeof PatchBindingsOperationTriggerIdEnum];
@@ -10818,6 +11166,21 @@ export interface DeleteClientsByIdRequest {
 /**
  *
  */
+export interface DeleteCredentialsByCredentialIdRequest {
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the credential to delete.
+   *
+   */
+  credential_id: string;
+}
+/**
+ *
+ */
 export interface GetClientsRequest {
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
@@ -10883,12 +11246,62 @@ export interface GetClientsByIdRequest {
 /**
  *
  */
+export interface GetCredentialsRequest {
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
+}
+/**
+ *
+ */
+export interface GetCredentialsByCredentialIdRequest {
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the credential.
+   *
+   */
+  credential_id: string;
+}
+/**
+ *
+ */
 export interface PatchClientsByIdRequest {
   /**
    * ID of the client to update.
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface PatchCredentialsByCredentialIdOperationRequest {
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the credential.
+   *
+   */
+  credential_id: string;
+}
+/**
+ *
+ */
+export interface PostCredentialsOperationRequest {
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
 }
 /**
  *
@@ -11011,10 +11424,20 @@ export interface GetConnectionsRequest {
    */
   page?: number;
   /**
-   * true if a query summary must be included in the result, false otherwise. Default <code>false</code>.
+   * true if a query summary must be included in the result, false otherwise. Not returned when using checkpoint pagination. Default <code>false</code>.
    *
    */
   include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
   /**
    * Provide strategies to only retrieve connections with such strategies
    *
@@ -11947,7 +12370,7 @@ export interface GetOrganizationsRequest {
    */
   take?: number;
   /**
-   * Field to sort by. Use &lt;code&gt;field:order&lt;/code&gt; where order is &lt;code&gt;1&lt;/code&gt; for ascending and &lt;code&gt;-1&lt;/code&gt; for descending. e.g. &lt;code&gt;created_at:1&lt;/code&gt;. We currently support sorting by the following fields: &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;display_name&lt;/code&gt; and &lt;code&gt;created_at&lt;/code&gt;.
+   * Field to sort by. Use <code>field:order</code> where order is <code>1</code> for ascending and <code>-1</code> for descending. e.g. <code>created_at:1</code>. We currently support sorting by the following fields: <code>name</code>, <code>display_name</code> and <code>created_at</code>.
    *
    */
   sort?: string;
@@ -12064,6 +12487,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   organizations: 'organizations',
   invitation: 'invitation',
   common: 'common',
+  passkeys: 'passkeys',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
@@ -12075,17 +12499,21 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
   bg: 'bg',
   bs: 'bs',
+  ca_ES: 'ca-ES',
   cs: 'cs',
+  cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
   es: 'es',
   et: 'et',
+  eu_ES: 'eu-ES',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
+  gl_ES: 'gl-ES',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
@@ -12099,6 +12527,8 @@ export const GetCustomTextByLanguageLanguageEnum = {
   lv: 'lv',
   nb: 'nb',
   nl: 'nl',
+  nn: 'nn',
+  no: 'no',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -12166,6 +12596,7 @@ export const PutCustomTextByLanguagePromptEnum = {
   organizations: 'organizations',
   invitation: 'invitation',
   common: 'common',
+  passkeys: 'passkeys',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
@@ -12177,17 +12608,21 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
   bg: 'bg',
   bs: 'bs',
+  ca_ES: 'ca-ES',
   cs: 'cs',
+  cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
   es: 'es',
   et: 'et',
+  eu_ES: 'eu-ES',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
+  gl_ES: 'gl-ES',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
@@ -12201,6 +12636,8 @@ export const PutCustomTextByLanguageLanguageEnum = {
   lv: 'lv',
   nb: 'nb',
   nl: 'nl',
+  nn: 'nn',
+  no: 'no',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
