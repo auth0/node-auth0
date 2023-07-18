@@ -1,6 +1,6 @@
 {
   "name": "auth0",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "SDK for Auth0 API v2",
   "main": "src/index.js",
   "module": "src/index.mjs",
