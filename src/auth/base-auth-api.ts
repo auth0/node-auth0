@@ -33,6 +33,22 @@ export class AuthApiError extends Error {
   }
 }
 
+function parseErrorBody(body: any): AuthApiErrorResponse {
+  const rawData = JSON.parse(body);
+  let data: AuthApiErrorResponse;
+
+  if (rawData.error) {
+    data = rawData as AuthApiErrorResponse;
+  } else {
+    data = {
+      error: rawData.code,
+      error_description: rawData.description,
+    };
+  }
+
+  return data;
+}
+
 async function parseError(response: Response) {
   // Errors typically have a specific format:
   // {
@@ -41,10 +57,10 @@ async function parseError(response: Response) {
   // }
 
   const body = await response.text();
-  let data: AuthApiErrorResponse;
 
   try {
-    data = JSON.parse(body) as AuthApiErrorResponse;
+    const data = parseErrorBody(body);
+
     return new AuthApiError(
       data.error,
       data.error_description,
