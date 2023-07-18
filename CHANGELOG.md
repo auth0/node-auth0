@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.6.0](https://github.com/auth0/node-auth0/tree/v3.6.0) (2023-07-18)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.5.0...v3.6.0)
+
+**Added**
+
+- Support Organization Name [\#884](https://github.com/auth0/node-auth0/pull/884) ([frederikprijck](https://github.com/frederikprijck))
+
+**Changed**
+
+- Do not lowercase org_name claim [\#887](https://github.com/auth0/node-auth0/pull/887) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.5.0](https://github.com/auth0/node-auth0/tree/v3.5.0) (2023-06-26)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v3.5.0)
