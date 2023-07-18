@@ -70,6 +70,11 @@ export interface AuthorizationCodeGrantRequest extends ClientCredentials {
    *	This is required only if it was set at the `/authorize` endpoint. The values must match.
    */
   redirect_uri?: string;
+
+  /**
+   * Allow for any custom property to be sent to Auth0
+   */
+  [key: string]: any;
 }
 
 export interface AuthorizationCodeGrantWithPKCERequest extends AuthorizationCodeGrantRequest {
@@ -133,6 +138,11 @@ export interface RefreshTokenGrantRequest extends ClientCredentials {
    * If not sent, the original scopes will be used; otherwise you can request a reduced set of scopes.
    */
   scope?: string;
+
+  /**
+   * Allow for any custom property to be sent to Auth0
+   */
+  [key: string]: any;
 }
 
 export interface RevokeRefreshTokenRequest extends ClientCredentials {

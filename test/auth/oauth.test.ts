@@ -56,6 +56,23 @@ describe('OAuth', () => {
       });
     });
 
+    it('should send custom parameters', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.authorizationCodeGrant({
+          code: 'test-valid-code',
+          redirect_uri: 'https://example.com',
+          my_param: 'test',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'my-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
+        },
+      });
+    });
+
     it('should throw for invalid code', async () => {
       const oauth = new OAuth(opts);
       await expect(
@@ -113,6 +130,24 @@ describe('OAuth', () => {
           body: expect.anything(),
         })
       );
+    });
+
+    it('should send custom parameters', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.authorizationCodeGrantWithPKCE({
+          code: 'test-code',
+          code_verifier: 'test-valid-code-verifier',
+          redirect_uri: 'https://example.com',
+          my_param: 'test',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'my-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
+        },
+      });
     });
   });
 
@@ -191,6 +226,24 @@ describe('OAuth', () => {
       const oauth = new OAuth(opts);
       await expect(
         oauth.refreshTokenGrant({ refresh_token: 'test-refresh-token' })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'my-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
+          id_token: expect.any(String),
+          scope: 'openid profile email address phone offline_access',
+        },
+      });
+    });
+
+    it('should send custom parameters', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.refreshTokenGrant({
+          refresh_token: 'test-refresh-token',
+          my_param: 'test',
+        })
       ).resolves.toMatchObject({
         data: {
           access_token: 'my-access-token',
