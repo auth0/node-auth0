@@ -36,6 +36,23 @@
   {
     "scope": "https://test-domain.auth0.com",
     "method": "POST",
+    "path": "/dbconnections/signup",
+    "body": {
+      "client_id": "test-client-id",
+      "email": "test-email-duplicate@example.com",
+      "password": "test-password",
+      "connection": "Username-Password-Authentication"
+    },
+    "status": 400,
+    "response": {
+      "name": "BadRequestError",
+      "code": "invalid_signup",
+      "description": "Invalid sign up"
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
     "path": "/dbconnections/change_password",
     "body": {
       "client_id": "test-client-id",
