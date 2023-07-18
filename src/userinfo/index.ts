@@ -1,4 +1,5 @@
 import { ResponseError } from '../lib/errors.js';
+import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 import { ClientOptions, InitOverride, JSONApiResponse } from '../lib/models.js';
 import { BaseAPI } from '../lib/runtime.js';
 
@@ -77,7 +78,15 @@ export async function parseError(response: Response) {
 
 export class UserInfoClient extends BaseAPI {
   constructor(options: { domain: string } & ClientOptions) {
-    super({ ...options, baseUrl: `https://${options.domain}`, parseError });
+    super({
+      ...options,
+      baseUrl: `https://${options.domain}`,
+      middleware: [
+        ...(options.middleware || []),
+        ...(options.telemetry !== false ? [new TelemetryMiddleware(options)] : []),
+      ],
+      parseError,
+    });
   }
 
   /**
