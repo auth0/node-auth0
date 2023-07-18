@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { AuthenticationClient, ManagementClient } from '../../src';
+import { AuthenticationClient, ManagementClient, UserInfoClient, UserInfoError } from '../../src';
 import { ResponseError } from '../../src/lib/errors';
 import { ErrorContext, InitOverrideFunction, RequestOpts } from '../../src/lib/models';
 import { BaseAPI } from '../../src/lib/runtime';
@@ -692,6 +692,107 @@ describe('Runtime for AuthenticationClient', () => {
     await client.oauth.clientCredentialsGrant({
       audience: '123',
     });
+
+    expect(request.isDone()).toBe(true);
+  });
+});
+
+describe('Runtime for UserInfoClient', () => {
+  const URL = 'https://tenant.auth0.com';
+
+  afterEach(() => {
+    nock.cleanAll();
+    jest.clearAllMocks();
+  });
+
+  it('should throw a ResponseError when response does not provide payload', async () => {
+    nock(URL, { encodedQueryParams: true }).get('/userinfo').reply(428);
+
+    const client = new UserInfoClient({
+      domain: 'tenant.auth0.com',
+    });
+
+    try {
+      await client.getUserInfo('token');
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof ResponseError) {
+        expect(e.statusCode).toBe(428);
+      } else {
+        expect(e).toBeInstanceOf(ResponseError);
+      }
+    }
+  });
+
+  it('should throw a UserInfoApiError when backend provides known error details', async () => {
+    nock(URL, { encodedQueryParams: true })
+      .get('/userinfo')
+      .reply(428, { error: 'test error', error_description: 'test error description' });
+
+    const client = new UserInfoClient({
+      domain: 'tenant.auth0.com',
+    });
+
+    try {
+      await client.getUserInfo('token');
+      // Should not reach this
+      expect(true).toBeFalsy();
+    } catch (e: any) {
+      if (e instanceof UserInfoError) {
+        expect(e.error).toBe('test error');
+        expect(e.error_description).toBe('test error description');
+        expect(e.message).toBe('test error description');
+      } else {
+        expect(e).toBeInstanceOf(UserInfoError);
+      }
+    }
+  });
+
+  it('should add the telemetry by default', async () => {
+    const request = nock(URL)
+      .get('/userinfo')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(utils.generateClientInfo())))
+      .reply(200, {});
+
+    const client = new UserInfoClient({
+      domain: 'tenant.auth0.com',
+    });
+
+    await client.getUserInfo('token');
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should add custom telemetry when provided', async () => {
+    const mockClientInfo = { name: 'test', version: '12', env: { node: '16' } };
+
+    const request = nock(URL)
+      .get('/userinfo')
+      .matchHeader('Auth0-Client', base64url.encode(JSON.stringify(mockClientInfo)))
+      .reply(200, {});
+
+    const client = new UserInfoClient({
+      domain: 'tenant.auth0.com',
+      clientInfo: mockClientInfo,
+    });
+
+    await client.getUserInfo('token');
+
+    expect(request.isDone()).toBe(true);
+  });
+
+  it('should not add the telemetry when disabled', async () => {
+    const request = nock(URL, { badheaders: ['Auth0-Client'] })
+      .get('/userinfo')
+      .reply(200, {});
+
+    const client = new UserInfoClient({
+      domain: 'tenant.auth0.com',
+      telemetry: false,
+    });
+
+    await client.getUserInfo('token');
 
     expect(request.isDone()).toBe(true);
   });
