@@ -101,7 +101,7 @@ const validate = function (token, options) {
         );
       }
 
-      if (payload.org_name.toLowerCase() !== options.organization.toLowerCase()) {
+      if (payload.org_name !== options.organization.toLowerCase()) {
         throw new Error(
           `Organization Name (org_name) claim value mismatch in the ID token; expected "${options.organization}", found "${payload.org_name}"'`
         );
