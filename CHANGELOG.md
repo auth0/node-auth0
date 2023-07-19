@@ -1,5 +1,20 @@
 # Change Log
 
+## [v4.0.0-beta.6](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.6) (2023-07-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.5...v4.0.0-beta.6)
+
+**Changed**
+
+- Update managers [\#883](https://github.com/auth0/node-auth0/pull/883) ([frederikprijck](https://github.com/frederikprijck))
+- Handle duplicate user sign up [\#886](https://github.com/auth0/node-auth0/pull/886) ([frederikprijck](https://github.com/frederikprijck))
+
+**Added**
+
+- Support Organization Name [\#885](https://github.com/auth0/node-auth0/pull/885) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for userinfo endpoint [\#872](https://github.com/auth0/node-auth0/pull/872) ([frederikprijck](https://github.com/frederikprijck))
+- Support custom parameters with Authorization Code and Refresh Token Grants [\#889](https://github.com/auth0/node-auth0/pull/889) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.0-beta.5](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.5) (2023-06-28)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.4...v4.0.0-beta.5)
