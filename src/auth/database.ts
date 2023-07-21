@@ -108,6 +108,10 @@ export interface ChangePasswordRequest {
    * The name of the database configured to your client.
    */
   connection: string;
+  /**
+   * The organization of the user.
+   */
+  organization?: string;
 }
 
 /**
