@@ -345,6 +345,87 @@ describe('CustomDomainsManager', () => {
     });
   });
 
+  describe('#update', () => {
+    const params = { id: 'foo' };
+    const data = {};
+
+    const response: CustomDomain = {
+      custom_domain_id: 'test_domain',
+      domain: 'Test Domain',
+      primary: true,
+      status: 'disabled',
+      type: 'auth0_managed_certs',
+      verification: {
+        methods: [
+          {
+            name: 'cname',
+            record: 'test_record',
+            domain: 'test_domain',
+          },
+        ],
+      },
+      custom_client_ip_header: 'test_header',
+      tls_policy: 'policy',
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).patch('/custom-domains/foo').reply(200, response);
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).patch('/custom-domains/foo').reply(500, {});
+
+      customDomains.update(params, data).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a PATCH request to /api/v2/custom-domains', (done) => {
+      customDomains.update(params, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      customDomains.update(params, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      customDomains.update(params, data).then((customDomain) => {
+        expect(customDomain.data.custom_domain_id).toBe(response.custom_domain_id);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch('/custom-domains/foo')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      customDomains.update(params, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
   describe('#delete', () => {
     const id = 'cd_0000000000000001';
     let request: nock.Scope;

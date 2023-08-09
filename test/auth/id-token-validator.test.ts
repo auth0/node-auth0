@@ -196,6 +196,18 @@ describe('id-token-validator', () => {
     );
   });
 
+  it('verifies iss matches the provided issuer', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+    });
+    const jwt = await sign({ issuer: 'foo' });
+    await expect(idTokenValidator.validate(jwt)).rejects.toThrowError(
+      /\(iss\) claim mismatch in the ID token; expected "https:\/\/tenant.auth0.com\/", found "foo"/
+    );
+  });
+
   it('verifies sub is present', async () => {
     const idTokenValidator = new IDTokenValidator({
       domain: DOMAIN,

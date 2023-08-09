@@ -10,7 +10,7 @@ import {
   AuthApiError,
 } from '../../src/index.js';
 import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
-import { BaseAPI } from '../../src/lib/runtime.js';
+import { BaseAPI, applyQueryParams } from '../../src/lib/runtime.js';
 import { Response as NodeResponse } from 'node-fetch';
 
 import * as utils from '../../src/utils.js';
@@ -333,6 +333,42 @@ describe('Runtime', () => {
       method: 'GET',
     });
     await expect((await resonse).json()).resolves.toMatchObject({ bar: 'foo' });
+  });
+
+  it('should apply query params', () => {
+    const params = applyQueryParams({ foo: 'bar' }, [{ key: 'foo', config: {} }]);
+    expect(params).toEqual({ foo: 'bar' });
+  });
+
+  it('should ignore unknown query params', () => {
+    const params = applyQueryParams({ foo: 'bar' }, []);
+    expect(params).not.toHaveProperty('foo');
+  });
+
+  it('should ignore undefined query params', () => {
+    const params = applyQueryParams({ foo: undefined }, [{ key: 'foo', config: {} }]);
+    expect(params).not.toHaveProperty('foo');
+  });
+
+  it('should apply array of query params with multiple params', () => {
+    const params = applyQueryParams({ foo: ['bar', 'baz'] }, [
+      { key: 'foo', config: { isArray: true } },
+    ]);
+    expect(params).not.toHaveProperty('bar,baz');
+  });
+
+  it('should apply array of query params with single param', () => {
+    const params = applyQueryParams({ foo: ['bar', 'baz'] }, [
+      { key: 'foo', config: { isArray: true } },
+    ]);
+    expect(params).toEqual({ foo: 'bar,baz' });
+  });
+
+  it('should apply array of query params with multiple params', () => {
+    const params = applyQueryParams({ foo: ['bar', 'baz'] }, [
+      { key: 'foo', config: { isArray: true, isCollectionFormatMulti: true } },
+    ]);
+    expect(params).toEqual({ foo: ['bar', 'baz'] });
   });
 });
 

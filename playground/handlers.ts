@@ -8,12 +8,15 @@ import {
   ManagementClientOptionsWithClientCredentials,
   PutAuthenticationMethodsRequestInner,
   ResourceServer,
-} from '../src/management';
+} from '../src/index.js';
 import { v4 as uuid } from 'uuid';
 
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import nock from 'nock';
+
+process.env.RECORD && nock.recorder.rec({ output_objects: true });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -786,6 +789,24 @@ export async function jobs() {
   await mgmntClient.connections.delete({ id: connection.id as string });
 }
 
+export async function keys() {
+  const mgmntClient = new ManagementClient(program.opts());
+
+  const { data: newClient } = await mgmntClient.clients.create({ name: uuid() });
+  console.log('Create a client: ' + newClient.name);
+  const { data: client } = await mgmntClient.clients.get({ id: newClient.client_id as string });
+
+  const cert = client.signing_keys![0].cert;
+  const { data: keys } = await mgmntClient.keys.getAll();
+  console.log('Got', keys.length, 'keys');
+  const { kid } = keys.find((key) => key.cert === cert)!;
+  const { data: key } = await mgmntClient.keys.get({ kid });
+  console.log('Got key:', key.kid);
+
+  await mgmntClient.clients.delete({ id: newClient.client_id as string });
+  console.log('Removed the client: ' + newClient.name);
+}
+
 export async function logStreams() {
   const mgmntClient = new ManagementClient(program.opts());
 
@@ -934,7 +955,7 @@ export async function organizations() {
       {
         id: organization.id as string,
       },
-      { members: [user.user_id] }
+      { members: [user.user_id!] }
     );
 
     console.log(`Add member to organization`);

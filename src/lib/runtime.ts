@@ -294,9 +294,7 @@ export function applyQueryParams<
         if (config.isCollectionFormatMulti) {
           value = requestParameters[key];
         } else {
-          value = requestParameters[key].join(
-            COLLECTION_FORMATS[config.collectionFormat as keyof typeof COLLECTION_FORMATS]
-          );
+          value = requestParameters[key].join(COLLECTION_FORMATS[config.collectionFormat!]);
         }
       } else {
         if (requestParameters[key] !== undefined) {
