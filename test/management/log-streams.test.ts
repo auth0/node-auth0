@@ -6,8 +6,8 @@ import {
   GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum,
   LogStreamsManager,
   PostLogStreamsRequestOneOf7,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 describe('LogStreamsManager', () => {
   let logStreams: LogStreamsManager;

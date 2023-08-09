@@ -4,11 +4,9 @@ import {
   AttackProtectionManager,
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
-  PatchBruteForceProtectionRequestShieldsEnum,
   PatchSuspiciousIpThrottlingRequest,
-  PatchSuspiciousIpThrottlingRequestStage,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 const API_URL = 'https://tenant.auth0.com';
 
@@ -85,8 +83,7 @@ describe('AttackProtectionManager', () => {
 
       it('should pass the body of the response to the "then" handler', (done) => {
         attackProtection.getBruteForceConfig().then((bruteForceConfig) => {
-          // TODO: body should contain data
-          // expect(bruteForceConfig).to.deep.equal(data);
+          expect(bruteForceConfig.data).toMatchObject(data);
 
           done();
         });

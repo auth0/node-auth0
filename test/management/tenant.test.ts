@@ -2,8 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { TenantsManager } from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+import { TenantsManager, ManagementClient } from '../../src/index.js';
 
 describe('TenantManager', () => {
   let tenant: TenantsManager;

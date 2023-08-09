@@ -8,11 +8,12 @@ import {
   JobsManager,
   GetErrors200ResponseOneOfInner,
   PostUsersImportsData,
-} from '../../src/management/__generated/index';
-import { ManagementClient, ManagementApiError } from '../../src/management';
-import { extractParts } from '../utils/extractParts';
+  ManagementClient,
+  ManagementApiError,
+  FetchError,
+} from '../../src/index.js';
+import { extractParts } from '../utils/index.js';
 import { fileURLToPath } from 'url';
-import { FetchError } from '../../src/lib/errors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -168,7 +169,6 @@ describe('JobsManager', () => {
   });
 
   const usersFilePath = path.join(__dirname, '../data/users.json');
-  const usersFileData = fs.readFileSync(usersFilePath, 'utf-8');
 
   describe('#importUsers', () => {
     let data: PostUsersImportsData;
@@ -383,14 +383,13 @@ describe('JobsManager', () => {
 
   describe('#importUsers with JSON data', () => {
     let data: PostUsersImportsData;
-    let request: nock.Scope;
 
     beforeEach(() => {
       data = {
         users: fs.createReadStream(usersFilePath) as any,
         connection_id: 'con_test',
       };
-      request = nock(API_URL).post('/jobs/users-imports').reply(200, {});
+      nock(API_URL).post('/jobs/users-imports').reply(200, {});
     });
 
     it('should correctly include user JSON from ReadStream', (done) => {

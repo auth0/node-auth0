@@ -8,9 +8,9 @@ import {
   PostIdentitiesRequestProviderEnum,
   DeleteUserIdentityByUserIdProviderEnum,
   DeleteMultifactorByProviderProviderEnum,
-} from '../../src/management/__generated/index';
-import { RequiredError } from '../../src/lib/errors';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+  RequiredError,
+} from '../../src/index.js';
 
 describe('UsersManager', () => {
   const token = 'TOKEN§';

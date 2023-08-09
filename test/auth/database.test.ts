@@ -1,7 +1,6 @@
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import { Database } from '../../src/auth/database';
-import { AuthApiError } from '../../src/auth/base-auth-api';
+import { Database, AuthApiError } from '../../src/index.js';
 
 const { back: nockBack } = nock;
 

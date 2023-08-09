@@ -2,8 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { GrantsManager } from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+import { GrantsManager, ManagementClient } from '../../src/index.js';
 
 describe('GrantsManager', () => {
   let grants: GrantsManager;

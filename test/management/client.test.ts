@@ -11,9 +11,10 @@ import {
   PatchCredentialsByCredentialIdRequest,
   PostCredentialsOperationRequest,
   PostCredentialsRequest,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
-import { RequiredError } from '../../src/lib/errors';
+  ManagementClient,
+} from '../../src/index.js';
+
+import { RequiredError } from '../../src/lib/errors.js';
 
 let clients: ClientsManager;
 

@@ -16,8 +16,8 @@ import {
   PatchBrandingThemeRequest,
   PostBrandingTheme200Response,
   PostBrandingThemeRequest,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 describe('BrandingManager', () => {
   let branding: BrandingManager;

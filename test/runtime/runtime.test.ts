@@ -1,14 +1,19 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { AuthenticationClient, ManagementClient, UserInfoClient, UserInfoError } from '../../src';
-import { ResponseError } from '../../src/lib/errors';
-import { ErrorContext, InitOverrideFunction, RequestOpts } from '../../src/lib/models';
-import { BaseAPI } from '../../src/lib/runtime';
+import {
+  AuthenticationClient,
+  ManagementClient,
+  UserInfoClient,
+  UserInfoError,
+  ResponseError,
+  ManagementApiError,
+  AuthApiError,
+} from '../../src/index.js';
+import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
+import { BaseAPI } from '../../src/lib/runtime.js';
 import { Response as NodeResponse } from 'node-fetch';
-import { AuthApiError } from '../../src/auth/base-auth-api';
-import { ManagementApiError } from '../../src/management';
 
-import * as utils from '../../src/utils';
+import * as utils from '../../src/utils.js';
 import { base64url } from 'jose';
 
 export class TestClient extends BaseAPI {
@@ -73,7 +78,7 @@ describe('Runtime', () => {
   });
 
   it('should only retry until default configured attempts', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
+    nock(URL, { encodedQueryParams: true })
       .get('/clients')
       .times(6)
       .reply(429)
@@ -195,7 +200,7 @@ describe('Runtime', () => {
   });
 
   it('should only retry configured status codes', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
+    nock(URL, { encodedQueryParams: true })
       .get('/clients')
       .reply(428)
       .get('/clients')
@@ -220,7 +225,7 @@ describe('Runtime', () => {
   });
 
   it('should not retry if not enabled', async () => {
-    const request = nock(URL, { encodedQueryParams: true })
+    nock(URL, { encodedQueryParams: true })
       .get('/clients')
       .reply(429)
       .get('/clients')
@@ -243,7 +248,7 @@ describe('Runtime', () => {
   });
 
   it('should timeout after default time', async () => {
-    const request = nock(URL).get('/clients').delayConnection(10000).reply(200, []);
+    nock(URL).get('/clients').delayConnection(10000).reply(200, []);
 
     const client = new TestClient({
       baseUrl: URL,
@@ -262,7 +267,7 @@ describe('Runtime', () => {
   });
 
   it('should timeout after configured time', async () => {
-    const request = nock(URL).get('/clients').delayConnection(100).reply(200, []);
+    nock(URL).get('/clients').delayConnection(100).reply(200, []);
 
     const client = new TestClient({
       baseUrl: URL,
@@ -290,7 +295,7 @@ describe('Runtime', () => {
       timeoutDuration: 50,
       middleware: [
         {
-          onError(context: ErrorContext) {
+          onError() {
             return new NodeResponse(undefined, { status: 418 }) as Response;
           },
         },

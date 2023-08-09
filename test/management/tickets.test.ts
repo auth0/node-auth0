@@ -2,12 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import {
-  TicketsManager,
-  PatchProviderRequestNameEnum,
-  PostProviderRequestNameEnum,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+import { TicketsManager, ManagementClient } from '../../src/index.js';
 
 describe('TicketsManager', () => {
   let tickets: TicketsManager;

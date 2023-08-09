@@ -5,10 +5,9 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 import {
   ConnectionsManager,
   ConnectionCreateStrategyEnum,
-} from '../../src/management/__generated/index';
-
-import { RequiredError } from '../../src/lib/errors';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+  RequiredError,
+} from '../../src/index.js';
 
 describe('ConnectionsManager', () => {
   let connections: ConnectionsManager;
@@ -484,10 +483,9 @@ describe('ConnectionsManager', () => {
       id: params.id,
       name: 'Test connection',
     };
-    let request: nock.Scope;
 
     beforeEach(() => {
-      request = nock(API_URL).get(`/connections/${data.id}/status`).reply(200, {});
+      nock(API_URL).get(`/connections/${data.id}/status`).reply(200, {});
     });
 
     it('should return a promise if no callback is given', (done) => {

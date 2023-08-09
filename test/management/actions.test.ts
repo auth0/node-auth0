@@ -14,8 +14,8 @@ import {
   PatchActionRequest,
   PatchBindingsRequest,
   PostActionRequest,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 describe('ActionsManager', () => {
   let actions: ActionsManager;

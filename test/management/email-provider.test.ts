@@ -9,8 +9,8 @@ import {
   PatchProviderRequestNameEnum,
   PostProviderRequest,
   PostProviderRequestNameEnum,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 describe('EmailProviderManager', () => {
   let emails: EmailsManager;

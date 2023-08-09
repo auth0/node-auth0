@@ -1,8 +1,8 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
 import * as jose from 'jose';
-import { AuthenticationClient } from '../../src';
-import { TEST_PUBLIC_KEY, TEST_PRIVATE_KEY } from '../constants';
+import { AuthenticationClient } from '../../src/index.js';
+import { TEST_PUBLIC_KEY, TEST_PRIVATE_KEY } from '../constants.js';
 
 const URL = 'https://tenant.auth0.com/';
 const clientId = 'test-client-id';

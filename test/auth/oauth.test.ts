@@ -7,8 +7,8 @@ import {
   PasswordGrantRequest,
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
-} from '../../src/auth/oauth';
-import { withIdToken } from '../utils';
+} from '../../src/index.js';
+import { withIdToken } from '../utils/index.js';
 
 const { back: nockBack } = nock;
 

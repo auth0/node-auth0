@@ -2,13 +2,12 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { OrganizationsManager } from '../../src/management/__generated/index';
-import { RequiredError } from '../../src/lib/errors';
-import { ManagementClient } from '../../src/management';
+import { OrganizationsManager, ManagementClient, RequiredError } from '../../src/index.js';
 
 describe('OrganizationsManager', () => {
   let organizations: OrganizationsManager;
 
+  let request: nock.Scope;
   const token = 'TOKEN';
 
   beforeAll(() => {
@@ -34,8 +33,6 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#getAll', () => {
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL).get('/organizations').reply(200, []);
     });
@@ -116,7 +113,6 @@ describe('OrganizationsManager', () => {
       name: 'organizations',
       display_name: 'My organization',
     };
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).get(`/organizations/${data.id}`).reply(200, data);
@@ -168,7 +164,6 @@ describe('OrganizationsManager', () => {
       name: 'organizations',
       display_name: 'My organization',
     };
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).get(`/organizations/name/${data.name}`).reply(200, data);
@@ -223,8 +218,6 @@ describe('OrganizationsManager', () => {
       name: 'org_name',
       display_name: 'My Organization',
     };
-
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).post('/organizations').reply(200, data);
@@ -284,7 +277,6 @@ describe('OrganizationsManager', () => {
 
   describe('#update', () => {
     const data = { id: 'org_123' };
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).patch(`/organizations/${data.id}`).reply(200, data);
@@ -338,7 +330,6 @@ describe('OrganizationsManager', () => {
 
   describe('#delete', () => {
     const id = 'rol_ID';
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).delete(`/organizations/${id}`).reply(200, {});
@@ -390,8 +381,6 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
     };
 
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL).get(`/organizations/${data.id}/enabled_connections`).reply(200, []);
     });
@@ -441,8 +430,6 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
       connectionId: 'conn_id',
     };
-
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL)
@@ -498,8 +485,6 @@ describe('OrganizationsManager', () => {
     };
 
     const body = { connection_id: '123', assign_membership_on_login: false };
-
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).post(`/organizations/${data.id}/enabled_connections`).reply(200, {});
@@ -568,7 +553,6 @@ describe('OrganizationsManager', () => {
       connectionId: '123',
     };
     const body = { assign_membership_on_login: false };
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL)
@@ -653,8 +637,6 @@ describe('OrganizationsManager', () => {
       connectionId: '123',
     };
 
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL)
         .delete(`/organizations/${data.id}/enabled_connections/${data.connectionId}`)
@@ -724,8 +706,6 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
     };
 
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL).get(`/organizations/${data.id}/members`).reply(200, []);
     });
@@ -775,7 +755,6 @@ describe('OrganizationsManager', () => {
       id: 'org_123',
     };
     const body = { members: [] };
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).post(`/organizations/${data.id}/members`).reply(200, {});
@@ -843,7 +822,6 @@ describe('OrganizationsManager', () => {
   describe('#removeMembers', () => {
     const data = { id: 'org_123' };
     const body = { members: ['user_id'] };
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).delete(`/organizations/${data.id}/members`, {}).reply(200, {});
@@ -907,8 +885,6 @@ describe('OrganizationsManager', () => {
       user_id: 'user_123',
     };
 
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL)
         .get(`/organizations/${data.id}/members/${data.user_id}/roles`)
@@ -961,8 +937,6 @@ describe('OrganizationsManager', () => {
       user_id: 'user_id',
     };
     const body = { roles: ['user_id'] };
-
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL)
@@ -1041,8 +1015,6 @@ describe('OrganizationsManager', () => {
 
     const body = { roles: ['user_id'] };
 
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL)
         .delete(`/organizations/${data.id}/members/${data.user_id}/roles`, {})
@@ -1116,8 +1088,6 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
     };
 
-    let request: nock.Scope;
-
     beforeEach(() => {
       request = nock(API_URL).get(`/organizations/${data.id}/invitations`).reply(200, []);
     });
@@ -1167,8 +1137,6 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
       invitation_id: 'inv_123',
     };
-
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL)
@@ -1232,12 +1200,6 @@ describe('OrganizationsManager', () => {
     const data = {
       id: 'org_123',
     };
-    const body = {
-      invitee: 'inv',
-      client_id: 'cid',
-    };
-
-    let request: nock.Scope;
 
     beforeEach(() => {
       request = nock(API_URL).post(`/organizations/${data.id}/invitations`).reply(200, {});
@@ -1343,7 +1305,7 @@ describe('OrganizationsManager', () => {
       id: 'org_123',
       invitation_id: 'inv_123',
     };
-    let request: nock.Scope;
+
     beforeEach(() => {
       request = nock(API_URL)
         .delete(`/organizations/${data.id}/invitations/${data.invitation_id}`)

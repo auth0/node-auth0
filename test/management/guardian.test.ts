@@ -1,4 +1,4 @@
-import nock, { Scope, cleanAll } from 'nock';
+import nock, { Scope } from 'nock';
 import {
   DeleteEnrollmentsByIdRequest,
   Enrollment,
@@ -25,8 +25,9 @@ import {
   SnsFactorProvider,
   TemplateMessages,
   TwilioFactorProvider,
-} from '../../src/management/__generated/index';
-import { ManagementApiError, ManagementClient } from '../../src/management';
+  ManagementClient,
+  ManagementApiError,
+} from '../../src/index.js';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
@@ -238,7 +239,7 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock.cleanAll();
 
-      const request = nock(API_URL).get('/guardian/factors').reply(200, data);
+      nock(API_URL).get('/guardian/factors').reply(200, data);
 
       await expect(guardian.getFactors()).resolves.toHaveProperty('data', data);
     });

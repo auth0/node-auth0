@@ -2,8 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { RulesConfigsManager } from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+import { RulesConfigsManager, ManagementClient } from '../../src/index.js';
 
 describe('RulesConfigsManager', () => {
   let rulesConfigs: RulesConfigsManager;

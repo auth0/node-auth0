@@ -6,8 +6,8 @@ import {
   CustomDomain,
   CustomDomainsManager,
   PostCustomDomainsRequestTypeEnum,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 describe('CustomDomainsManager', () => {
   let customDomains: CustomDomainsManager;

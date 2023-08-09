@@ -5,8 +5,8 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 import {
   EmailTemplatesManager,
   GetEmailTemplatesByTemplateNameTemplateNameEnum,
-} from '../../src/management/__generated/index';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+} from '../../src/index.js';
 
 const TEMPLATE_NAME = GetEmailTemplatesByTemplateNameTemplateNameEnum.reset_email;
 const DEFAULT_PARAMS = { templateName: TEMPLATE_NAME };

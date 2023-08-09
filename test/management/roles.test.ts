@@ -2,9 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { RolesManager } from '../../src/management/__generated/index';
-import { RequiredError } from '../../src/lib/errors';
-import { ManagementClient } from '../../src/management';
+import { RolesManager, ManagementClient, RequiredError } from '../../src/index.js';
 
 describe('RolesManager', () => {
   let roles: RolesManager;

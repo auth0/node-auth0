@@ -8,9 +8,9 @@ import {
   PromptsManager,
   PromptsSettingsUniversalLoginExperienceEnum,
   PromptsSettingsUpdateUniversalLoginExperienceEnum,
-} from '../../src/management/__generated/index';
-import { RequiredError } from '../../src/lib/errors';
-import { ManagementClient } from '../../src/management';
+  ManagementClient,
+  RequiredError,
+} from '../../src/index.js';
 
 describe('PromptsManager', () => {
   let prompts: PromptsManager;
