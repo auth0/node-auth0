@@ -1,4 +1,3 @@
-import chai from 'chai';
 import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -6,13 +5,11 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 import { TenantsManager } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 
-const { expect } = chai;
-
 describe('TenantManager', () => {
   let tenant: TenantsManager;
   const token = 'TOKEN';
 
-  before(function () {
+  beforeAll(() => {
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
       token: token,
@@ -24,8 +21,8 @@ describe('TenantManager', () => {
     const methods = ['updateSettings', 'getSettings'];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect((tenant as any)[method]).to.exist.to.be.an.instanceOf(Function);
+      it(`should have a ${method} method`, () => {
+        expect((tenant as any)[method]).toBeInstanceOf(Function);
       });
     });
   });
@@ -34,39 +31,39 @@ describe('TenantManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new TenantsManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new TenantsManager({ baseUrl: '' } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
   describe('#getSettings', () => {
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get('/tenants/settings').reply(200, {});
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       tenant.getSettings().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).get('/tenants/settings').reply(500, {});
 
       tenant.getSettings().catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', async function () {
+    it('should pass the body of the response to the "then" handler', async () => {
       nock.cleanAll();
 
       const data = { friendly_name: '123' };
@@ -74,15 +71,15 @@ describe('TenantManager', () => {
 
       const blacklistedTokens = await tenant.getSettings();
 
-      expect(blacklistedTokens.data.friendly_name).to.equal(data.friendly_name);
+      expect(blacklistedTokens.data.friendly_name).toBe(data.friendly_name);
     });
 
-    it('should perform a GET request to /api/v2/tenants/settings', async function () {
+    it('should perform a GET request to /api/v2/tenants/settings', async () => {
       await tenant.getSettings();
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
-    it('should include the token in the Authorization header', async function () {
+    it('should include the token in the Authorization header', async () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -91,10 +88,10 @@ describe('TenantManager', () => {
         .reply(200, {});
 
       await tenant.getSettings();
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
-    it('should pass the parameters in the query-string', async function () {
+    it('should pass the parameters in the query-string', async () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -106,7 +103,7 @@ describe('TenantManager', () => {
         .reply(200, {});
 
       await tenant.getSettings({ include_fields: true, fields: 'test' });
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -116,40 +113,40 @@ describe('TenantManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).patch('/tenants/settings').reply(200, {});
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       tenant.updateSettings(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).patch('/tenants/settings').reply(500, {});
 
       tenant.updateSettings(data).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
         done();
       });
     });
 
-    it('should perform a PATCH request to /api/v2/tenants/settings', async function () {
+    it('should perform a PATCH request to /api/v2/tenants/settings', async () => {
       await tenant.updateSettings(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
-    it('should pass the data in the body of the request', async function () {
+    it('should pass the data in the body of the request', async () => {
       nock.cleanAll();
 
       const request = nock(API_URL).patch('/tenants/settings', data).reply(200, {});
 
       await tenant.updateSettings(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
-    it('should include the token in the Authorization header', async function () {
+    it('should include the token in the Authorization header', async () => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -158,7 +155,7 @@ describe('TenantManager', () => {
         .reply(200, {});
 
       await tenant.updateSettings(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 });

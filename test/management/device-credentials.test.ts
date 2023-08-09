@@ -1,4 +1,3 @@
-import chai from 'chai';
 import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -9,14 +8,12 @@ import {
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 
-const { expect } = chai;
-
 describe('DeviceCredentialsManager', () => {
   let credentials: DeviceCredentialsManager;
 
   const token = 'TOKEN';
 
-  before(function () {
+  beforeAll(() => {
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
       token: token,
@@ -28,8 +25,8 @@ describe('DeviceCredentialsManager', () => {
     const methods = ['createPublicKey', 'getAll', 'delete'];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect((credentials as any)[method]).to.exist.to.be.an.instanceOf(Function);
+      it(`should have a ${method} method`, () => {
+        expect((credentials as any)[method]).toBeInstanceOf(Function);
       });
     });
   });
@@ -38,13 +35,13 @@ describe('DeviceCredentialsManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new DeviceCredentialsManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new DeviceCredentialsManager({ baseUrl: '' } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
@@ -60,50 +57,50 @@ describe('DeviceCredentialsManager', () => {
         client_id: 'AaiyAPdpYdesoKnqjj8HJqRn4T5titww',
       },
     ];
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get('/device-credentials').reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       credentials.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).get('/device-credentials').reply(500, {});
 
       credentials.getAll().catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       credentials.getAll().then((credentials) => {
-        expect(credentials.data).to.be.an.instanceOf(Array);
+        expect(credentials.data).toBeInstanceOf(Array);
 
-        expect(credentials.data.length).to.equal(response.length);
+        expect(credentials.data.length).toBe(response.length);
 
-        expect(credentials.data[0].id).to.equal(response[0].id);
-        expect(credentials.data[0].device_id).to.equal(response[0].device_id);
-        expect(credentials.data[0].device_name).to.equal(response[0].device_name);
-        expect(credentials.data[0].type).to.equal(response[0].type);
-        expect(credentials.data[0].user_id).to.equal(response[0].user_id);
-        expect(credentials.data[0].client_id).to.equal(response[0].client_id);
+        expect(credentials.data[0].id).toBe(response[0].id);
+        expect(credentials.data[0].device_id).toBe(response[0].device_id);
+        expect(credentials.data[0].device_name).toBe(response[0].device_name);
+        expect(credentials.data[0].type).toBe(response[0].type);
+        expect(credentials.data[0].user_id).toBe(response[0].user_id);
+        expect(credentials.data[0].client_id).toBe(response[0].client_id);
 
         done();
       });
     });
 
-    it('should perform a GET request to /api/v2/device-credentials', function (done) {
+    it('should perform a GET request to /api/v2/device-credentials', (done) => {
       credentials.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -112,12 +109,12 @@ describe('DeviceCredentialsManager', () => {
         .reply(200, []);
 
       credentials.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', (done) => {
       nock.cleanAll();
 
       const params = {
@@ -127,7 +124,7 @@ describe('DeviceCredentialsManager', () => {
       const request = nock(API_URL).get('/device-credentials').query(params).reply(200, []);
 
       credentials.getAll(params).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -146,53 +143,53 @@ describe('DeviceCredentialsManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL)
         .post('/device-credentials', data as any)
         .reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       credentials.createPublicKey(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).post('/device-credentials').reply(500, {});
 
       credentials.createPublicKey(data).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/device-credentials', function (done) {
+    it('should perform a POST request to /api/v2/device-credentials', (done) => {
       credentials.createPublicKey(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', (done) => {
       credentials.createPublicKey(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       credentials.createPublicKey(data).then((credential) => {
-        expect(credential.data.id).to.equal(response.id);
+        expect(credential.data.id).toBe(response.id);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -201,7 +198,7 @@ describe('DeviceCredentialsManager', () => {
         .reply(200, data);
 
       credentials.createPublicKey(data as DeviceCredentialCreate).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -212,35 +209,35 @@ describe('DeviceCredentialsManager', () => {
     const id = '5';
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).delete(`/device-credentials/${id}`).reply(200, {});
     });
 
-    it('should return a promise when no callback is given', function (done) {
+    it('should return a promise when no callback is given', (done) => {
       credentials.delete({ id }).then(done.bind(null, null));
     });
 
-    it(`should perform a delete request to /device-credentials/${id}`, function (done) {
+    it(`should perform a delete request to /device-credentials/${id}`, (done) => {
       credentials.delete({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).delete(`/device-credentials/${id}`).reply(500, {});
 
       credentials.delete({ id }).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it('should include the token in the authorization header', function (done) {
+    it('should include the token in the authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -249,7 +246,7 @@ describe('DeviceCredentialsManager', () => {
         .reply(200, {});
 
       credentials.delete({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });

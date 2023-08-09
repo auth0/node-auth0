@@ -1,5 +1,3 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import nock, { Scope, cleanAll } from 'nock';
 import {
   DeleteEnrollmentsByIdRequest,
@@ -32,14 +30,11 @@ import { ManagementApiError, ManagementClient } from '../../src/management';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-const { expect } = chai;
-chai.use(chaiAsPromised);
-
 describe('GuardianManager', () => {
   let token: string;
   let guardian: GuardianManager;
 
-  before(function () {
+  beforeAll(() => {
     token = 'TOKEN';
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
@@ -88,8 +83,8 @@ describe('GuardianManager', () => {
     ];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect((guardian as any)[method]).to.exist.to.be.an.instanceOf(Function);
+      it(`should have a ${method} method`, () => {
+        expect((guardian as any)[method]).toBeInstanceOf(Function);
       });
     });
   });
@@ -98,13 +93,13 @@ describe('GuardianManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new GuardianManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new GuardianManager({ baseUrl: '' } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
@@ -114,16 +109,13 @@ describe('GuardianManager', () => {
     };
     let request: Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).delete(`/guardian/enrollments/${data.id}`).reply(200, {});
     });
 
     it('should perform a DELETE request to /guardian/enrollments/:id', async () => {
-      await expect(guardian.deleteGuardianEnrollment(data)).to.eventually.have.property(
-        'status',
-        200
-      );
-      expect(request.isDone()).to.be.true;
+      await expect(guardian.deleteGuardianEnrollment(data)).resolves.toHaveProperty('status', 200);
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -131,7 +123,9 @@ describe('GuardianManager', () => {
 
       nock(API_URL).delete(`/guardian/enrollments/${data.id}`).reply(500, {});
 
-      await expect(guardian.deleteGuardianEnrollment(data)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.deleteGuardianEnrollment(data)).rejects.toThrowError(
+        ManagementApiError
+      );
     });
   });
 
@@ -139,7 +133,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors/push-notification/providers/apns').reply(500, {});
 
-      await expect(guardian.getPushNotificationProviderAPNS()).to.be.rejectedWith(
+      await expect(guardian.getPushNotificationProviderAPNS()).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -152,7 +146,7 @@ describe('GuardianManager', () => {
       };
       nock(API_URL).get('/guardian/factors/push-notification/providers/apns').reply(200, data);
 
-      await expect(guardian.getPushNotificationProviderAPNS()).to.eventually.have.deep.property(
+      await expect(guardian.getPushNotificationProviderAPNS()).resolves.toHaveProperty(
         'data',
         data
       );
@@ -167,7 +161,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get(`/guardian/enrollments/${params.id}`).reply(500, {});
 
-      await expect(guardian.getGuardianEnrollment(params)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getGuardianEnrollment(params)).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -182,10 +176,7 @@ describe('GuardianManager', () => {
       };
       nock(API_URL).get(`/guardian/enrollments/${params.id}`).reply(200, data);
 
-      await expect(guardian.getGuardianEnrollment(params)).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getGuardianEnrollment(params)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -193,7 +184,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors/phone/templates').reply(500, {});
 
-      await expect(guardian.getPhoneFactorTemplates()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getPhoneFactorTemplates()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -205,10 +196,7 @@ describe('GuardianManager', () => {
       };
       nock(API_URL).get('/guardian/factors/phone/templates').reply(200, data);
 
-      await expect(guardian.getPhoneFactorTemplates()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getPhoneFactorTemplates()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -216,7 +204,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors/sms/templates').reply(500, {});
 
-      await expect(guardian.getSmsFactorTemplates()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getSmsFactorTemplates()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -228,7 +216,7 @@ describe('GuardianManager', () => {
       };
       nock(API_URL).get('/guardian/factors/sms/templates').reply(200, data);
 
-      await expect(guardian.getSmsFactorTemplates()).to.eventually.have.deep.property('data', data);
+      await expect(guardian.getSmsFactorTemplates()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -244,7 +232,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors').reply(500, {});
 
-      await expect(guardian.getFactors()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getFactors()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -252,7 +240,7 @@ describe('GuardianManager', () => {
 
       const request = nock(API_URL).get('/guardian/factors').reply(200, data);
 
-      await expect(guardian.getFactors()).to.eventually.have.deep.property('data', data);
+      await expect(guardian.getFactors()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -265,7 +253,7 @@ describe('GuardianManager', () => {
       nock.cleanAll();
       nock(API_URL).get('/guardian/factors/phone/message-types').reply(500, {});
 
-      await expect(guardian.getPhoneFactorMessageTypes()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getPhoneFactorMessageTypes()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -273,10 +261,7 @@ describe('GuardianManager', () => {
 
       nock(API_URL).get('/guardian/factors/phone/message-types').reply(200, data);
 
-      await expect(guardian.getPhoneFactorMessageTypes()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getPhoneFactorMessageTypes()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -289,7 +274,7 @@ describe('GuardianManager', () => {
       nock.cleanAll();
       nock(API_URL).get('/guardian/factors/phone/selected-provider').reply(500, {});
 
-      await expect(guardian.getPhoneFactorSelectedProvider()).to.be.rejectedWith(
+      await expect(guardian.getPhoneFactorSelectedProvider()).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -299,10 +284,7 @@ describe('GuardianManager', () => {
 
       nock(API_URL).get('/guardian/factors/phone/selected-provider').reply(200, data);
 
-      await expect(guardian.getPhoneFactorSelectedProvider()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getPhoneFactorSelectedProvider()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -318,7 +300,9 @@ describe('GuardianManager', () => {
       nock.cleanAll();
       nock(API_URL).get('/guardian/factors/phone/providers/twilio').reply(500, {});
 
-      await expect(guardian.getPhoneFactorProviderTwilio()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getPhoneFactorProviderTwilio()).rejects.toThrowError(
+        ManagementApiError
+      );
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -326,10 +310,7 @@ describe('GuardianManager', () => {
 
       nock(API_URL).get('/guardian/factors/phone/providers/twilio').reply(200, data);
 
-      await expect(guardian.getPhoneFactorProviderTwilio()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getPhoneFactorProviderTwilio()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -342,7 +323,7 @@ describe('GuardianManager', () => {
       nock.cleanAll();
       nock(API_URL).get('/guardian/factors/push-notification/selected-provider').reply(500, {});
 
-      await expect(guardian.getPushNotificationSelectedProvider()).to.be.rejectedWith(
+      await expect(guardian.getPushNotificationSelectedProvider()).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -352,7 +333,7 @@ describe('GuardianManager', () => {
 
       nock(API_URL).get('/guardian/factors/push-notification/selected-provider').reply(200, data);
 
-      await expect(guardian.getPushNotificationSelectedProvider()).to.eventually.have.deep.property(
+      await expect(guardian.getPushNotificationSelectedProvider()).resolves.toHaveProperty(
         'data',
         data
       );
@@ -366,7 +347,7 @@ describe('GuardianManager', () => {
       nock.cleanAll();
       nock(API_URL).get('/guardian/policies').reply(500, {});
 
-      await expect(guardian.getPolicies()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getPolicies()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -374,7 +355,7 @@ describe('GuardianManager', () => {
 
       nock(API_URL).get('/guardian/policies').reply(200, data);
 
-      await expect(guardian.getPolicies()).to.eventually.have.deep.property('data', data);
+      await expect(guardian.getPolicies()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -384,16 +365,13 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors/sms/selected-provider').reply(500, {});
 
-      await expect(guardian.getSmsSelectedProvider()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getSmsSelectedProvider()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).get('/guardian/factors/sms/selected-provider').reply(200, data);
 
-      await expect(guardian.getSmsSelectedProvider()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getSmsSelectedProvider()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -408,16 +386,13 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors/sms/providers/twilio').reply(500, {});
 
-      await expect(guardian.getSmsFactorProviderTwilio()).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.getSmsFactorProviderTwilio()).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).get('/guardian/factors/sms/providers/twilio').reply(200, data);
 
-      await expect(guardian.getSmsFactorProviderTwilio()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getSmsFactorProviderTwilio()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -433,7 +408,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).get('/guardian/factors/push-notification/providers/sns').reply(500, {});
 
-      await expect(guardian.getPushNotificationProviderSNS()).to.be.rejectedWith(
+      await expect(guardian.getPushNotificationProviderSNS()).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -441,10 +416,7 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).get('/guardian/factors/push-notification/providers/sns').reply(200, data);
 
-      await expect(guardian.getPushNotificationProviderSNS()).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.getPushNotificationProviderSNS()).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -462,7 +434,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).patch('/guardian/factors/push-notification/providers/apns').reply(500, {});
 
-      await expect(guardian.updatePushNotificationProviderAPNS(params)).to.be.rejectedWith(
+      await expect(guardian.updatePushNotificationProviderAPNS(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -470,9 +442,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).patch('/guardian/factors/push-notification/providers/apns').reply(200, data);
 
-      await expect(
-        guardian.updatePushNotificationProviderAPNS(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.updatePushNotificationProviderAPNS(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -488,7 +461,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).patch('/guardian/factors/push-notification/providers/fcm').reply(500, {});
 
-      await expect(guardian.updatePushNotificationProviderFCM(params)).to.be.rejectedWith(
+      await expect(guardian.updatePushNotificationProviderFCM(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -496,9 +469,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).patch('/guardian/factors/push-notification/providers/fcm').reply(200, data);
 
-      await expect(
-        guardian.updatePushNotificationProviderFCM(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.updatePushNotificationProviderFCM(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -518,7 +492,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).patch('/guardian/factors/push-notification/providers/sns').reply(500, {});
 
-      await expect(guardian.updatePushNotificationProviderSNS(params)).to.be.rejectedWith(
+      await expect(guardian.updatePushNotificationProviderSNS(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -526,9 +500,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).patch('/guardian/factors/push-notification/providers/sns').reply(200, data);
 
-      await expect(
-        guardian.updatePushNotificationProviderSNS(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.updatePushNotificationProviderSNS(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -546,16 +521,15 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).post('/guardian/enrollments/ticket').reply(500, {});
 
-      await expect(guardian.createEnrollmentTicket(params)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.createEnrollmentTicket(params)).rejects.toThrowError(
+        ManagementApiError
+      );
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).post('/guardian/enrollments/ticket').reply(200, data);
 
-      await expect(guardian.createEnrollmentTicket(params)).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.createEnrollmentTicket(params)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -573,7 +547,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/providers/apns').reply(500, {});
 
-      await expect(guardian.setPushNotificationProviderAPNS(params)).to.be.rejectedWith(
+      await expect(guardian.setPushNotificationProviderAPNS(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -581,9 +555,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/providers/apns').reply(200, data);
 
-      await expect(
-        guardian.setPushNotificationProviderAPNS(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.setPushNotificationProviderAPNS(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -600,16 +575,15 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/templates').reply(500, {});
 
-      await expect(guardian.setPhoneFactorTemplates(params)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.setPhoneFactorTemplates(params)).rejects.toThrowError(
+        ManagementApiError
+      );
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/templates').reply(200, data);
 
-      await expect(guardian.setPhoneFactorTemplates(params)).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.setPhoneFactorTemplates(params)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -626,16 +600,13 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/sms/templates').reply(500, {});
 
-      await expect(guardian.setSmsFactorTemplates(params)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.setSmsFactorTemplates(params)).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/sms/templates').reply(200, data);
 
-      await expect(guardian.setSmsFactorTemplates(params)).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.setSmsFactorTemplates(params)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -647,16 +618,13 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put(`/guardian/factors/${params.name}`).reply(500, {});
 
-      await expect(guardian.updateFactor(params, body)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.updateFactor(params, body)).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put(`/guardian/factors/${params.name}`).reply(200, data);
 
-      await expect(guardian.updateFactor(params, body)).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.updateFactor(params, body)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -667,7 +635,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/providers/fcm').reply(500, {});
 
-      await expect(guardian.setPushNotificationProviderFCM(params)).to.be.rejectedWith(
+      await expect(guardian.setPushNotificationProviderFCM(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -675,9 +643,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/providers/fcm').reply(200, data);
 
-      await expect(
-        guardian.setPushNotificationProviderFCM(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.setPushNotificationProviderFCM(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -688,7 +657,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/message-types').reply(500, {});
 
-      await expect(guardian.updatePhoneFactorMessageTypes(params)).to.be.rejectedWith(
+      await expect(guardian.updatePhoneFactorMessageTypes(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -696,7 +665,7 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/message-types').reply(200, data);
 
-      await expect(guardian.updatePhoneFactorMessageTypes(params)).to.eventually.have.deep.property(
+      await expect(guardian.updatePhoneFactorMessageTypes(params)).resolves.toHaveProperty(
         'data',
         data
       );
@@ -710,7 +679,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/selected-provider').reply(500, {});
 
-      await expect(guardian.updatePhoneFactorSelectedProvider(params)).to.be.rejectedWith(
+      await expect(guardian.updatePhoneFactorSelectedProvider(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -718,9 +687,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/selected-provider').reply(200, data);
 
-      await expect(
-        guardian.updatePhoneFactorSelectedProvider(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.updatePhoneFactorSelectedProvider(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -731,7 +701,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/selected-provider').reply(500, {});
 
-      await expect(guardian.setPushNotificationSelectedProvider(params)).to.be.rejectedWith(
+      await expect(guardian.setPushNotificationSelectedProvider(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -739,9 +709,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/selected-provider').reply(200, data);
 
-      await expect(
-        guardian.setPushNotificationSelectedProvider(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.setPushNotificationSelectedProvider(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -752,13 +723,13 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/policies').reply(500, {});
 
-      await expect(guardian.updatePolicies(params)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.updatePolicies(params)).rejects.toThrowError(ManagementApiError);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/policies').reply(200, data);
 
-      await expect(guardian.updatePolicies(params)).to.eventually.have.deep.property('data', data);
+      await expect(guardian.updatePolicies(params)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -769,16 +740,15 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/sms/selected-provider').reply(500, {});
 
-      await expect(guardian.setSmsSelectedProvider(params)).to.be.rejectedWith(ManagementApiError);
+      await expect(guardian.setSmsSelectedProvider(params)).rejects.toThrowError(
+        ManagementApiError
+      );
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/sms/selected-provider').reply(200, data);
 
-      await expect(guardian.setSmsSelectedProvider(params)).to.eventually.have.deep.property(
-        'data',
-        data
-      );
+      await expect(guardian.setSmsSelectedProvider(params)).resolves.toHaveProperty('data', data);
     });
   });
 
@@ -794,7 +764,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/sms/providers/twilio').reply(500, {});
 
-      await expect(guardian.setSmsFactorProviderTwilio(params)).to.be.rejectedWith(
+      await expect(guardian.setSmsFactorProviderTwilio(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -802,7 +772,7 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/sms/providers/twilio').reply(200, data);
 
-      await expect(guardian.setSmsFactorProviderTwilio(params)).to.eventually.have.deep.property(
+      await expect(guardian.setSmsFactorProviderTwilio(params)).resolves.toHaveProperty(
         'data',
         data
       );
@@ -822,7 +792,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/providers/sns').reply(500, {});
 
-      await expect(guardian.setPushNotificationProviderSNS(params)).to.be.rejectedWith(
+      await expect(guardian.setPushNotificationProviderSNS(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -830,9 +800,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/push-notification/providers/sns').reply(200, data);
 
-      await expect(
-        guardian.setPushNotificationProviderSNS(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.setPushNotificationProviderSNS(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 
@@ -848,7 +819,7 @@ describe('GuardianManager', () => {
     it('should pass any errors to the promise catch handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/providers/twilio').reply(500, {});
 
-      await expect(guardian.updatePhoneFactorProviderTwilio(params)).to.be.rejectedWith(
+      await expect(guardian.updatePhoneFactorProviderTwilio(params)).rejects.toThrowError(
         ManagementApiError
       );
     });
@@ -856,9 +827,10 @@ describe('GuardianManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock(API_URL).put('/guardian/factors/phone/providers/twilio').reply(200, data);
 
-      await expect(
-        guardian.updatePhoneFactorProviderTwilio(params)
-      ).to.eventually.have.deep.property('data', data);
+      await expect(guardian.updatePhoneFactorProviderTwilio(params)).resolves.toHaveProperty(
+        'data',
+        data
+      );
     });
   });
 });

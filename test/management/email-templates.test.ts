@@ -1,4 +1,3 @@
-import chai from 'chai';
 import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -8,8 +7,6 @@ import {
   GetEmailTemplatesByTemplateNameTemplateNameEnum,
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
-
-const { expect } = chai;
 
 const TEMPLATE_NAME = GetEmailTemplatesByTemplateNameTemplateNameEnum.reset_email;
 const DEFAULT_PARAMS = { templateName: TEMPLATE_NAME };
@@ -28,7 +25,7 @@ describe('EmailTemplatesManager', () => {
   let emailTemplates: EmailTemplatesManager;
   const token = 'TOKEN';
 
-  before(function () {
+  beforeAll(() => {
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
       token: token,
@@ -39,8 +36,8 @@ describe('EmailTemplatesManager', () => {
     const methods = ['get', 'create', 'update'];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect((emailTemplates as any)[method]).to.exist.to.be.an.instanceOf(Function);
+      it(`should have a ${method} method`, () => {
+        expect((emailTemplates as any)[method]).toBeInstanceOf(Function);
       });
     });
   });
@@ -49,13 +46,13 @@ describe('EmailTemplatesManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new EmailTemplatesManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new EmailTemplatesManager({ baseUrl: '' } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
@@ -73,35 +70,35 @@ describe('EmailTemplatesManager', () => {
       enabled: false,
     };
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       emailTemplates.get(DEFAULT_PARAMS).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it(`should perform a GET request to /api/v2/email-templates/${TEMPLATE_NAME}`, function (done) {
+    it(`should perform a GET request to /api/v2/email-templates/${TEMPLATE_NAME}`, (done) => {
       emailTemplates.get(DEFAULT_PARAMS).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).get(`/email-templates/${TEMPLATE_NAME}`).reply(500, {});
 
       emailTemplates.get(DEFAULT_PARAMS).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -110,23 +107,23 @@ describe('EmailTemplatesManager', () => {
         .reply(200, response);
 
       emailTemplates.get(DEFAULT_PARAMS).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       emailTemplates.get(DEFAULT_PARAMS).then((template) => {
-        expect(template.data.template).to.equal(response.template);
-        expect(template.data.body).to.equal(response.body);
-        expect(template.data.from).to.equal(response.from);
-        expect(template.data.resultUrl).to.equal(response.resultUrl);
-        expect(template.data.subject).to.equal(response.subject);
-        expect(template.data.syntax).to.equal(response.syntax);
-        expect(template.data.urlLifetimeInSeconds).to.equal(response.urlLifetimeInSeconds);
-        expect(template.data.includeEmailInRedirect).to.equal(response.includeEmailInRedirect);
-        expect(template.data.enabled).to.equal(response.enabled);
+        expect(template.data.template).toBe(response.template);
+        expect(template.data.body).toBe(response.body);
+        expect(template.data.from).toBe(response.from);
+        expect(template.data.resultUrl).toBe(response.resultUrl);
+        expect(template.data.subject).toBe(response.subject);
+        expect(template.data.syntax).toBe(response.syntax);
+        expect(template.data.urlLifetimeInSeconds).toBe(response.urlLifetimeInSeconds);
+        expect(template.data.includeEmailInRedirect).toBe(response.includeEmailInRedirect);
+        expect(template.data.enabled).toBe(response.enabled);
 
         done();
       });
@@ -147,59 +144,59 @@ describe('EmailTemplatesManager', () => {
       enabled: false,
     };
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).post('/email-templates', DEFAULT_DATA).reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       emailTemplates.create(DEFAULT_DATA).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).post('/email-templates').reply(500, {});
 
       emailTemplates.create(DEFAULT_DATA).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/email-templates', function (done) {
+    it('should perform a POST request to /api/v2/email-templates', (done) => {
       emailTemplates.create(DEFAULT_DATA).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', (done) => {
       emailTemplates.create(DEFAULT_DATA).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       emailTemplates.create(DEFAULT_DATA).then((template) => {
-        expect(template.data.template).to.equal(response.template);
-        expect(template.data.body).to.equal(response.body);
-        expect(template.data.from).to.equal(response.from);
-        expect(template.data.resultUrl).to.equal(response.resultUrl);
-        expect(template.data.subject).to.equal(response.subject);
-        expect(template.data.syntax).to.equal(response.syntax);
-        expect(template.data.urlLifetimeInSeconds).to.equal(response.urlLifetimeInSeconds);
-        expect(template.data.includeEmailInRedirect).to.equal(response.includeEmailInRedirect);
-        expect(template.data.enabled).to.equal(response.enabled);
+        expect(template.data.template).toBe(response.template);
+        expect(template.data.body).toBe(response.body);
+        expect(template.data.from).toBe(response.from);
+        expect(template.data.resultUrl).toBe(response.resultUrl);
+        expect(template.data.subject).toBe(response.subject);
+        expect(template.data.syntax).toBe(response.syntax);
+        expect(template.data.urlLifetimeInSeconds).toBe(response.urlLifetimeInSeconds);
+        expect(template.data.includeEmailInRedirect).toBe(response.includeEmailInRedirect);
+        expect(template.data.enabled).toBe(response.enabled);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -208,7 +205,7 @@ describe('EmailTemplatesManager', () => {
         .reply(200, {});
 
       emailTemplates.create(DEFAULT_DATA).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -230,28 +227,28 @@ describe('EmailTemplatesManager', () => {
       enabled: false,
     };
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL)
         .patch(`/email-templates/${TEMPLATE_NAME}`, patchData)
         .reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       emailTemplates
         .update(DEFAULT_PARAMS, patchData)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it(`should perform a PATCH request to /api/v2/email-templates/${TEMPLATE_NAME}`, function (done) {
+    it(`should perform a PATCH request to /api/v2/email-templates/${TEMPLATE_NAME}`, (done) => {
       emailTemplates.update(DEFAULT_PARAMS, patchData).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should include the new data in the body of the request', function (done) {
+    it('should include the new data in the body of the request', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -259,35 +256,35 @@ describe('EmailTemplatesManager', () => {
         .reply(200, response);
 
       emailTemplates.update(DEFAULT_PARAMS, patchData).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       emailTemplates.update(DEFAULT_PARAMS, patchData).then((template) => {
-        expect(template.data.template).to.equal(response.template);
-        expect(template.data.body).to.equal(response.body);
-        expect(template.data.from).to.equal(response.from);
-        expect(template.data.resultUrl).to.equal(response.resultUrl);
-        expect(template.data.subject).to.equal(response.subject);
-        expect(template.data.syntax).to.equal(response.syntax);
-        expect(template.data.urlLifetimeInSeconds).to.equal(response.urlLifetimeInSeconds);
-        expect(template.data.includeEmailInRedirect).to.equal(response.includeEmailInRedirect);
-        expect(template.data.enabled).to.equal(response.enabled);
+        expect(template.data.template).toBe(response.template);
+        expect(template.data.body).toBe(response.body);
+        expect(template.data.from).toBe(response.from);
+        expect(template.data.resultUrl).toBe(response.resultUrl);
+        expect(template.data.subject).toBe(response.subject);
+        expect(template.data.syntax).toBe(response.syntax);
+        expect(template.data.urlLifetimeInSeconds).toBe(response.urlLifetimeInSeconds);
+        expect(template.data.includeEmailInRedirect).toBe(response.includeEmailInRedirect);
+        expect(template.data.enabled).toBe(response.enabled);
 
         done();
       });
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).patch(`/email-templates/${TEMPLATE_NAME}`).reply(500, {});
 
       emailTemplates.update(DEFAULT_PARAMS, patchData).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });

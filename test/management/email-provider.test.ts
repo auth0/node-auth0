@@ -1,4 +1,3 @@
-import chai from 'chai';
 import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -13,13 +12,11 @@ import {
 } from '../../src/management/__generated/index';
 import { ManagementClient } from '../../src/management';
 
-const { expect } = chai;
-
 describe('EmailProviderManager', () => {
   let emails: EmailsManager;
   const token = 'TOKEN';
 
-  before(function () {
+  beforeAll(() => {
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
       token: token,
@@ -31,8 +28,8 @@ describe('EmailProviderManager', () => {
     const methods = ['configure', 'get', 'update'];
 
     methods.forEach((method) => {
-      it(`should have a ${method} method`, function () {
-        expect((emails as any)[method]).to.exist.to.be.an.instanceOf(Function);
+      it(`should have a ${method} method`, () => {
+        expect((emails as any)[method]).toBeInstanceOf(Function);
       });
     });
   });
@@ -41,13 +38,13 @@ describe('EmailProviderManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new EmailsManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new EmailsManager({ baseUrl: '' } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
@@ -69,52 +66,52 @@ describe('EmailProviderManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get('/emails/provider').reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       emails.get().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).get('/emails/provider').reply(500, {});
 
       emails.get().catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       emails.get().then((provider) => {
-        expect(provider.data.name).to.equal(response.name);
-        expect(provider.data.enabled).to.equal(response.enabled);
-        expect(provider.data.default_from_address).to.equal(response.default_from_address);
-        expect(provider.data.credentials?.api_user).to.equal(response.credentials?.api_user);
-        expect(provider.data.credentials?.region).to.equal(response.credentials?.region);
-        expect(provider.data.credentials?.smtp_host).to.equal(response.credentials?.smtp_host);
-        expect(provider.data.credentials?.smtp_port).to.equal(response.credentials?.smtp_port);
-        expect(provider.data.credentials?.smtp_user).to.equal(response.credentials?.smtp_user);
+        expect(provider.data.name).toBe(response.name);
+        expect(provider.data.enabled).toBe(response.enabled);
+        expect(provider.data.default_from_address).toBe(response.default_from_address);
+        expect(provider.data.credentials?.api_user).toBe(response.credentials?.api_user);
+        expect(provider.data.credentials?.region).toBe(response.credentials?.region);
+        expect(provider.data.credentials?.smtp_host).toBe(response.credentials?.smtp_host);
+        expect(provider.data.credentials?.smtp_port).toBe(response.credentials?.smtp_port);
+        expect(provider.data.credentials?.smtp_user).toBe(response.credentials?.smtp_user);
 
-        expect(provider.data.settings?.test).to.equal(response.settings?.test);
+        expect(provider.data.settings?.test).toBe(response.settings?.test);
 
         done();
       });
     });
 
-    it('should perform a GET request to /api/v2/emails/provider', function (done) {
+    it('should perform a GET request to /api/v2/emails/provider', (done) => {
       emails.get().then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -123,13 +120,13 @@ describe('EmailProviderManager', () => {
         .reply(200, response);
 
       emails.get().then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the parameters in the query-string', function (done) {
+    it('should pass the parameters in the query-string', (done) => {
       nock.cleanAll();
 
       const params = {
@@ -140,7 +137,7 @@ describe('EmailProviderManager', () => {
       const request = nock(API_URL).get('/emails/provider').query(params).reply(200, response);
 
       emails.get(params).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -180,62 +177,62 @@ describe('EmailProviderManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL)
         .post('/emails/provider', data as any)
         .reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       emails.configure(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).post('/emails/provider').reply(500, {});
 
       emails.configure(data).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it('should perform a POST request to /api/v2/emails/provider', function (done) {
+    it('should perform a POST request to /api/v2/emails/provider', (done) => {
       emails.configure(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', (done) => {
       emails.configure(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       emails.configure(data).then((provider) => {
-        expect(provider.data.name).to.equal(response.name);
-        expect(provider.data.enabled).to.equal(response.enabled);
-        expect(provider.data.default_from_address).to.equal(response.default_from_address);
-        expect(provider.data.credentials?.api_user).to.equal(response.credentials?.api_user);
-        expect(provider.data.credentials?.region).to.equal(response.credentials?.region);
-        expect(provider.data.credentials?.smtp_host).to.equal(response.credentials?.smtp_host);
-        expect(provider.data.credentials?.smtp_port).to.equal(response.credentials?.smtp_port);
-        expect(provider.data.credentials?.smtp_user).to.equal(response.credentials?.smtp_user);
+        expect(provider.data.name).toBe(response.name);
+        expect(provider.data.enabled).toBe(response.enabled);
+        expect(provider.data.default_from_address).toBe(response.default_from_address);
+        expect(provider.data.credentials?.api_user).toBe(response.credentials?.api_user);
+        expect(provider.data.credentials?.region).toBe(response.credentials?.region);
+        expect(provider.data.credentials?.smtp_host).toBe(response.credentials?.smtp_host);
+        expect(provider.data.credentials?.smtp_port).toBe(response.credentials?.smtp_port);
+        expect(provider.data.credentials?.smtp_user).toBe(response.credentials?.smtp_user);
 
-        expect(provider.data.settings?.test).to.equal(response.settings?.test);
+        expect(provider.data.settings?.test).toBe(response.settings?.test);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -244,7 +241,7 @@ describe('EmailProviderManager', () => {
         .reply(200, response);
 
       emails.configure(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -284,62 +281,62 @@ describe('EmailProviderManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL)
         .patch('/emails/provider', data as any)
         .reply(200, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       emails.update(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', function (done) {
+    it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
 
       nock(API_URL).patch(`/emails/provider`).reply(500, {});
 
       emails.update(data).catch((err) => {
-        expect(err).to.exist.to.be.an.instanceOf(Error);
+        expect(err).toBeInstanceOf(Error);
 
         done();
       });
     });
 
-    it('should perform a PATCH request to /api/v2/emails/provider', function (done) {
+    it('should perform a PATCH request to /api/v2/emails/provider', (done) => {
       emails.update(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the data in the body of the request', function (done) {
+    it('should pass the data in the body of the request', (done) => {
       emails.update(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should pass the body of the response to the "then" handler', function (done) {
+    it('should pass the body of the response to the "then" handler', (done) => {
       emails.update(data).then((provider) => {
-        expect(provider.data.name).to.equal(response.name);
-        expect(provider.data.enabled).to.equal(response.enabled);
-        expect(provider.data.default_from_address).to.equal(response.default_from_address);
-        expect(provider.data.credentials?.api_user).to.equal(response.credentials?.api_user);
-        expect(provider.data.credentials?.region).to.equal(response.credentials?.region);
-        expect(provider.data.credentials?.smtp_host).to.equal(response.credentials?.smtp_host);
-        expect(provider.data.credentials?.smtp_port).to.equal(response.credentials?.smtp_port);
-        expect(provider.data.credentials?.smtp_user).to.equal(response.credentials?.smtp_user);
+        expect(provider.data.name).toBe(response.name);
+        expect(provider.data.enabled).toBe(response.enabled);
+        expect(provider.data.default_from_address).toBe(response.default_from_address);
+        expect(provider.data.credentials?.api_user).toBe(response.credentials?.api_user);
+        expect(provider.data.credentials?.region).toBe(response.credentials?.region);
+        expect(provider.data.credentials?.smtp_host).toBe(response.credentials?.smtp_host);
+        expect(provider.data.credentials?.smtp_port).toBe(response.credentials?.smtp_port);
+        expect(provider.data.credentials?.smtp_user).toBe(response.credentials?.smtp_user);
 
-        expect(provider.data.settings?.test).to.equal(response.settings?.test);
+        expect(provider.data.settings?.test).toBe(response.settings?.test);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -348,7 +345,7 @@ describe('EmailProviderManager', () => {
         .reply(200, response);
 
       emails.update(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });

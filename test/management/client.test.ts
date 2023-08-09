@@ -1,5 +1,3 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -17,15 +15,12 @@ import {
 import { ManagementClient } from '../../src/management';
 import { RequiredError } from '../../src/lib/errors';
 
-chai.use(chaiAsPromised);
-const { expect } = chai;
-
 let clients: ClientsManager;
 
 describe('ClientsManager', () => {
   const token = 'TOKEN';
 
-  before(function () {
+  beforeAll(() => {
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
       token: token,
@@ -43,7 +38,7 @@ describe('ClientsManager', () => {
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, () => {
-        expect((clients as any)[method]).to.exist.to.be.an.instanceOf(Function);
+        expect((clients as any)[method]).toBeInstanceOf(Function);
       });
     });
   });
@@ -52,7 +47,7 @@ describe('ClientsManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new ClientsManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
@@ -60,7 +55,7 @@ describe('ClientsManager', () => {
         new ClientsManager({
           baseUrl: '',
         } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
@@ -79,7 +74,7 @@ describe('ClientsManager', () => {
       },
     ];
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get('/clients').reply(200, response);
     });
 
@@ -93,38 +88,38 @@ describe('ClientsManager', () => {
       nock(API_URL).get('/clients').reply(500, {});
 
       clients.getAll().catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
         done();
       });
     });
 
     it('should pass the body of the response to the "then" handler', (done) => {
       clients.getAll().then((clients) => {
-        expect(clients.data).to.be.an.instanceOf(Array);
+        expect(clients.data).toBeInstanceOf(Array);
 
-        expect(clients.data.length).to.equal(response.length);
+        expect(clients.data.length).toBe(response.length);
 
-        expect(clients.data[0].tenant).to.equal(response[0].tenant);
-        expect(clients.data[0].client_id).to.equal(response[0].client_id);
-        expect(clients.data[0].name).to.equal(response[0].name);
-        expect(clients.data[0].description).to.equal(response[0].description);
-        expect(clients.data[0].global).to.equal(response[0].global);
-        expect(clients.data[0].client_secret).to.equal(response[0].client_secret);
-        expect(clients.data[0].app_type).to.equal(response[0].app_type);
-        expect(clients.data[0].logo_uri).to.equal(response[0].logo_uri);
+        expect(clients.data[0].tenant).toBe(response[0].tenant);
+        expect(clients.data[0].client_id).toBe(response[0].client_id);
+        expect(clients.data[0].name).toBe(response[0].name);
+        expect(clients.data[0].description).toBe(response[0].description);
+        expect(clients.data[0].global).toBe(response[0].global);
+        expect(clients.data[0].client_secret).toBe(response[0].client_secret);
+        expect(clients.data[0].app_type).toBe(response[0].app_type);
+        expect(clients.data[0].logo_uri).toBe(response[0].logo_uri);
 
         done();
       });
     });
 
-    it('should perform a GET request to /api/v2/clients', function (done) {
+    it('should perform a GET request to /api/v2/clients', (done) => {
       clients.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const data = [{ client_id: '1' }];
@@ -134,7 +129,7 @@ describe('ClientsManager', () => {
         .reply(200, data);
 
       clients.getAll().then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
         done();
       });
     });
@@ -152,7 +147,7 @@ describe('ClientsManager', () => {
         .reply(200, data);
 
       clients.getAll({ include_fields: true, fields: 'test' }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
         done();
       });
     });
@@ -177,7 +172,7 @@ describe('ClientsManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).post('/clients').reply(201, response);
     });
 
@@ -185,15 +180,15 @@ describe('ClientsManager', () => {
       clients.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/clients', function (done) {
+    it('should perform a POST request to /api/v2/clients', (done) => {
       clients.create(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -202,7 +197,7 @@ describe('ClientsManager', () => {
         .reply(201, data);
 
       clients.create(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -216,7 +211,7 @@ describe('ClientsManager', () => {
         .reply(201, data);
 
       clients.create(data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -224,13 +219,13 @@ describe('ClientsManager', () => {
 
     it('should pass the body of the response to the "then" handler', (done) => {
       clients.create(data).then((client) => {
-        expect(client.data.client_id).to.equal(response.client_id);
-        expect(client.data.name).to.equal(response.name);
-        expect(client.data.description).to.equal(response.description);
-        expect(client.data.global).to.equal(response.global);
-        expect(client.data.client_secret).to.equal(response.client_secret);
-        expect(client.data.app_type).to.equal(response.app_type);
-        expect(client.data.logo_uri).to.equal(response.logo_uri);
+        expect(client.data.client_id).toBe(response.client_id);
+        expect(client.data.name).toBe(response.name);
+        expect(client.data.description).toBe(response.description);
+        expect(client.data.global).toBe(response.global);
+        expect(client.data.client_secret).toBe(response.client_secret);
+        expect(client.data.app_type).toBe(response.app_type);
+        expect(client.data.logo_uri).toBe(response.logo_uri);
 
         done();
       });
@@ -250,20 +245,20 @@ describe('ClientsManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get(`/clients/${response.client_id}`).reply(201, response);
     });
 
-    it('should return a promise if no callback is given', function (done) {
+    it('should return a promise if no callback is given', (done) => {
       clients
         .get({ id: response.client_id as string })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/clients/5', function (done) {
+    it('should perform a POST request to /api/v2/clients/5', (done) => {
       clients.get({ id: response.client_id as string }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -271,13 +266,13 @@ describe('ClientsManager', () => {
 
     it('should pass the body of the response to the "then" handler', (done) => {
       clients.get({ id: response.client_id as string }).then((client) => {
-        expect(client.data.client_id).to.equal(response.client_id);
-        expect(client.data.name).to.equal(response.name);
-        expect(client.data.description).to.equal(response.description);
-        expect(client.data.global).to.equal(response.global);
-        expect(client.data.client_secret).to.equal(response.client_secret);
-        expect(client.data.app_type).to.equal(response.app_type);
-        expect(client.data.logo_uri).to.equal(response.logo_uri);
+        expect(client.data.client_id).toBe(response.client_id);
+        expect(client.data.name).toBe(response.name);
+        expect(client.data.description).toBe(response.description);
+        expect(client.data.global).toBe(response.global);
+        expect(client.data.client_secret).toBe(response.client_secret);
+        expect(client.data.app_type).toBe(response.app_type);
+        expect(client.data.logo_uri).toBe(response.logo_uri);
 
         done();
       });
@@ -303,7 +298,7 @@ describe('ClientsManager', () => {
     };
 
     let request: nock.Scope;
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).patch(`/clients/${response.client_id}`).reply(200, response);
     });
 
@@ -314,15 +309,15 @@ describe('ClientsManager', () => {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a PATCH request to /api/v2/clients/5', function (done) {
+    it('should perform a PATCH request to /api/v2/clients/5', (done) => {
       clients.update({ id: response.client_id as string }, {}).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should include the new data in the body of the request', function (done) {
+    it('should include the new data in the body of the request', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -330,7 +325,7 @@ describe('ClientsManager', () => {
         .reply(200, response);
 
       clients.update({ id: response.client_id as string }, data as any).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -338,13 +333,13 @@ describe('ClientsManager', () => {
 
     it('should pass the body of the response to the "then" handler', (done) => {
       clients.update({ id: response.client_id as string }, data as any).then((client) => {
-        expect(client.data.client_id).to.equal(response.client_id);
-        expect(client.data.name).to.equal(response.name);
-        expect(client.data.description).to.equal(response.description);
-        expect(client.data.global).to.equal(response.global);
-        expect(client.data.client_secret).to.equal(response.client_secret);
-        expect(client.data.app_type).to.equal(response.app_type);
-        expect(client.data.logo_uri).to.equal(response.logo_uri);
+        expect(client.data.client_id).toBe(response.client_id);
+        expect(client.data.name).toBe(response.name);
+        expect(client.data.description).toBe(response.description);
+        expect(client.data.global).toBe(response.global);
+        expect(client.data.client_secret).toBe(response.client_secret);
+        expect(client.data.app_type).toBe(response.app_type);
+        expect(client.data.logo_uri).toBe(response.logo_uri);
 
         done();
       });
@@ -355,7 +350,7 @@ describe('ClientsManager', () => {
     const id = '5';
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).delete(`/clients/${id}`).reply(200, {});
     });
 
@@ -363,9 +358,9 @@ describe('ClientsManager', () => {
       clients.delete({ id }).then(done.bind(null, null));
     });
 
-    it(`should perform a DELETE request to /clients/${id}`, function (done) {
+    it(`should perform a DELETE request to /clients/${id}`, (done) => {
       clients.delete({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -376,7 +371,7 @@ describe('ClientsManager', () => {
     const id = '5';
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).post(`/clients/${id}/rotate-secret`).reply(200, { client_id: '123' });
     });
 
@@ -387,19 +382,16 @@ describe('ClientsManager', () => {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/clients/5/rotate-secret', function (done) {
+    it('should perform a POST request to /api/v2/clients/5/rotate-secret', (done) => {
       clients.rotateClientSecret({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
     it('should return an error when client_id is not sent', async () => {
-      expect(clients.rotateClientSecret({} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
-      );
+      expect(clients.rotateClientSecret({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should include the new data in the body of the request', (done) => {
@@ -410,7 +402,7 @@ describe('ClientsManager', () => {
         .reply(200, { client_id: '123' });
 
       clients.rotateClientSecret({ id }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -422,7 +414,7 @@ describe('ClientsManager', () => {
       nock(API_URL).post(`/clients/${id}/rotate-secret`).reply(500, {});
 
       clients.rotateClientSecret({ id }).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
 
         done();
       });
@@ -444,7 +436,7 @@ describe('ClientsManager', () => {
       },
     ];
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get('/clients/123/credentials').reply(200, response);
     });
 
@@ -463,7 +455,7 @@ describe('ClientsManager', () => {
       nock(API_URL).get('/clients/123/credentials').reply(500, {});
 
       clients.getCredentials({ client_id: '123' }).catch((err) => {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
         done();
       });
     });
@@ -474,28 +466,28 @@ describe('ClientsManager', () => {
           client_id: '123',
         })
         .then((credentials) => {
-          expect(credentials.data).to.be.an.instanceOf(Array);
+          expect(credentials.data).toBeInstanceOf(Array);
 
-          expect(credentials.data.length).to.equal(response.length);
+          expect(credentials.data.length).toBe(response.length);
 
-          expect(credentials.data[0].kid).to.equal(response[0].kid);
+          expect(credentials.data[0].kid).toBe(response[0].kid);
 
           done();
         });
     });
 
-    it('should perform a GET request to /api/v2/clients/123/credentials', function (done) {
+    it('should perform a GET request to /api/v2/clients/123/credentials', (done) => {
       clients
         .getCredentials({
           client_id: '123',
         })
         .then(() => {
-          expect(request.isDone()).to.be.true;
+          expect(request.isDone()).toBe(true);
           done();
         });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const data = [{ client_id: '1' }];
@@ -509,7 +501,7 @@ describe('ClientsManager', () => {
           client_id: '123',
         })
         .then(() => {
-          expect(request.isDone()).to.be.true;
+          expect(request.isDone()).toBe(true);
           done();
         });
     });
@@ -527,7 +519,7 @@ describe('ClientsManager', () => {
       updated_at: '',
       expires_at: '',
     };
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).get('/clients/123/credentials/abc').reply(200, response);
     });
 
@@ -552,7 +544,7 @@ describe('ClientsManager', () => {
           credential_id: 'abc',
         })
         .catch((err) => {
-          expect(err).to.exist;
+          expect(err).toBeDefined();
           done();
         });
     });
@@ -564,25 +556,25 @@ describe('ClientsManager', () => {
           credential_id: 'abc',
         })
         .then((credentials) => {
-          expect(credentials.data.kid).to.equal(response.kid);
+          expect(credentials.data.kid).toBe(response.kid);
 
           done();
         });
     });
 
-    it('should perform a GET request to /api/v2/clients/123/credentials/abc', function (done) {
+    it('should perform a GET request to /api/v2/clients/123/credentials/abc', (done) => {
       clients
         .getCredential({
           client_id: '123',
           credential_id: 'abc',
         })
         .then(() => {
-          expect(request.isDone()).to.be.true;
+          expect(request.isDone()).toBe(true);
           done();
         });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const data = [{ client_id: '1' }];
@@ -597,7 +589,7 @@ describe('ClientsManager', () => {
           credential_id: 'abc',
         })
         .then(() => {
-          expect(request.isDone()).to.be.true;
+          expect(request.isDone()).toBe(true);
           done();
         });
     });
@@ -625,7 +617,7 @@ describe('ClientsManager', () => {
     };
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).post('/clients/123/credentials').reply(201, response);
     });
 
@@ -633,15 +625,15 @@ describe('ClientsManager', () => {
       clients.createCredential(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should perform a POST request to /api/v2/clients/123/credentials', function (done) {
+    it('should perform a POST request to /api/v2/clients/123/credentials', (done) => {
       clients.createCredential(data, body).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should include the token in the Authorization header', function (done) {
+    it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -650,7 +642,7 @@ describe('ClientsManager', () => {
         .reply(201, data);
 
       clients.createCredential(data, body).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -664,7 +656,7 @@ describe('ClientsManager', () => {
         .reply(201, data);
 
       clients.createCredential(data, body).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -672,7 +664,7 @@ describe('ClientsManager', () => {
 
     it('should pass the body of the response to the "then" handler', (done) => {
       clients.createCredential(data, body).then((credential) => {
-        expect(credential.data.kid).to.equal(response.kid);
+        expect(credential.data.kid).toBe(response.kid);
 
         done();
       });
@@ -693,7 +685,7 @@ describe('ClientsManager', () => {
     };
 
     let request: nock.Scope;
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL)
         .patch(`/clients/123/credentials/abc`, data as any)
         .reply(200, response);
@@ -706,15 +698,15 @@ describe('ClientsManager', () => {
         .catch(done.bind(null, null));
     });
 
-    it('should perform a PATCH request to /api/v2/clients/123/credentials/abc', function (done) {
+    it('should perform a PATCH request to /api/v2/clients/123/credentials/abc', (done) => {
       clients.updateCredential({ client_id: '123', credential_id: 'abc' }, data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it('should include the new data in the body of the request', function (done) {
+    it('should include the new data in the body of the request', (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
@@ -722,7 +714,7 @@ describe('ClientsManager', () => {
         .reply(200, response);
 
       clients.updateCredential({ client_id: '123', credential_id: 'abc' }, data).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });
@@ -732,7 +724,7 @@ describe('ClientsManager', () => {
       clients
         .updateCredential({ client_id: '123', credential_id: 'abc' }, data)
         .then((credential) => {
-          expect(credential.data.kid).to.equal(response.kid);
+          expect(credential.data.kid).toBe(response.kid);
 
           done();
         });
@@ -743,7 +735,7 @@ describe('ClientsManager', () => {
     const id = '123';
     let request: nock.Scope;
 
-    beforeEach(function () {
+    beforeEach(() => {
       request = nock(API_URL).delete(`/clients/123/credentials/abc`).reply(200, {});
     });
 
@@ -753,9 +745,9 @@ describe('ClientsManager', () => {
         .then(done.bind(null, null));
     });
 
-    it(`should perform a DELETE request to /clients/${id}`, function (done) {
+    it(`should perform a DELETE request to /clients/${id}`, (done) => {
       clients.deleteCredential({ client_id: '123', credential_id: 'abc' }).then(() => {
-        expect(request.isDone()).to.be.true;
+        expect(request.isDone()).toBe(true);
 
         done();
       });

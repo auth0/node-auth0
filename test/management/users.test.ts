@@ -1,4 +1,3 @@
-import chai, { use } from 'chai';
 import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -13,14 +12,12 @@ import {
 import { RequiredError } from '../../src/lib/errors';
 import { ManagementClient } from '../../src/management';
 
-const { expect } = chai;
-
 describe('UsersManager', () => {
   const token = 'TOKEN§';
 
   let usersManager: UsersManager;
   let usersByEmailManager: UsersByEmailManager;
-  before(() => {
+  beforeAll(() => {
     const client = new ManagementClient({
       domain: 'tenant.auth0.com',
       token: token,
@@ -33,13 +30,13 @@ describe('UsersManager', () => {
     it('should throw an error when no base URL is provided', () => {
       expect(() => {
         new UsersManager({} as any);
-      }).to.throw(Error, 'Must provide a base URL for the API');
+      }).toThrowError(Error);
     });
 
     it('should throw an error when the base URL is invalid', () => {
       expect(() => {
         new UsersManager({ baseUrl: '' } as any);
-      }).to.throw(Error, 'The provided base URL is invalid');
+      }).toThrowError(Error);
     });
   });
 
@@ -51,7 +48,7 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.getAll().then(() => done())).instanceOf(Promise);
+      expect(usersManager.getAll().then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -62,7 +59,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.getAll();
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -73,14 +70,14 @@ describe('UsersManager', () => {
       nock(API_URL).get('/users').reply(200, data);
 
       const users = await usersManager.getAll();
-      expect(users.data).to.be.an.instanceOf(Array);
-      expect(users.data.length).to.equal(data.length);
-      expect(users.data[0].family_name).to.equal(data[0].family_name);
+      expect(users.data).toBeInstanceOf(Array);
+      expect(users.data.length).toBe(data.length);
+      expect(users.data[0].family_name).toBe(data[0].family_name);
     });
 
     it('should perform a GET request to /api/v2/users', async () => {
       await usersManager.getAll();
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -92,7 +89,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.getAll();
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass the parameters in the query-string', async () => {
@@ -105,7 +102,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).get('/users').query(params).reply(200, []);
 
       await usersManager.getAll(params);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -121,7 +118,9 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersByEmailManager.getByEmail({ email: '' }).then(() => done())).instanceOf(Promise);
+      expect(usersByEmailManager.getByEmail({ email: '' }).then(() => done())).toBeInstanceOf(
+        Promise
+      );
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -132,7 +131,7 @@ describe('UsersManager', () => {
       try {
         await usersByEmailManager.getByEmail({ email: '' });
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -144,9 +143,9 @@ describe('UsersManager', () => {
       nock(API_URL).get('/users-by-email').query(params).reply(200, data);
 
       const users = await usersByEmailManager.getByEmail(params);
-      expect(users.data).to.be.an.instanceOf(Array);
-      expect(users.data.length).to.equal(data.length);
-      expect(users.data[0].family_name).to.equal(data[0].family_name);
+      expect(users.data).toBeInstanceOf(Array);
+      expect(users.data.length).toBe(data.length);
+      expect(users.data[0].family_name).toBe(data[0].family_name);
     });
 
     it('should perform a GET request to /api/v2/users-by-email', async () => {
@@ -157,7 +156,7 @@ describe('UsersManager', () => {
 
       await usersByEmailManager.getByEmail(params);
 
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -171,7 +170,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersByEmailManager.getByEmail(params);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass an email in as a query string', async () => {
@@ -183,7 +182,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).get('/users-by-email').query(params).reply(200, []);
 
       await usersByEmailManager.getByEmail(params);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass additional options into the query string', async () => {
@@ -198,7 +197,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).get('/users-by-email').query(params).reply(200, []);
 
       await usersByEmailManager.getByEmail(params);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -217,12 +216,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.get({ id: data.id }).then(() => done())).instanceOf(Promise);
+      expect(usersManager.get({ id: data.id }).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a POST request to /api/v2/users/5', async () => {
       await usersManager.get({ id: data.id });
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -233,7 +232,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.get({ id: data.id });
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -246,7 +245,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.get({ id: data.id });
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -265,7 +264,7 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise if no callback is given', () => {
-      expect(usersManager.create(data)).instanceOf(Promise);
+      expect(usersManager.create(data)).toBeInstanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -276,13 +275,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.create(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a POST request to /api/v2/users', async () => {
       await usersManager.create(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass the data in the body of the request', async () => {
@@ -291,7 +290,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).post('/users', data).reply(200, {});
 
       await usersManager.create(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -303,7 +302,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.create(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -317,12 +316,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.update({ id: '5' }, {}).then(() => done())).instanceOf(Promise);
+      expect(usersManager.update({ id: '5' }, {}).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a PATCH request to /api/v2/users/5', async () => {
       await usersManager.update({ id: '5' }, {});
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the new data in the body of the request', async () => {
@@ -332,7 +331,7 @@ describe('UsersManager', () => {
 
       await usersManager.update({ id: '5' }, data);
 
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -343,7 +342,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.update({ id: data.id }, data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
   });
@@ -357,12 +356,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.delete({ id }).then(() => done())).instanceOf(Promise);
+      expect(usersManager.delete({ id }).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it(`should perform a delete request to /users/${id}`, async () => {
       await usersManager.delete({ id });
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -373,7 +372,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.delete({ id });
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -386,7 +385,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.delete({ id });
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -403,14 +402,11 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty userId', () => {
-      expect(usersManager.link({} as any, {})).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
-      );
+      expect(usersManager.link({} as any, {})).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.link({ id: userId }, data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.link({ id: userId }, data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -421,13 +417,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.link({ id: userId }, data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a POST request to /api/v2/users', async () => {
       await usersManager.link({ id: userId }, data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass the data in the body of the request', async () => {
@@ -436,7 +432,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).post(`/users/${userId}/identities`, data).reply(200, []);
 
       await usersManager.link({ id: userId }, data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -448,7 +444,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.link({ id: userId }, data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -467,12 +463,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.unlink(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.unlink(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it(`should perform a DELETE request to ${url}`, async () => {
       await usersManager.unlink(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -483,7 +479,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.unlink(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -496,7 +492,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.unlink(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -513,12 +509,14 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.deleteMultifactorProvider(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.deleteMultifactorProvider(data).then(() => done())).toBeInstanceOf(
+        Promise
+      );
     });
 
     it(`should perform a DELETE request to ${url}`, async () => {
       await usersManager.deleteMultifactorProvider(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -529,7 +527,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.deleteMultifactorProvider(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -542,7 +540,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.deleteMultifactorProvider(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -559,12 +557,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.update({ id: '5' }, {}).then(() => done())).instanceOf(Promise);
+      expect(usersManager.update({ id: '5' }, {}).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a PATCH request to /api/v2/users/5', async () => {
       await usersManager.update({ id: '5' }, {});
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the metadata in the body of the request', async () => {
@@ -582,7 +580,7 @@ describe('UsersManager', () => {
           user_metadata: data,
         }
       );
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -593,7 +591,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.update({ id: data.id }, data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
   });
@@ -610,12 +608,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.getLogs(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.getLogs(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it(`should perform a GET request to ${url}`, async () => {
       await usersManager.getLogs(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -626,7 +624,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.getLogs(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -639,7 +637,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.getLogs(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should pass the body of the response to the "then" handler', async () => {
@@ -649,11 +647,11 @@ describe('UsersManager', () => {
       nock(API_URL).get(url).reply(200, response);
 
       const logs = await usersManager.getLogs(data);
-      expect(logs.data).to.be.an.instanceOf(Array);
+      expect(logs.data).toBeInstanceOf(Array);
 
-      expect(logs.data.length).to.equal(response.length);
+      expect(logs.data.length).toBe(response.length);
 
-      expect(logs.data[0].audience).to.equal(response[0].audience);
+      expect(logs.data[0].audience).toBe(response[0].audience);
     });
 
     it('should pass the parameters in the query-string', async () => {
@@ -669,7 +667,7 @@ describe('UsersManager', () => {
         id: data.id,
         ...params,
       });
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -685,12 +683,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.getEnrollments(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.getEnrollments(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/5/enrollments', async () => {
       await usersManager.getEnrollments(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -701,7 +699,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.getEnrollments(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -714,7 +712,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.getEnrollments(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -730,14 +728,11 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', () => {
-      expect(usersManager.regenerateRecoveryCode({} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
-      );
+      expect(usersManager.regenerateRecoveryCode({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.regenerateRecoveryCode(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.regenerateRecoveryCode(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -748,13 +743,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.regenerateRecoveryCode(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a POST request to /api/v2/users/:id/recovery-code-regeneration', async () => {
       await usersManager.regenerateRecoveryCode(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -766,7 +761,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.regenerateRecoveryCode(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -784,14 +779,13 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', () => {
-      expect(usersManager.invalidateRememberBrowser({} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
-      );
+      expect(usersManager.invalidateRememberBrowser({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.invalidateRememberBrowser(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.invalidateRememberBrowser(data).then(() => done())).toBeInstanceOf(
+        Promise
+      );
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -804,13 +798,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.invalidateRememberBrowser(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a POST request to /api/v2/users/:id/multifactor/actions/invalidate-remember-browser', async () => {
       await usersManager.invalidateRememberBrowser(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -822,7 +816,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.invalidateRememberBrowser(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -837,12 +831,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.getRoles(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.getRoles(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/user_id/roles', async () => {
       await usersManager.getRoles(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -853,7 +847,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.getRoles(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -866,7 +860,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.getRoles(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -883,31 +877,28 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', () => {
-      expect(usersManager.assignRoles({} as any, {} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
-      );
+      expect(usersManager.assignRoles({} as any, {} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.assignRoles(data, {} as any).then(() => done())).instanceOf(Promise);
+      expect(usersManager.assignRoles(data, {} as any).then(() => done())).toBeInstanceOf(Promise);
     });
 
-    it('should pass any errors to the promise catch handler', () => {
+    it('should pass any errors to the promise catch handler', async () => {
       nock.cleanAll();
 
       nock(API_URL).post(`/users/${data.id}/roles`).reply(500, {});
 
       try {
-        usersManager.assignRoles(data, {} as any);
+        await usersManager.assignRoles(data, {} as any);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a POST request to /api/v2/users/user_id/roles', async () => {
       await usersManager.assignRoles(data, {} as any);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass the data in the body of the request', async () => {
@@ -916,7 +907,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).post(`/users/${data.id}/roles`, body).reply(200, {});
 
       await usersManager.assignRoles(data, body);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -928,7 +919,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.assignRoles(data, {} as any);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -945,14 +936,11 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', () => {
-      expect(usersManager.deleteRoles({} as any, {} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
-      );
+      expect(usersManager.deleteRoles({} as any, {} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.deleteRoles(data, {} as any).then(() => done())).instanceOf(Promise);
+      expect(usersManager.deleteRoles(data, {} as any).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -963,13 +951,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.deleteRoles(data, {} as any);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a DELETE request to /api/v2/users/user_id/roles', async () => {
       await usersManager.deleteRoles(data, {} as any);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass the data in the body of the request', async () => {
@@ -978,7 +966,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).delete(`/users/${data.id}/roles`, body).reply(200, {});
 
       await usersManager.deleteRoles(data, body);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -990,7 +978,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.deleteRoles(data, {} as any);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -1006,12 +994,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.getPermissions(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.getPermissions(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/user_id/permissions', async () => {
       await usersManager.getPermissions(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -1022,7 +1010,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.getPermissions(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -1035,7 +1023,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.getPermissions(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -1052,14 +1040,13 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', () => {
-      expect(usersManager.assignPermissions({} as any, {} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
+      expect(usersManager.assignPermissions({} as any, {} as any)).rejects.toThrowError(
+        RequiredError
       );
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.assignPermissions(data, {} as any).then(() => done())).instanceOf(
+      expect(usersManager.assignPermissions(data, {} as any).then(() => done())).toBeInstanceOf(
         Promise
       );
     });
@@ -1072,13 +1059,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.assignPermissions(data, {} as any);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a POST request to /api/v2/users/user_id/permissions', async () => {
       await usersManager.assignPermissions(data, {} as any);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass the data in the body of the request', async () => {
@@ -1089,7 +1076,7 @@ describe('UsersManager', () => {
         .reply(200, 'Test');
 
       await usersManager.assignPermissions(data, { permissions: [body] });
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -1101,7 +1088,7 @@ describe('UsersManager', () => {
         .reply(200, 'Test');
 
       await usersManager.assignPermissions(data, {} as any);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -1117,14 +1104,13 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', () => {
-      expect(usersManager.deletePermissions({} as any, {} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
+      expect(usersManager.deletePermissions({} as any, {} as any)).rejects.toThrowError(
+        RequiredError
       );
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.deletePermissions(data, {} as any).then(() => done())).instanceOf(
+      expect(usersManager.deletePermissions(data, {} as any).then(() => done())).toBeInstanceOf(
         Promise
       );
     });
@@ -1137,13 +1123,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.deletePermissions(data, {} as any);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a DELETE request to /api/v2/users/user_id/permissions', async () => {
       await usersManager.deletePermissions(data, {} as any);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass the data in the body of the request', async () => {
@@ -1152,7 +1138,7 @@ describe('UsersManager', () => {
       const request = nock(API_URL).delete(`/users/${data.id}/permissions`, body).reply(200, {});
 
       await usersManager.deletePermissions(data, body as any);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -1164,7 +1150,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.deletePermissions(data, {} as any);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -1179,14 +1165,15 @@ describe('UsersManager', () => {
     });
 
     it('should validate empty id', async () => {
-      await expect(usersManager.deleteAllAuthenticators({} as any)).to.be.rejectedWith(
-        RequiredError,
-        `Required parameter requestParameters.id was null or undefined.`
+      await expect(usersManager.deleteAllAuthenticators({} as any)).rejects.toThrowError(
+        RequiredError
       );
     });
 
     it('should return a promise if no callback is given', (done) => {
-      expect(usersManager.deleteAllAuthenticators(params).then(() => done())).instanceOf(Promise);
+      expect(usersManager.deleteAllAuthenticators(params).then(() => done())).toBeInstanceOf(
+        Promise
+      );
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -1197,13 +1184,13 @@ describe('UsersManager', () => {
       try {
         await usersManager.deleteAllAuthenticators(params);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
     it('should perform a DELETE request to /api/v2/users/user_id/authenticators', async () => {
       await usersManager.deleteAllAuthenticators(params);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should include the token in the Authorization header', async () => {
@@ -1215,7 +1202,7 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.deleteAllAuthenticators(params);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -1231,12 +1218,12 @@ describe('UsersManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      expect(usersManager.getUserOrganizations(data).then(() => done())).instanceOf(Promise);
+      expect(usersManager.getUserOrganizations(data).then(() => done())).toBeInstanceOf(Promise);
     });
 
     it('should perform a GET request to /api/v2/users/user_id/organizations', async () => {
       await usersManager.getUserOrganizations(data);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -1247,7 +1234,7 @@ describe('UsersManager', () => {
       try {
         await usersManager.getUserOrganizations(data);
       } catch (err) {
-        expect(err).to.exist;
+        expect(err).toBeDefined();
       }
     });
 
@@ -1260,7 +1247,7 @@ describe('UsersManager', () => {
         .reply(200, []);
 
       await usersManager.getUserOrganizations(data);
-      expect(request.isDone()).to.be.true;
+      expect(request.isDone()).toBe(true);
     });
   });
 
@@ -1277,7 +1264,7 @@ describe('UsersManager', () => {
 
     it('should perform a GET request to /api/v2/users/{user}/authentication-methods', async () => {
       await usersManager.getAuthenticationMethods(params);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -1296,7 +1283,7 @@ describe('UsersManager', () => {
 
     it('should perform a GET request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {
       await usersManager.getAuthenticationMethod(params);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -1312,7 +1299,7 @@ describe('UsersManager', () => {
 
     it('should perform a POST request to /api/v2/users/{id}/authentication-methods', async () => {
       await usersManager.createAuthenticationMethod(params, {} as any);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -1329,7 +1316,7 @@ describe('UsersManager', () => {
 
     it('should perform a PUT request to /api/v2/users/{user}/authentication-methods', async () => {
       await usersManager.updateAuthenticationMethods(params, {} as any);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -1349,7 +1336,7 @@ describe('UsersManager', () => {
 
     it('should perform a PATCH request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {
       await usersManager.updateAuthenticationMethod(params, {});
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -1366,7 +1353,7 @@ describe('UsersManager', () => {
 
     it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods', async () => {
       await usersManager.deleteAuthenticationMethods(params);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 
@@ -1386,7 +1373,7 @@ describe('UsersManager', () => {
 
     it('should perform a DELETE request to /api/v2/users/{user}/authentication-methods/{authentication_method_id}', async () => {
       await usersManager.deleteAuthenticationMethod(params);
-      expect(scope.isDone()).to.be.true;
+      expect(scope.isDone()).toBe(true);
     });
   });
 });
