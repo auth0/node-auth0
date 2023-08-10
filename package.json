@@ -21,7 +21,7 @@
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json && echo '{\"type\": \"commonjs\"}'> dist/cjs/package.json",
     "docs": "typedoc --options typedoc.cjs",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
-    "test:ci": "c8 npm run test",
+    "test:ci": "c8 npm run test -- --maxWorkers=1",
     "precommit": "pretty-quick --staged",
     "lint": "eslint ./src ./test --ext ts",
     "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm playground/index.ts"

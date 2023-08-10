@@ -24,7 +24,7 @@ jobs:
           command: npm run build
       - run:
           name: Tests
-          command: npm run test:ci -- -- --maxWorkers=1
+          command: npm run test:ci
       - when:
           condition:
             equal: [ "18.17", << parameters.node-version >> ]
