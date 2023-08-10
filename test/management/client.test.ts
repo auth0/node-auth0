@@ -392,7 +392,7 @@ describe('ClientsManager', () => {
     });
 
     it('should return an error when client_id is not sent', async () => {
-      expect(clients.rotateClientSecret({} as any)).rejects.toThrowError(RequiredError);
+      await expect(clients.rotateClientSecret({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should include the new data in the body of the request', (done) => {

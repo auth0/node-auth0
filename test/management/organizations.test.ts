@@ -589,10 +589,10 @@ describe('OrganizationsManager', () => {
       });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(organizations.updateEnabledConnection({} as any, {} as any)).rejects.toThrowError(
-        RequiredError
-      );
+    it('should return error when id is not sent', async () => {
+      await expect(
+        organizations.updateEnabledConnection({} as any, {} as any)
+      ).rejects.toThrowError(RequiredError);
     });
 
     it('should return error when connectionId is not sent', () => {
@@ -643,14 +643,14 @@ describe('OrganizationsManager', () => {
         .reply(200, {});
     });
 
-    it('should validate empty organizationId', () => {
-      expect(organizations.deleteEnabledConnection({} as any, {} as any)).rejects.toThrowError(
-        RequiredError
-      );
+    it('should validate empty organizationId', async () => {
+      await expect(
+        organizations.deleteEnabledConnection({} as any, {} as any)
+      ).rejects.toThrowError(RequiredError);
     });
 
-    it('should validate empty connectionId', () => {
-      expect(
+    it('should validate empty connectionId', async () => {
+      await expect(
         organizations.deleteEnabledConnection({ id: '123' } as any, {} as any)
       ).rejects.toThrowError(RequiredError);
     });
@@ -787,8 +787,10 @@ describe('OrganizationsManager', () => {
       });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(organizations.addMembers({} as any, {} as any)).rejects.toThrowError(RequiredError);
+    it('should return error when id is not sent', async () => {
+      await expect(organizations.addMembers({} as any, {} as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should pass the data in the body of the request', (done) => {
@@ -827,8 +829,10 @@ describe('OrganizationsManager', () => {
       request = nock(API_URL).delete(`/organizations/${data.id}/members`, {}).reply(200, {});
     });
 
-    it('should validate empty organizationId', () => {
-      expect(organizations.deleteMembers({} as any, {} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty organizationId', async () => {
+      await expect(organizations.deleteMembers({} as any, {} as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -1021,8 +1025,8 @@ describe('OrganizationsManager', () => {
         .reply(200, {});
     });
 
-    it('should validate empty id', () => {
-      expect(organizations.deleteMemberRoles({} as any, {} as any)).rejects.toThrowError(
+    it('should validate empty id', async () => {
+      await expect(organizations.deleteMemberRoles({} as any, {} as any)).rejects.toThrowError(
         RequiredError
       );
     });
@@ -1170,14 +1174,16 @@ describe('OrganizationsManager', () => {
       });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(organizations.getInvitation({} as any, {} as any)).rejects.toThrowError(RequiredError);
-    });
-
-    it('should return error when invitation_id is not sent', () => {
-      expect(organizations.getInvitation({ id: '123' } as any, {} as any)).rejects.toThrowError(
+    it('should return error when id is not sent', async () => {
+      await expect(organizations.getInvitation({} as any, {} as any)).rejects.toThrowError(
         RequiredError
       );
+    });
+
+    it('should return error when invitation_id is not sent', async () => {
+      await expect(
+        organizations.getInvitation({ id: '123' } as any, {} as any)
+      ).rejects.toThrowError(RequiredError);
     });
 
     it('should include the token in the authorization header', (done) => {
@@ -1248,8 +1254,8 @@ describe('OrganizationsManager', () => {
         });
     });
 
-    it('should return error when id is not sent', () => {
-      expect(organizations.createInvitation({} as any, {} as any)).rejects.toThrowError(
+    it('should return error when id is not sent', async () => {
+      await expect(organizations.createInvitation({} as any, {} as any)).rejects.toThrowError(
         RequiredError
       );
     });
@@ -1312,8 +1318,8 @@ describe('OrganizationsManager', () => {
         .reply(200, {});
     });
 
-    it('should validate empty id', () => {
-      expect(organizations.deleteInvitation({} as any, {} as any)).rejects.toThrowError(
+    it('should validate empty id', async () => {
+      await expect(organizations.deleteInvitation({} as any, {} as any)).rejects.toThrowError(
         RequiredError
       );
     });

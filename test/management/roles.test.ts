@@ -416,8 +416,8 @@ describe('RolesManager', () => {
       request = nock(API_URL).delete(`/roles/${data.id}/permissions`, body).reply(200, {});
     });
 
-    it('should validate empty roleId', () => {
-      expect(roles.deletePermissions({} as any, body)).rejects.toThrowError(RequiredError);
+    it('should validate empty roleId', async () => {
+      await expect(roles.deletePermissions({} as any, body)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -534,8 +534,8 @@ describe('RolesManager', () => {
       request = nock(API_URL).post(`/roles/${data.id}/users`).reply(200, {});
     });
 
-    it('should validate empty roleId', () => {
-      expect(roles.assignUsers({} as any, body)).rejects.toThrowError(RequiredError);
+    it('should validate empty roleId', async () => {
+      await expect(roles.assignUsers({} as any, body)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {

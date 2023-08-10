@@ -401,8 +401,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).post(`/users/${userId}/identities`).reply(200, {});
     });
 
-    it('should validate empty userId', () => {
-      expect(usersManager.link({} as any, {})).rejects.toThrowError(RequiredError);
+    it('should validate empty userId', async () => {
+      await expect(usersManager.link({} as any, {})).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -727,8 +727,10 @@ describe('UsersManager', () => {
       scope = nock(API_URL).post(`/users/${data.id}/recovery-code-regeneration`).reply(200, {});
     });
 
-    it('should validate empty id', () => {
-      expect(usersManager.regenerateRecoveryCode({} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty id', async () => {
+      await expect(usersManager.regenerateRecoveryCode({} as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -778,8 +780,10 @@ describe('UsersManager', () => {
         .reply(204, {});
     });
 
-    it('should validate empty id', () => {
-      expect(usersManager.invalidateRememberBrowser({} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty id', async () => {
+      await expect(usersManager.invalidateRememberBrowser({} as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -876,8 +880,10 @@ describe('UsersManager', () => {
       scope = nock(API_URL).post(`/users/${data.id}/roles`).reply(200, {});
     });
 
-    it('should validate empty id', () => {
-      expect(usersManager.assignRoles({} as any, {} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty id', async () => {
+      await expect(usersManager.assignRoles({} as any, {} as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -935,8 +941,10 @@ describe('UsersManager', () => {
       scope = nock(API_URL).delete(`/users/${data.id}/roles`, {}).reply(200, {});
     });
 
-    it('should validate empty id', () => {
-      expect(usersManager.deleteRoles({} as any, {} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty id', async () => {
+      await expect(usersManager.deleteRoles({} as any, {} as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -1039,8 +1047,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).post(`/users/${data.id}/permissions`).reply(200, 'Test');
     });
 
-    it('should validate empty id', () => {
-      expect(usersManager.assignPermissions({} as any, {} as any)).rejects.toThrowError(
+    it('should validate empty id', async () => {
+      await expect(usersManager.assignPermissions({} as any, {} as any)).rejects.toThrowError(
         RequiredError
       );
     });
@@ -1103,8 +1111,8 @@ describe('UsersManager', () => {
       scope = nock(API_URL).delete(`/users/${data.id}/permissions`, {}).reply(200, {});
     });
 
-    it('should validate empty id', () => {
-      expect(usersManager.deletePermissions({} as any, {} as any)).rejects.toThrowError(
+    it('should validate empty id', async () => {
+      await expect(usersManager.deletePermissions({} as any, {} as any)).rejects.toThrowError(
         RequiredError
       );
     });

@@ -368,7 +368,7 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_id: undefined } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).rejects.toThrow(
+    await expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).rejects.toThrow(
       'Organization Id (org_id) claim must be a string present in the ID token'
     );
   });
@@ -382,7 +382,7 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_name: undefined } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).rejects.toThrow(
+    await expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).rejects.toThrow(
       'Organization Name (org_name) claim must be a string present in the ID token'
     );
   });
@@ -396,7 +396,7 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_id: 'org_1234' } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).rejects.toThrow(
+    await expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).rejects.toThrow(
       'Organization Id (org_id) claim value mismatch in the ID token; expected "org_123", found "org_1234'
     );
   });
@@ -410,7 +410,7 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_name: 'notExpectedOrg' } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).rejects.toThrow(
+    await expect(idTokenValidator.validate(jwt, { organization: 'testorg' })).rejects.toThrow(
       'Organization Name (org_name) claim value mismatch in the ID token; expected "testorg", found "notExpectedOrg'
     );
   });
@@ -424,7 +424,9 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_id: 'org_123' } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'org_123' })).resolves.not.toThrow();
+    await expect(
+      idTokenValidator.validate(jwt, { organization: 'org_123' })
+    ).resolves.not.toThrow();
   });
 
   it('should NOT throw when org_name matches expected organization', async () => {
@@ -436,6 +438,8 @@ describe('id-token-validator', () => {
 
     const jwt = await sign({ payload: { org_name: 'testorg' } });
 
-    expect(idTokenValidator.validate(jwt, { organization: 'testOrg' })).resolves.not.toThrow();
+    await expect(
+      idTokenValidator.validate(jwt, { organization: 'testOrg' })
+    ).resolves.not.toThrow();
   });
 });

@@ -546,12 +546,16 @@ describe('ConnectionsManager', () => {
       });
     });
 
-    it('should require a connection id', () => {
-      expect(connections.deleteUserByEmail({ email } as any)).rejects.toThrowError(RequiredError);
+    it('should require a connection id', async () => {
+      await expect(connections.deleteUserByEmail({ email } as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
-    it('should require an email', () => {
-      expect(connections.deleteUserByEmail({ id } as any)).rejects.toThrowError(RequiredError);
+    it('should require an email', async () => {
+      await expect(connections.deleteUserByEmail({ id } as any)).rejects.toThrowError(
+        RequiredError
+      );
     });
 
     it('should include the token in the Authorization header', (done) => {

@@ -42,8 +42,8 @@ describe('UserBlocksManager', () => {
       nock.cleanAll();
     });
 
-    it('should throw an error when no id is provided', () => {
-      expect(userBlocks.get({} as any)).rejects.toThrowError(RequiredError);
+    it('should throw an error when no id is provided', async () => {
+      await expect(userBlocks.get({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -95,8 +95,8 @@ describe('UserBlocksManager', () => {
       nock.cleanAll();
     });
 
-    it('should throw an error when no id is provided', () => {
-      expect(userBlocks.delete({} as any)).rejects.toThrowError(RequiredError);
+    it('should throw an error when no id is provided', async () => {
+      await expect(userBlocks.delete({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -148,8 +148,8 @@ describe('UserBlocksManager', () => {
       nock.cleanAll();
     });
 
-    it('should throw an error when no identifier is provided', () => {
-      expect(userBlocks.getAll({} as any)).rejects.toThrowError(RequiredError);
+    it('should throw an error when no identifier is provided', async () => {
+      await expect(userBlocks.getAll({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -202,8 +202,8 @@ describe('UserBlocksManager', () => {
       nock.cleanAll();
     });
 
-    it('should throw an error when no identifier is provided', () => {
-      expect(userBlocks.deleteAll({} as any)).rejects.toThrowError(RequiredError);
+    it('should throw an error when no identifier is provided', async () => {
+      await expect(userBlocks.deleteAll({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise when no callback is given', (done) => {

@@ -173,12 +173,12 @@ describe('PromptsManager', () => {
       request = nock(API_URL).get('/prompts/consent/custom-text/en').reply(200, {});
     });
 
-    it('should validate empty prompt parameter', () => {
-      expect(prompts.getCustomTextByLanguage({} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty prompt parameter', async () => {
+      await expect(prompts.getCustomTextByLanguage({} as any)).rejects.toThrowError(RequiredError);
     });
 
-    it('should validate empty language parameter', () => {
-      expect(prompts.getCustomTextByLanguage({} as any)).rejects.toThrowError(RequiredError);
+    it('should validate empty language parameter', async () => {
+      await expect(prompts.getCustomTextByLanguage({} as any)).rejects.toThrowError(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -235,12 +235,14 @@ describe('PromptsManager', () => {
       request = nock(API_URL).put('/prompts/consent/custom-text/en').reply(200, {});
     });
 
-    it('should validate empty prompt parameter', () => {
-      expect(prompts.updateCustomTextByLanguage({} as any, {})).rejects.toThrowError(RequiredError);
+    it('should validate empty prompt parameter', async () => {
+      await expect(prompts.updateCustomTextByLanguage({} as any, {})).rejects.toThrowError(
+        RequiredError
+      );
     });
 
-    it('should validate empty language parameter', () => {
-      expect(
+    it('should validate empty language parameter', async () => {
+      await expect(
         prompts.updateCustomTextByLanguage({ prompt: 'common' } as any, {})
       ).rejects.toThrowError(RequiredError);
     });
