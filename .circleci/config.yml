@@ -27,7 +27,7 @@ jobs:
           command: npm run test:ci
       - when:
           condition:
-            equal: [ "16.18", << parameters.node-version >> ]
+            equal: [ "18.17", << parameters.node-version >> ]
           steps:
             - codecov/upload
 workflows:
@@ -36,7 +36,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["16.18", "18.12", "20.3"]
+              node-version: ["16.18", "18.17", "20.3"]
       - ship/node-publish:
           publish-command: npm run build && npm publish --tag beta
           requires:

@@ -20,6 +20,7 @@ import {
   guardian,
   hooks,
   jobs,
+  keys,
   logStreams,
   logs,
   organizations,
@@ -34,7 +35,7 @@ import {
   userBlocks,
   users,
   usersByEmail,
-} from './handlers';
+} from './handlers.js';
 
 program
   .name('node-auth0-playground')
@@ -65,6 +66,7 @@ program
     await guardian();
     await hooks();
     await jobs();
+    await keys();
     await logStreams();
     await logs();
     await organizations();
@@ -120,6 +122,8 @@ program.command('guardian').description('Test the guardians endpoints').action(g
 program.command('hooks').description('Test the hooks endpoints').action(hooks);
 
 program.command('jobs').description('Test the jobs endpoints').action(jobs);
+
+program.command('keys').description('Test the keys endpoints').action(keys);
 
 program.command('log-streams').description('Test the log streams endpoints').action(logStreams);
 

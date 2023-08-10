@@ -1,8 +1,8 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { RequestOpts, InitOverrideFunction } from '../../src/lib';
-import { BaseAPI } from '../../src/lib/runtime';
-import { TokenProviderMiddleware } from '../../src/management/token-provider-middleware';
+import { RequestOpts, InitOverrideFunction } from '../../src/lib/index.js';
+import { BaseAPI } from '../../src/lib/runtime.js';
+import { TokenProviderMiddleware } from '../../src/management/token-provider-middleware.js';
 
 const domain = 'test-domain.auth0.com';
 
@@ -44,7 +44,7 @@ describe('TokenProviderMiddleware', () => {
       });
     nock(opts.baseUrl)
       .get('/foo')
-      .reply(200, function (y) {
+      .reply(200, function () {
         spy(this.req.headers);
         return {};
       });
@@ -52,6 +52,7 @@ describe('TokenProviderMiddleware', () => {
       ...opts,
       middleware: [new TokenProviderMiddleware({ ...opts, domain })],
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { clientSecret, ...optsNoSecret } = opts;
     tokenClient = new TestClient({
       ...opts,

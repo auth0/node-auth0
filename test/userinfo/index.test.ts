@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import { UserInfoClient } from '../../src/userinfo';
+import { UserInfoClient } from '../../src/index.js';
 
 const { back: nockBack } = nock;
 
