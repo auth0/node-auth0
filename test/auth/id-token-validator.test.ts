@@ -30,12 +30,12 @@ const sign = async ({
     secretOrKey = new TextEncoder().encode(clientSecret);
   } else {
     secretOrKey = privateKey || (await jose.importPKCS8(TEST_PRIVATE_KEY, alg));
-    const jwk = await jose.exportJWK(publicKey || (await jose.importSPKI(TEST_PUBLIC_KEY, alg)));
-    nock(URL)
-      .persist()
-      .get('/.well-known/jwks.json')
-      .reply(200, { keys: [{ kid: '1', ...jwk }] });
   }
+  const jwk = await jose.exportJWK(publicKey || (await jose.importSPKI(TEST_PUBLIC_KEY, alg)));
+  nock(URL)
+    .persist()
+    .get('/.well-known/jwks.json')
+    .reply(200, { keys: [{ kid: '1', ...jwk }] });
 
   return new jose.SignJWT({
     iss: issuer,
