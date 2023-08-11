@@ -2,15 +2,27 @@
 
 Guide to migrating from `2.x` to `3.x`
 
-## Node 16 or newer is required
+- [General](#general)
+  - [Node 16 or newer is required](#node-16-or-newer-is-required)
+  - [Callbacks are no longer supported](#callbacks-are-no-longer-supported)
+- [Authentication API](#authentication-api)
+  - [Legacy endpoints have been removed](#legacy-endpoints-have-been-removed)
+  - [Method name changes](#method-name-changes)
+- [Management API](#management-api)
+  - [Top level methods have been removed](#top-level-methods-have-been-removed)
+  - [Method name changes](#method-name-changes-1)
+
+## General
+
+### Node 16 or newer is required
 
 Node 16 LTS and newer LTS releases are supported.
 
-## Callbacks are no longer supported
+### Callbacks are no longer supported
 
 All methods no longer accept a callback and only return a Promise.
 
-### Before
+#### Before
 
 ```js
 management.users.getAll({}, function (err, users) {
@@ -18,14 +30,72 @@ management.users.getAll({}, function (err, users) {
 });
 ```
 
-### After
+#### After
 
 ```js
 const users = await management.users.getAll();
 console.log(users.length);
 ```
 
-## Top level methods have been removed
+## Authentication API
+
+### Legacy endpoints have been removed
+
+The following endpoints are deprecated and have been removed:
+
+- `oauth.socialSignIn`- We recommend that you open the browser to do social authentication instead, [more info](https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html)
+- `oauth.signIn`- You should use `oauth.passwordGrant` instead.
+- `tokens.getInfo` - You should use `UserInfoClient.getUserInfo` instead.
+- `tokens.getDelegationToken` and `getDelegationToken` - See https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-delegation
+- `users.impersonate` - See https://community.auth0.com/t/auth0-user-impersonation/81821/2
+
+### Top level methods have been removed
+
+Previously, in many cases, there were 2 ways to call a method:
+
+```js
+await auth.clientCredentialsGrant({ audience: 'my-api' });
+```
+
+Now the top level methods on the Management Client have been removed, so you must call the method on the applicable namespace.
+
+```js
+await auth.oauth.clientCredentialsGrant({ audience: 'my-api' });
+```
+
+<details>
+  <summary>Full list</summary>
+
+| Before                       | After                          |
+| ---------------------------- | ------------------------------ |
+| `requestMagicLink`           | `passwordless.sendEmail`       |
+| `requestEmailCode`           | `passwordless.sendEmail`       |
+| `verifyEmailCode`            | `passwordless.loginWithEmail`  |
+| `requestSMSCode`             | `passwordless.sendSMS`         |
+| `verifySMSCode`              | `passwordless.loginWithSMS`    |
+| `changePassword`             | `database.changePassword`      |
+| `requestChangePasswordEmail` | `database.changePassword`      |
+| `getProfile`                 | `UserInfoClient.getUserInfo`   |
+| `clientCredentialsGrant`     | `oauth.clientCredentialsGrant` |
+| `passwordGrant`              | `oauth.passwordGrant`          |
+| `refreshToken`               | `oauth.refreshTokenGrant`      |
+
+</details>
+
+### Method name changes
+
+Some method names have been changed to better align with the documentation.
+
+| Before                                | After                                                         |
+| ------------------------------------- | ------------------------------------------------------------- |
+| `oauth.refreshToken`                  | `oauth.refreshTokenGrant`                                     |
+| `database.requestChangePasswordEmail` | `database.changePassword`                                     |
+| `passwordless.signIn`                 | `passwordless.loginWithEmail`<br/>`passwordless.loginWithSMS` |
+| `users.getInfo`                       | `UserInfoClient.getUserInfo`                                  |
+
+## Management API
+
+### Top level methods have been removed
 
 Previously, in many cases, there were 2 ways to call a method:
 
@@ -38,6 +108,9 @@ Now the top level methods on the Management Client have been removed, so you mus
 ```js
 const usersAlso = await management.users.getAll();
 ```
+
+<details>
+  <summary>Full list</summary>
 
 | Before                                      | After                                        |
 | ------------------------------------------- | -------------------------------------------- |
@@ -182,9 +255,26 @@ const usersAlso = await management.users.getAll();
 | `getCustomTextByLanguage`                   | `prompts.getCustomTextByLanguage`            |
 | `updateCustomTextByLanguage`                | `prompts.updateCustomTextByLanguage`         |
 
-## Method name changes
+</details>
 
-Some method names have changed, full list
+### Method name changes
+
+Some method names have been changed to better align with the documentation.
+
+#### Before
+
+```js
+await users.removeRoles({ id: 'user' }, { roles: ['read:users'] });
+```
+
+#### Before
+
+```js
+await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
+```
+
+<details>
+  <summary>full list</summary>
 
 | Before                                  | After                                           |
 | --------------------------------------- | ----------------------------------------------- |
@@ -226,3 +316,5 @@ Some method names have changed, full list
 | `organizations.removeEnabledConnection` | `organizations.deleteEnabledConnection`         |
 | `organizations.removeMembers`           | `organizations.deleteMembers`                   |
 | `organizations.removeMemberRoles`       | `organizations.deleteMemberRoles`               |
+
+</details>
