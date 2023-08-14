@@ -1,8 +1,6 @@
 import {
   InitOverride,
-  InitOverrideFunction,
   JSONApiResponse,
-  RequestOpts,
   VoidApiResponse,
   validateRequiredRequestParams,
 } from '../lib/runtime.js';

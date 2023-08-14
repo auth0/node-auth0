@@ -134,6 +134,7 @@ export async function grant(
   grantType: string,
   bodyParameters: Record<string, any>,
   { idTokenValidateOptions, initOverrides }: GrantOptions = {},
+  clientId: string,
   idTokenValidator: IDTokenValidator,
   request: (
     context: RequestOpts,
@@ -148,7 +149,7 @@ export async function grant(
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        client_id: this.clientId,
+        client_id: clientId,
         ...bodyParameters,
         grant_type: grantType,
       }),
