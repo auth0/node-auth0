@@ -24,7 +24,7 @@ Node 16 LTS and newer LTS releases are supported.
 
 ### Callbacks are no longer supported
 
-All methods no longer accept a callback and only return a Promise.
+All methods no longer accept a callback and only return a Promise. The last argument is now an object to override the `fetch` request.
 
 #### Before
 
