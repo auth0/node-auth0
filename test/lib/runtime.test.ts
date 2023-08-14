@@ -80,7 +80,7 @@ describe('Runtime', () => {
   it('should only retry until default configured attempts', async () => {
     nock(URL, { encodedQueryParams: true })
       .get('/clients')
-      .times(6)
+      .times(4)
       .reply(429)
       .get('/clients')
       .reply(200, [{ client_id: '123' }]);
