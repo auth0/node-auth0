@@ -319,6 +319,10 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 | `actions.createVersion`                 | ??                                              |
 | `blacklistedTokens.add`                 | `blacklists.add`                                |
 | `blacklistedTokens.getAll`              | `blacklists.getAll`                             |
+| `clientCredentials.create`              | `clients.createCredential`                      |
+| `clientCredentials.getAll`              | `clients.getredentials`                         |
+| `clientCredentials.get`                 | `clients.getCredential`                         |
+| `clientCredentials.delete`              | `clients.deleteCredential`                      |
 | `emailProvider.get`                     | `emails.get`                                    |
 | `emailProvider.update`                  | `emails.update`                                 |
 | `emailProvider.configure`               | `emails.configure`                              |
