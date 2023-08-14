@@ -35,7 +35,7 @@ async function pause(delay: number) {
 export interface RetryConfiguration {
   /**
    * Configure the usage of retries.
-   * Defaults to true.
+   * Defaults to true on the Management Client and false on the Authentication Client.
    */
   enabled?: boolean;
   /**

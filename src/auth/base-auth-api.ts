@@ -85,7 +85,12 @@ export class BaseAuthAPI extends BaseAPI {
   clientAssertionSigningAlg?: string;
 
   constructor(options: AuthenticationClientOptions) {
-    super({ ...options, baseUrl: `https://${options.domain}`, parseError });
+    super({
+      ...options,
+      baseUrl: `https://${options.domain}`,
+      parseError,
+      retry: { enabled: false, ...options.retry },
+    });
 
     this.domain = options.domain;
     this.clientId = options.clientId;
