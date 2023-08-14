@@ -109,7 +109,7 @@ export interface ChangePasswordRequest {
    */
   connection: string;
   /**
-   * The organization_id of the Organization associated with the user.
+   * The organization_id of the Organization associated with the user.
    */
   organization?: string;
 }
