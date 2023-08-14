@@ -1,6 +1,6 @@
-# V3 Migration Guide
+# V4 Migration Guide
 
-Guide to migrating from `2.x` to `3.x`
+Guide to migrating from `3.x` to `4.x`
 
 - [General](#general)
   - [Node 16 or newer is required](#node-16-or-newer-is-required)
