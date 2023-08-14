@@ -1,9 +1,17 @@
 import { ResponseError } from '../lib/errors.js';
-import { BaseAPI, ClientOptions } from '../lib/runtime.js';
+import {
+  BaseAPI,
+  ClientOptions,
+  InitOverrideFunction,
+  JSONApiResponse,
+  RequestOpts,
+} from '../lib/runtime.js';
 import {
   AddClientAuthenticationPayload,
   addClientAuthentication,
 } from './client-authentication.js';
+import { IDTokenValidator } from './id-token-validator.js';
+import { GrantOptions, TokenSet } from './oauth.js';
 
 export interface AuthenticationClientOptions extends ClientOptions {
   domain: string;
@@ -116,4 +124,41 @@ export class BaseAuthAPI extends BaseAPI {
       clientAssertionSigningAlg: this.clientAssertionSigningAlg,
     });
   }
+}
+
+/**
+ * @private
+ * Perform an OAuth 2.0 grant.
+ */
+export async function grant(
+  grantType: string,
+  bodyParameters: Record<string, any>,
+  { idTokenValidateOptions, initOverrides }: GrantOptions = {},
+  idTokenValidator: IDTokenValidator,
+  request: (
+    context: RequestOpts,
+    initOverrides?: RequestInit | InitOverrideFunction
+  ) => Promise<Response>
+): Promise<JSONApiResponse<TokenSet>> {
+  const response = await request(
+    {
+      path: '/oauth/token',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: this.clientId,
+        ...bodyParameters,
+        grant_type: grantType,
+      }),
+    },
+    initOverrides
+  );
+
+  const res: JSONApiResponse<TokenSet> = await JSONApiResponse.fromResponse(response);
+  if (res.data.id_token) {
+    await idTokenValidator.validate(res.data.id_token, idTokenValidateOptions);
+  }
+  return res;
 }
