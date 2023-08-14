@@ -583,6 +583,9 @@ describe('Runtime for AuthenticationClient', () => {
       domain: 'tenant.auth0.com',
       clientId: '123',
       clientSecret: '123',
+      retry: {
+        enabled: true,
+      },
     });
     const response = await client.oauth.clientCredentialsGrant({
       audience: '123',
@@ -603,9 +606,6 @@ describe('Runtime for AuthenticationClient', () => {
       domain: 'tenant.auth0.com',
       clientId: '123',
       clientSecret: '123',
-      retry: {
-        enabled: false,
-      },
     });
 
     try {
