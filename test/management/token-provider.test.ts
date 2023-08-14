@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { TokenProvider } from '../../src/management/token-provider';
+import { TokenProvider } from '../../src/management/token-provider.js';
 
 const opts = {
   domain: 'test-domain.auth0.com',

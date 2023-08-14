@@ -342,11 +342,11 @@ export class OAuth extends BaseAuthAPI {
    *    clientSecret: 'myClientSecret'
    * });
    *
-   * await auth0.oauth.clientCredentialsGrant({
+   * await auth0.oauth.passwordGrant({
    *     username: 'myusername@example.com',
    *     password: 'mypassword'
    *   },
-   *   { headers: { 'auth0-forwarded-for': 'END.USER.IP.123' } }
+   *   { initOverrides: { headers: { 'auth0-forwarded-for': 'END.USER.IP.123' } } }
    * );
    * ```
    *

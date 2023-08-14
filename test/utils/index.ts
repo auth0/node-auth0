@@ -1,2 +1,2 @@
-export * from './extractParts';
-export * from './withIdToken';
+export * from './extractParts.js';
+export * from './withIdToken.js';

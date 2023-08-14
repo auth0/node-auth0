@@ -23,5 +23,7 @@ module.exports = {
     'promise/catch-or-return': 'off',
     'promise/always-return': 'off',
     'import/no-default-export': 'error',
+    '@typescript-eslint/no-unused-vars': 'error',
+    'import/extensions': ['error', 'always'],
   },
 };

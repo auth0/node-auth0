@@ -1,11 +1,7 @@
 import nock from 'nock';
 import { beforeAll, afterAll } from '@jest/globals';
-import {
-  Passwordless,
-  LoginWithEmailRequest,
-  LoginWithSMSRequest,
-} from '../../src/auth/passwordless';
-import { withIdToken } from '../utils';
+import { Passwordless, LoginWithEmailRequest, LoginWithSMSRequest } from '../../src/index.js';
+import { withIdToken } from '../utils/index.js';
 
 const { back: nockBack } = nock;
 

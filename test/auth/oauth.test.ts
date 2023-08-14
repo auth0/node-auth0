@@ -7,8 +7,8 @@ import {
   PasswordGrantRequest,
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
-} from '../../src/auth/oauth';
-import { withIdToken } from '../utils';
+} from '../../src/index.js';
+import { withIdToken } from '../utils/index.js';
 
 const { back: nockBack } = nock;
 
@@ -33,11 +33,11 @@ describe('OAuth', () => {
   });
 
   describe('#authorizationCodeGrant', () => {
-    it('should require a code', () => {
+    it('should require a code', async () => {
       const oauth = new OAuth(opts);
-      expect(oauth.authorizationCodeGrant({} as AuthorizationCodeGrantRequest)).rejects.toThrow(
-        'Required parameter requestParameters.code was null or undefined.'
-      );
+      await expect(
+        oauth.authorizationCodeGrant({} as AuthorizationCodeGrantRequest)
+      ).rejects.toThrow('Required parameter requestParameters.code was null or undefined.');
     });
 
     it('should return tokens', async () => {
@@ -152,11 +152,11 @@ describe('OAuth', () => {
   });
 
   describe('#clientCredentialsGrant', () => {
-    it('should require an audience', () => {
+    it('should require an audience', async () => {
       const oauth = new OAuth(opts);
-      expect(oauth.clientCredentialsGrant({} as ClientCredentialsGrantRequest)).rejects.toThrow(
-        'Required parameter requestParameters.audience was null or undefined.'
-      );
+      await expect(
+        oauth.clientCredentialsGrant({} as ClientCredentialsGrantRequest)
+      ).rejects.toThrow('Required parameter requestParameters.audience was null or undefined.');
     });
 
     it('should return tokens', async () => {
@@ -172,11 +172,11 @@ describe('OAuth', () => {
   });
 
   describe('#passwordGrant', () => {
-    it('should require a password', () => {
+    it('should require a password', async () => {
       const oauth = new OAuth(opts);
-      expect(oauth.passwordGrant({ username: 'foo' } as PasswordGrantRequest)).rejects.toThrow(
-        'Required parameter requestParameters.password was null or undefined.'
-      );
+      await expect(
+        oauth.passwordGrant({ username: 'foo' } as PasswordGrantRequest)
+      ).rejects.toThrow('Required parameter requestParameters.password was null or undefined.');
     });
 
     it('should return tokens', async () => {
@@ -215,9 +215,9 @@ describe('OAuth', () => {
   });
 
   describe('#refreshTokenGrant', () => {
-    it('should require a refresh token', () => {
+    it('should require a refresh token', async () => {
       const oauth = new OAuth(opts);
-      expect(oauth.refreshTokenGrant({} as RefreshTokenGrantRequest)).rejects.toThrow(
+      await expect(oauth.refreshTokenGrant({} as RefreshTokenGrantRequest)).rejects.toThrow(
         'Required parameter requestParameters.refresh_token was null or undefined.'
       );
     });
@@ -257,9 +257,9 @@ describe('OAuth', () => {
   });
 
   describe('#revokeRefreshToken', () => {
-    it('should require a refresh token', () => {
+    it('should require a refresh token', async () => {
       const oauth = new OAuth(opts);
-      expect(oauth.revokeRefreshToken({} as RevokeRefreshTokenRequest)).rejects.toThrow(
+      await expect(oauth.revokeRefreshToken({} as RevokeRefreshTokenRequest)).rejects.toThrow(
         'Required parameter requestParameters.token was null or undefined.'
       );
     });
