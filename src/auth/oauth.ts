@@ -257,7 +257,7 @@ export class OAuth extends BaseAuthAPI {
 
     return this.grant(
       'authorization_code',
-      await this.addClientAuthentication(bodyParameters, true),
+      await this.addClientAuthentication(bodyParameters),
       options
     );
   }
@@ -291,7 +291,7 @@ export class OAuth extends BaseAuthAPI {
 
     return this.grant(
       'authorization_code',
-      await this.addClientAuthentication(bodyParameters, false),
+      await this.addClientAuthentication(bodyParameters),
       options
     );
   }
@@ -323,7 +323,7 @@ export class OAuth extends BaseAuthAPI {
 
     return this.grant(
       'client_credentials',
-      await this.addClientAuthentication(bodyParameters, true),
+      await this.addClientAuthentication(bodyParameters),
       options
     );
   }
@@ -364,7 +364,7 @@ export class OAuth extends BaseAuthAPI {
 
     return this.grant(
       bodyParameters.realm ? 'http://auth0.com/oauth/grant-type/password-realm' : 'password',
-      await this.addClientAuthentication(bodyParameters, false),
+      await this.addClientAuthentication(bodyParameters),
       options
     );
   }
@@ -391,11 +391,7 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['refresh_token']);
 
-    return this.grant(
-      'refresh_token',
-      await this.addClientAuthentication(bodyParameters, false),
-      options
-    );
+    return this.grant('refresh_token', await this.addClientAuthentication(bodyParameters), options);
   }
 
   /**
@@ -432,10 +428,7 @@ export class OAuth extends BaseAuthAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: await this.addClientAuthentication(
-          { client_id: this.clientId, ...bodyParameters },
-          false
-        ),
+        body: await this.addClientAuthentication({ client_id: this.clientId, ...bodyParameters }),
       },
       options.initOverrides
     );

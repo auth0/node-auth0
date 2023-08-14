@@ -130,10 +130,11 @@ export class Passwordless extends BaseAuthAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: await this.addClientAuthentication(
-          { client_id: this.clientId, connection: 'email', ...bodyParameters },
-          false
-        ),
+        body: await this.addClientAuthentication({
+          client_id: this.clientId,
+          connection: 'email',
+          ...bodyParameters,
+        }),
       },
       initOverrides
     );
@@ -177,10 +178,11 @@ export class Passwordless extends BaseAuthAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: await this.addClientAuthentication(
-          { client_id: this.clientId, connection: 'sms', ...bodyParameters },
-          false
-        ),
+        body: await this.addClientAuthentication({
+          client_id: this.clientId,
+          connection: 'sms',
+          ...bodyParameters,
+        }),
       },
       initOverrides
     );
@@ -215,15 +217,12 @@ export class Passwordless extends BaseAuthAPI {
 
     return this.oauth.grant(
       'http://auth0.com/oauth/grant-type/passwordless/otp',
-      await this.addClientAuthentication(
-        {
-          username,
-          otp,
-          realm: 'email',
-          ...otherParams,
-        },
-        false
-      ),
+      await this.addClientAuthentication({
+        username,
+        otp,
+        realm: 'email',
+        ...otherParams,
+      }),
       options
     );
   }
@@ -255,15 +254,12 @@ export class Passwordless extends BaseAuthAPI {
 
     return this.oauth.grant(
       'http://auth0.com/oauth/grant-type/passwordless/otp',
-      await this.addClientAuthentication(
-        {
-          username,
-          otp,
-          realm: 'sms',
-          ...otherParams,
-        },
-        false
-      ),
+      await this.addClientAuthentication({
+        username,
+        otp,
+        realm: 'sms',
+        ...otherParams,
+      }),
       options
     );
   }

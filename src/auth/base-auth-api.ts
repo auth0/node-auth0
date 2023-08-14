@@ -103,13 +103,11 @@ export class BaseAuthAPI extends BaseAPI {
    * @private
    */
   protected async addClientAuthentication(
-    payload: AddClientAuthenticationPayload,
-    required: boolean
+    payload: AddClientAuthenticationPayload
   ): Promise<AddClientAuthenticationPayload> {
     return addClientAuthentication({
       payload,
       domain: this.domain,
-      required,
       clientId: this.clientId,
       clientSecret: this.clientSecret,
       clientAssertionSigningKey: this.clientAssertionSigningKey,
