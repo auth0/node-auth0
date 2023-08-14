@@ -316,7 +316,6 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 
 | Before                                  | After                                           |
 | --------------------------------------- | ----------------------------------------------- |
-| `actions.createVersion`                 | ??                                              |
 | `blacklistedTokens.add`                 | `blacklists.add`                                |
 | `blacklistedTokens.getAll`              | `blacklists.getAll`                             |
 | `clientCredentials.create`              | `clients.createCredential`                      |
@@ -328,7 +327,6 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 | `emailProvider.configure`               | `emails.configure`                              |
 | `tenant.getSettings`                    | `tenants.getSettings`                           |
 | `tenant.updateSettings`                 | `tenants.updateSettings`                        |
-| `migrations.*`                          | ??                                              |
 | `users.getByEmail`                      | `usersByEmailManager.getByEmail`                |
 | `users.updateUserMetadata`              | `users.update`                                  |
 | `users.updateAppMetadata`               | `users.update`                                  |
@@ -342,8 +340,6 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 | `users.deleteAuthenticationMethodById`  | `users.deleteAuthenticationMethod`              |
 | `userBlocks.getByIdentifier`            | `userBlocks.get`                                |
 | `userBlocks.deleteByIdentifier`         | `userBlocks.delete`                             |
-| `guardian.getFactorSettings`            | ??                                              |
-| `guardian.updateFactorSettings`         | ??                                              |
 | `guardian.getFactorProvider`            | `guardian.get{name}FactorProvider{provider}`    |
 | `guardian.updateFactorProvider`         | `guardian.update{name}FactorProvider{provider}` |
 | `guardian.getFactorTemplates`           | `guardian.get{name}FactorTemplates`             |
