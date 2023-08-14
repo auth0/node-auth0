@@ -1,9 +1,8 @@
 const MAX_REQUEST_RETRY_JITTER = 250;
 const MAX_REQUEST_RETRY_DELAY = 10000;
-const MIN_REQUEST_RETRY_DELAY = 250;
-const DEFAULT_NUMBER_RETRIES = 5;
+const DEFAULT_NUMBER_RETRIES = 3;
 const MAX_NUMBER_RETRIES = 10;
-const BASE_DELAY = 250;
+const BASE_DELAY = 500;
 
 /**
  * @private
@@ -72,7 +71,6 @@ export function retry(
       let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
       wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
       wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
-      wait = Math.max(wait, MIN_REQUEST_RETRY_DELAY);
 
       await pause(wait);
 
