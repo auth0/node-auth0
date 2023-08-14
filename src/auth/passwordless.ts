@@ -227,6 +227,7 @@ export class Passwordless extends BaseAuthAPI {
         false
       ),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );
@@ -269,6 +270,7 @@ export class Passwordless extends BaseAuthAPI {
         false
       ),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );

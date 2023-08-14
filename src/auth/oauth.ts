@@ -231,6 +231,7 @@ export class OAuth extends BaseAuthAPI {
       'authorization_code',
       await this.addClientAuthentication(bodyParameters, true),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );
@@ -267,6 +268,7 @@ export class OAuth extends BaseAuthAPI {
       'authorization_code',
       await this.addClientAuthentication(bodyParameters, false),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );
@@ -301,6 +303,7 @@ export class OAuth extends BaseAuthAPI {
       'client_credentials',
       await this.addClientAuthentication(bodyParameters, true),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );
@@ -344,6 +347,7 @@ export class OAuth extends BaseAuthAPI {
       bodyParameters.realm ? 'http://auth0.com/oauth/grant-type/password-realm' : 'password',
       await this.addClientAuthentication(bodyParameters, false),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );
@@ -375,6 +379,7 @@ export class OAuth extends BaseAuthAPI {
       'refresh_token',
       await this.addClientAuthentication(bodyParameters, false),
       options,
+      this.clientId,
       this.idTokenValidator,
       this.request.bind(this)
     );
