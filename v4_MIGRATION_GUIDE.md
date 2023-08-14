@@ -5,11 +5,15 @@ Guide to migrating from `2.x` to `3.x`
 - [General](#general)
   - [Node 16 or newer is required](#node-16-or-newer-is-required)
   - [Callbacks are no longer supported](#callbacks-are-no-longer-supported)
+  - [Response change](#response-change)
 - [Authentication API](#authentication-api)
+  - [Options](#options)
   - [Legacy endpoints have been removed](#legacy-endpoints-have-been-removed)
+  - [Top level methods have been removed](#top-level-methods-have-been-removed)
   - [Method name changes](#method-name-changes)
 - [Management API](#management-api)
-  - [Top level methods have been removed](#top-level-methods-have-been-removed)
+  - [Options](#options-1)
+  - [Top level methods have been removed](#top-level-methods-have-been-removed-1)
   - [Method name changes](#method-name-changes-1)
 
 ## General
@@ -37,7 +41,31 @@ const users = await management.users.getAll();
 console.log(users.length);
 ```
 
+### Response change
+
+The SDK now returns an object which includes the data and other information about the response.
+
+#### Before
+
+```js
+const user = await management.users.get({ id: 'user-id' });
+```
+
+#### After
+
+```js
+const { data: user } = await management.users.get({ id: 'user-id' });
+```
+
 ## Authentication API
+
+### Options
+
+The following configuration options have changed:
+
+- `scope` - You should use the `scope` option for the specific grant.
+- `proxy` - You should now provide an [HttpsAgent](https://nodejs.org/api/https.html#class-httpsagent) as the `agent` config.
+- `supportedAlgorithms` - This has been replaced with `idTokenSigningAlg` which defaults to `RS256` (If your ID Tokens are signed with `HS256` you should provide this as the configuration option)
 
 ### Legacy endpoints have been removed
 
@@ -94,6 +122,16 @@ Some method names have been changed to better align with the documentation.
 | `users.getInfo`                       | `UserInfoClient.getUserInfo`                                  |
 
 ## Management API
+
+### Options
+
+The following configuration options have changed:
+
+- `scope` - The Management Client uses the Client Credentials grant which gets all the scopes granted to the application. So this is redundant and has been removed.
+- `tokenProvider.enableCache` - Use the `enableCache` option of the Management Client.
+- `tokenProvider.cacheTTLInSeconds` - Each instance of the Management Client only stores a single access token, so this functionality has been removed.
+- `proxy` - You should now provide an [HttpsAgent](https://nodejs.org/api/https.html#class-httpsagent) as the `agent` config.
+- `includeResponseHeaders` - This has been removed, all return types include the response headers by default.
 
 ### Top level methods have been removed
 
