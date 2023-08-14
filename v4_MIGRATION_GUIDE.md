@@ -85,7 +85,7 @@ Previously, in many cases, there were 2 ways to call a method:
 await auth.clientCredentialsGrant({ audience: 'my-api' });
 ```
 
-Now the top level methods on the Management Client have been removed, so you must call the method on the applicable namespace.
+Now the top level methods on the Authentication Client have been removed, so you must call the method on the applicable namespace.
 
 ```js
 await auth.oauth.clientCredentialsGrant({ audience: 'my-api' });
