@@ -386,7 +386,8 @@ describe('JobsManager', () => {
   describe('#importUsers with JSON data', () => {
     let data: PostUsersImportsData;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      const Blob = await getBlobCls();
       data = {
         users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
