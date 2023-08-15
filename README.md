@@ -36,8 +36,6 @@ npm install auth0@beta
 
 This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
 
-The **AuthenticationClient** constructor takes an _optional_ client ID, if specified it will be used as default value for all endpoints that accept a client ID.
-
 ```js
 import { AuthenticationClient } from 'auth0';
 
@@ -48,31 +46,36 @@ const auth0 = new AuthenticationClient({
 });
 ```
 
+See [more examples](./EXAMPLES.md#authentication-client).
+
 #### Management API Client
 
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
-Initialize your client class with an API v2 token and a domain.
+Initialize your client class with a client ID, client secret and a domain.
 
 ```js
 import { ManagementClient } from 'auth0';
 
 var management = new ManagementClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
-  token: '{YOUR_API_V2_TOKEN}',
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
 });
 ```
 
-Or, initialize your client class with a client secret and a domain.
+Or, initialize your client class with an API v2 token and a domain.
 
 ```js
 import { ManagementClient } from 'auth0';
 
 var management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
   token: '{YOUR_API_V2_TOKEN}',
-  domain: '{YOUR_ACCOUNT}.auth0.com',
 });
 ```
+
+See [more examples](./EXAMPLES.md#management-client).
 
 ## API Reference
 
