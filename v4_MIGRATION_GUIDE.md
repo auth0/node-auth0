@@ -372,7 +372,7 @@ await management.jobs.importUsers({
 
 ```js
 await management.jobs.importUsers({
-  users: new Blob[(fs.readFileSync('./myusers.json'), { type: 'application/json' })](),
+  users: new Blob([fs.readFileSync('./myusers.json')], { type: 'application/json' }),
   connection_id: 'con_123',
 });
 ```
