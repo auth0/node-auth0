@@ -731,7 +731,7 @@ export async function jobs() {
   const ids = [];
 
   const { data: createImportJob } = await mgmntClient.jobs.importUsers({
-    users: fs.createReadStream(usersFilePath),
+    users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
     connection_id: connection.id as string,
   });
 

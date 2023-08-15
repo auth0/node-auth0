@@ -1,5 +1,3 @@
-import type { ReadStream } from 'fs';
-
 /**
  *
  */
@@ -11963,7 +11961,7 @@ export interface GetJobsByIdRequest {
 export interface PostUsersImportsData {
   /**
    */
-  users: Blob | ReadStream;
+  users: Blob;
   /**
    * connection_id of the connection to which users will be imported.
    *

@@ -14,6 +14,7 @@ import {
 } from '../../src/index.js';
 import { extractParts } from '../utils/index.js';
 import { fileURLToPath } from 'url';
+import { getBlobCls } from '../../src/lib/fetch.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -174,9 +175,10 @@ describe('JobsManager', () => {
     let data: PostUsersImportsData;
     let request: nock.Scope;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      const Blob = await getBlobCls();
       data = {
-        users: fs.createReadStream(usersFilePath) as any,
+        users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
       };
       request = nock(API_URL).post('/jobs/users-imports').reply(200, {});
@@ -386,13 +388,13 @@ describe('JobsManager', () => {
 
     beforeEach(() => {
       data = {
-        users: fs.createReadStream(usersFilePath) as any,
+        users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
       };
       nock(API_URL).post('/jobs/users-imports').reply(200, {});
     });
 
-    it('should correctly include user JSON from ReadStream', (done) => {
+    it('should correctly include user JSON from Blob', (done) => {
       nock.cleanAll();
       let boundary: string | null = null;
 
@@ -423,46 +425,42 @@ describe('JobsManager', () => {
       });
     });
 
-    (typeof Blob === 'undefined' ? it.skip : it)(
-      'should correctly include user JSON from Blob',
-      function (done) {
-        nock.cleanAll();
-        let boundary: string | null = null;
+    it('should correctly include user JSON from Blob', async function () {
+      nock.cleanAll();
+      let boundary: string | null = null;
 
-        const request = nock(API_URL)
-          .matchHeader('Content-Type', (header) => {
-            boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+      const request = nock(API_URL)
+        .matchHeader('Content-Type', (header) => {
+          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
 
-            return true;
-          })
-          .post('/jobs/users-imports', (body) => {
-            const parts = extractParts(body, boundary);
+          return true;
+        })
+        .post('/jobs/users-imports', (body) => {
+          const parts = extractParts(body, boundary);
 
-            expect(parts.users).toContain('Content-Type: application/json');
+          expect(parts.users).toContain('Content-Type: application/json');
 
-            // Validate the content of the users JSON.
-            const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
-            expect(users.length).toBe(2);
-            expect(users[0].email).toBe('jane.doe@contoso.com');
+          // Validate the content of the users JSON.
+          const users = JSON.parse(parts.users.split('\r\n').slice(-1)[0]);
+          expect(users.length).toBe(2);
+          expect(users[0].email).toBe('jane.doe@contoso.com');
 
-            return true;
-          })
-          .reply(200, {});
+          return true;
+        })
+        .reply(200, {});
 
-        jobs
-          .importUsers({
-            ...data,
-            users: new Blob([fs.readFileSync(usersFilePath).toString()], {
-              type: 'application/json',
-            }),
-          })
-          .then(() => {
-            expect(request.isDone()).toBe(true);
-
-            done();
-          });
-      }
-    );
+      const Blob = await getBlobCls();
+      await jobs
+        .importUsers({
+          ...data,
+          users: new Blob([fs.readFileSync(usersFilePath)], {
+            type: 'application/json',
+          }),
+        })
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+        });
+    });
   });
 
   describe('#exportUsers', () => {

@@ -1,4 +1,3 @@
-import type { ReadStream } from 'fs';
 import { retry } from './retry.js';
 import { FetchError, RequiredError, TimeoutError } from './errors.js';
 import {
@@ -9,19 +8,10 @@ import {
   Middleware,
   FetchAPI,
 } from './models.js';
-
-/**
- * @private
- */
-const nodeFetch = (...args: Parameters<FetchAPI>) =>
-  import('node-fetch').then(({ default: fetch }) => (fetch as FetchAPI)(...args));
-
-/**
- * @private
- */
-export const getFormDataCls = async () => import('node-fetch').then(({ FormData }) => FormData);
+import { fetch as fetchApi, getFormDataCls, getBlobCls } from './fetch.js';
 
 export * from './models.js';
+export { getFormDataCls };
 
 /**
  * @private
@@ -43,7 +33,7 @@ export class BaseAPI {
     }
 
     this.middleware = configuration.middleware || [];
-    this.fetchApi = configuration.fetchApi || nodeFetch;
+    this.fetchApi = configuration.fetchApi || fetchApi;
     this.parseError = configuration.parseError;
     this.timeoutDuration =
       typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
@@ -96,7 +86,7 @@ export class BaseAPI {
       })),
     };
 
-    const { Blob } = await import('node-fetch');
+    const Blob = await getBlobCls();
     const init: RequestInit = {
       ...overriddenInit,
       body:
@@ -312,17 +302,9 @@ export function applyQueryParams<
  * @private
  */
 export async function parseFormParam(
-  originalValue: number | boolean | string | Blob | ReadStream
+  originalValue: number | boolean | string | Blob
 ): Promise<string | Blob> {
   let value = originalValue;
   value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-  if (
-    typeof originalValue === 'object' &&
-    'path' in originalValue &&
-    typeof originalValue.path === 'string'
-  ) {
-    const { fileFrom } = await import('node-fetch');
-    value = await fileFrom(originalValue.path, 'application/json');
-  }
   return value as string | Blob;
 }

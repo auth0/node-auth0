@@ -356,3 +356,34 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 | `organizations.removeMemberRoles`       | `organizations.deleteMemberRoles`               |
 
 </details>
+
+### Import users now takes a Blob
+
+#### Before
+
+```js
+await management.jobs.importUsers({
+  users: fs.createReadStream('./myusers.json'),
+  connection_id: 'con_123',
+});
+```
+
+#### After
+
+```js
+await management.jobs.importUsers({
+  users: new Blob[(fs.readFileSync('./myusers.json'), { type: 'application/json' })](),
+  connection_id: 'con_123',
+});
+```
+
+If you are on Node 16, or you don't want to read the whole file into memory, you can use a library like [fetch-blob](https://github.com/node-fetch/fetch-blob).
+
+```js
+import { fileFrom } from 'fetch-blob/from.js';
+
+await management.jobs.importUsers({
+  users: await fileFrom('./myusers.json', 'application/json'),
+  connection_id: 'con_123',
+});
+```
