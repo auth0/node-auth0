@@ -14,7 +14,6 @@ import {
 } from '../../src/index.js';
 import { extractParts } from '../utils/index.js';
 import { fileURLToPath } from 'url';
-import { getBlobCls } from '../../src/lib/fetch.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -176,7 +175,7 @@ describe('JobsManager', () => {
     let request: nock.Scope;
 
     beforeEach(async () => {
-      const Blob = await getBlobCls();
+      const Blob = globalThis.Blob;
       data = {
         users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
@@ -387,7 +386,7 @@ describe('JobsManager', () => {
     let data: PostUsersImportsData;
 
     beforeEach(async () => {
-      const Blob = await getBlobCls();
+      const Blob = globalThis.Blob;
       data = {
         users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
@@ -450,7 +449,7 @@ describe('JobsManager', () => {
         })
         .reply(200, {});
 
-      const Blob = await getBlobCls();
+      const Blob = globalThis.Blob;
       await jobs
         .importUsers({
           ...data,

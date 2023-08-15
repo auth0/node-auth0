@@ -8,10 +8,9 @@ import {
   Middleware,
   FetchAPI,
 } from './models.js';
-import { fetch as fetchApi, getFormDataCls, getBlobCls } from './fetch.js';
 
 export * from './models.js';
-export { getFormDataCls };
+export const getFormDataCls = () => globalThis.FormData;
 
 /**
  * @private
@@ -33,7 +32,7 @@ export class BaseAPI {
     }
 
     this.middleware = configuration.middleware || [];
-    this.fetchApi = configuration.fetchApi || fetchApi;
+    this.fetchApi = configuration.fetchApi || globalThis.fetch;
     this.parseError = configuration.parseError;
     this.timeoutDuration =
       typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
@@ -86,7 +85,7 @@ export class BaseAPI {
       })),
     };
 
-    const Blob = await getBlobCls();
+    const Blob = globalThis.Blob;
     const init: RequestInit = {
       ...overriddenInit,
       body:
@@ -175,7 +174,7 @@ export class BaseAPI {
 }
 
 async function isFormData(value: unknown): Promise<boolean> {
-  const FormData = await getFormDataCls();
+  const FormData = globalThis.FormData;
   return typeof FormData !== 'undefined' && value instanceof FormData;
 }
 
