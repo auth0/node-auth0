@@ -191,16 +191,6 @@ export class OAuth extends BaseAuthAPI {
     this.idTokenValidator = new IDTokenValidator(options);
   }
 
-  private async validateIdToken(
-    tokenSet: TokenSet,
-    idTokenValidateOptions?: IDTokenValidateOptions
-  ): Promise<void> {
-    const { id_token: idToken } = tokenSet;
-    if (idToken) {
-      await this.idTokenValidator.validate(idToken, idTokenValidateOptions);
-    }
-  }
-
   /**
    * This is the flow that regular web apps use to access an API.
    *
@@ -227,7 +217,7 @@ export class OAuth extends BaseAuthAPI {
 
     return grant(
       'authorization_code',
-      await this.addClientAuthentication(bodyParameters, true),
+      await this.addClientAuthentication(bodyParameters),
       options,
       this.clientId,
       this.idTokenValidator,
@@ -264,7 +254,7 @@ export class OAuth extends BaseAuthAPI {
 
     return grant(
       'authorization_code',
-      await this.addClientAuthentication(bodyParameters, false),
+      await this.addClientAuthentication(bodyParameters),
       options,
       this.clientId,
       this.idTokenValidator,
@@ -299,7 +289,7 @@ export class OAuth extends BaseAuthAPI {
 
     return grant(
       'client_credentials',
-      await this.addClientAuthentication(bodyParameters, true),
+      await this.addClientAuthentication(bodyParameters),
       options,
       this.clientId,
       this.idTokenValidator,
@@ -343,7 +333,7 @@ export class OAuth extends BaseAuthAPI {
 
     return grant(
       bodyParameters.realm ? 'http://auth0.com/oauth/grant-type/password-realm' : 'password',
-      await this.addClientAuthentication(bodyParameters, false),
+      await this.addClientAuthentication(bodyParameters),
       options,
       this.clientId,
       this.idTokenValidator,
@@ -375,7 +365,7 @@ export class OAuth extends BaseAuthAPI {
 
     return grant(
       'refresh_token',
-      await this.addClientAuthentication(bodyParameters, false),
+      await this.addClientAuthentication(bodyParameters),
       options,
       this.clientId,
       this.idTokenValidator,
@@ -417,10 +407,7 @@ export class OAuth extends BaseAuthAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: await this.addClientAuthentication(
-          { client_id: this.clientId, ...bodyParameters },
-          false
-        ),
+        body: await this.addClientAuthentication({ client_id: this.clientId, ...bodyParameters }),
       },
       options.initOverrides
     );
