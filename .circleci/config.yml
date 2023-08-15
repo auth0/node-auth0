@@ -7,7 +7,7 @@ jobs:
     parameters:
       node-version:
         type: string
-        default: "16.18"
+        default: "18.17"
     docker:
       - image: cimg/node:<< parameters.node-version >>
     resource_class: xlarge
@@ -36,7 +36,7 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["16.18", "18.17", "20.3"]
+              node-version: ["18.17", "20.3"]
       - ship/node-publish:
           publish-command: npm run build && npm publish --tag beta
           requires:
