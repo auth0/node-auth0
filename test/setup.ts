@@ -6,5 +6,5 @@ const { back: nockBack } = nock;
 
 nockBack.fixtures = path.dirname(fileURLToPath(import.meta.url));
 
-// @ts-expect-error Falling back to node-fetch because nock doesn't wotk with native fetch.
+// @ts-expect-error Falling back to node-fetch because nock doesn't work with native fetch.
 delete globalThis.fetch;
