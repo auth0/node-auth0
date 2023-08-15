@@ -11,7 +11,6 @@ import {
 } from '../../src/index.js';
 import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
 import { BaseAPI, applyQueryParams } from '../../src/lib/runtime.js';
-import { Response as NodeResponse } from 'node-fetch';
 
 import * as utils from '../../src/utils.js';
 import { base64url } from 'jose';
@@ -296,7 +295,7 @@ describe('Runtime', () => {
       middleware: [
         {
           onError() {
-            return new NodeResponse(undefined, { status: 418 }) as Response;
+            return new Response(undefined, { status: 418 }) as Response;
           },
         },
       ],
@@ -320,7 +319,7 @@ describe('Runtime', () => {
       middleware: [
         {
           post() {
-            return new NodeResponse(JSON.stringify({ bar: 'foo' }), {
+            return new Response(JSON.stringify({ bar: 'foo' }), {
               status: 200,
             }) as Response;
           },
