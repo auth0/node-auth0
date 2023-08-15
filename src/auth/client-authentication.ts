@@ -31,7 +31,6 @@ export const addClientAuthentication = async ({
   payload,
   domain,
   clientId,
-  required,
   clientAssertionSigningKey,
   clientAssertionSigningAlg,
   clientSecret,
@@ -55,7 +54,6 @@ export const addClientAuthentication = async ({
     payload.client_secret = clientSecret;
   }
   if (
-    required &&
     (!payload.client_secret || payload.client_secret.trim().length === 0) &&
     (!payload.client_assertion || payload.client_assertion.trim().length === 0)
   ) {
