@@ -1,5 +1,23 @@
 # Change Log
 
+## [v4.0.0-beta.7](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.7) (2023-08-16)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.6...v4.0.0-beta.7)
+
+**⚠️ BREAKING CHANGES**
+
+- [SDK-4485] Use native fetch, drop Node 16 support [\#906](https://github.com/auth0/node-auth0/pull/906) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Do not expose a grant method [\#904](https://github.com/auth0/node-auth0/pull/904) ([frederikprijck](https://github.com/frederikprijck))
+- Only allow confidential clients [\#905](https://github.com/auth0/node-auth0/pull/905) ([frederikprijck](https://github.com/frederikprijck))
+
+**Added**
+
+- Support providing Organization when resetting password [\#893](https://github.com/auth0/node-auth0/pull/893) ([frederikprijck](https://github.com/frederikprijck))
+
+**Fixed**
+
+- Improve ESM and CJS support [\#902](https://github.com/auth0/node-auth0/pull/902) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.0-beta.6](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.6) (2023-07-19)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.5...v4.0.0-beta.6)
