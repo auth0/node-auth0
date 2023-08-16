@@ -10,7 +10,6 @@ import {
 } from './models.js';
 
 export * from './models.js';
-export const getFormDataCls = () => FormData;
 
 /**
  * @private
