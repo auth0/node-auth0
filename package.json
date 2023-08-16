@@ -15,6 +15,16 @@
         "default": "./dist/cjs/index.js",
         "types": "./dist/cjs/index.d.ts"
       }
+    },
+    "./public": {
+      "import": {
+        "default": "./dist/esm/public.js",
+        "types": "./dist/esm/public.d.ts"
+      },
+      "require": {
+        "default": "./dist/cjs/public.js",
+        "types": "./dist/cjs/public.d.ts"
+      }
     }
   },
   "sideEffects": false,
