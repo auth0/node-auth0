@@ -4,7 +4,7 @@ import {
   VoidApiResponse,
   validateRequiredRequestParams,
 } from '../lib/runtime.js';
-import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api.js';
+import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api.js';
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
 
 export interface TokenSet {
@@ -191,46 +191,6 @@ export class OAuth extends BaseAuthAPI {
     this.idTokenValidator = new IDTokenValidator(options);
   }
 
-  private async validateIdToken(
-    tokenSet: TokenSet,
-    idTokenValidateOptions?: IDTokenValidateOptions
-  ): Promise<void> {
-    const { id_token: idToken } = tokenSet;
-    if (idToken) {
-      await this.idTokenValidator.validate(idToken, idTokenValidateOptions);
-    }
-  }
-
-  /**
-   * Perform an OAuth 2.0 grant.
-   * (You should only need this if you can't find the grant you need in this library.)
-   */
-  async grant(
-    grantType: string,
-    bodyParameters: Record<string, any>,
-    { idTokenValidateOptions, initOverrides }: GrantOptions = {}
-  ): Promise<JSONApiResponse<TokenSet>> {
-    const response = await this.request(
-      {
-        path: '/oauth/token',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          client_id: this.clientId,
-          ...bodyParameters,
-          grant_type: grantType,
-        }),
-      },
-      initOverrides
-    );
-
-    const res: JSONApiResponse<TokenSet> = await JSONApiResponse.fromResponse(response);
-    await this.validateIdToken(res.data, idTokenValidateOptions);
-    return res;
-  }
-
   /**
    * This is the flow that regular web apps use to access an API.
    *
@@ -255,10 +215,13 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['code']);
 
-    return this.grant(
+    return grant(
       'authorization_code',
       await this.addClientAuthentication(bodyParameters),
-      options
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
     );
   }
 
@@ -289,10 +252,13 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['code', 'code_verifier']);
 
-    return this.grant(
+    return grant(
       'authorization_code',
       await this.addClientAuthentication(bodyParameters),
-      options
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
     );
   }
 
@@ -321,10 +287,13 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['audience']);
 
-    return this.grant(
+    return grant(
       'client_credentials',
       await this.addClientAuthentication(bodyParameters),
-      options
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
     );
   }
 
@@ -362,10 +331,13 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['username', 'password']);
 
-    return this.grant(
+    return grant(
       bodyParameters.realm ? 'http://auth0.com/oauth/grant-type/password-realm' : 'password',
       await this.addClientAuthentication(bodyParameters),
-      options
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
     );
   }
 
@@ -391,7 +363,14 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['refresh_token']);
 
-    return this.grant('refresh_token', await this.addClientAuthentication(bodyParameters), options);
+    return grant(
+      'refresh_token',
+      await this.addClientAuthentication(bodyParameters),
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
+    );
   }
 
   /**

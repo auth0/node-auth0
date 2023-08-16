@@ -4,8 +4,9 @@ import {
   VoidApiResponse,
   validateRequiredRequestParams,
 } from '../lib/runtime.js';
-import { BaseAuthAPI, AuthenticationClientOptions } from './base-auth-api.js';
-import { OAuth, ClientCredentials, GrantOptions, TokenSet } from './oauth.js';
+import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api.js';
+import { IDTokenValidator } from './id-token-validator.js';
+import { ClientCredentials, GrantOptions, TokenSet } from './oauth.js';
 
 export interface SendEmailLinkRequest {
   /**
@@ -75,10 +76,11 @@ export interface LoginWithSMSRequest extends Omit<LoginWithEmailRequest, 'email'
  * Handles passwordless flows using Email and SMS.
  */
 export class Passwordless extends BaseAuthAPI {
-  private oauth: OAuth;
+  private idTokenValidator: IDTokenValidator;
   constructor(configuration: AuthenticationClientOptions) {
     super(configuration);
-    this.oauth = new OAuth(configuration);
+
+    this.idTokenValidator = new IDTokenValidator(configuration);
   }
 
   /**
@@ -215,7 +217,7 @@ export class Passwordless extends BaseAuthAPI {
 
     const { email: username, code: otp, ...otherParams } = bodyParameters;
 
-    return this.oauth.grant(
+    return grant(
       'http://auth0.com/oauth/grant-type/passwordless/otp',
       await this.addClientAuthentication({
         username,
@@ -223,7 +225,10 @@ export class Passwordless extends BaseAuthAPI {
         realm: 'email',
         ...otherParams,
       }),
-      options
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
     );
   }
 
@@ -252,7 +257,7 @@ export class Passwordless extends BaseAuthAPI {
 
     const { phone_number: username, code: otp, ...otherParams } = bodyParameters;
 
-    return this.oauth.grant(
+    return grant(
       'http://auth0.com/oauth/grant-type/passwordless/otp',
       await this.addClientAuthentication({
         username,
@@ -260,7 +265,10 @@ export class Passwordless extends BaseAuthAPI {
         realm: 'sms',
         ...otherParams,
       }),
-      options
+      options,
+      this.clientId,
+      this.idTokenValidator,
+      this.request.bind(this)
     );
   }
 }

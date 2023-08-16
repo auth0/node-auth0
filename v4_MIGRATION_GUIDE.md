@@ -18,9 +18,9 @@ Guide to migrating from `3.x` to `4.x`
 
 ## General
 
-### Node 16 or newer is required
+### Node 18 or newer is required
 
-Node 16 LTS and newer LTS releases are supported.
+Node 18 LTS and newer LTS releases are supported.
 
 ### Callbacks are no longer supported
 
