@@ -1,4 +1,3 @@
-import type { ReadStream } from 'fs';
 import { retry } from './retry.js';
 import { FetchError, RequiredError, TimeoutError } from './errors.js';
 import {
@@ -9,17 +8,6 @@ import {
   Middleware,
   FetchAPI,
 } from './models.js';
-
-/**
- * @private
- */
-const nodeFetch = (...args: Parameters<FetchAPI>) =>
-  import('node-fetch').then(({ default: fetch }) => (fetch as FetchAPI)(...args));
-
-/**
- * @private
- */
-export const getFormDataCls = async () => import('node-fetch').then(({ FormData }) => FormData);
 
 export * from './models.js';
 
@@ -43,7 +31,7 @@ export class BaseAPI {
     }
 
     this.middleware = configuration.middleware || [];
-    this.fetchApi = configuration.fetchApi || nodeFetch;
+    this.fetchApi = configuration.fetchApi || fetch;
     this.parseError = configuration.parseError;
     this.timeoutDuration =
       typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
@@ -96,11 +84,10 @@ export class BaseAPI {
       })),
     };
 
-    const { Blob } = await import('node-fetch');
     const init: RequestInit = {
       ...overriddenInit,
       body:
-        (await isFormData(overriddenInit.body)) ||
+        overriddenInit.body instanceof FormData ||
         overriddenInit.body instanceof URLSearchParams ||
         overriddenInit.body instanceof Blob
           ? overriddenInit.body
@@ -182,11 +169,6 @@ export class BaseAPI {
 
     return response as Response;
   };
-}
-
-async function isFormData(value: unknown): Promise<boolean> {
-  const FormData = await getFormDataCls();
-  return typeof FormData !== 'undefined' && value instanceof FormData;
 }
 
 /**
@@ -312,17 +294,9 @@ export function applyQueryParams<
  * @private
  */
 export async function parseFormParam(
-  originalValue: number | boolean | string | Blob | ReadStream
+  originalValue: number | boolean | string | Blob
 ): Promise<string | Blob> {
   let value = originalValue;
   value = typeof value == 'number' || typeof value == 'boolean' ? '' + value : value;
-  if (
-    typeof originalValue === 'object' &&
-    'path' in originalValue &&
-    typeof originalValue.path === 'string'
-  ) {
-    const { fileFrom } = await import('node-fetch');
-    value = await fileFrom(originalValue.path, 'application/json');
-  }
   return value as string | Blob;
 }
