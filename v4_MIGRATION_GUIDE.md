@@ -377,7 +377,7 @@ await management.jobs.importUsers({
 });
 ```
 
-If you are on Node 16, or you don't want to read the whole file into memory, you can use a library like [fetch-blob](https://github.com/node-fetch/fetch-blob).
+If you don't want to read the whole file into memory, you can use a library like [fetch-blob](https://github.com/node-fetch/fetch-blob).
 
 ```js
 import { fileFrom } from 'fetch-blob/from.js';

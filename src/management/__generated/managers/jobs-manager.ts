@@ -99,7 +99,7 @@ export class JobsManager extends BaseAPI {
     bodyParameters: PostUsersImportsData,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Job>> {
-    const formParams = new (await runtime.getFormDataCls())();
+    const formParams = new FormData();
 
     if (bodyParameters.users !== undefined) {
       formParams.append('users', await runtime.parseFormParam(bodyParameters.users));
