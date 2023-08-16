@@ -175,7 +175,6 @@ describe('JobsManager', () => {
     let request: nock.Scope;
 
     beforeEach(async () => {
-      const Blob = globalThis.Blob;
       data = {
         users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
@@ -386,7 +385,6 @@ describe('JobsManager', () => {
     let data: PostUsersImportsData;
 
     beforeEach(async () => {
-      const Blob = globalThis.Blob;
       data = {
         users: new Blob([fs.readFileSync(usersFilePath)], { type: 'application/json' }),
         connection_id: 'con_test',
@@ -449,7 +447,6 @@ describe('JobsManager', () => {
         })
         .reply(200, {});
 
-      const Blob = globalThis.Blob;
       await jobs
         .importUsers({
           ...data,
