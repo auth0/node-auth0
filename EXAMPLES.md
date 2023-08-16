@@ -46,7 +46,7 @@ const auth = new AuthenticationClient({
   clientAssertionSigningKey,
 });
 
-const { data: tokens } = auth.oauth.clientCredentialsGrant({
+const { data: tokens } = await auth.oauth.clientCredentialsGrant({
   audience: 'you-api',
 });
 ```
@@ -120,7 +120,7 @@ await auth.passwordless.sendEmail({
   send: 'code',
 });
 
-const { data: tokens } = auth.passwordless.loginWithEmail({
+const { data: tokens } = await auth.passwordless.loginWithEmail({
   email: '{user email}',
   code: '{code from email}',
 });
