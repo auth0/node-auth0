@@ -20,7 +20,7 @@
 
 This library supports the following tooling versions:
 
-- Node.js: `>=16`
+- Node.js: `>=18`
 
 ### Installation
 
