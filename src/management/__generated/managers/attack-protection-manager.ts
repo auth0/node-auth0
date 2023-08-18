@@ -1,6 +1,9 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetBreachedPasswordDetection200Response,
+  GetBruteForceProtection200Response,
+  GetSuspiciousIpThrottling200Response,
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
   PatchSuspiciousIpThrottlingRequest,
@@ -19,7 +22,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async getBreachedPasswordDetectionConfig(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<GetBreachedPasswordDetection200Response>> {
     const response = await this.request(
       {
         path: `/attack-protection/breached-password-detection`,
@@ -28,7 +31,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -38,7 +41,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async getBruteForceConfig(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<GetBruteForceProtection200Response>> {
     const response = await this.request(
       {
         path: `/attack-protection/brute-force-protection`,
@@ -47,7 +50,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -57,7 +60,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async getSuspiciousIpThrottlingConfig(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<GetSuspiciousIpThrottling200Response>> {
     const response = await this.request(
       {
         path: `/attack-protection/suspicious-ip-throttling`,
@@ -66,7 +69,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -77,7 +80,7 @@ export class AttackProtectionManager extends BaseAPI {
   async updateBreachedPasswordDetectionConfig(
     bodyParameters: PatchBreachedPasswordDetectionRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<GetBreachedPasswordDetection200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -92,7 +95,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -103,7 +106,7 @@ export class AttackProtectionManager extends BaseAPI {
   async updateBruteForceConfig(
     bodyParameters: PatchBruteForceProtectionRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<GetBruteForceProtection200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -118,7 +121,7 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -129,7 +132,7 @@ export class AttackProtectionManager extends BaseAPI {
   async updateSuspiciousIpThrottlingConfig(
     bodyParameters: PatchSuspiciousIpThrottlingRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<{ [key: string]: any }>> {
+  ): Promise<ApiResponse<GetSuspiciousIpThrottling200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -144,6 +147,6 @@ export class AttackProtectionManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse<any>(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }
