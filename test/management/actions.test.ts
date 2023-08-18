@@ -7,8 +7,9 @@ import {
   GetActionVersions200ResponseVersionsInner,
   GetActions200ResponseActionsInner,
   GetActions200ResponseActionsInnerSupportedTriggersInner,
-  GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum,
-  GetActionsTriggerIdEnum,
+  // Leaving comments here, as we should need these back eventually
+  //GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum,
+  //GetActionsTriggerIdEnum,
   GetBindings200ResponseBindingsInner,
   GetExecution200Response,
   PatchActionRequest,
@@ -185,7 +186,9 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const params = {
-          triggerId: GetActionsTriggerIdEnum.post_login,
+          // Leaving comments here, as we should need these back eventually
+          //triggerId: GetActionsTriggerIdEnum.post_login,
+          triggerId: 'post_login',
           actionName: 'test',
         };
         const request = nock(API_URL).get('/actions/actions').query(params).reply(200, {});
@@ -304,7 +307,9 @@ describe('ActionsManager', () => {
         dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
         supported_triggers: [
           {
-            id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
+            // Leaving comments here, as we should need these back eventually
+            // id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
+            id: 'post_login',
             version: 'v1',
             status: 'pending',
             runtimes: ['node12'],
@@ -400,7 +405,8 @@ describe('ActionsManager', () => {
         dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
         supported_triggers: [
           {
-            id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
+            // id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
+            id: 'post_login',
             version: 'v1',
             status: 'pending',
             runtimes: ['node12'],

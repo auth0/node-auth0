@@ -2,6 +2,7 @@
  *
  */
 export interface Client {
+  [key: string]: any | any;
   /**
    * ID of this client.
    *
@@ -313,6 +314,7 @@ export interface ClientAddons {
  * AWS addon configuration.
  */
 export interface ClientAddonsAws {
+  [key: string]: any | any;
   /**
    * AWS principal ARN, e.g. `arn:aws:iam::010616021751:saml-provider/idpname`
    *
@@ -333,6 +335,7 @@ export interface ClientAddonsAws {
  * Azure Blob Storage addon configuration.
  */
 export interface ClientAddonsAzureBlob {
+  [key: string]: any | any;
   /**
    * Your Azure storage account name. Usually first segment in your Azure storage URL. e.g. `https://acme-org.blob.core.windows.net` would be the account name `acme-org`.
    *
@@ -403,6 +406,7 @@ export interface ClientAddonsAzureBlob {
  * Azure Storage Bus addon configuration.
  */
 export interface ClientAddonsAzureSb {
+  [key: string]: any | any;
   /**
    * Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (e.g. `https://acme-org.servicebus.windows.net` would be `acme-org`).
    *
@@ -433,6 +437,7 @@ export interface ClientAddonsAzureSb {
  * Adobe EchoSign SSO configuration.
  */
 export interface ClientAddonsEchosign {
+  [key: string]: any | any;
   /**
    * Your custom domain found in your EchoSign URL. e.g. `https://acme-org.echosign.com` would be `acme-org`.
    *
@@ -443,6 +448,7 @@ export interface ClientAddonsEchosign {
  * Egnyte SSO configuration.
  */
 export interface ClientAddonsEgnyte {
+  [key: string]: any | any;
   /**
    * Your custom domain found in your Egnyte URL. e.g. `https://acme-org.egnyte.com` would be `acme-org`.
    *
@@ -453,6 +459,7 @@ export interface ClientAddonsEgnyte {
  * Google Firebase addon configuration.
  */
 export interface ClientAddonsFirebase {
+  [key: string]: any | any;
   /**
    * Google Firebase Secret. (SDK 2 only).
    *
@@ -483,6 +490,7 @@ export interface ClientAddonsFirebase {
  * Layer addon configuration.
  */
 export interface ClientAddonsLayer {
+  [key: string]: any | any;
   /**
    * Provider ID of your Layer account
    *
@@ -513,6 +521,7 @@ export interface ClientAddonsLayer {
  * Microsoft Dynamics CRM SSO configuration.
  */
 export interface ClientAddonsMscrm {
+  [key: string]: any | any;
   /**
    * Microsoft Dynamics CRM application URL.
    *
@@ -523,6 +532,7 @@ export interface ClientAddonsMscrm {
  * New Relic SSO configuration.
  */
 export interface ClientAddonsNewrelic {
+  [key: string]: any | any;
   /**
    * Your New Relic Account ID found in your New Relic URL after the `/accounts/` path. e.g. `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.
    *
@@ -533,6 +543,7 @@ export interface ClientAddonsNewrelic {
  * Microsoft Office 365 SSO configuration.
  */
 export interface ClientAddonsOffice365 {
+  [key: string]: any | any;
   /**
    * Your Office 365 domain name. e.g. `acme-org.com`.
    *
@@ -548,6 +559,7 @@ export interface ClientAddonsOffice365 {
  * Active Directory Rights Management Service SSO configuration.
  */
 export interface ClientAddonsRms {
+  [key: string]: any | any;
   /**
    * URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
    *
@@ -558,6 +570,7 @@ export interface ClientAddonsRms {
  * Salesforce SSO configuration.
  */
 export interface ClientAddonsSalesforce {
+  [key: string]: any | any;
   /**
    * Arbitrary logical URL that identifies the Saleforce resource. e.g. `https://acme-org.com`.
    *
@@ -568,6 +581,7 @@ export interface ClientAddonsSalesforce {
  * Salesforce API addon configuration.
  */
 export interface ClientAddonsSalesforceApi {
+  [key: string]: any | any;
   /**
    * Consumer Key assigned by Salesforce to the Connected App.
    *
@@ -593,6 +607,7 @@ export interface ClientAddonsSalesforceApi {
  * Salesforce Sandbox addon configuration.
  */
 export interface ClientAddonsSalesforceSandboxApi {
+  [key: string]: any | any;
   /**
    * Consumer Key assigned by Salesforce to the Connected App.
    *
@@ -618,6 +633,7 @@ export interface ClientAddonsSalesforceSandboxApi {
  * SAML2 addon indicator (no configuration settings needed for SAML2 addon).
  */
 export interface ClientAddonsSamlp {
+  [key: string]: any | any;
   /**
    */
   mappings?: { [key: string]: any };
@@ -671,6 +687,7 @@ export interface ClientAddonsSamlp {
  * SAP API addon configuration.
  */
 export interface ClientAddonsSapApi {
+  [key: string]: any | any;
   /**
    * If activated in the OAuth 2.0 client configuration (transaction SOAUTH2) the SAML attribute client_id must be set and equal the client_id form parameter of the access token request.
    *
@@ -706,6 +723,7 @@ export interface ClientAddonsSapApi {
  * Sentry SSO configuration.
  */
 export interface ClientAddonsSentry {
+  [key: string]: any | any;
   /**
    * Generated slug for your Sentry organization. Found in your Sentry URL. e.g. `https://sentry.acme.com/acme-org/` would be `acme-org`.
    *
@@ -721,6 +739,7 @@ export interface ClientAddonsSentry {
  * SharePoint SSO configuration.
  */
 export interface ClientAddonsSharepoint {
+  [key: string]: any | any;
   /**
    * Internal SharePoint application URL.
    *
@@ -738,6 +757,7 @@ export type ClientAddonsSharepointExternalUrl = Array<string> | string;
  * Slack team or workspace name usually first segment in your Slack URL. e.g. `https://acme-org.slack.com` would be `acme-org`.
  */
 export interface ClientAddonsSlack {
+  [key: string]: any | any;
   /**
    * Slack team name.
    *
@@ -748,6 +768,7 @@ export interface ClientAddonsSlack {
  * SpringCM SSO configuration.
  */
 export interface ClientAddonsSpringcm {
+  [key: string]: any | any;
   /**
    * SpringCM ACS URL, e.g. `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.
    *
@@ -758,6 +779,7 @@ export interface ClientAddonsSpringcm {
  *
  */
 export interface ClientAddonsSsoIntegration {
+  [key: string]: any | any;
   /**
    * SSO integration name
    *
@@ -773,6 +795,7 @@ export interface ClientAddonsSsoIntegration {
  * Windows Azure Mobile Services addon configuration.
  */
 export interface ClientAddonsWams {
+  [key: string]: any | any;
   /**
    * Your master key for Windows Azure Mobile Services.
    *
@@ -783,6 +806,7 @@ export interface ClientAddonsWams {
  * Zendesk SSO configuration.
  */
 export interface ClientAddonsZendesk {
+  [key: string]: any | any;
   /**
    * Zendesk account name usually first segment in your Zendesk URL. e.g. `https://acme-org.zendesk.com` would be `acme-org`.
    *
@@ -793,6 +817,7 @@ export interface ClientAddonsZendesk {
  * Zoom SSO configuration.
  */
 export interface ClientAddonsZoom {
+  [key: string]: any | any;
   /**
    * Zoom account name usually first segment of your Zoom URL, e.g. `https://acme-org.zoom.us` would be `acme-org`.
    *
@@ -805,14 +830,14 @@ export interface ClientAddonsZoom {
 export interface ClientClientAuthenticationMethods {
   /**
    */
-  private_key_jwt: ClientClientAuthenticationMethodsPrivateKeyJwt;
+  private_key_jwt?: ClientClientAuthenticationMethodsPrivateKeyJwt;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
  */
 export interface ClientClientAuthenticationMethodsPrivateKeyJwt {
   /**
-   * The list of unique credential IDs that are enabled on the client for Private Key JWT authentication.
+   * A list of unique and previously created credential IDs enabled on the client for Private Key JWT authentication.
    *
    */
   credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
@@ -1044,7 +1069,7 @@ export type ClientCreateOrganizationRequireBehaviorEnum =
 export interface ClientCreateClientAuthenticationMethods {
   /**
    */
-  private_key_jwt: ClientCreateClientAuthenticationMethodsPrivateKeyJwt;
+  private_key_jwt?: ClientCreateClientAuthenticationMethodsPrivateKeyJwt;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
@@ -1054,8 +1079,59 @@ export interface ClientCreateClientAuthenticationMethodsPrivateKeyJwt {
    * Fully defined credentials that will be enabled on the client for Private Key JWT authentication.
    *
    */
-  credentials: Array<PostCredentialsRequest>;
+  credentials: Array<ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
+/**
+ *
+ */
+export interface ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInner {
+  /**
+   * Credential type. Supported types: public_key.
+   *
+   */
+  credential_type: ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerCredentialTypeEnum;
+  /**
+   * Friendly name for a credential.
+   *
+   */
+  name?: string;
+  /**
+   * PEM-formatted public key (SPKI and PKCS1) or X509 certificate. Must be JSON escaped.
+   *
+   */
+  pem: string;
+  /**
+   * Algorithm which will be used with the credential. Can be one of RS256, RS384, PS256. If not specified, RS256 will be used.
+   *
+   */
+  alg?: ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum;
+  /**
+   * Parse expiry from x509 certificate. If true, attempts to parse the expiry date from the provided PEM.
+   *
+   */
+  parse_expiry_from_cert?: boolean;
+  /**
+   * The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires.
+   *
+   */
+  expires_at?: string;
+}
+
+export const ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerCredentialTypeEnum =
+  {
+    public_key: 'public_key',
+  } as const;
+export type ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerCredentialTypeEnum =
+  (typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerCredentialTypeEnum];
+
+export const ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum = {
+  RS256: 'RS256',
+  RS384: 'RS384',
+  PS256: 'PS256',
+} as const;
+export type ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum =
+  (typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum)[keyof typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum];
+
 /**
  * Encryption used for WsFed responses with this client.
  */
@@ -1091,7 +1167,7 @@ export interface ClientCreateJwtConfiguration {
    */
   scopes?: { [key: string]: any };
   /**
-   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`.
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
   alg?: ClientCreateJwtConfigurationAlgEnum;
@@ -1100,6 +1176,7 @@ export interface ClientCreateJwtConfiguration {
 export const ClientCreateJwtConfigurationAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  PS256: 'PS256',
 } as const;
 export type ClientCreateJwtConfigurationAlgEnum =
   (typeof ClientCreateJwtConfigurationAlgEnum)[keyof typeof ClientCreateJwtConfigurationAlgEnum];
@@ -1159,6 +1236,7 @@ export interface ClientCreateOidcBackchannelLogout {
  * Encryption used for WsFed responses with this client.
  */
 export interface ClientEncryptionKey {
+  [key: string]: any | any;
   /**
    * Encryption Public RSA Key.
    *
@@ -1224,6 +1302,7 @@ export interface ClientGrantCreate {
  * Configuration related to JWTs for the client.
  */
 export interface ClientJwtConfiguration {
+  [key: string]: any | any;
   /**
    * Number of seconds the JWT will be valid for (affects `exp` claim).
    *
@@ -1240,7 +1319,7 @@ export interface ClientJwtConfiguration {
    */
   scopes?: { [key: string]: any };
   /**
-   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`.
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
   alg?: ClientJwtConfigurationAlgEnum;
@@ -1249,6 +1328,7 @@ export interface ClientJwtConfiguration {
 export const ClientJwtConfigurationAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  PS256: 'PS256',
 } as const;
 export type ClientJwtConfigurationAlgEnum =
   (typeof ClientJwtConfigurationAlgEnum)[keyof typeof ClientJwtConfigurationAlgEnum];
@@ -1257,6 +1337,7 @@ export type ClientJwtConfigurationAlgEnum =
  * Additional configuration for native mobile apps.
  */
 export interface ClientMobile {
+  [key: string]: any | any;
   /**
    */
   android?: ClientMobileAndroid;
@@ -1268,6 +1349,7 @@ export interface ClientMobile {
  * Android native app configuration.
  */
 export interface ClientMobileAndroid {
+  [key: string]: any | any;
   /**
    * App package name found in AndroidManifest.xml.
    *
@@ -1283,6 +1365,7 @@ export interface ClientMobileAndroid {
  * iOS native app configuration.
  */
 export interface ClientMobileIos {
+  [key: string]: any | any;
   /**
    * Identifier assigned to the Apple account that signs and uploads the app to the store.
    *
@@ -1329,6 +1412,7 @@ export interface ClientNativeSocialLoginFacebook {
  * Configuration for OIDC backchannel logout
  */
 export interface ClientOidcBackchannelLogout {
+  [key: string]: any | any;
   /**
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
    *
@@ -1571,7 +1655,7 @@ export interface ClientUpdate {
   organization_require_behavior?: ClientUpdateOrganizationRequireBehaviorEnum;
   /**
    */
-  client_authentication_methods?: ClientUpdateClientAuthenticationMethods | null;
+  client_authentication_methods?: ClientClientAuthenticationMethods | null;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
@@ -1729,24 +1813,6 @@ export interface ClientUpdateAddons {
   sso_integration?: ClientAddonsSsoIntegration;
 }
 /**
- * Defines client authentication methods.
- */
-export interface ClientUpdateClientAuthenticationMethods {
-  /**
-   */
-  private_key_jwt: ClientUpdateClientAuthenticationMethodsPrivateKeyJwt;
-}
-/**
- * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
- */
-export interface ClientUpdateClientAuthenticationMethodsPrivateKeyJwt {
-  /**
-   * A list of unique credential IDs that will be enabled on the client for Private Key JWT authentication. The credentials must be previously created.
-   *
-   */
-  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
-}
-/**
  * The client's encryption key
  */
 export interface ClientUpdateEncryptionKey {
@@ -1779,7 +1845,7 @@ export interface ClientUpdateJwtConfiguration {
    */
   scopes?: { [key: string]: any };
   /**
-   * The algorithm used to sign the JsonWebToken
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
   alg?: ClientUpdateJwtConfigurationAlgEnum;
@@ -1788,6 +1854,7 @@ export interface ClientUpdateJwtConfiguration {
 export const ClientUpdateJwtConfigurationAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  PS256: 'PS256',
 } as const;
 export type ClientUpdateJwtConfigurationAlgEnum =
   (typeof ClientUpdateJwtConfigurationAlgEnum)[keyof typeof ClientUpdateJwtConfigurationAlgEnum];
@@ -2104,6 +2171,7 @@ export type ConnectionCreateOptionsSetUserRootAttributesEnum =
  * A map of scripts used to integrate with a custom database.
  */
 export interface ConnectionCreateOptionsCustomScripts {
+  [key: string]: any | any;
   /**
    */
   login?: string;
@@ -2420,6 +2488,7 @@ export type CustomDomainTypeEnum = (typeof CustomDomainTypeEnum)[keyof typeof Cu
  *
  */
 export interface DeleteMembersRequest {
+  [key: string]: any | any;
   /**
    * List of user IDs to remove from the organization.
    *
@@ -2547,6 +2616,7 @@ export type DeviceCredentialTypeEnum =
  *
  */
 export interface DeviceCredentialCreate {
+  [key: string]: any | any;
   /**
    * Name for this device easily recognized by owner.
    *
@@ -3261,6 +3331,7 @@ export type GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum =
  *
  */
 export interface GetActions200ResponseActionsInnerIntegrationCurrentRelease {
+  [key: string]: any | any;
   /**
    * The id of the associated IntegrationRelease
    *
@@ -3380,6 +3451,7 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentReleaseSemve
  *
  */
 export interface GetActions200ResponseActionsInnerSecretsInner {
+  [key: string]: any | any;
   /**
    * The name of the particular secret, e.g. API_KEY.
    *
@@ -3396,10 +3468,8 @@ export interface GetActions200ResponseActionsInnerSecretsInner {
  */
 export interface GetActions200ResponseActionsInnerSupportedTriggersInner {
   /**
-   * An actions extensibility point.
-   *
    */
-  id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum;
+  id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
   /**
    * The version of a trigger. v1, v2, etc.
    *
@@ -3426,8 +3496,29 @@ export interface GetActions200ResponseActionsInnerSupportedTriggersInner {
    */
   compatible_triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInner>;
 }
+/**
+ *
+ */
+export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInner {
+  [key: string]: any | any;
+  /**
+   */
+  id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  /**
+   * The version of a trigger. v1, v2, etc.
+   *
+   */
+  version: string;
+}
+/**
+ * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+ */
+export interface GetActions200ResponseActionsInnerSupportedTriggersInnerId {}
 
-export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum = {
+/**
+ *
+ */
+export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf = {
   post_login: 'post-login',
   credentials_exchange: 'credentials-exchange',
   pre_user_registration: 'pre-user-registration',
@@ -3440,41 +3531,8 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum = {
   iga_fulfillment_execution: 'iga-fulfillment-execution',
   password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
-export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum =
-  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum];
-
-/**
- *
- */
-export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInner {
-  /**
-   * An actions extensibility point.
-   *
-   */
-  id: GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum;
-  /**
-   * The version of a trigger. v1, v2, etc.
-   *
-   */
-  version: string;
-}
-
-export const GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
-  {
-    post_login: 'post-login',
-    credentials_exchange: 'credentials-exchange',
-    pre_user_registration: 'pre-user-registration',
-    post_user_registration: 'post-user-registration',
-    post_change_password: 'post-change-password',
-    send_phone_message: 'send-phone-message',
-    iga_approval: 'iga-approval',
-    iga_certification: 'iga-certification',
-    iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-    iga_fulfillment_execution: 'iga-fulfillment-execution',
-    password_reset_post_challenge: 'password-reset-post-challenge',
-  } as const;
-export type GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
-  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum];
+export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
+  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf];
 
 /**
  *
@@ -3619,6 +3677,7 @@ export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferred
  *
  */
 export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInner {
+  [key: string]: any | any;
   /**
    */
   type?: GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum;
@@ -3753,10 +3812,8 @@ export interface GetBindings200ResponseBindingsInner {
    */
   id?: string;
   /**
-   * An actions extensibility point.
-   *
    */
-  trigger_id?: GetBindings200ResponseBindingsInnerTriggerIdEnum;
+  trigger_id?: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
   /**
    * The name of the binding.
    *
@@ -3776,27 +3833,11 @@ export interface GetBindings200ResponseBindingsInner {
    */
   updated_at?: string;
 }
-
-export const GetBindings200ResponseBindingsInnerTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-  password_reset_post_challenge: 'password-reset-post-challenge',
-} as const;
-export type GetBindings200ResponseBindingsInnerTriggerIdEnum =
-  (typeof GetBindings200ResponseBindingsInnerTriggerIdEnum)[keyof typeof GetBindings200ResponseBindingsInnerTriggerIdEnum];
-
 /**
  *
  */
 export interface GetBranding200Response {
+  [key: string]: any | any;
   /**
    */
   colors?: GetBranding200ResponseColors;
@@ -3831,12 +3872,14 @@ export interface GetBranding200ResponseColors {
  * Page Background Color or Gradient.
  * Property contains either <code>null</code> to unset, a solid color as a string value <code>#FFFFFF</code>, or a gradient as an object.
  *
- * <pre><code>{
+ * <pre><code>
+ * {
  *   type: 'linear-gradient',
  *   start: '#FFFFFF',
  *   end: '#000000',
  *   angle_deg: 35
- * }</code></pre>
+ * }
+ * </code></pre>
  */
 export type GetBranding200ResponseColorsPageBackground = string | { [key: string]: any };
 /**
@@ -3849,6 +3892,142 @@ export interface GetBranding200ResponseFont {
    */
   url?: string;
 }
+/**
+ *
+ */
+export interface GetBreachedPasswordDetection200Response {
+  [key: string]: any | any;
+  /**
+   * Whether or not breached password detection is active.
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Action to take when a breached password is detected during a login.
+   *       Possible values: <code>block</code>, <code>user_notification</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<GetBreachedPasswordDetection200ResponseShieldsEnum>;
+  /**
+   * When "admin_notification" is enabled, determines how often email notifications are sent.
+   *         Possible values: <code>immediately</code>, <code>daily</code>, <code>weekly</code>, <code>monthly</code>.
+   *
+   */
+  admin_notification_frequency?: Array<GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum>;
+  /**
+   * The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard.
+   *         Possible values: <code>standard</code>, <code>enhanced</code>.
+   *
+   */
+  method?: GetBreachedPasswordDetection200ResponseMethodEnum;
+  /**
+   */
+  stage?: GetBreachedPasswordDetection200ResponseStage;
+}
+
+export const GetBreachedPasswordDetection200ResponseShieldsEnum = {
+  block: 'block',
+  user_notification: 'user_notification',
+  admin_notification: 'admin_notification',
+} as const;
+export type GetBreachedPasswordDetection200ResponseShieldsEnum =
+  (typeof GetBreachedPasswordDetection200ResponseShieldsEnum)[keyof typeof GetBreachedPasswordDetection200ResponseShieldsEnum];
+
+export const GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum = {
+  immediately: 'immediately',
+  daily: 'daily',
+  weekly: 'weekly',
+  monthly: 'monthly',
+} as const;
+export type GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum =
+  (typeof GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum)[keyof typeof GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum];
+
+export const GetBreachedPasswordDetection200ResponseMethodEnum = {
+  standard: 'standard',
+  enhanced: 'enhanced',
+} as const;
+export type GetBreachedPasswordDetection200ResponseMethodEnum =
+  (typeof GetBreachedPasswordDetection200ResponseMethodEnum)[keyof typeof GetBreachedPasswordDetection200ResponseMethodEnum];
+
+/**
+ *
+ */
+export interface GetBreachedPasswordDetection200ResponseStage {
+  /**
+   */
+  'pre-user-registration'?: GetBreachedPasswordDetection200ResponseStagePreUserRegistration;
+}
+/**
+ *
+ */
+export interface GetBreachedPasswordDetection200ResponseStagePreUserRegistration {
+  /**
+   * Action to take when a breached password is detected during a signup.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum>;
+}
+
+export const GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum =
+  (typeof GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum)[keyof typeof GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum];
+
+/**
+ *
+ */
+export interface GetBruteForceProtection200Response {
+  [key: string]: any | any;
+  /**
+   * Whether or not brute force attack protections are active.
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Action to take when a brute force protection threshold is violated.
+   *         Possible values: <code>block</code>, <code>user_notification</code>.
+   *
+   */
+  shields?: Array<GetBruteForceProtection200ResponseShieldsEnum>;
+  /**
+   * List of trusted IP addresses that will not have attack protection enforced against them.
+   *
+   */
+  allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
+  /**
+   * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
+   *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
+   *
+   */
+  mode?: GetBruteForceProtection200ResponseModeEnum;
+  /**
+   * Maximum number of unsuccessful attempts.
+   *
+   */
+  max_attempts?: number;
+}
+
+export const GetBruteForceProtection200ResponseShieldsEnum = {
+  block: 'block',
+  user_notification: 'user_notification',
+} as const;
+export type GetBruteForceProtection200ResponseShieldsEnum =
+  (typeof GetBruteForceProtection200ResponseShieldsEnum)[keyof typeof GetBruteForceProtection200ResponseShieldsEnum];
+
+export const GetBruteForceProtection200ResponseModeEnum = {
+  identifier_and_ip: 'count_per_identifier_and_ip',
+  identifier: 'count_per_identifier',
+} as const;
+export type GetBruteForceProtection200ResponseModeEnum =
+  (typeof GetBruteForceProtection200ResponseModeEnum)[keyof typeof GetBruteForceProtection200ResponseModeEnum];
+
+/**
+ *
+ */
+export interface GetBruteForceProtection200ResponseAllowlistInner {}
 /**
  *
  */
@@ -3895,6 +4074,7 @@ export interface GetConnections200ResponseOneOf {
  *
  */
 export interface GetCredentials200ResponseInner {
+  [key: string]: any | any;
   /**
    * ID of the credential. Generated on creation.
    *
@@ -4080,6 +4260,7 @@ export interface GetEnabledConnections200ResponseOneOfInner {
  *
  */
 export interface GetEnabledConnections200ResponseOneOfInnerConnection {
+  [key: string]: any | any;
   /**
    * The name of the enabled connection.
    *
@@ -4114,6 +4295,7 @@ export interface GetErrors200ResponseOneOfInner {
  *
  */
 export interface GetErrors200ResponseOneOfInnerErrorsInner {
+  [key: string]: any | any;
   /**
    * Error code.
    *
@@ -4140,10 +4322,8 @@ export interface GetExecution200Response {
    */
   id?: string;
   /**
-   * An actions extensibility point.
-   *
    */
-  trigger_id?: GetExecution200ResponseTriggerIdEnum;
+  trigger_id?: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
   /**
    * The overall status of an execution.
    *
@@ -4163,22 +4343,6 @@ export interface GetExecution200Response {
    */
   updated_at?: string;
 }
-
-export const GetExecution200ResponseTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-  password_reset_post_challenge: 'password-reset-post-challenge',
-} as const;
-export type GetExecution200ResponseTriggerIdEnum =
-  (typeof GetExecution200ResponseTriggerIdEnum)[keyof typeof GetExecution200ResponseTriggerIdEnum];
 
 export const GetExecution200ResponseStatusEnum = {
   unspecified: 'unspecified',
@@ -4344,6 +4508,7 @@ export interface GetInvitations200ResponseOneOfInner {
  * Data related to the user that does affect the application's core functionality.
  */
 export interface GetInvitations200ResponseOneOfInnerAppMetadata {
+  [key: string]: any | any;
   /**
    */
   clientID?: any | null;
@@ -4429,6 +4594,7 @@ export type GetLogStreams200ResponseInner =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4475,6 +4641,7 @@ export type GetLogStreams200ResponseInnerOneOfTypeEnum =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf1 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4570,6 +4737,7 @@ export type GetLogStreams200ResponseInnerOneOf1SinkAwsRegionEnum =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf2 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4680,6 +4848,7 @@ export type GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf3 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4751,6 +4920,7 @@ export type GetLogStreams200ResponseInnerOneOf3SinkDatadogRegionEnum =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf4 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4822,6 +4992,7 @@ export interface GetLogStreams200ResponseInnerOneOf4Sink {
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf5 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4878,6 +5049,7 @@ export interface GetLogStreams200ResponseInnerOneOf5Sink {
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf6 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -4934,6 +5106,7 @@ export interface GetLogStreams200ResponseInnerOneOf6Sink {
  *
  */
 export interface GetLogStreams200ResponseInnerOneOf7 {
+  [key: string]: any | any;
   /**
    * The id of the log stream
    *
@@ -5013,6 +5186,7 @@ export type GetLogStreams200ResponseInnerOneOf7SinkMixpanelRegionEnum =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOfFiltersInner {
+  [key: string]: any | any;
   /**
    * Filter type. Currently `category` is the only valid type.
    *
@@ -5099,6 +5273,7 @@ export type GetLogStreams200ResponseInnerOneOfSinkHttpContentFormatEnum =
  *
  */
 export interface GetLogStreams200ResponseInnerOneOfSinkHttpCustomHeadersInner {
+  [key: string]: any | any;
   /**
    * HTTP header name
    *
@@ -5162,6 +5337,7 @@ export interface GetMembers200ResponseOneOf {
  *
  */
 export interface GetMembers200ResponseOneOf1 {
+  [key: string]: any | any;
   /**
    */
   next?: string;
@@ -5294,6 +5470,7 @@ export interface GetOrganizations200ResponseOneOf1 {
  *
  */
 export interface GetOrganizations200ResponseOneOfInner {
+  [key: string]: any | any;
   /**
    * Organization identifier
    *
@@ -5535,6 +5712,7 @@ export interface GetRules200ResponseOneOf {
  *
  */
 export interface GetRulesConfigs200ResponseInner {
+  [key: string]: any | any;
   /**
    * Key for a rules config variable.
    *
@@ -5612,6 +5790,80 @@ export type GetSigningKeys200ResponseInnerCurrentUntil = string | { [key: string
  *
  */
 export type GetSigningKeys200ResponseInnerRevokedAt = string | { [key: string]: any };
+/**
+ *
+ */
+export interface GetSuspiciousIpThrottling200Response {
+  [key: string]: any | any;
+  /**
+   * Whether or not suspicious IP throttling attack protections are active.
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Action to take when a suspicious IP throttling threshold is violated.
+   *           Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<GetSuspiciousIpThrottling200ResponseShieldsEnum>;
+  /**
+   * List of trusted IP addresses that will not have attack protection enforced against them.
+   *
+   */
+  allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
+  /**
+   */
+  stage?: GetSuspiciousIpThrottling200ResponseStage;
+}
+
+export const GetSuspiciousIpThrottling200ResponseShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type GetSuspiciousIpThrottling200ResponseShieldsEnum =
+  (typeof GetSuspiciousIpThrottling200ResponseShieldsEnum)[keyof typeof GetSuspiciousIpThrottling200ResponseShieldsEnum];
+
+/**
+ * Holds per-stage configuration options (max_attempts and rate).
+ */
+export interface GetSuspiciousIpThrottling200ResponseStage {
+  /**
+   */
+  'pre-login'?: GetSuspiciousIpThrottling200ResponseStagePreLogin;
+  /**
+   */
+  'pre-user-registration'?: GetSuspiciousIpThrottling200ResponseStagePreUserRegistration;
+}
+/**
+ * Configuration options that apply before every login attempt.
+ */
+export interface GetSuspiciousIpThrottling200ResponseStagePreLogin {
+  /**
+   * Total number of attempts allowed per day.
+   *
+   */
+  max_attempts?: number;
+  /**
+   * Interval of time, given in milliseconds, at which new attempts are granted.
+   *
+   */
+  rate?: number;
+}
+/**
+ * Configuration options that apply before every user registration attempt.
+ */
+export interface GetSuspiciousIpThrottling200ResponseStagePreUserRegistration {
+  /**
+   * Total number of attempts allowed.
+   *
+   */
+  max_attempts?: number;
+  /**
+   * Interval of time, given in milliseconds, at which new attempts are granted.
+   *
+   */
+  rate?: number;
+}
 /**
  *
  */
@@ -5711,10 +5963,8 @@ export interface GetUsers200ResponseOneOfInner {
    */
   identities?: Array<GetUsers200ResponseOneOfInnerIdentitiesInner>;
   /**
-   * User metadata to which this user has read-only access.
-   *
    */
-  app_metadata?: { [key: string]: any };
+  app_metadata?: GetUsers200ResponseOneOfInnerAppMetadata;
   /**
    * User metadata to which this user has read/write access.
    *
@@ -5768,6 +6018,60 @@ export interface GetUsers200ResponseOneOfInner {
    *
    */
   family_name?: string;
+}
+/**
+ * User metadata to which this user has read-only access.
+ */
+export interface GetUsers200ResponseOneOfInnerAppMetadata {
+  [key: string]: any | any;
+  /**
+   */
+  clientID?: any | null;
+  /**
+   */
+  globalClientID?: any | null;
+  /**
+   */
+  global_client_id?: any | null;
+  /**
+   */
+  email_verified?: any | null;
+  /**
+   */
+  user_id?: any | null;
+  /**
+   */
+  identities?: any | null;
+  /**
+   */
+  lastIP?: any | null;
+  /**
+   */
+  lastLogin?: any | null;
+  /**
+   */
+  metadata?: any | null;
+  /**
+   */
+  created_at?: any | null;
+  /**
+   */
+  loginsCount?: any | null;
+  /**
+   */
+  _id?: any | null;
+  /**
+   */
+  email?: any | null;
+  /**
+   */
+  blocked?: any | null;
+  /**
+   */
+  __tenant?: any | null;
+  /**
+   */
+  updated_at?: any | null;
 }
 /**
  *
@@ -5929,6 +6233,7 @@ export interface HookUpdate {
  *
  */
 export interface Job {
+  [key: string]: any | any;
   /**
    * Status of this job.
    *
@@ -6087,6 +6392,7 @@ export type LogDate = string | { [key: string]: any };
  * Information about the location that triggered this event based on the `ip`.
  */
 export interface LogLocationInfo {
+  [key: string]: any | any;
   /**
    * Two-letter <a href="https://www.iso.org/iso-3166-country-codes.html">Alpha-2 ISO 3166-1</a> country code.
    *
@@ -6231,6 +6537,7 @@ export interface PatchBindingsRequestBindingsInnerOneOf {
  * A reference to an action. An action can be referred to by ID or by Name.
  */
 export interface PatchBindingsRequestBindingsInnerOneOfRef {
+  [key: string]: any | any;
   /**
    * How the action is being referred to: `action_id` or `action_name`.
    *
@@ -6324,7 +6631,7 @@ export interface PatchBreachedPasswordDetectionRequest {
   method?: PatchBreachedPasswordDetectionRequestMethodEnum;
   /**
    */
-  stage?: PatchBreachedPasswordDetectionRequestStage;
+  stage?: GetBreachedPasswordDetection200ResponseStage;
 }
 
 export const PatchBreachedPasswordDetectionRequestShieldsEnum = {
@@ -6354,33 +6661,6 @@ export type PatchBreachedPasswordDetectionRequestMethodEnum =
 /**
  *
  */
-export interface PatchBreachedPasswordDetectionRequestStage {
-  /**
-   */
-  'pre-user-registration'?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
-}
-/**
- *
- */
-export interface PatchBreachedPasswordDetectionRequestStagePreUserRegistration {
-  /**
-   * Action to take when a breached password is detected during a signup.
-   *               Possible values: <code>block</code>, <code>admin_notification</code>.
-   *
-   */
-  shields?: Array<PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum>;
-}
-
-export const PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum = {
-  block: 'block',
-  admin_notification: 'admin_notification',
-} as const;
-export type PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum =
-  (typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum];
-
-/**
- *
- */
 export interface PatchBruteForceProtectionRequest {
   /**
    * Whether or not brute force attack protections are active.
@@ -6397,7 +6677,7 @@ export interface PatchBruteForceProtectionRequest {
    * List of trusted IP addresses that will not have attack protection enforced against them.
    *
    */
-  allowlist?: Array<PatchBruteForceProtectionRequestAllowlistInner>;
+  allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
   /**
    * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
    *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
@@ -6425,10 +6705,6 @@ export const PatchBruteForceProtectionRequestModeEnum = {
 export type PatchBruteForceProtectionRequestModeEnum =
   (typeof PatchBruteForceProtectionRequestModeEnum)[keyof typeof PatchBruteForceProtectionRequestModeEnum];
 
-/**
- *
- */
-export interface PatchBruteForceProtectionRequestAllowlistInner {}
 /**
  *
  */
@@ -6723,10 +6999,10 @@ export interface PatchSuspiciousIpThrottlingRequest {
    * List of trusted IP addresses that will not have attack protection enforced against them.
    *
    */
-  allowlist?: Array<PatchBruteForceProtectionRequestAllowlistInner>;
+  allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
   /**
    */
-  stage?: PatchSuspiciousIpThrottlingRequestStage;
+  stage?: GetSuspiciousIpThrottling200ResponseStage;
 }
 
 export const PatchSuspiciousIpThrottlingRequestShieldsEnum = {
@@ -6736,47 +7012,6 @@ export const PatchSuspiciousIpThrottlingRequestShieldsEnum = {
 export type PatchSuspiciousIpThrottlingRequestShieldsEnum =
   (typeof PatchSuspiciousIpThrottlingRequestShieldsEnum)[keyof typeof PatchSuspiciousIpThrottlingRequestShieldsEnum];
 
-/**
- * Holds per-stage configuration options (max_attempts and rate).
- */
-export interface PatchSuspiciousIpThrottlingRequestStage {
-  /**
-   */
-  'pre-login'?: PatchSuspiciousIpThrottlingRequestStagePreLogin;
-  /**
-   */
-  'pre-user-registration'?: PatchSuspiciousIpThrottlingRequestStagePreUserRegistration;
-}
-/**
- * Configuration options that apply before every login attempt.
- */
-export interface PatchSuspiciousIpThrottlingRequestStagePreLogin {
-  /**
-   * Total number of attempts allowed per day.
-   *
-   */
-  max_attempts?: number;
-  /**
-   * Interval of time, given in milliseconds, at which new attempts are granted.
-   *
-   */
-  rate?: number;
-}
-/**
- * Configuration options that apply before every user registration attempt.
- */
-export interface PatchSuspiciousIpThrottlingRequestStagePreUserRegistration {
-  /**
-   * Total number of attempts allowed.
-   *
-   */
-  max_attempts?: number;
-  /**
-   * Interval of time, given in milliseconds, at which new attempts are granted.
-   *
-   */
-  rate?: number;
-}
 /**
  *
  */
@@ -6841,6 +7076,7 @@ export interface PostActionRequest {
  *
  */
 export interface PostActionRequestSecretsInner {
+  [key: string]: any | any;
   /**
    * The name of the particular secret, e.g. API_KEY.
    *
@@ -7436,8 +7672,9 @@ export type PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum =
  *
  */
 export interface PostCredentialsRequest {
+  [key: string]: any | any;
   /**
-   * Credential type. Supported types: public_key.
+   * Credential type. Supported types: public_key, cert_subject_dn or x509_cert
    *
    */
   credential_type: PostCredentialsRequestCredentialTypeEnum;
@@ -7446,41 +7683,15 @@ export interface PostCredentialsRequest {
    *
    */
   name?: string;
-  /**
-   * PEM-formatted public key (SPKI and PKCS1) or X509 certificate. Must be JSON escaped.
-   *
-   */
-  pem: string;
-  /**
-   * Algorithm which will be used with the credential. Can be one of RS256, RS384, PS256. If not specified, RS256 will be used.
-   *
-   */
-  alg?: PostCredentialsRequestAlgEnum;
-  /**
-   * Parse expiry from x509 certificate. If true, attempts to parse the expiry date from the provided PEM.
-   *
-   */
-  parse_expiry_from_cert?: boolean;
-  /**
-   * The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires.
-   *
-   */
-  expires_at?: string;
 }
 
 export const PostCredentialsRequestCredentialTypeEnum = {
   public_key: 'public_key',
+  cert_subject_dn: 'cert_subject_dn',
+  x509_cert: 'x509_cert',
 } as const;
 export type PostCredentialsRequestCredentialTypeEnum =
   (typeof PostCredentialsRequestCredentialTypeEnum)[keyof typeof PostCredentialsRequestCredentialTypeEnum];
-
-export const PostCredentialsRequestAlgEnum = {
-  RS256: 'RS256',
-  RS384: 'RS384',
-  PS256: 'PS256',
-} as const;
-export type PostCredentialsRequestAlgEnum =
-  (typeof PostCredentialsRequestAlgEnum)[keyof typeof PostCredentialsRequestAlgEnum];
 
 /**
  *
@@ -7648,6 +7859,7 @@ export type PostDeployDraftVersionRequest = DraftUpdate;
  *
  */
 export interface PostDeviceCredentials201Response {
+  [key: string]: any | any;
   /**
    * The credential's identifier
    *
@@ -7725,6 +7937,7 @@ export type PostEmailTemplatesRequestTemplateEnum =
  *
  */
 export interface PostEmailVerification201Response {
+  [key: string]: any | any;
   /**
    * URL representing the ticket.
    *
@@ -8305,6 +8518,7 @@ export type PostLogStreamsRequestOneOf7TypeEnum =
  *
  */
 export interface PostMembersRequest {
+  [key: string]: any | any;
   /**
    * List of user IDs to add to the organization as members.
    *
@@ -8368,6 +8582,7 @@ export interface PostOrganizationsRequestEnabledConnectionsInner {
  *
  */
 export interface PostPasswordChange201Response {
+  [key: string]: any | any;
   /**
    * URL representing the ticket.
    *
@@ -8484,6 +8699,7 @@ export interface PostProviderRequestCredentials {}
  *
  */
 export interface PostRecoveryCodeRegeneration200Response {
+  [key: string]: any | any;
   /**
    * New account recovery code.
    *
@@ -8510,7 +8726,7 @@ export interface PostResourceServersRequest {
    */
   scopes?: Array<Scope>;
   /**
-   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`.
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
   signing_alg?: PostResourceServersRequestSigningAlgEnum;
@@ -8552,6 +8768,7 @@ export interface PostResourceServersRequest {
 export const PostResourceServersRequestSigningAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  PS256: 'PS256',
 } as const;
 export type PostResourceServersRequestSigningAlgEnum =
   (typeof PostResourceServersRequestSigningAlgEnum)[keyof typeof PostResourceServersRequestSigningAlgEnum];
@@ -8602,6 +8819,7 @@ export interface PostRoleUsersRequest {
  *
  */
 export interface PostSigningKeys201Response {
+  [key: string]: any | any;
   /**
    * Next key certificate
    *
@@ -8637,6 +8855,7 @@ export interface PostTestActionRequest {
  *
  */
 export interface PostTicket200Response {
+  [key: string]: any | any;
   /**
    * The ticket_id used to identify the enrollment
    *
@@ -8885,6 +9104,7 @@ export type PostVerify200ResponseTypeEnum =
  *
  */
 export interface PromptsSettings {
+  [key: string]: any | any;
   /**
    * Which login experience to use. Can be `new` or `classic`.
    *
@@ -9045,6 +9265,7 @@ export type PutAuthenticationMethods200ResponseInnerPreferredAuthenticationMetho
  *
  */
 export interface PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInner {
+  [key: string]: any | any;
   /**
    */
   id?: string;
@@ -9195,6 +9416,7 @@ export type PutPnProvidersRequestProviderEnum =
  *
  */
 export interface PutRulesConfigsByKey200Response {
+  [key: string]: any | any;
   /**
    * Key for a rules config variable.
    *
@@ -9220,6 +9442,7 @@ export interface PutRulesConfigsByKeyRequest {
  *
  */
 export interface PutSigningKeys200Response {
+  [key: string]: any | any;
   /**
    * Revoked key certificate
    *
@@ -9318,7 +9541,7 @@ export interface ResourceServer {
    */
   scopes?: Array<Scope>;
   /**
-   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`.
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
   signing_alg?: ResourceServerSigningAlgEnum;
@@ -9365,6 +9588,7 @@ export interface ResourceServer {
 export const ResourceServerSigningAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  PS256: 'PS256',
 } as const;
 export type ResourceServerSigningAlgEnum =
   (typeof ResourceServerSigningAlgEnum)[keyof typeof ResourceServerSigningAlgEnum];
@@ -9391,7 +9615,7 @@ export interface ResourceServerUpdate {
    */
   scopes?: Array<Scope>;
   /**
-   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`.
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
   signing_alg?: ResourceServerUpdateSigningAlgEnum;
@@ -9433,6 +9657,7 @@ export interface ResourceServerUpdate {
 export const ResourceServerUpdateSigningAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  PS256: 'PS256',
 } as const;
 export type ResourceServerUpdateSigningAlgEnum =
   (typeof ResourceServerUpdateSigningAlgEnum)[keyof typeof ResourceServerUpdateSigningAlgEnum];
@@ -9598,6 +9823,7 @@ export interface SnsFactorProvider {
  *
  */
 export interface StatsEntry {
+  [key: string]: any | any;
   /**
    * Date these events occurred in ISO 8601 format.
    *
@@ -9734,6 +9960,11 @@ export interface TenantSettings {
   /**
    */
   sessions?: TenantSettingsSessions | null;
+  /**
+   * Whether to accept an organization name instead of an ID on auth endpoints
+   *
+   */
+  allow_organization_name_in_authentication_api?: boolean;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
@@ -10361,6 +10592,7 @@ export interface UserBlock {
  *
  */
 export interface UserBlockBlockedForInner {
+  [key: string]: any | any;
   /**
    * Identifier (should be any of an `email`, `username`, or `phone_number`)
    *
@@ -10469,6 +10701,7 @@ export interface UserCreate {
  *
  */
 export interface UserEnrollment {
+  [key: string]: any | any;
   /**
    * ID of this enrollment.
    *
@@ -10752,6 +10985,7 @@ export interface UserUpdate {
  * User metadata to which this user has read-only access.
  */
 export interface UserUpdateAppMetadata {
+  [key: string]: any | any;
   /**
    */
   clientID?: any | null;
@@ -10861,35 +11095,15 @@ export interface GetActionVersionsRequest {
    */
   per_page?: number;
 }
-
-/**
- *
- */
-export const GetActionsTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-  password_reset_post_challenge: 'password-reset-post-challenge',
-} as const;
-export type GetActionsTriggerIdEnum =
-  (typeof GetActionsTriggerIdEnum)[keyof typeof GetActionsTriggerIdEnum];
-
 /**
  *
  */
 export interface GetActionsRequest {
   /**
-   * An actions extensibility point.
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
    *
    */
-  triggerId?: GetActionsTriggerIdEnum;
+  triggerId?: string;
   /**
    * The name of the action to retrieve.
    *
@@ -10916,35 +11130,15 @@ export interface GetActionsRequest {
    */
   installed?: boolean;
 }
-
-/**
- *
- */
-export const GetBindingsTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-  password_reset_post_challenge: 'password-reset-post-challenge',
-} as const;
-export type GetBindingsTriggerIdEnum =
-  (typeof GetBindingsTriggerIdEnum)[keyof typeof GetBindingsTriggerIdEnum];
-
 /**
  *
  */
 export interface GetBindingsRequest {
   /**
-   * An actions extensibility point.
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
    *
    */
-  triggerId: GetBindingsTriggerIdEnum;
+  triggerId: string;
   /**
    * Use this field to request a specific page of the list results.
    *
@@ -10976,35 +11170,15 @@ export interface PatchActionOperationRequest {
    */
   id: string;
 }
-
-/**
- *
- */
-export const PatchBindingsOperationTriggerIdEnum = {
-  post_login: 'post-login',
-  credentials_exchange: 'credentials-exchange',
-  pre_user_registration: 'pre-user-registration',
-  post_user_registration: 'post-user-registration',
-  post_change_password: 'post-change-password',
-  send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
-  password_reset_post_challenge: 'password-reset-post-challenge',
-} as const;
-export type PatchBindingsOperationTriggerIdEnum =
-  (typeof PatchBindingsOperationTriggerIdEnum)[keyof typeof PatchBindingsOperationTriggerIdEnum];
-
 /**
  *
  */
 export interface PatchBindingsOperationRequest {
   /**
-   * An actions extensibility point.
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
    *
    */
-  triggerId: PatchBindingsOperationTriggerIdEnum;
+  triggerId: string;
 }
 /**
  *
@@ -12466,6 +12640,8 @@ export const GetCustomTextByLanguagePromptEnum = {
   signup: 'signup',
   signup_id: 'signup-id',
   signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
   reset_password: 'reset-password',
   consent: 'consent',
   logout: 'logout',
@@ -12575,6 +12751,8 @@ export const PutCustomTextByLanguagePromptEnum = {
   signup: 'signup',
   signup_id: 'signup-id',
   signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
   reset_password: 'reset-password',
   consent: 'consent',
   logout: 'logout',
