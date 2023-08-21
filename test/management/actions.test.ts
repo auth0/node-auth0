@@ -7,15 +7,13 @@ import {
   GetActionVersions200ResponseVersionsInner,
   GetActions200ResponseActionsInner,
   GetActions200ResponseActionsInnerSupportedTriggersInner,
-  // Leaving comments here, as we should need these back eventually
-  //GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum,
-  //GetActionsTriggerIdEnum,
   GetBindings200ResponseBindingsInner,
   GetExecution200Response,
   PatchActionRequest,
   PatchBindingsRequest,
   PostActionRequest,
   ManagementClient,
+  GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf,
 } from '../../src/index.js';
 
 describe('ActionsManager', () => {
@@ -186,9 +184,7 @@ describe('ActionsManager', () => {
         nock.cleanAll();
 
         const params = {
-          // Leaving comments here, as we should need these back eventually
-          //triggerId: GetActionsTriggerIdEnum.post_login,
-          triggerId: 'post_login',
+          triggerId: GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf.post_login,
           actionName: 'test',
         };
         const request = nock(API_URL).get('/actions/actions').query(params).reply(200, {});
@@ -307,9 +303,7 @@ describe('ActionsManager', () => {
         dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
         supported_triggers: [
           {
-            // Leaving comments here, as we should need these back eventually
-            // id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
-            id: 'post_login',
+            id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf.post_login,
             version: 'v1',
             status: 'pending',
             runtimes: ['node12'],
@@ -405,8 +399,7 @@ describe('ActionsManager', () => {
         dependencies: [{ name: 'dep1', version: 'dep1_v1' }],
         supported_triggers: [
           {
-            // id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum.post_login,
-            id: 'post_login',
+            id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf.post_login,
             version: 'v1',
             status: 'pending',
             runtimes: ['node12'],
