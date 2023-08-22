@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.6.1](https://github.com/auth0/node-auth0/tree/v3.6.1) (2023-08-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.6.0...v3.6.1)
+
+**Changed**
+
+- Support providing Organization when resetting password [\#892](https://github.com/auth0/node-auth0/pull/892) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.6.0](https://github.com/auth0/node-auth0/tree/v3.6.0) (2023-07-18)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.5.0...v3.6.0)
