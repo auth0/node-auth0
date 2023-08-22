@@ -51,6 +51,7 @@ class PasswordlessAuthenticator {
       errorFormatter: { message: 'message', name: 'error' },
       headers: options.headers,
       proxy: options.proxy,
+      keepAlive: options.keepAlive,
     };
 
     this.oauth = oauth;

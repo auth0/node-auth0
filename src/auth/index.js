@@ -69,6 +69,7 @@ class AuthenticationClient {
       supportedAlgorithms: options.supportedAlgorithms,
       __bypassIdTokenValidation: options.__bypassIdTokenValidation,
       proxy: options.proxy,
+      keepAlive: true,
     };
 
     if (options.telemetry !== false) {
