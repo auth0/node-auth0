@@ -1,5 +1,15 @@
 # Change Log
 
+## [v4.0.0-beta.8](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.8) (2023-08-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.7...v4.0.0-beta.8)
+
+**Fixed**
+
+- Update AttackProtection response and general types [\#911](https://github.com/auth0/node-auth0/pull/911) ([frederikprijck](https://github.com/frederikprijck))
+- Fix default condition should be the last one [\#915](https://github.com/auth0/node-auth0/pull/915) ([frederikprijck](https://github.com/frederikprijck))
+- Fix trigger_id types for actions [\#914](https://github.com/auth0/node-auth0/pull/914) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.0-beta.7](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.7) (2023-08-16)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.6...v4.0.0-beta.7)
