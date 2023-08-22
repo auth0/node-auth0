@@ -3513,7 +3513,8 @@ export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatib
 /**
  * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
  */
-export interface GetActions200ResponseActionsInnerSupportedTriggersInnerId {}
+export type GetActions200ResponseActionsInnerSupportedTriggersInnerId =
+  GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf;
 
 /**
  *
@@ -4027,7 +4028,7 @@ export type GetBruteForceProtection200ResponseModeEnum =
 /**
  *
  */
-export interface GetBruteForceProtection200ResponseAllowlistInner {}
+export type GetBruteForceProtection200ResponseAllowlistInner = any;
 /**
  *
  */
@@ -8694,7 +8695,7 @@ export type PostProviderRequestNameEnum =
 /**
  * Credentials required to use the provider.
  */
-export interface PostProviderRequestCredentials {}
+export type PostProviderRequestCredentials = any;
 /**
  *
  */
