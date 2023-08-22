@@ -29,6 +29,7 @@
     "test:ci": "c8 npm run test -- --maxWorkers=1",
     "precommit": "pretty-quick --staged",
     "lint": "eslint ./src ./test --ext ts",
+    "lint:package": "publint",
     "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm playground/index.ts"
   },
   "repository": {
@@ -74,6 +75,7 @@
     "node-fetch": "^3.3.1",
     "prettier": "^2.8.7",
     "pretty-quick": "^1.11.1",
+    "publint": "^0.2.2",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typedoc": "^0.24.6",
