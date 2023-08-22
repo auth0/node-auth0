@@ -13749,3 +13749,23 @@ export interface PutAuthenticationMethodsRequest {
    */
   id: string;
 }
+/**
+ *
+ */
+export interface GetUsersByEmailRequest {
+  /**
+   * Email address to search for (case-sensitive).
+   *
+   */
+  email: string;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
+   *
+   */
+  include_fields?: boolean;
+}
