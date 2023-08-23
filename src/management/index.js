@@ -108,7 +108,8 @@ class ManagementClient {
    * @param   {number}  [options.retry.maxRetries=10]               Retry failed requests X times.
    * @param   {object}  [options.headers]                           Additional headers that will be added to the outgoing requests.
    * @param   {string}  [options.proxy]                             Add the `superagent-proxy` dependency and specify a proxy url eg 'https://myproxy.com:1234'
-   * @param   {boolean}  [options.includeResponseHeaders]            Include the response headers in the payload in the format `{ data, headers }`.
+   * @param   {boolean}  [options.includeResponseHeaders]           Include the response headers in the payload in the format `{ data, headers }`.
+   * @param   {boolean}  [options.keepAlive]                        Keep the http connections alive.
    */
   constructor(options) {
     if (!options || typeof options !== 'object') {
@@ -172,6 +173,7 @@ class ManagementClient {
     managerOptions.retry = options.retry;
     managerOptions.includeResponseHeaders = options.includeResponseHeaders;
     managerOptions.proxy = options.proxy;
+    managerOptions.keepAlive = options.keepAlive;
 
     /**
      * Simple abstraction for performing CRUD operations on the

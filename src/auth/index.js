@@ -43,6 +43,7 @@ class AuthenticationClient {
    * @param  {boolean}  [options.__bypassIdTokenValidation] Whether the id_token should be validated or not
    * @param   {object}  [options.headers]                 Additional headers that will be added to the outgoing requests.
    * @param   {string}  [options.proxy]                   Add the `superagent-proxy` dependency and specify a proxy url eg 'https://myproxy.com:1234'
+   * @param   {boolean}  [options.keepAlive]              Keep the http connections alive.
    */
   constructor(options) {
     if (!options || typeof options !== 'object') {
@@ -69,7 +70,7 @@ class AuthenticationClient {
       supportedAlgorithms: options.supportedAlgorithms,
       __bypassIdTokenValidation: options.__bypassIdTokenValidation,
       proxy: options.proxy,
-      keepAlive: true,
+      keepAlive: options.keepAlive,
     };
 
     if (options.telemetry !== false) {
