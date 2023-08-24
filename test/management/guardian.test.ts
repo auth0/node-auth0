@@ -17,9 +17,6 @@ import {
   PutFactorsByNameOperationRequest,
   PutFactorsByNameRequest,
   PutFcmRequest,
-  PutMessageTypesRequest,
-  PutPhoneProvidersRequest,
-  PutPnProvidersRequest,
   PutSnsRequest,
   PutTwilioRequest,
   SnsFactorProvider,
@@ -652,7 +649,7 @@ describe('GuardianManager', () => {
   });
 
   describe('#updatePhoneFactorMessageTypes', () => {
-    const params: PutMessageTypesRequest = { message_types: ['sms', 'voice'] };
+    const params: GetMessageTypes200Response = { message_types: ['sms', 'voice'] };
     const data: GetMessageTypes200Response = { message_types: ['sms', 'voice'] };
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -674,7 +671,7 @@ describe('GuardianManager', () => {
   });
 
   describe('#updatePhoneFactorSelectedProvider', () => {
-    const params: PutPhoneProvidersRequest = { provider: 'twilio' };
+    const params: GetPhoneProviders200Response = { provider: 'twilio' };
     const data: GetPhoneProviders200Response = { provider: 'twilio' };
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -696,7 +693,7 @@ describe('GuardianManager', () => {
   });
 
   describe('#setPushNotificationSelectedProvider', () => {
-    const params: PutPnProvidersRequest = { provider: 'guardian' };
+    const params: GetPnProviders200Response = { provider: 'guardian' };
     const data: GetPnProviders200Response = { provider: 'guardian' };
 
     it('should pass any errors to the promise catch handler', async () => {
@@ -735,7 +732,7 @@ describe('GuardianManager', () => {
   });
 
   describe('#setSmsSelectedProvider', () => {
-    const params: PutPhoneProvidersRequest = { provider: 'auth0' };
+    const params: GetPhoneProviders200Response = { provider: 'auth0' };
     const data: GetPhoneProviders200Response = { provider: 'auth0' };
 
     it('should pass any errors to the promise catch handler', async () => {

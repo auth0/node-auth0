@@ -4,11 +4,6 @@ const API_URL = 'https://tenant.auth0.com/api/v2';
 
 import {
   ActionsManager,
-  GetActionVersions200ResponseVersionsInner,
-  GetActions200ResponseActionsInner,
-  GetActions200ResponseActionsInnerSupportedTriggersInner,
-  GetBindings200ResponseBindingsInner,
-  GetExecution200Response,
   PatchActionRequest,
   PatchBindingsRequest,
   PostActionRequest,
@@ -198,7 +193,7 @@ describe('ActionsManager', () => {
     });
 
     describe('#get', () => {
-      const data: GetActions200ResponseActionsInner = {
+      const data = {
         id: '0d565aa1-d8ce-4802-83e7-82e3d2040222',
         name: 'Test Action',
         code: 'code here',
@@ -623,7 +618,7 @@ describe('ActionsManager', () => {
     describe('#getVersions', () => {
       const actionId = '123';
       const id = '0d565aa1-d8ce-4802-83e7-82e3d2040222';
-      const data: GetActionVersions200ResponseVersionsInner[] = [
+      const data = [
         {
           id: id,
           action_id: actionId,
@@ -726,7 +721,7 @@ describe('ActionsManager', () => {
     describe('#getVersion', () => {
       const actionId = '0d565aa1-d8ce-4802-83e7-82e3d2040222';
       const id = '7asd8sd9-d8ce-4802-83e7-82e3d2040222';
-      const data: GetActionVersions200ResponseVersionsInner = {
+      const data = {
         id: id,
         action_id: actionId,
         code: 'code here',
@@ -876,7 +871,7 @@ describe('ActionsManager', () => {
   });
 
   describe('executions', () => {
-    let data: GetExecution200Response = {
+    let data: any = {
       id: '0d565aa1-d8ce-4802-83e7',
       trigger_id: 'credentials-exchange',
       status: 'final',
@@ -961,7 +956,7 @@ describe('ActionsManager', () => {
     let request: nock.Scope;
 
     describe('#getAllTriggers', () => {
-      const data: GetActions200ResponseActionsInnerSupportedTriggersInner[] = [
+      const data = [
         {
           id: 'post-login',
           version: 'v1',
@@ -1112,12 +1107,15 @@ describe('ActionsManager', () => {
 
     describe('#getTriggerBindings', () => {
       const trigger_id = 'post-login';
-      const data: GetBindings200ResponseBindingsInner[] = [
+      const data = [
         {
           id: '123',
           trigger_id: 'iga-approval',
           display_name: 'test',
-          action: { id: 'action-id', name: 'test action' },
+          action: {
+            id: 'action-id',
+            name: 'test action',
+          },
         },
       ];
       let request: nock.Scope;
