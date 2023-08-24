@@ -184,6 +184,7 @@ class DatabaseAuthenticator {
    * @param   {string}    userData.email        User email address.
    * @param   {string}    userData.password     New password.
    * @param   {string}    userData.connection   Identity provider in use.
+   * @param   {string}    userData.organization The organization_id of the Organization associated with the user.
    * @param   {Function}  [cb]              Method callback.
    * @returns  {Promise|undefined}
    */
