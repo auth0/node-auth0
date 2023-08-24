@@ -7,181 +7,181 @@ export interface Client {
    * ID of this client.
    *
    */
-  client_id?: string;
+  client_id: string;
   /**
    * Name of the tenant this client belongs to.
    *
    */
-  tenant?: string;
+  tenant: string;
   /**
    * Name of this client (min length: 1 character, does not allow `<` or `>`).
    *
    */
-  name?: string;
+  name: string;
   /**
    * Free text description of this client (max length: 140 characters).
    *
    */
-  description?: string;
+  description: string;
   /**
    * Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false).
    *
    */
-  global?: boolean;
+  global: boolean;
   /**
    * Client secret (which you must not make public).
    *
    */
-  client_secret?: string;
+  client_secret: string;
   /**
    * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`.
    *
    */
-  app_type?: string;
+  app_type: string;
   /**
    * URL of the logo to display for this client. Recommended size is 150x150 pixels.
    *
    */
-  logo_uri?: string;
+  logo_uri: string;
   /**
    * Whether this client a first party client (true) or not (false).
    *
    */
-  is_first_party?: boolean;
+  is_first_party: boolean;
   /**
    * Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false).
    *
    */
-  oidc_conformant?: boolean;
+  oidc_conformant: boolean;
   /**
    * Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication.
    *
    */
-  callbacks?: Array<string>;
+  callbacks: Array<string>;
   /**
    * Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs.
    *
    */
-  allowed_origins?: Array<string>;
+  allowed_origins: Array<string>;
   /**
    * Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>.
    *
    */
-  web_origins?: Array<string>;
+  web_origins: Array<string>;
   /**
    * List of audiences/realms for SAML protocol. Used by the wsfed addon.
    *
    */
-  client_aliases?: Array<string>;
+  client_aliases: Array<string>;
   /**
    * List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed.
    *
    */
-  allowed_clients?: Array<string>;
+  allowed_clients: Array<string>;
   /**
    * Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains.
    *
    */
-  allowed_logout_urls?: Array<string>;
+  allowed_logout_urls: Array<string>;
   /**
    */
-  oidc_backchannel_logout?: ClientOidcBackchannelLogout;
+  oidc_backchannel_logout: ClientOidcBackchannelLogout;
   /**
    * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, and `urn:ietf:params:oauth:grant-type:device_code`.
    *
    */
-  grant_types?: Array<string>;
+  grant_types: Array<string>;
   /**
    */
-  jwt_configuration?: ClientJwtConfiguration;
+  jwt_configuration: ClientJwtConfiguration;
   /**
    * Signing certificates associated with this client.
    *
    */
-  signing_keys?: Array<ClientSigningKeysInner>;
+  signing_keys: Array<ClientSigningKeysInner>;
   /**
    */
-  encryption_key?: ClientEncryptionKey | null;
+  encryption_key: ClientEncryptionKey | null;
   /**
    * Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false).
    *
    */
-  sso?: boolean;
+  sso: boolean;
   /**
    * Whether Single Sign On is disabled (true) or enabled (true). Defaults to true.
    *
    */
-  sso_disabled?: boolean;
+  sso_disabled: boolean;
   /**
    * Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false).
    *
    */
-  cross_origin_authentication?: boolean;
+  cross_origin_authentication: boolean;
   /**
    * URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page.
    *
    */
-  cross_origin_loc?: string;
+  cross_origin_loc: string;
   /**
    * Whether a custom login page is to be used (true) or the default provided login page (false).
    *
    */
-  custom_login_page_on?: boolean;
+  custom_login_page_on: boolean;
   /**
    * The content (HTML, CSS, JS) of the custom login page.
    *
    */
-  custom_login_page?: string;
+  custom_login_page: string;
   /**
    * The content (HTML, CSS, JS) of the custom login page. (Used on Previews)
    *
    */
-  custom_login_page_preview?: string;
+  custom_login_page_preview: string;
   /**
    * HTML form template to be used for WS-Federation.
    *
    */
-  form_template?: string;
+  form_template: string;
   /**
    */
-  addons?: ClientAddons;
+  addons: ClientAddons;
   /**
    * Defines the requested authentication method for the token endpoint. Can be `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), or `client_secret_basic` (client uses HTTP Basic).
    *
    */
-  token_endpoint_auth_method?: ClientTokenEndpointAuthMethodEnum;
+  token_endpoint_auth_method: ClientTokenEndpointAuthMethodEnum;
   /**
    * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
-  client_metadata?: { [key: string]: any };
+  client_metadata: object;
   /**
    */
-  mobile?: ClientMobile;
+  mobile: ClientMobile;
   /**
    * Initiate login uri, must be https
    *
    */
-  initiate_login_uri?: string;
+  initiate_login_uri: string;
   /**
    */
-  native_social_login?: ClientNativeSocialLogin | null;
+  native_social_login: ClientNativeSocialLogin | null;
   /**
    */
-  refresh_token?: ClientRefreshToken | null;
+  refresh_token: ClientRefreshToken | null;
   /**
    * Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`.
    *
    */
-  organization_usage?: ClientOrganizationUsageEnum;
+  organization_usage: ClientOrganizationUsageEnum;
   /**
    * Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`. `post_login_prompt` requires `oidc_conformant: true`.
    *
    */
-  organization_require_behavior?: ClientOrganizationRequireBehaviorEnum;
+  organization_require_behavior: ClientOrganizationRequireBehaviorEnum;
   /**
    */
-  client_authentication_methods?: ClientClientAuthenticationMethods | null;
+  client_authentication_methods: ClientClientAuthenticationMethods | null;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -214,101 +214,101 @@ export type ClientOrganizationRequireBehaviorEnum =
 export interface ClientAddons {
   /**
    */
-  aws?: ClientAddonsAws;
+  aws: ClientAddonsAws;
   /**
    */
-  azure_blob?: ClientAddonsAzureBlob;
+  azure_blob: ClientAddonsAzureBlob;
   /**
    */
-  azure_sb?: ClientAddonsAzureSb;
+  azure_sb: ClientAddonsAzureSb;
   /**
    */
-  rms?: ClientAddonsRms;
+  rms: ClientAddonsRms;
   /**
    */
-  mscrm?: ClientAddonsMscrm;
+  mscrm: ClientAddonsMscrm;
   /**
    */
-  slack?: ClientAddonsSlack;
+  slack: ClientAddonsSlack;
   /**
    */
-  sentry?: ClientAddonsSentry;
+  sentry: ClientAddonsSentry;
   /**
    * Box SSO indicator (no configuration settings needed for Box SSO).
    *
    */
-  box?: { [key: string]: any };
+  box: { [key: string]: any };
   /**
    * CloudBees SSO indicator (no configuration settings needed for CloudBees SSO).
    *
    */
-  cloudbees?: { [key: string]: any };
+  cloudbees: { [key: string]: any };
   /**
    * Concur SSO indicator (no configuration settings needed for Concur SSO).
    *
    */
-  concur?: { [key: string]: any };
+  concur: { [key: string]: any };
   /**
    * Dropbox SSO indicator (no configuration settings needed for Dropbox SSO).
    *
    */
-  dropbox?: { [key: string]: any };
+  dropbox: { [key: string]: any };
   /**
    */
-  echosign?: ClientAddonsEchosign;
+  echosign: ClientAddonsEchosign;
   /**
    */
-  egnyte?: ClientAddonsEgnyte;
+  egnyte: ClientAddonsEgnyte;
   /**
    */
-  firebase?: ClientAddonsFirebase;
+  firebase: ClientAddonsFirebase;
   /**
    */
-  newrelic?: ClientAddonsNewrelic;
+  newrelic: ClientAddonsNewrelic;
   /**
    */
-  office365?: ClientAddonsOffice365;
+  office365: ClientAddonsOffice365;
   /**
    */
-  salesforce?: ClientAddonsSalesforce;
+  salesforce: ClientAddonsSalesforce;
   /**
    */
-  salesforce_api?: ClientAddonsSalesforceApi;
+  salesforce_api: ClientAddonsSalesforceApi;
   /**
    */
-  salesforce_sandbox_api?: ClientAddonsSalesforceSandboxApi;
+  salesforce_sandbox_api: ClientAddonsSalesforceSandboxApi;
   /**
    */
-  samlp?: ClientAddonsSamlp;
+  samlp: ClientAddonsSamlp;
   /**
    */
-  layer?: ClientAddonsLayer;
+  layer: ClientAddonsLayer;
   /**
    */
-  sap_api?: ClientAddonsSapApi;
+  sap_api: ClientAddonsSapApi;
   /**
    */
-  sharepoint?: ClientAddonsSharepoint;
+  sharepoint: ClientAddonsSharepoint;
   /**
    */
-  springcm?: ClientAddonsSpringcm;
+  springcm: ClientAddonsSpringcm;
   /**
    */
-  wams?: ClientAddonsWams;
+  wams: ClientAddonsWams;
   /**
    * WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` and `client_aliases` properties on the client.
    *
    */
-  wsfed?: { [key: string]: any };
+  wsfed: { [key: string]: any };
   /**
    */
-  zendesk?: ClientAddonsZendesk;
+  zendesk: ClientAddonsZendesk;
   /**
    */
-  zoom?: ClientAddonsZoom;
+  zoom: ClientAddonsZoom;
   /**
    */
-  sso_integration?: ClientAddonsSsoIntegration;
+  sso_integration: ClientAddonsSsoIntegration;
 }
 /**
  * AWS addon configuration.
@@ -319,17 +319,17 @@ export interface ClientAddonsAws {
    * AWS principal ARN, e.g. `arn:aws:iam::010616021751:saml-provider/idpname`
    *
    */
-  principal?: string;
+  principal: string;
   /**
    * AWS role ARN, e.g. `arn:aws:iam::010616021751:role/foo`
    *
    */
-  role?: string;
+  role: string;
   /**
    * AWS token lifetime in seconds
    *
    */
-  lifetime_in_seconds?: number;
+  lifetime_in_seconds: number;
 }
 /**
  * Azure Blob Storage addon configuration.
@@ -340,67 +340,67 @@ export interface ClientAddonsAzureBlob {
    * Your Azure storage account name. Usually first segment in your Azure storage URL. e.g. `https://acme-org.blob.core.windows.net` would be the account name `acme-org`.
    *
    */
-  accountName?: string;
+  accountName: string;
   /**
    * Access key associated with this storage account.
    *
    */
-  storageAccessKey?: string;
+  storageAccessKey: string;
   /**
    * Container to request a token for. e.g. `my-container`.
    *
    */
-  containerName?: string;
+  containerName: string;
   /**
    * Entity to request a token for. e.g. `my-blob`. If blank the computed SAS will apply to the entire storage container.
    *
    */
-  blobName?: string;
+  blobName: string;
   /**
    * Expiration in minutes for the generated token (default of 5 minutes).
    *
    */
-  expiration?: number;
+  expiration: number;
   /**
    * Shared access policy identifier defined in your storage account resource.
    *
    */
-  signedIdentifier?: string;
+  signedIdentifier: string;
   /**
    * Indicates if the issued token has permission to read the content, properties, metadata and block list. Use the blob as the source of a copy operation.
    *
    */
-  blob_read?: boolean;
+  blob_read: boolean;
   /**
    * Indicates if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
    *
    */
-  blob_write?: boolean;
+  blob_write: boolean;
   /**
    * Indicates if the issued token has permission to delete the blob.
    *
    */
-  blob_delete?: boolean;
+  blob_delete: boolean;
   /**
    * Indicates if the issued token has permission to read the content, properties, metadata or block list of any blob in the container. Use any blob in the container as the source of a copy operation
    *
    */
-  container_read?: boolean;
+  container_read: boolean;
   /**
    * Indicates that for any blob in the container if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
    *
    */
-  container_write?: boolean;
+  container_write: boolean;
   /**
    * Indicates if issued token has permission to delete any blob in the container.
    *
    */
-  container_delete?: boolean;
+  container_delete: boolean;
   /**
    * Indicates if the issued token has permission to list blobs in the container.
    *
    */
-  container_list?: boolean;
+  container_list: boolean;
 }
 /**
  * Azure Storage Bus addon configuration.
@@ -411,27 +411,27 @@ export interface ClientAddonsAzureSb {
    * Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (e.g. `https://acme-org.servicebus.windows.net` would be `acme-org`).
    *
    */
-  namespace?: string;
+  namespace: string;
   /**
    * Your shared access policy name defined in your Service Bus entity.
    *
    */
-  sasKeyName?: string;
+  sasKeyName: string;
   /**
    * Primary Key associated with your shared access policy.
    *
    */
-  sasKey?: string;
+  sasKey: string;
   /**
    * Entity you want to request a token for. e.g. `my-queue`.'
    *
    */
-  entityPath?: string;
+  entityPath: string;
   /**
    * Optional expiration in minutes for the generated token. Defaults to 5 minutes.
    *
    */
-  expiration?: number;
+  expiration: number;
 }
 /**
  * Adobe EchoSign SSO configuration.
@@ -442,7 +442,7 @@ export interface ClientAddonsEchosign {
    * Your custom domain found in your EchoSign URL. e.g. `https://acme-org.echosign.com` would be `acme-org`.
    *
    */
-  domain?: string;
+  domain: string;
 }
 /**
  * Egnyte SSO configuration.
@@ -453,7 +453,7 @@ export interface ClientAddonsEgnyte {
    * Your custom domain found in your Egnyte URL. e.g. `https://acme-org.egnyte.com` would be `acme-org`.
    *
    */
-  domain?: string;
+  domain: string;
 }
 /**
  * Google Firebase addon configuration.
@@ -464,27 +464,27 @@ export interface ClientAddonsFirebase {
    * Google Firebase Secret. (SDK 2 only).
    *
    */
-  secret?: string;
+  secret: string;
   /**
    * Optional ID of the private key to obtain kid header in the issued token (SDK v3+ tokens only).
    *
    */
-  private_key_id?: string;
+  private_key_id: string;
   /**
    * Private Key for signing the token (SDK v3+ tokens only).
    *
    */
-  private_key?: string;
+  private_key: string;
   /**
    * ID of the Service Account you have created (shown as `client_email` in the generated JSON file, SDK v3+ tokens only).
    *
    */
-  client_email?: string;
+  client_email: string;
   /**
    * Optional expiration in seconds for the generated token. Defaults to 3600 seconds (SDK v3+ tokens only).
    *
    */
-  lifetime_in_seconds?: number;
+  lifetime_in_seconds: number;
 }
 /**
  * Layer addon configuration.
@@ -537,7 +537,7 @@ export interface ClientAddonsNewrelic {
    * Your New Relic Account ID found in your New Relic URL after the `/accounts/` path. e.g. `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.
    *
    */
-  account?: string;
+  account: string;
 }
 /**
  * Microsoft Office 365 SSO configuration.
@@ -548,12 +548,12 @@ export interface ClientAddonsOffice365 {
    * Your Office 365 domain name. e.g. `acme-org.com`.
    *
    */
-  domain?: string;
+  domain: string;
   /**
    * Optional Auth0 database connection for testing an already-configured Office 365 tenant.
    *
    */
-  connection?: string;
+  connection: string;
 }
 /**
  * Active Directory Rights Management Service SSO configuration.
@@ -575,7 +575,7 @@ export interface ClientAddonsSalesforce {
    * Arbitrary logical URL that identifies the Saleforce resource. e.g. `https://acme-org.com`.
    *
    */
-  entity_id?: string;
+  entity_id: string;
 }
 /**
  * Salesforce API addon configuration.
@@ -586,22 +586,22 @@ export interface ClientAddonsSalesforceApi {
    * Consumer Key assigned by Salesforce to the Connected App.
    *
    */
-  clientid?: string;
+  clientid: string;
   /**
    * Name of the property in the user object that maps to a Salesforce username. e.g. `email`.
    *
    */
-  principal?: string;
+  principal: string;
   /**
    * Community name.
    *
    */
-  communityName?: string;
+  communityName: string;
   /**
    * Community url section.
    *
    */
-  community_url_section?: string;
+  community_url_section: string;
 }
 /**
  * Salesforce Sandbox addon configuration.
@@ -612,22 +612,22 @@ export interface ClientAddonsSalesforceSandboxApi {
    * Consumer Key assigned by Salesforce to the Connected App.
    *
    */
-  clientid?: string;
+  clientid: string;
   /**
    * Name of the property in the user object that maps to a Salesforce username. e.g. `email`.
    *
    */
-  principal?: string;
+  principal: string;
   /**
    * Community name.
    *
    */
-  communityName?: string;
+  communityName: string;
   /**
    * Community url section.
    *
    */
-  community_url_section?: string;
+  community_url_section: string;
 }
 /**
  * SAML2 addon indicator (no configuration settings needed for SAML2 addon).
@@ -636,52 +636,52 @@ export interface ClientAddonsSamlp {
   [key: string]: any | any;
   /**
    */
-  mappings?: { [key: string]: any };
+  mappings: { [key: string]: any };
   /**
    */
-  audience?: string;
+  audience: string;
   /**
    */
-  recipient?: string;
+  recipient: string;
   /**
    */
-  createUpnClaim?: boolean;
+  createUpnClaim: boolean;
   /**
    */
-  mapUnknownClaimsAsIs?: boolean;
+  mapUnknownClaimsAsIs: boolean;
   /**
    */
-  passthroughClaimsWithNoMapping?: boolean;
+  passthroughClaimsWithNoMapping: boolean;
   /**
    */
-  mapIdentities?: boolean;
+  mapIdentities: boolean;
   /**
    */
-  signatureAlgorithm?: string;
+  signatureAlgorithm: string;
   /**
    */
-  digestAlgorithm?: string;
+  digestAlgorithm: string;
   /**
    */
-  issuer?: string;
+  issuer: string;
   /**
    */
-  destination?: string;
+  destination: string;
   /**
    */
-  lifetimeInSeconds?: number;
+  lifetimeInSeconds: number;
   /**
    */
-  signResponse?: boolean;
+  signResponse: boolean;
   /**
    */
-  nameIdentifierFormat?: string;
+  nameIdentifierFormat: string;
   /**
    */
-  nameIdentifierProbes?: Array<string>;
+  nameIdentifierProbes: Array<string>;
   /**
    */
-  authnContextClassRef?: string;
+  authnContextClassRef: string;
 }
 /**
  * SAP API addon configuration.
@@ -692,32 +692,32 @@ export interface ClientAddonsSapApi {
    * If activated in the OAuth 2.0 client configuration (transaction SOAUTH2) the SAML attribute client_id must be set and equal the client_id form parameter of the access token request.
    *
    */
-  clientid?: string;
+  clientid: string;
   /**
    * Name of the property in the user object that maps to a SAP username. e.g. `email`.
    *
    */
-  usernameAttribute?: string;
+  usernameAttribute: string;
   /**
    * Your SAP OData server OAuth2 token endpoint URL.
    *
    */
-  tokenEndpointUrl?: string;
+  tokenEndpointUrl: string;
   /**
    * Requested scope for SAP APIs.
    *
    */
-  scope?: string;
+  scope: string;
   /**
    * Service account password to use to authenticate API calls to the token endpoint.
    *
    */
-  servicePassword?: string;
+  servicePassword: string;
   /**
    * NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
    *
    */
-  nameIdentifierFormat?: string;
+  nameIdentifierFormat: string;
 }
 /**
  * Sentry SSO configuration.
@@ -728,12 +728,12 @@ export interface ClientAddonsSentry {
    * Generated slug for your Sentry organization. Found in your Sentry URL. e.g. `https://sentry.acme.com/acme-org/` would be `acme-org`.
    *
    */
-  org_slug?: string;
+  org_slug: string;
   /**
    * URL prefix only if running Sentry Community Edition, otherwise leave should be blank.
    *
    */
-  base_url?: string;
+  base_url: string;
 }
 /**
  * SharePoint SSO configuration.
@@ -744,10 +744,10 @@ export interface ClientAddonsSharepoint {
    * Internal SharePoint application URL.
    *
    */
-  url?: string;
+  url: string;
   /**
    */
-  external_url?: ClientAddonsSharepointExternalUrl;
+  external_url: ClientAddonsSharepointExternalUrl;
 }
 /**
  * External SharePoint application URLs if exposed to the Internet.
@@ -773,7 +773,7 @@ export interface ClientAddonsSpringcm {
    * SpringCM ACS URL, e.g. `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.
    *
    */
-  acsurl?: string;
+  acsurl: string;
 }
 /**
  *
@@ -784,12 +784,12 @@ export interface ClientAddonsSsoIntegration {
    * SSO integration name
    *
    */
-  name?: string;
+  name: string;
   /**
    * SSO integration version installed
    *
    */
-  version?: string;
+  version: string;
 }
 /**
  * Windows Azure Mobile Services addon configuration.
@@ -800,7 +800,7 @@ export interface ClientAddonsWams {
    * Your master key for Windows Azure Mobile Services.
    *
    */
-  masterkey?: string;
+  masterkey: string;
 }
 /**
  * Zendesk SSO configuration.
@@ -811,7 +811,7 @@ export interface ClientAddonsZendesk {
    * Zendesk account name usually first segment in your Zendesk URL. e.g. `https://acme-org.zendesk.com` would be `acme-org`.
    *
    */
-  accountName?: string;
+  accountName: string;
 }
 /**
  * Zoom SSO configuration.
@@ -822,7 +822,7 @@ export interface ClientAddonsZoom {
    * Zoom account name usually first segment of your Zoom URL, e.g. `https://acme-org.zoom.us` would be `acme-org`.
    *
    */
-  account?: string;
+  account: string;
 }
 /**
  * Defines client authentication methods.
@@ -830,7 +830,7 @@ export interface ClientAddonsZoom {
 export interface ClientClientAuthenticationMethods {
   /**
    */
-  private_key_jwt?: ClientClientAuthenticationMethodsPrivateKeyJwt;
+  private_key_jwt: ClientClientAuthenticationMethodsPrivateKeyJwt;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
@@ -977,12 +977,12 @@ export interface ClientCreate {
   form_template?: string;
   /**
    */
-  addons?: ClientAddons;
+  addons?: ClientCreateAddons;
   /**
    * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
-  client_metadata?: { [key: string]: any };
+  client_metadata?: object;
   /**
    */
   mobile?: ClientCreateMobile;
@@ -993,7 +993,7 @@ export interface ClientCreate {
   initiate_login_uri?: string;
   /**
    */
-  native_social_login?: ClientNativeSocialLogin | null;
+  native_social_login?: ClientCreateNativeSocialLogin | null;
   /**
    */
   refresh_token?: ClientRefreshToken | null;
@@ -1063,6 +1063,554 @@ export const ClientCreateOrganizationRequireBehaviorEnum = {
 export type ClientCreateOrganizationRequireBehaviorEnum =
   (typeof ClientCreateOrganizationRequireBehaviorEnum)[keyof typeof ClientCreateOrganizationRequireBehaviorEnum];
 
+/**
+ * Addons enabled for this client and their associated configurations.
+ */
+export interface ClientCreateAddons {
+  /**
+   */
+  aws?: ClientCreateAddonsAws;
+  /**
+   */
+  azure_blob?: ClientCreateAddonsAzureBlob;
+  /**
+   */
+  azure_sb?: ClientCreateAddonsAzureSb;
+  /**
+   */
+  rms?: ClientAddonsRms;
+  /**
+   */
+  mscrm?: ClientAddonsMscrm;
+  /**
+   */
+  slack?: ClientAddonsSlack;
+  /**
+   */
+  sentry?: ClientCreateAddonsSentry;
+  /**
+   * Box SSO indicator (no configuration settings needed for Box SSO).
+   *
+   */
+  box?: { [key: string]: any };
+  /**
+   * CloudBees SSO indicator (no configuration settings needed for CloudBees SSO).
+   *
+   */
+  cloudbees?: { [key: string]: any };
+  /**
+   * Concur SSO indicator (no configuration settings needed for Concur SSO).
+   *
+   */
+  concur?: { [key: string]: any };
+  /**
+   * Dropbox SSO indicator (no configuration settings needed for Dropbox SSO).
+   *
+   */
+  dropbox?: { [key: string]: any };
+  /**
+   */
+  echosign?: ClientCreateAddonsEchosign;
+  /**
+   */
+  egnyte?: ClientCreateAddonsEgnyte;
+  /**
+   */
+  firebase?: ClientCreateAddonsFirebase;
+  /**
+   */
+  newrelic?: ClientCreateAddonsNewrelic;
+  /**
+   */
+  office365?: ClientCreateAddonsOffice365;
+  /**
+   */
+  salesforce?: ClientCreateAddonsSalesforce;
+  /**
+   */
+  salesforce_api?: ClientCreateAddonsSalesforceApi;
+  /**
+   */
+  salesforce_sandbox_api?: ClientCreateAddonsSalesforceSandboxApi;
+  /**
+   */
+  samlp?: ClientCreateAddonsSamlp;
+  /**
+   */
+  layer?: ClientAddonsLayer;
+  /**
+   */
+  sap_api?: ClientCreateAddonsSapApi;
+  /**
+   */
+  sharepoint?: ClientCreateAddonsSharepoint;
+  /**
+   */
+  springcm?: ClientCreateAddonsSpringcm;
+  /**
+   */
+  wams?: ClientCreateAddonsWams;
+  /**
+   * WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` and `client_aliases` properties on the client.
+   *
+   */
+  wsfed?: { [key: string]: any };
+  /**
+   */
+  zendesk?: ClientCreateAddonsZendesk;
+  /**
+   */
+  zoom?: ClientCreateAddonsZoom;
+  /**
+   */
+  sso_integration?: ClientCreateAddonsSsoIntegration;
+}
+/**
+ * AWS addon configuration.
+ */
+export interface ClientCreateAddonsAws {
+  [key: string]: any | any;
+  /**
+   * AWS principal ARN, e.g. `arn:aws:iam::010616021751:saml-provider/idpname`
+   *
+   */
+  principal?: string;
+  /**
+   * AWS role ARN, e.g. `arn:aws:iam::010616021751:role/foo`
+   *
+   */
+  role?: string;
+  /**
+   * AWS token lifetime in seconds
+   *
+   */
+  lifetime_in_seconds?: number;
+}
+/**
+ * Azure Blob Storage addon configuration.
+ */
+export interface ClientCreateAddonsAzureBlob {
+  [key: string]: any | any;
+  /**
+   * Your Azure storage account name. Usually first segment in your Azure storage URL. e.g. `https://acme-org.blob.core.windows.net` would be the account name `acme-org`.
+   *
+   */
+  accountName?: string;
+  /**
+   * Access key associated with this storage account.
+   *
+   */
+  storageAccessKey?: string;
+  /**
+   * Container to request a token for. e.g. `my-container`.
+   *
+   */
+  containerName?: string;
+  /**
+   * Entity to request a token for. e.g. `my-blob`. If blank the computed SAS will apply to the entire storage container.
+   *
+   */
+  blobName?: string;
+  /**
+   * Expiration in minutes for the generated token (default of 5 minutes).
+   *
+   */
+  expiration?: number;
+  /**
+   * Shared access policy identifier defined in your storage account resource.
+   *
+   */
+  signedIdentifier?: string;
+  /**
+   * Indicates if the issued token has permission to read the content, properties, metadata and block list. Use the blob as the source of a copy operation.
+   *
+   */
+  blob_read?: boolean;
+  /**
+   * Indicates if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
+   *
+   */
+  blob_write?: boolean;
+  /**
+   * Indicates if the issued token has permission to delete the blob.
+   *
+   */
+  blob_delete?: boolean;
+  /**
+   * Indicates if the issued token has permission to read the content, properties, metadata or block list of any blob in the container. Use any blob in the container as the source of a copy operation
+   *
+   */
+  container_read?: boolean;
+  /**
+   * Indicates that for any blob in the container if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
+   *
+   */
+  container_write?: boolean;
+  /**
+   * Indicates if issued token has permission to delete any blob in the container.
+   *
+   */
+  container_delete?: boolean;
+  /**
+   * Indicates if the issued token has permission to list blobs in the container.
+   *
+   */
+  container_list?: boolean;
+}
+/**
+ * Azure Storage Bus addon configuration.
+ */
+export interface ClientCreateAddonsAzureSb {
+  [key: string]: any | any;
+  /**
+   * Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (e.g. `https://acme-org.servicebus.windows.net` would be `acme-org`).
+   *
+   */
+  namespace?: string;
+  /**
+   * Your shared access policy name defined in your Service Bus entity.
+   *
+   */
+  sasKeyName?: string;
+  /**
+   * Primary Key associated with your shared access policy.
+   *
+   */
+  sasKey?: string;
+  /**
+   * Entity you want to request a token for. e.g. `my-queue`.'
+   *
+   */
+  entityPath?: string;
+  /**
+   * Optional expiration in minutes for the generated token. Defaults to 5 minutes.
+   *
+   */
+  expiration?: number;
+}
+/**
+ * Adobe EchoSign SSO configuration.
+ */
+export interface ClientCreateAddonsEchosign {
+  [key: string]: any | any;
+  /**
+   * Your custom domain found in your EchoSign URL. e.g. `https://acme-org.echosign.com` would be `acme-org`.
+   *
+   */
+  domain?: string;
+}
+/**
+ * Egnyte SSO configuration.
+ */
+export interface ClientCreateAddonsEgnyte {
+  [key: string]: any | any;
+  /**
+   * Your custom domain found in your Egnyte URL. e.g. `https://acme-org.egnyte.com` would be `acme-org`.
+   *
+   */
+  domain?: string;
+}
+/**
+ * Google Firebase addon configuration.
+ */
+export interface ClientCreateAddonsFirebase {
+  [key: string]: any | any;
+  /**
+   * Google Firebase Secret. (SDK 2 only).
+   *
+   */
+  secret?: string;
+  /**
+   * Optional ID of the private key to obtain kid header in the issued token (SDK v3+ tokens only).
+   *
+   */
+  private_key_id?: string;
+  /**
+   * Private Key for signing the token (SDK v3+ tokens only).
+   *
+   */
+  private_key?: string;
+  /**
+   * ID of the Service Account you have created (shown as `client_email` in the generated JSON file, SDK v3+ tokens only).
+   *
+   */
+  client_email?: string;
+  /**
+   * Optional expiration in seconds for the generated token. Defaults to 3600 seconds (SDK v3+ tokens only).
+   *
+   */
+  lifetime_in_seconds?: number;
+}
+/**
+ * New Relic SSO configuration.
+ */
+export interface ClientCreateAddonsNewrelic {
+  [key: string]: any | any;
+  /**
+   * Your New Relic Account ID found in your New Relic URL after the `/accounts/` path. e.g. `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.
+   *
+   */
+  account?: string;
+}
+/**
+ * Microsoft Office 365 SSO configuration.
+ */
+export interface ClientCreateAddonsOffice365 {
+  [key: string]: any | any;
+  /**
+   * Your Office 365 domain name. e.g. `acme-org.com`.
+   *
+   */
+  domain?: string;
+  /**
+   * Optional Auth0 database connection for testing an already-configured Office 365 tenant.
+   *
+   */
+  connection?: string;
+}
+/**
+ * Salesforce SSO configuration.
+ */
+export interface ClientCreateAddonsSalesforce {
+  [key: string]: any | any;
+  /**
+   * Arbitrary logical URL that identifies the Saleforce resource. e.g. `https://acme-org.com`.
+   *
+   */
+  entity_id?: string;
+}
+/**
+ * Salesforce API addon configuration.
+ */
+export interface ClientCreateAddonsSalesforceApi {
+  [key: string]: any | any;
+  /**
+   * Consumer Key assigned by Salesforce to the Connected App.
+   *
+   */
+  clientid?: string;
+  /**
+   * Name of the property in the user object that maps to a Salesforce username. e.g. `email`.
+   *
+   */
+  principal?: string;
+  /**
+   * Community name.
+   *
+   */
+  communityName?: string;
+  /**
+   * Community url section.
+   *
+   */
+  community_url_section?: string;
+}
+/**
+ * Salesforce Sandbox addon configuration.
+ */
+export interface ClientCreateAddonsSalesforceSandboxApi {
+  [key: string]: any | any;
+  /**
+   * Consumer Key assigned by Salesforce to the Connected App.
+   *
+   */
+  clientid?: string;
+  /**
+   * Name of the property in the user object that maps to a Salesforce username. e.g. `email`.
+   *
+   */
+  principal?: string;
+  /**
+   * Community name.
+   *
+   */
+  communityName?: string;
+  /**
+   * Community url section.
+   *
+   */
+  community_url_section?: string;
+}
+/**
+ * SAML2 addon indicator (no configuration settings needed for SAML2 addon).
+ */
+export interface ClientCreateAddonsSamlp {
+  [key: string]: any | any;
+  /**
+   */
+  mappings?: { [key: string]: any };
+  /**
+   */
+  audience?: string;
+  /**
+   */
+  recipient?: string;
+  /**
+   */
+  createUpnClaim?: boolean;
+  /**
+   */
+  mapUnknownClaimsAsIs?: boolean;
+  /**
+   */
+  passthroughClaimsWithNoMapping?: boolean;
+  /**
+   */
+  mapIdentities?: boolean;
+  /**
+   */
+  signatureAlgorithm?: string;
+  /**
+   */
+  digestAlgorithm?: string;
+  /**
+   */
+  issuer?: string;
+  /**
+   */
+  destination?: string;
+  /**
+   */
+  lifetimeInSeconds?: number;
+  /**
+   */
+  signResponse?: boolean;
+  /**
+   */
+  nameIdentifierFormat?: string;
+  /**
+   */
+  nameIdentifierProbes?: Array<string>;
+  /**
+   */
+  authnContextClassRef?: string;
+}
+/**
+ * SAP API addon configuration.
+ */
+export interface ClientCreateAddonsSapApi {
+  [key: string]: any | any;
+  /**
+   * If activated in the OAuth 2.0 client configuration (transaction SOAUTH2) the SAML attribute client_id must be set and equal the client_id form parameter of the access token request.
+   *
+   */
+  clientid?: string;
+  /**
+   * Name of the property in the user object that maps to a SAP username. e.g. `email`.
+   *
+   */
+  usernameAttribute?: string;
+  /**
+   * Your SAP OData server OAuth2 token endpoint URL.
+   *
+   */
+  tokenEndpointUrl?: string;
+  /**
+   * Requested scope for SAP APIs.
+   *
+   */
+  scope?: string;
+  /**
+   * Service account password to use to authenticate API calls to the token endpoint.
+   *
+   */
+  servicePassword?: string;
+  /**
+   * NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
+   *
+   */
+  nameIdentifierFormat?: string;
+}
+/**
+ * Sentry SSO configuration.
+ */
+export interface ClientCreateAddonsSentry {
+  [key: string]: any | any;
+  /**
+   * Generated slug for your Sentry organization. Found in your Sentry URL. e.g. `https://sentry.acme.com/acme-org/` would be `acme-org`.
+   *
+   */
+  org_slug?: string;
+  /**
+   * URL prefix only if running Sentry Community Edition, otherwise leave should be blank.
+   *
+   */
+  base_url?: string;
+}
+/**
+ * SharePoint SSO configuration.
+ */
+export interface ClientCreateAddonsSharepoint {
+  [key: string]: any | any;
+  /**
+   * Internal SharePoint application URL.
+   *
+   */
+  url?: string;
+  /**
+   */
+  external_url?: ClientAddonsSharepointExternalUrl;
+}
+/**
+ * SpringCM SSO configuration.
+ */
+export interface ClientCreateAddonsSpringcm {
+  [key: string]: any | any;
+  /**
+   * SpringCM ACS URL, e.g. `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.
+   *
+   */
+  acsurl?: string;
+}
+/**
+ *
+ */
+export interface ClientCreateAddonsSsoIntegration {
+  [key: string]: any | any;
+  /**
+   * SSO integration name
+   *
+   */
+  name?: string;
+  /**
+   * SSO integration version installed
+   *
+   */
+  version?: string;
+}
+/**
+ * Windows Azure Mobile Services addon configuration.
+ */
+export interface ClientCreateAddonsWams {
+  [key: string]: any | any;
+  /**
+   * Your master key for Windows Azure Mobile Services.
+   *
+   */
+  masterkey?: string;
+}
+/**
+ * Zendesk SSO configuration.
+ */
+export interface ClientCreateAddonsZendesk {
+  [key: string]: any | any;
+  /**
+   * Zendesk account name usually first segment in your Zendesk URL. e.g. `https://acme-org.zendesk.com` would be `acme-org`.
+   *
+   */
+  accountName?: string;
+}
+/**
+ * Zoom SSO configuration.
+ */
+export interface ClientCreateAddonsZoom {
+  [key: string]: any | any;
+  /**
+   * Zoom account name usually first segment of your Zoom URL, e.g. `https://acme-org.zoom.us` would be `acme-org`.
+   *
+   */
+  account?: string;
+}
 /**
  * Defines client authentication methods.
  */
@@ -1223,6 +1771,37 @@ export interface ClientCreateMobileIos {
   app_bundle_identifier?: string;
 }
 /**
+ * Configure native social settings
+ */
+export interface ClientCreateNativeSocialLogin {
+  /**
+   */
+  apple?: ClientCreateNativeSocialLoginApple | null;
+  /**
+   */
+  facebook?: ClientCreateNativeSocialLoginFacebook | null;
+}
+/**
+ * Native Social Login support for the Apple connection
+ */
+export interface ClientCreateNativeSocialLoginApple {
+  /**
+   * Determine whether or not to allow signing in natively using an Apple authorization code
+   *
+   */
+  enabled?: boolean;
+}
+/**
+ * Native Social Login support for the Facebook connection
+ */
+export interface ClientCreateNativeSocialLoginFacebook {
+  /**
+   * Determine whether or not to allow signing in natively using Facebook
+   *
+   */
+  enabled?: boolean;
+}
+/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientCreateOidcBackchannelLogout {
@@ -1241,17 +1820,17 @@ export interface ClientEncryptionKey {
    * Encryption Public RSA Key.
    *
    */
-  pub?: string;
+  pub: string;
   /**
    * Encryption certificate for public key in X.590 (.CER) format.
    *
    */
-  cert?: string;
+  cert: string;
   /**
    * Encryption certificate name for this certificate in the format `/CN={domain}`.
    *
    */
-  subject?: string;
+  subject: string;
 }
 /**
  *
@@ -1261,22 +1840,22 @@ export interface ClientGrant {
    * ID of the client grant.
    *
    */
-  id?: string;
+  id: string;
   /**
    * ID of the client.
    *
    */
-  client_id?: string;
+  client_id: string;
   /**
    * Audience or API identifier of this client grant.
    *
    */
-  audience?: string;
+  audience: string;
   /**
    * Scopes allowed for this client grant.
    *
    */
-  scope?: Array<string>;
+  scope: Array<string>;
 }
 /**
  *
@@ -1307,22 +1886,22 @@ export interface ClientJwtConfiguration {
    * Number of seconds the JWT will be valid for (affects `exp` claim).
    *
    */
-  lifetime_in_seconds?: number;
+  lifetime_in_seconds: number;
   /**
    * Whether the client secret is base64 encoded (true) or unencoded (false).
    *
    */
-  secret_encoded?: boolean;
+  secret_encoded: boolean;
   /**
    * Configuration related to id token claims for the client.
    *
    */
-  scopes?: { [key: string]: any };
+  scopes: { [key: string]: any };
   /**
    * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
-  alg?: ClientJwtConfigurationAlgEnum;
+  alg: ClientJwtConfigurationAlgEnum;
 }
 
 export const ClientJwtConfigurationAlgEnum = {
@@ -1340,10 +1919,10 @@ export interface ClientMobile {
   [key: string]: any | any;
   /**
    */
-  android?: ClientMobileAndroid;
+  android: ClientMobileAndroid;
   /**
    */
-  ios?: ClientMobileIos;
+  ios: ClientMobileIos;
 }
 /**
  * Android native app configuration.
@@ -1354,12 +1933,12 @@ export interface ClientMobileAndroid {
    * App package name found in AndroidManifest.xml.
    *
    */
-  app_package_name?: string;
+  app_package_name: string;
   /**
    * SHA256 fingerprints of the app's signing certificate. Multiple fingerprints can be used to support different versions of your app, such as debug and production builds.
    *
    */
-  sha256_cert_fingerprints?: Array<string>;
+  sha256_cert_fingerprints: Array<string>;
 }
 /**
  * iOS native app configuration.
@@ -1370,12 +1949,12 @@ export interface ClientMobileIos {
    * Identifier assigned to the Apple account that signs and uploads the app to the store.
    *
    */
-  team_id?: string;
+  team_id: string;
   /**
    * Assigned by developer to the app as its unique identifier inside the store. Usually this is a reverse domain plus the app name, e.g. `com.you.MyApp`.
    *
    */
-  app_bundle_identifier?: string;
+  app_bundle_identifier: string;
 }
 /**
  * Configure native social settings
@@ -1383,10 +1962,10 @@ export interface ClientMobileIos {
 export interface ClientNativeSocialLogin {
   /**
    */
-  apple?: ClientNativeSocialLoginApple | null;
+  apple: ClientNativeSocialLoginApple | null;
   /**
    */
-  facebook?: ClientNativeSocialLoginFacebook | null;
+  facebook: ClientNativeSocialLoginFacebook | null;
 }
 /**
  * Native Social Login support for the Apple connection
@@ -1396,7 +1975,7 @@ export interface ClientNativeSocialLoginApple {
    * Determine whether or not to allow signing in natively using an Apple authorization code
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
 }
 /**
  * Native Social Login support for the Facebook connection
@@ -1406,7 +1985,7 @@ export interface ClientNativeSocialLoginFacebook {
    * Determine whether or not to allow signing in natively using Facebook
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
 }
 /**
  * Configuration for OIDC backchannel logout
@@ -1417,7 +1996,7 @@ export interface ClientOidcBackchannelLogout {
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
    *
    */
-  backchannel_logout_urls?: Array<string>;
+  backchannel_logout_urls: Array<string>;
 }
 /**
  * Refresh token configuration
@@ -1483,17 +2062,17 @@ export interface ClientSigningKeysInner {
    * Signing certificate public key and chain in PKCS#7 (.P7B) format.
    *
    */
-  pkcs7?: string;
+  pkcs7: string;
   /**
    * Signing certificate public key in X.590 (.CER) format.
    *
    */
-  cert?: string;
+  cert: string;
   /**
    * Subject name for this certificate in the format `/CN={domain}`.
    *
    */
-  subject?: string;
+  subject: string;
 }
 /**
  *
@@ -1628,7 +2207,7 @@ export interface ClientUpdate {
    * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
-  client_metadata?: { [key: string]: any };
+  client_metadata?: object;
   /**
    */
   mobile?: ClientUpdateMobile | null;
@@ -1639,7 +2218,7 @@ export interface ClientUpdate {
   initiate_login_uri?: string;
   /**
    */
-  native_social_login?: ClientNativeSocialLogin | null;
+  native_social_login?: ClientCreateNativeSocialLogin | null;
   /**
    */
   refresh_token?: ClientRefreshToken | null;
@@ -1655,7 +2234,7 @@ export interface ClientUpdate {
   organization_require_behavior?: ClientUpdateOrganizationRequireBehaviorEnum;
   /**
    */
-  client_authentication_methods?: ClientClientAuthenticationMethods | null;
+  client_authentication_methods?: ClientUpdateClientAuthenticationMethods | null;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
@@ -1716,13 +2295,13 @@ export type ClientUpdateOrganizationRequireBehaviorEnum =
 export interface ClientUpdateAddons {
   /**
    */
-  aws?: ClientAddonsAws;
+  aws?: ClientCreateAddonsAws;
   /**
    */
-  azure_blob?: ClientAddonsAzureBlob;
+  azure_blob?: ClientCreateAddonsAzureBlob;
   /**
    */
-  azure_sb?: ClientAddonsAzureSb;
+  azure_sb?: ClientCreateAddonsAzureSb;
   /**
    */
   rms?: ClientAddonsRms;
@@ -1734,7 +2313,7 @@ export interface ClientUpdateAddons {
   slack?: ClientAddonsSlack;
   /**
    */
-  sentry?: ClientAddonsSentry;
+  sentry?: ClientCreateAddonsSentry;
   /**
    * Box SSO indicator (no configuration settings needed for Box SSO).
    *
@@ -1757,46 +2336,46 @@ export interface ClientUpdateAddons {
   dropbox?: { [key: string]: any };
   /**
    */
-  echosign?: ClientAddonsEchosign;
+  echosign?: ClientCreateAddonsEchosign;
   /**
    */
-  egnyte?: ClientAddonsEgnyte;
+  egnyte?: ClientCreateAddonsEgnyte;
   /**
    */
-  firebase?: ClientAddonsFirebase;
+  firebase?: ClientCreateAddonsFirebase;
   /**
    */
-  newrelic?: ClientAddonsNewrelic;
+  newrelic?: ClientCreateAddonsNewrelic;
   /**
    */
-  office365?: ClientAddonsOffice365;
+  office365?: ClientCreateAddonsOffice365;
   /**
    */
-  salesforce?: ClientAddonsSalesforce;
+  salesforce?: ClientCreateAddonsSalesforce;
   /**
    */
-  salesforce_api?: ClientAddonsSalesforceApi;
+  salesforce_api?: ClientCreateAddonsSalesforceApi;
   /**
    */
-  salesforce_sandbox_api?: ClientAddonsSalesforceSandboxApi;
+  salesforce_sandbox_api?: ClientCreateAddonsSalesforceSandboxApi;
   /**
    */
-  samlp?: ClientAddonsSamlp;
+  samlp?: ClientCreateAddonsSamlp;
   /**
    */
   layer?: ClientAddonsLayer;
   /**
    */
-  sap_api?: ClientAddonsSapApi;
+  sap_api?: ClientCreateAddonsSapApi;
   /**
    */
-  sharepoint?: ClientAddonsSharepoint;
+  sharepoint?: ClientCreateAddonsSharepoint;
   /**
    */
-  springcm?: ClientAddonsSpringcm;
+  springcm?: ClientCreateAddonsSpringcm;
   /**
    */
-  wams?: ClientAddonsWams;
+  wams?: ClientCreateAddonsWams;
   /**
    * WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` and `client_aliases` properties on the client.
    *
@@ -1804,13 +2383,21 @@ export interface ClientUpdateAddons {
   wsfed?: { [key: string]: any };
   /**
    */
-  zendesk?: ClientAddonsZendesk;
+  zendesk?: ClientCreateAddonsZendesk;
   /**
    */
-  zoom?: ClientAddonsZoom;
+  zoom?: ClientCreateAddonsZoom;
   /**
    */
-  sso_integration?: ClientAddonsSsoIntegration;
+  sso_integration?: ClientCreateAddonsSsoIntegration;
+}
+/**
+ * Defines client authentication methods.
+ */
+export interface ClientUpdateClientAuthenticationMethods {
+  /**
+   */
+  private_key_jwt?: ClientClientAuthenticationMethodsPrivateKeyJwt;
 }
 /**
  * The client's encryption key
@@ -1918,40 +2505,40 @@ export interface Connection {
    * The name of the connection
    *
    */
-  name?: string;
+  name: string;
   /**
    * Connection name used in login screen
    *
    */
-  display_name?: string;
+  display_name: string;
   /**
    */
-  options?: { [key: string]: any };
+  options: { [key: string]: any };
   /**
    * The connection's identifier
    *
    */
-  id?: string;
+  id: string;
   /**
    * The type of the connection, related to the identity provider
    *
    */
-  strategy?: string;
+  strategy: string;
   /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm
    *
    */
-  realms?: Array<string>;
+  realms: Array<string>;
   /**
    * True if the connection is domain level
    *
    */
-  is_domain_connection?: boolean;
+  is_domain_connection: boolean;
   /**
    * Metadata associated with the connection, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
-  metadata?: { [key: string]: any };
+  metadata: { [key: string]: any };
 }
 /**
  *
@@ -2668,25 +3255,25 @@ export interface EmailProvider {
    * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Whether the provider is enabled (true) or disabled (false).
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Email address to use as "from" when no other address specified.
    *
    */
-  default_from_address?: string;
+  default_from_address: string;
   /**
    */
-  credentials?: EmailProviderCredentials;
+  credentials: EmailProviderCredentials;
   /**
    * Specific provider setting
    *
    */
-  settings?: { [key: string]: any };
+  settings: { [key: string]: any };
 }
 /**
  * Credentials required to use the provider.
@@ -2696,27 +3283,27 @@ export interface EmailProviderCredentials {
    * API User.
    *
    */
-  api_user?: string;
+  api_user: string;
   /**
    * AWS or SparkPost region.
    *
    */
-  region?: string;
+  region: string;
   /**
    * SMTP host.
    *
    */
-  smtp_host?: string;
+  smtp_host: string;
   /**
    * SMTP port.
    *
    */
-  smtp_port?: number;
+  smtp_port: number;
   /**
    * SMTP username.
    *
    */
-  smtp_user?: string;
+  smtp_user: string;
 }
 /**
  *
@@ -2897,20 +3484,20 @@ export interface GetActionVersions200Response {
    * The total result count.
    *
    */
-  total?: number;
+  total: number;
   /**
    * Page index of the results being returned. First page is 0.
    *
    */
-  page?: number;
+  page: number;
   /**
    * Number of results per page. Paging is disabled if parameter not sent.
    *
    */
-  per_page?: number;
+  per_page: number;
   /**
    */
-  versions?: Array<GetActionVersions200ResponseVersionsInner>;
+  versions: Array<GetActionVersions200ResponseVersionsInner>;
 }
 /**
  *
@@ -2920,75 +3507,75 @@ export interface GetActionVersions200ResponseVersionsInner {
    * The unique id of an action version.
    *
    */
-  id?: string;
+  id: string;
   /**
    * The id of the action to which this version belongs.
    *
    */
-  action_id?: string;
+  action_id: string;
   /**
    * The source code of this specific version of the action.
    *
    */
-  code?: string;
+  code: string;
   /**
    * The list of third party npm modules, and their versions, that this specific version depends on.
    *
    */
-  dependencies?: Array<GetActions200ResponseActionsInnerDependenciesInner>;
+  dependencies: Array<GetActions200ResponseActionsInnerDependenciesInner>;
   /**
    * Indicates if this speciic version is the currently one deployed.
    *
    */
-  deployed?: boolean;
+  deployed: boolean;
   /**
    * The Node runtime. For example: `node12`
    *
    */
-  runtime?: string;
+  runtime: string;
   /**
    * The list of secrets that are included in an action or a version of an action.
    *
    */
-  secrets?: Array<GetActions200ResponseActionsInnerSecretsInner>;
+  secrets: Array<GetActions200ResponseActionsInnerSecretsInner>;
   /**
    * The build status of this specific version.
    *
    */
-  status?: GetActionVersions200ResponseVersionsInnerStatusEnum;
+  status: GetActionVersions200ResponseVersionsInnerStatusEnum;
   /**
    * The index of this version in list of versions for the action.
    *
    */
-  number?: number;
+  number: number;
   /**
    * Any errors that occurred while the version was being built.
    *
    */
-  errors?: Array<GetActionVersions200ResponseVersionsInnerErrorsInner>;
+  errors: Array<GetActionVersions200ResponseVersionsInnerErrorsInner>;
   /**
    */
-  action?: GetActionVersions200ResponseVersionsInnerAction;
+  action: GetActionVersions200ResponseVersionsInnerAction;
   /**
    * The time when this version was built successfully.
    *
    */
-  built_at?: string;
+  built_at: string;
   /**
    * The time when this version was created.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is beiing built.
    *
    */
-  updated_at?: string;
+  updated_at: string;
   /**
    * The list of triggers that this version supports. At this time, a version can only target a single trigger at a time.
    *
    */
-  supported_triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
 }
 
 export const GetActionVersions200ResponseVersionsInnerStatusEnum = {
@@ -3010,75 +3597,75 @@ export interface GetActionVersions200ResponseVersionsInnerAction {
    * The unique ID of the action.
    *
    */
-  id?: string;
+  id: string;
   /**
    * The name of an action.
    *
    */
-  name?: string;
+  name: string;
   /**
    * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
    *
    */
-  supported_triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
   /**
    * The source code of the action.
    *
    */
-  code?: string;
+  code: string;
   /**
    * The list of third party npm modules, and their versions, that this action depends on.
    *
    */
-  dependencies?: Array<GetActions200ResponseActionsInnerDependenciesInner>;
+  dependencies: Array<GetActions200ResponseActionsInnerDependenciesInner>;
   /**
    * The Node runtime. For example: `node12`, defaults to `node12`
    *
    */
-  runtime?: string;
+  runtime: string;
   /**
    * The list of secrets that are included in an action or a version of an action.
    *
    */
-  secrets?: Array<GetActions200ResponseActionsInnerSecretsInner>;
+  secrets: Array<GetActions200ResponseActionsInnerSecretsInner>;
   /**
    * The version of the action that is currently deployed.
    *
    */
-  deployed_version?: { [key: string]: any };
+  deployed_version: { [key: string]: any };
   /**
    * installed_integration_id is the fk reference to the InstalledIntegration entity.
    *
    */
-  installed_integration_id?: string;
+  installed_integration_id: string;
   /**
    */
-  integration?: GetActions200ResponseActionsInnerIntegration;
+  integration: GetActions200ResponseActionsInnerIntegration;
   /**
    * The build status of this action.
    *
    */
-  status?: GetActionVersions200ResponseVersionsInnerActionStatusEnum;
+  status: GetActionVersions200ResponseVersionsInnerActionStatusEnum;
   /**
    * True if all of an Action's contents have been deployed.
    *
    */
-  all_changes_deployed?: boolean;
+  all_changes_deployed: boolean;
   /**
    * The time when this action was built successfully.
    *
    */
-  built_at?: string;
+  built_at: string;
   /**
    * The time when this action was created.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The time when this action was updated.
    *
    */
-  updated_at?: string;
+  updated_at: string;
 }
 
 export const GetActionVersions200ResponseVersionsInnerActionStatusEnum = {
@@ -3098,13 +3685,13 @@ export type GetActionVersions200ResponseVersionsInnerActionStatusEnum =
 export interface GetActionVersions200ResponseVersionsInnerErrorsInner {
   /**
    */
-  id?: string;
+  id: string;
   /**
    */
-  msg?: string;
+  msg: string;
   /**
    */
-  url?: string;
+  url: string;
 }
 /**
  *
@@ -3114,22 +3701,22 @@ export interface GetActions200Response {
    * The total result count.
    *
    */
-  total?: number;
+  total: number;
   /**
    * Page index of the results being returned. First page is 0.
    *
    */
-  page?: number;
+  page: number;
   /**
    * Number of results per page.
    *
    */
-  per_page?: number;
+  per_page: number;
   /**
    * The list of actions.
    *
    */
-  actions?: Array<GetActions200ResponseActionsInner>;
+  actions: Array<GetActions200ResponseActionsInner>;
 }
 /**
  *
@@ -3139,75 +3726,75 @@ export interface GetActions200ResponseActionsInner {
    * The unique ID of the action.
    *
    */
-  id?: string;
+  id: string;
   /**
    * The name of an action.
    *
    */
-  name?: string;
+  name: string;
   /**
    * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
    *
    */
-  supported_triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
   /**
    * The source code of the action.
    *
    */
-  code?: string;
+  code: string;
   /**
    * The list of third party npm modules, and their versions, that this action depends on.
    *
    */
-  dependencies?: Array<GetActions200ResponseActionsInnerDependenciesInner>;
+  dependencies: Array<GetActions200ResponseActionsInnerDependenciesInner>;
   /**
    * The Node runtime. For example: `node12`, defaults to `node12`
    *
    */
-  runtime?: string;
+  runtime: string;
   /**
    * The list of secrets that are included in an action or a version of an action.
    *
    */
-  secrets?: Array<GetActions200ResponseActionsInnerSecretsInner>;
+  secrets: Array<GetActions200ResponseActionsInnerSecretsInner>;
   /**
    * The version of the action that is currently deployed.
    *
    */
-  deployed_version?: { [key: string]: any };
+  deployed_version: { [key: string]: any };
   /**
    * installed_integration_id is the fk reference to the InstalledIntegration entity.
    *
    */
-  installed_integration_id?: string;
+  installed_integration_id: string;
   /**
    */
-  integration?: GetActions200ResponseActionsInnerIntegration;
+  integration: GetActions200ResponseActionsInnerIntegration;
   /**
    * The build status of this action.
    *
    */
-  status?: GetActions200ResponseActionsInnerStatusEnum;
+  status: GetActions200ResponseActionsInnerStatusEnum;
   /**
    * True if all of an Action's contents have been deployed.
    *
    */
-  all_changes_deployed?: boolean;
+  all_changes_deployed: boolean;
   /**
    * The time when this action was built successfully.
    *
    */
-  built_at?: string;
+  built_at: string;
   /**
    * The time when this action was created.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The time when this action was updated.
    *
    */
-  updated_at?: string;
+  updated_at: string;
 }
 
 export const GetActions200ResponseActionsInnerStatusEnum = {
@@ -3229,17 +3816,17 @@ export interface GetActions200ResponseActionsInnerDependenciesInner {
    * name is the name of the npm module, e.g. lodash
    *
    */
-  name?: string;
+  name: string;
   /**
    * description is the version of the npm module, e.g. 4.17.1
    *
    */
-  version?: string;
+  version: string;
   /**
    * registry_url is an optional value used primarily for private npm registries.
    *
    */
-  registry_url?: string;
+  registry_url: string;
 }
 /**
  * Integration defines a self contained functioning unit which partners
@@ -3251,23 +3838,23 @@ export interface GetActions200ResponseActionsInnerIntegration {
    * all the applicable localities.
    *
    */
-  id?: string;
+  id: string;
   /**
    * catalog_id refers to the ID in the marketplace catalog
    *
    */
-  catalog_id?: string;
+  catalog_id: string;
   /**
    * url_slug refers to the url_slug in the marketplace catalog
    *
    */
-  url_slug?: string;
+  url_slug: string;
   /**
    * partner_id is the foreign key reference to the partner account this
    * integration belongs to.
    *
    */
-  partner_id?: string;
+  partner_id: string;
   /**
    * name is the integration name, which will be used for display purposes in
    * the marketplace.
@@ -3276,44 +3863,44 @@ export interface GetActions200ResponseActionsInnerIntegration {
    * characters. Can adjust this easily later.
    *
    */
-  name?: string;
+  name: string;
   /**
    * description adds more text for the integration name -- also relevant for
    * the marketplace listing.
    *
    */
-  description?: string;
+  description: string;
   /**
    * short_description is the brief description of the integration, which is used for display purposes in cards
    *
    */
-  short_description?: string;
+  short_description: string;
   /**
    */
-  logo?: string;
+  logo: string;
   /**
    * feature_type is the type of the integration.
    *
    */
-  feature_type?: GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum;
+  feature_type: GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum;
   /**
    */
-  terms_of_use_url?: string;
+  terms_of_use_url: string;
   /**
    */
-  privacy_policy_url?: string;
+  privacy_policy_url: string;
   /**
    */
-  public_support_link?: string;
+  public_support_link: string;
   /**
    */
-  current_release?: GetActions200ResponseActionsInnerIntegrationCurrentRelease;
+  current_release: GetActions200ResponseActionsInnerIntegrationCurrentRelease;
   /**
    */
-  created_at?: string;
+  created_at: string;
   /**
    */
-  updated_at?: string;
+  updated_at: string;
 }
 
 export const GetActions200ResponseActionsInnerIntegrationFeatureTypeEnum = {
@@ -3336,24 +3923,24 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentRelease {
    * The id of the associated IntegrationRelease
    *
    */
-  id?: string;
+  id: string;
   /**
    */
-  trigger?: GetActions200ResponseActionsInnerSupportedTriggersInner;
+  trigger: GetActions200ResponseActionsInnerSupportedTriggersInner;
   /**
    */
-  semver?: GetActions200ResponseActionsInnerIntegrationCurrentReleaseSemver;
+  semver: GetActions200ResponseActionsInnerIntegrationCurrentReleaseSemver;
   /**
    * required_secrets declares all the necessary secrets for an integration to
    * work.
    *
    */
-  required_secrets?: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
+  required_secrets: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
   /**
    * required_configuration declares all the necessary configuration fields for an integration to work.
    *
    */
-  required_configuration?: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
+  required_configuration: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
 }
 /**
  * Param are form input values, primarily utilized when specifying secrets and
@@ -3366,47 +3953,47 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentRelease {
 export interface GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner {
   /**
    */
-  type?: GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum;
+  type: GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum;
   /**
    * The name of the parameter.
    *
    */
-  name?: string;
+  name: string;
   /**
    * The flag for if this parameter is required.
    *
    */
-  required?: boolean;
+  required: boolean;
   /**
    * The temp flag for if this parameter is required (experimental; for Labs use only).
    *
    */
-  optional?: boolean;
+  optional: boolean;
   /**
    * The short label for this parameter.
    *
    */
-  label?: string;
+  label: string;
   /**
    * The lengthier description for this parameter.
    *
    */
-  description?: string;
+  description: string;
   /**
    * The default value for this parameter.
    *
    */
-  default_value?: string;
+  default_value: string;
   /**
    * Placeholder text for this parameter.
    *
    */
-  placeholder?: string;
+  placeholder: string;
   /**
    * The allowable options for this param.
    *
    */
-  options?: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerOptionsInner>;
+  options: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerOptionsInner>;
 }
 
 export const GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInnerTypeEnum =
@@ -3425,12 +4012,12 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequi
    * The value of an option that will be used within the application.
    *
    */
-  value?: string;
+  value: string;
   /**
    * The display value of an option suitable for displaying in a UI.
    *
    */
-  label?: string;
+  label: string;
 }
 /**
  * Semver denotes the major.minor version of an integration release
@@ -3440,12 +4027,12 @@ export interface GetActions200ResponseActionsInnerIntegrationCurrentReleaseSemve
    * Major is the major number of a semver
    *
    */
-  major?: number;
+  major: number;
   /**
    * Minior is the minior number of a semver
    *
    */
-  minor?: number;
+  minor: number;
 }
 /**
  *
@@ -3456,12 +4043,12 @@ export interface GetActions200ResponseActionsInnerSecretsInner {
    * The name of the particular secret, e.g. API_KEY.
    *
    */
-  name?: string;
+  name: string;
   /**
    * The time when the secret was last updated.
    *
    */
-  updated_at?: string;
+  updated_at: string;
 }
 /**
  *
@@ -3541,13 +4128,13 @@ export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
 export interface GetApns200Response {
   /**
    */
-  bundle_id?: string | null;
+  bundle_id: string | null;
   /**
    */
-  sandbox?: boolean;
+  sandbox: boolean;
   /**
    */
-  enabled?: boolean;
+  enabled: boolean;
 }
 /**
  *
@@ -3563,22 +4150,22 @@ export interface GetAuthenticationMethods200ResponseOneOf {
    * Index of the starting record. Derived from the page and per_page parameters.
    *
    */
-  start?: number;
+  start: number;
   /**
    * Maximum amount of records to return.
    *
    */
-  limit?: number;
+  limit: number;
   /**
    * Total number of pageable records.
    *
    */
-  total?: number;
+  total: number;
   /**
    * The paginated authentication methods. Returned in this structure when include_totals is true.
    *
    */
-  authenticators?: Array<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner>;
+  authenticators: Array<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner>;
 }
 /**
  *
@@ -3786,22 +4373,22 @@ export interface GetBindings200Response {
    * The total result count.
    *
    */
-  total?: number;
+  total: number;
   /**
    * Page index of the results being returned. First page is 0.
    *
    */
-  page?: number;
+  page: number;
   /**
    * Number of results per page.
    *
    */
-  per_page?: number;
+  per_page: number;
   /**
    * The list of actions that are bound to this trigger in the order in which they will be executed.
    *
    */
-  bindings?: Array<GetBindings200ResponseBindingsInner>;
+  bindings: Array<GetBindings200ResponseBindingsInner>;
 }
 /**
  * Binding is the associative entity joining a trigger, and an action together.
@@ -3811,28 +4398,28 @@ export interface GetBindings200ResponseBindingsInner {
    * The unique ID of this binding.
    *
    */
-  id?: string;
+  id: string;
   /**
    */
-  trigger_id?: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  trigger_id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
   /**
    * The name of the binding.
    *
    */
-  display_name?: string;
+  display_name: string;
   /**
    */
-  action?: GetActions200ResponseActionsInner;
+  action: GetActions200ResponseActionsInner;
   /**
    * The time when the binding was created.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The time when the binding was updated.
    *
    */
-  updated_at?: string;
+  updated_at: string;
 }
 /**
  *
@@ -3841,20 +4428,20 @@ export interface GetBranding200Response {
   [key: string]: any | any;
   /**
    */
-  colors?: GetBranding200ResponseColors;
+  colors: GetBranding200ResponseColors;
   /**
    * URL for the favicon. Must use HTTPS.
    *
    */
-  favicon_url?: string;
+  favicon_url: string;
   /**
    * URL for the logo. Must use HTTPS.
    *
    */
-  logo_url?: string;
+  logo_url: string;
   /**
    */
-  font?: GetBranding200ResponseFont;
+  font: GetBranding200ResponseFont;
 }
 /**
  * Custom color settings.
@@ -3864,10 +4451,10 @@ export interface GetBranding200ResponseColors {
    * Accent color.
    *
    */
-  primary?: string;
+  primary: string;
   /**
    */
-  page_background?: GetBranding200ResponseColorsPageBackground;
+  page_background: GetBranding200ResponseColorsPageBackground;
 }
 /**
  * Page Background Color or Gradient.
@@ -3891,7 +4478,7 @@ export interface GetBranding200ResponseFont {
    * URL for the custom font. The URL must point to a font file and not a stylesheet. Must use HTTPS.
    *
    */
-  url?: string;
+  url: string;
 }
 /**
  *
@@ -3902,28 +4489,28 @@ export interface GetBreachedPasswordDetection200Response {
    * Whether or not breached password detection is active.
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Action to take when a breached password is detected during a login.
    *       Possible values: <code>block</code>, <code>user_notification</code>, <code>admin_notification</code>.
    *
    */
-  shields?: Array<GetBreachedPasswordDetection200ResponseShieldsEnum>;
+  shields: Array<GetBreachedPasswordDetection200ResponseShieldsEnum>;
   /**
    * When "admin_notification" is enabled, determines how often email notifications are sent.
    *         Possible values: <code>immediately</code>, <code>daily</code>, <code>weekly</code>, <code>monthly</code>.
    *
    */
-  admin_notification_frequency?: Array<GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum>;
+  admin_notification_frequency: Array<GetBreachedPasswordDetection200ResponseAdminNotificationFrequencyEnum>;
   /**
    * The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard.
    *         Possible values: <code>standard</code>, <code>enhanced</code>.
    *
    */
-  method?: GetBreachedPasswordDetection200ResponseMethodEnum;
+  method: GetBreachedPasswordDetection200ResponseMethodEnum;
   /**
    */
-  stage?: GetBreachedPasswordDetection200ResponseStage;
+  stage: GetBreachedPasswordDetection200ResponseStage;
 }
 
 export const GetBreachedPasswordDetection200ResponseShieldsEnum = {
@@ -3956,7 +4543,7 @@ export type GetBreachedPasswordDetection200ResponseMethodEnum =
 export interface GetBreachedPasswordDetection200ResponseStage {
   /**
    */
-  'pre-user-registration'?: GetBreachedPasswordDetection200ResponseStagePreUserRegistration;
+  'pre-user-registration': GetBreachedPasswordDetection200ResponseStagePreUserRegistration;
 }
 /**
  *
@@ -3967,7 +4554,7 @@ export interface GetBreachedPasswordDetection200ResponseStagePreUserRegistration
    *               Possible values: <code>block</code>, <code>admin_notification</code>.
    *
    */
-  shields?: Array<GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum>;
+  shields: Array<GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum>;
 }
 
 export const GetBreachedPasswordDetection200ResponseStagePreUserRegistrationShieldsEnum = {
@@ -3986,29 +4573,29 @@ export interface GetBruteForceProtection200Response {
    * Whether or not brute force attack protections are active.
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Action to take when a brute force protection threshold is violated.
    *         Possible values: <code>block</code>, <code>user_notification</code>.
    *
    */
-  shields?: Array<GetBruteForceProtection200ResponseShieldsEnum>;
+  shields: Array<GetBruteForceProtection200ResponseShieldsEnum>;
   /**
    * List of trusted IP addresses that will not have attack protection enforced against them.
    *
    */
-  allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
+  allowlist: Array<GetBruteForceProtection200ResponseAllowlistInner>;
   /**
    * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
    *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
    *
    */
-  mode?: GetBruteForceProtection200ResponseModeEnum;
+  mode: GetBruteForceProtection200ResponseModeEnum;
   /**
    * Maximum number of unsuccessful attempts.
    *
    */
-  max_attempts?: number;
+  max_attempts: number;
 }
 
 export const GetBruteForceProtection200ResponseShieldsEnum = {
@@ -4039,16 +4626,16 @@ export type GetClientGrants200Response = Array<ClientGrant> | GetClientGrants200
 export interface GetClientGrants200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  client_grants?: Array<ClientGrant>;
+  client_grants: Array<ClientGrant>;
 }
 /**
  *
@@ -4060,16 +4647,16 @@ export type GetConnections200Response = Array<Connection> | GetConnections200Res
 export interface GetConnections200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  connections?: Array<Connection>;
+  connections: Array<Connection>;
 }
 /**
  *
@@ -4080,42 +4667,42 @@ export interface GetCredentials200ResponseInner {
    * ID of the credential. Generated on creation.
    *
    */
-  id?: string;
+  id: string;
   /**
    * The name given to the credential by the user.
    *
    */
-  name?: string;
+  name: string;
   /**
    * The key identifier of the credential, generated on creation.
    *
    */
-  kid?: string;
+  kid: string;
   /**
    * Algorithm which will be used with the credential. Supported algorithms: RS256,RS384,PS256
    *
    */
-  alg?: GetCredentials200ResponseInnerAlgEnum;
+  alg: GetCredentials200ResponseInnerAlgEnum;
   /**
    * The type of credential. Supported types: public_key.
    *
    */
-  credential_type?: string;
+  credential_type: string;
   /**
    * The ISO 8601 formatted date the credential was created.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The ISO 8601 formatted date the credential was updated.
    *
    */
-  updated_at?: string;
+  updated_at: string;
   /**
    * The ISO 8601 formatted date representing the expiration of the credential.
    *
    */
-  expires_at?: string;
+  expires_at: string;
 }
 
 export const GetCredentials200ResponseInnerAlgEnum = {
@@ -4138,16 +4725,16 @@ export type GetDeviceCredentials200Response =
 export interface GetDeviceCredentials200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  device_credentials?: Array<DeviceCredential>;
+  device_credentials: Array<DeviceCredential>;
 }
 /**
  *
@@ -4157,47 +4744,47 @@ export interface GetEmailTemplatesByTemplateName200Response {
    * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
-  template?: GetEmailTemplatesByTemplateName200ResponseTemplateEnum;
+  template: GetEmailTemplatesByTemplateName200ResponseTemplateEnum;
   /**
    * Body of the email template.
    *
    */
-  body?: string | null;
+  body: string | null;
   /**
    * Senders `from` email address.
    *
    */
-  from?: string | null;
+  from: string | null;
   /**
    * URL to redirect the user to after a successful action.
    *
    */
-  resultUrl?: string | null;
+  resultUrl: string | null;
   /**
    * Subject line of the email.
    *
    */
-  subject?: string | null;
+  subject: string | null;
   /**
    * Syntax of the template body.
    *
    */
-  syntax?: string | null;
+  syntax: string | null;
   /**
    * Lifetime in seconds that the link within the email will be valid for.
    *
    */
-  urlLifetimeInSeconds?: number | null;
+  urlLifetimeInSeconds: number | null;
   /**
    * Whether the `reset_email` and `verify_email` templates should include the user's email address as the `email` parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true.
    *
    */
-  includeEmailInRedirect?: boolean;
+  includeEmailInRedirect: boolean;
   /**
    * Whether the template is enabled (true) or disabled (false).
    *
    */
-  enabled?: boolean | null;
+  enabled: boolean | null;
 }
 
 export const GetEmailTemplatesByTemplateName200ResponseTemplateEnum = {
@@ -4228,16 +4815,16 @@ export type GetEnabledConnections200Response =
 export interface GetEnabledConnections200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  enabled_connections?: Array<GetEnabledConnections200ResponseOneOfInner>;
+  enabled_connections: Array<GetEnabledConnections200ResponseOneOfInner>;
 }
 /**
  *
@@ -4247,15 +4834,15 @@ export interface GetEnabledConnections200ResponseOneOfInner {
    * ID of the connection.
    *
    */
-  connection_id?: string;
+  connection_id: string;
   /**
    * When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
    *
    */
-  assign_membership_on_login?: boolean;
+  assign_membership_on_login: boolean;
   /**
    */
-  connection?: GetEnabledConnections200ResponseOneOfInnerConnection;
+  connection: GetEnabledConnections200ResponseOneOfInnerConnection;
 }
 /**
  *
@@ -4266,12 +4853,12 @@ export interface GetEnabledConnections200ResponseOneOfInnerConnection {
    * The name of the enabled connection.
    *
    */
-  name?: string;
+  name: string;
   /**
    * The strategy of the enabled connection.
    *
    */
-  strategy?: string;
+  strategy: string;
 }
 /**
  *
@@ -4285,12 +4872,12 @@ export interface GetErrors200ResponseOneOfInner {
    * User, as provided in the import file
    *
    */
-  user?: { [key: string]: any };
+  user: { [key: string]: any };
   /**
    * Errors importing the user.
    *
    */
-  errors?: Array<GetErrors200ResponseOneOfInnerErrorsInner>;
+  errors: Array<GetErrors200ResponseOneOfInnerErrorsInner>;
 }
 /**
  *
@@ -4301,17 +4888,17 @@ export interface GetErrors200ResponseOneOfInnerErrorsInner {
    * Error code.
    *
    */
-  code?: string;
+  code: string;
   /**
    * Error message.
    *
    */
-  message?: string;
+  message: string;
   /**
    * Error field.
    *
    */
-  path?: string;
+  path: string;
 }
 /**
  * The result of a specific execution of a trigger.
@@ -4321,28 +4908,28 @@ export interface GetExecution200Response {
    * ID identifies this specific execution simulation. These IDs would resemble real executions in production.
    *
    */
-  id?: string;
+  id: string;
   /**
    */
-  trigger_id?: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  trigger_id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
   /**
    * The overall status of an execution.
    *
    */
-  status?: GetExecution200ResponseStatusEnum;
+  status: GetExecution200ResponseStatusEnum;
   /**
    */
-  results?: Array<GetExecution200ResponseResultsInner>;
+  results: Array<GetExecution200ResponseResultsInner>;
   /**
    * The time that the execution was started.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The time that the exeution finished executing.
    *
    */
-  updated_at?: string;
+  updated_at: string;
 }
 
 export const GetExecution200ResponseStatusEnum = {
@@ -4364,20 +4951,20 @@ export interface GetExecution200ResponseResultsInner {
    * The name of the action that was executed.
    *
    */
-  action_name?: string;
+  action_name: string;
   /**
    */
-  error?: GetActionVersions200ResponseVersionsInnerErrorsInner;
+  error: GetActionVersions200ResponseVersionsInnerErrorsInner;
   /**
    * The time when the action was started.
    *
    */
-  started_at?: string;
+  started_at: string;
   /**
    * The time when the action finished executing.
    *
    */
-  ended_at?: string;
+  ended_at: string;
 }
 /**
  *
@@ -4389,16 +4976,16 @@ export type GetGrants200Response = Array<UserGrant> | GetGrants200ResponseOneOf;
 export interface GetGrants200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  grants?: Array<UserGrant>;
+  grants: Array<UserGrant>;
 }
 /**
  *
@@ -4410,16 +4997,16 @@ export type GetHooks200Response = Array<Hook> | GetHooks200ResponseOneOf;
 export interface GetHooks200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  hooks?: Array<Hook>;
+  hooks: Array<Hook>;
 }
 /**
  *
@@ -4433,13 +5020,13 @@ export type GetInvitations200Response =
 export interface GetInvitations200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  invitations?: Array<GetInvitations200ResponseOneOfInner>;
+  invitations: Array<GetInvitations200ResponseOneOfInner>;
 }
 /**
  *
@@ -4449,61 +5036,61 @@ export interface GetInvitations200ResponseOneOfInner {
    * The id of the user invitation.
    *
    */
-  id?: string;
+  id: string;
   /**
    * Organization identifier
    *
    */
-  organization_id?: string;
+  organization_id: string;
   /**
    */
-  inviter?: GetInvitations200ResponseOneOfInnerInviter;
+  inviter: GetInvitations200ResponseOneOfInnerInviter;
   /**
    */
-  invitee?: GetInvitations200ResponseOneOfInnerInvitee;
+  invitee: GetInvitations200ResponseOneOfInnerInvitee;
   /**
    * The invitation url to be send to the invitee.
    *
    */
-  invitation_url?: string;
+  invitation_url: string;
   /**
    * The ISO 8601 formatted timestamp representing the creation time of the invitation.
    *
    */
-  created_at?: string;
+  created_at: string;
   /**
    * The ISO 8601 formatted timestamp representing the expiration time of the invitation.
    *
    */
-  expires_at?: string;
+  expires_at: string;
   /**
    * Auth0 client ID. Used to resolve the application's login initiation endpoint.
    *
    */
-  client_id?: string;
+  client_id: string;
   /**
    * The id of the connection to force invitee to authenticate with.
    *
    */
-  connection_id?: string;
+  connection_id: string;
   /**
    */
-  app_metadata?: GetInvitations200ResponseOneOfInnerAppMetadata;
+  app_metadata: GetInvitations200ResponseOneOfInnerAppMetadata;
   /**
    * Data related to the user that does not affect the application's core functionality.
    *
    */
-  user_metadata?: { [key: string]: any };
+  user_metadata: { [key: string]: any };
   /**
    * List of roles IDs to associated with the user.
    *
    */
-  roles?: Array<string>;
+  roles: Array<string>;
   /**
    * The id of the invitation ticket
    *
    */
-  ticket_id?: string;
+  ticket_id: string;
 }
 /**
  * Data related to the user that does affect the application's core functionality.
@@ -4512,52 +5099,52 @@ export interface GetInvitations200ResponseOneOfInnerAppMetadata {
   [key: string]: any | any;
   /**
    */
-  clientID?: any | null;
+  clientID: any | null;
   /**
    */
-  globalClientID?: any | null;
+  globalClientID: any | null;
   /**
    */
-  global_client_id?: any | null;
+  global_client_id: any | null;
   /**
    */
-  email_verified?: any | null;
+  email_verified: any | null;
   /**
    */
-  user_id?: any | null;
+  user_id: any | null;
   /**
    */
-  identities?: any | null;
+  identities: any | null;
   /**
    */
-  lastIP?: any | null;
+  lastIP: any | null;
   /**
    */
-  lastLogin?: any | null;
+  lastLogin: any | null;
   /**
    */
-  metadata?: any | null;
+  metadata: any | null;
   /**
    */
-  created_at?: any | null;
+  created_at: any | null;
   /**
    */
-  loginsCount?: any | null;
+  loginsCount: any | null;
   /**
    */
-  _id?: any | null;
+  _id: any | null;
   /**
    */
-  email?: any | null;
+  email: any | null;
   /**
    */
-  blocked?: any | null;
+  blocked: any | null;
   /**
    */
-  __tenant?: any | null;
+  __tenant: any | null;
   /**
    */
-  updated_at?: any | null;
+  updated_at: any | null;
 }
 /**
  *
@@ -4600,28 +5187,28 @@ export interface GetLogStreams200ResponseInnerOneOf {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOfStatusEnum;
+  status: GetLogStreams200ResponseInnerOneOfStatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOfTypeEnum;
+  type: GetLogStreams200ResponseInnerOneOfTypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOfSink;
+  sink: GetLogStreams200ResponseInnerOneOfSink;
 }
 
 export const GetLogStreams200ResponseInnerOneOfStatusEnum = {
@@ -4647,28 +5234,28 @@ export interface GetLogStreams200ResponseInnerOneOf1 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf1StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf1StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf1TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf1TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf1Sink;
+  sink: GetLogStreams200ResponseInnerOneOf1Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf1StatusEnum = {
@@ -4743,28 +5330,28 @@ export interface GetLogStreams200ResponseInnerOneOf2 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf2StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf2StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf2TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf2TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf2Sink;
+  sink: GetLogStreams200ResponseInnerOneOf2Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf2StatusEnum = {
@@ -4854,28 +5441,28 @@ export interface GetLogStreams200ResponseInnerOneOf3 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf3StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf3StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf3TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf3TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf3Sink;
+  sink: GetLogStreams200ResponseInnerOneOf3Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf3StatusEnum = {
@@ -4926,28 +5513,28 @@ export interface GetLogStreams200ResponseInnerOneOf4 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf4StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf4StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf4TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf4TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf4Sink;
+  sink: GetLogStreams200ResponseInnerOneOf4Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf4StatusEnum = {
@@ -4998,28 +5585,28 @@ export interface GetLogStreams200ResponseInnerOneOf5 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf5StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf5StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf5TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf5TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf5Sink;
+  sink: GetLogStreams200ResponseInnerOneOf5Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf5StatusEnum = {
@@ -5055,28 +5642,28 @@ export interface GetLogStreams200ResponseInnerOneOf6 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf6StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf6StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf6TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf6TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf6Sink;
+  sink: GetLogStreams200ResponseInnerOneOf6Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf6StatusEnum = {
@@ -5112,28 +5699,28 @@ export interface GetLogStreams200ResponseInnerOneOf7 {
    * The id of the log stream
    *
    */
-  id?: string;
+  id: string;
   /**
    * log stream name
    *
    */
-  name?: string;
+  name: string;
   /**
    * The status of the log stream. Possible values: `active`, `paused`, `suspended`
    *
    */
-  status?: GetLogStreams200ResponseInnerOneOf7StatusEnum;
+  status: GetLogStreams200ResponseInnerOneOf7StatusEnum;
   /**
    */
-  type?: GetLogStreams200ResponseInnerOneOf7TypeEnum;
+  type: GetLogStreams200ResponseInnerOneOf7TypeEnum;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
   /**
    */
-  sink?: GetLogStreams200ResponseInnerOneOf7Sink;
+  sink: GetLogStreams200ResponseInnerOneOf7Sink;
 }
 
 export const GetLogStreams200ResponseInnerOneOf7StatusEnum = {
@@ -5192,12 +5779,12 @@ export interface GetLogStreams200ResponseInnerOneOfFiltersInner {
    * Filter type. Currently `category` is the only valid type.
    *
    */
-  type?: GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum;
+  type: GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum;
   /**
    * Category group name
    *
    */
-  name?: GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum;
+  name: GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum;
 }
 
 export const GetLogStreams200ResponseInnerOneOfFiltersInnerTypeEnum = {
@@ -5296,19 +5883,19 @@ export type GetLogs200Response = Array<Log> | GetLogs200ResponseOneOf;
 export interface GetLogs200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  length?: number;
+  length: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  logs?: Array<Log>;
+  logs: Array<Log>;
 }
 /**
  *
@@ -5323,16 +5910,16 @@ export type GetMembers200Response =
 export interface GetMembers200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  members?: Array<GetMembers200ResponseOneOfInner>;
+  members: Array<GetMembers200ResponseOneOfInner>;
 }
 /**
  *
@@ -5341,10 +5928,10 @@ export interface GetMembers200ResponseOneOf1 {
   [key: string]: any | any;
   /**
    */
-  next?: string;
+  next: string;
   /**
    */
-  members?: Array<GetMembers200ResponseOneOfInner>;
+  members: Array<GetMembers200ResponseOneOfInner>;
 }
 /**
  *
@@ -5354,22 +5941,22 @@ export interface GetMembers200ResponseOneOfInner {
    * ID of this user.
    *
    */
-  user_id?: string;
+  user_id: string;
   /**
    * URL to a picture for this user.
    *
    */
-  picture?: string;
+  picture: string;
   /**
    * Name of this user.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Email address of this user.
    *
    */
-  email?: string;
+  email: string;
 }
 /**
  *
@@ -5379,7 +5966,7 @@ export interface GetMessageTypes200Response {
    * The list of phone factors to enable on the tenant. Can include `sms` and `voice`.
    *
    */
-  message_types?: Array<GetMessageTypes200ResponseMessageTypesEnum>;
+  message_types: Array<GetMessageTypes200ResponseMessageTypesEnum>;
 }
 
 export const GetMessageTypes200ResponseMessageTypesEnum = {
@@ -5401,16 +5988,16 @@ export type GetOrganizationMemberRoles200Response =
 export interface GetOrganizationMemberRoles200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  roles?: Array<GetOrganizationMemberRoles200ResponseOneOfInner>;
+  roles: Array<GetOrganizationMemberRoles200ResponseOneOfInner>;
 }
 /**
  *
@@ -5420,17 +6007,17 @@ export interface GetOrganizationMemberRoles200ResponseOneOfInner {
    * ID for this role.
    *
    */
-  id?: string;
+  id: string;
   /**
    * Name of the role.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Description of the role.
    *
    */
-  description?: string;
+  description: string;
 }
 /**
  *
@@ -5445,16 +6032,16 @@ export type GetOrganizations200Response =
 export interface GetOrganizations200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  organizations?: Array<GetOrganizations200ResponseOneOfInner>;
+  organizations: Array<GetOrganizations200ResponseOneOfInner>;
 }
 /**
  *
@@ -5462,10 +6049,10 @@ export interface GetOrganizations200ResponseOneOf {
 export interface GetOrganizations200ResponseOneOf1 {
   /**
    */
-  next?: string;
+  next: string;
   /**
    */
-  organizations?: Array<GetOrganizations200ResponseOneOfInner>;
+  organizations: Array<GetOrganizations200ResponseOneOfInner>;
 }
 /**
  *
@@ -5476,25 +6063,25 @@ export interface GetOrganizations200ResponseOneOfInner {
    * Organization identifier
    *
    */
-  id?: string;
+  id: string;
   /**
    * The name of this organization.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Friendly name of this organization.
    *
    */
-  display_name?: string;
+  display_name: string;
   /**
    */
-  branding?: GetOrganizations200ResponseOneOfInnerBranding;
+  branding: GetOrganizations200ResponseOneOfInnerBranding;
   /**
    * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
-  metadata?: { [key: string]: any };
+  metadata: { [key: string]: any };
 }
 /**
  * Theme defines how to style the login pages
@@ -5504,10 +6091,10 @@ export interface GetOrganizations200ResponseOneOfInnerBranding {
    * URL of logo to display on login page
    *
    */
-  logo_url?: string;
+  logo_url: string;
   /**
    */
-  colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+  colors: GetOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
  * Color scheme used to customize the login pages
@@ -5536,16 +6123,16 @@ export type GetPermissions200Response =
 export interface GetPermissions200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  permissions?: Array<GetPermissions200ResponseOneOfInner>;
+  permissions: Array<GetPermissions200ResponseOneOfInner>;
 }
 /**
  *
@@ -5553,27 +6140,27 @@ export interface GetPermissions200ResponseOneOf {
 export interface GetPermissions200ResponseOneOfInner {
   /**
    */
-  sources?: any | null;
+  sources: any | null;
   /**
    * Resource server (API) identifier that this permission is for.
    *
    */
-  resource_server_identifier?: string;
+  resource_server_identifier: string;
   /**
    * Name of this permission.
    *
    */
-  permission_name?: string;
+  permission_name: string;
   /**
    * Resource server (API) name this permission is for.
    *
    */
-  resource_server_name?: string;
+  resource_server_name: string;
   /**
    * Description of this permission.
    *
    */
-  description?: string;
+  description: string;
 }
 /**
  *
@@ -5581,7 +6168,7 @@ export interface GetPermissions200ResponseOneOfInner {
 export interface GetPhoneProviders200Response {
   /**
    */
-  provider?: GetPhoneProviders200ResponseProviderEnum;
+  provider: GetPhoneProviders200ResponseProviderEnum;
 }
 
 export const GetPhoneProviders200ResponseProviderEnum = {
@@ -5598,7 +6185,7 @@ export type GetPhoneProviders200ResponseProviderEnum =
 export interface GetPnProviders200Response {
   /**
    */
-  provider?: GetPnProviders200ResponseProviderEnum;
+  provider: GetPnProviders200ResponseProviderEnum;
 }
 
 export const GetPnProviders200ResponseProviderEnum = {
@@ -5621,16 +6208,16 @@ export type GetResourceServers200Response =
 export interface GetResourceServers200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  resource_servers?: Array<ResourceServer>;
+  resource_servers: Array<ResourceServer>;
 }
 /**
  *
@@ -5642,16 +6229,16 @@ export type GetRolePermission200Response = Array<Permission> | GetRolePermission
 export interface GetRolePermission200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  permissions?: Array<Permission>;
+  permissions: Array<Permission>;
 }
 /**
  *
@@ -5666,16 +6253,16 @@ export type GetRoleUser200Response =
 export interface GetRoleUser200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  users?: Array<GetMembers200ResponseOneOfInner>;
+  users: Array<GetMembers200ResponseOneOfInner>;
 }
 /**
  *
@@ -5683,10 +6270,10 @@ export interface GetRoleUser200ResponseOneOf {
 export interface GetRoleUser200ResponseOneOf1 {
   /**
    */
-  next?: string;
+  next: string;
   /**
    */
-  users?: Array<GetMembers200ResponseOneOfInner>;
+  users: Array<GetMembers200ResponseOneOfInner>;
 }
 /**
  *
@@ -5698,16 +6285,16 @@ export type GetRules200Response = Array<Rule> | GetRules200ResponseOneOf;
 export interface GetRules200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  rules?: Array<Rule>;
+  rules: Array<Rule>;
 }
 /**
  *
@@ -5718,7 +6305,7 @@ export interface GetRulesConfigs200ResponseInner {
    * Key for a rules config variable.
    *
    */
-  key?: string;
+  key: string;
 }
 /**
  *
@@ -5800,21 +6387,21 @@ export interface GetSuspiciousIpThrottling200Response {
    * Whether or not suspicious IP throttling attack protections are active.
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Action to take when a suspicious IP throttling threshold is violated.
    *           Possible values: <code>block</code>, <code>admin_notification</code>.
    *
    */
-  shields?: Array<GetSuspiciousIpThrottling200ResponseShieldsEnum>;
+  shields: Array<GetSuspiciousIpThrottling200ResponseShieldsEnum>;
   /**
    * List of trusted IP addresses that will not have attack protection enforced against them.
    *
    */
-  allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
+  allowlist: Array<GetBruteForceProtection200ResponseAllowlistInner>;
   /**
    */
-  stage?: GetSuspiciousIpThrottling200ResponseStage;
+  stage: GetSuspiciousIpThrottling200ResponseStage;
 }
 
 export const GetSuspiciousIpThrottling200ResponseShieldsEnum = {
@@ -5830,10 +6417,10 @@ export type GetSuspiciousIpThrottling200ResponseShieldsEnum =
 export interface GetSuspiciousIpThrottling200ResponseStage {
   /**
    */
-  'pre-login'?: GetSuspiciousIpThrottling200ResponseStagePreLogin;
+  'pre-login': GetSuspiciousIpThrottling200ResponseStagePreLogin;
   /**
    */
-  'pre-user-registration'?: GetSuspiciousIpThrottling200ResponseStagePreUserRegistration;
+  'pre-user-registration': GetSuspiciousIpThrottling200ResponseStagePreUserRegistration;
 }
 /**
  * Configuration options that apply before every login attempt.
@@ -5843,12 +6430,12 @@ export interface GetSuspiciousIpThrottling200ResponseStagePreLogin {
    * Total number of attempts allowed per day.
    *
    */
-  max_attempts?: number;
+  max_attempts: number;
   /**
    * Interval of time, given in milliseconds, at which new attempts are granted.
    *
    */
-  rate?: number;
+  rate: number;
 }
 /**
  * Configuration options that apply before every user registration attempt.
@@ -5858,12 +6445,12 @@ export interface GetSuspiciousIpThrottling200ResponseStagePreUserRegistration {
    * Total number of attempts allowed.
    *
    */
-  max_attempts?: number;
+  max_attempts: number;
   /**
    * Interval of time, given in milliseconds, at which new attempts are granted.
    *
    */
-  rate?: number;
+  rate: number;
 }
 /**
  *
@@ -5871,7 +6458,7 @@ export interface GetSuspiciousIpThrottling200ResponseStagePreUserRegistration {
 export interface GetTriggers200Response {
   /**
    */
-  triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
 }
 /**
  *
@@ -5885,7 +6472,7 @@ export interface GetUniversalLogin200ResponseOneOf {
    * The custom page template for the New Universal Login Experience
    *
    */
-  body?: string;
+  body: string;
 }
 /**
  *
@@ -5903,19 +6490,19 @@ export type GetUsers200Response = Array<GetUsers200ResponseOneOfInner> | GetUser
 export interface GetUsers200ResponseOneOf {
   /**
    */
-  start?: number;
+  start: number;
   /**
    */
-  limit?: number;
+  limit: number;
   /**
    */
-  length?: number;
+  length: number;
   /**
    */
-  total?: number;
+  total: number;
   /**
    */
-  users?: Array<GetUsers200ResponseOneOfInner>;
+  users: Array<GetUsers200ResponseOneOfInner>;
 }
 /**
  *
@@ -5926,99 +6513,99 @@ export interface GetUsers200ResponseOneOfInner {
    * ID of the user which can be used when interacting with other APIs.
    *
    */
-  user_id?: string;
+  user_id: string;
   /**
    * Email address of this user.
    *
    */
-  email?: string;
+  email: string;
   /**
    * Whether this email address is verified (true) or unverified (false).
    *
    */
-  email_verified?: boolean;
+  email_verified: boolean;
   /**
    * Username of this user.
    *
    */
-  username?: string;
+  username: string;
   /**
    * Phone number for this user when using SMS connections. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>.
    *
    */
-  phone_number?: string;
+  phone_number: string;
   /**
    * Whether this phone number has been verified (true) or not (false).
    *
    */
-  phone_verified?: boolean;
+  phone_verified: boolean;
   /**
    */
-  created_at?: GetUsers200ResponseOneOfInnerCreatedAt;
+  created_at: GetUsers200ResponseOneOfInnerCreatedAt;
   /**
    */
-  updated_at?: GetUsers200ResponseOneOfInnerUpdatedAt;
+  updated_at: GetUsers200ResponseOneOfInnerUpdatedAt;
   /**
    * Array of user identity objects when accounts are linked.
    *
    */
-  identities?: Array<GetUsers200ResponseOneOfInnerIdentitiesInner>;
+  identities: Array<GetUsers200ResponseOneOfInnerIdentitiesInner>;
   /**
    */
-  app_metadata?: GetUsers200ResponseOneOfInnerAppMetadata;
+  app_metadata: GetUsers200ResponseOneOfInnerAppMetadata;
   /**
    * User metadata to which this user has read/write access.
    *
    */
-  user_metadata?: { [key: string]: any };
+  user_metadata: { [key: string]: any };
   /**
    * URL to picture, photo, or avatar of this user.
    *
    */
-  picture?: string;
+  picture: string;
   /**
    * Name of this user.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Preferred nickname or alias of this user.
    *
    */
-  nickname?: string;
+  nickname: string;
   /**
    * List of multi-factor authentication providers with which this user has enrolled.
    *
    */
-  multifactor?: Array<string>;
+  multifactor: Array<string>;
   /**
    * Last IP address from which this user logged in.
    *
    */
-  last_ip?: string;
+  last_ip: string;
   /**
    */
-  last_login?: GetUsers200ResponseOneOfInnerLastLogin;
+  last_login: GetUsers200ResponseOneOfInnerLastLogin;
   /**
    * Total number of logins this user has performed.
    *
    */
-  logins_count?: number;
+  logins_count: number;
   /**
    * Whether this user was blocked by an administrator (true) or is not (false).
    *
    */
-  blocked?: boolean;
+  blocked: boolean;
   /**
    * Given name/first name/forename of this user.
    *
    */
-  given_name?: string;
+  given_name: string;
   /**
    * Family name/last name/surname of this user.
    *
    */
-  family_name?: string;
+  family_name: string;
 }
 /**
  * User metadata to which this user has read-only access.
@@ -6027,52 +6614,52 @@ export interface GetUsers200ResponseOneOfInnerAppMetadata {
   [key: string]: any | any;
   /**
    */
-  clientID?: any | null;
+  clientID: any | null;
   /**
    */
-  globalClientID?: any | null;
+  globalClientID: any | null;
   /**
    */
-  global_client_id?: any | null;
+  global_client_id: any | null;
   /**
    */
-  email_verified?: any | null;
+  email_verified: any | null;
   /**
    */
-  user_id?: any | null;
+  user_id: any | null;
   /**
    */
-  identities?: any | null;
+  identities: any | null;
   /**
    */
-  lastIP?: any | null;
+  lastIP: any | null;
   /**
    */
-  lastLogin?: any | null;
+  lastLogin: any | null;
   /**
    */
-  metadata?: any | null;
+  metadata: any | null;
   /**
    */
-  created_at?: any | null;
+  created_at: any | null;
   /**
    */
-  loginsCount?: any | null;
+  loginsCount: any | null;
   /**
    */
-  _id?: any | null;
+  _id: any | null;
   /**
    */
-  email?: any | null;
+  email: any | null;
   /**
    */
-  blocked?: any | null;
+  blocked: any | null;
   /**
    */
-  __tenant?: any | null;
+  __tenant: any | null;
   /**
    */
-  updated_at?: any | null;
+  updated_at: any | null;
 }
 /**
  *
@@ -6086,40 +6673,40 @@ export interface GetUsers200ResponseOneOfInnerIdentitiesInner {
    * Name of the connection containing this identity.
    *
    */
-  connection?: string;
+  connection: string;
   /**
    * Unique identifier of the user user for this identity.
    *
    */
-  user_id?: string;
+  user_id: string;
   /**
    * The type of identity provider
    *
    */
-  provider?: string;
+  provider: string;
   /**
    * Whether this identity is from a social provider (true) or not (false).
    *
    */
-  isSocial?: boolean;
+  isSocial: boolean;
   /**
    * IDP access token returned only if scope read:user_idp_tokens is defined.
    *
    */
-  access_token?: string;
+  access_token: string;
   /**
    * IDP access token secret returned only if scope read:user_idp_tokens is defined.
    *
    */
-  access_token_secret?: string;
+  access_token_secret: string;
   /**
    * IDP refresh token returned only if scope read:user_idp_tokens is defined.
    *
    */
-  refresh_token?: string;
+  refresh_token: string;
   /**
    */
-  profileData?: UserProfile;
+  profileData: UserProfile;
 }
 /**
  *
@@ -6137,32 +6724,32 @@ export interface Hook {
    * Trigger ID
    *
    */
-  triggerId?: string;
+  triggerId: string;
   /**
    * ID of this hook.
    *
    */
-  id?: string;
+  id: string;
   /**
    * Name of this hook.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Whether this hook will be executed (true) or ignored (false).
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Code to be executed when this hook runs.
    *
    */
-  script?: string;
+  script: string;
   /**
    * Dependencies of this hook used by webtask server.
    *
    */
-  dependencies?: { [key: string]: any };
+  dependencies: { [key: string]: any };
 }
 /**
  *
@@ -6290,100 +6877,100 @@ export interface Log {
   [key: string]: any | any;
   /**
    */
-  date?: LogDate;
+  date: LogDate;
   /**
    * Type of event.
    *
    */
-  type?: string;
+  type: string;
   /**
    * Description of this event.
    *
    */
-  description?: string | null;
+  description: string | null;
   /**
    * Name of the connection the event relates to.
    *
    */
-  connection?: string;
+  connection: string;
   /**
    * ID of the connection the event relates to.
    *
    */
-  connection_id?: string;
+  connection_id: string;
   /**
    * ID of the client (application).
    *
    */
-  client_id?: string;
+  client_id: string;
   /**
    * Name of the client (application).
    *
    */
-  client_name?: string;
+  client_name: string;
   /**
    * IP address of the log event source.
    *
    */
-  ip?: string;
+  ip: string;
   /**
    * Hostname the event applies to.
    *
    */
-  hostname?: string;
+  hostname: string;
   /**
    * ID of the user involved in the event.
    *
    */
-  user_id?: string;
+  user_id: string;
   /**
    * Name of the user involved in the event.
    *
    */
-  user_name?: string;
+  user_name: string;
   /**
    * API audience the event applies to.
    *
    */
-  audience?: string;
+  audience: string;
   /**
    * Scope permissions applied to the event.
    *
    */
-  scope?: string;
+  scope: string;
   /**
    * Name of the strategy involved in the event.
    *
    */
-  strategy?: string;
+  strategy: string;
   /**
    * Type of strategy involved in the event.
    *
    */
-  strategy_type?: string;
+  strategy_type: string;
   /**
    * Unique ID of the event.
    *
    */
-  log_id?: string;
+  log_id: string;
   /**
    * Whether the client was a mobile device (true) or desktop/laptop/server (false).
    *
    */
-  isMobile?: boolean;
+  isMobile: boolean;
   /**
    * Additional useful details about this event (structure is dependent upon event type).
    *
    */
-  details?: { [key: string]: any };
+  details: { [key: string]: any };
   /**
    * User agent string from the client device that caused the event.
    *
    */
-  user_agent?: string;
+  user_agent: string;
   /**
    */
-  location_info?: LogLocationInfo;
+  location_info: LogLocationInfo;
 }
 /**
  *
@@ -6398,42 +6985,42 @@ export interface LogLocationInfo {
    * Two-letter <a href="https://www.iso.org/iso-3166-country-codes.html">Alpha-2 ISO 3166-1</a> country code.
    *
    */
-  country_code?: string;
+  country_code: string;
   /**
    * Three-letter <a href="https://www.iso.org/iso-3166-country-codes.html">Alpha-3 ISO 3166-1</a> country code.
    *
    */
-  country_code3?: string;
+  country_code3: string;
   /**
    * Full country name in English.
    *
    */
-  country_name?: string;
+  country_name: string;
   /**
    * Full city name in English.
    *
    */
-  city_name?: string;
+  city_name: string;
   /**
    * Global latitude (horizontal) position.
    *
    */
-  latitude?: string;
+  latitude: string;
   /**
    * Global longitude (vertical) position.
    *
    */
-  longitude?: string;
+  longitude: string;
   /**
    * Time zone name as found in the <a href="https://www.iana.org/time-zones">tz database</a>.
    *
    */
-  time_zone?: string;
+  time_zone: string;
   /**
    * Continent the country is located within. Can be `AF` (Africa), `AN` (Antarctica), `AS` (Asia), `EU` (Europe), `NA` (North America), `OC` (Oceania) or `SA` (South America).
    *
    */
-  continent_code?: string;
+  continent_code: string;
 }
 /**
  *
@@ -6458,7 +7045,7 @@ export interface PatchActionRequest {
    * The list of third party npm modules, and their versions, that this action depends on.
    *
    */
-  dependencies?: Array<GetActions200ResponseActionsInnerDependenciesInner>;
+  dependencies?: Array<PostActionRequestDependenciesInner>;
   /**
    * The Node runtime. For example: `node12`, defaults to `node12`
    *
@@ -6500,7 +7087,7 @@ export type PatchAuthenticationMethodsByAuthenticationMethodIdRequestPreferredAu
 export interface PatchBindings200Response {
   /**
    */
-  bindings?: Array<GetBindings200ResponseBindingsInner>;
+  bindings: Array<GetBindings200ResponseBindingsInner>;
 }
 /**
  *
@@ -6632,7 +7219,7 @@ export interface PatchBreachedPasswordDetectionRequest {
   method?: PatchBreachedPasswordDetectionRequestMethodEnum;
   /**
    */
-  stage?: GetBreachedPasswordDetection200ResponseStage;
+  stage?: PatchBreachedPasswordDetectionRequestStage;
 }
 
 export const PatchBreachedPasswordDetectionRequestShieldsEnum = {
@@ -6658,6 +7245,33 @@ export const PatchBreachedPasswordDetectionRequestMethodEnum = {
 } as const;
 export type PatchBreachedPasswordDetectionRequestMethodEnum =
   (typeof PatchBreachedPasswordDetectionRequestMethodEnum)[keyof typeof PatchBreachedPasswordDetectionRequestMethodEnum];
+
+/**
+ *
+ */
+export interface PatchBreachedPasswordDetectionRequestStage {
+  /**
+   */
+  'pre-user-registration'?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
+}
+/**
+ *
+ */
+export interface PatchBreachedPasswordDetectionRequestStagePreUserRegistration {
+  /**
+   * Action to take when a breached password is detected during a signup.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum>;
+}
+
+export const PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum =
+  (typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestStagePreUserRegistrationShieldsEnum];
 
 /**
  *
@@ -6761,6 +7375,73 @@ export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
 /**
  *
  */
+export interface PatchEmailTemplatesByTemplateNameRequest {
+  /**
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   *
+   */
+  template?: PatchEmailTemplatesByTemplateNameRequestTemplateEnum;
+  /**
+   * Body of the email template.
+   *
+   */
+  body?: string | null;
+  /**
+   * Senders `from` email address.
+   *
+   */
+  from?: string | null;
+  /**
+   * URL to redirect the user to after a successful action.
+   *
+   */
+  resultUrl?: string | null;
+  /**
+   * Subject line of the email.
+   *
+   */
+  subject?: string | null;
+  /**
+   * Syntax of the template body.
+   *
+   */
+  syntax?: string | null;
+  /**
+   * Lifetime in seconds that the link within the email will be valid for.
+   *
+   */
+  urlLifetimeInSeconds?: number | null;
+  /**
+   * Whether the `reset_email` and `verify_email` templates should include the user's email address as the `email` parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true.
+   *
+   */
+  includeEmailInRedirect?: boolean;
+  /**
+   * Whether the template is enabled (true) or disabled (false).
+   *
+   */
+  enabled?: boolean | null;
+}
+
+export const PatchEmailTemplatesByTemplateNameRequestTemplateEnum = {
+  verify_email: 'verify_email',
+  verify_email_by_code: 'verify_email_by_code',
+  reset_email: 'reset_email',
+  welcome_email: 'welcome_email',
+  blocked_account: 'blocked_account',
+  stolen_credentials: 'stolen_credentials',
+  enrollment_email: 'enrollment_email',
+  mfa_oob_code: 'mfa_oob_code',
+  user_invitation: 'user_invitation',
+  change_password: 'change_password',
+  password_reset: 'password_reset',
+} as const;
+export type PatchEmailTemplatesByTemplateNameRequestTemplateEnum =
+  (typeof PatchEmailTemplatesByTemplateNameRequestTemplateEnum)[keyof typeof PatchEmailTemplatesByTemplateNameRequestTemplateEnum];
+
+/**
+ *
+ */
 export interface PatchEnabledConnectionsByConnectionIdRequest {
   /**
    * When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
@@ -6786,7 +7467,7 @@ export interface PatchLogStreamsByIdRequest {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink?: PatchLogStreamsByIdRequestSink;
@@ -7003,7 +7684,7 @@ export interface PatchSuspiciousIpThrottlingRequest {
   allowlist?: Array<GetBruteForceProtection200ResponseAllowlistInner>;
   /**
    */
-  stage?: GetSuspiciousIpThrottling200ResponseStage;
+  stage?: PatchSuspiciousIpThrottlingRequestStage;
 }
 
 export const PatchSuspiciousIpThrottlingRequestShieldsEnum = {
@@ -7013,6 +7694,47 @@ export const PatchSuspiciousIpThrottlingRequestShieldsEnum = {
 export type PatchSuspiciousIpThrottlingRequestShieldsEnum =
   (typeof PatchSuspiciousIpThrottlingRequestShieldsEnum)[keyof typeof PatchSuspiciousIpThrottlingRequestShieldsEnum];
 
+/**
+ * Holds per-stage configuration options (max_attempts and rate).
+ */
+export interface PatchSuspiciousIpThrottlingRequestStage {
+  /**
+   */
+  'pre-login'?: PatchSuspiciousIpThrottlingRequestStagePreLogin;
+  /**
+   */
+  'pre-user-registration'?: PatchSuspiciousIpThrottlingRequestStagePreUserRegistration;
+}
+/**
+ * Configuration options that apply before every login attempt.
+ */
+export interface PatchSuspiciousIpThrottlingRequestStagePreLogin {
+  /**
+   * Total number of attempts allowed per day.
+   *
+   */
+  max_attempts?: number;
+  /**
+   * Interval of time, given in milliseconds, at which new attempts are granted.
+   *
+   */
+  rate?: number;
+}
+/**
+ * Configuration options that apply before every user registration attempt.
+ */
+export interface PatchSuspiciousIpThrottlingRequestStagePreUserRegistration {
+  /**
+   * Total number of attempts allowed.
+   *
+   */
+  max_attempts?: number;
+  /**
+   * Interval of time, given in milliseconds, at which new attempts are granted.
+   *
+   */
+  rate?: number;
+}
 /**
  *
  */
@@ -7061,7 +7783,7 @@ export interface PostActionRequest {
    * The list of third party npm modules, and their versions, that this action depends on.
    *
    */
-  dependencies?: Array<GetActions200ResponseActionsInnerDependenciesInner>;
+  dependencies?: Array<PostActionRequestDependenciesInner>;
   /**
    * The Node runtime. For example: `node12`, defaults to `node12`
    *
@@ -7072,6 +7794,26 @@ export interface PostActionRequest {
    *
    */
   secrets?: Array<PostActionRequestSecretsInner>;
+}
+/**
+ * Dependency is an npm module. These values are used to produce an immutable artifact, which manifests as a layer_id.
+ */
+export interface PostActionRequestDependenciesInner {
+  /**
+   * name is the name of the npm module, e.g. lodash
+   *
+   */
+  name?: string;
+  /**
+   * description is the version of the npm module, e.g. 4.17.1
+   *
+   */
+  version?: string;
+  /**
+   * registry_url is an optional value used primarily for private npm registries.
+   *
+   */
+  registry_url?: string;
 }
 /**
  *
@@ -8114,7 +8856,7 @@ export interface PostInvitationsRequest {
   connection_id?: string;
   /**
    */
-  app_metadata?: GetInvitations200ResponseOneOfInnerAppMetadata;
+  app_metadata?: PostInvitationsRequestAppMetadata;
   /**
    * Data related to the user that does not affect the application's core functionality.
    *
@@ -8135,6 +8877,60 @@ export interface PostInvitationsRequest {
    *
    */
   send_invitation_email?: boolean;
+}
+/**
+ * Data related to the user that does affect the application's core functionality.
+ */
+export interface PostInvitationsRequestAppMetadata {
+  [key: string]: any | any;
+  /**
+   */
+  clientID?: any | null;
+  /**
+   */
+  globalClientID?: any | null;
+  /**
+   */
+  global_client_id?: any | null;
+  /**
+   */
+  email_verified?: any | null;
+  /**
+   */
+  user_id?: any | null;
+  /**
+   */
+  identities?: any | null;
+  /**
+   */
+  lastIP?: any | null;
+  /**
+   */
+  lastLogin?: any | null;
+  /**
+   */
+  metadata?: any | null;
+  /**
+   */
+  created_at?: any | null;
+  /**
+   */
+  loginsCount?: any | null;
+  /**
+   */
+  _id?: any | null;
+  /**
+   */
+  email?: any | null;
+  /**
+   */
+  blocked?: any | null;
+  /**
+   */
+  __tenant?: any | null;
+  /**
+   */
+  updated_at?: any | null;
 }
 /**
  *
@@ -8164,7 +8960,7 @@ export interface PostLogStreamsRequestOneOf {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOfSink;
@@ -8197,7 +8993,7 @@ export interface PostLogStreamsRequestOneOf1 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: PostLogStreamsRequestOneOf1Sink;
@@ -8274,7 +9070,7 @@ export interface PostLogStreamsRequestOneOf2 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: PostLogStreamsRequestOneOf2Sink;
@@ -8366,7 +9162,7 @@ export interface PostLogStreamsRequestOneOf3 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf3Sink;
@@ -8399,7 +9195,7 @@ export interface PostLogStreamsRequestOneOf4 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf4Sink;
@@ -8432,7 +9228,7 @@ export interface PostLogStreamsRequestOneOf5 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf5Sink;
@@ -8465,7 +9261,7 @@ export interface PostLogStreamsRequestOneOf6 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf6Sink;
@@ -8498,7 +9294,7 @@ export interface PostLogStreamsRequestOneOf7 {
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
-  filters?: Array<GetLogStreams200ResponseInnerOneOfFiltersInner>;
+  filters?: Array<PostLogStreamsRequestOneOfFiltersInner>;
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf7Sink;
@@ -8514,6 +9310,54 @@ export const PostLogStreamsRequestOneOf7TypeEnum = {
 } as const;
 export type PostLogStreamsRequestOneOf7TypeEnum =
   (typeof PostLogStreamsRequestOneOf7TypeEnum)[keyof typeof PostLogStreamsRequestOneOf7TypeEnum];
+
+/**
+ *
+ */
+export interface PostLogStreamsRequestOneOfFiltersInner {
+  [key: string]: any | any;
+  /**
+   * Filter type. Currently `category` is the only valid type.
+   *
+   */
+  type?: PostLogStreamsRequestOneOfFiltersInnerTypeEnum;
+  /**
+   * Category group name
+   *
+   */
+  name?: PostLogStreamsRequestOneOfFiltersInnerNameEnum;
+}
+
+export const PostLogStreamsRequestOneOfFiltersInnerTypeEnum = {
+  category: 'category',
+} as const;
+export type PostLogStreamsRequestOneOfFiltersInnerTypeEnum =
+  (typeof PostLogStreamsRequestOneOfFiltersInnerTypeEnum)[keyof typeof PostLogStreamsRequestOneOfFiltersInnerTypeEnum];
+
+export const PostLogStreamsRequestOneOfFiltersInnerNameEnum = {
+  auth_ancillary_fail: 'auth.ancillary.fail',
+  auth_ancillary_success: 'auth.ancillary.success',
+  auth_login_fail: 'auth.login.fail',
+  auth_login_notification: 'auth.login.notification',
+  auth_login_success: 'auth.login.success',
+  auth_logout_fail: 'auth.logout.fail',
+  auth_logout_success: 'auth.logout.success',
+  auth_signup_fail: 'auth.signup.fail',
+  auth_signup_success: 'auth.signup.success',
+  auth_silent_auth_fail: 'auth.silent_auth.fail',
+  auth_silent_auth_success: 'auth.silent_auth.success',
+  auth_token_exchange_fail: 'auth.token_exchange.fail',
+  auth_token_exchange_success: 'auth.token_exchange.success',
+  management_fail: 'management.fail',
+  management_success: 'management.success',
+  system_notification: 'system.notification',
+  user_fail: 'user.fail',
+  user_notification: 'user.notification',
+  user_success: 'user.success',
+  other: 'other',
+} as const;
+export type PostLogStreamsRequestOneOfFiltersInnerNameEnum =
+  (typeof PostLogStreamsRequestOneOfFiltersInnerNameEnum)[keyof typeof PostLogStreamsRequestOneOfFiltersInnerNameEnum];
 
 /**
  *
@@ -8552,7 +9396,7 @@ export interface PostOrganizationsRequest {
   display_name?: string;
   /**
    */
-  branding?: GetOrganizations200ResponseOneOfInnerBranding;
+  branding?: PostOrganizationsRequestBranding;
   /**
    * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -8563,6 +9407,19 @@ export interface PostOrganizationsRequest {
    *
    */
   enabled_connections?: Array<PostOrganizationsRequestEnabledConnectionsInner>;
+}
+/**
+ * Theme defines how to style the login pages
+ */
+export interface PostOrganizationsRequestBranding {
+  /**
+   * URL of logo to display on login page
+   *
+   */
+  logo_url?: string;
+  /**
+   */
+  colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
  * Connection to be added to the organization.
@@ -8705,7 +9562,7 @@ export interface PostRecoveryCodeRegeneration200Response {
    * New account recovery code.
    *
    */
-  recovery_code?: string;
+  recovery_code: string;
 }
 /**
  *
@@ -8840,7 +9697,7 @@ export interface PostTestAction200Response {
    * The resulting payload after an action was executed.
    *
    */
-  payload?: { [key: string]: any };
+  payload: { [key: string]: any };
 }
 /**
  *
@@ -8861,12 +9718,12 @@ export interface PostTicket200Response {
    * The ticket_id used to identify the enrollment
    *
    */
-  ticket_id?: string;
+  ticket_id: string;
   /**
    * The url you can use to start enrollment
    *
    */
-  ticket_url?: string;
+  ticket_url: string;
 }
 /**
  *
@@ -9110,17 +9967,17 @@ export interface PromptsSettings {
    * Which login experience to use. Can be `new` or `classic`.
    *
    */
-  universal_login_experience?: PromptsSettingsUniversalLoginExperienceEnum;
+  universal_login_experience: PromptsSettingsUniversalLoginExperienceEnum;
   /**
    * Whether identifier first is enabled or not
    *
    */
-  identifier_first?: boolean;
+  identifier_first: boolean;
   /**
    * Use WebAuthn with Device Biometrics as the first authentication factor
    *
    */
-  webauthn_platform_first_factor?: boolean;
+  webauthn_platform_first_factor: boolean;
 }
 
 export const PromptsSettingsUniversalLoginExperienceEnum = {
@@ -9164,10 +10021,10 @@ export type PromptsSettingsUpdateUniversalLoginExperienceEnum =
 export interface PutApns200Response {
   /**
    */
-  sandbox?: boolean;
+  sandbox: boolean;
   /**
    */
-  bundle_id?: string | null;
+  bundle_id: string | null;
 }
 /**
  *
@@ -9364,58 +10221,6 @@ export interface PutFcmRequest {
 /**
  *
  */
-export interface PutMessageTypesRequest {
-  /**
-   * The list of phone factors to enable on the tenant. Can include `sms` and `voice`.
-   *
-   */
-  message_types: Array<PutMessageTypesRequestMessageTypesEnum>;
-}
-
-export const PutMessageTypesRequestMessageTypesEnum = {
-  sms: 'sms',
-  voice: 'voice',
-} as const;
-export type PutMessageTypesRequestMessageTypesEnum =
-  (typeof PutMessageTypesRequestMessageTypesEnum)[keyof typeof PutMessageTypesRequestMessageTypesEnum];
-
-/**
- *
- */
-export interface PutPhoneProvidersRequest {
-  /**
-   */
-  provider: PutPhoneProvidersRequestProviderEnum;
-}
-
-export const PutPhoneProvidersRequestProviderEnum = {
-  auth0: 'auth0',
-  twilio: 'twilio',
-  phone_message_hook: 'phone-message-hook',
-} as const;
-export type PutPhoneProvidersRequestProviderEnum =
-  (typeof PutPhoneProvidersRequestProviderEnum)[keyof typeof PutPhoneProvidersRequestProviderEnum];
-
-/**
- *
- */
-export interface PutPnProvidersRequest {
-  /**
-   */
-  provider: PutPnProvidersRequestProviderEnum;
-}
-
-export const PutPnProvidersRequestProviderEnum = {
-  guardian: 'guardian',
-  sns: 'sns',
-  direct: 'direct',
-} as const;
-export type PutPnProvidersRequestProviderEnum =
-  (typeof PutPnProvidersRequestProviderEnum)[keyof typeof PutPnProvidersRequestProviderEnum];
-
-/**
- *
- */
 export interface PutRulesConfigsByKey200Response {
   [key: string]: any | any;
   /**
@@ -9458,6 +10263,26 @@ export interface PutSigningKeys200Response {
 /**
  *
  */
+export interface PutSns200Response {
+  /**
+   */
+  aws_access_key_id: string | null;
+  /**
+   */
+  aws_secret_access_key: string | null;
+  /**
+   */
+  aws_region: string | null;
+  /**
+   */
+  sns_apns_platform_application_arn: string | null;
+  /**
+   */
+  sns_gcm_platform_application_arn: string | null;
+}
+/**
+ *
+ */
 export interface PutSnsRequest {
   /**
    */
@@ -9474,6 +10299,31 @@ export interface PutSnsRequest {
   /**
    */
   sns_gcm_platform_application_arn?: string | null;
+}
+/**
+ *
+ */
+export interface PutTwilio200Response {
+  /**
+   * From number
+   *
+   */
+  from: string | null;
+  /**
+   * Copilot SID
+   *
+   */
+  messaging_service_sid: string | null;
+  /**
+   * Twilio Authentication token
+   *
+   */
+  auth_token: string | null;
+  /**
+   * Twilio SID
+   *
+   */
+  sid: string | null;
 }
 /**
  *
@@ -9520,70 +10370,70 @@ export interface ResourceServer {
    * ID of the API (resource server).
    *
    */
-  id?: string;
+  id: string;
   /**
    * Friendly name for this resource server. Can not contain `<` or `>` characters.
    *
    */
-  name?: string;
+  name: string;
   /**
    * Whether this is an Auth0 system API (true) or a custom API (false).
    *
    */
-  is_system?: boolean;
+  is_system: boolean;
   /**
    * Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set.
    *
    */
-  identifier?: string;
+  identifier: string;
   /**
    * List of permissions (scopes) that this API uses.
    *
    */
-  scopes?: Array<Scope>;
+  scopes: Array<Scope>;
   /**
    * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
    *
    */
-  signing_alg?: ResourceServerSigningAlgEnum;
+  signing_alg: ResourceServerSigningAlgEnum;
   /**
    * Secret used to sign tokens when using symmetric algorithms (HS256).
    *
    */
-  signing_secret?: string;
+  signing_secret: string;
   /**
    * Whether refresh tokens can be issued for this API (true) or not (false).
    *
    */
-  allow_offline_access?: boolean;
+  allow_offline_access: boolean;
   /**
    * Whether to skip user consent for applications flagged as first party (true) or not (false).
    *
    */
-  skip_consent_for_verifiable_first_party_clients?: boolean;
+  skip_consent_for_verifiable_first_party_clients: boolean;
   /**
    * Expiration value (in seconds) for access tokens issued for this API from the token endpoint.
    *
    */
-  token_lifetime?: number;
+  token_lifetime: number;
   /**
    * Expiration value (in seconds) for access tokens issued for this API via Implicit or Hybrid Flows. Cannot be greater than the `token_lifetime` value.
    *
    */
-  token_lifetime_for_web?: number;
+  token_lifetime_for_web: number;
   /**
    * Whether authorization polices are enforced (true) or unenforced (false).
    *
    */
-  enforce_policies?: boolean;
+  enforce_policies: boolean;
   /**
    * Dialect of access tokens that should be issued. Can be `access_token` or `access_token_authz` (includes permissions).
    *
    */
-  token_dialect?: ResourceServerTokenDialectEnum;
+  token_dialect: ResourceServerTokenDialectEnum;
   /**
    */
-  client?: object;
+  client: object;
 }
 
 export const ResourceServerSigningAlgEnum = {
@@ -9708,32 +10558,32 @@ export interface Rule {
    * Name of this rule.
    *
    */
-  name?: string;
+  name: string;
   /**
    * ID of this rule.
    *
    */
-  id?: string;
+  id: string;
   /**
    * Whether the rule is enabled (true), or disabled (false).
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Code to be executed when this rule runs.
    *
    */
-  script?: string;
+  script: string;
   /**
    * Order that this rule should execute in relative to other rules. Lower-valued rules execute first.
    *
    */
-  order?: number;
+  order: number;
   /**
    * Execution stage of this rule. Can be `login_success`, `login_failure`, or `pre_authorize`.
    *
    */
-  stage?: string;
+  stage: string;
 }
 /**
  *
@@ -9806,19 +10656,19 @@ export interface Scope {
 export interface SnsFactorProvider {
   /**
    */
-  aws_access_key_id?: string | null;
+  aws_access_key_id: string | null;
   /**
    */
-  aws_secret_access_key?: string | null;
+  aws_secret_access_key: string | null;
   /**
    */
-  aws_region?: string | null;
+  aws_region: string | null;
   /**
    */
-  sns_apns_platform_application_arn?: string | null;
+  sns_apns_platform_application_arn: string | null;
   /**
    */
-  sns_gcm_platform_application_arn?: string | null;
+  sns_gcm_platform_application_arn: string | null;
 }
 /**
  *
@@ -9877,95 +10727,95 @@ export interface TemplateMessages {
 export interface TenantSettings {
   /**
    */
-  change_password?: TenantSettingsChangePassword | null;
+  change_password: TenantSettingsChangePassword | null;
   /**
    */
-  guardian_mfa_page?: TenantSettingsGuardianMfaPage | null;
+  guardian_mfa_page: TenantSettingsGuardianMfaPage | null;
   /**
    * Default audience for API authorization.
    *
    */
-  default_audience?: string;
+  default_audience: string;
   /**
    * Name of connection used for password grants at the `/token`endpoint. The following connection types are supported: LDAP, AD, Database Connections, Passwordless, Windows Azure Active Directory, ADFS.
    *
    */
-  default_directory?: string;
+  default_directory: string;
   /**
    */
-  error_page?: TenantSettingsErrorPage | null;
+  error_page: TenantSettingsErrorPage | null;
   /**
    */
-  device_flow?: TenantSettingsDeviceFlow | null;
+  device_flow: TenantSettingsDeviceFlow | null;
   /**
    */
-  flags?: TenantSettingsFlags;
+  flags: TenantSettingsFlags;
   /**
    * Friendly name for this tenant.
    *
    */
-  friendly_name?: string;
+  friendly_name: string;
   /**
    * URL of logo to be shown for this tenant (recommended size: 150x150)
    *
    */
-  picture_url?: string;
+  picture_url: string;
   /**
    * End-user support email address.
    *
    */
-  support_email?: string;
+  support_email: string;
   /**
    * End-user support URL.
    *
    */
-  support_url?: string;
+  support_url: string;
   /**
    * URLs that are valid to redirect to after logout from Auth0.
    *
    */
-  allowed_logout_urls?: Array<string>;
+  allowed_logout_urls: Array<string>;
   /**
    * Number of hours a session will stay valid.
    *
    */
-  session_lifetime?: number;
+  session_lifetime: number;
   /**
    * Number of hours for which a session can be inactive before the user must log in again.
    *
    */
-  idle_session_lifetime?: number;
+  idle_session_lifetime: number;
   /**
    * Selected sandbox version for the extensibility environment.
    *
    */
-  sandbox_version?: string;
+  sandbox_version: string;
   /**
    * Available sandbox versions for the extensibility environment.
    *
    */
-  sandbox_versions_available?: Array<string>;
+  sandbox_versions_available: Array<string>;
   /**
    * The default absolute redirection uri, must be https
    *
    */
-  default_redirection_uri?: string;
+  default_redirection_uri: string;
   /**
    * Supported locales for the user interface.
    *
    */
-  enabled_locales?: Array<TenantSettingsEnabledLocalesEnum>;
+  enabled_locales: Array<TenantSettingsEnabledLocalesEnum>;
   /**
    */
-  session_cookie?: TenantSettingsSessionCookie | null;
+  session_cookie: TenantSettingsSessionCookie | null;
   /**
    */
-  sessions?: TenantSettingsSessions | null;
+  sessions: TenantSettingsSessions | null;
   /**
    * Whether to accept an organization name instead of an ID on auth endpoints
    *
    */
-  allow_organization_name_in_authentication_api?: boolean;
+  allow_organization_name_in_authentication_api: boolean;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
@@ -10030,12 +10880,12 @@ export interface TenantSettingsChangePassword {
    * Whether to use the custom change password HTML (true) or the default Auth0 page (false). Default is to use the Auth0 page.
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    * Custom change password HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> supported).
    *
    */
-  html?: string;
+  html: string;
 }
 /**
  * Device Flow configuration
@@ -10045,12 +10895,12 @@ export interface TenantSettingsDeviceFlow {
    * Character set used to generate a User Code. Can be `base20` or `digits`.
    *
    */
-  charset?: TenantSettingsDeviceFlowCharsetEnum;
+  charset: TenantSettingsDeviceFlowCharsetEnum;
   /**
    * Mask used to format a generated User Code into a friendly, readable format.
    *
    */
-  mask?: string;
+  mask: string;
 }
 
 export const TenantSettingsDeviceFlowCharsetEnum = {
@@ -10068,17 +10918,17 @@ export interface TenantSettingsErrorPage {
    * Custom Error HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> is supported).
    *
    */
-  html?: string;
+  html: string;
   /**
    * Whether to show the link to log as part of the default error page (true, default) or not to show the link (false).
    *
    */
-  show_log_link?: boolean;
+  show_log_link: boolean;
   /**
    * URL to redirect to when an error occurs instead of showing the default error page.
    *
    */
-  url?: string;
+  url: string;
 }
 /**
  * Flags used to change the behavior of this tenant.
@@ -10088,112 +10938,112 @@ export interface TenantSettingsFlags {
    * Whether to use the older v1 change password flow (true, not recommended except for backward compatibility) or the newer safer flow (false, recommended).
    *
    */
-  change_pwd_flow_v1?: boolean;
+  change_pwd_flow_v1: boolean;
   /**
    * Whether the APIs section is enabled (true) or disabled (false).
    *
    */
-  enable_apis_section?: boolean;
+  enable_apis_section: boolean;
   /**
    * Whether the impersonation functionality has been disabled (true) or not (false). Read-only.
    *
    */
-  disable_impersonation?: boolean;
+  disable_impersonation: boolean;
   /**
    * Whether all current connections should be enabled when a new client (application) is created (true, default) or not (false).
    *
    */
-  enable_client_connections?: boolean;
+  enable_client_connections: boolean;
   /**
    * Whether advanced API Authorization scenarios are enabled (true) or disabled (false).
    *
    */
-  enable_pipeline2?: boolean;
+  enable_pipeline2: boolean;
   /**
    * If enabled, clients are able to add legacy delegation grants.
    *
    */
-  allow_legacy_delegation_grant_types?: boolean;
+  allow_legacy_delegation_grant_types: boolean;
   /**
    * If enabled, clients are able to add legacy RO grants.
    *
    */
-  allow_legacy_ro_grant_types?: boolean;
+  allow_legacy_ro_grant_types: boolean;
   /**
    * Whether the legacy `/tokeninfo` endpoint is enabled for your account (true) or unavailable (false).
    *
    */
-  allow_legacy_tokeninfo_endpoint?: boolean;
+  allow_legacy_tokeninfo_endpoint: boolean;
   /**
    * Whether ID tokens and the userinfo endpoint includes a complete user profile (true) or only OpenID Connect claims (false).
    *
    */
-  enable_legacy_profile?: boolean;
+  enable_legacy_profile: boolean;
   /**
    * Whether ID tokens can be used to authorize some types of requests to API v2 (true) not not (false).
    *
    */
-  enable_idtoken_api2?: boolean;
+  enable_idtoken_api2: boolean;
   /**
    * Whether the public sign up process shows a user_exists error (true) or a generic error (false) if the user already exists.
    *
    */
-  enable_public_signup_user_exists_error?: boolean;
+  enable_public_signup_user_exists_error: boolean;
   /**
    * Whether users are prompted to confirm log in before SSO redirection (false) or are not prompted (true).
    *
    */
-  enable_sso?: boolean;
+  enable_sso: boolean;
   /**
    * Whether the `enable_sso` setting can be changed (true) or not (false).
    *
    */
-  allow_changing_enable_sso?: boolean;
+  allow_changing_enable_sso: boolean;
   /**
    * Whether classic Universal Login prompts include additional security headers to prevent clickjacking (true) or no safeguard (false).
    *
    */
-  disable_clickjack_protection_headers?: boolean;
+  disable_clickjack_protection_headers: boolean;
   /**
    * Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
    *
    */
-  no_disclose_enterprise_connections?: boolean;
+  no_disclose_enterprise_connections: boolean;
   /**
    * Enforce client authentication for passwordless start.
    *
    */
-  enforce_client_authentication_on_passwordless_start?: boolean;
+  enforce_client_authentication_on_passwordless_start: boolean;
   /**
    * Enables the email verification flow during login for Azure AD and ADFS connections
    *
    */
-  enable_adfs_waad_email_verification?: boolean;
+  enable_adfs_waad_email_verification: boolean;
   /**
    * Delete underlying grant when a Refresh Token is revoked via the Authentication API.
    *
    */
-  revoke_refresh_token_grant?: boolean;
+  revoke_refresh_token_grant: boolean;
   /**
    * Enables beta access to log streaming changes
    *
    */
-  dashboard_log_streams_next?: boolean;
+  dashboard_log_streams_next: boolean;
   /**
    * Enables new insights activity page view
    *
    */
-  dashboard_insights_view?: boolean;
+  dashboard_insights_view: boolean;
   /**
    * Disables SAML fields map fix for bad mappings with repeated attributes
    *
    */
-  disable_fields_map_fix?: boolean;
+  disable_fields_map_fix: boolean;
   /**
    * Used to allow users to pick what factor to enroll of the available MFA factors.
    *
    */
-  mfa_show_factor_list_on_enrollment?: boolean;
+  mfa_show_factor_list_on_enrollment: boolean;
 }
 /**
  * Guardian page customization.
@@ -10203,12 +11053,12 @@ export interface TenantSettingsGuardianMfaPage {
    * Whether to use the custom Guardian HTML (true) or the default Auth0 page (false, default)
    *
    */
-  enabled?: boolean;
+  enabled: boolean;
   /**
    *  Custom Guardian HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> is supported).
    *
    */
-  html?: string;
+  html: string;
 }
 /**
  * Session cookie configuration
@@ -10236,7 +11086,7 @@ export interface TenantSettingsSessions {
    * Whether to bypass prompting logic (false) when performing OIDC Logout
    *
    */
-  oidc_logout_prompt_enabled?: boolean;
+  oidc_logout_prompt_enabled: boolean;
 }
 /**
  *
@@ -10244,13 +11094,13 @@ export interface TenantSettingsSessions {
 export interface TenantSettingsUpdate {
   /**
    */
-  change_password?: TenantSettingsChangePassword | null;
+  change_password?: TenantSettingsUpdateChangePassword | null;
   /**
    */
   device_flow?: TenantSettingsUpdateDeviceFlow | null;
   /**
    */
-  guardian_mfa_page?: TenantSettingsGuardianMfaPage | null;
+  guardian_mfa_page?: TenantSettingsUpdateGuardianMfaPage | null;
   /**
    * Default audience for API Authorization.
    *
@@ -10263,7 +11113,7 @@ export interface TenantSettingsUpdate {
   default_directory?: string;
   /**
    */
-  error_page?: TenantSettingsErrorPage | null;
+  error_page?: TenantSettingsUpdateErrorPage | null;
   /**
    */
   flags?: TenantSettingsUpdateFlags;
@@ -10322,7 +11172,7 @@ export interface TenantSettingsUpdate {
   session_cookie?: TenantSettingsSessionCookie | null;
   /**
    */
-  sessions?: TenantSettingsSessions | null;
+  sessions?: TenantSettingsUpdateSessions | null;
   /**
    * Whether to accept an organization name instead of an ID on auth endpoints
    *
@@ -10385,6 +11235,21 @@ export type TenantSettingsUpdateEnabledLocalesEnum =
   (typeof TenantSettingsUpdateEnabledLocalesEnum)[keyof typeof TenantSettingsUpdateEnabledLocalesEnum];
 
 /**
+ * Change Password page customization.
+ */
+export interface TenantSettingsUpdateChangePassword {
+  /**
+   * Whether to use the custom change password HTML (true) or the default Auth0 page (false). Default is to use the Auth0 page.
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Custom change password HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> supported).
+   *
+   */
+  html?: string;
+}
+/**
  * Device Flow configuration.
  */
 export interface TenantSettingsUpdateDeviceFlow {
@@ -10407,6 +11272,26 @@ export const TenantSettingsUpdateDeviceFlowCharsetEnum = {
 export type TenantSettingsUpdateDeviceFlowCharsetEnum =
   (typeof TenantSettingsUpdateDeviceFlowCharsetEnum)[keyof typeof TenantSettingsUpdateDeviceFlowCharsetEnum];
 
+/**
+ * Error page customization.
+ */
+export interface TenantSettingsUpdateErrorPage {
+  /**
+   * Custom Error HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> is supported).
+   *
+   */
+  html?: string;
+  /**
+   * Whether to show the link to log as part of the default error page (true, default) or not to show the link (false).
+   *
+   */
+  show_log_link?: boolean;
+  /**
+   * URL to redirect to when an error occurs instead of showing the default error page.
+   *
+   */
+  url?: string;
+}
 /**
  * Flags used to change the behavior of this tenant.
  */
@@ -10540,6 +11425,31 @@ export type TenantSettingsUpdateFlagsChangePwdFlowV1Enum =
   (typeof TenantSettingsUpdateFlagsChangePwdFlowV1Enum)[keyof typeof TenantSettingsUpdateFlagsChangePwdFlowV1Enum];
 
 /**
+ * Guardian page customization.
+ */
+export interface TenantSettingsUpdateGuardianMfaPage {
+  /**
+   * Whether to use the custom Guardian HTML (true) or the default Auth0 page (false, default)
+   *
+   */
+  enabled?: boolean;
+  /**
+   *  Custom Guardian HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> is supported).
+   *
+   */
+  html?: string;
+}
+/**
+ * Sessions related settings for tenant
+ */
+export interface TenantSettingsUpdateSessions {
+  /**
+   * Whether to bypass prompting logic (false) when performing OIDC Logout
+   *
+   */
+  oidc_logout_prompt_enabled?: boolean;
+}
+/**
  *
  */
 export interface Token {
@@ -10562,22 +11472,22 @@ export interface TwilioFactorProvider {
    * From number
    *
    */
-  from?: string | null;
+  from: string | null;
   /**
    * Copilot SID
    *
    */
-  messaging_service_sid?: string | null;
+  messaging_service_sid: string | null;
   /**
    * Twilio Authentication token
    *
    */
-  auth_token?: string | null;
+  auth_token: string | null;
   /**
    * Twilio SID
    *
    */
-  sid?: string | null;
+  sid: string | null;
 }
 /**
  *
@@ -10587,7 +11497,7 @@ export interface UserBlock {
    * Array of identifier + IP address pairs.  IP address is optional, and may be omitted in certain circumstances (such as Account Lockout mode).
    *
    */
-  blocked_for?: Array<UserBlockBlockedForInner>;
+  blocked_for: Array<UserBlockBlockedForInner>;
 }
 /**
  *
@@ -10598,17 +11508,17 @@ export interface UserBlockBlockedForInner {
    * Identifier (should be any of an `email`, `username`, or `phone_number`)
    *
    */
-  identifier?: string;
+  identifier: string;
   /**
    * IP Address
    *
    */
-  ip?: string;
+  ip: string;
   /**
    * Connection identifier
    *
    */
-  connection?: string;
+  connection: string;
 }
 /**
  *
@@ -10646,7 +11556,7 @@ export interface UserCreate {
   phone_verified?: boolean;
   /**
    */
-  app_metadata?: GetInvitations200ResponseOneOfInnerAppMetadata;
+  app_metadata?: PostInvitationsRequestAppMetadata;
   /**
    * The user's given name(s).
    *
@@ -11813,7 +12723,7 @@ export interface GetEmailTemplatesByTemplateNameRequest {
 /**
  *
  */
-export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
+export const PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
@@ -11826,18 +12736,18 @@ export const PatchEmailTemplatesByTemplateNameTemplateNameEnum = {
   change_password: 'change_password',
   password_reset: 'password_reset',
 } as const;
-export type PatchEmailTemplatesByTemplateNameTemplateNameEnum =
-  (typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PatchEmailTemplatesByTemplateNameTemplateNameEnum];
+export type PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum =
+  (typeof PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum)[keyof typeof PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum];
 
 /**
  *
  */
-export interface PatchEmailTemplatesByTemplateNameRequest {
+export interface PatchEmailTemplatesByTemplateNameOperationRequest {
   /**
    * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
-  templateName: PatchEmailTemplatesByTemplateNameTemplateNameEnum;
+  templateName: PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum;
 }
 
 /**

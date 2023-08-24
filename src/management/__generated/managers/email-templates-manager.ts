@@ -3,9 +3,10 @@ import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   EmailTemplateUpdate,
   GetEmailTemplatesByTemplateName200Response,
+  PatchEmailTemplatesByTemplateNameRequest,
   PostEmailTemplatesRequest,
   GetEmailTemplatesByTemplateNameRequest,
-  PatchEmailTemplatesByTemplateNameRequest,
+  PatchEmailTemplatesByTemplateNameOperationRequest,
   PutEmailTemplatesByTemplateNameRequest,
 } from '../models/index.js';
 
@@ -48,8 +49,8 @@ export class EmailTemplatesManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async update(
-    requestParameters: PatchEmailTemplatesByTemplateNameRequest,
-    bodyParameters: GetEmailTemplatesByTemplateName200Response,
+    requestParameters: PatchEmailTemplatesByTemplateNameOperationRequest,
+    bodyParameters: PatchEmailTemplatesByTemplateNameRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetEmailTemplatesByTemplateName200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['templateName']);

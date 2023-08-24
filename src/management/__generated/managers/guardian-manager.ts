@@ -14,10 +14,9 @@ import type {
   PutFactorsByName200Response,
   PutFactorsByNameRequest,
   PutFcmRequest,
-  PutMessageTypesRequest,
-  PutPhoneProvidersRequest,
-  PutPnProvidersRequest,
+  PutSns200Response,
   PutSnsRequest,
+  PutTwilio200Response,
   PutTwilioRequest,
   SnsFactorProvider,
   TemplateMessages,
@@ -388,7 +387,7 @@ export class GuardianManager extends BaseAPI {
   async updatePushNotificationProviderSNS(
     bodyParameters: PutSnsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutSnsRequest>> {
+  ): Promise<ApiResponse<PutSns200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -581,7 +580,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async updatePhoneFactorMessageTypes(
-    bodyParameters: PutMessageTypesRequest,
+    bodyParameters: GetMessageTypes200Response,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetMessageTypes200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
@@ -607,7 +606,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async updatePhoneFactorSelectedProvider(
-    bodyParameters: PutPhoneProvidersRequest,
+    bodyParameters: GetPhoneProviders200Response,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
@@ -633,7 +632,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async setPushNotificationSelectedProvider(
-    bodyParameters: PutPnProvidersRequest,
+    bodyParameters: GetPnProviders200Response,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPnProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
@@ -692,7 +691,7 @@ export class GuardianManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async setSmsSelectedProvider(
-    bodyParameters: PutPhoneProvidersRequest,
+    bodyParameters: GetPhoneProviders200Response,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetPhoneProviders200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
@@ -723,7 +722,7 @@ export class GuardianManager extends BaseAPI {
   async setSmsFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutTwilioRequest>> {
+  ): Promise<ApiResponse<PutTwilio200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -750,7 +749,7 @@ export class GuardianManager extends BaseAPI {
   async setPushNotificationProviderSNS(
     bodyParameters: PutSnsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutSnsRequest>> {
+  ): Promise<ApiResponse<PutSns200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -777,7 +776,7 @@ export class GuardianManager extends BaseAPI {
   async updatePhoneFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutTwilioRequest>> {
+  ): Promise<ApiResponse<PutTwilio200Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
