@@ -62,7 +62,7 @@ describe('ClientsManager', () => {
 
   describe('#getAll', () => {
     let request: nock.Scope;
-    const response: Client[] = [
+    const response: Partial<Client>[] = [
       {
         tenant: 'test_tenant',
         client_id: '123',
@@ -161,7 +161,7 @@ describe('ClientsManager', () => {
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
     };
-    const response: Client = {
+    const response: Partial<Client> = {
       tenant: 'test_tenant',
       client_id: '123',
       name: data.name,
@@ -234,7 +234,7 @@ describe('ClientsManager', () => {
   });
 
   describe('#get', () => {
-    const response: Client = {
+    const response: Partial<Client> = {
       tenant: 'test_tenant',
       client_id: '123',
       name: 'test_name',
@@ -287,7 +287,7 @@ describe('ClientsManager', () => {
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
     };
-    const response: Client = {
+    const response: Partial<Client> = {
       tenant: 'test_tenant',
       client_id: '123',
       name: data.name,

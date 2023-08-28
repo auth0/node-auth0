@@ -249,7 +249,7 @@ describe('CustomDomainsManager', () => {
       },
     };
 
-    const response: CustomDomain = {
+    const response: Partial<CustomDomain> = {
       custom_domain_id: 'test_domain',
       domain: 'Test Domain',
       primary: true,
@@ -349,7 +349,7 @@ describe('CustomDomainsManager', () => {
     const params = { id: 'foo' };
     const data = {};
 
-    const response: CustomDomain = {
+    const response: Partial<CustomDomain> = {
       custom_domain_id: 'test_domain',
       domain: 'Test Domain',
       primary: true,
