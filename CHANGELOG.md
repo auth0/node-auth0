@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.7.0](https://github.com/auth0/node-auth0/tree/v3.7.0) (2023-08-29)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.6.0...v3.7.0)
+
+**Added**
+
+- feat: add configuration for using persistent connections [\#919](https://github.com/auth0/node-auth0/pull/919) ([alaczi](https://github.com/alaczi))
+
 ## [v3.6.1](https://github.com/auth0/node-auth0/tree/v3.6.1) (2023-08-22)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.6.0...v3.6.1)
