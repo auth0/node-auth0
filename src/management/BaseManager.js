@@ -27,6 +27,7 @@ class BaseManager {
       proxy: options.proxy,
       query: { repeatParams: false },
       includeResponseHeaders: options.includeResponseHeaders,
+      keepAlive: options.keepAlive,
     };
 
     const usersAuth0RestClient = new Auth0RestClient(

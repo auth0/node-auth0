@@ -313,4 +313,32 @@ describe('Auth0RestClient', () => {
       proxy: 'http://proxy',
     });
   });
+
+  it('should use keepAlive if it is passed in the options', async function () {
+    const spy = sinon.spy();
+    class MockClient extends Client {
+      constructor(...args) {
+        spy(...args);
+        super(...args);
+      }
+    }
+    const RestClient = proxyquire('../src/Auth0RestClient', {
+      'rest-facade': {
+        Client: MockClient,
+      },
+    });
+    nock(API_URL).get('/some-resource').reply(200, { data: 'value' });
+
+    const options = {
+      headers: {},
+      keepAlive: true,
+    };
+
+    const client = new RestClient(`${API_URL}/some-resource`, options, this.providerMock);
+    const data = await client.getAll();
+    expect(data).to.deep.equal({ data: 'value' });
+    sinon.assert.calledWithMatch(spy, 'https://tenant.auth0.com/some-resource', {
+      keepAlive: true,
+    });
+  });
 });

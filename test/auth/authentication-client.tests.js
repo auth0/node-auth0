@@ -174,6 +174,17 @@ describe('AuthenticationClient', () => {
       expect(client.users.headers).to.contain(customHeaders);
       expect(client.tokens.headers).to.contain(customHeaders);
     });
+    it('should configure instances with keepAlive if the option is passwd', () => {
+      const client = new AuthenticationClient({
+        token: 'token',
+        domain: 'auth0.com',
+        keepAlive: true,
+      });
+
+      expect(client.oauth.oauth.options.keepAlive).to.equal(true);
+      expect(client.database.dbConnections.options.keepAlive).to.equal(true);
+      expect(client.passwordless.passwordless.options.keepAlive).to.equal(true);
+    });
   });
 
   describe(`verifySMSCode`, () => {
