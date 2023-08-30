@@ -5,7 +5,8 @@ import { RetryConfiguration } from './retry.js';
  */
 export type FetchAPI = (url: URL | RequestInfo, init?: RequestInit) => Promise<Response>;
 
-export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
+export interface ClientOptions
+  extends Omit<Configuration, 'baseUrl' | 'parseError' | 'middleware'> {
   telemetry?: boolean;
   clientInfo?: { name: string; [key: string]: unknown };
 }

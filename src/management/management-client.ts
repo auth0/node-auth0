@@ -70,7 +70,6 @@ export class ManagementClient extends ManagementClientBase {
       ...options,
       baseUrl: `https://${options.domain}/api/v2`,
       middleware: [
-        ...(options.middleware || []),
         new TokenProviderMiddleware(options),
         ...(options.telemetry !== false ? [new TelemetryMiddleware(options)] : []),
       ],

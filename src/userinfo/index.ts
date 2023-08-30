@@ -81,10 +81,7 @@ export class UserInfoClient extends BaseAPI {
     super({
       ...options,
       baseUrl: `https://${options.domain}`,
-      middleware: [
-        ...(options.middleware || []),
-        ...(options.telemetry !== false ? [new TelemetryMiddleware(options)] : []),
-      ],
+      middleware: options.telemetry !== false ? [new TelemetryMiddleware(options)] : [],
       parseError,
     });
   }

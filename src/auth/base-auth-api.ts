@@ -12,6 +12,7 @@ import {
 } from './client-authentication.js';
 import { IDTokenValidator } from './id-token-validator.js';
 import { GrantOptions, TokenSet } from './oauth.js';
+import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 
 export interface AuthenticationClientOptions extends ClientOptions {
   domain: string;
@@ -96,6 +97,7 @@ export class BaseAuthAPI extends BaseAPI {
     super({
       ...options,
       baseUrl: `https://${options.domain}`,
+      middleware: options.telemetry !== false ? [new TelemetryMiddleware(options)] : [],
       parseError,
       retry: { enabled: false, ...options.retry },
     });

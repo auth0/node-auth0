@@ -13,7 +13,6 @@
   - [Update a user's user_metadata](#update-a-users-user_metadata)
 - [Customizing the request](#customizing-the-request)
   - [Passing custom options to fetch](#passing-custom-options-to-fetch)
-  - [Using middleware](#using-middleware)
   - [Overriding `fetch`](#overriding-fetch)
 
 ## Authentication Client
@@ -253,59 +252,6 @@ const management = new ManagementClient({
 });
 
 await management.users.get({ id: '{user id}' }, { headers: { 'bar': 'applied to this request' } });
-```
-
-### Using middleware
-
-```js
-import { ManagementClient } from 'auth0';
-
-const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
-  clientId: '{YOUR_CLIENT_ID}',
-  clientSecret: '{YOUR_CLIENT_SECRET}',
-  middleware: [
-    {
-      async pre({ url, init }) {
-        // Run some code before every request
-        log(url, init.method);
-        // optionally modify the url of fetchoptions
-        return { url, init: { ...init, priority: 'high' } };
-      },
-    },
-    {
-      // Runs after all retries, before reading the response
-      async post({ response }) {
-        // Run some code after every request
-        log(url, init.method, response);
-        // Optionall modify the response
-        const json = await response.json();
-        return Response.json({ ...json, foo: 'bar' });
-      },
-    },
-    {
-      // Runs after all retries, before reading the response
-      async onError({ fetch, url, init, error, response }) {
-        // Run some code when the request fails.
-        log(error);
-        // Optionally return a backup response
-        return Response.json({ foo: 'bar' });
-      },
-    },
-    {
-      async onError({ fetch, url, init, error, response }) {
-        if (response.status === 429) {
-          // Retry the response using your own retry logic (rather than the SDK's exponential backoff)
-          return fetch(url, init);
-        }
-        // throw a custom error
-        throw new Error('foo');
-      },
-    },
-  ],
-});
-
-await management.users.get({ id: '{user id}' });
 ```
 
 ### Overriding `fetch`
