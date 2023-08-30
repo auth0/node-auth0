@@ -10,7 +10,11 @@
   - [Paginate through a list of users](#paginate-through-a-list-of-users)
   - [Paginate through a list of logs using checkpoint pagination](#paginate-through-a-list-of-logs-using-checkpoint-pagination)
   - [Import users from a JSON file](#import-users-from-a-json-file)
-  - [Update a user's user_metadata](#update-a-users-user_metadata)
+  - [Update a user's user_metadata](#update-a-user-s-user-metadata)
+- [Customizing the request](#customizing-the-request)
+  - [Passing custom options to fetch](#passing-custom-options-to-fetch)
+  - [Using middleware](#using-middleware)
+  - [Overriding `fetch`](#overriding-fetch)
 
 ## Authentication Client
 
@@ -229,4 +233,98 @@ const management = new ManagementClient({
 });
 
 await management.users.update({ id: '{user id}' }, { user_metadata: { foo: 'bar' } });
+```
+
+## Customizing the request
+
+### Passing custom options to fetch
+
+```js
+import https from 'https';
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  headers: { 'foo': 'applied to all requests' },
+  agent: new https.Agent({ ... }),
+  httpTimeout: 5000
+});
+
+await management.users.get({ id: '{user id}' }, { headers: { 'bar': 'applied to this request' } });
+```
+
+### Using middleware
+
+```js
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  middleware: [
+    {
+      async pre({ url, init }) {
+        // Run some code before every request
+        log(url, init.method);
+        // optionally modify the url of fetchoptions
+        return { url, init: { ...init, priority: 'high' } };
+      },
+    },
+    {
+      // Runs after all retries, before reading the response
+      async post({ response }) {
+        // Run some code after every request
+        log(url, init.method, response);
+        // Optionall modify the response
+        const json = await response.json();
+        return Response.json({ ...json, foo: 'bar' });
+      },
+    },
+    {
+      // Runs after all retries, before reading the response
+      async onError({ fetch, url, init, error, response }) {
+        // Run some code when the request fails.
+        log(error);
+        // Optionally return a backup response
+        return Response.json({ foo: 'bar' });
+      },
+    },
+    {
+      async onError({ fetch, url, init, error, response }) {
+        if (response.status === 429) {
+          // Retry the response using your own retry logic (rather than the SDK's exponential backoff)
+          return fetch(url, init);
+        }
+        // throw a custom error
+        throw new Error('foo');
+      },
+    },
+  ],
+});
+
+await management.users.get({ id: '{user id}' });
+```
+
+### Overriding `fetch`
+
+```js
+import { ManagementClient } from 'auth0';
+import { myFetch } from './fetch';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  async fetch(url, init) {
+    log('before', url, init.method);
+    const res = await myFetch(url, init);
+    log('after', url, init.method, res.status);
+    return res;
+  },
+});
+
+await management.users.get({ id: '{user id}' });
 ```

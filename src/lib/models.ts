@@ -16,7 +16,7 @@ export interface Configuration {
   /**
    * Provide your own fetch implementation.
    */
-  fetchApi?: FetchAPI;
+  fetch?: FetchAPI;
   /**
    * Provide a middleware that will run either before the request, after the request or when the request fails.
    */
