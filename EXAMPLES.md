@@ -10,7 +10,7 @@
   - [Paginate through a list of users](#paginate-through-a-list-of-users)
   - [Paginate through a list of logs using checkpoint pagination](#paginate-through-a-list-of-logs-using-checkpoint-pagination)
   - [Import users from a JSON file](#import-users-from-a-json-file)
-  - [Update a user's user_metadata](#update-a-user-s-user-metadata)
+  - [Update a user's user_metadata](#update-a-users-user_metadata)
 - [Customizing the request](#customizing-the-request)
   - [Passing custom options to fetch](#passing-custom-options-to-fetch)
   - [Using middleware](#using-middleware)
