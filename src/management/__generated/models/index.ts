@@ -154,7 +154,7 @@ export interface Client {
    * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
-  client_metadata: object;
+  client_metadata: { [key: string]: any };
   /**
    */
   mobile: ClientMobile;
@@ -982,7 +982,7 @@ export interface ClientCreate {
    * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
-  client_metadata?: object;
+  client_metadata?: { [key: string]: any };
   /**
    */
   mobile?: ClientCreateMobile;
@@ -2207,7 +2207,7 @@ export interface ClientUpdate {
    * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
    *
    */
-  client_metadata?: object;
+  client_metadata?: { [key: string]: any };
   /**
    */
   mobile?: ClientUpdateMobile | null;
@@ -12244,7 +12244,7 @@ export interface DeleteClientsByIdRequest {
    * ID of the client to delete.
    *
    */
-  id: string;
+  client_id: string;
 }
 /**
  *
@@ -12314,7 +12314,7 @@ export interface GetClientsByIdRequest {
    * ID of the client to retrieve.
    *
    */
-  id: string;
+  client_id: string;
   /**
    * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
    *
@@ -12359,7 +12359,7 @@ export interface PatchClientsByIdRequest {
    * ID of the client to update.
    *
    */
-  id: string;
+  client_id: string;
 }
 /**
  *
@@ -12394,7 +12394,7 @@ export interface PostRotateSecretRequest {
    * ID of the client that will rotate secrets.
    *
    */
-  id: string;
+  client_id: string;
 }
 /**
  *

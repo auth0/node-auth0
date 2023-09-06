@@ -35,11 +35,14 @@ export class ClientsManager extends BaseAPI {
     requestParameters: DeleteClientsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
-    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+    runtime.validateRequiredRequestParams(requestParameters, ['client_id']);
 
     const response = await this.request(
       {
-        path: `/clients/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
+        path: `/clients/{client_id}`.replace(
+          '{client_id}',
+          encodeURIComponent(String(requestParameters.client_id))
+        ),
         method: 'DELETE',
       },
       initOverrides
@@ -194,7 +197,7 @@ export class ClientsManager extends BaseAPI {
     requestParameters: GetClientsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
-    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+    runtime.validateRequiredRequestParams(requestParameters, ['client_id']);
 
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
@@ -209,7 +212,10 @@ export class ClientsManager extends BaseAPI {
 
     const response = await this.request(
       {
-        path: `/clients/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
+        path: `/clients/{client_id}`.replace(
+          '{client_id}',
+          encodeURIComponent(String(requestParameters.client_id))
+        ),
         method: 'GET',
         query: queryParameters,
       },
@@ -291,7 +297,7 @@ export class ClientsManager extends BaseAPI {
     bodyParameters: ClientUpdate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
-    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+    runtime.validateRequiredRequestParams(requestParameters, ['client_id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
 
@@ -299,7 +305,10 @@ export class ClientsManager extends BaseAPI {
 
     const response = await this.request(
       {
-        path: `/clients/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
+        path: `/clients/{client_id}`.replace(
+          '{client_id}',
+          encodeURIComponent(String(requestParameters.client_id))
+        ),
         method: 'PATCH',
         headers: headerParameters,
         body: bodyParameters,
@@ -429,13 +438,13 @@ export class ClientsManager extends BaseAPI {
     requestParameters: PostRotateSecretRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Client>> {
-    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+    runtime.validateRequiredRequestParams(requestParameters, ['client_id']);
 
     const response = await this.request(
       {
-        path: `/clients/{id}/rotate-secret`.replace(
-          '{id}',
-          encodeURIComponent(String(requestParameters.id))
+        path: `/clients/{client_id}/rotate-secret`.replace(
+          '{client_id}',
+          encodeURIComponent(String(requestParameters.client_id))
         ),
         method: 'POST',
       },
