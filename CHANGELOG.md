@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.0.0-beta.9](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.9) (2023-09-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.8...v4.0.0-beta.9)
+
+**⚠️ BREAKING CHANGES**
+
+- Rename fetch option, add request examples [\#923](https://github.com/auth0/node-auth0/pull/923) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Change client id params to client_id [\#924](https://github.com/auth0/node-auth0/pull/924) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+**Fixed**
+
+- Avoid optional properties on responses where possible [\#921](https://github.com/auth0/node-auth0/pull/921) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.0-beta.8](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.8) (2023-08-22)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.7...v4.0.0-beta.8)
