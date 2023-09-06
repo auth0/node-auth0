@@ -252,13 +252,13 @@ describe('ClientsManager', () => {
 
     it('should return a promise if no callback is given', (done) => {
       clients
-        .get({ id: response.client_id as string })
+        .get({ client_id: response.client_id as string })
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/clients/5', (done) => {
-      clients.get({ id: response.client_id as string }).then(() => {
+      clients.get({ client_id: response.client_id as string }).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -266,7 +266,7 @@ describe('ClientsManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', (done) => {
-      clients.get({ id: response.client_id as string }).then((client) => {
+      clients.get({ client_id: response.client_id as string }).then((client) => {
         expect(client.data.client_id).toBe(response.client_id);
         expect(client.data.name).toBe(response.name);
         expect(client.data.description).toBe(response.description);
@@ -305,13 +305,13 @@ describe('ClientsManager', () => {
 
     it('should return a promise if no callback is given', (done) => {
       clients
-        .update({ id: response.client_id as string }, {})
+        .update({ client_id: response.client_id as string }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it('should perform a PATCH request to /api/v2/clients/5', (done) => {
-      clients.update({ id: response.client_id as string }, {}).then(() => {
+      clients.update({ client_id: response.client_id as string }, {}).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -325,7 +325,7 @@ describe('ClientsManager', () => {
         .patch(`/clients/${response.client_id as string}`, data as any)
         .reply(200, response);
 
-      clients.update({ id: response.client_id as string }, data as any).then(() => {
+      clients.update({ client_id: response.client_id as string }, data as any).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -333,7 +333,7 @@ describe('ClientsManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', (done) => {
-      clients.update({ id: response.client_id as string }, data as any).then((client) => {
+      clients.update({ client_id: response.client_id as string }, data as any).then((client) => {
         expect(client.data.client_id).toBe(response.client_id);
         expect(client.data.name).toBe(response.name);
         expect(client.data.description).toBe(response.description);
@@ -356,11 +356,11 @@ describe('ClientsManager', () => {
     });
 
     it('should return a promise when no callback is given', (done) => {
-      clients.delete({ id }).then(done.bind(null, null));
+      clients.delete({ client_id: id }).then(done.bind(null, null));
     });
 
     it(`should perform a DELETE request to /clients/${id}`, (done) => {
-      clients.delete({ id }).then(() => {
+      clients.delete({ client_id: id }).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -378,13 +378,13 @@ describe('ClientsManager', () => {
 
     it('should return a promise if no callback is given', (done) => {
       clients
-        .rotateClientSecret({ id }, {})
+        .rotateClientSecret({ client_id: id }, {})
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
 
     it('should perform a POST request to /api/v2/clients/5/rotate-secret', (done) => {
-      clients.rotateClientSecret({ id }).then(() => {
+      clients.rotateClientSecret({ client_id: id }).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -402,7 +402,7 @@ describe('ClientsManager', () => {
         .post(`/clients/${id}/rotate-secret`)
         .reply(200, { client_id: '123' });
 
-      clients.rotateClientSecret({ id }).then(() => {
+      clients.rotateClientSecret({ client_id: id }).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -414,7 +414,7 @@ describe('ClientsManager', () => {
 
       nock(API_URL).post(`/clients/${id}/rotate-secret`).reply(500, {});
 
-      clients.rotateClientSecret({ id }).catch((err) => {
+      clients.rotateClientSecret({ client_id: id }).catch((err) => {
         expect(err).toBeDefined();
 
         done();
