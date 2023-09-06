@@ -5,7 +5,8 @@ import { RetryConfiguration } from './retry.js';
  */
 export type FetchAPI = (url: URL | RequestInfo, init?: RequestInit) => Promise<Response>;
 
-export interface ClientOptions extends Omit<Configuration, 'baseUrl' | 'parseError'> {
+export interface ClientOptions
+  extends Omit<Configuration, 'baseUrl' | 'parseError' | 'middleware'> {
   telemetry?: boolean;
   clientInfo?: { name: string; [key: string]: unknown };
 }
@@ -16,7 +17,7 @@ export interface Configuration {
   /**
    * Provide your own fetch implementation.
    */
-  fetchApi?: FetchAPI;
+  fetch?: FetchAPI;
   /**
    * Provide a middleware that will run either before the request, after the request or when the request fails.
    */

@@ -11,6 +11,9 @@
   - [Paginate through a list of logs using checkpoint pagination](#paginate-through-a-list-of-logs-using-checkpoint-pagination)
   - [Import users from a JSON file](#import-users-from-a-json-file)
   - [Update a user's user_metadata](#update-a-users-user_metadata)
+- [Customizing the request](#customizing-the-request)
+  - [Passing custom options to fetch](#passing-custom-options-to-fetch)
+  - [Overriding `fetch`](#overriding-fetch)
 
 ## Authentication Client
 
@@ -229,4 +232,45 @@ const management = new ManagementClient({
 });
 
 await management.users.update({ id: '{user id}' }, { user_metadata: { foo: 'bar' } });
+```
+
+## Customizing the request
+
+### Passing custom options to fetch
+
+```js
+import https from 'https';
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  headers: { 'foo': 'applied to all requests' },
+  agent: new https.Agent({ ... }),
+  httpTimeout: 5000
+});
+
+await management.users.get({ id: '{user id}' }, { headers: { 'bar': 'applied to this request' } });
+```
+
+### Overriding `fetch`
+
+```js
+import { ManagementClient } from 'auth0';
+import { myFetch } from './fetch';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  async fetch(url, init) {
+    log('before', url, init.method);
+    const res = await myFetch(url, init);
+    log('after', url, init.method, res.status);
+    return res;
+  },
+});
+
+await management.users.get({ id: '{user id}' });
 ```

@@ -1,4 +1,3 @@
-import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 import { AuthenticationClientOptions } from './base-auth-api.js';
 import { Database } from './database.js';
 import { OAuth } from './oauth.js';
@@ -16,10 +15,6 @@ export class AuthenticationClient {
   passwordless: Passwordless;
 
   constructor(options: AuthenticationClientOptions) {
-    if (options.telemetry !== false) {
-      options.middleware = [...(options.middleware || []), new TelemetryMiddleware(options)];
-    }
-
     this.database = new Database(options);
     this.oauth = new OAuth(options);
     this.passwordless = new Passwordless(options);
