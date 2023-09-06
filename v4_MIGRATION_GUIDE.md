@@ -15,6 +15,7 @@ Guide to migrating from `3.x` to `4.x`
   - [Options](#options-1)
   - [Top level methods have been removed](#top-level-methods-have-been-removed-1)
   - [Method name changes](#method-name-changes-1)
+  - [Parameter changes](#parameter-changes)
 
 ## General
 
@@ -385,5 +386,25 @@ import { fileFrom } from 'fetch-blob/from.js';
 await management.jobs.importUsers({
   users: await fileFrom('./myusers.json', 'application/json'),
   connection_id: 'con_123',
+});
+```
+
+### Parameter changes
+
+The `fields` parameter, used to include or exclude fields from a response, now takes only a string.
+
+#### Before
+
+```js
+await management.connections.getAll({
+  fields: ['name', 'strategy'],
+});
+```
+
+#### After
+
+```js
+await management.connections.getAll({
+  fields: 'name,strategy',
 });
 ```
