@@ -20,6 +20,7 @@ class ManagementTokenProvider {
    * @param {number}  [options.cacheTTLInSeconds]     By default the `expires_in` value will be used to determine the cached time of the token, this can be overridden.
    * @param {object}  [options.headers]               Additional headers that will be added to the outgoing requests.
    * @param {string}  [options.proxy]                 Add the `superagent-proxy` dependency and specify a proxy url eg 'https://myproxy.com:1234'
+   * @param {boolean}  [options.keepAlive]          Keep the http connections alive.
    */
   constructor(options) {
     if (!options || typeof options !== 'object') {
@@ -76,6 +77,7 @@ class ManagementTokenProvider {
       clientInfo: this.options.clientInfo,
       headers: this.options.headers,
       proxy: this.options.proxy,
+      keepAlive: this.options.keepAlive,
     };
     this.authenticationClient = new AuthenticationClient(authenticationClientOptions);
 
