@@ -216,6 +216,12 @@ describe('GuardianManager', () => {
 
       await expect(guardian.getSmsFactorTemplates()).resolves.toHaveProperty('data', data);
     });
+
+    it('should not fail when no response returned', async () => {
+      nock(API_URL).get('/guardian/factors/sms/templates').reply(204);
+
+      await expect(guardian.getSmsFactorTemplates()).resolves.not.toThrow();
+    });
   });
 
   describe('#getFactors', () => {
