@@ -324,14 +324,16 @@ export async function clients() {
   const mgmntClient = new ManagementClient(program.opts());
   const { data: newClient } = await mgmntClient.clients.create({ name: uuid() });
   console.log('Create a client: ' + newClient.name);
-  const { data: client } = await mgmntClient.clients.get({ id: newClient.client_id as string });
+  const { data: client } = await mgmntClient.clients.get({
+    client_id: newClient.client_id as string,
+  });
   console.log('Get the client: ' + client.name);
   const { data: updatedClient } = await mgmntClient.clients.update(
-    { id: client.client_id as string },
+    { client_id: client.client_id as string },
     { name: uuid() }
   );
   console.log('Updated the client: ' + updatedClient.name);
-  await mgmntClient.clients.delete({ id: newClient.client_id as string });
+  await mgmntClient.clients.delete({ client_id: newClient.client_id as string });
   console.log('Removed the client: ' + updatedClient.name);
 }
 
@@ -524,8 +526,8 @@ export async function guardian() {
 
   const { data: smsTemplates } = await mgmntClient.guardian.getSmsFactorTemplates();
 
-  console.log(`Get SMS enrollement message: ${smsTemplates.enrollment_message}`);
-  console.log(`Get SMS verification message: ${smsTemplates.verification_message}`);
+  console.log(`Get SMS enrollement message: ${smsTemplates?.enrollment_message}`);
+  console.log(`Get SMS verification message: ${smsTemplates?.verification_message}`);
 
   const { data: updateSmsTemplates } = await mgmntClient.guardian.setSmsFactorTemplates({
     enrollment_message: 'This is the encrollment message ' + uuid(),
@@ -794,7 +796,9 @@ export async function keys() {
 
   const { data: newClient } = await mgmntClient.clients.create({ name: uuid() });
   console.log('Create a client: ' + newClient.name);
-  const { data: client } = await mgmntClient.clients.get({ id: newClient.client_id as string });
+  const { data: client } = await mgmntClient.clients.get({
+    client_id: newClient.client_id as string,
+  });
 
   const cert = client.signing_keys![0].cert;
   const { data: keys } = await mgmntClient.keys.getAll();
@@ -803,7 +807,7 @@ export async function keys() {
   const { data: key } = await mgmntClient.keys.get({ kid });
   console.log('Got key:', key.kid);
 
-  await mgmntClient.clients.delete({ id: newClient.client_id as string });
+  await mgmntClient.clients.delete({ client_id: newClient.client_id as string });
   console.log('Removed the client: ' + newClient.name);
 }
 

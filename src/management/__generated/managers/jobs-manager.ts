@@ -25,7 +25,7 @@ export class JobsManager extends BaseAPI {
   async getErrors(
     requestParameters: GetErrorsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetErrors200Response>> {
+  ): Promise<ApiResponse<GetErrors200Response | void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
@@ -36,7 +36,9 @@ export class JobsManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse(response);
+    return response.status === 204
+      ? runtime.VoidApiResponse.fromResponse(response)
+      : runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
