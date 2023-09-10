@@ -5,7 +5,7 @@ import type {
   DeleteUserIdentityByUserId200ResponseInner,
   DeleteUserRolesRequest,
   GetAuthenticationMethods200Response,
-  GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner,
+  GetAuthenticationMethods200ResponseOneOfInner,
   GetLogs200Response,
   GetOrganizationMemberRoles200Response,
   GetPermissions200Response,
@@ -26,7 +26,6 @@ import type {
   UserIdentity,
   UserUpdate,
   GetAuthenticationMethods200ResponseOneOf,
-  GetAuthenticationMethods200ResponseOneOfInner,
   GetLogs200ResponseOneOf,
   Log,
   GetPermissions200ResponseOneOf,
@@ -342,7 +341,7 @@ export class UsersManager extends BaseAPI {
   async getAuthenticationMethod(
     requestParameters: GetAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner>> {
+  ): Promise<ApiResponse<GetAuthenticationMethods200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
     const response = await this.request(
