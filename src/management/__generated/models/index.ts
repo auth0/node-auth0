@@ -12812,7 +12812,7 @@ export interface DeleteGrantsByUserIdRequest {
    * user_id of the grant to delete.
    *
    */
-  user_id?: string;
+  user_id: string;
 }
 /**
  *
