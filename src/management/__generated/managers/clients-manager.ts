@@ -4,9 +4,11 @@ import type {
   Client,
   ClientCreate,
   ClientUpdate,
+  GetClients200Response,
   GetCredentials200ResponseInner,
   PatchCredentialsByCredentialIdRequest,
   PostCredentialsRequest,
+  GetClients200ResponseOneOf,
   DeleteClientsByIdRequest,
   DeleteCredentialsByCredentialIdRequest,
   GetClientsRequest,
@@ -79,10 +81,12 @@ export class ClientsManager extends BaseAPI {
    * Retrieve clients (applications and SSO integrations) matching provided filters. A list of fields to include or exclude
    * may also be specified. Note:
    * <ul>
-   *   <li><code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
+   *   <li>
+   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
    *     any scope.
    *   </li>
-   *   <li><code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
+   *   <li>
+   *     <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
    *     <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
    *     <code>callback_url_template</code>, <code>jwt_configuration</code>,
    *     <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
@@ -99,7 +103,8 @@ export class ClientsManager extends BaseAPI {
    *     properties can only be retrieved with the <code>read:clients</code> or
    *     <code>read:client_keys</code> scope.
    *   </li>
-   *   <li><code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
+   *   <li>
+   *     <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
    *     <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code> properties can only be retrieved with the
    *     <code>read:client_keys</code> or <code>read:client_credentials</code> scope.
    *   </li>
@@ -110,9 +115,17 @@ export class ClientsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async getAll(
+    requestParameters: GetClientsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClients200ResponseOneOf>>;
+  async getAll(
+    requestParameters?: GetClientsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<Client>>>;
+  async getAll(
     requestParameters: GetClientsRequest = {},
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<Client>>> {
+  ): Promise<ApiResponse<GetClients200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
         key: 'fields',
@@ -163,10 +176,12 @@ export class ClientsManager extends BaseAPI {
   /**
    * Retrieve client details. A list of fields to include or exclude may also be specified. Note:
    * <ul>
-   *   <li><code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
+   *   <li>
+   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
    *     the any of the scopes.
    *   </li>
-   *   <li><code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
+   *   <li>
+   *     <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
    *     <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
    *     <code>callback_url_template</code>, <code>jwt_configuration</code>,
    *     <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
@@ -183,7 +198,8 @@ export class ClientsManager extends BaseAPI {
    *     properties can only be retrieved with the <code>read:clients</code> or
    *     <code>read:client_keys</code> scope.
    *   </li>
-   *   <li><code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
+   *   <li>
+   *     <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
    *     <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code> properties can only be retrieved with the
    *     <code>read:client_keys</code> or <code>read:client_credentials</code> scope.
    *   </li>
@@ -228,7 +244,7 @@ export class ClientsManager extends BaseAPI {
   /**
    * Get the list of client credentials that are associated to the client.
    *
-   * Important: To enable credentials to be used for Private Key JWT authentication method, set the <code>client_authentication_methods</code> property on the client.
+   * Important: To enable credentials to be used
    * Get client credentials
    *
    * @throws {RequiredError}
@@ -391,7 +407,7 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Create a client credential associated to the client. The credential will be created but not yet enabled for use with Private Key JWT authentication method. To enable the credential, set the <code>client_authentication_methods</code> property on the client.
+   * Create a client credential associated to the client. The credential will be created but not yet enabled
    * Create a client credential
    *
    * @throws {RequiredError}
