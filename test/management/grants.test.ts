@@ -2,7 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { GrantsManager, ManagementClient } from '../../src/index.js';
+import { GrantsManager, ManagementClient, RequiredError } from '../../src/index.js';
 
 describe('GrantsManager', () => {
   let grants: GrantsManager;
@@ -146,6 +146,31 @@ describe('GrantsManager', () => {
         expect(request.isDone()).toBe(true);
 
         done();
+      });
+    });
+
+    describe('#deleteByUserId', () => {
+      const user_id = '5';
+      let request: nock.Scope;
+
+      beforeEach(() => {
+        request = nock(API_URL).delete(`/grants/?user_id=${user_id}`).reply(200, {});
+      });
+
+      it('should return a promise when no callback is given', (done) => {
+        grants.deleteByUserId({ user_id }).then(done.bind(null, null));
+      });
+
+      it(`should perform a DELETE request to /grants/${id}`, (done) => {
+        grants.deleteByUserId({ user_id }).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should return an error when client_id is not sent', async () => {
+        await expect(grants.deleteByUserId({} as any)).rejects.toThrowError(RequiredError);
       });
     });
   });
