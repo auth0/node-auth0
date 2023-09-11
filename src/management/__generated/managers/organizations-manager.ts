@@ -415,6 +415,14 @@ export class OrganizationsManager extends BaseAPI {
         key: 'take',
         config: {},
       },
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
     ]);
 
     const response = await this.request(
