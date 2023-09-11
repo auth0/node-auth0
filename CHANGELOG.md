@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.7.1](https://github.com/auth0/node-auth0/tree/v3.7.1) (2023-09-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.0...v3.7.1)
+
+**Fixed**
+
+- fix: ManagementTokenProvider should also respect the keepAlive config option [\#927](https://github.com/auth0/node-auth0/pull/927) ([alaczi](https://github.com/alaczi))
+
 ## [v3.7.0](https://github.com/auth0/node-auth0/tree/v3.7.0) (2023-08-29)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.6.0...v3.7.0)
