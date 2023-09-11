@@ -1,6 +1,16 @@
 /**
  *
  */
+export interface ActionsDraftUpdate {
+  /**
+   * True if the draft of the action should be updated with the reverted version.
+   *
+   */
+  update_draft?: boolean;
+}
+/**
+ *
+ */
 export interface Client {
   [key: string]: any | any;
   /**
@@ -309,6 +319,11 @@ export interface ClientAddons {
   /**
    */
   sso_integration: ClientAddonsSsoIntegration;
+  /**
+   * Okta Access Gateway SSO configuration
+   *
+   */
+  oag: object | null;
 }
 /**
  * AWS addon configuration.
@@ -1043,6 +1058,7 @@ export const ClientCreateAppTypeEnum = {
   zendesk: 'zendesk',
   zoom: 'zoom',
   sso_integration: 'sso_integration',
+  oag: 'oag',
 } as const;
 export type ClientCreateAppTypeEnum =
   (typeof ClientCreateAppTypeEnum)[keyof typeof ClientCreateAppTypeEnum];
@@ -1164,6 +1180,11 @@ export interface ClientCreateAddons {
   /**
    */
   sso_integration?: ClientCreateAddonsSsoIntegration;
+  /**
+   * Okta Access Gateway SSO configuration
+   *
+   */
+  oag?: object | null;
 }
 /**
  * AWS addon configuration.
@@ -1847,7 +1868,7 @@ export interface ClientGrant {
    */
   client_id: string;
   /**
-   * Audience or API identifier of this client grant.
+   * The audience (API identifier) of this client grant.
    *
    */
   audience: string;
@@ -1867,7 +1888,7 @@ export interface ClientGrantCreate {
    */
   client_id: string;
   /**
-   * Audience or API identifier of this client grant.
+   * The audience (API identifier) of this client grant
    *
    */
   audience: string;
@@ -2269,6 +2290,7 @@ export const ClientUpdateAppTypeEnum = {
   zendesk: 'zendesk',
   zoom: 'zoom',
   sso_integration: 'sso_integration',
+  oag: 'oag',
 } as const;
 export type ClientUpdateAppTypeEnum =
   (typeof ClientUpdateAppTypeEnum)[keyof typeof ClientUpdateAppTypeEnum];
@@ -2390,6 +2412,11 @@ export interface ClientUpdateAddons {
   /**
    */
   sso_integration?: ClientCreateAddonsSsoIntegration;
+  /**
+   * Okta Access Gateway SSO configuration
+   *
+   */
+  oag?: object | null;
 }
 /**
  * Defines client authentication methods.
@@ -2525,7 +2552,7 @@ export interface Connection {
    */
   strategy: string;
   /**
-   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
    */
   realms: Array<string>;
@@ -2535,7 +2562,7 @@ export interface Connection {
    */
   is_domain_connection: boolean;
   /**
-   * Metadata associated with the connection, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
   metadata: { [key: string]: any };
@@ -2571,12 +2598,12 @@ export interface ConnectionCreate {
    */
   is_domain_connection?: boolean;
   /**
-   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
    */
   realms?: Array<string>;
   /**
-   * Metadata associated with the connection, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
   metadata?: { [key: string]: any };
@@ -2678,6 +2705,12 @@ export interface ConnectionCreateOptions {
    */
   customScripts?: ConnectionCreateOptionsCustomScripts;
   /**
+   */
+  authentication_methods?: ConnectionCreateOptionsAuthenticationMethods | null;
+  /**
+   */
+  passkey_options?: ConnectionCreateOptionsPasskeyOptions | null;
+  /**
    * Password strength level
    *
    */
@@ -2755,6 +2788,37 @@ export type ConnectionCreateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionCreateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionCreateOptionsSetUserRootAttributesEnum];
 
 /**
+ * Options for enabling authentication methods.
+ */
+export interface ConnectionCreateOptionsAuthenticationMethods {
+  /**
+   */
+  password?: ConnectionCreateOptionsAuthenticationMethodsPassword;
+  /**
+   */
+  passkey?: ConnectionCreateOptionsAuthenticationMethodsPasskey;
+}
+/**
+ * Passkey authentication enablement
+ */
+export interface ConnectionCreateOptionsAuthenticationMethodsPasskey {
+  /**
+   * Determines whether passkeys are enabled
+   *
+   */
+  enabled?: boolean;
+}
+/**
+ * Password authentication enablement
+ */
+export interface ConnectionCreateOptionsAuthenticationMethodsPassword {
+  /**
+   * Determines whether passwords are enabled
+   *
+   */
+  enabled?: boolean;
+}
+/**
  * A map of scripts used to integrate with a custom database.
  */
 export interface ConnectionCreateOptionsCustomScripts {
@@ -2809,6 +2873,35 @@ export interface ConnectionCreateOptionsGatewayAuthentication {
    */
   secret_base64_encoded?: boolean;
 }
+/**
+ * Options for the passkey authentication method
+ */
+export interface ConnectionCreateOptionsPasskeyOptions {
+  /**
+   * Controls the UI used to challenge the user for their passkey.
+   *
+   */
+  challenge_ui?: ConnectionCreateOptionsPasskeyOptionsChallengeUiEnum;
+  /**
+   * Enables or disables progressive enrollment of passkeys for the connection.
+   *
+   */
+  progressive_enrollment_enabled?: boolean;
+  /**
+   * Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection.
+   *
+   */
+  local_enrollment_enabled?: boolean;
+}
+
+export const ConnectionCreateOptionsPasskeyOptionsChallengeUiEnum = {
+  both: 'both',
+  autofill: 'autofill',
+  button: 'button',
+} as const;
+export type ConnectionCreateOptionsPasskeyOptionsChallengeUiEnum =
+  (typeof ConnectionCreateOptionsPasskeyOptionsChallengeUiEnum)[keyof typeof ConnectionCreateOptionsPasskeyOptionsChallengeUiEnum];
+
 /**
  * Password complexity options
  */
@@ -2891,12 +2984,12 @@ export interface ConnectionUpdate {
    */
   is_domain_connection?: boolean;
   /**
-   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
    */
   realms?: Array<string>;
   /**
-   * Metadata associated with the connection, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
   metadata?: { [key: string]: any };
@@ -2930,6 +3023,12 @@ export interface ConnectionUpdateOptions {
   /**
    */
   customScripts?: ConnectionCreateOptionsCustomScripts;
+  /**
+   */
+  authentication_methods?: ConnectionCreateOptionsAuthenticationMethods | null;
+  /**
+   */
+  passkey_options?: ConnectionCreateOptionsPasskeyOptions | null;
   /**
    * Password strength level
    *
@@ -3240,16 +3339,6 @@ export type DeviceCredentialCreateTypeEnum =
 /**
  *
  */
-export interface DraftUpdate {
-  /**
-   * True if the draft of the action should be updated with the reverted version.
-   *
-   */
-  update_draft?: boolean;
-}
-/**
- *
- */
 export interface EmailProvider {
   /**
    * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
@@ -3554,8 +3643,10 @@ export interface GetActionVersions200ResponseVersionsInner {
    */
   errors: Array<GetActionVersions200ResponseVersionsInnerErrorsInner>;
   /**
+   * The action to which this verison belongs.
+   *
    */
-  action: GetActionVersions200ResponseVersionsInnerAction;
+  action: any | null;
   /**
    * The time when this version was built successfully.
    *
@@ -3588,96 +3679,6 @@ export const GetActionVersions200ResponseVersionsInnerStatusEnum = {
 } as const;
 export type GetActionVersions200ResponseVersionsInnerStatusEnum =
   (typeof GetActionVersions200ResponseVersionsInnerStatusEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerStatusEnum];
-
-/**
- * The action to which this verison belongs.
- */
-export interface GetActionVersions200ResponseVersionsInnerAction {
-  /**
-   * The unique ID of the action.
-   *
-   */
-  id: string;
-  /**
-   * The name of an action.
-   *
-   */
-  name: string;
-  /**
-   * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
-   *
-   */
-  supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
-  /**
-   * The source code of the action.
-   *
-   */
-  code: string;
-  /**
-   * The list of third party npm modules, and their versions, that this action depends on.
-   *
-   */
-  dependencies: Array<GetActions200ResponseActionsInnerDependenciesInner>;
-  /**
-   * The Node runtime. For example: `node12`, defaults to `node12`
-   *
-   */
-  runtime: string;
-  /**
-   * The list of secrets that are included in an action or a version of an action.
-   *
-   */
-  secrets: Array<GetActions200ResponseActionsInnerSecretsInner>;
-  /**
-   * The version of the action that is currently deployed.
-   *
-   */
-  deployed_version: { [key: string]: any };
-  /**
-   * installed_integration_id is the fk reference to the InstalledIntegration entity.
-   *
-   */
-  installed_integration_id: string;
-  /**
-   */
-  integration: GetActions200ResponseActionsInnerIntegration;
-  /**
-   * The build status of this action.
-   *
-   */
-  status: GetActionVersions200ResponseVersionsInnerActionStatusEnum;
-  /**
-   * True if all of an Action's contents have been deployed.
-   *
-   */
-  all_changes_deployed: boolean;
-  /**
-   * The time when this action was built successfully.
-   *
-   */
-  built_at: string;
-  /**
-   * The time when this action was created.
-   *
-   */
-  created_at: string;
-  /**
-   * The time when this action was updated.
-   *
-   */
-  updated_at: string;
-}
-
-export const GetActionVersions200ResponseVersionsInnerActionStatusEnum = {
-  pending: 'pending',
-  building: 'building',
-  packaged: 'packaged',
-  built: 'built',
-  retrying: 'retrying',
-  failed: 'failed',
-} as const;
-export type GetActionVersions200ResponseVersionsInnerActionStatusEnum =
-  (typeof GetActionVersions200ResponseVersionsInnerActionStatusEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerActionStatusEnum];
 
 /**
  * Error is a generic error with a human readable id which should be easily referenced in support tickets.
@@ -4165,12 +4166,12 @@ export interface GetAuthenticationMethods200ResponseOneOf {
    * The paginated authentication methods. Returned in this structure when include_totals is true.
    *
    */
-  authenticators: Array<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner>;
+  authenticators: Array<GetAuthenticationMethods200ResponseOneOfInner>;
 }
 /**
  *
  */
-export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner {
+export interface GetAuthenticationMethods200ResponseOneOfInner {
   /**
    * The ID of the authentication method (auto generated)
    *
@@ -4178,7 +4179,7 @@ export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner {
   id: string;
   /**
    */
-  type: GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum;
+  type: GetAuthenticationMethods200ResponseOneOfInnerTypeEnum;
   /**
    * The authentication method status
    *
@@ -4191,12 +4192,12 @@ export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner {
   name?: string;
   /**
    */
-  authentication_methods?: Array<GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInner>;
+  authentication_methods?: Array<GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInner>;
   /**
    * The authentication method preferred for phone authenticators.
    *
    */
-  preferred_authentication_method?: GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum;
+  preferred_authentication_method?: GetAuthenticationMethods200ResponseOneOfInnerPreferredAuthenticationMethodEnum;
   /**
    * The ID of a linked authentication method. Linked authentication methods will be deleted together.
    *
@@ -4237,9 +4238,29 @@ export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInner {
    *
    */
   last_auth_at?: string;
+  /**
+   * Applies to passkeys only. The kind of device the credential is stored on as defined by backup eligibility. "single_device" credentials cannot be backed up and synced to another device, "multi_device" credentials can be backed up if enabled by the end-user.
+   *
+   */
+  credential_device_type?: string;
+  /**
+   * Applies to passkeys only. Whether the credential was backed up.
+   *
+   */
+  credential_backed_up?: boolean;
+  /**
+   * Applies to passkeys only. The ID of the user identity linked with the authentication method.
+   *
+   */
+  identity_user_id?: string;
+  /**
+   * Applies to passkeys only. The user-agent of the browser used to create the passkey.
+   *
+   */
+  user_agent?: string;
 }
 
-export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum = {
+export const GetAuthenticationMethods200ResponseOneOfInnerTypeEnum = {
   recovery_code: 'recovery-code',
   totp: 'totp',
   push: 'push',
@@ -4249,121 +4270,39 @@ export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum
   webauthn_roaming: 'webauthn-roaming',
   webauthn_platform: 'webauthn-platform',
   guardian: 'guardian',
+  passkey: 'passkey',
 } as const;
-export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum =
-  (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerTypeEnum];
+export type GetAuthenticationMethods200ResponseOneOfInnerTypeEnum =
+  (typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum];
 
-export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum =
-  {
-    sms: 'sms',
-    voice: 'voice',
-  } as const;
-export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum =
-  (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerPreferredAuthenticationMethodEnum];
+export const GetAuthenticationMethods200ResponseOneOfInnerPreferredAuthenticationMethodEnum = {
+  sms: 'sms',
+  voice: 'voice',
+} as const;
+export type GetAuthenticationMethods200ResponseOneOfInnerPreferredAuthenticationMethodEnum =
+  (typeof GetAuthenticationMethods200ResponseOneOfInnerPreferredAuthenticationMethodEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfInnerPreferredAuthenticationMethodEnum];
 
 /**
  *
  */
-export interface GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInner {
+export interface GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInner {
   [key: string]: any | any;
   /**
    */
-  type?: GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum;
+  type?: GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInnerTypeEnum;
   /**
    */
   id?: string;
 }
 
-export const GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum =
-  {
-    totp: 'totp',
-    push: 'push',
-    sms: 'sms',
-    voice: 'voice',
-  } as const;
-export type GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum =
-  (typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfAuthenticatorsInnerAuthenticationMethodsInnerTypeEnum];
-
-/**
- *
- */
-export interface GetAuthenticationMethods200ResponseOneOfInner {
-  [key: string]: any | any;
-  /**
-   * Enrollment generated id
-   *
-   */
-  id: string;
-  /**
-   * Enrollment type
-   *
-   */
-  type: GetAuthenticationMethods200ResponseOneOfInnerTypeEnum;
-  /**
-   * Enrollment status
-   *
-   */
-  confirmed?: boolean;
-  /**
-   * A human-readable label to identify the authenticator
-   *
-   */
-  name?: string;
-  /**
-   * Indicates the authenticator is linked to another authenticator
-   *
-   */
-  link_id?: string;
-  /**
-   * Applies to phone authenticators only. The destination phone number used to text and call.
-   *
-   */
-  phone_number?: string;
-  /**
-   * Applies to email authenticators only. The email address used to send verification messages.
-   *
-   */
-  email?: string;
-  /**
-   * Applies to webauthn authenticators only. The ID of the generated credential.
-   *
-   */
-  key_id?: string;
-  /**
-   * Applies to webauthn authenticators only. The public key.
-   *
-   */
-  public_key?: string;
-  /**
-   * Authenticator creation date
-   *
-   */
-  created_at: string;
-  /**
-   * Enrollment date
-   *
-   */
-  enrolled_at?: string;
-  /**
-   * Last authentication
-   *
-   */
-  last_auth_at?: string;
-}
-
-export const GetAuthenticationMethods200ResponseOneOfInnerTypeEnum = {
-  recovery_code: 'recovery-code',
+export const GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInnerTypeEnum = {
   totp: 'totp',
   push: 'push',
-  guardian: 'guardian',
   sms: 'sms',
-  phone: 'phone',
-  email: 'email',
-  webauthn_roaming: 'webauthn-roaming',
-  webauthn_platform: 'webauthn-platform',
+  voice: 'voice',
 } as const;
-export type GetAuthenticationMethods200ResponseOneOfInnerTypeEnum =
-  (typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfInnerTypeEnum];
+export type GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInnerTypeEnum =
+  (typeof GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInnerTypeEnum)[keyof typeof GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInnerTypeEnum];
 
 /**
  *
@@ -4636,6 +4575,27 @@ export interface GetClientGrants200ResponseOneOf {
   /**
    */
   client_grants: Array<ClientGrant>;
+}
+/**
+ *
+ */
+export type GetClients200Response = Array<Client> | GetClients200ResponseOneOf;
+/**
+ *
+ */
+export interface GetClients200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  clients: Array<Client>;
 }
 /**
  *
@@ -7367,6 +7327,7 @@ export const PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum = {
   true_client_ip: 'true-client-ip',
   cf_connecting_ip: 'cf-connecting-ip',
   x_forwarded_for: 'x-forwarded-for',
+  x_azure_clientip: 'x-azure-clientip',
   empty: '',
 } as const;
 export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
@@ -8589,6 +8550,7 @@ export const PostCustomDomainsRequestCustomClientIpHeaderEnum = {
   true_client_ip: 'true-client-ip',
   cf_connecting_ip: 'cf-connecting-ip',
   x_forwarded_for: 'x-forwarded-for',
+  x_azure_clientip: 'x-azure-clientip',
   null: 'null',
 } as const;
 export type PostCustomDomainsRequestCustomClientIpHeaderEnum =
@@ -8597,7 +8559,7 @@ export type PostCustomDomainsRequestCustomClientIpHeaderEnum =
 /**
  *
  */
-export type PostDeployDraftVersionRequest = DraftUpdate;
+export type PostDeployDraftVersionRequest = ActionsDraftUpdate;
 /**
  *
  */
@@ -9567,80 +9529,6 @@ export interface PostRecoveryCodeRegeneration200Response {
 /**
  *
  */
-export interface PostResourceServersRequest {
-  /**
-   * Friendly name for this resource server. Can not contain `<` or `>` characters.
-   *
-   */
-  name?: string;
-  /**
-   * Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set.
-   *
-   */
-  identifier: string;
-  /**
-   * List of permissions (scopes) that this API uses.
-   *
-   */
-  scopes?: Array<Scope>;
-  /**
-   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
-   *
-   */
-  signing_alg?: PostResourceServersRequestSigningAlgEnum;
-  /**
-   * Secret used to sign tokens when using symmetric algorithms (HS256).
-   *
-   */
-  signing_secret?: string;
-  /**
-   * Whether refresh tokens can be issued for this API (true) or not (false).
-   *
-   */
-  allow_offline_access?: boolean;
-  /**
-   * Expiration value (in seconds) for access tokens issued for this API from the token endpoint.
-   *
-   */
-  token_lifetime?: number;
-  /**
-   * Dialect of issued access token. Can be `access_token` or `access_token_authz` (includes permissions). Values can be `access_token` or `access_token_authz` (includes permissions).
-   *
-   */
-  token_dialect?: PostResourceServersRequestTokenDialectEnum;
-  /**
-   * Whether to skip user consent for applications flagged as first party (true) or not (false).
-   *
-   */
-  skip_consent_for_verifiable_first_party_clients?: boolean;
-  /**
-   * Whether to enforce authorization policies (true) or to ignore them (false).
-   *
-   */
-  enforce_policies?: boolean;
-  /**
-   */
-  client?: object;
-}
-
-export const PostResourceServersRequestSigningAlgEnum = {
-  HS256: 'HS256',
-  RS256: 'RS256',
-  PS256: 'PS256',
-} as const;
-export type PostResourceServersRequestSigningAlgEnum =
-  (typeof PostResourceServersRequestSigningAlgEnum)[keyof typeof PostResourceServersRequestSigningAlgEnum];
-
-export const PostResourceServersRequestTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
-} as const;
-export type PostResourceServersRequestTokenDialectEnum =
-  (typeof PostResourceServersRequestTokenDialectEnum)[keyof typeof PostResourceServersRequestTokenDialectEnum];
-
-/**
- *
- */
 export interface PostRolePermissionAssignmentRequest {
   /**
    * array of resource_server_identifier, permission_name pairs.
@@ -10303,31 +10191,6 @@ export interface PutSnsRequest {
 /**
  *
  */
-export interface PutTwilio200Response {
-  /**
-   * From number
-   *
-   */
-  from: string | null;
-  /**
-   * Copilot SID
-   *
-   */
-  messaging_service_sid: string | null;
-  /**
-   * Twilio Authentication token
-   *
-   */
-  auth_token: string | null;
-  /**
-   * Twilio SID
-   *
-   */
-  sid: string | null;
-}
-/**
- *
- */
 export interface PutTwilioRequest {
   /**
    * From number
@@ -10450,6 +10313,80 @@ export const ResourceServerTokenDialectEnum = {
 } as const;
 export type ResourceServerTokenDialectEnum =
   (typeof ResourceServerTokenDialectEnum)[keyof typeof ResourceServerTokenDialectEnum];
+
+/**
+ *
+ */
+export interface ResourceServerCreate {
+  /**
+   * Friendly name for this resource server. Can not contain `<` or `>` characters.
+   *
+   */
+  name?: string;
+  /**
+   * Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set.
+   *
+   */
+  identifier: string;
+  /**
+   * List of permissions (scopes) that this API uses.
+   *
+   */
+  scopes?: Array<Scope>;
+  /**
+   * Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon.
+   *
+   */
+  signing_alg?: ResourceServerCreateSigningAlgEnum;
+  /**
+   * Secret used to sign tokens when using symmetric algorithms (HS256).
+   *
+   */
+  signing_secret?: string;
+  /**
+   * Whether refresh tokens can be issued for this API (true) or not (false).
+   *
+   */
+  allow_offline_access?: boolean;
+  /**
+   * Expiration value (in seconds) for access tokens issued for this API from the token endpoint.
+   *
+   */
+  token_lifetime?: number;
+  /**
+   * Dialect of issued access token. Can be `access_token` or `access_token_authz` (includes permissions). Values can be `access_token` or `access_token_authz` (includes permissions).
+   *
+   */
+  token_dialect?: ResourceServerCreateTokenDialectEnum;
+  /**
+   * Whether to skip user consent for applications flagged as first party (true) or not (false).
+   *
+   */
+  skip_consent_for_verifiable_first_party_clients?: boolean;
+  /**
+   * Whether to enforce authorization policies (true) or to ignore them (false).
+   *
+   */
+  enforce_policies?: boolean;
+  /**
+   */
+  client?: object;
+}
+
+export const ResourceServerCreateSigningAlgEnum = {
+  HS256: 'HS256',
+  RS256: 'RS256',
+  PS256: 'PS256',
+} as const;
+export type ResourceServerCreateSigningAlgEnum =
+  (typeof ResourceServerCreateSigningAlgEnum)[keyof typeof ResourceServerCreateSigningAlgEnum];
+
+export const ResourceServerCreateTokenDialectEnum = {
+  token: 'access_token',
+  token_authz: 'access_token_authz',
+} as const;
+export type ResourceServerCreateTokenDialectEnum =
+  (typeof ResourceServerCreateTokenDialectEnum)[keyof typeof ResourceServerCreateTokenDialectEnum];
 
 /**
  *
@@ -10649,6 +10586,31 @@ export interface Scope {
    *
    */
   description?: string;
+}
+/**
+ *
+ */
+export interface SmsTwilioFactorProvider {
+  /**
+   * From number
+   *
+   */
+  from: string | null;
+  /**
+   * Copilot SID
+   *
+   */
+  messaging_service_sid: string | null;
+  /**
+   * Twilio Authentication token
+   *
+   */
+  auth_token: string | null;
+  /**
+   * Twilio SID
+   *
+   */
+  sid: string | null;
 }
 /**
  *
@@ -13382,6 +13344,16 @@ export interface GetMembersRequest {
    *
    */
   take?: number;
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
 }
 /**
  *
