@@ -3,7 +3,7 @@
 Guide to migrating from `3.x` to `4.x`
 
 - [General](#general)
-  - [Node 16 or newer is required](#node-16-or-newer-is-required)
+  - [Node 18 or newer is required](#node-18-or-newer-is-required)
   - [Callbacks are no longer supported](#callbacks-are-no-longer-supported)
   - [Response change](#response-change)
 - [Authentication API](#authentication-api)
