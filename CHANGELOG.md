@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.7.1](https://github.com/auth0/node-auth0/tree/v3.7.1) (2023-09-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.0...v3.7.1)
+
+**Fixed**
+
+- fix: ManagementTokenProvider should also respect the keepAlive config option [\#927](https://github.com/auth0/node-auth0/pull/927) ([alaczi](https://github.com/alaczi))
+
 ## [v4.0.0-beta.9](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.9) (2023-09-06)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.8...v4.0.0-beta.9)
@@ -12,6 +20,22 @@
 **Fixed**
 
 - Avoid optional properties on responses where possible [\#921](https://github.com/auth0/node-auth0/pull/921) ([frederikprijck](https://github.com/frederikprijck))
+
+## [v3.7.0](https://github.com/auth0/node-auth0/tree/v3.7.0) (2023-08-29)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.6.0...v3.7.0)
+
+**Added**
+
+- feat: add configuration for using persistent connections [\#919](https://github.com/auth0/node-auth0/pull/919) ([alaczi](https://github.com/alaczi))
+
+## [v3.6.1](https://github.com/auth0/node-auth0/tree/v3.6.1) (2023-08-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.6.0...v3.6.1)
+
+**Changed**
+
+- Support providing Organization when resetting password [\#892](https://github.com/auth0/node-auth0/pull/892) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.8](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.8) (2023-08-22)
 
@@ -56,6 +80,18 @@
 - Add support for userinfo endpoint [\#872](https://github.com/auth0/node-auth0/pull/872) ([frederikprijck](https://github.com/frederikprijck))
 - Support custom parameters with Authorization Code and Refresh Token Grants [\#889](https://github.com/auth0/node-auth0/pull/889) ([frederikprijck](https://github.com/frederikprijck))
 
+## [v3.6.0](https://github.com/auth0/node-auth0/tree/v3.6.0) (2023-07-18)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.5.0...v3.6.0)
+
+**Added**
+
+- Support Organization Name [\#884](https://github.com/auth0/node-auth0/pull/884) ([frederikprijck](https://github.com/frederikprijck))
+
+**Changed**
+
+- Do not lowercase org_name claim [\#887](https://github.com/auth0/node-auth0/pull/887) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.0-beta.5](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.5) (2023-06-28)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.4...v4.0.0-beta.5)
@@ -71,6 +107,14 @@
 **Added**
 
 - Upgrade to fetch 3 [\#876](https://github.com/auth0/node-auth0/pull/876) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+## [v3.5.0](https://github.com/auth0/node-auth0/tree/v3.5.0) (2023-06-26)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v3.5.0)
+
+**Added**
+
+- Add option to pass x-request-language header for passwordless [\#873](https://github.com/auth0/node-auth0/pull/873) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v4.0.0-beta.3](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.3) (2023-05-19)
 
@@ -96,6 +140,18 @@
 - Rewritten from the ground up in TypeScript
 - Full TypeScript coverage of methods, request paramters, bodies, errors and responses
 - Customisable modern networking stack
+
+## [v3.4.0](https://github.com/auth0/node-auth0/tree/v3.4.0) (2023-05-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.3.0...v3.4.0)
+
+**Added**
+
+- feat: allow to pass a method as token [\#793](https://github.com/auth0/node-auth0/pull/793) ([KillianHmyd](https://github.com/KillianHmyd))
+
+**Fixed**
+
+- Fix ESM [\#828](https://github.com/auth0/node-auth0/pull/828) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.3.0](https://github.com/auth0/node-auth0/tree/v3.3.0) (2023-03-14)
 
