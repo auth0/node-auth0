@@ -135,7 +135,7 @@ export class GuardianManager extends BaseAPI {
    */
   async getSmsFactorTemplates(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<TemplateMessages>> {
+  ): Promise<ApiResponse<TemplateMessages | void>> {
     const response = await this.request(
       {
         path: `/guardian/factors/sms/templates`,
@@ -144,7 +144,9 @@ export class GuardianManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.JSONApiResponse.fromResponse(response);
+    return response.status === 204
+      ? runtime.VoidApiResponse.fromResponse(response)
+      : runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**

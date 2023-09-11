@@ -166,6 +166,14 @@ describe('JobsManager', () => {
         done();
       });
     });
+
+    it('should not fail when no response returned', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/jobs/${id}/errors`).reply(204);
+
+      await expect(jobs.getErrors({ id: id })).resolves.not.toThrow();
+    });
   });
 
   const usersFilePath = path.join(__dirname, '../data/users.json');
