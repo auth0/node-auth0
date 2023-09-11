@@ -154,6 +154,20 @@ describe('ManagementTokenProvider', () => {
     expect(provider.options.headers).to.be.equal(options.headers);
   });
 
+  it('should send keepAlive true value to authentication client when passed into options', () => {
+    const options = Object.assign({}, defaultOptions);
+    options.keepAlive = true;
+    const provider = new ManagementTokenProvider(options);
+    expect(provider.authenticationClient.oauth.oauth.options.keepAlive).to.be.true;
+  });
+
+  it('should send keepAlive false value to authentication client when passed into options', () => {
+    const options = Object.assign({}, defaultOptions);
+    options.keepAlive = false;
+    const provider = new ManagementTokenProvider(options);
+    expect(provider.authenticationClient.oauth.oauth.options.keepAlive).to.be.false;
+  });
+
   it('should handle network errors correctly', async () => {
     const options = Object.assign({}, defaultOptions);
     options.domain = 'domain';
