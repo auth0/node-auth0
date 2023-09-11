@@ -16,8 +16,8 @@ import type {
   PutFcmRequest,
   PutSns200Response,
   PutSnsRequest,
-  PutTwilio200Response,
   PutTwilioRequest,
+  SmsTwilioFactorProvider,
   SnsFactorProvider,
   TemplateMessages,
   TwilioFactorProvider,
@@ -294,7 +294,7 @@ export class GuardianManager extends BaseAPI {
    */
   async getSmsFactorProviderTwilio(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<TwilioFactorProvider>> {
+  ): Promise<ApiResponse<SmsTwilioFactorProvider>> {
     const response = await this.request(
       {
         path: `/guardian/factors/sms/providers/twilio`,
@@ -722,7 +722,7 @@ export class GuardianManager extends BaseAPI {
   async setSmsFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutTwilio200Response>> {
+  ): Promise<ApiResponse<SmsTwilioFactorProvider>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -776,7 +776,7 @@ export class GuardianManager extends BaseAPI {
   async updatePhoneFactorProviderTwilio(
     bodyParameters: PutTwilioRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutTwilio200Response>> {
+  ): Promise<ApiResponse<TwilioFactorProvider>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
