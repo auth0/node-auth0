@@ -45,9 +45,11 @@ export class GrantsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async deleteByUserId(
-    requestParameters: DeleteGrantsByUserIdRequest = {},
+    requestParameters: DeleteGrantsByUserIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
         key: 'user_id',

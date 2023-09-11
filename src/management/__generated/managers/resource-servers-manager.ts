@@ -2,8 +2,8 @@ import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   GetResourceServers200Response,
-  PostResourceServersRequest,
   ResourceServer,
+  ResourceServerCreate,
   ResourceServerUpdate,
   GetResourceServers200ResponseOneOf,
   DeleteResourceServersByIdRequest,
@@ -167,7 +167,7 @@ export class ResourceServersManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async create(
-    bodyParameters: PostResourceServersRequest,
+    bodyParameters: ResourceServerCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<ResourceServer>> {
     const headerParameters: runtime.HTTPHeaders = {};
