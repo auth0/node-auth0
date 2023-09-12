@@ -1,5 +1,16 @@
 # Change Log
 
+## [v4.0.0-beta.10](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.10) (2023-09-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.9...v4.0.0-beta.10)
+
+**Fixed**
+
+- [SDK-4548] Support optional responses [\#928](https://github.com/auth0/node-auth0/pull/928) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- mark user_id as required for grants.deleteByUserId [\#930](https://github.com/auth0/node-auth0/pull/930) ([frederikprijck](https://github.com/frederikprijck))
+- add fields and include_fields to organization.getMembers [\#929](https://github.com/auth0/node-auth0/pull/929) ([frederikprijck](https://github.com/frederikprijck))
+- add pagination overloads to `client.getAll()` [\#931](https://github.com/auth0/node-auth0/pull/931) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.7.1](https://github.com/auth0/node-auth0/tree/v3.7.1) (2023-09-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.0...v3.7.1)
