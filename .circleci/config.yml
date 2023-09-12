@@ -41,7 +41,7 @@ workflows:
             parameters:
               node-version: ["18.17", "20.3"]
       - ship/node-publish:
-          publish-command: npm run build && npm publish --tag beta
+          publish-command: npm run build && npm publish
           requires:
             - build-and-test
           context:
@@ -50,4 +50,4 @@ workflows:
           filters:
             branches:
               only:
-                - beta
+                - master

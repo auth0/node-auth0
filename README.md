@@ -1,7 +1,5 @@
 ![Node.js client library for Auth0](https://cdn.auth0.com/website/sdks/banner/node-auth0-banner.png)
 
-> ⚠️ Please be aware that v4 is currently in <strong>Beta</strong>. Whilst we encourage you to test the update within your applications, we do no recommend using this version in production yet.
-
 ![Release](https://img.shields.io/npm/v/auth0)
 [![Codecov](https://img.shields.io/codecov/c/github/auth0/node-auth0)](https://codecov.io/gh/auth0/node-auth0)
 ![Downloads](https://img.shields.io/npm/dw/auth0)
@@ -27,7 +25,7 @@ This library supports the following tooling versions:
 Using [npm](https://npmjs.org) in your project directory run the following command:
 
 ```bash
-npm install auth0@beta
+npm install auth0
 ```
 
 ### Configure the SDK
@@ -79,8 +77,8 @@ See [more examples](./EXAMPLES.md#management-client).
 
 ## API Reference
 
-- [AuthenticationClient](https://auth0.github.io/node-auth0/beta/classes/auth.AuthenticationClient.html)
-- [ManagementClient](https://auth0.github.io/node-auth0/beta/classes/management.ManagementClient.html)
+- [AuthenticationClient](https://auth0.github.io/node-auth0/classes/auth.AuthenticationClient.html)
+- [ManagementClient](https://auth0.github.io/node-auth0/classes/management.ManagementClient.html)
 
 ## Feedback
 
