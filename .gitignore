@@ -36,12 +36,12 @@ node_modules
 # IntelliJ IDEA
 .idea
 
+# VS Code
+.vscode
+settings.json
+
 build
 **/.env
-out/
 test-results.xml
 .nyc_output
-
-
-# npm
-package-lock.json
+dist/

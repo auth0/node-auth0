@@ -1,6 +1,6 @@
 name: 🐞 Report a bug
 description: Have you found a bug or issue? Create a bug report for this library
-labels: ["bug"]
+labels: ['bug']
 
 body:
   - type: markdown

@@ -1,5 +1,16 @@
 # Change Log
 
+## [v4.0.0-beta.10](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.10) (2023-09-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.9...v4.0.0-beta.10)
+
+**Fixed**
+
+- [SDK-4548] Support optional responses [\#928](https://github.com/auth0/node-auth0/pull/928) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- mark user_id as required for grants.deleteByUserId [\#930](https://github.com/auth0/node-auth0/pull/930) ([frederikprijck](https://github.com/frederikprijck))
+- add fields and include_fields to organization.getMembers [\#929](https://github.com/auth0/node-auth0/pull/929) ([frederikprijck](https://github.com/frederikprijck))
+- add pagination overloads to `client.getAll()` [\#931](https://github.com/auth0/node-auth0/pull/931) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.7.1](https://github.com/auth0/node-auth0/tree/v3.7.1) (2023-09-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.0...v3.7.1)
@@ -7,6 +18,19 @@
 **Fixed**
 
 - fix: ManagementTokenProvider should also respect the keepAlive config option [\#927](https://github.com/auth0/node-auth0/pull/927) ([alaczi](https://github.com/alaczi))
+
+## [v4.0.0-beta.9](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.9) (2023-09-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.8...v4.0.0-beta.9)
+
+**⚠️ BREAKING CHANGES**
+
+- Rename fetch option, add request examples [\#923](https://github.com/auth0/node-auth0/pull/923) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Change client id params to client_id [\#924](https://github.com/auth0/node-auth0/pull/924) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+**Fixed**
+
+- Avoid optional properties on responses where possible [\#921](https://github.com/auth0/node-auth0/pull/921) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v3.7.0](https://github.com/auth0/node-auth0/tree/v3.7.0) (2023-08-29)
 
@@ -24,6 +48,49 @@
 
 - Support providing Organization when resetting password [\#892](https://github.com/auth0/node-auth0/pull/892) ([frederikprijck](https://github.com/frederikprijck))
 
+## [v4.0.0-beta.8](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.8) (2023-08-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.7...v4.0.0-beta.8)
+
+**Fixed**
+
+- Update AttackProtection response and general types [\#911](https://github.com/auth0/node-auth0/pull/911) ([frederikprijck](https://github.com/frederikprijck))
+- Fix default condition should be the last one [\#915](https://github.com/auth0/node-auth0/pull/915) ([frederikprijck](https://github.com/frederikprijck))
+- Fix trigger_id types for actions [\#914](https://github.com/auth0/node-auth0/pull/914) ([frederikprijck](https://github.com/frederikprijck))
+
+## [v4.0.0-beta.7](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.7) (2023-08-16)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.6...v4.0.0-beta.7)
+
+**⚠️ BREAKING CHANGES**
+
+- [SDK-4485] Use native fetch, drop Node 16 support [\#906](https://github.com/auth0/node-auth0/pull/906) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Do not expose a grant method [\#904](https://github.com/auth0/node-auth0/pull/904) ([frederikprijck](https://github.com/frederikprijck))
+- Only allow confidential clients [\#905](https://github.com/auth0/node-auth0/pull/905) ([frederikprijck](https://github.com/frederikprijck))
+
+**Added**
+
+- Support providing Organization when resetting password [\#893](https://github.com/auth0/node-auth0/pull/893) ([frederikprijck](https://github.com/frederikprijck))
+
+**Fixed**
+
+- Improve ESM and CJS support [\#902](https://github.com/auth0/node-auth0/pull/902) ([frederikprijck](https://github.com/frederikprijck))
+
+## [v4.0.0-beta.6](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.6) (2023-07-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.5...v4.0.0-beta.6)
+
+**Changed**
+
+- Update managers [\#883](https://github.com/auth0/node-auth0/pull/883) ([frederikprijck](https://github.com/frederikprijck))
+- Handle duplicate user sign up [\#886](https://github.com/auth0/node-auth0/pull/886) ([frederikprijck](https://github.com/frederikprijck))
+
+**Added**
+
+- Support Organization Name [\#885](https://github.com/auth0/node-auth0/pull/885) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for userinfo endpoint [\#872](https://github.com/auth0/node-auth0/pull/872) ([frederikprijck](https://github.com/frederikprijck))
+- Support custom parameters with Authorization Code and Refresh Token Grants [\#889](https://github.com/auth0/node-auth0/pull/889) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.6.0](https://github.com/auth0/node-auth0/tree/v3.6.0) (2023-07-18)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.5.0...v3.6.0)
@@ -36,6 +103,22 @@
 
 - Do not lowercase org_name claim [\#887](https://github.com/auth0/node-auth0/pull/887) ([frederikprijck](https://github.com/frederikprijck))
 
+## [v4.0.0-beta.5](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.5) (2023-06-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.4...v4.0.0-beta.5)
+
+**Fixed**
+
+- Fix issue with TS rewriting fetch dynamic imports [\#878](https://github.com/auth0/node-auth0/pull/878) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+## [v4.0.0-beta.4](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.4) (2023-06-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.3...v4.0.0-beta.4)
+
+**Added**
+
+- Upgrade to fetch 3 [\#876](https://github.com/auth0/node-auth0/pull/876) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v3.5.0](https://github.com/auth0/node-auth0/tree/v3.5.0) (2023-06-26)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v3.5.0)
@@ -43,6 +126,31 @@
 **Added**
 
 - Add option to pass x-request-language header for passwordless [\#873](https://github.com/auth0/node-auth0/pull/873) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+## [v4.0.0-beta.3](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.3) (2023-05-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.2...v4.0.0-beta.3)
+
+**Fixed**
+
+- Fix void responses in Beta types [\#864](https://github.com/auth0/node-auth0/pull/864) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Fix: add missing endpoint and model properties [\#866](https://github.com/auth0/node-auth0/pull/866) ([frederikprijck](https://github.com/frederikprijck))
+
+## [v4.0.0-beta.2](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.2) (2023-05-18)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.1...v4.0.0-beta.2)
+
+**Fixed**
+
+- Fix types exports [\#860](https://github.com/auth0/node-auth0/pull/860) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
+## [v4.0.0-beta.1](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.1) (2023-05-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v4.0.0-beta.1)
+
+- Rewritten from the ground up in TypeScript
+- Full TypeScript coverage of methods, request paramters, bodies, errors and responses
+- Customisable modern networking stack
 
 ## [v3.4.0](https://github.com/auth0/node-auth0/tree/v3.4.0) (2023-05-05)
 

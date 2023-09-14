@@ -1,71 +1,276 @@
 # Examples
 
-## Automatic Management API Token Retrieval
+- [Authentication Client](#authentication-client)
+  - [Signup a user](#signup-a-user)
+  - [Use a client assertion](#use-a-client-assertion)
+  - [Use Refresh Tokens](#use-refresh-tokens)
+  - [Complete the Authorization Code flow with PKCE](#complete-the-authorization-code-flow-with-pkce)
+  - [Login with Passwordless](#login-with-passwordless)
+- [Management Client](#management-client)
+  - [Paginate through a list of users](#paginate-through-a-list-of-users)
+  - [Paginate through a list of logs using checkpoint pagination](#paginate-through-a-list-of-logs-using-checkpoint-pagination)
+  - [Import users from a JSON file](#import-users-from-a-json-file)
+  - [Update a user's user_metadata](#update-a-users-user_metadata)
+- [Customizing the request](#customizing-the-request)
+  - [Passing custom options to fetch](#passing-custom-options-to-fetch)
+  - [Overriding `fetch`](#overriding-fetch)
 
-To **automatically** obtain a Management API token via the ManagementClient, you can specify the parameters `clientId`, `clientSecret` (use a Non Interactive Client) and optionally `scope`.
-Behind the scenes the Client Credentials Grant is used to obtain the `access_token` and is by default cached for the duration of the returned `expires_in` value.
+## Authentication Client
+
+### Signup a user
 
 ```js
-var ManagementClient = require('auth0').ManagementClient;
-var auth0 = new ManagementClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{YOUR_NON_INTERACTIVE_CLIENT_ID}',
-  clientSecret: '{YOUR_NON_INTERACTIVE_CLIENT_SECRET}',
-  scope: 'read:users update:users',
+import { AuthenticationClient } from 'auth0';
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+const { data: user } = await auth.database.signUp({
+  user: '{USER_EMAIL}',
+  password: '{USER_PASSWORD}',
+  connection: 'Username-Password-Authentication',
 });
 ```
 
-> Make sure your `clientId` is allowed to request tokens from Management API in [Auth0 Dashboard](https://manage.auth0.com/#/apis)
-
-> Note: The domain should not include `https://` the ManagementClient will prepend that to the string.
-
-### Obtaining Management API Token from Node.js backend
-
-To obtain a Management API token from your node backend, you can use Client Credentials Grant using your registered Auth0 Non Interactive Clients
+### Use a client assertion
 
 ```js
-var AuthenticationClient = require('auth0').AuthenticationClient;
+import { AuthenticationClient } from 'auth0';
 
-var auth0 = new AuthenticationClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
-  clientId: '{CLIENT_ID}',
-  clientSecret: '{CLIENT_SECRET}',
+const clientAssertionSigningKey = `-----BEGIN PRIVATE KEY-----
+...
+-----END PRIVATE KEY-----`;
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientAssertionSigningKey,
 });
 
-auth0.clientCredentialsGrant(
+const { data: tokens } = await auth.oauth.clientCredentialsGrant({
+  audience: 'you-api',
+});
+```
+
+### Use Refresh Tokens
+
+```js
+import { AuthenticationClient } from 'auth0';
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+// Get a new access token
+const {
+  data: { access_token },
+} = await auth.oauth.refreshTokenGrant({
+  refresh_token: refreshToken,
+});
+
+// Revoke a refresh token
+await auth.oauth.revokeRefreshToken({
+  token: refreshToken,
+});
+```
+
+### Complete the Authorization Code flow with PKCE
+
+```js
+import { AuthenticationClient } from 'auth0';
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+const { data: tokens } = await auth.oauth.authorizationCodeGrantWithPKCE(
   {
-    audience: 'https://{YOUR_ACCOUNT}.auth0.com/api/v2/',
-    scope: '{MANAGEMENT_API_SCOPES}',
+    code_verifier: '{key used to generate the code_challenge passed to /authorize}',
+    code: '{code from authorization response}',
+    redirect_uri: '{application redirect uri}',
   },
-  function (err, response) {
-    if (err) {
-      // Handle error.
-    }
-    console.log(response.access_token);
+  {
+    idTokenValidateOptions: {
+      nonce: '{random string passed to /authorize to check against the nonce claim}',
+      maxAge: '{number of seconds to check against the auth_time claim}',
+      organization: '{organization name or ID to check against the org_id or org_name claim}',
+    },
   }
 );
 ```
 
-### Promises and callback support
+> Note: We recommend one of our [Regular Web Application SDK Libraries](https://auth0.com/docs/libraries#webapp) for this.
 
-All methods can be used with promises or callbacks, when a callback argument is provided no promise will be returned.
+### Login with Passwordless
 
 ```js
-// Using callbacks.
-management.getUsers(function (err, users) {
-  if (err) {
-    // handle error.
-  }
-  console.log(users);
+import { AuthenticationClient } from 'auth0';
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
 });
 
-// Using promises.
-management
-  .getUsers()
-  .then(function (users) {
-    console.log(users);
-  })
-  .catch(function (err) {
-    // Handle error.
+// Or you can `sendSMS`
+await auth.passwordless.sendEmail({
+  email: '{user email}',
+  send: 'code',
+});
+
+const { data: tokens } = await auth.passwordless.loginWithEmail({
+  email: '{user email}',
+  code: '{code from email}',
+});
+```
+
+## Management Client
+
+### Paginate through a list of users
+
+```js
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+const allUsers = [];
+let page = 0;
+while (true) {
+  const {
+    data: { users, total },
+  } = await management.users.getAll({
+    include_totals: true,
+    page: page++,
   });
+  allUsers.push(...users);
+  if (allUsers.length === total) {
+    break;
+  }
+}
+```
+
+> Note: The maximum number of users you can get with this endpoint is 1000. For more use `users.exportUsers`.
+
+### Paginate through a list of logs using checkpoint pagination
+
+```js
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+const allLogs = [];
+let from = '';
+while (true) {
+  const { data: logs } = await mgmntClient.logs.getAll({ from });
+  if (!logs.length) {
+    break;
+  }
+  allLogs.push(...logs);
+  ({ log_id: from } = logs[logs.length - 1]);
+}
+```
+
+### Import users from a JSON file
+
+```js
+import { ManagementClient } from 'auth0';
+import { fileFrom } from 'fetch-blob/from.js';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+const {
+  data: { job: id },
+} = await management.jobs.importUsers({
+  users: await fileFrom('./users.json', 'application/json'),
+  connection_id: 'con_{your connection id}',
+});
+
+let done = false;
+while (!done) {
+  const {
+    data: {
+      job: { status },
+    },
+  } = await management.jobs.get({ id });
+  if (status === 'completed') {
+    done = true;
+  } else if (status === 'failed') {
+    const { data: errors } = await management.jobs.getErrors({ id });
+    throw new Error(errors);
+  } else {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  }
+}
+```
+
+### Update a user's user_metadata
+
+```js
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+await management.users.update({ id: '{user id}' }, { user_metadata: { foo: 'bar' } });
+```
+
+## Customizing the request
+
+### Passing custom options to fetch
+
+```js
+import https from 'https';
+import { ManagementClient } from 'auth0';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  headers: { 'foo': 'applied to all requests' },
+  agent: new https.Agent({ ... }),
+  httpTimeout: 5000
+});
+
+await management.users.get({ id: '{user id}' }, { headers: { 'bar': 'applied to this request' } });
+```
+
+### Overriding `fetch`
+
+```js
+import { ManagementClient } from 'auth0';
+import { myFetch } from './fetch';
+
+const management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+  async fetch(url, init) {
+    log('before', url, init.method);
+    const res = await myFetch(url, init);
+    log('after', url, init.method, res.status);
+    return res;
+  },
+});
+
+await management.users.get({ id: '{user id}' });
 ```

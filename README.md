@@ -10,7 +10,6 @@
 
 ## Documentation
 
-- [FAQs](https://github.com/auth0/node-auth0/blob/master/FAQ.md) - frequently asked questions about node-auth0.
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
 
 ## Getting Started
@@ -19,7 +18,7 @@
 
 This library supports the following tooling versions:
 
-- Node.js: `>=8.3.0`
+- Node.js: `>=18`
 
 ### Installation
 
@@ -33,44 +32,53 @@ npm install auth0
 
 #### Authentication API Client
 
-This client must be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
-
-The **AuthenticationClient** constructor takes an _optional_ client ID, if specified it will be used as default value for all endpoints that accept a client ID.
+This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
 
 ```js
-var AuthenticationClient = require('auth0').AuthenticationClient;
+import { AuthenticationClient } from 'auth0';
 
-var auth0 = new AuthenticationClient({
+const auth0 = new AuthenticationClient({
   domain: '{YOUR_ACCOUNT}.auth0.com',
   clientId: '{OPTIONAL_CLIENT_ID}',
+  clientSecret: '{OPTIONAL_CLIENT_SECRET}',
 });
 ```
+
+See [more examples](./EXAMPLES.md#authentication-client).
 
 #### Management API Client
 
-> Note: When using the ManagementClient in a browser you should set `telemetry: false`.
-
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
-Initialize your client class with an API v2 token and a domain.
+Initialize your client class with a client ID, client secret and a domain.
 
 ```js
-var ManagementClient = require('auth0').ManagementClient;
+import { ManagementClient } from 'auth0';
 
 var management = new ManagementClient({
-  token: '{YOUR_API_V2_TOKEN}',
-  domain: '{YOUR_ACCOUNT}.auth0.com',
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
 });
 ```
 
-> Note: The domain should not include `https://` the ManagementClient will prepend that to the string.
+Or, initialize your client class with an API v2 token and a domain.
 
-For other examples see the [EXAMPLES.md](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md) document.
+```js
+import { ManagementClient } from 'auth0';
+
+var management = new ManagementClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  token: '{YOUR_API_V2_TOKEN}',
+});
+```
+
+See [more examples](./EXAMPLES.md#management-client).
 
 ## API Reference
 
-- [AuthenticationClient](https://auth0.github.io/node-auth0/AuthenticationClient.html)
-- [ManagementClient](https://auth0.github.io/node-auth0/ManagementClient.html)
+- [AuthenticationClient](https://auth0.github.io/node-auth0/classes/auth.AuthenticationClient.html)
+- [ManagementClient](https://auth0.github.io/node-auth0/classes/management.ManagementClient.html)
 
 ## Feedback
 

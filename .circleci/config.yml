@@ -1,39 +1,36 @@
 version: 2.1
 orbs:
-  ship: auth0/ship@0.3.1
+  ship: auth0/ship@0.7.8
   codecov: codecov/codecov@3
 jobs:
   build-and-test:
     parameters:
       node-version:
         type: string
-        default: "14.20"
+        default: "18.17"
     docker:
       - image: cimg/node:<< parameters.node-version >>
+    resource_class: xlarge
     environment:
       LANG: en_US.UTF-8
     steps:
       - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install Dependencies
-          command: yarn install --ignore-engines
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
+      - ship/node-install-packages
       - run:
           name: ESLint
-          command: yarn lint
+          command: npm run lint
+      - run:
+          name: Build
+          command: npm run build
+      - run:
+          name: Lint package
+          command: npm run lint:package
       - run:
           name: Tests
-          command: yarn test:ci
+          command: npm run test:ci
       - when:
           condition:
-            equal: [ "14.20", << parameters.node-version >> ]
+            equal: [ "18.17", << parameters.node-version >> ]
           steps:
             - codecov/upload
 workflows:
@@ -42,9 +39,9 @@ workflows:
       - build-and-test:
           matrix:
             parameters:
-              node-version: ["14.20", "16.18", "18.12"]
+              node-version: ["18.17", "20.3"]
       - ship/node-publish:
-          pkg-manager: yarn
+          publish-command: npm run build && npm publish
           requires:
             - build-and-test
           context:
