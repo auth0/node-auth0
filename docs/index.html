@@ -13,9 +13,6 @@
 <div class="tsd-page-title">
 <h2>auth0</h2></div>
 <div class="tsd-panel tsd-typography"><p><img src="https://cdn.auth0.com/website/sdks/banner/node-auth0-banner.png" alt="Node.js client library for Auth0"></p>
-<blockquote>
-<p>⚠️ Please be aware that v4 is currently in <strong>Beta</strong>. Whilst we encourage you to test the update within your applications, we do no recommend using this version in production yet.</p>
-</blockquote>
 <p><img src="https://img.shields.io/npm/v/auth0" alt="Release">
 <a href="https://codecov.io/gh/auth0/node-auth0"><img src="https://img.shields.io/codecov/c/github/auth0/node-auth0" alt="Codecov"></a>
 <img src="https://img.shields.io/npm/dw/auth0" alt="Downloads">
@@ -30,7 +27,7 @@
 <li>Node.js: <code>&gt;=18</code></li>
 </ul>
 <a id="md:installation" class="tsd-anchor"></a><h3><a href="#md:installation">Installation</a></h3><p>Using <a href="https://npmjs.org">npm</a> in your project directory run the following command:</p>
-<pre><code class="language-bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">auth0@beta</span>
+<pre><code class="language-bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">auth0</span>
 </code><button>Copy</button></pre>
 <a id="md:configure-the-sdk" class="tsd-anchor"></a><h3><a href="#md:configure-the-sdk">Configure the SDK</a></h3><a id="md:authentication-api-client" class="tsd-anchor"></a><h4><a href="#md:authentication-api-client">Authentication API Client</a></h4><p>This client can be used to access Auth0&#39;s <a href="https://auth0.com/docs/api/authentication">Authentication API</a>.</p>
 <pre><code class="language-js"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">AuthenticationClient</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;auth0&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">auth0</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-0">AuthenticationClient</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-4">domain:</span><span class="hl-1"> </span><span class="hl-2">&#39;{YOUR_ACCOUNT}.auth0.com&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">clientId:</span><span class="hl-1"> </span><span class="hl-2">&#39;{OPTIONAL_CLIENT_ID}&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-4">clientSecret:</span><span class="hl-1"> </span><span class="hl-2">&#39;{OPTIONAL_CLIENT_SECRET}&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">});</span>
@@ -45,8 +42,8 @@
 </code><button>Copy</button></pre>
 <p>See <a href="./EXAMPLES.md#management-client">more examples</a>.</p>
 <a id="md:api-reference" class="tsd-anchor"></a><h2><a href="#md:api-reference">API Reference</a></h2><ul>
-<li><a href="https://auth0.github.io/node-auth0/beta/classes/auth.AuthenticationClient.html">AuthenticationClient</a></li>
-<li><a href="https://auth0.github.io/node-auth0/beta/classes/management.ManagementClient.html">ManagementClient</a></li>
+<li><a href="https://auth0.github.io/node-auth0/classes/auth.AuthenticationClient.html">AuthenticationClient</a></li>
+<li><a href="https://auth0.github.io/node-auth0/classes/management.ManagementClient.html">ManagementClient</a></li>
 </ul>
 <a id="md:feedback" class="tsd-anchor"></a><h2><a href="#md:feedback">Feedback</a></h2><a id="md:contributing" class="tsd-anchor"></a><h3><a href="#md:contributing">Contributing</a></h3><p>We appreciate feedback and contribution to this repo! Before you get started, please see the following:</p>
 <ul>
