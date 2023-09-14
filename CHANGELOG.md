@@ -1,5 +1,17 @@
 # Change Log
 
+## [v4.0.0](https://github.com/auth0/node-auth0/tree/v4.0.0) (2023-09-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.1...v4.0.0)
+
+This release brings a variety of exciting new features and improvements, including:
+
+- Rewritten from the ground up in TypeScript
+- Types for methods, request parameters, bodies, errors and responses
+- Customisable modern networking stack
+
+This release also drops support for Node <18. See the [Migration Guide](https://github.com/auth0/node-auth0/blob/master/v4_MIGRATION_GUIDE.md) for more information.
+
 ## [v4.0.0-beta.10](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.10) (2023-09-12)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0-beta.9...v4.0.0-beta.10)
