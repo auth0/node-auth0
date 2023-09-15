@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.0.1](https://github.com/auth0/node-auth0/tree/v4.0.1) (2023-09-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0...v4.0.1)
+
+**Fixed**
+
+- Ensure to pass-trough options to TokenProvider [\#938](https://github.com/auth0/node-auth0/pull/938) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.0](https://github.com/auth0/node-auth0/tree/v4.0.0) (2023-09-14)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.1...v4.0.0)
