@@ -129,7 +129,7 @@ Some method names have been changed to better align with the documentation.
 The following configuration options have changed:
 
 - `scope` - The Management Client uses the Client Credentials grant which gets all the scopes granted to the application. So this is redundant and has been removed.
-- `tokenProvider.enableCache` - Use the `enableCache` option of the Management Client.
+- `tokenProvider.enableCache` - Each instance of the Management Client has its own cache, if you want a new cache you want to instantiate a new Management Client.
 - `tokenProvider.cacheTTLInSeconds` - Each instance of the Management Client only stores a single access token, so this functionality has been removed.
 - `proxy` - You should now provide an [HttpsAgent](https://nodejs.org/api/https.html#class-httpsagent) as the `agent` config.
 - `includeResponseHeaders` - This has been removed, all return types include the response headers by default.

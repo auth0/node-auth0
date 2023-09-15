@@ -1,6 +1,7 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
 import { TokenProvider } from '../../src/management/token-provider.js';
+import { FetchAPI } from '../../src/lib/models.js';
 
 const opts = {
   domain: 'test-domain.auth0.com',
@@ -47,13 +48,6 @@ describe('TokenProvider', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('should get a new access token if caching disabled', async () => {
-    const tp = new TokenProvider({ ...opts, enableCache: false });
-    expect(await tp.getAccessToken()).toBe('my-access-token');
-    expect(await tp.getAccessToken()).toBe('my-access-token');
-    expect(spy).toHaveBeenCalledTimes(2);
-  });
-
   it('should get a new access token if token expires', async () => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
     const tp = new TokenProvider(opts);
@@ -93,12 +87,16 @@ describe('TokenProvider', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('should not cache concurrent requests when caching disabled', async () => {
-    const tp = new TokenProvider({ ...opts, enableCache: false });
-    expect(
-      await Promise.all([tp.getAccessToken(), tp.getAccessToken(), tp.getAccessToken()])
-    ).toEqual(['my-access-token', 'my-access-token', 'my-access-token']);
+  it('should use a custom fetch', async () => {
+    const customFetch = jest
+      .fn<FetchAPI>()
+      .mockImplementation((url: URL | RequestInfo, init?: RequestInit) => fetch(url, init));
 
-    expect(spy).toHaveBeenCalledTimes(3);
+    const tp = new TokenProvider({
+      ...opts,
+      fetch: customFetch as any,
+    });
+    expect(await tp.getAccessToken()).toBe('my-access-token');
+    expect(customFetch).toHaveBeenCalled();
   });
 });

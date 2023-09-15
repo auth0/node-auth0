@@ -17,6 +17,7 @@ export interface ManagementClientOptionsWithClientSecret extends ManagementClien
 export interface ManagementClientOptionsWithClientAssertion extends ManagementClientOptions {
   clientId: string;
   clientAssertionSigningKey: string;
+  clientAssertionSigningAlg?: string;
 }
 
 export type ManagementClientOptionsWithClientCredentials =
