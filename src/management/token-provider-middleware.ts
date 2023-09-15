@@ -18,8 +18,7 @@ export class TokenProviderMiddleware implements Middleware {
       };
     } else {
       this.tokenProvider = new TokenProvider({
-        clientId: options.clientId,
-        domain: options.domain,
+        ...options,
         audience: options.audience ?? `https://${options.domain}/api/v2/`,
         ...{ clientSecret: (options as ManagementClientOptionsWithClientSecret).clientSecret },
         ...{
