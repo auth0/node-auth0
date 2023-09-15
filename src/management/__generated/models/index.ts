@@ -1897,6 +1897,10 @@ export interface ClientGrantCreate {
    *
    */
   scope: Array<string>;
+
+  organization_usage?: 'allow' | 'deny' | 'require';
+
+  allow_any_organization?: boolean;
 }
 /**
  * Configuration related to JWTs for the client.
@@ -14650,4 +14654,22 @@ export interface GetUsersByEmailRequest {
    *
    */
   include_fields?: boolean;
+}
+
+export interface PostOrganizationClientGrantOperationRequest {
+  organization_id: string;
+}
+
+export interface PostOrganizationClientGrantRequest {
+  grant_id: string;
+  client_id: string;
+  audience: string;
+  scopes: string[];
+}
+
+export interface PostOrganizationClientGrant200Response {
+  grant_id: string;
+  client_id: string;
+  audience: string;
+  scopes: string[];
 }

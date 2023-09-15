@@ -45,6 +45,9 @@ import type {
   PostInvitationsOperationRequest,
   PostMembersOperationRequest,
   PostOrganizationMemberRolesOperationRequest,
+  PostOrganizationClientGrantRequest,
+  PostOrganizationClientGrantOperationRequest,
+  PostOrganizationClientGrant200Response,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -824,6 +827,33 @@ export class OrganizationsManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/organizations`,
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  async createOrganizationClientGrant(
+    requestParameters: PostOrganizationClientGrantOperationRequest,
+    bodyParameters: PostOrganizationClientGrantRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PostOrganizationClientGrant200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['organization_id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client_grants`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.organization_id))
+        ),
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
