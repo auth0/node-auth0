@@ -2552,6 +2552,11 @@ export interface Connection {
    */
   strategy: string;
   /**
+   * The identifiers of the clients for which the connection is to be enabled. If the array is empty or the property is not specified, no clients are enabled
+   *
+   */
+  enabled_clients?: Array<string>;
+  /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
    */

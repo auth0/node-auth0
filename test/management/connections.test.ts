@@ -53,6 +53,7 @@ describe('ConnectionsManager', () => {
         display_name: 'Test Connection',
         id: 'test_connection_id',
         strategy: 'auth0',
+        enabled_clients: ['test_client'],
         realms: ['test'],
         is_domain_connection: false,
         metadata: {
@@ -170,6 +171,7 @@ describe('ConnectionsManager', () => {
       display_name: 'Test Connection',
       id: 'test_connection_id',
       strategy: 'auth0',
+      enabled_clients: ['test_client'],
       realms: ['test'],
       is_domain_connection: false,
       metadata: {
@@ -268,6 +270,7 @@ describe('ConnectionsManager', () => {
       display_name: 'Test Connection',
       id: 'test_connection_id',
       strategy: 'auth0',
+      enabled_clients: ['test_client'],
       realms: ['test'],
       is_domain_connection: false,
       metadata: {
@@ -355,6 +358,7 @@ describe('ConnectionsManager', () => {
       display_name: 'Test Connection',
       id: 'test_connection_id',
       strategy: 'auth0',
+      enabled_clients: ['test_client'],
       realms: ['test'],
       is_domain_connection: false,
       metadata: {
