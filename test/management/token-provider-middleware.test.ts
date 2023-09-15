@@ -1,10 +1,14 @@
 import nock from 'nock';
 import { jest } from '@jest/globals';
-import { RequestOpts, InitOverrideFunction } from '../../src/lib/index.js';
+import { RequestOpts, InitOverrideFunction, FetchAPI } from '../../src/lib/index.js';
 import { BaseAPI } from '../../src/lib/runtime.js';
 import { TokenProviderMiddleware } from '../../src/management/token-provider-middleware.js';
 
 const domain = 'test-domain.auth0.com';
+
+const customFetch = jest
+  .fn<FetchAPI>()
+  .mockImplementation((url: URL | RequestInfo, init?: RequestInit) => fetch(url, init));
 
 const opts = {
   baseUrl: `https://${domain}`,
@@ -14,6 +18,7 @@ const opts = {
   parseError: async (response: Response) => {
     return new Error(`${response.status}`);
   },
+  fetch: customFetch,
 };
 
 export class TestClient extends BaseAPI {
@@ -86,5 +91,12 @@ describe('TokenProviderMiddleware', () => {
         authorization: 'Bearer my-access-token',
       })
     );
+  });
+
+  it('should use custom fetch', async () => {
+    await expect(
+      clientSecretClient.testRequest({ path: '/foo', method: 'GET' })
+    ).resolves.toMatchObject({});
+    expect(customFetch).toHaveBeenCalled();
   });
 });

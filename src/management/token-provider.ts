@@ -1,15 +1,13 @@
 import { AuthenticationClient } from '../auth/index.js';
 import { TokenSet } from '../auth/oauth.js';
 import { JSONApiResponse } from '../lib/models.js';
+import {
+  ManagementClientOptionsWithClientAssertion,
+  ManagementClientOptionsWithClientCredentials,
+  ManagementClientOptionsWithClientSecret,
+} from './management-client-options.js';
 
 const LEEWAY = 10 * 1000;
-
-interface BaseOptions {
-  domain: string;
-  audience: string;
-  clientId: string;
-  enableCache?: boolean;
-}
 
 export class TokenProvider {
   private authenticationClient: AuthenticationClient;
@@ -17,22 +15,18 @@ export class TokenProvider {
   private accessToken = '';
   private pending: Promise<JSONApiResponse<TokenSet>> | undefined;
 
-  constructor(options: BaseOptions & { clientSecret: string });
-  constructor(options: BaseOptions & { clientAssertionSigningKey: string });
-  constructor(private options: any) {
-    this.authenticationClient = new AuthenticationClient({
-      clientId: options.clientId,
-      domain: options.domain,
-      clientSecret: options.clientSecret,
-      clientAssertionSigningKey: options.clientAssertionSigningKey,
-    });
+  constructor(options: ManagementClientOptionsWithClientSecret & { audience: string });
+  constructor(options: ManagementClientOptionsWithClientAssertion & { audience: string });
+  constructor(
+    private options: ManagementClientOptionsWithClientCredentials & { audience: string }
+  ) {
+    this.authenticationClient = new AuthenticationClient(options);
   }
 
   public async getAccessToken() {
-    const disableCache = this.options.enableCache === false;
-    if (disableCache || !this.accessToken || Date.now() > this.expiresAt - LEEWAY) {
+    if (!this.accessToken || Date.now() > this.expiresAt - LEEWAY) {
       this.pending =
-        (!disableCache && this.pending) ||
+        this.pending ||
         this.authenticationClient.oauth.clientCredentialsGrant({
           audience: this.options.audience,
         });
