@@ -328,7 +328,7 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 | `emailProvider.configure`               | `emails.configure`                              |
 | `tenant.getSettings`                    | `tenants.getSettings`                           |
 | `tenant.updateSettings`                 | `tenants.updateSettings`                        |
-| `users.getByEmail`                      | `usersByEmailManager.getByEmail`                |
+| `users.getByEmail`                      | `usersByEmail.getByEmail`                       |
 | `users.updateUserMetadata`              | `users.update`                                  |
 | `users.updateAppMetadata`               | `users.update`                                  |
 | `users.deleteAll`                       | `REMOVED`                                       |
