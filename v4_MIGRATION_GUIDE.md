@@ -178,7 +178,7 @@ const usersAlso = await management.users.getAll();
 | `deleteRule`                                | `rules.delete`                               |
 | `updateRule`                                | `rules.update`                               |
 | `getUsers`                                  | `users.getAll`                               |
-| `getUsersByEmail`                           | `users.getByEmail`                           |
+| `getUsersByEmail`                           | `usersByEmail.getByEmail`                    |
 | `getUser`                                   | `users.get`                                  |
 | `deleteAllUsers`                            | `users.deleteAll`                            |
 | `deleteUser`                                | `users.delete`                               |
