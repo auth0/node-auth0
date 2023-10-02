@@ -184,8 +184,8 @@ const usersAlso = await management.users.getAll();
 | `deleteUser`                                | `users.delete`                               |
 | `createUser`                                | `users.create`                               |
 | `updateUser`                                | `users.update`                               |
-| `updateUserMetadata`                        | `users.updateUserMetadata`                   |
-| `updateAppMetadata`                         | `users.updateAppMetadata`                    |
+| `updateUserMetadata`                        | `REMOVED`                                    |
+| `updateAppMetadata`                         | `REMOVED`                                    |
 | `deleteUserMultifactor`                     | `users.deleteMultifactorProvider`            |
 | `deleteUserMultifcator`                     | `users.deleteMultifactorProvider`            |
 | `unlinkUsers`                               | `users.unlink`                               |
