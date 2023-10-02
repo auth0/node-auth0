@@ -281,7 +281,7 @@ const usersAlso = await management.users.getAll();
 | `addHookSecrets`                            | `hooks.addSecrets`                           |
 | `updateHookSecrets`                         | `hooks.updateSecrets`                        |
 | `removeHookSecrets`                         | `hooks.removeSecrets`                        |
-| `getAccessToken`                            | `tokenProvider.getAccessToken`               |
+| `getAccessToken`                            | `oauth.clientCredentialsGrant` (on `AuthenticationClient`) |
 | `updateBrandingSettings`                    | `branding.updateSettings`                    |
 | `getBrandingSettings`                       | `branding.getSettings`                       |
 | `getBrandingUniversalLoginTemplate`         | `branding.getUniversalLoginTemplate`         |
