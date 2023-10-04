@@ -222,7 +222,7 @@ const usersAlso = await management.users.getAll();
 | `updateTenantSettings`                      | `tenant.updateSettings`                      |
 | `getJob`                                    | `jobs.get`                                   |
 | `importUsers`                               | `jobs.importUsers`                           |
-| `importUsersJob`                            | `jobs.importUsersJob`                        |
+| `importUsersJob`                            | `jobs.importUsers`                           |
 | `exportUsers`                               | `jobs.exportUsers`                           |
 | `getJobErrors`                              | `jobs.errors`                                |
 | `sendEmailVerification`                     | `jobs.verifyEmail`                           |
