@@ -178,14 +178,14 @@ const usersAlso = await management.users.getAll();
 | `deleteRule`                                | `rules.delete`                               |
 | `updateRule`                                | `rules.update`                               |
 | `getUsers`                                  | `users.getAll`                               |
-| `getUsersByEmail`                           | `users.getByEmail`                           |
+| `getUsersByEmail`                           | `usersByEmail.getByEmail`                    |
 | `getUser`                                   | `users.get`                                  |
 | `deleteAllUsers`                            | `users.deleteAll`                            |
 | `deleteUser`                                | `users.delete`                               |
 | `createUser`                                | `users.create`                               |
 | `updateUser`                                | `users.update`                               |
-| `updateUserMetadata`                        | `users.updateUserMetadata`                   |
-| `updateAppMetadata`                         | `users.updateAppMetadata`                    |
+| `updateUserMetadata`                        | `REMOVED`                                    |
+| `updateAppMetadata`                         | `REMOVED`                                    |
 | `deleteUserMultifactor`                     | `users.deleteMultifactorProvider`            |
 | `deleteUserMultifcator`                     | `users.deleteMultifactorProvider`            |
 | `unlinkUsers`                               | `users.unlink`                               |
@@ -222,7 +222,7 @@ const usersAlso = await management.users.getAll();
 | `updateTenantSettings`                      | `tenant.updateSettings`                      |
 | `getJob`                                    | `jobs.get`                                   |
 | `importUsers`                               | `jobs.importUsers`                           |
-| `importUsersJob`                            | `jobs.importUsersJob`                        |
+| `importUsersJob`                            | `jobs.importUsers`                           |
 | `exportUsers`                               | `jobs.exportUsers`                           |
 | `getJobErrors`                              | `jobs.errors`                                |
 | `sendEmailVerification`                     | `jobs.verifyEmail`                           |
@@ -281,7 +281,7 @@ const usersAlso = await management.users.getAll();
 | `addHookSecrets`                            | `hooks.addSecrets`                           |
 | `updateHookSecrets`                         | `hooks.updateSecrets`                        |
 | `removeHookSecrets`                         | `hooks.removeSecrets`                        |
-| `getAccessToken`                            | `tokenProvider.getAccessToken`               |
+| `getAccessToken`                            | `oauth.clientCredentialsGrant` (on `AuthenticationClient`) |
 | `updateBrandingSettings`                    | `branding.updateSettings`                    |
 | `getBrandingSettings`                       | `branding.getSettings`                       |
 | `getBrandingUniversalLoginTemplate`         | `branding.getUniversalLoginTemplate`         |
@@ -328,7 +328,7 @@ await users.deleteRoles({ id: 'user' }, { roles: ['read:users'] });
 | `emailProvider.configure`               | `emails.configure`                              |
 | `tenant.getSettings`                    | `tenants.getSettings`                           |
 | `tenant.updateSettings`                 | `tenants.updateSettings`                        |
-| `users.getByEmail`                      | `usersByEmailManager.getByEmail`                |
+| `users.getByEmail`                      | `usersByEmail.getByEmail`                       |
 | `users.updateUserMetadata`              | `users.update`                                  |
 | `users.updateAppMetadata`               | `users.update`                                  |
 | `users.deleteAll`                       | `REMOVED`                                       |
