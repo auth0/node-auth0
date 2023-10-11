@@ -8,7 +8,7 @@ import { ResponseError } from '../lib/index.js';
 import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 
 interface ManagementApiErrorResponse {
-  errorCode: string;
+  errorCode: string | undefined;
   error: string;
   message: string;
   statusCode: number;
@@ -17,7 +17,7 @@ interface ManagementApiErrorResponse {
 export class ManagementApiError extends Error {
   override name = 'ManagementApiError' as const;
   constructor(
-    public errorCode: string,
+    public errorCode: string | undefined,
     public error: string,
     public statusCode: number,
     public body: string,
