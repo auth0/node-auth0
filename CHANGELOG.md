@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.0.2](https://github.com/auth0/node-auth0/tree/v4.0.2) (2023-10-25)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.1...v4.0.2)
+
+**Changed**
+
+- Export models that are using in the runtime [\#954](https://github.com/auth0/node-auth0/pull/954) ([frederikprijck](https://github.com/frederikprijck))
+- Type errorCode as possibly undefined [\#953](https://github.com/auth0/node-auth0/pull/953) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.0.1](https://github.com/auth0/node-auth0/tree/v4.0.1) (2023-09-15)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.0...v4.0.1)
