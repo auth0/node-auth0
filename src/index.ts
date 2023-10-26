@@ -4,4 +4,3 @@ export * from './userinfo/index.js';
 export * from './lib/errors.js';
 export * from './lib/models.js';
 export * from './deprecations.js';
-export { Client, ClientCreate, ClientUpdate } from './deprecations.js';

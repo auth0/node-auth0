@@ -45,24 +45,3 @@ export type ClientOidcBackchannelLogout = ClientOidcLogout;
  * @deprecated Use {@link ClientUpdateOidcLogout} instead.
  */
 export type ClientUpdateOidcBackchannelLogout = ClientUpdateOidcLogout;
-
-export interface Client extends _Client {
-  /**
-   * @deprecated Use {@link _Client.oidc_logout} instead.
-   */
-  oidc_backchannel_logout?: ClientOidcLogout;
-}
-
-export interface ClientCreate extends _ClientCreate {
-  /**
-   * @deprecated Use {@link _ClientCreate.oidc_logout} instead.
-   */
-  oidc_backchannel_logout?: ClientCreateOidcLogout;
-}
-
-export interface ClientUpdate extends _ClientUpdate {
-  /**
-   * @deprecated Use {@link _ClientUpdate.oidc_logout} instead.
-   */
-  oidc_backchannel_logout?: ClientUpdateOidcLogout;
-}
