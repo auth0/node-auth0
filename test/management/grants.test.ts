@@ -154,7 +154,7 @@ describe('GrantsManager', () => {
       let request: nock.Scope;
 
       beforeEach(() => {
-        request = nock(API_URL).delete(`/grants/?user_id=${user_id}`).reply(200, {});
+        request = nock(API_URL).delete(`/grants?user_id=${user_id}`).reply(200, {});
       });
 
       it('should return a promise when no callback is given', (done) => {

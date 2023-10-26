@@ -12,7 +12,7 @@ import type {
   GetRolePermission200ResponseOneOf,
   Permission,
   GetRoleUser200ResponseOneOf,
-  GetMembers200ResponseOneOfInner,
+  GetRoleUser200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   DeleteRolePermissionAssignmentRequest,
   DeleteRolesByIdRequest,
@@ -166,7 +166,7 @@ export class RolesManager extends BaseAPI {
   async getUsers(
     requestParameters?: GetRoleUserRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<GetMembers200ResponseOneOfInner>>>;
+  ): Promise<ApiResponse<Array<GetRoleUser200ResponseOneOfInner>>>;
   async getUsers(
     requestParameters: GetRoleUserRequest,
     initOverrides?: InitOverride

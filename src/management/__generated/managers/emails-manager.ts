@@ -2,8 +2,8 @@ import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   EmailProvider,
-  PatchProviderRequest,
-  PostProviderRequest,
+  EmailProviderCreate,
+  EmailProviderUpdate,
   GetProviderRequest,
 } from '../models/index.js';
 
@@ -58,7 +58,7 @@ export class EmailsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async update(
-    bodyParameters: PatchProviderRequest,
+    bodyParameters: EmailProviderUpdate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<EmailProvider>> {
     const headerParameters: runtime.HTTPHeaders = {};
@@ -89,7 +89,7 @@ export class EmailsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async configure(
-    bodyParameters: PostProviderRequest,
+    bodyParameters: EmailProviderCreate,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<EmailProvider>> {
     const headerParameters: runtime.HTTPHeaders = {};
