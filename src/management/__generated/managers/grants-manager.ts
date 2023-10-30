@@ -59,7 +59,7 @@ export class GrantsManager extends BaseAPI {
 
     const response = await this.request(
       {
-        path: `/grants/`,
+        path: `/grants`,
         method: 'DELETE',
         query: queryParameters,
       },

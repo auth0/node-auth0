@@ -95,7 +95,7 @@ export interface Client {
   allowed_logout_urls: Array<string>;
   /**
    */
-  oidc_backchannel_logout: ClientOidcBackchannelLogout;
+  oidc_logout: ClientOidcLogout;
   /**
    * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, and `urn:ietf:params:oauth:grant-type:device_code`.
    *
@@ -893,7 +893,7 @@ export interface ClientCreate {
   callbacks?: Array<string>;
   /**
    */
-  oidc_backchannel_logout?: ClientCreateOidcBackchannelLogout;
+  oidc_logout?: ClientCreateOidcLogout;
   /**
    * Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs.
    *
@@ -1825,7 +1825,7 @@ export interface ClientCreateNativeSocialLoginFacebook {
 /**
  * Configuration for OIDC backchannel logout
  */
-export interface ClientCreateOidcBackchannelLogout {
+export interface ClientCreateOidcLogout {
   /**
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
    *
@@ -2011,7 +2011,7 @@ export interface ClientNativeSocialLoginFacebook {
 /**
  * Configuration for OIDC backchannel logout
  */
-export interface ClientOidcBackchannelLogout {
+export interface ClientOidcLogout {
   [key: string]: any | any;
   /**
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
@@ -2126,7 +2126,7 @@ export interface ClientUpdate {
   callbacks?: Array<string>;
   /**
    */
-  oidc_backchannel_logout?: ClientUpdateOidcBackchannelLogout | null;
+  oidc_logout?: ClientUpdateOidcLogout | null;
   /**
    * A set of URLs that represents valid origins for CORS
    *
@@ -2517,7 +2517,7 @@ export interface ClientUpdateMobileIos {
 /**
  * Configuration for OIDC backchannel logout
  */
-export interface ClientUpdateOidcBackchannelLogout {
+export interface ClientUpdateOidcLogout {
   /**
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
    *
@@ -3365,6 +3365,48 @@ export interface EmailProvider {
   settings: { [key: string]: any };
 }
 /**
+ *
+ */
+export interface EmailProviderCreate {
+  /**
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   *
+   */
+  name: EmailProviderCreateNameEnum;
+  /**
+   * Whether the provider is enabled (true) or disabled (false).
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Email address to use as "from" when no other address specified.
+   *
+   */
+  default_from_address?: string;
+  /**
+   */
+  credentials: EmailProviderUpdateCredentials;
+  /**
+   * Specific provider setting
+   *
+   */
+  settings?: { [key: string]: any } | null;
+}
+
+export const EmailProviderCreateNameEnum = {
+  mailgun: 'mailgun',
+  mandrill: 'mandrill',
+  sendgrid: 'sendgrid',
+  ses: 'ses',
+  sparkpost: 'sparkpost',
+  smtp: 'smtp',
+  azure_cs: 'azure_cs',
+  ms365: 'ms365',
+} as const;
+export type EmailProviderCreateNameEnum =
+  (typeof EmailProviderCreateNameEnum)[keyof typeof EmailProviderCreateNameEnum];
+
+/**
  * Credentials required to use the provider.
  */
 export interface EmailProviderCredentials {
@@ -3394,6 +3436,52 @@ export interface EmailProviderCredentials {
    */
   smtp_user: string;
 }
+/**
+ *
+ */
+export interface EmailProviderUpdate {
+  /**
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   *
+   */
+  name?: EmailProviderUpdateNameEnum;
+  /**
+   * Whether the provider is enabled (true) or disabled (false).
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Email address to use as "from" when no other address specified.
+   *
+   */
+  default_from_address?: string;
+  /**
+   */
+  credentials?: EmailProviderUpdateCredentials;
+  /**
+   * Specific provider setting
+   *
+   */
+  settings?: { [key: string]: any } | null;
+}
+
+export const EmailProviderUpdateNameEnum = {
+  mailgun: 'mailgun',
+  mandrill: 'mandrill',
+  sendgrid: 'sendgrid',
+  ses: 'ses',
+  sparkpost: 'sparkpost',
+  smtp: 'smtp',
+  azure_cs: 'azure_cs',
+  ms365: 'ms365',
+} as const;
+export type EmailProviderUpdateNameEnum =
+  (typeof EmailProviderUpdateNameEnum)[keyof typeof EmailProviderUpdateNameEnum];
+
+/**
+ * Credentials required to use the provider.
+ */
+export type EmailProviderUpdateCredentials = any;
 /**
  *
  */
@@ -5917,6 +6005,24 @@ export interface GetMembers200ResponseOneOfInner {
    *
    */
   email: string;
+  /**
+   */
+  roles: Array<GetMembers200ResponseOneOfInnerRolesInner>;
+}
+/**
+ *
+ */
+export interface GetMembers200ResponseOneOfInnerRolesInner {
+  /**
+   * ID for this role.
+   *
+   */
+  id: string;
+  /**
+   * Name of this role.
+   *
+   */
+  name: string;
 }
 /**
  *
@@ -5969,12 +6075,12 @@ export interface GetOrganizationMemberRoles200ResponseOneOfInner {
    */
   id: string;
   /**
-   * Name of the role.
+   * Name of this role.
    *
    */
   name: string;
   /**
-   * Description of the role.
+   * Description of this role.
    *
    */
   description: string;
@@ -6204,7 +6310,7 @@ export interface GetRolePermission200ResponseOneOf {
  *
  */
 export type GetRoleUser200Response =
-  | Array<GetMembers200ResponseOneOfInner>
+  | Array<GetRoleUser200ResponseOneOfInner>
   | GetRoleUser200ResponseOneOf
   | GetRoleUser200ResponseOneOf1;
 /**
@@ -6222,7 +6328,7 @@ export interface GetRoleUser200ResponseOneOf {
   total: number;
   /**
    */
-  users: Array<GetMembers200ResponseOneOfInner>;
+  users: Array<GetRoleUser200ResponseOneOfInner>;
 }
 /**
  *
@@ -6233,7 +6339,32 @@ export interface GetRoleUser200ResponseOneOf1 {
   next: string;
   /**
    */
-  users: Array<GetMembers200ResponseOneOfInner>;
+  users: Array<GetRoleUser200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetRoleUser200ResponseOneOfInner {
+  /**
+   * ID of this user.
+   *
+   */
+  user_id: string;
+  /**
+   * URL to a picture for this user.
+   *
+   */
+  picture: string;
+  /**
+   * Name of this user.
+   *
+   */
+  name: string;
+  /**
+   * Email address of this user.
+   *
+   */
+  email: string;
 }
 /**
  *
@@ -7581,48 +7712,6 @@ export interface PatchOrganizationsByIdRequestBranding {
    */
   colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
 }
-/**
- *
- */
-export interface PatchProviderRequest {
-  /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
-   *
-   */
-  name?: PatchProviderRequestNameEnum;
-  /**
-   * Whether the provider is enabled (true) or disabled (false).
-   *
-   */
-  enabled?: boolean;
-  /**
-   * Email address to use as "from" when no other address specified.
-   *
-   */
-  default_from_address?: string;
-  /**
-   */
-  credentials?: PostProviderRequestCredentials;
-  /**
-   * Specific provider setting
-   *
-   */
-  settings?: { [key: string]: any } | null;
-}
-
-export const PatchProviderRequestNameEnum = {
-  mailgun: 'mailgun',
-  mandrill: 'mandrill',
-  sendgrid: 'sendgrid',
-  ses: 'ses',
-  sparkpost: 'sparkpost',
-  smtp: 'smtp',
-  azure_cs: 'azure_cs',
-  ms365: 'ms365',
-} as const;
-export type PatchProviderRequestNameEnum =
-  (typeof PatchProviderRequestNameEnum)[keyof typeof PatchProviderRequestNameEnum];
-
 /**
  *
  */
@@ -9472,52 +9561,6 @@ export interface PostPermissionsRequest {
 /**
  *
  */
-export interface PostProviderRequest {
-  /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
-   *
-   */
-  name: PostProviderRequestNameEnum;
-  /**
-   * Whether the provider is enabled (true) or disabled (false).
-   *
-   */
-  enabled?: boolean;
-  /**
-   * Email address to use as "from" when no other address specified.
-   *
-   */
-  default_from_address?: string;
-  /**
-   */
-  credentials: PostProviderRequestCredentials;
-  /**
-   * Specific provider setting
-   *
-   */
-  settings?: { [key: string]: any } | null;
-}
-
-export const PostProviderRequestNameEnum = {
-  mailgun: 'mailgun',
-  mandrill: 'mandrill',
-  sendgrid: 'sendgrid',
-  ses: 'ses',
-  sparkpost: 'sparkpost',
-  smtp: 'smtp',
-  azure_cs: 'azure_cs',
-  ms365: 'ms365',
-} as const;
-export type PostProviderRequestNameEnum =
-  (typeof PostProviderRequestNameEnum)[keyof typeof PostProviderRequestNameEnum];
-
-/**
- * Credentials required to use the provider.
- */
-export type PostProviderRequestCredentials = any;
-/**
- *
- */
 export interface PostRecoveryCodeRegeneration200Response {
   [key: string]: any | any;
   /**
@@ -10778,6 +10821,11 @@ export interface TenantSettings {
    *
    */
   allow_organization_name_in_authentication_api: boolean;
+  /**
+   * Whether to enable flexible factors for MFA in the PostLogin action
+   *
+   */
+  customize_mfa_in_postlogin_action: boolean;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
@@ -11135,6 +11183,11 @@ export interface TenantSettingsUpdate {
   /**
    */
   sessions?: TenantSettingsUpdateSessions | null;
+  /**
+   * Whether to enable flexible factors for MFA in the PostLogin action
+   *
+   */
+  customize_mfa_in_postlogin_action?: boolean | null;
   /**
    * Whether to accept an organization name instead of an ID on auth endpoints
    *
