@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.1.0](https://github.com/auth0/node-auth0/tree/v4.1.0) (2023-10-30)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.2...v4.1.0)
+
+**Added**
+
+- [SDK-4646] Add MFA tenant setting and handle deprecations [\#960](https://github.com/auth0/node-auth0/pull/960) ([adamjmcgrath](https://github.com/adamjmcgrath))
+
 ## [v4.0.2](https://github.com/auth0/node-auth0/tree/v4.0.2) (2023-10-25)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.1...v4.0.2)
