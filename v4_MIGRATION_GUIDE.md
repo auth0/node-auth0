@@ -218,8 +218,8 @@ const usersAlso = await management.users.getAll();
 | `updateEmailProvider`                       | `emailProvider.update`                       |
 | `getActiveUsersCount`                       | `stats.getActiveUsersCount`                  |
 | `getDailyStats`                             | `stats.getDaily`                             |
-| `getTenantSettings`                         | `tenant.getSettings`                         |
-| `updateTenantSettings`                      | `tenant.updateSettings`                      |
+| `getTenantSettings`                         | `tenants.getSettings`                         |
+| `updateTenantSettings`                      | `tenants.updateSettings`                      |
 | `getJob`                                    | `jobs.get`                                   |
 | `importUsers`                               | `jobs.importUsers`                           |
 | `importUsersJob`                            | `jobs.importUsers`                           |
