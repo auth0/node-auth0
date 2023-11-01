@@ -3,20 +3,23 @@ import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   DeleteMembersRequest,
   DeleteOrganizationMemberRolesRequest,
+  GetClientGrantsOrganizations200Response,
+  GetClientGrantsOrganizations200ResponseOneOfInner,
   GetEnabledConnections200Response,
   GetEnabledConnections200ResponseOneOfInner,
   GetInvitations200Response,
   GetInvitations200ResponseOneOfInner,
   GetMembers200Response,
   GetOrganizationMemberRoles200Response,
-  GetOrganizations200Response,
-  GetOrganizations200ResponseOneOfInner,
+  GetOrganizationsClientGrants200Response,
+  GetOrganizationsClientGrants200ResponseOneOfInner,
   PatchEnabledConnectionsByConnectionIdRequest,
   PatchOrganizationsByIdRequest,
   PostEnabledConnectionsRequest,
   PostInvitationsRequest,
   PostMembersRequest,
   PostOrganizationMemberRolesRequest,
+  PostOrganizationsClientGrantsRequest,
   PostOrganizationsRequest,
   GetEnabledConnections200ResponseOneOf,
   GetInvitations200ResponseOneOf,
@@ -24,7 +27,9 @@ import type {
   GetMembers200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
-  GetOrganizations200ResponseOneOf,
+  GetClientGrantsOrganizations200ResponseOneOf,
+  GetOrganizationsClientGrants200ResponseOneOf,
+  DeleteClientGrantsByGrantIdRequest,
   DeleteEnabledConnectionsByConnectionIdRequest,
   DeleteInvitationsByInvitationIdRequest,
   DeleteMembersOperationRequest,
@@ -39,12 +44,14 @@ import type {
   GetOrganizationMemberRolesRequest,
   GetOrganizationsRequest,
   GetOrganizationsByIdRequest,
+  GetOrganizationsClientGrantsRequest,
   PatchEnabledConnectionsByConnectionIdOperationRequest,
   PatchOrganizationsByIdOperationRequest,
   PostEnabledConnectionsOperationRequest,
   PostInvitationsOperationRequest,
   PostMembersOperationRequest,
   PostOrganizationMemberRolesOperationRequest,
+  PostOrganizationsClientGrantsOperationRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -53,6 +60,30 @@ const { BaseAPI } = runtime;
  *
  */
 export class OrganizationsManager extends BaseAPI {
+  /**
+   * Remove a client grant from an organization
+   *
+   * @throws {RequiredError}
+   */
+  async deleteClientGrant(
+    requestParameters: DeleteClientGrantsByGrantIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'grant_id']);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants/{grant_id}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace('{grant_id}', encodeURIComponent(String(requestParameters.grant_id))),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
   /**
    * Delete connections from an organization
    *
@@ -465,7 +496,7 @@ export class OrganizationsManager extends BaseAPI {
   async getByName(
     requestParameters: GetNameByNameRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['name']);
 
     const response = await this.request(
@@ -552,15 +583,15 @@ export class OrganizationsManager extends BaseAPI {
   async getAll(
     requestParameters: GetOrganizationsRequest & { include_totals: true },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOf>>;
   async getAll(
     requestParameters?: GetOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
+  ): Promise<ApiResponse<Array<GetClientGrantsOrganizations200ResponseOneOfInner>>>;
   async getAll(
     requestParameters: GetOrganizationsRequest = {},
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200Response>> {
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
       {
         key: 'page',
@@ -610,7 +641,7 @@ export class OrganizationsManager extends BaseAPI {
   async get(
     requestParameters: GetOrganizationsByIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
@@ -620,6 +651,63 @@ export class OrganizationsManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Get client grants associated to an organization
+   *
+   * @throws {RequiredError}
+   */
+  async getClientGrants(
+    requestParameters: GetOrganizationsClientGrantsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationsClientGrants200ResponseOneOf>>;
+  async getClientGrants(
+    requestParameters?: GetOrganizationsClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizationsClientGrants200ResponseOneOfInner>>>;
+  async getClientGrants(
+    requestParameters: GetOrganizationsClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationsClientGrants200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'audience',
+        config: {},
+      },
+      {
+        key: 'client_id',
+        config: {},
+      },
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
       },
       initOverrides
     );
@@ -671,7 +759,7 @@ export class OrganizationsManager extends BaseAPI {
     requestParameters: PatchOrganizationsByIdOperationRequest,
     bodyParameters: PatchOrganizationsByIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -831,7 +919,7 @@ export class OrganizationsManager extends BaseAPI {
   async create(
     bodyParameters: PostOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOfInner>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';
@@ -839,6 +927,38 @@ export class OrganizationsManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/organizations`,
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Associate a client grant with an organization
+   *
+   * @throws {RequiredError}
+   */
+  async addClientGrant(
+    requestParameters: PostOrganizationsClientGrantsOperationRequest,
+    bodyParameters: PostOrganizationsClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationsClientGrants200ResponseOneOfInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,

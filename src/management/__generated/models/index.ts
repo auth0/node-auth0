@@ -1877,7 +1877,26 @@ export interface ClientGrant {
    *
    */
   scope: Array<string>;
+  /**
+   * Defines whether organizations can be used with client credentials exchanges for this grant.
+   *
+   */
+  organization_usage: ClientGrantOrganizationUsageEnum;
+  /**
+   * If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
+   *
+   */
+  allow_any_organization: boolean;
 }
+
+export const ClientGrantOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+} as const;
+export type ClientGrantOrganizationUsageEnum =
+  (typeof ClientGrantOrganizationUsageEnum)[keyof typeof ClientGrantOrganizationUsageEnum];
+
 /**
  *
  */
@@ -1893,11 +1912,30 @@ export interface ClientGrantCreate {
    */
   audience: string;
   /**
+   * Defines whether organizations can be used with client credentials exchanges for this grant.
+   *
+   */
+  organization_usage?: ClientGrantCreateOrganizationUsageEnum;
+  /**
+   * If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
+   *
+   */
+  allow_any_organization?: boolean;
+  /**
    * Scopes allowed for this client grant.
    *
    */
   scope: Array<string>;
 }
+
+export const ClientGrantCreateOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+} as const;
+export type ClientGrantCreateOrganizationUsageEnum =
+  (typeof ClientGrantCreateOrganizationUsageEnum)[keyof typeof ClientGrantCreateOrganizationUsageEnum];
+
 /**
  * Configuration related to JWTs for the client.
  */
@@ -4667,6 +4705,98 @@ export interface GetClientGrants200ResponseOneOf {
 /**
  *
  */
+export type GetClientGrantsOrganizations200Response =
+  | Array<GetClientGrantsOrganizations200ResponseOneOfInner>
+  | GetClientGrantsOrganizations200ResponseOneOf
+  | GetClientGrantsOrganizations200ResponseOneOf1;
+/**
+ *
+ */
+export interface GetClientGrantsOrganizations200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  organizations: Array<GetClientGrantsOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetClientGrantsOrganizations200ResponseOneOf1 {
+  /**
+   */
+  next: string;
+  /**
+   */
+  organizations: Array<GetClientGrantsOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetClientGrantsOrganizations200ResponseOneOfInner {
+  [key: string]: any | any;
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The name of this organization.
+   *
+   */
+  name: string;
+  /**
+   * Friendly name of this organization.
+   *
+   */
+  display_name: string;
+  /**
+   */
+  branding: GetClientGrantsOrganizations200ResponseOneOfInnerBranding;
+  /**
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata: { [key: string]: any };
+}
+/**
+ * Theme defines how to style the login pages
+ */
+export interface GetClientGrantsOrganizations200ResponseOneOfInnerBranding {
+  /**
+   * URL of logo to display on login page
+   *
+   */
+  logo_url: string;
+  /**
+   */
+  colors: GetClientGrantsOrganizations200ResponseOneOfInnerBrandingColors;
+}
+/**
+ * Color scheme used to customize the login pages
+ */
+export interface GetClientGrantsOrganizations200ResponseOneOfInnerBrandingColors {
+  /**
+   * HEX Color for primary elements
+   *
+   */
+  primary: string;
+  /**
+   * HEX Color for background
+   *
+   */
+  page_background: string;
+}
+/**
+ *
+ */
 export type GetClients200Response = Array<Client> | GetClients200ResponseOneOf;
 /**
  *
@@ -6088,14 +6218,13 @@ export interface GetOrganizationMemberRoles200ResponseOneOfInner {
 /**
  *
  */
-export type GetOrganizations200Response =
-  | Array<GetOrganizations200ResponseOneOfInner>
-  | GetOrganizations200ResponseOneOf
-  | GetOrganizations200ResponseOneOf1;
+export type GetOrganizationsClientGrants200Response =
+  | Array<GetOrganizationsClientGrants200ResponseOneOfInner>
+  | GetOrganizationsClientGrants200ResponseOneOf;
 /**
  *
  */
-export interface GetOrganizations200ResponseOneOf {
+export interface GetOrganizationsClientGrants200ResponseOneOf {
   /**
    */
   start: number;
@@ -6107,75 +6236,32 @@ export interface GetOrganizations200ResponseOneOf {
   total: number;
   /**
    */
-  organizations: Array<GetOrganizations200ResponseOneOfInner>;
+  grants: Array<GetOrganizationsClientGrants200ResponseOneOfInner>;
 }
 /**
  *
  */
-export interface GetOrganizations200ResponseOneOf1 {
+export interface GetOrganizationsClientGrants200ResponseOneOfInner {
   /**
-   */
-  next: string;
-  /**
-   */
-  organizations: Array<GetOrganizations200ResponseOneOfInner>;
-}
-/**
- *
- */
-export interface GetOrganizations200ResponseOneOfInner {
-  [key: string]: any | any;
-  /**
-   * Organization identifier
+   * ID of the client grant.
    *
    */
   id: string;
   /**
-   * The name of this organization.
+   * ID of the client.
    *
    */
-  name: string;
+  client_id: string;
   /**
-   * Friendly name of this organization.
+   * The audience (API identifier) of this client grant
    *
    */
-  display_name: string;
+  audience: string;
   /**
-   */
-  branding: GetOrganizations200ResponseOneOfInnerBranding;
-  /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Scopes allowed for this client grant.
    *
    */
-  metadata: { [key: string]: any };
-}
-/**
- * Theme defines how to style the login pages
- */
-export interface GetOrganizations200ResponseOneOfInnerBranding {
-  /**
-   * URL of logo to display on login page
-   *
-   */
-  logo_url: string;
-  /**
-   */
-  colors: GetOrganizations200ResponseOneOfInnerBrandingColors;
-}
-/**
- * Color scheme used to customize the login pages
- */
-export interface GetOrganizations200ResponseOneOfInnerBrandingColors {
-  /**
-   * HEX Color for primary elements
-   *
-   */
-  primary: string;
-  /**
-   * HEX Color for background
-   *
-   */
-  page_background: string;
+  scope: Array<string>;
 }
 /**
  *
@@ -6569,8 +6655,8 @@ export interface GetUniversalLogin200ResponseOneOf {
  *
  */
 export type GetUserOrganizations200Response =
-  | Array<GetOrganizations200ResponseOneOfInner>
-  | GetOrganizations200ResponseOneOf;
+  | Array<GetClientGrantsOrganizations200ResponseOneOfInner>
+  | GetClientGrantsOrganizations200ResponseOneOf;
 /**
  *
  */
@@ -7420,7 +7506,27 @@ export interface PatchClientGrantsByIdRequest {
    *
    */
   scope?: Array<string>;
+  /**
+   * Controls how organizations may be used with this grant
+   *
+   */
+  organization_usage?: PatchClientGrantsByIdRequestOrganizationUsageEnum;
+  /**
+   * Controls allowing any organization to be used with this grant
+   *
+   */
+  allow_any_organization?: boolean | null;
 }
+
+export const PatchClientGrantsByIdRequestOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+  null: 'null',
+} as const;
+export type PatchClientGrantsByIdRequestOrganizationUsageEnum =
+  (typeof PatchClientGrantsByIdRequestOrganizationUsageEnum)[keyof typeof PatchClientGrantsByIdRequestOrganizationUsageEnum];
+
 /**
  *
  */
@@ -7710,7 +7816,7 @@ export interface PatchOrganizationsByIdRequestBranding {
   logo_url?: string;
   /**
    */
-  colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+  colors?: GetClientGrantsOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
  *
@@ -9434,6 +9540,16 @@ export interface PostOrganizationMemberRolesRequest {
 /**
  *
  */
+export interface PostOrganizationsClientGrantsRequest {
+  /**
+   * A Client Grant ID to add to the organization.
+   *
+   */
+  grant_id: string;
+}
+/**
+ *
+ */
 export interface PostOrganizationsRequest {
   /**
    * The name of this organization.
@@ -9470,7 +9586,7 @@ export interface PostOrganizationsRequestBranding {
   logo_url?: string;
   /**
    */
-  colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+  colors?: GetClientGrantsOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
  * Connection to be added to the organization.
@@ -12211,6 +12327,16 @@ export interface DeleteClientGrantsByIdRequest {
    */
   id: string;
 }
+
+/**
+ *
+ */
+export const GetClientGrantsAllowAnyOrganizationEnum = {
+  true: true,
+} as const;
+export type GetClientGrantsAllowAnyOrganizationEnum =
+  (typeof GetClientGrantsAllowAnyOrganizationEnum)[keyof typeof GetClientGrantsAllowAnyOrganizationEnum];
+
 /**
  *
  */
@@ -12240,6 +12366,46 @@ export interface GetClientGrantsRequest {
    *
    */
   client_id?: string;
+  /**
+   * Optional filter on allow_any_organization.
+   *
+   */
+  allow_any_organization?: GetClientGrantsAllowAnyOrganizationEnum;
+}
+/**
+ *
+ */
+export interface GetClientGrantsOrganizationsRequest {
+  /**
+   * ID of the client grant
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
 }
 /**
  *
@@ -13196,6 +13362,21 @@ export interface GetLogsByIdRequest {
 /**
  *
  */
+export interface DeleteClientGrantsByGrantIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The Client Grant ID to remove from the organization
+   *
+   */
+  grant_id: string;
+}
+/**
+ *
+ */
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
    * Organization identifier
@@ -13496,6 +13677,41 @@ export interface GetOrganizationsByIdRequest {
 /**
  *
  */
+export interface GetOrganizationsClientGrantsRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Optional filter on audience of the client grant.
+   *
+   */
+  audience?: string;
+  /**
+   * Optional filter on client_id of the client grant.
+   *
+   */
+  client_id?: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
   /**
    * Organization identifier
@@ -13562,6 +13778,16 @@ export interface PostOrganizationMemberRolesOperationRequest {
    *
    */
   user_id: string;
+}
+/**
+ *
+ */
+export interface PostOrganizationsClientGrantsOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
 }
 
 /**

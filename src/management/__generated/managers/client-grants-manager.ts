@@ -4,10 +4,14 @@ import type {
   ClientGrant,
   ClientGrantCreate,
   GetClientGrants200Response,
+  GetClientGrantsOrganizations200Response,
   PatchClientGrantsByIdRequest,
   GetClientGrants200ResponseOneOf,
+  GetClientGrantsOrganizations200ResponseOneOf,
+  GetClientGrantsOrganizations200ResponseOneOfInner,
   DeleteClientGrantsByIdRequest,
   GetClientGrantsRequest,
+  GetClientGrantsOrganizationsRequest,
   PatchClientGrantsByIdOperationRequest,
 } from '../models/index.js';
 
@@ -83,11 +87,72 @@ export class ClientGrantsManager extends BaseAPI {
         key: 'client_id',
         config: {},
       },
+      {
+        key: 'allow_any_organization',
+        config: {},
+      },
     ]);
 
     const response = await this.request(
       {
         path: `/client-grants`,
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Get the organizations associated to a client grant
+   *
+   * @throws {RequiredError}
+   */
+  async getOrganizations(
+    requestParameters: GetClientGrantsOrganizationsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOf>>;
+  async getOrganizations(
+    requestParameters?: GetClientGrantsOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetClientGrantsOrganizations200ResponseOneOfInner>>>;
+  async getOrganizations(
+    requestParameters: GetClientGrantsOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/client-grants/{id}/organizations`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
         method: 'GET',
         query: queryParameters,
       },

@@ -30,8 +30,8 @@ import type {
   Log,
   GetPermissions200ResponseOneOf,
   GetPermissions200ResponseOneOfInner,
-  GetOrganizations200ResponseOneOf,
-  GetOrganizations200ResponseOneOfInner,
+  GetClientGrantsOrganizations200ResponseOneOf,
+  GetClientGrantsOrganizations200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetUsers200ResponseOneOf,
@@ -503,11 +503,11 @@ export class UsersManager extends BaseAPI {
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest & { include_totals: true },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
+  ): Promise<ApiResponse<GetClientGrantsOrganizations200ResponseOneOf>>;
   async getUserOrganizations(
     requestParameters?: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
+  ): Promise<ApiResponse<Array<GetClientGrantsOrganizations200ResponseOneOfInner>>>;
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
