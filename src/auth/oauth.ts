@@ -89,6 +89,11 @@ export interface ClientCredentialsGrantRequest extends ClientCredentials {
    * The unique identifier of the target API you want to access.
    */
   audience: string;
+
+  /**
+   * An Organization Name or ID. When included, the access token returned will include the org_id and org_name claims
+   */
+  organization?: string;
 }
 
 export interface PasswordGrantRequest extends ClientCredentials {
