@@ -1,4 +1,5 @@
 import { program } from 'commander';
+import fetch from 'node-fetch';
 import {
   Connection,
   GetOrganizationMemberRoles200ResponseOneOfInner,
@@ -16,7 +17,10 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import nock from 'nock';
 
-process.env.RECORD && nock.recorder.rec({ output_objects: true });
+if (process.env.RECORD) {
+  (globalThis as any).fetch = fetch;
+  nock.recorder.rec({ output_objects: true });
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -151,6 +155,7 @@ export async function attackProtection() {
     revertedSuspiciousIpThrottlingConfig.enabled
   );
 }
+
 export async function anomaly() {
   const mgmntClient = new ManagementClient(program.opts());
   try {
@@ -296,6 +301,7 @@ export async function clientGrants() {
   const { data: clientGrant } = await mgmntClient.clientGrants.create({
     client_id: program.opts().clientId,
     audience: api?.identifier as string,
+    organization_usage: 'allow',
     scope: ['openid'],
   });
   console.log(`Created client grant ${clientGrant.id}`);
@@ -310,11 +316,35 @@ export async function clientGrants() {
     { id: clientGrant.id as string },
     { scope: ['openid', 'profile'] }
   );
-
   console.log(`Updated client grant to use scopes '${updatedClientGrant.scope?.join(', ')}'`);
+
+  const { data: organization } = await mgmntClient.organizations.create({
+    name: 'test-org',
+  });
+
+  await mgmntClient.organizations.addClientGrant(
+    { id: organization.id },
+    { grant_id: clientGrant.id }
+  );
+
+  const { data: orgsByClientGrant } = await mgmntClient.clientGrants.getOrganizations({
+    id: clientGrant.id,
+  });
+  console.log(`got orgs by ${clientGrant.id} ${orgsByClientGrant.map((org) => org.name)}`);
+  const { data: clientGrantsByOrg } = await mgmntClient.organizations.getClientGrants({
+    id: organization.id,
+  });
+  console.log(`got client grants by ${organization.name} ${clientGrantsByOrg.map((cg) => cg.id)}`);
+
+  await mgmntClient.organizations.deleteClientGrant({
+    id: organization.id,
+    grant_id: clientGrant.id,
+  });
+  console.log(`Removed ${clientGrant.id} from ${organization.id}`);
 
   // Delete API for testing
   await mgmntClient.resourceServers.delete({ id: api?.id as string });
+  await mgmntClient.organizations.delete({ id: organization.id });
 
   await mgmntClient.clientGrants.delete({ id: clientGrant.id as string });
   console.log('Removed the client grant: ' + clientGrant.id);

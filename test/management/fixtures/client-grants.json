@@ -1,0 +1,53 @@
+[
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/client-grants",
+    "body": {
+      "client_id": "test-client-id",
+      "audience": "test-aud",
+      "scope": ["read:foo", "write:foo"]
+    },
+    "response": {},
+    "status": 201
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/client-grants?client_id=test-client-id",
+    "response": {},
+    "status": 200
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/client-grants?client_id=test-client-id&allow_any_organization=true",
+    "response": {},
+    "status": 200
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "PATCH",
+    "path": "/api/v2/client-grants/test-client-grant",
+    "body": {
+      "scope": ["read:foo", "read:bar"]
+    },
+    "response": {},
+    "status": 200
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "DELETE",
+    "path": "/api/v2/client-grants/test-client-grant",
+    "body": "",
+    "status": 204,
+    "response": ""
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/client-grants/test-client-grant/organizations",
+    "status": 200,
+    "response": {}
+  }
+]

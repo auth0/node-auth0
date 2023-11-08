@@ -1,0 +1,156 @@
+[
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/organizations",
+    "body": { "name": "organization" },
+    "status": 201,
+    "response": {
+      "name": "organization",
+      "id": "test-org",
+      "display_name": "organization"
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "PATCH",
+    "path": "/api/v2/organizations/test-org",
+    "body": { "name": "organization-2" },
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/organizations/test-org",
+    "body": "",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/organizations/test-org/enabled_connections",
+    "body": {
+      "connection_id": "test-conn",
+      "assign_membership_on_login": true
+    },
+    "status": 201,
+    "response": {
+      "connection_id": "test-conn",
+      "assign_membership_on_login": true,
+      "connection": { "name": "OrganizationConnection", "strategy": "auth0" }
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "PATCH",
+    "path": "/api/v2/organizations/test-org/enabled_connections/test-conn",
+    "body": { "assign_membership_on_login": false },
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/organizations/test-org/enabled_connections",
+    "body": "",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/organizations/test-org/enabled_connections/test-conn",
+    "body": "",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/organizations/test-org/members",
+    "body": { "members": ["test-user"] },
+    "status": 204,
+    "response": ""
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/organizations/test-org/members",
+    "body": "",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/organizations/test-org/members/test-user/roles",
+    "body": { "roles": ["test-role"] },
+    "status": 204,
+    "response": ""
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/organizations/test-org/members/test-user/roles",
+    "body": "",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "DELETE",
+    "path": "/api/v2/organizations/test-org/members/test-user/roles",
+    "body": { "roles": ["test-role"] },
+    "status": 204,
+    "response": ""
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "DELETE",
+    "path": "/api/v2/organizations/test-org/members",
+    "body": { "members": ["test-user"] },
+    "status": 204,
+    "response": ""
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "DELETE",
+    "path": "/api/v2/organizations/test-org",
+    "body": "",
+    "status": 204,
+    "response": ""
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/organizations/test-org/client-grants",
+    "body": {
+      "grant_id": "test-grant"
+    },
+    "status": 201,
+    "response": {
+      "grant_id": "test-grant",
+      "client_id": "test-client",
+      "audience": "ClientGrantTests",
+      "scope": ["openid", "profile"]
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "GET",
+    "path": "/api/v2/organizations/test-org/client-grants",
+    "body": "",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "DELETE",
+    "path": "/api/v2/organizations/test-org/client-grants/test-grant",
+    "body": "",
+    "status": 204,
+    "response": ""
+  }
+]
