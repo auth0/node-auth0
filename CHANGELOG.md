@@ -1,5 +1,13 @@
 # Change Log
 
+## [v3.7.2](https://github.com/auth0/node-auth0/tree/v3.7.2) (2023-11-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.1...v3.7.2)
+
+**Security**
+
+- Bump Axios to resolve CVE-2023-45857 [\#968](https://github.com/auth0/node-auth0/pull/968) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v3.7.1](https://github.com/auth0/node-auth0/tree/v3.7.1) (2023-09-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.7.0...v3.7.1)
