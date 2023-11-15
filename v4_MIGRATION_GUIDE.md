@@ -190,7 +190,7 @@ const usersAlso = await management.users.getAll();
 | `deleteUserMultifcator`                     | `users.deleteMultifactorProvider`            |
 | `unlinkUsers`                               | `users.unlink`                               |
 | `linkUsers`                                 | `users.link`                                 |
-| `getUserLogs`                               | `users.logs`                                 |
+| `getUserLogs`                               | `users.getLogs`                                 |
 | `getUserRoles`                              | `users.getRoles`                             |
 | `assignRolestoUser`                         | `users.assignRoles`                          |
 | `assignUsersToRole`                         | `roles.assignUsers`                          |
