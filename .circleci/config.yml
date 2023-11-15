@@ -44,6 +44,7 @@ workflows:
             parameters:
               node-version: ["14.20", "16.18", "18.12"]
       - ship/node-publish:
+          publish-command: npm publish --tag v3
           pkg-manager: yarn
           requires:
             - build-and-test
@@ -53,4 +54,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - v3
