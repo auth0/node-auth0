@@ -44,7 +44,7 @@ const auth0 = new AuthenticationClient({
 });
 ```
 
-See [more examples](./EXAMPLES.md#authentication-client).
+See [more examples](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md#authentication-client).
 
 #### Management API Client
 
@@ -73,7 +73,7 @@ var management = new ManagementClient({
 });
 ```
 
-See [more examples](./EXAMPLES.md#management-client).
+See [more examples](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md#management-client).
 
 ## API Reference
 
