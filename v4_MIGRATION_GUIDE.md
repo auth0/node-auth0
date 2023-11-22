@@ -212,10 +212,10 @@ const usersAlso = await management.users.getAll();
 | `createEmailTemplate`                       | `emailTemplates.create`                      |
 | `getEmailTemplate`                          | `emailTemplates.get`                         |
 | `updateEmailTemplate`                       | `emailTemplates.update`                      |
-| `getEmailProvider`                          | `emailProvider.get`                          |
-| `configureEmailProvider`                    | `emailProvider.configure`                    |
-| `deleteEmailProvider`                       | `emailProvider.delete`                       |
-| `updateEmailProvider`                       | `emailProvider.update`                       |
+| `getEmailProvider`                          | `emails.get`                                 |
+| `configureEmailProvider`                    | `emails.configure`                           |
+| `deleteEmailProvider`                       | DELETED                                      |
+| `updateEmailProvider`                       | `emails.update`                              |
 | `getActiveUsersCount`                       | `stats.getActiveUsersCount`                  |
 | `getDailyStats`                             | `stats.getDaily`                             |
 | `getTenantSettings`                         | `tenants.getSettings`                         |
