@@ -141,7 +141,6 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
    * The id of an invitation to accept.
    */
   invitation?: string;
-  
   /**
    * A Base64-encoded SHA-256 hash of the {@link AuthorizationCodeGrantWithPKCERequest.code_verifier} used for the Authorization Code Flow with PKCE.
    */
