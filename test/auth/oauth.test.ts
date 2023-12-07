@@ -7,6 +7,7 @@ import {
   PasswordGrantRequest,
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
+  PushedAuthorizationRequest,
 } from '../../src/index.js';
 import { withIdToken } from '../utils/index.js';
 
@@ -270,6 +271,61 @@ describe('OAuth', () => {
         oauth.revokeRefreshToken({ token: 'test-refresh-token' })
       ).resolves.toMatchObject({
         status: 200,
+      });
+    });
+  });
+
+  describe('#pushedAuthorization', () => {
+    it('should require a client_id', async () => {
+      const oauth = new OAuth(opts);
+      await expect(oauth.pushedAuthorization({} as PushedAuthorizationRequest)).rejects.toThrow(
+        'Required parameter requestParameters.client_id was null or undefined.'
+      );
+    });
+
+    it('should require a response_type', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({ client_id: 'test-client-id' } as PushedAuthorizationRequest)
+      ).rejects.toThrow(
+        'Required parameter requestParameters.response_type was null or undefined.'
+      );
+    });
+
+    it('should require a redirect_uri', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+        } as PushedAuthorizationRequest)
+      ).rejects.toThrow('Required parameter requestParameters.redirect_uri was null or undefined.');
+    });
+
+    it('should require a client_secret or client_assertion', async () => {
+      const oauth = new OAuth({ ...opts, clientSecret: undefined });
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+          redirect_uri: 'https://example.com',
+        } as PushedAuthorizationRequest)
+      ).rejects.toThrow('The client_secret or client_assertion field is required.');
+    });
+
+    it('should return the par response', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+          redirect_uri: 'https://example.com',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          request_uri: 'https://www.request.uri',
+          expires_in: 86400,
+        },
       });
     });
   });

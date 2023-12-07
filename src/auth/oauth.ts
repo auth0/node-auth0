@@ -13,7 +13,7 @@ export interface TokenSet {
    */
   access_token: string;
   /**
-   * The refresh token, vavailable with the `offline_access` scope.
+   * The refresh token, available with the `offline_access` scope.
    */
   refresh_token?: string;
   /**
@@ -25,7 +25,7 @@ export interface TokenSet {
    */
   token_type: 'Bearer';
   /**
-   * The duration in secs that that the access token is valid.
+   * The duration in secs that the access token is valid.
    */
   expires_in: number;
 }
@@ -89,6 +89,76 @@ export interface ClientCredentialsGrantRequest extends ClientCredentials {
    * The unique identifier of the target API you want to access.
    */
   audience: string;
+}
+
+export interface PushedAuthorizationRequest extends ClientCredentials {
+  /**
+   * URI to redirect to.
+   */
+  redirect_uri: string;
+
+  /**
+   * The response_type the client expects.
+   */
+  response_type: string;
+
+  /**
+   * The response_mode to use.
+   */
+  response_mode?: string;
+
+  /**
+   * The nonce.
+   */
+  nonce?: string;
+
+  /**
+   * State value to be passed back on successful authorization.
+   */
+  state?: string;
+
+  /**
+   * Name of the connection.
+   */
+  connection?: string;
+
+  /**
+   * Scopes to request. Multiple scopes must be separated by a space character.
+   */
+  scope?: string;
+
+  /**
+   * The unique identifier of the target API you want to access.
+   */
+  audience?: string;
+
+  /**
+   * The organization to log the user in to.
+   */
+  organization?: string;
+
+  /**
+   * The id of an invitation to accept.
+   */
+  invitation?: string;
+
+  /**
+   * Allow for any custom property to be sent to Auth0
+   */
+  [key: string]: any;
+}
+
+export interface PushedAuthorizationResponse {
+  /**
+   * The request URI corresponding to the authorization request posted.
+   * This URI is a single-use reference to the respective request data in the subsequent authorization request.
+   */
+  request_uri: string;
+
+  /**
+   * This URI is a single-use reference to the respective request data in the subsequent authorization request.
+   */
+  expires_in: number;
 }
 
 export interface PasswordGrantRequest extends ClientCredentials {
@@ -295,6 +365,51 @@ export class OAuth extends BaseAuthAPI {
       this.idTokenValidator,
       this.request.bind(this)
     );
+  }
+
+  /**
+   * This is the OAuth 2.0 extension that allows to initiate an OAuth flow from the backchannel instead of by building a URL.
+   *
+   *
+   * See: https://www.rfc-editor.org/rfc/rfc9126.html
+   *
+   * @example
+   * ```js
+   * const auth0 = new AuthenticationApi({
+   *    domain: 'my-domain.auth0.com',
+   *    clientId: 'myClientId',
+   *    clientSecret: 'myClientSecret'
+   * });
+   *
+   * await auth0.oauth.pushedAuthorization({ response_type: 'id_token', redirect_uri: 'http://localhost' });
+   * ```
+   */
+  async pushedAuthorization(
+    bodyParameters: PushedAuthorizationRequest,
+    options: { initOverrides?: InitOverride } = {}
+  ): Promise<JSONApiResponse<PushedAuthorizationResponse>> {
+    validateRequiredRequestParams(bodyParameters, ['client_id', 'response_type', 'redirect_uri']);
+
+    const bodyParametersWithClientAuthentication = await this.addClientAuthentication(
+      bodyParameters
+    );
+
+    const response = await this.request(
+      {
+        path: '/oauth/par',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: this.clientId,
+          ...bodyParametersWithClientAuthentication,
+        }),
+      },
+      options.initOverrides
+    );
+
+    return JSONApiResponse.fromResponse(response);
   }
 
   /**
