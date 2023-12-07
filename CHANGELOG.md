@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.2.0](https://github.com/auth0/node-auth0/tree/v4.2.0) (2023-12-07)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.1.0...v4.2.0)
+
+**Added**
+
+- Add support for Pushed Authorization Requests [\#973](https://github.com/auth0/node-auth0/pull/973) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.1.0](https://github.com/auth0/node-auth0/tree/v4.1.0) (2023-10-30)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.0.2...v4.1.0)
