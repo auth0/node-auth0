@@ -79,6 +79,7 @@ See [more examples](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md#
 
 - [AuthenticationClient](https://auth0.github.io/node-auth0/classes/auth.AuthenticationClient.html)
 - [ManagementClient](https://auth0.github.io/node-auth0/classes/management.ManagementClient.html)
+- [UserInfoClient](https://auth0.github.io/node-auth0/classes/userinfo.UserInfoClient.html)
 
 ## Feedback
 
