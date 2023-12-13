@@ -95,7 +95,11 @@ export class UserInfoClient extends BaseAPI {
    *   <a href="https://auth0.com/docs/auth-api#!#get--userinfo">API Docs</a>.
    * </caption>
    *
-   * const userInfo = await auth0.users.getUserInfo(accessToken);
+   * const userInfoClient = new UserInfoClient({
+   *   domain: '...'
+   * });
+
+   * const userInfo = await userInfoClient.getUserInfo(accessToken);
    */
   async getUserInfo(
     accessToken: string,

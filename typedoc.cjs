@@ -11,7 +11,7 @@ module.exports = {
     inherited: true,
     external: true,
   },
-  entryPoints: ['src/auth', 'src/management', 'src/lib'],
+  entryPoints: ['src/auth', 'src/management', 'src/userinfo', 'src/lib'],
   navigation: {
     includeGroups: true,
   },
