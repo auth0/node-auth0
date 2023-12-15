@@ -53,9 +53,9 @@ jobs:
         shell: bash
         run: npm run lint:package
 
-      - run:
-        name: Tests
-        command: npm run test:ci
+      - name: Tests
+        shell: bash
+        run: npm run test:ci
 
       - name: Upload coverage
         if: matrix.node-version == '18.17'
