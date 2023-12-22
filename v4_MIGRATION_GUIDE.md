@@ -289,8 +289,8 @@ const usersAlso = await management.users.getAll();
 | `deleteBrandingUniversalLoginTemplate`      | `branding.deleteUniversalLoginTemplate`      |
 | `updateMigrations`                          | `migrations.updateMigrations`                |
 | `getMigrations`                             | `migrations.getMigrations`                   |
-| `getPromptsSettings`                        | `prompts.getSettings`                        |
-| `updatePromptsSettings`                     | `prompts.updateSettings`                     |
+| `getPromptsSettings`                        | `prompts.get`                        |
+| `updatePromptsSettings`                     | `prompts.update`                     |
 | `getCustomTextByLanguage`                   | `prompts.getCustomTextByLanguage`            |
 | `updateCustomTextByLanguage`                | `prompts.updateCustomTextByLanguage`         |
 
