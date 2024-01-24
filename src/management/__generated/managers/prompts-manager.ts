@@ -5,6 +5,8 @@ import type {
   PromptsSettingsUpdate,
   GetCustomTextByLanguageRequest,
   PutCustomTextByLanguageRequest,
+  GetTeplatePartialsByPromptRequest,
+  PutTeplatePartialsByPromptRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -36,6 +38,32 @@ export class PromptsManager extends BaseAPI {
     );
 
     return runtime.JSONApiResponse.fromResponse<any>(response);
+  }
+
+  /**
+   * Retrieve template partials for a specific prompt.
+   * Get template partials for a prompt
+   *
+   * @throws {RequiredError}
+   */
+  async getTemplatePartialsByPrompt(
+    requestParameters: GetTeplatePartialsByPromptRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt']);
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/partials`.replace(
+          '{prompt}',
+          encodeURIComponent(String(requestParameters.prompt))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -113,5 +141,38 @@ export class PromptsManager extends BaseAPI {
     );
 
     return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Set template partials for a specific prompt. Existing partials will be overwritten.
+   * Set template partials for a specific prompt
+   *
+   * @throws {RequiredError}
+   */
+  async updateTemplatePartialsByPrompt(
+    requestParameters: PutTeplatePartialsByPromptRequest,
+    bodyParameters: { [key: string]: any },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/partials`.replace(
+          '{prompt}',
+          encodeURIComponent(String(requestParameters.prompt))
+        ),
+        method: 'PUT',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

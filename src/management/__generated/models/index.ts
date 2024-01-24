@@ -13605,6 +13605,60 @@ export type GetCustomTextByLanguagePromptEnum =
 /**
  *
  */
+export interface GetTeplatePartialsByPromptRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: GetTemplatePartialsByPromptEnum;
+}
+
+/**
+ *
+ */
+export interface PutTeplatePartialsByPromptRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: PutTemplatePartialsByPromptEnum;
+}
+
+/**
+ *
+ */
+export const GetTemplatePartialsByPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+};
+
+export type GetTemplatePartialsByPromptEnum =
+  (typeof GetTemplatePartialsByPromptEnum)[keyof typeof GetTemplatePartialsByPromptEnum];
+
+/**
+ *
+ */
+export const PutTemplatePartialsByPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+};
+
+export type PutTemplatePartialsByPromptEnum =
+  (typeof PutTemplatePartialsByPromptEnum)[keyof typeof PutTemplatePartialsByPromptEnum];
+
+/**
+ *
+ */
 export const GetCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
   bg: 'bg',
