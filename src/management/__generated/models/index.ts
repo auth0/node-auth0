@@ -13678,6 +13678,31 @@ export interface GetCustomTextByLanguageRequest {
 /**
  *
  */
+export const GetPartialsPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+} as const;
+export type GetPartialsPromptEnum =
+  (typeof GetPartialsPromptEnum)[keyof typeof GetPartialsPromptEnum];
+
+/**
+ *
+ */
+export interface GetPartialsRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: GetPartialsPromptEnum;
+}
+
+/**
+ *
+ */
 export const PutCustomTextByLanguagePromptEnum = {
   login: 'login',
   login_id: 'login-id',
@@ -13784,6 +13809,30 @@ export interface PutCustomTextByLanguageRequest {
    *
    */
   language: PutCustomTextByLanguageLanguageEnum;
+}
+/**
+ *
+ */
+export const PutPartialsPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+} as const;
+export type PutPartialsPromptEnum =
+  (typeof PutPartialsPromptEnum)[keyof typeof PutPartialsPromptEnum];
+
+/**
+ *
+ */
+export interface PutPartialsRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: PutPartialsPromptEnum;
 }
 /**
  *

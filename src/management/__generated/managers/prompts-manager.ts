@@ -4,7 +4,9 @@ import type {
   PromptsSettings,
   PromptsSettingsUpdate,
   GetCustomTextByLanguageRequest,
+  GetPartialsRequest,
   PutCustomTextByLanguageRequest,
+  PutPartialsRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -39,8 +41,34 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve prompts settings.
-   * Get prompts settings
+   * Get template partials for a prompt - In Early Access
+   * Get partials for a prompt
+   *
+   * @throws {RequiredError}
+   */
+  async getPartials(
+    requestParameters: GetPartialsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<{ [key: string]: any }>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt']);
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/partials`.replace(
+          '{prompt}',
+          encodeURIComponent(String(requestParameters.prompt))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse<any>(response);
+  }
+
+  /**
+   * Retrieve details of the Universal Login configuration of your tenant. This includes the <a href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier First Authentication</a> and <a href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn with Device Biometrics for MFA</a> features.
+   * Get prompt settings
    *
    * @throws {RequiredError}
    */
@@ -57,8 +85,8 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * Update prompts settings.
-   * Update prompts settings
+   * Update the Universal Login configuration of your tenant. This includes the <a href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier First Authentication</a> and <a href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn with Device Biometrics for MFA</a> features.
+   * Update prompt settings
    *
    * @throws {RequiredError}
    */
@@ -105,6 +133,39 @@ export class PromptsManager extends BaseAPI {
         path: `/prompts/{prompt}/custom-text/{language}`
           .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
           .replace('{language}', encodeURIComponent(String(requestParameters.language))),
+        method: 'PUT',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Set template partials for a prompt - In Early Access
+   * Set partials for a prompt
+   *
+   * @throws {RequiredError}
+   */
+  async updatePartials(
+    requestParameters: PutPartialsRequest,
+    bodyParameters: { [key: string]: any },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/partials`.replace(
+          '{prompt}',
+          encodeURIComponent(String(requestParameters.prompt))
+        ),
         method: 'PUT',
         headers: headerParameters,
         body: bodyParameters,
