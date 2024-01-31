@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.3.0](https://github.com/auth0/node-auth0/tree/v4.3.0) (2024-01-31)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.2.0...v4.3.0)
+
+**Added**
+
+- Add support for prompt partials [\#985](https://github.com/auth0/node-auth0/pull/985) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.2.0](https://github.com/auth0/node-auth0/tree/v4.2.0) (2023-12-07)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.1.0...v4.2.0)
