@@ -10,6 +10,8 @@ import {
   PromptsSettingsUpdateUniversalLoginExperienceEnum,
   ManagementClient,
   RequiredError,
+  GetPartialsPromptEnum,
+  PutPartialsPromptEnum,
 } from '../../src/index.js';
 
 describe('PromptsManager', () => {
@@ -304,6 +306,140 @@ describe('PromptsManager', () => {
         .reply(200, {});
 
       prompts.updateCustomTextByLanguage(params, params.body).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getPartials', () => {
+    const params = {
+      prompt: GetPartialsPromptEnum.login,
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).get('/prompts/login/partials').reply(200, {});
+    });
+
+    it('should validate empty prompt parameter', async () => {
+      await expect(prompts.getPartials({} as any)).rejects.toThrowError(RequiredError);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      prompts.getPartials(params).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/prompts/login/partials').reply(500, {});
+
+      prompts.getPartials(params).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/prompts/login/partials', (done) => {
+      prompts.getPartials(params).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get('/prompts/login/partials')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      prompts.getPartials(params).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#updatePartials', () => {
+    const params = {
+      prompt: PutPartialsPromptEnum.login,
+    };
+    const body = {
+      'form-content-start': '<div>HTML or Liquid</div>...',
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).put('/prompts/login/partials').reply(200, {});
+    });
+
+    it('should validate empty prompt parameter', async () => {
+      await expect(prompts.updatePartials({} as any, {})).rejects.toThrowError(RequiredError);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      prompts.updatePartials(params, body).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).put('/prompts/login/partials').reply(500, {});
+
+      prompts.updatePartials(params, body).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a PUT request to /api/v2/prompts/login/partials', (done) => {
+      prompts
+        .updatePartials(params, body)
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .put('/prompts/login/partials')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      prompts.updatePartials(params, body).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should send the payload to the body', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .put(
+          '/prompts/login/partials',
+          (body) =>
+            body &&
+            body['form-content-start'] &&
+            body['form-content-start'] === '<div>HTML or Liquid</div>...'
+        )
+        .reply(200, {});
+
+      prompts.updatePartials(params, body).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
