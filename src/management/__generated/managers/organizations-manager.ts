@@ -17,6 +17,7 @@ import type {
   PostInvitationsRequest,
   PostMembersRequest,
   PostOrganizationMemberRolesRequest,
+  PostOrganizations201Response,
   PostOrganizationsRequest,
   GetEnabledConnections200ResponseOneOf,
   GetInvitations200ResponseOneOf,
@@ -831,7 +832,7 @@ export class OrganizationsManager extends BaseAPI {
   async create(
     bodyParameters: PostOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<PostOrganizations201Response>> {
     const headerParameters: runtime.HTTPHeaders = {};
 
     headerParameters['Content-Type'] = 'application/json';

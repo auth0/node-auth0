@@ -4889,6 +4889,11 @@ export interface GetEnabledConnections200ResponseOneOfInner {
    */
   assign_membership_on_login: boolean;
   /**
+   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button: boolean;
+  /**
    */
   connection: GetEnabledConnections200ResponseOneOfInnerConnection;
 }
@@ -7539,7 +7544,12 @@ export interface PatchEnabledConnectionsByConnectionIdRequest {
    * When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
    *
    */
-  assign_membership_on_login: boolean;
+  assign_membership_on_login?: boolean;
+  /**
+   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button?: boolean;
 }
 /**
  *
@@ -8790,6 +8800,11 @@ export interface PostEnabledConnectionsRequest {
    *
    */
   assign_membership_on_login?: boolean;
+  /**
+   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button?: boolean;
 }
 /**
  *
@@ -9434,6 +9449,59 @@ export interface PostOrganizationMemberRolesRequest {
 /**
  *
  */
+export interface PostOrganizations201Response {
+  [key: string]: any | any;
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The name of this organization.
+   *
+   */
+  name: string;
+  /**
+   * Friendly name of this organization.
+   *
+   */
+  display_name: string;
+  /**
+   */
+  branding: GetOrganizations200ResponseOneOfInnerBranding;
+  /**
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata: { [key: string]: any };
+  /**
+   */
+  enabled_connections: Array<PostOrganizations201ResponseEnabledConnectionsInner>;
+}
+/**
+ *
+ */
+export interface PostOrganizations201ResponseEnabledConnectionsInner {
+  [key: string]: any | any;
+  /**
+   * ID of the connection.
+   *
+   */
+  connection_id: string;
+  /**
+   * When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
+   *
+   */
+  assign_membership_on_login: boolean;
+  /**
+   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button: boolean;
+}
+/**
+ *
+ */
 export interface PostOrganizationsRequest {
   /**
    * The name of this organization.
@@ -9486,6 +9554,11 @@ export interface PostOrganizationsRequestEnabledConnectionsInner {
    *
    */
   assign_membership_on_login?: boolean;
+  /**
+   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button?: boolean;
 }
 /**
  *
