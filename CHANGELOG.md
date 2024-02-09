@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.3.1](https://github.com/auth0/node-auth0/tree/v4.3.1) (2024-02-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.3.0...v4.3.1)
+
+**Changed**
+
+- Add support for show_as_button on organization connections [\#988](https://github.com/auth0/node-auth0/pull/988) ([frederikprijck](https://github.com/frederikprijck))
+
 ## [v4.3.0](https://github.com/auth0/node-auth0/tree/v4.3.0) (2024-01-31)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.2.0...v4.3.0)
