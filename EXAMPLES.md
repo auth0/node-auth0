@@ -54,6 +54,28 @@ const { data: tokens } = await auth.oauth.clientCredentialsGrant({
 });
 ```
 
+### Use a Password Grant to get a Refresh Token
+```js
+import { AuthenticationClient } from 'auth0';
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+// Get a refresh token
+const {
+  data: { refresh_token },
+} = await auth.oauth.passwordGrant({
+  username: '{USER_USERNAME}',
+  password: '{USER_PASSWORD}',
+  scope: "offline_access", // To get a refresh token, the scope "offline_access" must be included in the request
+  audience: 'you-api', // For subsequent refresh token grants to return JWT access tokens, instead of opaque access tokens (tokens without payloads), audience must be included in the original grant
+});
+
+```
+
 ### Use Refresh Tokens
 
 ```js
