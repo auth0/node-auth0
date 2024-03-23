@@ -28,7 +28,7 @@ const auth = new AuthenticationClient({
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
 const { data: user } = await auth.database.signUp({
-  user: '{USER_EMAIL}',
+  email: '{USER_EMAIL}',
   password: '{USER_PASSWORD}',
   connection: 'Username-Password-Authentication',
 });
@@ -158,7 +158,7 @@ while (true) {
 }
 ```
 
-> Note: The maximum number of users you can get with this endpoint is 1000. For more use `users.exportUsers`.
+> Note: The maximum number of users you can get with this endpoint is 1000. For more, use `users.exportUsers`.
 
 ### Paginate through a list of logs using checkpoint pagination
 
@@ -174,7 +174,7 @@ const management = new ManagementClient({
 const allLogs = [];
 let from = '';
 while (true) {
-  const { data: logs } = await mgmntClient.logs.getAll({ from });
+  const { data: logs } = await management.logs.getAll({ from });
   if (!logs.length) {
     break;
   }
@@ -248,10 +248,11 @@ const management = new ManagementClient({
   clientSecret: '{YOUR_CLIENT_SECRET}',
   headers: { 'foo': 'applied to all requests' },
   agent: new https.Agent({ ... }),
-  httpTimeout: 5000
+  timeoutDuration: 5000
 });
-
-await management.users.get({ id: '{user id}' }, { headers: { 'bar': 'applied to this request' } });
+await management.users.get({ id: '{user id}', 
+fields: 'user_metadata,user_id',
+include_fields: true });
 ```
 
 ### Overriding `fetch`
