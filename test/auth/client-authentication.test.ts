@@ -3,6 +3,7 @@ import { jest } from '@jest/globals';
 import * as jose from 'jose';
 import { AuthenticationClient } from '../../src/index.js';
 import { TEST_PUBLIC_KEY, TEST_PRIVATE_KEY } from '../constants.js';
+import { addClientAuthentication } from '../../src/auth/client-authentication.js';
 
 const URL = 'https://tenant.auth0.com/';
 const clientId = 'test-client-id';
@@ -150,5 +151,76 @@ describe('client-authentication', () => {
       exp: expect.any(Number),
       jti: 'foo',
     });
+  });
+});
+
+describe('client-authentication for par endpoint', () => {
+  const path = jest.fn();
+  const body = jest.fn();
+  const headers = jest.fn();
+  const clientAssertion = jest.fn();
+
+  beforeEach(() => {
+    async function handler(this: any, pathIn: unknown, bodyIn: string) {
+      const bodyParsed = Object.fromEntries(new URLSearchParams(bodyIn));
+      path(pathIn);
+      body(bodyParsed);
+      headers(this.req.headers);
+      if ((bodyParsed as any).client_assertion) {
+        clientAssertion(await verify(bodyParsed.client_assertion, TEST_PUBLIC_KEY, verifyOpts));
+      }
+      return {
+        data: {
+          request_uri: 'https://www.request.uri',
+          expires_in: 86400,
+        },
+      };
+    }
+
+    nock(URL, { encodedQueryParams: true }).post('/oauth/par').reply(200, handler).persist();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+    jest.clearAllMocks();
+  });
+
+  it('should allow you to call with cliendId & clientSecret combination', async () => {
+    const auth0 = new AuthenticationClient({
+      domain: 'tenant.auth0.com',
+      clientId,
+      clientSecret: 'foo',
+    });
+    await auth0.oauth.pushedAuthorization({
+      client_id: 'test-client-id',
+      response_type: 'code',
+      redirect_uri: 'https://example.com',
+    });
+    expect(path).toHaveBeenCalledWith('/oauth/par');
+
+    expect(body).toHaveBeenCalledWith({
+      client_id: 'test-client-id',
+      client_secret: 'foo',
+      redirect_uri: 'https://example.com',
+      response_type: 'code',
+    });
+  });
+});
+
+describe('Validate addClientAuthentication function', () => {
+  it('should stringify authorization_details property of payload parameter', async () => {
+    const authorization_details = [{ type: 'payment_initiation', actions: ['write'] }];
+    const authenticatedPayload = await addClientAuthentication({
+      payload: {
+        authorization_details: authorization_details,
+        client_secret: 'foo',
+      },
+      domain: 'tenant.auth0.com',
+      clientId,
+    });
+
+    expect(authenticatedPayload.authorization_details).toEqual(
+      JSON.stringify(authorization_details)
+    );
   });
 });

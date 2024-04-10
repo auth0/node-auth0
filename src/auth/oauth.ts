@@ -91,6 +91,19 @@ export interface ClientCredentialsGrantRequest extends ClientCredentials {
   audience: string;
 }
 
+interface AuthorizationDetails {
+  /**
+   * An identifier for the authorization details
+   */
+  type: string;
+
+  /**
+   * Allow for any custom property to be sent to Auth0
+   * It represents data to specify the authorization requirements for a certain type of resource.
+   */
+  [key: string]: any;
+}
+
 export interface PushedAuthorizationRequest extends ClientCredentials {
   /**
    * URI to redirect to.
@@ -145,6 +158,11 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
    * A Base64-encoded SHA-256 hash of the {@link AuthorizationCodeGrantWithPKCERequest.code_verifier} used for the Authorization Code Flow with PKCE.
    */
   code_challenge?: string;
+
+  /**
+   * Can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests(RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
+   */
+  authorization_details?: Required<AuthorizationDetails>[];
 
   /**
    * Allow for any custom property to be sent to Auth0
