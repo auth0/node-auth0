@@ -147,7 +147,7 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
   code_challenge?: string;
 
   /**
-   * A JSON stringified an array of objects. It Can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests(RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
+   * A JSON stringified array of objects. It can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests (RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
    */
   authorization_details?: string;
 
