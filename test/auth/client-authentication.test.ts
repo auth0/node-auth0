@@ -206,21 +206,3 @@ describe('client-authentication for par endpoint', () => {
     });
   });
 });
-
-describe('Validate addClientAuthentication function', () => {
-  it('should stringify authorization_details property of payload parameter', async () => {
-    const authorization_details = [{ type: 'payment_initiation', actions: ['write'] }];
-    const authenticatedPayload = await addClientAuthentication({
-      payload: {
-        authorization_details: authorization_details,
-        client_secret: 'foo',
-      },
-      domain: 'tenant.auth0.com',
-      clientId,
-    });
-
-    expect(authenticatedPayload.authorization_details).toEqual(
-      JSON.stringify(authorization_details)
-    );
-  });
-});

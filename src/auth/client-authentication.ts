@@ -36,9 +36,6 @@ export const addClientAuthentication = async ({
   clientSecret,
 }: AddClientAuthenticationOptions): Promise<Record<string, unknown>> => {
   const cid = payload.client_id || clientId;
-  if (payload.authorization_details) {
-    payload.authorization_details = JSON.stringify(payload.authorization_details);
-  }
   if (clientAssertionSigningKey && !payload.client_assertion) {
     const alg = clientAssertionSigningAlg || 'RS256';
     const privateKey = await jose.importPKCS8(clientAssertionSigningKey, alg);
