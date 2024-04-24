@@ -147,6 +147,11 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
   code_challenge?: string;
 
   /**
+   * Allows JWT-Secured Authorization Request (JAR), when JAR & PAR request are used together. {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-par-and-jar | Reference}
+   */
+  request?: string;
+
+  /**
    * A JSON stringified array of objects. It can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests (RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
    */
   authorization_details?: string;
