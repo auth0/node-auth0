@@ -328,6 +328,24 @@ describe('OAuth', () => {
         },
       });
     });
+
+    it('should send request param when provided', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+          redirect_uri: 'https://example.com',
+          request:
+            'eyJhbGciOiJSUzI1NiIsInR5cCI6Imp3dCIsImtpZCI6IjNreHdsVm5ZdW5oVUIyQVFYLVFYVUVZV0oxSlRyd08tQUpBMmc3MVVfa0UifQ.eyJpc3MiOiJkUkRDaWNobkk1YUpLcHZqYVJNZG0yUWdTRUxycVlHVSIsImF1ZCI6Imh0dHBzOi8vcGV1Mi10ZXN0LmV1LmF1dGgwLmNvbS8iLCJjbGllbnRfaWQiOiJkUkRDaWNobkk1YUpLcHZqYVJNZG0yUWdTRUxycVlHVSIsInJlc3BvbnNlX3R5cGUiOiJjb2RlIiwicmVkaXJlY3RfdXJpIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwibm9uY2UiOiIzMjNmMWYxNDIxMjI3Y2U1OGE3M2IxOTVkZWRjMDRmOCIsImlhdCI6MTcxMjMzNTMyMn0.E9ZAju2emT9KyR-asklRydgT0q2GmL3u90enSHvpF1PVn7zKqHBW9i6o4-QlIy-efHAsaGikMsysRMbp2xNVl5p9SFn-mZXlxrtIe2vKwbIRrknCT29CRyxX7Ulvv9840YK7N8BHoah8PRuAfJMq-e0jvCgfxuxBJC8uXBY2S43_YpLe2SKkmb-E9APwKh-55Mx-DPFVUKm1hasZ9GnRSZUb9F4aVB9Q8YndZ0uxKSjtPPwakDECHxSyA1yXQ7B1FrhcsZcTwneTDbmzepodStNboBdxmDVjXQggfyPeqeeeW5cCpJAhVnoo740TjwgsncJ9ftymR2uLP_fexru6KA',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          request_uri: 'https://www.request.uri',
+          expires_in: 86400,
+        },
+      });
+    });
   });
 });
 
