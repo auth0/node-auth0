@@ -6,6 +6,7 @@
   - [Use Refresh Tokens](#use-refresh-tokens)
   - [Complete the Authorization Code flow with PKCE](#complete-the-authorization-code-flow-with-pkce)
   - [Login with Passwordless](#login-with-passwordless)
+  - [mTLS request](#mtls-request)
 - [Management Client](#management-client)
   - [Paginate through a list of users](#paginate-through-a-list-of-users)
   - [Paginate through a list of logs using checkpoint pagination](#paginate-through-a-list-of-logs-using-checkpoint-pagination)
@@ -127,6 +128,24 @@ const { data: tokens } = await auth.passwordless.loginWithEmail({
   email: '{user email}',
   code: '{code from email}',
 });
+```
+
+### mTLS request
+
+```js
+import { AuthenticationClient } from 'auth0';
+
+// add mtls prefix to your domain name
+const auth = new AuthenticationClient({
+  domain: 'mtls.{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  agent: new https.Agent({ ... }),
+});
+
+const { data: tokens } = await auth.oauth.clientCredentialsGrant({
+  audience: 'you-api',
+});
+
 ```
 
 ## Management Client

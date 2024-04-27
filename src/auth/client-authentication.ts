@@ -26,6 +26,7 @@ interface AddClientAuthenticationOptions {
  * Adds `client_assertion` and `client_assertion_type` for Private Key JWT token endpoint auth method.
  *
  * If `clientAssertionSigningKey` is provided it takes precedent over `clientSecret` .
+ * Also skips  `client_secret` & `clientAssertionSigningKey` if request(domain) is of mTLS type
  */
 export const addClientAuthentication = async ({
   payload,
@@ -55,9 +56,17 @@ export const addClientAuthentication = async ({
   }
   if (
     (!payload.client_secret || payload.client_secret.trim().length === 0) &&
-    (!payload.client_assertion || payload.client_assertion.trim().length === 0)
+    (!payload.client_assertion || payload.client_assertion.trim().length === 0) &&
+    !isMTLSRequest(domain)
   ) {
     throw new Error('The client_secret or client_assertion field is required.');
   }
   return payload;
+};
+
+/**
+ * Checks if domain name starts with mTLS keyword for mTLS requests
+ */
+const isMTLSRequest = (domain: string): boolean => {
+  return domain.toLowerCase().startsWith('mtls');
 };

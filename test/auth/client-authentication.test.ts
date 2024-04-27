@@ -205,3 +205,49 @@ describe('client-authentication for par endpoint', () => {
     });
   });
 });
+
+describe('mTLS-authentication', () => {
+  const path = jest.fn();
+  const body = jest.fn();
+  const headers = jest.fn();
+  const clientAssertion = jest.fn();
+  const URL = 'https://mtls.tenant.auth0.com/';
+
+  beforeEach(() => {
+    async function handler(this: any, pathIn: unknown, bodyIn: string) {
+      const bodyParsed = Object.fromEntries(new URLSearchParams(bodyIn));
+      path(pathIn);
+      body(bodyParsed);
+      headers(this.req.headers);
+      if ((bodyParsed as any).client_assertion) {
+        clientAssertion(await verify(bodyParsed.client_assertion, TEST_PUBLIC_KEY, verifyOpts));
+      }
+      return {
+        access_token: 'test-access-token',
+      };
+    }
+
+    nock(URL, { encodedQueryParams: true }).post('/oauth/token').reply(200, handler).persist();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+    jest.clearAllMocks();
+  });
+
+  it('should do client credentials grant without client secret or assertion', async () => {
+    const auth0 = new AuthenticationClient({
+      domain: 'mtls.tenant.auth0.com',
+      clientId,
+    });
+    await auth0.oauth.clientCredentialsGrant({
+      audience: 'my-api',
+    });
+    expect(path).toHaveBeenCalledWith('/oauth/token');
+    expect(body).toHaveBeenCalledWith({
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      audience: 'my-api',
+    });
+  });
+});
