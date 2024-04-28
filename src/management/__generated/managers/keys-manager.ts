@@ -15,6 +15,7 @@ const { BaseAPI } = runtime;
  */
 export class KeysManager extends BaseAPI {
   /**
+   * Retrieve details of the application signing key with the given ID.
    * Get an Application Signing Key by its key id
    *
    * @throws {RequiredError}
@@ -40,6 +41,7 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Retrieve details of all the application signing keys associated with your tenant.
    * Get all Application Signing Keys
    *
    * @throws {RequiredError}
@@ -59,6 +61,7 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Rotate the application signing key of your tenant.
    * Rotate the Application Signing Key
    *
    * @throws {RequiredError}
@@ -76,6 +79,7 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Revoke the application signing key with the given ID.
    * Revoke an Application Signing Key by its key id
    *
    * @throws {RequiredError}

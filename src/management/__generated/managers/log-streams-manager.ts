@@ -157,7 +157,55 @@ export class LogStreamsManager extends BaseAPI {
    * 		"datadogRegion": "string",
    * 		"datadogApiKey": "string"
    * 	}
-   * }</code></pre> <h5>Splunk Log Stream</h5><pre><code>{
+   *
+   * }</code></pre><h5>Mixpanel</h5>
+   *
+   * 	Request: <pre><code>{
+   * 	  "name": "string",
+   * 	  "type": "mixpanel",
+   * 	  "sink": {
+   * 		"mixpanelRegion": "string", // "us" | "eu",
+   * 		"mixpanelProjectId": "string",
+   * 		"mixpanelServiceAccountUsername": "string",
+   * 		"mixpanelServiceAccountPassword": "string"
+   * 	  }
+   * 	} </code></pre>
+   *
+   *
+   * 	Response: <pre><code>{
+   * 		"id": "string",
+   * 		"name": "string",
+   * 		"type": "mixpanel",
+   * 		"status": "active",
+   * 		"sink": {
+   * 		  "mixpanelRegion": "string", // "us" | "eu",
+   * 		  "mixpanelProjectId": "string",
+   * 		  "mixpanelServiceAccountUsername": "string",
+   * 		  "mixpanelServiceAccountPassword": "string" // the following is redacted on return
+   * 		}
+   * 	  } </code></pre>
+   *
+   * 	<h5>Segment</h5>
+   *
+   * 	Request: <pre><code> {
+   * 	  "name": "string",
+   * 	  "type": "segment",
+   * 	  "sink": {
+   * 		"segmentWriteKey": "string"
+   * 	  }
+   * 	}</code></pre>
+   *
+   * 	Response: <pre><code>{
+   * 	  "id": "string",
+   * 	  "name": "string",
+   * 	  "type": "segment",
+   * 	  "status": "active",
+   * 	  "sink": {
+   * 		"segmentWriteKey": "string"
+   * 	  }
+   * 	} </code></pre>
+   *
+   * <h5>Splunk Log Stream</h5><pre><code>{
    * 	"id": "string",
    * 	"name": "string",
    * 	"type": "splunk",

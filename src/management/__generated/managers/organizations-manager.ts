@@ -266,6 +266,8 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Retrieve a detailed list of invitations sent to users for a specific Organization. The list includes details such as inviter and invitee information, invitation URLs, and dates of creation and expiration. To learn more about Organization invitations, review <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite Organization Members</a>.
+   *
    * Get invitations to organization
    *
    * @throws {RequiredError}
@@ -728,6 +730,8 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Create a user invitation for a specific Organization. Upon creation, the listed user receives an email inviting them to join the Organization. To learn more about Organization invitations, review <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite Organization Members</a>.
+   *
    * Create invitations to organization
    *
    * @throws {RequiredError}

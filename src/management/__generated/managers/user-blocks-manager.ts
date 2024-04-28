@@ -15,7 +15,9 @@ const { BaseAPI } = runtime;
  */
 export class UserBlocksManager extends BaseAPI {
   /**
-   * Unblock a user blocked due to an excessive amount of incorrectly-provided credentials.
+   * Remove all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given identifier (username, phone number, or email).
+   *
+   * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by a tenant administrator</a>.
    *
    * Unblock by identifier
    *
@@ -47,9 +49,9 @@ export class UserBlocksManager extends BaseAPI {
   }
 
   /**
-   * Unblock a user that was blocked due to an excessive amount of incorrectly provided credentials.
+   * Remove all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given ID.
    *
-   * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by admins</a>.
+   * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by a tenant administrator</a>.
    *
    * Unblock a user
    *
@@ -73,8 +75,7 @@ export class UserBlocksManager extends BaseAPI {
   }
 
   /**
-   * Retrieve a list of blocked IP addresses for a given identifier (e.g., username, phone number or email).
-   *
+   * Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for a user with the given identifier (username, phone number, or email).
    * Get blocks by identifier
    *
    * @throws {RequiredError}
@@ -109,8 +110,7 @@ export class UserBlocksManager extends BaseAPI {
   }
 
   /**
-   * Retrieve a list of blocked IP addresses for the login identifiers (email, username, phone number, etc) associated with the specified user.
-   *
+   * Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given ID.
    *
    * Get a user's blocks
    *

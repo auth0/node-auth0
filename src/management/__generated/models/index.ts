@@ -192,6 +192,22 @@ export interface Client {
   /**
    */
   client_authentication_methods: ClientClientAuthenticationMethods | null;
+  /**
+   * Makes the use of Pushed Authorization Requests mandatory for this client
+   *
+   */
+  require_pushed_authorization_requests: boolean;
+  /**
+   */
+  access_token: ClientAccessToken | null;
+  /**
+   */
+  signed_request_object: ClientSignedRequestObject;
+  /**
+   * Defines the compliance level for this client, which may restrict it's capabilities
+   *
+   */
+  compliance_level: ClientComplianceLevelEnum;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -218,6 +234,25 @@ export const ClientOrganizationRequireBehaviorEnum = {
 export type ClientOrganizationRequireBehaviorEnum =
   (typeof ClientOrganizationRequireBehaviorEnum)[keyof typeof ClientOrganizationRequireBehaviorEnum];
 
+export const ClientComplianceLevelEnum = {
+  none: 'none',
+  fapi1_adv_pkj_par: 'fapi1_adv_pkj_par',
+  fapi1_adv_mtls_par: 'fapi1_adv_mtls_par',
+  null: 'null',
+} as const;
+export type ClientComplianceLevelEnum =
+  (typeof ClientComplianceLevelEnum)[keyof typeof ClientComplianceLevelEnum];
+
+/**
+ * Custom configuration for Access Tokens
+ */
+export interface ClientAccessToken {
+  /**
+   * Enable use of TLS client certificate-bound access tokens
+   *
+   */
+  tls_client_certificate_binding: boolean;
+}
 /**
  * Addons enabled for this client and their associated configurations.
  */
@@ -846,6 +881,12 @@ export interface ClientClientAuthenticationMethods {
   /**
    */
   private_key_jwt: ClientClientAuthenticationMethodsPrivateKeyJwt;
+  /**
+   */
+  tls_client_auth: ClientClientAuthenticationMethodsTlsClientAuth;
+  /**
+   */
+  self_signed_tls_client_auth: ClientClientAuthenticationMethodsSelfSignedTlsClientAuth;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
@@ -866,6 +907,26 @@ export interface ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner 
    *
    */
   id: string;
+}
+/**
+ * Defines `self_signed_tls_client_auth` client authentication method. If the property is defined, the client is configured to use mTLS authentication method utilizing self-signed certificate.
+ */
+export interface ClientClientAuthenticationMethodsSelfSignedTlsClientAuth {
+  /**
+   * A list of unique and previously created credential IDs enabled on the client for mTLS authentication utilizing self-signed certificate.
+   *
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
+}
+/**
+ * Defines `tls_client_auth` client authentication method. If the property is defined, the client is configured to use CA-based mTLS authentication method.
+ */
+export interface ClientClientAuthenticationMethodsTlsClientAuth {
+  /**
+   * A list of unique and previously created credential IDs enabled on the client for CA-based mTLS authentication.
+   *
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  *
@@ -893,7 +954,7 @@ export interface ClientCreate {
   callbacks?: Array<string>;
   /**
    */
-  oidc_logout?: ClientCreateOidcLogout;
+  oidc_logout?: ClientCreateOidcLogout | null;
   /**
    * Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs.
    *
@@ -1025,6 +1086,22 @@ export interface ClientCreate {
   /**
    */
   client_authentication_methods?: ClientCreateClientAuthenticationMethods;
+  /**
+   * Makes the use of Pushed Authorization Requests mandatory for this client
+   *
+   */
+  require_pushed_authorization_requests?: boolean;
+  /**
+   */
+  access_token?: ClientCreateAccessToken | null;
+  /**
+   */
+  signed_request_object?: ClientCreateSignedRequestObject;
+  /**
+   * Defines the compliance level for this client, which may restrict it's capabilities
+   *
+   */
+  compliance_level?: ClientCreateComplianceLevelEnum;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -1079,6 +1156,25 @@ export const ClientCreateOrganizationRequireBehaviorEnum = {
 export type ClientCreateOrganizationRequireBehaviorEnum =
   (typeof ClientCreateOrganizationRequireBehaviorEnum)[keyof typeof ClientCreateOrganizationRequireBehaviorEnum];
 
+export const ClientCreateComplianceLevelEnum = {
+  none: 'none',
+  fapi1_adv_pkj_par: 'fapi1_adv_pkj_par',
+  fapi1_adv_mtls_par: 'fapi1_adv_mtls_par',
+  null: 'null',
+} as const;
+export type ClientCreateComplianceLevelEnum =
+  (typeof ClientCreateComplianceLevelEnum)[keyof typeof ClientCreateComplianceLevelEnum];
+
+/**
+ * Custom configuration for Access Tokens
+ */
+export interface ClientCreateAccessToken {
+  /**
+   * Enable use of TLS client certificate-bound access tokens
+   *
+   */
+  tls_client_certificate_binding?: boolean;
+}
 /**
  * Addons enabled for this client and their associated configurations.
  */
@@ -1639,6 +1735,12 @@ export interface ClientCreateClientAuthenticationMethods {
   /**
    */
   private_key_jwt?: ClientCreateClientAuthenticationMethodsPrivateKeyJwt;
+  /**
+   */
+  tls_client_auth?: ClientCreateClientAuthenticationMethodsTlsClientAuth;
+  /**
+   */
+  self_signed_tls_client_auth?: ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuth;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
@@ -1700,6 +1802,79 @@ export const ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInne
 } as const;
 export type ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum =
   (typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum)[keyof typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum];
+
+/**
+ * Defines `self_signed_tls_client_auth` client authentication method. If the property is defined, the client is configured to use mTLS authentication method utilizing self-signed certificate.
+ */
+export interface ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuth {
+  /**
+   * Fully defined credentials that will be enabled on the client for mTLS authentication utilizing self-signed certificate.
+   *
+   */
+  credentials: Array<ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInner>;
+}
+/**
+ *
+ */
+export interface ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInner {
+  /**
+   */
+  credential_type: ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum;
+  /**
+   */
+  name?: string;
+  /**
+   * PEM-formatted X509 certificate. Must be JSON escaped.
+   *
+   */
+  pem: string;
+}
+
+export const ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  {
+    x509_cert: 'x509_cert',
+  } as const;
+export type ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  (typeof ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum];
+
+/**
+ * Defines `tls_client_auth` client authentication method. If the property is defined, the client is configured to use CA-based mTLS authentication method.
+ */
+export interface ClientCreateClientAuthenticationMethodsTlsClientAuth {
+  /**
+   * Fully defined credentials that will be enabled on the client for CA-based mTLS authentication.
+   *
+   */
+  credentials: Array<ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInner>;
+}
+/**
+ *
+ */
+export interface ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInner {
+  /**
+   */
+  credential_type?: ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum;
+  /**
+   */
+  name?: string;
+  /**
+   * Subject Distinguished Name. Mutually exclusive with `pem` property.
+   *
+   */
+  subject_dn?: string;
+  /**
+   * PEM-formatted X509 certificate. Must be JSON escaped. Mutually exclusive with `subject_dn` property.
+   *
+   */
+  pem?: string;
+}
+
+export const ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  {
+    cert_subject_dn: 'cert_subject_dn',
+  } as const;
+export type ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  (typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum];
 
 /**
  * Encryption used for WsFed responses with this client.
@@ -1801,6 +1976,9 @@ export interface ClientCreateNativeSocialLogin {
   /**
    */
   facebook?: ClientCreateNativeSocialLoginFacebook | null;
+  /**
+   */
+  google?: ClientCreateNativeSocialLoginGoogle | null;
 }
 /**
  * Native Social Login support for the Apple connection
@@ -1823,6 +2001,16 @@ export interface ClientCreateNativeSocialLoginFacebook {
   enabled?: boolean;
 }
 /**
+ * Native Social Login support for the google-oauth2 connection
+ */
+export interface ClientCreateNativeSocialLoginGoogle {
+  /**
+   * Determine whether or not to allow signing in natively using a Google ID token
+   *
+   */
+  enabled?: boolean;
+}
+/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientCreateOidcLogout {
@@ -1830,7 +2018,59 @@ export interface ClientCreateOidcLogout {
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
    *
    */
-  backchannel_logout_urls: Array<string>;
+  backchannel_logout_urls?: Array<string>;
+  /**
+   */
+  backchannel_logout_initiators?: ClientCreateOidcLogoutBackchannelLogoutInitiators;
+}
+/**
+ * Configuration for OIDC backchannel logout initiators
+ */
+export interface ClientCreateOidcLogoutBackchannelLogoutInitiators {
+  [key: string]: any | any;
+  /**
+   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
+   *
+   */
+  mode: ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum;
+  /**
+   */
+  selected_initiators?: Array<ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
+}
+
+export const ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
+  custom: 'custom',
+  all: 'all',
+} as const;
+export type ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum =
+  (typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum];
+
+export const ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
+  rp_logout: 'rp-logout',
+  idp_logout: 'idp-logout',
+  password_changed: 'password-changed',
+  session_expired: 'session-expired',
+  session_revoked: 'session-revoked',
+  account_deleted: 'account-deleted',
+  email_identifier_changed: 'email-identifier-changed',
+  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
+  account_deactivated: 'account-deactivated',
+} as const;
+export type ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
+  (typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
+
+/**
+ * JWT-secured Authorization Requests (JAR) settings.
+ */
+export interface ClientCreateSignedRequestObject {
+  /**
+   * Indicates whether the JAR requests are mandatory
+   *
+   */
+  required?: boolean;
+  /**
+   */
+  credentials?: Array<ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  * Encryption used for WsFed responses with this client.
@@ -1987,6 +2227,9 @@ export interface ClientNativeSocialLogin {
   /**
    */
   facebook: ClientNativeSocialLoginFacebook | null;
+  /**
+   */
+  google: ClientNativeSocialLoginGoogle | null;
 }
 /**
  * Native Social Login support for the Apple connection
@@ -2009,6 +2252,16 @@ export interface ClientNativeSocialLoginFacebook {
   enabled: boolean;
 }
 /**
+ * Native Social Login support for the google-oauth2 connection
+ */
+export interface ClientNativeSocialLoginGoogle {
+  /**
+   * Determine whether or not to allow signing in natively using a Google ID token
+   *
+   */
+  enabled: boolean;
+}
+/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientOidcLogout {
@@ -2018,7 +2271,46 @@ export interface ClientOidcLogout {
    *
    */
   backchannel_logout_urls: Array<string>;
+  /**
+   */
+  backchannel_logout_initiators: ClientOidcLogoutBackchannelLogoutInitiators;
 }
+/**
+ * Configuration for OIDC backchannel logout initiators
+ */
+export interface ClientOidcLogoutBackchannelLogoutInitiators {
+  [key: string]: any | any;
+  /**
+   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
+   *
+   */
+  mode: ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum;
+  /**
+   */
+  selected_initiators: Array<ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
+}
+
+export const ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
+  custom: 'custom',
+  all: 'all',
+} as const;
+export type ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum =
+  (typeof ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum];
+
+export const ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
+  rp_logout: 'rp-logout',
+  idp_logout: 'idp-logout',
+  password_changed: 'password-changed',
+  session_expired: 'session-expired',
+  session_revoked: 'session-revoked',
+  account_deleted: 'account-deleted',
+  email_identifier_changed: 'email-identifier-changed',
+  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
+  account_deactivated: 'account-deactivated',
+} as const;
+export type ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
+  (typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
+
 /**
  * Refresh token configuration
  */
@@ -2075,6 +2367,19 @@ export type ClientRefreshTokenExpirationTypeEnum =
   (typeof ClientRefreshTokenExpirationTypeEnum)[keyof typeof ClientRefreshTokenExpirationTypeEnum];
 
 /**
+ * JWT-secured Authorization Requests (JAR) settings.
+ */
+export interface ClientSignedRequestObject {
+  /**
+   * Indicates whether the JAR requests are mandatory
+   *
+   */
+  required: boolean;
+  /**
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
+}
+/**
  *
  */
 export interface ClientSigningKeysInner {
@@ -2126,7 +2431,7 @@ export interface ClientUpdate {
   callbacks?: Array<string>;
   /**
    */
-  oidc_logout?: ClientUpdateOidcLogout | null;
+  oidc_logout?: ClientCreateOidcLogout | null;
   /**
    * A set of URLs that represents valid origins for CORS
    *
@@ -2256,6 +2561,22 @@ export interface ClientUpdate {
   /**
    */
   client_authentication_methods?: ClientUpdateClientAuthenticationMethods | null;
+  /**
+   * Makes the use of Pushed Authorization Requests mandatory for this client
+   *
+   */
+  require_pushed_authorization_requests?: boolean;
+  /**
+   */
+  access_token?: ClientCreateAccessToken | null;
+  /**
+   */
+  signed_request_object?: ClientUpdateSignedRequestObject | null;
+  /**
+   * Defines the compliance level for this client, which may restrict it's capabilities
+   *
+   */
+  compliance_level?: ClientUpdateComplianceLevelEnum;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
@@ -2310,6 +2631,15 @@ export const ClientUpdateOrganizationRequireBehaviorEnum = {
 } as const;
 export type ClientUpdateOrganizationRequireBehaviorEnum =
   (typeof ClientUpdateOrganizationRequireBehaviorEnum)[keyof typeof ClientUpdateOrganizationRequireBehaviorEnum];
+
+export const ClientUpdateComplianceLevelEnum = {
+  none: 'none',
+  fapi1_adv_pkj_par: 'fapi1_adv_pkj_par',
+  fapi1_adv_mtls_par: 'fapi1_adv_mtls_par',
+  null: 'null',
+} as const;
+export type ClientUpdateComplianceLevelEnum =
+  (typeof ClientUpdateComplianceLevelEnum)[keyof typeof ClientUpdateComplianceLevelEnum];
 
 /**
  * Addons enabled for this client and their associated configurations.
@@ -2425,6 +2755,12 @@ export interface ClientUpdateClientAuthenticationMethods {
   /**
    */
   private_key_jwt?: ClientClientAuthenticationMethodsPrivateKeyJwt;
+  /**
+   */
+  tls_client_auth?: ClientClientAuthenticationMethodsTlsClientAuth;
+  /**
+   */
+  self_signed_tls_client_auth?: ClientClientAuthenticationMethodsSelfSignedTlsClientAuth;
 }
 /**
  * The client's encryption key
@@ -2515,14 +2851,17 @@ export interface ClientUpdateMobileIos {
   app_bundle_identifier?: string;
 }
 /**
- * Configuration for OIDC backchannel logout
+ * JWT-secured Authorization Requests (JAR) settings.
  */
-export interface ClientUpdateOidcLogout {
+export interface ClientUpdateSignedRequestObject {
   /**
-   * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
+   * Indicates whether the JAR requests are mandatory
    *
    */
-  backchannel_logout_urls?: Array<string>;
+  required?: boolean;
+  /**
+   */
+  credentials?: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  *
@@ -2556,6 +2895,11 @@ export interface Connection {
    *
    */
   realms: Array<string>;
+  /**
+   * The ids of the clients for which the connection is enabled
+   *
+   */
+  enabled_clients: Array<string>;
   /**
    * True if the connection is domain level
    *
@@ -2962,6 +3306,49 @@ export interface ConnectionCreateOptionsValidationUsername {
   /**
    */
   max: number;
+}
+/**
+ *
+ */
+export interface ConnectionForList {
+  /**
+   * The name of the connection
+   *
+   */
+  name?: string;
+  /**
+   * Connection name used in login screen
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  options?: { [key: string]: any };
+  /**
+   * The connection's identifier
+   *
+   */
+  id?: string;
+  /**
+   * The type of the connection, related to the identity provider
+   *
+   */
+  strategy?: string;
+  /**
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
+   *
+   */
+  realms?: Array<string>;
+  /**
+   * True if the connection is domain level
+   *
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
 }
 /**
  *
@@ -3579,11 +3966,15 @@ export interface Enrollment {
    */
   phone_number?: string;
   /**
+   * Enrollment date and time.
+   *
    */
-  enrolled_at?: EnrollmentEnrolledAt;
+  enrolled_at?: string;
   /**
+   * Last authentication date and time.
+   *
    */
-  last_auth?: EnrollmentLastAuth;
+  last_auth?: string;
 }
 
 export const EnrollmentStatusEnum = {
@@ -3611,15 +4002,12 @@ export interface EnrollmentCreate {
    *
    */
   send_mail?: boolean;
+  /**
+   * Optional. Specify the locale of the enrollment email. Used with send_email.
+   *
+   */
+  email_locale?: string;
 }
-/**
- *
- */
-export type EnrollmentEnrolledAt = string;
-/**
- *
- */
-export type EnrollmentLastAuth = string;
 /**
  *
  */
@@ -3656,6 +4044,210 @@ export type FactorNameEnum = (typeof FactorNameEnum)[keyof typeof FactorNameEnum
 /**
  *
  */
+export interface GetAction200Response {
+  /**
+   * The unique ID of the action.
+   *
+   */
+  id: string;
+  /**
+   * The name of an action.
+   *
+   */
+  name: string;
+  /**
+   * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
+   *
+   */
+  supported_triggers: Array<GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner>;
+  /**
+   * True if all of an Action's contents have been deployed.
+   *
+   */
+  all_changes_deployed: boolean;
+  /**
+   * The time when this action was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this action was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   * The source code of the action.
+   *
+   */
+  code: string;
+  /**
+   * The list of third party npm modules, and their versions, that this action depends on.
+   *
+   */
+  dependencies: Array<GetActions200ResponseActionsInnerDependenciesInner>;
+  /**
+   * The Node runtime. For example: `node12`, defaults to `node12`
+   *
+   */
+  runtime: string;
+  /**
+   * The list of secrets that are included in an action or a version of an action.
+   *
+   */
+  secrets: Array<GetActionVersions200ResponseVersionsInnerSecretsInner>;
+  /**
+   * The version of the action that is currently deployed.
+   *
+   */
+  deployed_version: { [key: string]: any };
+  /**
+   * installed_integration_id is the fk reference to the InstalledIntegration entity.
+   *
+   */
+  installed_integration_id: string;
+  /**
+   */
+  integration: GetAction200ResponseIntegration;
+  /**
+   * The build status of this action.
+   *
+   */
+  status: GetAction200ResponseStatusEnum;
+  /**
+   * The time when this action was built successfully.
+   *
+   */
+  built_at: string;
+}
+
+export const GetAction200ResponseStatusEnum = {
+  pending: 'pending',
+  building: 'building',
+  packaged: 'packaged',
+  built: 'built',
+  retrying: 'retrying',
+  failed: 'failed',
+} as const;
+export type GetAction200ResponseStatusEnum =
+  (typeof GetAction200ResponseStatusEnum)[keyof typeof GetAction200ResponseStatusEnum];
+
+/**
+ * Integration defines a self contained functioning unit which partners
+ * publish. A partner may create one or many of these integrations.
+ */
+export interface GetAction200ResponseIntegration {
+  /**
+   * id is a system generated GUID. This same ID is designed to be federated in
+   * all the applicable localities.
+   *
+   */
+  id: string;
+  /**
+   * catalog_id refers to the ID in the marketplace catalog
+   *
+   */
+  catalog_id: string;
+  /**
+   * url_slug refers to the url_slug in the marketplace catalog
+   *
+   */
+  url_slug: string;
+  /**
+   * partner_id is the foreign key reference to the partner account this
+   * integration belongs to.
+   *
+   */
+  partner_id: string;
+  /**
+   * name is the integration name, which will be used for display purposes in
+   * the marketplace.
+   *
+   * To start we're going to make sure the display name is at least 3
+   * characters. Can adjust this easily later.
+   *
+   */
+  name: string;
+  /**
+   * description adds more text for the integration name -- also relevant for
+   * the marketplace listing.
+   *
+   */
+  description: string;
+  /**
+   * short_description is the brief description of the integration, which is used for display purposes in cards
+   *
+   */
+  short_description: string;
+  /**
+   */
+  logo: string;
+  /**
+   * feature_type is the type of the integration.
+   *
+   */
+  feature_type: GetAction200ResponseIntegrationFeatureTypeEnum;
+  /**
+   */
+  terms_of_use_url: string;
+  /**
+   */
+  privacy_policy_url: string;
+  /**
+   */
+  public_support_link: string;
+  /**
+   */
+  current_release: GetAction200ResponseIntegrationCurrentRelease;
+  /**
+   */
+  created_at: string;
+  /**
+   */
+  updated_at: string;
+}
+
+export const GetAction200ResponseIntegrationFeatureTypeEnum = {
+  unspecified: 'unspecified',
+  action: 'action',
+  social_connection: 'social_connection',
+  log_stream: 'log_stream',
+  sso_integration: 'sso_integration',
+  sms_provider: 'sms_provider',
+} as const;
+export type GetAction200ResponseIntegrationFeatureTypeEnum =
+  (typeof GetAction200ResponseIntegrationFeatureTypeEnum)[keyof typeof GetAction200ResponseIntegrationFeatureTypeEnum];
+
+/**
+ *
+ */
+export interface GetAction200ResponseIntegrationCurrentRelease {
+  [key: string]: any | any;
+  /**
+   * The id of the associated IntegrationRelease
+   *
+   */
+  id: string;
+  /**
+   */
+  trigger: GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner;
+  /**
+   */
+  semver: GetActions200ResponseActionsInnerIntegrationCurrentReleaseSemver;
+  /**
+   * required_secrets declares all the necessary secrets for an integration to
+   * work.
+   *
+   */
+  required_secrets: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
+  /**
+   * required_configuration declares all the necessary configuration fields for an integration to work.
+   *
+   */
+  required_configuration: Array<GetActions200ResponseActionsInnerIntegrationCurrentReleaseRequiredSecretsInner>;
+}
+/**
+ *
+ */
 export interface GetActionVersions200Response {
   /**
    * The total result count.
@@ -3668,7 +4260,7 @@ export interface GetActionVersions200Response {
    */
   page: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page: number;
@@ -3714,7 +4306,7 @@ export interface GetActionVersions200ResponseVersionsInner {
    * The list of secrets that are included in an action or a version of an action.
    *
    */
-  secrets: Array<GetActions200ResponseActionsInnerSecretsInner>;
+  secrets: Array<GetActionVersions200ResponseVersionsInnerSecretsInner>;
   /**
    * The build status of this specific version.
    *
@@ -3731,10 +4323,8 @@ export interface GetActionVersions200ResponseVersionsInner {
    */
   errors: Array<GetActionVersions200ResponseVersionsInnerErrorsInner>;
   /**
-   * The action to which this verison belongs.
-   *
    */
-  action: any | null;
+  action: GetActionVersions200ResponseVersionsInnerAction;
   /**
    * The time when this version was built successfully.
    *
@@ -3754,7 +4344,7 @@ export interface GetActionVersions200ResponseVersionsInner {
    * The list of triggers that this version supports. At this time, a version can only target a single trigger at a time.
    *
    */
-  supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  supported_triggers: Array<GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner>;
 }
 
 export const GetActionVersions200ResponseVersionsInnerStatusEnum = {
@@ -3769,6 +4359,129 @@ export type GetActionVersions200ResponseVersionsInnerStatusEnum =
   (typeof GetActionVersions200ResponseVersionsInnerStatusEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerStatusEnum];
 
 /**
+ * The action to which this version belongs.
+ */
+export interface GetActionVersions200ResponseVersionsInnerAction {
+  /**
+   * The unique ID of the action.
+   *
+   */
+  id: string;
+  /**
+   * The name of an action.
+   *
+   */
+  name: string;
+  /**
+   * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
+   *
+   */
+  supported_triggers: Array<GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner>;
+  /**
+   * True if all of an Action's contents have been deployed.
+   *
+   */
+  all_changes_deployed: boolean;
+  /**
+   * The time when this action was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this action was updated.
+   *
+   */
+  updated_at: string;
+}
+/**
+ *
+ */
+export interface GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner {
+  /**
+   * An actions extensibility point.
+   *
+   */
+  id: GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerIdEnum;
+  /**
+   * The version of a trigger. v1, v2, etc.
+   *
+   */
+  version?: string;
+  /**
+   * status points to the trigger status.
+   *
+   */
+  status?: string;
+  /**
+   * runtimes supported by this trigger.
+   *
+   */
+  runtimes?: Array<string>;
+  /**
+   * Runtime that will be used when none is specified when creating an action.
+   *
+   */
+  default_runtime?: string;
+  /**
+   * compatible_triggers informs which other trigger supports the same event and api.
+   *
+   */
+  compatible_triggers?: Array<GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInner>;
+}
+
+export const GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  notifications_custom_provider_phone: 'notifications-custom-provider-phone',
+  iga_approval: 'iga-approval',
+  iga_certification: 'iga-certification',
+  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+  iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
+} as const;
+export type GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerIdEnum =
+  (typeof GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerIdEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerIdEnum];
+
+/**
+ *
+ */
+export interface GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInner {
+  [key: string]: any | any;
+  /**
+   * An actions extensibility point.
+   *
+   */
+  id: GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInnerIdEnum;
+  /**
+   * The version of a trigger. v1, v2, etc.
+   *
+   */
+  version: string;
+}
+
+export const GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
+  {
+    post_login: 'post-login',
+    credentials_exchange: 'credentials-exchange',
+    pre_user_registration: 'pre-user-registration',
+    post_user_registration: 'post-user-registration',
+    post_change_password: 'post-change-password',
+    send_phone_message: 'send-phone-message',
+    notifications_custom_provider_phone: 'notifications-custom-provider-phone',
+    iga_approval: 'iga-approval',
+    iga_certification: 'iga-certification',
+    iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+    iga_fulfillment_execution: 'iga-fulfillment-execution',
+    password_reset_post_challenge: 'password-reset-post-challenge',
+  } as const;
+export type GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
+  (typeof GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInnerIdEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInnerCompatibleTriggersInnerIdEnum];
+
+/**
  * Error is a generic error with a human readable id which should be easily referenced in support tickets.
  */
 export interface GetActionVersions200ResponseVersionsInnerErrorsInner {
@@ -3781,6 +4494,22 @@ export interface GetActionVersions200ResponseVersionsInnerErrorsInner {
   /**
    */
   url: string;
+}
+/**
+ *
+ */
+export interface GetActionVersions200ResponseVersionsInnerSecretsInner {
+  [key: string]: any | any;
+  /**
+   * The name of the particular secret, e.g. API_KEY.
+   *
+   */
+  name: string;
+  /**
+   * The time when the secret was last updated.
+   *
+   */
+  updated_at: string;
 }
 /**
  *
@@ -4427,8 +5156,10 @@ export interface GetBindings200ResponseBindingsInner {
    */
   id: string;
   /**
+   * An actions extensibility point.
+   *
    */
-  trigger_id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  trigger_id: GetBindings200ResponseBindingsInnerTriggerIdEnum;
   /**
    * The name of the binding.
    *
@@ -4436,7 +5167,7 @@ export interface GetBindings200ResponseBindingsInner {
   display_name: string;
   /**
    */
-  action: GetActions200ResponseActionsInner;
+  action: GetAction200Response;
   /**
    * The time when the binding was created.
    *
@@ -4448,6 +5179,24 @@ export interface GetBindings200ResponseBindingsInner {
    */
   updated_at: string;
 }
+
+export const GetBindings200ResponseBindingsInnerTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  notifications_custom_provider_phone: 'notifications-custom-provider-phone',
+  iga_approval: 'iga-approval',
+  iga_certification: 'iga-certification',
+  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+  iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
+} as const;
+export type GetBindings200ResponseBindingsInnerTriggerIdEnum =
+  (typeof GetBindings200ResponseBindingsInnerTriggerIdEnum)[keyof typeof GetBindings200ResponseBindingsInnerTriggerIdEnum];
+
 /**
  *
  */
@@ -4642,7 +5391,7 @@ export type GetBruteForceProtection200ResponseModeEnum =
 /**
  *
  */
-export type GetBruteForceProtection200ResponseAllowlistInner = any;
+export type GetBruteForceProtection200ResponseAllowlistInner = string;
 /**
  *
  */
@@ -4688,7 +5437,7 @@ export interface GetClients200ResponseOneOf {
 /**
  *
  */
-export type GetConnections200Response = Array<Connection> | GetConnections200ResponseOneOf;
+export type GetConnections200Response = Array<ConnectionForList> | GetConnections200ResponseOneOf;
 /**
  *
  */
@@ -4704,7 +5453,7 @@ export interface GetConnections200ResponseOneOf {
   total: number;
   /**
    */
-  connections: Array<Connection>;
+  connections: Array<ConnectionForList>;
 }
 /**
  *
@@ -4889,7 +5638,7 @@ export interface GetEnabledConnections200ResponseOneOfInner {
    */
   assign_membership_on_login: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button: boolean;
@@ -4963,8 +5712,10 @@ export interface GetExecution200Response {
    */
   id: string;
   /**
+   * An actions extensibility point.
+   *
    */
-  trigger_id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  trigger_id: GetExecution200ResponseTriggerIdEnum;
   /**
    * The overall status of an execution.
    *
@@ -4984,6 +5735,23 @@ export interface GetExecution200Response {
    */
   updated_at: string;
 }
+
+export const GetExecution200ResponseTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  notifications_custom_provider_phone: 'notifications-custom-provider-phone',
+  iga_approval: 'iga-approval',
+  iga_certification: 'iga-certification',
+  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
+  iga_fulfillment_execution: 'iga-fulfillment-execution',
+  password_reset_post_challenge: 'password-reset-post-challenge',
+} as const;
+export type GetExecution200ResponseTriggerIdEnum =
+  (typeof GetExecution200ResponseTriggerIdEnum)[keyof typeof GetExecution200ResponseTriggerIdEnum];
 
 export const GetExecution200ResponseStatusEnum = {
   unspecified: 'unspecified',
@@ -6270,6 +7038,151 @@ export type GetPnProviders200ResponseProviderEnum =
 /**
  *
  */
+export interface GetRefreshToken200Response {
+  [key: string]: any | any;
+  /**
+   * The ID of the refresh token
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetRefreshToken200ResponseCreatedAt | null;
+  /**
+   */
+  idle_expires_at: GetRefreshToken200ResponseIdleExpiresAt | null;
+  /**
+   */
+  expires_at: GetRefreshToken200ResponseExpiresAt | null;
+  /**
+   * ID of the client application granted with this refresh token
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the authenticated session used to obtain this refresh-token
+   *
+   */
+  session_id: string | null;
+  /**
+   * True if the token is a rotating refresh token
+   *
+   */
+  rotating: boolean;
+  /**
+   * A list of the resource server IDs associated to this refresh-token and their granted scopes
+   *
+   */
+  resource_servers: Array<GetRefreshToken200ResponseResourceServersInner>;
+}
+/**
+ *
+ */
+export type GetRefreshToken200ResponseCreatedAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshToken200ResponseExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshToken200ResponseIdleExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export interface GetRefreshToken200ResponseResourceServersInner {
+  [key: string]: any | any;
+  /**
+   * Resource server ID
+   *
+   */
+  audience: string;
+  /**
+   * List of scopes for the refresh token
+   *
+   */
+  scopes: string;
+}
+/**
+ *
+ */
+export interface GetRefreshTokensForUser200Response {
+  [key: string]: any | any;
+  /**
+   */
+  sessions: Array<GetRefreshTokensForUser200ResponseSessionsInner>;
+}
+/**
+ *
+ */
+export interface GetRefreshTokensForUser200ResponseSessionsInner {
+  [key: string]: any | any;
+  /**
+   * The ID of the refresh token
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetRefreshTokensForUser200ResponseSessionsInnerCreatedAt;
+  /**
+   */
+  idle_expires_at: GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt;
+  /**
+   */
+  expires_at: GetRefreshTokensForUser200ResponseSessionsInnerExpiresAt;
+  /**
+   * ID of the client application granted with this refresh token
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the authenticated session used to obtain this refresh-token
+   *
+   */
+  session_id: string;
+  /**
+   * True if the token is a rotating refresh token
+   *
+   */
+  rotating: boolean;
+  /**
+   * A list of the resource server IDs associated to this refresh-token and their granted scopes
+   *
+   */
+  resource_servers: Array<GetRefreshToken200ResponseResourceServersInner>;
+}
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseSessionsInnerCreatedAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseSessionsInnerExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
 export type GetResourceServers200Response =
   | Array<ResourceServer>
   | GetResourceServers200ResponseOneOf;
@@ -6403,6 +7316,288 @@ export interface GetRulesConfigs200ResponseInner {
    */
   key: string;
 }
+/**
+ *
+ */
+export interface GetSession200Response {
+  [key: string]: any | any;
+  /**
+   * The ID of the session
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetSession200ResponseCreatedAt | null;
+  /**
+   */
+  updated_at: GetSession200ResponseUpdatedAt | null;
+  /**
+   */
+  authenticated_at: GetSession200ResponseAuthenticatedAt | null;
+  /**
+   */
+  idle_expires_at: GetSession200ResponseIdleExpiresAt | null;
+  /**
+   */
+  expires_at: GetSession200ResponseExpiresAt | null;
+  /**
+   */
+  device: GetSession200ResponseDevice;
+  /**
+   * List of client details for the session
+   *
+   */
+  clients: Array<GetSession200ResponseClientsInner>;
+  /**
+   */
+  authentication: GetSession200ResponseAuthentication;
+}
+/**
+ *
+ */
+export type GetSession200ResponseAuthenticatedAt = string | { [key: string]: any };
+/**
+ * Details about authentication signals obtained during the login flow
+ */
+export interface GetSession200ResponseAuthentication {
+  [key: string]: any | any;
+  /**
+   * Contains the authentication methods a user has completed during their session
+   *
+   */
+  methods: Array<GetSession200ResponseAuthenticationMethodsInner>;
+}
+/**
+ * Authentication signal details
+ */
+export interface GetSession200ResponseAuthenticationMethodsInner {
+  [key: string]: any | any;
+  /**
+   * One of: "federated", "passkey", "pwd", "sms", "email", "mfa", "mock" or a custom method denoted by a URL
+   *
+   */
+  name: string;
+  /**
+   */
+  timestamp: GetSession200ResponseAuthenticationMethodsInnerTimestamp | null;
+  /**
+   * A specific MFA factor. Only present when "name" is set to "mfa"
+   *
+   */
+  type$: string;
+}
+/**
+ *
+ */
+export type GetSession200ResponseAuthenticationMethodsInnerTimestamp =
+  | string
+  | { [key: string]: any };
+/**
+ * Client details
+ */
+export interface GetSession200ResponseClientsInner {
+  [key: string]: any | any;
+  /**
+   * ID of client for the session
+   *
+   */
+  client_id: string;
+}
+/**
+ *
+ */
+export type GetSession200ResponseCreatedAt = string | { [key: string]: any };
+/**
+ * Metadata related to the device used in the session
+ */
+export interface GetSession200ResponseDevice {
+  [key: string]: any | any;
+  /**
+   * First IP address associated with this session
+   *
+   */
+  initial_ip: string | null;
+  /**
+   * First autonomous system number associated with this session
+   *
+   */
+  initial_asn: string;
+  /**
+   * Last user agent of the device from which this user logged in
+   *
+   */
+  last_user_agent: string;
+  /**
+   * Last IP address from which this user logged in
+   *
+   */
+  last_ip: string | null;
+  /**
+   * Last autonomous system number from which this user logged in
+   *
+   */
+  last_asn: string;
+}
+/**
+ *
+ */
+export type GetSession200ResponseExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetSession200ResponseIdleExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetSession200ResponseUpdatedAt = string | { [key: string]: any };
+/**
+ *
+ */
+export interface GetSessionsForUser200Response {
+  [key: string]: any | any;
+  /**
+   */
+  sessions: Array<GetSessionsForUser200ResponseSessionsInner>;
+}
+/**
+ *
+ */
+export interface GetSessionsForUser200ResponseSessionsInner {
+  [key: string]: any | any;
+  /**
+   * The ID of the session
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetSessionsForUser200ResponseSessionsInnerCreatedAt;
+  /**
+   */
+  updated_at: GetSessionsForUser200ResponseSessionsInnerUpdatedAt;
+  /**
+   */
+  authenticated_at: GetSessionsForUser200ResponseSessionsInnerAuthenticatedAt;
+  /**
+   */
+  idle_expires_at: GetSessionsForUser200ResponseSessionsInnerIdleExpiresAt;
+  /**
+   */
+  expires_at: GetSessionsForUser200ResponseSessionsInnerExpiresAt;
+  /**
+   */
+  device: GetSessionsForUser200ResponseSessionsInnerDevice;
+  /**
+   * List of client details for the session
+   *
+   */
+  clients: Array<GetSession200ResponseClientsInner>;
+  /**
+   */
+  authentication: GetSessionsForUser200ResponseSessionsInnerAuthentication;
+}
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerAuthenticatedAt =
+  | string
+  | { [key: string]: any };
+/**
+ * Details about authentication signals obtained during the login flow
+ */
+export interface GetSessionsForUser200ResponseSessionsInnerAuthentication {
+  [key: string]: any | any;
+  /**
+   * Contains the authentication methods a user has completed during their session
+   *
+   */
+  methods: Array<GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInner>;
+}
+/**
+ * Authentication signal details
+ */
+export interface GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInner {
+  [key: string]: any | any;
+  /**
+   * One of: "federated", "passkey", "pwd", "sms", "email", "mfa", "mock" or a custom method denoted by a URL
+   *
+   */
+  name: string;
+  /**
+   */
+  timestamp: GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInnerTimestamp;
+  /**
+   * A specific MFA factor. Only present when "name" is set to "mfa"
+   *
+   */
+  type$: string;
+}
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInnerTimestamp =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerCreatedAt = string | { [key: string]: any };
+/**
+ * Metadata related to the device used in the session
+ */
+export interface GetSessionsForUser200ResponseSessionsInnerDevice {
+  [key: string]: any | any;
+  /**
+   * First IP address associated with this session
+   *
+   */
+  initial_ip: string;
+  /**
+   * First autonomous system number associated with this session
+   *
+   */
+  initial_asn: string;
+  /**
+   * Last user agent of the device from which this user logged in
+   *
+   */
+  last_user_agent: string;
+  /**
+   * Last IP address from which this user logged in
+   *
+   */
+  last_ip: string;
+  /**
+   * Last autonomous system number from which this user logged in
+   *
+   */
+  last_asn: string;
+}
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerIdleExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerUpdatedAt = string | { [key: string]: any };
 /**
  *
  */
@@ -6554,7 +7749,7 @@ export interface GetSuspiciousIpThrottling200ResponseStagePreUserRegistration {
 export interface GetTriggers200Response {
   /**
    */
-  triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  triggers: Array<GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner>;
 }
 /**
  *
@@ -6779,7 +7974,7 @@ export interface GetUsers200ResponseOneOfInnerIdentitiesInner {
    * The type of identity provider
    *
    */
-  provider: string;
+  provider: GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum;
   /**
    * Whether this identity is from a social provider (true) or not (false).
    *
@@ -6804,6 +7999,73 @@ export interface GetUsers200ResponseOneOfInnerIdentitiesInner {
    */
   profileData: UserProfile;
 }
+
+export const GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum = {
+  ad: 'ad',
+  adfs: 'adfs',
+  amazon: 'amazon',
+  apple: 'apple',
+  dropbox: 'dropbox',
+  bitbucket: 'bitbucket',
+  aol: 'aol',
+  auth0_oidc: 'auth0-oidc',
+  auth0: 'auth0',
+  baidu: 'baidu',
+  bitly: 'bitly',
+  box: 'box',
+  custom: 'custom',
+  daccount: 'daccount',
+  dwolla: 'dwolla',
+  email: 'email',
+  evernote_sandbox: 'evernote-sandbox',
+  evernote: 'evernote',
+  exact: 'exact',
+  facebook: 'facebook',
+  fitbit: 'fitbit',
+  flickr: 'flickr',
+  github: 'github',
+  google_apps: 'google-apps',
+  google_oauth2: 'google-oauth2',
+  instagram: 'instagram',
+  ip: 'ip',
+  line: 'line',
+  linkedin: 'linkedin',
+  miicard: 'miicard',
+  oauth1: 'oauth1',
+  oauth2: 'oauth2',
+  office365: 'office365',
+  oidc: 'oidc',
+  okta: 'okta',
+  paypal: 'paypal',
+  paypal_sandbox: 'paypal-sandbox',
+  pingfederate: 'pingfederate',
+  planningcenter: 'planningcenter',
+  renren: 'renren',
+  salesforce_community: 'salesforce-community',
+  salesforce_sandbox: 'salesforce-sandbox',
+  salesforce: 'salesforce',
+  samlp: 'samlp',
+  sharepoint: 'sharepoint',
+  shopify: 'shopify',
+  sms: 'sms',
+  soundcloud: 'soundcloud',
+  thecity_sandbox: 'thecity-sandbox',
+  thecity: 'thecity',
+  thirtysevensignals: 'thirtysevensignals',
+  twitter: 'twitter',
+  untappd: 'untappd',
+  vkontakte: 'vkontakte',
+  waad: 'waad',
+  weibo: 'weibo',
+  windowslive: 'windowslive',
+  wordpress: 'wordpress',
+  yahoo: 'yahoo',
+  yammer: 'yammer',
+  yandex: 'yandex',
+} as const;
+export type GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum =
+  (typeof GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum)[keyof typeof GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum];
+
 /**
  *
  */
@@ -7131,7 +8393,7 @@ export interface PatchActionRequest {
    * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
    *
    */
-  supported_triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  supported_triggers?: Array<GetActionVersions200ResponseVersionsInnerActionSupportedTriggersInner>;
   /**
    * The source code of the action.
    *
@@ -7198,14 +8460,10 @@ export interface PatchBindingsRequest {
 /**
  *
  */
-export type PatchBindingsRequestBindingsInner = PatchBindingsRequestBindingsInnerOneOf;
-/**
- *
- */
-export interface PatchBindingsRequestBindingsInnerOneOf {
+export interface PatchBindingsRequestBindingsInner {
   /**
    */
-  ref: PatchBindingsRequestBindingsInnerOneOfRef;
+  ref: PatchBindingsRequestBindingsInnerRef;
   /**
    * The name of the binding.
    *
@@ -7220,13 +8478,13 @@ export interface PatchBindingsRequestBindingsInnerOneOf {
 /**
  * A reference to an action. An action can be referred to by ID or by Name.
  */
-export interface PatchBindingsRequestBindingsInnerOneOfRef {
+export interface PatchBindingsRequestBindingsInnerRef {
   [key: string]: any | any;
   /**
    * How the action is being referred to: `action_id` or `action_name`.
    *
    */
-  type?: PatchBindingsRequestBindingsInnerOneOfRefTypeEnum;
+  type?: PatchBindingsRequestBindingsInnerRefTypeEnum;
   /**
    * The id or name of an action that is being bound to a trigger.
    *
@@ -7234,13 +8492,13 @@ export interface PatchBindingsRequestBindingsInnerOneOfRef {
   value?: string;
 }
 
-export const PatchBindingsRequestBindingsInnerOneOfRefTypeEnum = {
+export const PatchBindingsRequestBindingsInnerRefTypeEnum = {
   binding_id: 'binding_id',
   action_id: 'action_id',
   action_name: 'action_name',
 } as const;
-export type PatchBindingsRequestBindingsInnerOneOfRefTypeEnum =
-  (typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum)[keyof typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum];
+export type PatchBindingsRequestBindingsInnerRefTypeEnum =
+  (typeof PatchBindingsRequestBindingsInnerRefTypeEnum)[keyof typeof PatchBindingsRequestBindingsInnerRefTypeEnum];
 
 /**
  * Branding settings
@@ -7546,7 +8804,7 @@ export interface PatchEnabledConnectionsByConnectionIdRequest {
    */
   assign_membership_on_login?: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button?: boolean;
@@ -8176,6 +9434,11 @@ export interface PostBrandingThemeRequestColors {
    */
   body_text: string;
   /**
+   * Captcha Widget Theme
+   *
+   */
+  captcha_widget_theme?: PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum;
+  /**
    * Error
    *
    */
@@ -8251,6 +9514,15 @@ export interface PostBrandingThemeRequestColors {
    */
   widget_border: string;
 }
+
+export const PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum = {
+  auto: 'auto',
+  dark: 'dark',
+  light: 'light',
+} as const;
+export type PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum =
+  (typeof PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum)[keyof typeof PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum];
+
 /**
  *
  */
@@ -8470,6 +9742,71 @@ export const PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum = {
 } as const;
 export type PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum =
   (typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum)[keyof typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum];
+
+/**
+ *
+ */
+export interface PostCredentials201Response {
+  [key: string]: any | any;
+  /**
+   * ID of the credential. Generated on creation.
+   *
+   */
+  id: string;
+  /**
+   * The name given to the credential by the user.
+   *
+   */
+  name: string;
+  /**
+   * The key identifier of the credential, generated on creation.
+   *
+   */
+  kid: string;
+  /**
+   * Algorithm which will be used with the credential. Supported algorithms: RS256,RS384,PS256
+   *
+   */
+  alg: PostCredentials201ResponseAlgEnum;
+  /**
+   * The type of credential. Supported types: public_key.
+   *
+   */
+  credential_type: string;
+  /**
+   * The X509 certificate's Subject Distinguished Name
+   *
+   */
+  subject_dn: string;
+  /**
+   * The X509 certificate's SHA256 thumbprint
+   *
+   */
+  thumbprint_sha256: string;
+  /**
+   * The ISO 8601 formatted date the credential was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The ISO 8601 formatted date the credential was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   * The ISO 8601 formatted date representing the expiration of the credential.
+   *
+   */
+  expires_at: string;
+}
+
+export const PostCredentials201ResponseAlgEnum = {
+  RS256: 'RS256',
+  RS384: 'RS384',
+  PS256: 'PS256',
+} as const;
+export type PostCredentials201ResponseAlgEnum =
+  (typeof PostCredentials201ResponseAlgEnum)[keyof typeof PostCredentials201ResponseAlgEnum];
 
 /**
  *
@@ -8763,7 +10100,7 @@ export interface PostEmailVerificationRequest {
    */
   user_id: string;
   /**
-   * ID of the client. If provided for tenants using New Universal Login experience, the user will be prompted to redirect to the default login route of the corresponding application once the ticket is used. See <a target='' href='https://manage.local.dev.auth0.com/docs/universal-login/configure-default-login-routes#completing-the-password-reset-flow'>Configuring Default Login Routes</a> for more details.
+   * ID of the client (application). If provided for tenants using the New Universal Login experience, the email template and UI displays application details, and the user is prompted to redirect to the application's <a target='' href='https://manage.local.dev.auth0.com/docs/authenticate/login/auth0-universal-login/configure-default-login-routes#completing-the-password-reset-flow'>default login route</a> after the ticket is used. client_id is required to use the <a target='' href='https://manage.local.dev.auth0.com/docs/customize/actions/flows-and-triggers/post-change-password-flow'>Password Reset Post Challenge</a> trigger.
    *
    */
   client_id?: string;
@@ -8801,7 +10138,7 @@ export interface PostEnabledConnectionsRequest {
    */
   assign_membership_on_login?: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button?: boolean;
@@ -9494,7 +10831,7 @@ export interface PostOrganizations201ResponseEnabledConnectionsInner {
    */
   assign_membership_on_login: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button: boolean;
@@ -9555,7 +10892,7 @@ export interface PostOrganizationsRequestEnabledConnectionsInner {
    */
   assign_membership_on_login?: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button?: boolean;
@@ -9586,7 +10923,7 @@ export interface PostPasswordChangeRequest {
    */
   user_id?: string;
   /**
-   * ID of the client. If provided for tenants using New Universal Login experience, the user will be prompted to redirect to the default login route of the corresponding application once the ticket is used. See <a target='' href='https://manage.local.dev.auth0.com/docs/universal-login/configure-default-login-routes#completing-the-password-reset-flow'>Configuring Default Login Routes</a> for more details.
+   * ID of the client (application). If provided for tenants using the New Universal Login experience, the email template and UI displays application details, and the user is prompted to redirect to the application's <a target='' href='https://manage.local.dev.auth0.com/docs/authenticate/login/auth0-universal-login/configure-default-login-routes#completing-the-password-reset-flow'>default login route</a> after the ticket is used. client_id is required to use the <a target='' href='https://manage.local.dev.auth0.com/docs/customize/actions/flows-and-triggers/post-change-password-flow'>Password Reset Post Challenge</a> trigger.
    *
    */
   client_id?: string;
@@ -10413,6 +11750,15 @@ export interface ResourceServer {
   /**
    */
   client: object;
+  /**
+   */
+  token_encryption: ResourceServerTokenEncryption | null;
+  /**
+   */
+  consent_policy: ResourceServerConsentPolicyEnum;
+  /**
+   */
+  authorization_details: Array<any>;
 }
 
 export const ResourceServerSigningAlgEnum = {
@@ -10424,11 +11770,20 @@ export type ResourceServerSigningAlgEnum =
   (typeof ResourceServerSigningAlgEnum)[keyof typeof ResourceServerSigningAlgEnum];
 
 export const ResourceServerTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
+  rfc9068_profile: 'rfc9068_profile',
+  rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
 export type ResourceServerTokenDialectEnum =
   (typeof ResourceServerTokenDialectEnum)[keyof typeof ResourceServerTokenDialectEnum];
+
+export const ResourceServerConsentPolicyEnum = {
+  transactional_authorization_with_mfa: 'transactional-authorization-with-mfa',
+  null: 'null',
+} as const;
+export type ResourceServerConsentPolicyEnum =
+  (typeof ResourceServerConsentPolicyEnum)[keyof typeof ResourceServerConsentPolicyEnum];
 
 /**
  *
@@ -10470,7 +11825,7 @@ export interface ResourceServerCreate {
    */
   token_lifetime?: number;
   /**
-   * Dialect of issued access token. Can be `access_token` or `access_token_authz` (includes permissions). Values can be `access_token` or `access_token_authz` (includes permissions).
+   * Dialect of issued access token. Can be `access_token` or `access_token_authz` (includes permissions).
    *
    */
   token_dialect?: ResourceServerCreateTokenDialectEnum;
@@ -10487,6 +11842,15 @@ export interface ResourceServerCreate {
   /**
    */
   client?: object;
+  /**
+   */
+  token_encryption?: ResourceServerTokenEncryption | null;
+  /**
+   */
+  consent_policy?: ResourceServerCreateConsentPolicyEnum;
+  /**
+   */
+  authorization_details?: Array<any>;
 }
 
 export const ResourceServerCreateSigningAlgEnum = {
@@ -10498,11 +11862,74 @@ export type ResourceServerCreateSigningAlgEnum =
   (typeof ResourceServerCreateSigningAlgEnum)[keyof typeof ResourceServerCreateSigningAlgEnum];
 
 export const ResourceServerCreateTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
+  rfc9068_profile: 'rfc9068_profile',
+  rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
 export type ResourceServerCreateTokenDialectEnum =
   (typeof ResourceServerCreateTokenDialectEnum)[keyof typeof ResourceServerCreateTokenDialectEnum];
+
+export const ResourceServerCreateConsentPolicyEnum = {
+  transactional_authorization_with_mfa: 'transactional-authorization-with-mfa',
+  null: 'null',
+} as const;
+export type ResourceServerCreateConsentPolicyEnum =
+  (typeof ResourceServerCreateConsentPolicyEnum)[keyof typeof ResourceServerCreateConsentPolicyEnum];
+
+/**
+ *
+ */
+export interface ResourceServerTokenEncryption {
+  /**
+   * Format of the encrypted JWT payload.
+   *
+   */
+  format: ResourceServerTokenEncryptionFormatEnum;
+  /**
+   */
+  encryption_key: ResourceServerTokenEncryptionEncryptionKey;
+}
+
+export const ResourceServerTokenEncryptionFormatEnum = {
+  compact_nested_jwe: 'compact-nested-jwe',
+} as const;
+export type ResourceServerTokenEncryptionFormatEnum =
+  (typeof ResourceServerTokenEncryptionFormatEnum)[keyof typeof ResourceServerTokenEncryptionFormatEnum];
+
+/**
+ *
+ */
+export interface ResourceServerTokenEncryptionEncryptionKey {
+  /**
+   * Name of the encryption key.
+   *
+   */
+  name?: string;
+  /**
+   * Algorithm used to encrypt the token.
+   *
+   */
+  alg: ResourceServerTokenEncryptionEncryptionKeyAlgEnum;
+  /**
+   * Key ID.
+   *
+   */
+  kid?: string;
+  /**
+   * PEM-formatted public key. Must be JSON escaped.
+   *
+   */
+  pem: string;
+}
+
+export const ResourceServerTokenEncryptionEncryptionKeyAlgEnum = {
+  _256: 'RSA-OAEP-256',
+  _384: 'RSA-OAEP-384',
+  _512: 'RSA-OAEP-512',
+} as const;
+export type ResourceServerTokenEncryptionEncryptionKeyAlgEnum =
+  (typeof ResourceServerTokenEncryptionEncryptionKeyAlgEnum)[keyof typeof ResourceServerTokenEncryptionEncryptionKeyAlgEnum];
 
 /**
  *
@@ -10556,6 +11983,15 @@ export interface ResourceServerUpdate {
   /**
    */
   client?: object;
+  /**
+   */
+  token_encryption?: ResourceServerTokenEncryption | null;
+  /**
+   */
+  consent_policy?: ResourceServerUpdateConsentPolicyEnum;
+  /**
+   */
+  authorization_details?: Array<any>;
 }
 
 export const ResourceServerUpdateSigningAlgEnum = {
@@ -10567,11 +12003,20 @@ export type ResourceServerUpdateSigningAlgEnum =
   (typeof ResourceServerUpdateSigningAlgEnum)[keyof typeof ResourceServerUpdateSigningAlgEnum];
 
 export const ResourceServerUpdateTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
+  rfc9068_profile: 'rfc9068_profile',
+  rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
 export type ResourceServerUpdateTokenDialectEnum =
   (typeof ResourceServerUpdateTokenDialectEnum)[keyof typeof ResourceServerUpdateTokenDialectEnum];
+
+export const ResourceServerUpdateConsentPolicyEnum = {
+  transactional_authorization_with_mfa: 'transactional-authorization-with-mfa',
+  null: 'null',
+} as const;
+export type ResourceServerUpdateConsentPolicyEnum =
+  (typeof ResourceServerUpdateConsentPolicyEnum)[keyof typeof ResourceServerUpdateConsentPolicyEnum];
 
 /**
  *
@@ -10890,6 +12335,9 @@ export interface TenantSettings {
    */
   sessions: TenantSettingsSessions | null;
   /**
+   */
+  oidc_logout: TenantSettingsOidcLogout;
+  /**
    * Whether to accept an organization name instead of an ID on auth endpoints
    *
    */
@@ -10899,10 +12347,26 @@ export interface TenantSettings {
    *
    */
   customize_mfa_in_postlogin_action: boolean;
+  /**
+   * Supported ACR values
+   *
+   */
+  acr_values_supported: Array<string>;
+  /**
+   */
+  mtls: TenantSettingsMtls | null;
+  /**
+   * Enables the use of Pushed Authorization Requests
+   *
+   */
+  pushed_authorization_requests_supported: boolean;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
   bs: 'bs',
   ca_ES: 'ca-ES',
@@ -10913,8 +12377,11 @@ export const TenantSettingsEnabledLocalesEnum = {
   el: 'el',
   en: 'en',
   es: 'es',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
@@ -10924,6 +12391,7 @@ export const TenantSettingsEnabledLocalesEnum = {
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
@@ -10931,6 +12399,7 @@ export const TenantSettingsEnabledLocalesEnum = {
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  ms: 'ms',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
@@ -10943,13 +12412,17 @@ export const TenantSettingsEnabledLocalesEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsEnabledLocalesEnum =
@@ -11127,6 +12600,11 @@ export interface TenantSettingsFlags {
    *
    */
   mfa_show_factor_list_on_enrollment: boolean;
+  /**
+   * Removes alg property from jwks .well-known endpoint
+   *
+   */
+  remove_alg_from_jwks: boolean;
 }
 /**
  * Guardian page customization.
@@ -11142,6 +12620,26 @@ export interface TenantSettingsGuardianMfaPage {
    *
    */
   html: string;
+}
+/**
+ * mTLS configuration.
+ */
+export interface TenantSettingsMtls {
+  /**
+   * If true, enables mTLS endpoint aliases
+   *
+   */
+  enable_endpoint_aliases: boolean;
+}
+/**
+ * Settings related to OIDC RP-initiated Logout
+ */
+export interface TenantSettingsOidcLogout {
+  /**
+   * Enable the end_session_endpoint URL in the .well-known discovery configuration
+   *
+   */
+  rp_logout_end_session_endpoint_discovery: boolean;
 }
 /**
  * Session cookie configuration
@@ -11257,6 +12755,9 @@ export interface TenantSettingsUpdate {
    */
   sessions?: TenantSettingsUpdateSessions | null;
   /**
+   */
+  oidc_logout?: TenantSettingsUpdateOidcLogout;
+  /**
    * Whether to enable flexible factors for MFA in the PostLogin action
    *
    */
@@ -11266,10 +12767,26 @@ export interface TenantSettingsUpdate {
    *
    */
   allow_organization_name_in_authentication_api?: boolean | null;
+  /**
+   * Supported ACR values
+   *
+   */
+  acr_values_supported?: Array<string>;
+  /**
+   */
+  mtls?: TenantSettingsUpdateMtls | null;
+  /**
+   * Enables the use of Pushed Authorization Requests
+   *
+   */
+  pushed_authorization_requests_supported?: boolean | null;
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
   bs: 'bs',
   ca_ES: 'ca-ES',
@@ -11280,8 +12797,11 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   el: 'el',
   en: 'en',
   es: 'es',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
@@ -11291,6 +12811,7 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
@@ -11298,6 +12819,7 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  ms: 'ms',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
@@ -11310,13 +12832,17 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsUpdateEnabledLocalesEnum =
@@ -11504,6 +13030,16 @@ export interface TenantSettingsUpdateFlags {
    *
    */
   mfa_show_factor_list_on_enrollment?: boolean;
+  /**
+   * Require the use of JWT Secured Authorization Requests (JAR)
+   *
+   */
+  require_signed_request_object?: boolean;
+  /**
+   * Removes alg property from jwks .well-known endpoint
+   *
+   */
+  remove_alg_from_jwks?: boolean;
 }
 
 export const TenantSettingsUpdateFlagsChangePwdFlowV1Enum = {
@@ -11526,6 +13062,26 @@ export interface TenantSettingsUpdateGuardianMfaPage {
    *
    */
   html?: string;
+}
+/**
+ * mTLS configuration.
+ */
+export interface TenantSettingsUpdateMtls {
+  /**
+   * If true, enables mTLS endpoint aliases
+   *
+   */
+  enable_endpoint_aliases?: boolean;
+}
+/**
+ * Settings related to OIDC RP-initiated Logout
+ */
+export interface TenantSettingsUpdateOidcLogout {
+  /**
+   * Enable the end_session_endpoint URL in the .well-known discovery configuration
+   *
+   */
+  rp_logout_end_session_endpoint_discovery?: boolean;
 }
 /**
  * Sessions related settings for tenant
@@ -11905,12 +13461,12 @@ export interface UserUpdate {
    * Email address of this user.
    *
    */
-  email?: string;
+  email?: string | null;
   /**
    * The user's phone number (following the E.164 recommendation), only valid for users from SMS connections.
    *
    */
-  phone_number?: string;
+  phone_number?: string | null;
   /**
    * Whether this phone number has been verified (true) or not (false).
    *
@@ -11965,7 +13521,7 @@ export interface UserUpdate {
    */
   password?: string;
   /**
-   * ID of the connection this user should be created in.
+   * Name of the connection to target for this user update.
    *
    */
   connection?: string;
@@ -12134,7 +13690,7 @@ export interface GetActionsRequest {
  */
 export interface GetBindingsRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point.
    *
    */
   triggerId: string;
@@ -12174,7 +13730,7 @@ export interface PatchActionOperationRequest {
  */
 export interface PatchBindingsOperationRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point.
    *
    */
   triggerId: string;
@@ -12289,7 +13845,7 @@ export interface DeleteClientGrantsByIdRequest {
  */
 export interface GetClientGrantsRequest {
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -12665,7 +14221,7 @@ export interface GetStatusRequest {
  */
 export interface PatchConnectionsByIdRequest {
   /**
-   * The id of the connection to retrieve
+   * The id of the connection to update
    *
    */
   id: string;
@@ -12907,7 +14463,7 @@ export interface DeleteGrantsByUserIdRequest {
  */
 export interface GetGrantsRequest {
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -13028,7 +14584,7 @@ export interface GetHooksRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -13653,6 +15209,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   phone_identifier_challenge: 'phone-identifier-challenge',
   reset_password: 'reset-password',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -13671,6 +15228,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
@@ -13680,6 +15238,9 @@ export type GetCustomTextByLanguagePromptEnum =
  */
 export const GetCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
   bs: 'bs',
   ca_ES: 'ca-ES',
@@ -13690,8 +15251,11 @@ export const GetCustomTextByLanguageLanguageEnum = {
   el: 'el',
   en: 'en',
   es: 'es',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
@@ -13701,6 +15265,7 @@ export const GetCustomTextByLanguageLanguageEnum = {
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
@@ -13708,6 +15273,7 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  ms: 'ms',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
@@ -13720,13 +15286,17 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
@@ -13758,6 +15328,7 @@ export const GetPartialsPromptEnum = {
   signup: 'signup',
   signup_id: 'signup-id',
   signup_password: 'signup-password',
+  customized_consent: 'customized-consent',
 } as const;
 export type GetPartialsPromptEnum =
   (typeof GetPartialsPromptEnum)[keyof typeof GetPartialsPromptEnum];
@@ -13789,6 +15360,7 @@ export const PutCustomTextByLanguagePromptEnum = {
   phone_identifier_challenge: 'phone-identifier-challenge',
   reset_password: 'reset-password',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -13807,6 +15379,7 @@ export const PutCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
@@ -13816,6 +15389,9 @@ export type PutCustomTextByLanguagePromptEnum =
  */
 export const PutCustomTextByLanguageLanguageEnum = {
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
   bs: 'bs',
   ca_ES: 'ca-ES',
@@ -13826,8 +15402,11 @@ export const PutCustomTextByLanguageLanguageEnum = {
   el: 'el',
   en: 'en',
   es: 'es',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
@@ -13837,6 +15416,7 @@ export const PutCustomTextByLanguageLanguageEnum = {
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
@@ -13844,6 +15424,7 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  ms: 'ms',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
@@ -13856,13 +15437,17 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type PutCustomTextByLanguageLanguageEnum =
@@ -13883,6 +15468,7 @@ export interface PutCustomTextByLanguageRequest {
    */
   language: PutCustomTextByLanguageLanguageEnum;
 }
+
 /**
  *
  */
@@ -13893,6 +15479,7 @@ export const PutPartialsPromptEnum = {
   signup: 'signup',
   signup_id: 'signup-id',
   signup_password: 'signup-password',
+  customized_consent: 'customized-consent',
 } as const;
 export type PutPartialsPromptEnum =
   (typeof PutPartialsPromptEnum)[keyof typeof PutPartialsPromptEnum];
@@ -13906,6 +15493,26 @@ export interface PutPartialsRequest {
    *
    */
   prompt: PutPartialsPromptEnum;
+}
+/**
+ *
+ */
+export interface DeleteRefreshTokenRequest {
+  /**
+   * ID of the refresh token to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetRefreshTokenRequest {
+  /**
+   * ID refresh token to retrieve
+   *
+   */
+  id: string;
 }
 /**
  *
@@ -13927,7 +15534,7 @@ export interface GetResourceServersRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -14132,7 +15739,7 @@ export interface GetRulesRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -14206,6 +15813,26 @@ export interface PutRulesConfigsByKeyOperationRequest {
    *
    */
   key: string;
+}
+/**
+ *
+ */
+export interface DeleteSessionRequest {
+  /**
+   * ID of the session to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetSessionRequest {
+  /**
+   * ID of session to retrieve
+   *
+   */
+  id: string;
 }
 /**
  *
@@ -14363,6 +15990,26 @@ export interface DeletePermissionsOperationRequest {
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface DeleteRefreshTokensForUserRequest {
+  /**
+   * ID of the user to get remove refresh tokens for
+   *
+   */
+  user_id: string;
+}
+/**
+ *
+ */
+export interface DeleteSessionsForUserRequest {
+  /**
+   * ID of the user to get sessions for
+   *
+   */
+  user_id: string;
 }
 
 /**
@@ -14564,7 +16211,7 @@ export interface GetPermissionsRequest {
    */
   id: string;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -14578,6 +16225,56 @@ export interface GetPermissionsRequest {
    *
    */
   include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetRefreshTokensForUserRequest {
+  /**
+   * ID of the user to get refresh tokens for
+   *
+   */
+  user_id: string;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional token ID from which to start selection (exclusive).
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetSessionsForUserRequest {
+  /**
+   * ID of the user to get sessions for
+   *
+   */
+  user_id: string;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional session ID from which to start selection (exclusive).
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
 }
 /**
  *
@@ -14614,7 +16311,7 @@ export interface GetUserRolesRequest {
    */
   id: string;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -14651,7 +16348,7 @@ export interface GetUsersRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;

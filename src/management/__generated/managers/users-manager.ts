@@ -9,6 +9,8 @@ import type {
   GetLogs200Response,
   GetOrganizationMemberRoles200Response,
   GetPermissions200Response,
+  GetRefreshTokensForUser200Response,
+  GetSessionsForUser200Response,
   GetUserOrganizations200Response,
   GetUsers200Response,
   GetUsers200ResponseOneOfInner,
@@ -40,6 +42,8 @@ import type {
   DeleteAuthenticatorsRequest,
   DeleteMultifactorByProviderRequest,
   DeletePermissionsOperationRequest,
+  DeleteRefreshTokensForUserRequest,
+  DeleteSessionsForUserRequest,
   DeleteUserIdentityByUserIdRequest,
   DeleteUserRolesOperationRequest,
   DeleteUsersByIdRequest,
@@ -48,6 +52,8 @@ import type {
   GetEnrollmentsRequest,
   GetLogsByUserRequest,
   GetPermissionsRequest,
+  GetRefreshTokensForUserRequest,
+  GetSessionsForUserRequest,
   GetUserOrganizationsRequest,
   GetUserRolesRequest,
   GetUsersRequest,
@@ -70,7 +76,8 @@ const { BaseAPI } = runtime;
  */
 export class UsersManager extends BaseAPI {
   /**
-   * Deletes all authentication methods for the given user
+   * Remove all authentication methods (i.e., enrolled MFA factors) from the specified user account. This action cannot be undone.
+   * Delete all authentication methods for the given user
    *
    * @throws {RequiredError}
    */
@@ -95,7 +102,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Deletes an authentication method by ID
+   * Remove the authentication method with the given ID from the specified user. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage Authentication Methods with Management API</a>.
+   * Delete an authentication method by ID
    *
    * @throws {RequiredError}
    */
@@ -122,6 +130,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
+   * Remove all authenticators registered to a given user ID, such as OTP, email, phone, and push-notification. This action cannot be undone. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage Authentication Methods with Management API</a>.
    * Delete All Authenticators
    *
    * @throws {RequiredError}
@@ -147,7 +156,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Delete a <a href="https://auth0.com/docs/multifactor-authentication">multifactor</a> configuration for a user. This forces the user to re-configure the multi-factor provider.
+   * Remove a <a href="https://auth0.com/docs/multifactor-authentication">multifactor</a> authentication configuration from a user's account. This forces the user to manually reconfigure the multi-factor provider.
    * Delete a User's Multi-factor Provider
    *
    * @throws {RequiredError}
@@ -206,7 +215,62 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Unlink an identity from the target user making it a separate user account again.
+   * Delete all refresh tokens for a user.
+   * Delete refresh tokens for a user
+   *
+   * @throws {RequiredError}
+   */
+  async deleteRefreshTokensForUser(
+    requestParameters: DeleteRefreshTokensForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/refresh-tokens`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Delete all sessions for a user.
+   * Delete sessions for user
+   *
+   * @throws {RequiredError}
+   */
+  async deleteSessionsForUser(
+    requestParameters: DeleteSessionsForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/sessions`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Unlink a specific secondary account from a target user. This action requires the ID of both the target user and the secondary account.
+   *
+   * Unlinking the secondary account removes it from the identities array of the target user and creates a new standalone profile for the secondary account. To learn more, review <a href="https://auth0.com/docs/manage-users/user-accounts/user-account-linking/unlink-user-accounts">Unlink User Accounts</a>.
+   *
    * Unlink a User Identity
    *
    * @throws {RequiredError}
@@ -262,7 +326,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Delete a user.
+   * Delete a user by user ID. This action cannot be undone. For Auth0 Dashboard instructions, see <a href="https://auth0.com/docs/manage-users/user-accounts/delete-users">Delete Users</a>.
+   *
    * Delete a User
    *
    * @throws {RequiredError}
@@ -285,7 +350,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Gets a list of authentication methods
+   * Retrieve detailed list of authentication methods associated with a specified user.
+   * Get a list of authentication methods
    *
    * @throws {RequiredError}
    */
@@ -334,7 +400,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Gets an authentication method by ID.
+   * Get an authentication method by ID.
    *
    * @throws {RequiredError}
    */
@@ -361,7 +427,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve the first confirmed <a href="https://auth0.com/docs/multifactor-authentication/guardian">Guardian</a> enrollment for a user.
+   * Retrieve the first <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor authentication</a> enrollment that a specific user has confirmed.
    * Get the First Confirmed Multi-factor Authentication Enrollment
    *
    * @throws {RequiredError}
@@ -483,6 +549,90 @@ export class UsersManager extends BaseAPI {
         path: `/users/{id}/permissions`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details for a user's refresh tokens.
+   * Get refresh tokens for a user
+   *
+   * @throws {RequiredError}
+   */
+  async getRefreshTokensForUser(
+    requestParameters: GetRefreshTokensForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRefreshTokensForUser200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/refresh-tokens`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details for a user's sessions.
+   * Get sessions for user
+   *
+   * @throws {RequiredError}
+   */
+  async getSessionsForUser(
+    requestParameters: GetSessionsForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetSessionsForUser200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/sessions`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
         ),
         method: 'GET',
         query: queryParameters,
@@ -675,7 +825,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve user details. A list of fields to include or exclude may also be specified.
+   * Retrieve user details. A list of fields to include or exclude may also be specified. For more information, see <a href="https://auth0.com/docs/manage-users/user-search/retrieve-users-with-get-users-endpoint">Retrieve Users with the Get Users Endpoint</a>.
+   *
    * Get a User
    *
    * @throws {RequiredError}
@@ -710,7 +861,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Updates an authentication method.
+   * Modify the authentication method with the given ID from the specified user. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage Authentication Methods with Management API</a>.
+   * Update an authentication method.
    *
    * @throws {RequiredError}
    */
@@ -843,7 +995,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Creates an authentication method for a given user. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
+   * Create an authentication method. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
+   * Create an authentication method for a given user.
    *
    * @throws {RequiredError}
    */
@@ -994,7 +1147,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Remove the current <a href="https://auth0.com/docs/multifactor-authentication/guardian">multi-factor authentication</a> recovery code and generate a new one.
+   * Remove an existing multi-factor authentication (MFA) <a href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">recovery code</a> and generate a new one. If a user cannot access the original device or account used for MFA enrollment, they can use a recovery code to authenticate.
    * Generate New Multi-factor Authentication Recovery Code
    *
    * @throws {RequiredError}
@@ -1079,7 +1232,10 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Updates all authentication methods by replacing them with the given ones.
+   * Replace the specified user <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors"> authentication methods</a> with supplied values.
+   *
+   *     <b>Note</b>: Authentication methods supplied through this action do not iterate on existing methods. Instead, any methods passed will overwrite the user&#8217s existing settings.
+   * Update all authentication methods by replacing them with the given ones.
    *
    * @throws {RequiredError}
    */

@@ -19,7 +19,7 @@ const { BaseAPI } = runtime;
  */
 export class ResourceServersManager extends BaseAPI {
   /**
-   * Delete an existing API (also known as a resource server).
+   * Delete an existing API by ID. For more information, read <a href="https://www.auth0.com/docs/get-started/apis/api-settings">API Settings</a>.
    * Delete a resource server
    *
    * @throws {RequiredError}
@@ -45,7 +45,7 @@ export class ResourceServersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve <a href="https://auth0.com/docs/apis">APIs</a> (also known as resource servers) that you can consume from your authorized applications.
+   * Retrieve details of all APIs associated with your tenant.
    * Get resource servers
    *
    * @throws {RequiredError}
@@ -94,7 +94,7 @@ export class ResourceServersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve an <a href="https://auth0.com/docs/apis">API</a> (also known as resource server).
+   * Retrieve <a href="https://auth0.com/docs/apis">API</a> details with the given ID.
    * Get a resource server
    *
    * @throws {RequiredError}
@@ -128,7 +128,7 @@ export class ResourceServersManager extends BaseAPI {
   }
 
   /**
-   * Update an existing API (also known as a resource server).
+   * Change an existing API setting by resource server ID. For more information, read <a href="https://www.auth0.com/docs/get-started/apis/api-settings">API Settings</a>.
    * Update a resource server
    *
    * @throws {RequiredError}
@@ -161,7 +161,7 @@ export class ResourceServersManager extends BaseAPI {
   }
 
   /**
-   * Create a new API (also known as a resource server).
+   * Create a new API associated with your tenant. Note that all new APIs must be registered with Auth0. For more information, read <a href="https://www.auth0.com/docs/get-started/apis"> APIs</a>.
    * Create a resource server
    *
    * @throws {RequiredError}

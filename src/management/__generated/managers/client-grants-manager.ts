@@ -18,7 +18,8 @@ const { BaseAPI } = runtime;
  */
 export class ClientGrantsManager extends BaseAPI {
   /**
-   * Delete a client grant.
+   * Delete the <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a> from your machine-to-machine application.
+   *
    * Delete client grant
    *
    * @throws {RequiredError}
@@ -44,7 +45,7 @@ export class ClientGrantsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>.
+   * Retrieve a list of <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>, including the scopes associated with the application/API pair.
    *
    * Get client grants
    *
@@ -131,7 +132,7 @@ export class ClientGrantsManager extends BaseAPI {
   }
 
   /**
-   * Create a client grant.
+   * Create a client grant for a machine-to-machine login flow. To learn more, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
    * Create client grant
    *
    * @throws {RequiredError}

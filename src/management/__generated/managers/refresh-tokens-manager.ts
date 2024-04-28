@@ -1,28 +1,32 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
-import type { DeleteIpsByIdRequest, GetIpsByIdRequest } from '../models/index.js';
+import type {
+  GetRefreshToken200Response,
+  DeleteRefreshTokenRequest,
+  GetRefreshTokenRequest,
+} from '../models/index.js';
 
 const { BaseAPI } = runtime;
 
 /**
  *
  */
-export class AnomalyManager extends BaseAPI {
+export class RefreshTokensManager extends BaseAPI {
   /**
-   * Remove a block imposed by <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> for the given IP address.
-   * Remove the blocked IP address
+   * Delete a refresh token by its ID.
+   * Delete a refresh tokens
    *
    * @throws {RequiredError}
    */
-  async deleteBlockedIp(
-    requestParameters: DeleteIpsByIdRequest,
+  async deleteRefreshToken(
+    requestParameters: DeleteRefreshTokenRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
-        path: `/anomaly/blocks/ips/{id}`.replace(
+        path: `/refresh-tokens/{id}`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
@@ -35,20 +39,20 @@ export class AnomalyManager extends BaseAPI {
   }
 
   /**
-   * Check if the given IP address is blocked via the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
-   * Check if an IP address is blocked
+   * Retrieve refresh token information.
+   * Get a refresh token
    *
    * @throws {RequiredError}
    */
-  async checkIfIpIsBlocked(
-    requestParameters: GetIpsByIdRequest,
+  async getRefreshToken(
+    requestParameters: GetRefreshTokenRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<GetRefreshToken200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
       {
-        path: `/anomaly/blocks/ips/{id}`.replace(
+        path: `/refresh-tokens/{id}`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
@@ -57,6 +61,6 @@ export class AnomalyManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }

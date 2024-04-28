@@ -33,7 +33,7 @@ const { BaseAPI } = runtime;
  */
 export class GuardianManager extends BaseAPI {
   /**
-   * Delete an enrollment to allow the user to enroll with multi-factor authentication again.
+   * Remove a specific multi-factor authentication (MFA) enrollment from a user's account. This allows the user to re-enroll with MFA. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">Reset User Multi-Factor Authentication and Recovery Codes</a>.
    * Delete a multi-factor authentication enrollment
    *
    * @throws {RequiredError}
@@ -59,7 +59,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve APNS push notification configuration
+   * Retrieve configuration details for the multi-factor authentication APNS provider associated with your tenant.
+   * Get APNS push notification configuration
    *
    * @throws {RequiredError}
    */
@@ -78,9 +79,7 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve an enrollment (including its status and type).
-   *
-   * Note: Phone numbers are partially obfuscated.
+   * Retrieve details, such as status and type, for a specific multi-factor authentication enrollment registered to a user account.
    * Retrieve a multi-factor authentication enrollment
    *
    * @throws {RequiredError}
@@ -106,7 +105,7 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve phone enrollment and verification templates (subscription required).
+   * Retrieve details of the multi-factor authentication enrollment and verification templates for phone-type factors available in your tenant.
    * Retrieve Enrollment and Verification Phone Templates
    *
    * @throws {RequiredError}
@@ -126,10 +125,10 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve SMS enrollment and verification templates (subscription required).
+   * This endpoint has been deprecated. To complete this action, use the <a href="https://auth0.com/docs/api/management/v2/guardian/get-factor-phone-templates">Retrieve enrollment and verification phone templates</a> endpoint instead.
    *
-   *     A new endpoint is available to retrieve enrollment and verification templates related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_templates'>phone templates</a>). It has the same payload as this one. Please use it instead.
-   * Retrieve SMS Enrollment and Verification Templates
+   *     <b>Previous function</b>: Retrieve details of SMS enrollment and verification templates configured for your tenant.
+   * Get SMS enrollment and verification templates
    *
    * @throws {RequiredError}
    */
@@ -150,8 +149,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve all <a href="https://auth0.com/docs/multifactor-authentication">multi-factor authentication</a> configurations.
-   * Retrieve Factors and their Status
+   * Retrieve details of all <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor authentication factors</a> associated with your tenant.
+   * Retrieve Factors and their StatuGet multi-factor authentication details
    *
    * @throws {RequiredError}
    */
@@ -168,6 +167,7 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
+   * Retrieve list of <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">phone-type MFA factors</a> (i.e., sms and voice) that are enabled for your tenant.
    * Retrieve the Enabled Phone Factors
    *
    * @throws {RequiredError}
@@ -187,7 +187,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve phone configuration (one of auth0|twilio|phone-message-hook)
+   * Retrieve details of the multi-factor authentication phone provider configured for your tenant.
+   * Get phone provider configuration
    *
    * @throws {RequiredError}
    */
@@ -206,8 +207,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio phone provider configuration</a> (subscription required).
-   * Retrieve Twilio phone configuration
+   * Retrieve configuration details for a Twilio phone provider that has been set up in your tenant. To learn more, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">Configure SMS and Voice Notifications for MFA</a>.
+   * Get Twilio configuration
    *
    * @throws {RequiredError}
    */
@@ -226,6 +227,7 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
+   * Modify the push notification provider configured for your tenant. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure Push Notifications for MFA</a>.
    * Retrieve push notification provider
    *
    * @throws {RequiredError}
@@ -245,12 +247,17 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Gets the MFA policies for the tenant.
+   * Retrieve the <a href="https://auth0.com/docs/secure/multi-factor-authentication/enable-mfa">multi-factor authentication (MFA) policies</a> configured for your tenant.
    *
-   * The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul>
-   * Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href="https://auth0.com/docs/mfa/adaptive-mfa">full documentation</a>.
+   * The following policies are supported:
+   * <ul>
+   * <li><code>all-applications</code> policy prompts with MFA for all logins.</li>
+   * <li><code>confidence-score</code> policy prompts with MFA only for low confidence logins.</li>
+   * </ul>
    *
-   * Get the Multi-factor Authentication policies
+   * <b>Note</b>: The <code>confidence-score</code> policy is part of the <a href="https://auth0.com/docs/secure/multi-factor-authentication/adaptive-mfa">Adaptive MFA feature</a>. Adaptive MFA requires an add-on for the Enterprise plan; review <a href="https://auth0.com/pricing">Auth0 Pricing</a> for more details.
+   *
+   * Get multi-factor authentication policies
    *
    * @throws {RequiredError}
    */
@@ -267,8 +274,10 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * A new endpoint is available to retrieve the configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/get_selected_provider'>phone configuration</a>). It has the same payload as this one. Please use it instead.
-   * Retrieve SMS configuration (one of auth0|twilio|phone-message-hook)
+   * This endpoint has been deprecated. To complete this action, use the <a href="https://auth0.com/docs/api/management/v2/guardian/get-phone-providers">Retrieve phone configuration</a> endpoint instead.
+   *
+   *     <b>Previous functionality</b>: Retrieve details for the multi-factor authentication SMS provider configured for your tenant.
+   * Get SMS configuration
    *
    * @throws {RequiredError}
    */
@@ -309,8 +318,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Retrieve the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
-   * Retrieve AWS SNS push notification configuration
+   * Retrieve configuration details for an AWS SNS push notification provider that has been enabled for MFA. To learn more, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure Push Notifications for MFA</a>.
+   * Get AWS SNS configuration
    *
    * @throws {RequiredError}
    */
@@ -329,7 +338,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Updates APNs provider configuration
+   * Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
+   * Update APNs provider configuration
    *
    * @throws {RequiredError}
    */
@@ -355,7 +365,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Updates FCM provider configuration
+   * Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
+   * Updates FCM configuration
    *
    * @throws {RequiredError}
    */
@@ -382,7 +393,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
-   * Update SNS configuration for push notifications
+   * Update AWS SNS configuration
    *
    * @throws {RequiredError}
    */
@@ -408,7 +419,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Generate an email with a link to start the multi-factor authentication enrollment process (subscription required).
+   * Create a <a href="https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian/create-custom-enrollment-tickets">multi-factor authentication (MFA) enrollment ticket</a>, and optionally send an email with the created ticket, to a given user.
+   *
    * Create a multi-factor authentication enrollment ticket
    *
    * @throws {RequiredError}
@@ -435,7 +447,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Updates APNs provider configuration
+   * Overwrite all configuration details of the multi-factor authentication APNS provider associated with your tenant.
+   * Update APNS configuration
    *
    * @throws {RequiredError}
    */
@@ -488,10 +501,10 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Customize the messages sent to complete SMS enrollment and verification (subscription required).
+   * This endpoint has been deprecated. To complete this action, use the <a href="https://auth0.com/docs/api/management/v2/guardian/put-factor-phone-templates">Update enrollment and verification phone templates</a> endpoint instead.
    *
-   *     A new endpoint is available to update enrollment and verification templates related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_templates'>phone templates</a>). It has the same payload as this one. Please use it instead.
-   * Update SMS Enrollment and Verification Templates
+   *     <b>Previous functionality</b>: Customize the messages sent to complete SMS enrollment and verification.
+   * Update SMS enrollment and verification templates
    *
    * @throws {RequiredError}
    */
@@ -517,8 +530,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Update a multi-factor authentication factor (subscription required).
-   * Update a Multi-factor Authentication Factor
+   * Update the status (i.e., enabled or disabled) of a specific multi-factor authentication factor.
+   * Update multi-factor authentication type
    *
    * @throws {RequiredError}
    */
@@ -550,7 +563,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Updates FCM provider configuration
+   * Overwrite all configuration details of the multi-factor authentication FCM provider associated with your tenant.
+   * Updates FCM configuration
    *
    * @throws {RequiredError}
    */
@@ -576,7 +590,7 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Update enabled phone factors for multi-factor authentication
+   * Replace the list of <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">phone-type MFA factors</a> (i.e., sms and voice) that are enabled for your tenant.
    * Update the Enabled Phone Factors
    *
    * @throws {RequiredError}
@@ -603,7 +617,7 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Update phone configuration (one of auth0|twilio|phone-message-hook)
+   * Update phone provider configuration
    *
    * @throws {RequiredError}
    */
@@ -629,7 +643,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Update Push Notification configuration (one of direct|sns|guardian)
+   * Modify the push notification provider configured for your tenant. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure Push Notifications for MFA</a>.
+   * Update Push Notification configuration
    *
    * @throws {RequiredError}
    */
@@ -655,13 +670,17 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Sets the MFA policies for the tenant.
+   * Set <a href="https://auth0.com/docs/secure/multi-factor-authentication/enable-mfa">multi-factor authentication (MFA) policies</a> for your tenant.
    *
-   * The following policies are supported: <ul><li><code>all-applications</code> policy - will prompt with MFA for all logins.</li><li><code>confidence-score</code> policy - will prompt with MFA only for low confidence logins.</li></ul> Pass an empty array to remove all MFA policies.
-   * Use of the Adaptive MFA feature requires an add-on for the Enterprise plan. Please contact sales with any questions. For more information about Adaptive MFA, read our <a href="https://auth0.com/docs/mfa/adaptive-mfa">full documentation</a>.
+   * The following policies are supported:
+   * <ul>
+   * <li><code>all-applications</code> policy prompts with MFA for all logins.</li>
+   * <li><code>confidence-score</code> policy prompts with MFA only for low confidence logins.</li>
+   * </ul>
    *
+   * <b>Note</b>: The <code>confidence-score</code> policy is part of the <a href="https://auth0.com/docs/secure/multi-factor-authentication/adaptive-mfa">Adaptive MFA feature</a>. Adaptive MFA requires an add-on for the Enterprise plan; review <a href="https://auth0.com/pricing">Auth0 Pricing</a> for more details.
    *
-   * Set the Multi-factor Authentication policies
+   * Update multi-factor authentication policies
    *
    * @throws {RequiredError}
    */
@@ -687,8 +706,10 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * A new endpoint is available to update the configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_selected_provider'>phone configuration</a>). It has the same payload as this one. Please use it instead.
-   * Update SMS configuration (one of auth0|twilio|phone-message-hook)
+   * This endpoint has been deprecated. To complete this action, use the <a href="https://auth0.com/docs/api/management/v2/guardian/put-phone-providers">Update phone configuration</a> endpoint instead.
+   *
+   *     <b>Previous functionality</b>: Update the multi-factor authentication SMS provider configuration in your tenant.
+   * Update SMS configuration
    *
    * @throws {RequiredError}
    */
@@ -714,9 +735,9 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Configure the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio SMS provider configuration</a> (subscription required).
+   * This endpoint has been deprecated. To complete this action, use the <a href="https://auth0.com/docs/api/management/v2/guardian/put-twilio">Update Twilio phone configuration</a> endpoint.
    *
-   *     A new endpoint is available to update the Twilio configuration related to phone factors (<a href='https://manage.local.dev.auth0.com/docs/api/management/v2/#!/Guardian/put_twilio'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
+   *     <b>Previous functionality</b>: Update the Twilio SMS provider configuration.
    * Update Twilio SMS configuration
    *
    * @throws {RequiredError}
@@ -744,7 +765,7 @@ export class GuardianManager extends BaseAPI {
 
   /**
    * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
-   * Update AWS SNS push notification configuration
+   * Update AWS SNS configuration
    *
    * @throws {RequiredError}
    */
@@ -770,8 +791,8 @@ export class GuardianManager extends BaseAPI {
   }
 
   /**
-   * Configure the <a href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio phone provider configuration</a> (subscription required).
-   * Update Twilio phone configuration
+   * Update the configuration of a Twilio phone provider that has been set up in your tenant. To learn more, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">Configure SMS and Voice Notifications for MFA</a>.
+   * Update Twilio configuration
    *
    * @throws {RequiredError}
    */

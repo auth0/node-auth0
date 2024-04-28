@@ -7,7 +7,6 @@ import {
   EmailProviderUpdateCredentials,
   ClientCreateOidcLogout,
   ClientOidcLogout,
-  ClientUpdateOidcLogout,
 } from './management/__generated/models/index.js';
 
 /**
@@ -39,6 +38,6 @@ export type ClientCreateOidcBackchannelLogout = ClientCreateOidcLogout;
  */
 export type ClientOidcBackchannelLogout = ClientOidcLogout;
 /**
- * @deprecated Use {@link ClientUpdateOidcLogout} instead.
+ * @deprecated Use {@link ClientCreateOidcLogout} instead.
  */
-export type ClientUpdateOidcBackchannelLogout = ClientUpdateOidcLogout;
+export type ClientUpdateOidcBackchannelLogout = ClientCreateOidcLogout;

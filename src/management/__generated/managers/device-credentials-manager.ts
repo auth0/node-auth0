@@ -17,7 +17,7 @@ const { BaseAPI } = runtime;
  */
 export class DeviceCredentialsManager extends BaseAPI {
   /**
-   * Delete a device credential.
+   * Permanently delete a device credential (such as a refresh token or public key) with the given ID.
    * Delete a device credential
    *
    * @throws {RequiredError}
@@ -43,10 +43,7 @@ export class DeviceCredentialsManager extends BaseAPI {
   }
 
   /**
-   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.
-   *
-   * Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.
-   * Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.
+   * Retrieve device credential information (<code>public_key</code>, <code>refresh_token</code>, or <code>rotating_refresh_token</code>) associated with a specific user.
    *
    * Retrieve device credentials
    *
@@ -112,10 +109,9 @@ export class DeviceCredentialsManager extends BaseAPI {
   }
 
   /**
-   * Device Credentials relate to refresh tokens and rotating refresh tokens for a given user_id.
+   * Create a device credential public key to manage refresh token rotation for a given <code>user_id</code>. Device Credentials APIs are designed for ad-hoc administrative use only and paging is by default enabled for GET requests.
    *
-   * Note: Device Credentials APIs are designed for ad-hoc administrative use only, and paging is by default enabled for GET requests.
-   * Note: When Refresh Token Rotation is enabled, the endpoint becomes eventual consistent.
+   * When refresh token rotation is enabled, the endpoint becomes consistent. For more information, read <a href="https://auth0.com/docs/get-started/tenant-settings/signing-keys"> Signing Keys</a>.
    *
    * Create a device public key credential
    *

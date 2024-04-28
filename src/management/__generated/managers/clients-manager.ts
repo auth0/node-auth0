@@ -7,6 +7,7 @@ import type {
   GetClients200Response,
   GetCredentials200ResponseInner,
   PatchCredentialsByCredentialIdRequest,
+  PostCredentials201Response,
   PostCredentialsRequest,
   GetClients200ResponseOneOf,
   DeleteClientsByIdRequest,
@@ -54,6 +55,7 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
+   * Delete a client credential you previously created. May be enabled or disabled. For more information, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
    * Delete a client credential
    *
    * @throws {RequiredError}
@@ -78,15 +80,18 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve clients (applications and SSO integrations) matching provided filters. A list of fields to include or exclude
-   * may also be specified. Note:
+   * Retrieve clients (applications and SSO integrations) matching provided filters. A list of fields to include or exclude may also be specified.
+   * For more information, read <a href="https://www.auth0.com/docs/get-started/applications"> Applications in Auth0</a> and <a href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single Sign-On</a>.
+   *
    * <ul>
    *   <li>
-   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
-   *     any scope.
+   *     The following can be retrieved with any scope:
+   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code>.
    *   </li>
    *   <li>
-   *     <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
+   *     The following properties can only be retrieved with the <code>read:clients</code> or
+   *     <code>read:client_keys</code> scope:
+   *     <code>callbacks</code>, <code>oidc_logout</code>, <code>allowed_origins</code>,
    *     <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
    *     <code>callback_url_template</code>, <code>jwt_configuration</code>,
    *     <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
@@ -99,14 +104,13 @@ export class ClientsManager extends BaseAPI {
    *     <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,
    *     <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,
    *     <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>organization_usage</code>,
-   *     <code>organization_require_behavior</code>
-   *     properties can only be retrieved with the <code>read:clients</code> or
-   *     <code>read:client_keys</code> scope.
+   *     <code>organization_require_behavior</code>.
    *   </li>
    *   <li>
+   *     The following properties can only be retrieved with the
+   *     <code>read:client_keys</code> or <code>read:client_credentials</code> scope:
    *     <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
-   *     <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code> properties can only be retrieved with the
-   *     <code>read:client_keys</code> or <code>read:client_credentials</code> scope.
+   *     <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code>.
    *   </li>
    * </ul>
    *
@@ -174,14 +178,17 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve client details. A list of fields to include or exclude may also be specified. Note:
+   * Retrieve client details by ID. Clients are SSO connections or Applications linked with your Auth0 tenant. A list of fields to include or exclude may also be specified.
+   * For more information, read <a href="https://www.auth0.com/docs/get-started/applications"> Applications in Auth0</a> and <a href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single Sign-On</a>.
    * <ul>
    *   <li>
-   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code> can be retrieved with
-   *     the any of the scopes.
+   *     The following properties can be retrieved with any of the scopes:
+   *     <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code>.
    *   </li>
    *   <li>
-   *     <code>callbacks</code>, <code>oidc_backchannel_logout</code>, <code>allowed_origins</code>,
+   *     The following properties can only be retrieved with the <code>read:clients</code> or
+   *     <code>read:client_keys</code> scopes:
+   *     <code>callbacks</code>, <code>oidc_logout</code>, <code>allowed_origins</code>,
    *     <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
    *     <code>callback_url_template</code>, <code>jwt_configuration</code>,
    *     <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
@@ -194,18 +201,16 @@ export class ClientsManager extends BaseAPI {
    *     <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,
    *     <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,
    *     <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>organization_usage</code>,
-   *     <code>organization_require_behavior</code>
-   *     properties can only be retrieved with the <code>read:clients</code> or
-   *     <code>read:client_keys</code> scope.
+   *     <code>organization_require_behavior</code>.
    *   </li>
    *   <li>
+   *     The following properties can only be retrieved with the <code>read:client_keys</code> or <code>read:client_credentials</code> scopes:
    *     <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
-   *     <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code> properties can only be retrieved with the
-   *     <code>read:client_keys</code> or <code>read:client_credentials</code> scope.
+   *     <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code>.
    *   </li>
    * </ul>
    *
-   * Get a client
+   * Get client by ID
    *
    * @throws {RequiredError}
    */
@@ -242,9 +247,9 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Get the list of client credentials that are associated to the client.
+   * Get the details of a client credential.
    *
-   * Important: To enable credentials to be used
+   * <b>Important</b>: To enable credentials to be used for Private Key JWT authentication method, set the <code>client_authentication_methods</code> property on the client.
    * Get client credentials
    *
    * @throws {RequiredError}
@@ -271,14 +276,16 @@ export class ClientsManager extends BaseAPI {
 
   /**
    * Get the details of a client credential.
-   * Get client credential
+   *
+   * <b>Important</b>: To enable credentials to be used for Private Key JWT authentication method, set the <code>client_authentication_methods</code> property on the client.
+   * Get client credential details
    *
    * @throws {RequiredError}
    */
   async getCredential(
     requestParameters: GetCredentialsByCredentialIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetCredentials200ResponseInner>> {
+  ): Promise<ApiResponse<PostCredentials201Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['client_id', 'credential_id']);
 
     const response = await this.request(
@@ -295,6 +302,8 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
+   * Updates a client's settings. For more information, read <a href="https://www.auth0.com/docs/get-started/applications"> Applications in Auth0</a> and <a href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single Sign-On</a>.
+   *
    * Notes:
    * - The `client_secret` and `signing_key` attributes can only be updated with the `update:client_keys` scope.
    * - The <code>client_authentication_methods</code> and <code>token_endpoint_auth_method</code> properties are mutually exclusive. Use
@@ -336,6 +345,7 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
+   * Change a client credential you previously created. May be enabled or disabled. For more information, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
    * Update a client credential
    *
    * @throws {RequiredError}
@@ -344,7 +354,7 @@ export class ClientsManager extends BaseAPI {
     requestParameters: PatchCredentialsByCredentialIdOperationRequest,
     bodyParameters: PatchCredentialsByCredentialIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetCredentials200ResponseInner>> {
+  ): Promise<ApiResponse<PostCredentials201Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['client_id', 'credential_id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -367,7 +377,8 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Create a new client (application or SSO integration).
+   * Create a new client (application or SSO integration). For more information, read <a href="https://www.auth0.com/docs/get-started/auth0-overview/create-applications">Create Applications</a>
+   * <a href="https://www.auth0.com/docs/authenticate/single-sign-on/api-endpoints-for-single-sign-on>">API Endpoints for Single Sign-On</a>.
    *
    * Notes:
    * - We recommend leaving the `client_secret` parameter unspecified to allow the generation of a safe secret.
@@ -407,7 +418,8 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Create a client credential associated to the client. The credential will be created but not yet enabled
+   * Create a client credential associated to your application. The credential will be created but not yet enabled for use with Private Key JWT authentication method. To enable the credential, set the <code>client_authentication_methods</code> property on the client.
+   * For more information, read <a href="https://www.auth0.com//docs/get-started/applications/configure-private-key-jwt">Configure Private Key JWT Authentication</a>.
    * Create a client credential
    *
    * @throws {RequiredError}
@@ -416,7 +428,7 @@ export class ClientsManager extends BaseAPI {
     requestParameters: PostCredentialsOperationRequest,
     bodyParameters: PostCredentialsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetCredentials200ResponseInner>> {
+  ): Promise<ApiResponse<PostCredentials201Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['client_id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -442,10 +454,9 @@ export class ClientsManager extends BaseAPI {
   /**
    * Rotate a client secret.
    *
-   * This endpoint cannot be used with clients configured with Private Key JWT authentication method (client_authentication_methods configured with private_key_jwt).
+   * This endpoint cannot be used with clients configured with Private Key JWT authentication method (client_authentication_methods configured with private_key_jwt). The generated secret is NOT base64 encoded.
    *
-   * Note: The generated secret is NOT base64 encoded.
-   *
+   * For more information, read <a href="https://www.auth0.com/docs/get-started/applications/rotate-client-secret">Rotate Client Secrets</a>.
    * Rotate a client secret
    *
    * @throws {RequiredError}

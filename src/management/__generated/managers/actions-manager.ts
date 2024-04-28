@@ -1,6 +1,7 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetAction200Response,
   GetActionVersions200Response,
   GetActionVersions200ResponseVersionsInner,
   GetActions200Response,
@@ -81,7 +82,7 @@ export class ActionsManager extends BaseAPI {
   async get(
     requestParameters: GetActionRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
+  ): Promise<ApiResponse<GetAction200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
@@ -316,7 +317,7 @@ export class ActionsManager extends BaseAPI {
     requestParameters: PatchActionOperationRequest,
     bodyParameters: PatchActionRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetActions200ResponseActionsInner>> {
+  ): Promise<ApiResponse<GetAction200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
