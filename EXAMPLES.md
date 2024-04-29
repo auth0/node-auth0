@@ -135,9 +135,8 @@ const { data: tokens } = await auth.passwordless.loginWithEmail({
 ```js
 import { AuthenticationClient } from 'auth0';
 
-// add mtls prefix to your domain name
 const auth = new AuthenticationClient({
-  domain: 'mtls.{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   agent: new https.Agent({ ... }),
 });
