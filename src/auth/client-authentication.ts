@@ -17,6 +17,7 @@ interface AddClientAuthenticationOptions {
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
   clientSecret?: string;
+  agent?: unknown;
 }
 
 /**
@@ -26,7 +27,6 @@ interface AddClientAuthenticationOptions {
  * Adds `client_assertion` and `client_assertion_type` for Private Key JWT token endpoint auth method.
  *
  * If `clientAssertionSigningKey` is provided it takes precedent over `clientSecret` .
- * Also skips  `client_secret` & `clientAssertionSigningKey` if request(domain) is of mTLS type
  */
 export const addClientAuthentication = async ({
   payload,
@@ -35,6 +35,7 @@ export const addClientAuthentication = async ({
   clientAssertionSigningKey,
   clientAssertionSigningAlg,
   clientSecret,
+  agent,
 }: AddClientAuthenticationOptions): Promise<Record<string, unknown>> => {
   const cid = payload.client_id || clientId;
   if (clientAssertionSigningKey && !payload.client_assertion) {
@@ -57,16 +58,18 @@ export const addClientAuthentication = async ({
   if (
     (!payload.client_secret || payload.client_secret.trim().length === 0) &&
     (!payload.client_assertion || payload.client_assertion.trim().length === 0) &&
-    !isMTLSRequest(domain)
+    !isMTLSRequest(agent)
   ) {
-    throw new Error('The client_secret or client_assertion field is required.');
+    throw new Error(
+      'The client_secret or client_assertion field is required, or it should be mTLS request.'
+    );
   }
   return payload;
 };
 
 /**
- * Checks if domain name starts with mTLS keyword for mTLS requests
+ * Checks if the request has agent property provided
  */
-const isMTLSRequest = (domain: string): boolean => {
-  return domain.toLowerCase().startsWith('mtls');
+const isMTLSRequest = (agent: unknown): boolean => {
+  return typeof agent === 'undefined' ? false : true;
 };

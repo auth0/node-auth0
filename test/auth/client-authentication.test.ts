@@ -111,7 +111,9 @@ describe('client-authentication', () => {
       auth0.oauth.clientCredentialsGrant({
         audience: 'my-api',
       })
-    ).rejects.toThrow('The client_secret or client_assertion field is required.');
+    ).rejects.toThrow(
+      'The client_secret or client_assertion field is required, or it should be mTLS request.'
+    );
   });
 
   it('should allow you to pass your own client assertion', async () => {
@@ -235,10 +237,13 @@ describe('mTLS-authentication', () => {
     jest.clearAllMocks();
   });
 
-  it('should do client credentials grant without client secret or assertion', async () => {
+  it('should do client credentials grant without client secret or assertion & only with agent', async () => {
     const auth0 = new AuthenticationClient({
       domain: 'mtls.tenant.auth0.com',
       clientId,
+      agent: {
+        options: { key: 'my-key', cert: 'my-cert' },
+      },
     });
     await auth0.oauth.clientCredentialsGrant({
       audience: 'my-api',
