@@ -18,7 +18,7 @@ export class SessionsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async deleteSession(
+  async delete(
     requestParameters: DeleteSessionRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -41,7 +41,7 @@ export class SessionsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getSession(
+  async get(
     requestParameters: GetSessionRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetSession200Response>> {

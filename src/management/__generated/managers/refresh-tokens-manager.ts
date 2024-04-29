@@ -18,7 +18,7 @@ export class RefreshTokensManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async deleteRefreshToken(
+  async delete(
     requestParameters: DeleteRefreshTokenRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<void>> {
@@ -44,7 +44,7 @@ export class RefreshTokensManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getRefreshToken(
+  async get(
     requestParameters: GetRefreshTokenRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRefreshToken200Response>> {
