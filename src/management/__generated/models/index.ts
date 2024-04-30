@@ -10406,7 +10406,7 @@ export interface ResourceServer {
    */
   enforce_policies: boolean;
   /**
-   * Dialect of access tokens that should be issued. Can be `access_token` or `access_token_authz` (includes permissions).
+   * Dialect of access tokens that should be issued. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
    *
    */
   token_dialect: ResourceServerTokenDialectEnum;
@@ -10424,8 +10424,10 @@ export type ResourceServerSigningAlgEnum =
   (typeof ResourceServerSigningAlgEnum)[keyof typeof ResourceServerSigningAlgEnum];
 
 export const ResourceServerTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
+  rfc9068_profile: 'rfc9068_profile',
+  rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
 export type ResourceServerTokenDialectEnum =
   (typeof ResourceServerTokenDialectEnum)[keyof typeof ResourceServerTokenDialectEnum];
@@ -10470,7 +10472,7 @@ export interface ResourceServerCreate {
    */
   token_lifetime?: number;
   /**
-   * Dialect of issued access token. Can be `access_token` or `access_token_authz` (includes permissions). Values can be `access_token` or `access_token_authz` (includes permissions).
+   * Dialect of access tokens that should be issued. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
    *
    */
   token_dialect?: ResourceServerCreateTokenDialectEnum;
@@ -10498,8 +10500,10 @@ export type ResourceServerCreateSigningAlgEnum =
   (typeof ResourceServerCreateSigningAlgEnum)[keyof typeof ResourceServerCreateSigningAlgEnum];
 
 export const ResourceServerCreateTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
+  rfc9068_profile: 'rfc9068_profile',
+  rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
 export type ResourceServerCreateTokenDialectEnum =
   (typeof ResourceServerCreateTokenDialectEnum)[keyof typeof ResourceServerCreateTokenDialectEnum];
@@ -10544,7 +10548,7 @@ export interface ResourceServerUpdate {
    */
   token_lifetime?: number;
   /**
-   * Dialect of issued access token. Can be `access_token` or `access_token_authz` (includes permissions).
+   * Dialect of access tokens that should be issued. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
    *
    */
   token_dialect?: ResourceServerUpdateTokenDialectEnum;
@@ -10567,8 +10571,10 @@ export type ResourceServerUpdateSigningAlgEnum =
   (typeof ResourceServerUpdateSigningAlgEnum)[keyof typeof ResourceServerUpdateSigningAlgEnum];
 
 export const ResourceServerUpdateTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
+  rfc9068_profile: 'rfc9068_profile',
+  rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
 export type ResourceServerUpdateTokenDialectEnum =
   (typeof ResourceServerUpdateTokenDialectEnum)[keyof typeof ResourceServerUpdateTokenDialectEnum];
