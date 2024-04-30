@@ -132,11 +132,13 @@ const { data: tokens } = await auth.passwordless.loginWithEmail({
 
 ### mTLS request
 
+Refer mTLS documentation for more info - [Link](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authenticate-with-mtls)
+
 ```js
 import { AuthenticationClient } from 'auth0';
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: 'mtls.{YOUR_TENANT_AND REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   agent: new https.Agent({ ... }),
 });
