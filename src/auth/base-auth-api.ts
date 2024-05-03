@@ -22,6 +22,8 @@ export interface AuthenticationClientOptions extends ClientOptions {
   clientAssertionSigningAlg?: string;
   idTokenSigningAlg?: string; // default 'RS256'
   clockTolerance?: number; // default 60s,
+
+  useMTLS: boolean;
 }
 
 interface AuthApiErrorResponse {

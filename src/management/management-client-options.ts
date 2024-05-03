@@ -12,12 +12,16 @@ export interface ManagementClientOptionsWithToken extends ManagementClientOption
 export interface ManagementClientOptionsWithClientSecret extends ManagementClientOptions {
   clientId: string;
   clientSecret: string;
+
+  useMTLS: boolean;
 }
 
 export interface ManagementClientOptionsWithClientAssertion extends ManagementClientOptions {
   clientId: string;
   clientAssertionSigningKey: string;
   clientAssertionSigningAlg?: string;
+
+  useMTLS: boolean;
 }
 
 export type ManagementClientOptionsWithClientCredentials =

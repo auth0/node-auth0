@@ -271,7 +271,7 @@ export interface TokenExchangeGrantRequest {
 export class OAuth extends BaseAuthAPI {
   private idTokenValidator: IDTokenValidator;
   constructor(options: AuthenticationClientOptions) {
-    super(options);
+    super({ ...options, domain: options.useMTLS ? 'mtls.' + options.domain : options.domain });
     this.idTokenValidator = new IDTokenValidator(options);
   }
 
