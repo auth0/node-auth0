@@ -10,3 +10,8 @@ export const generateClientInfo = () => ({
     node: process.version.replace('v', ''),
   },
 });
+
+/**
+ * @private
+ */
+export const mtlsPrefix = 'mtls';

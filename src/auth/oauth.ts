@@ -6,6 +6,7 @@ import {
 } from '../lib/runtime.js';
 import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api.js';
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
+import { mtlsPrefix } from '../utils.js';
 
 export interface TokenSet {
   /**
@@ -271,7 +272,10 @@ export interface TokenExchangeGrantRequest {
 export class OAuth extends BaseAuthAPI {
   private idTokenValidator: IDTokenValidator;
   constructor(options: AuthenticationClientOptions) {
-    super(options);
+    super({
+      ...options,
+      domain: options.useMTLS ? `${mtlsPrefix}.` + options.domain : options.domain,
+    });
     this.idTokenValidator = new IDTokenValidator(options);
   }
 

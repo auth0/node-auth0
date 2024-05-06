@@ -239,11 +239,12 @@ describe('mTLS-authentication', () => {
 
   it('should do client credentials grant without client secret or assertion & only with agent', async () => {
     const auth0 = new AuthenticationClient({
-      domain: 'mtls.tenant.auth0.com',
+      domain: 'tenant.auth0.com',
       clientId,
       agent: {
         options: { key: 'my-key', cert: 'my-cert' },
       },
+      useMTLS: true,
     });
     await auth0.oauth.clientCredentialsGrant({
       audience: 'my-api',

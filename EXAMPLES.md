@@ -136,17 +136,20 @@ Refer mTLS documentation for more info - [Link](https://auth0.com/docs/get-start
 
 ```js
 import { AuthenticationClient } from 'auth0';
+const { Agent } = require('undici');
 
 const auth = new AuthenticationClient({
-  domain: 'mtls.{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
-  agent: new https.Agent({ ... }),
+  agent: new Agent({
+    connect: { cert: 'your_cert', key: 'your_key' },
+  }),
+  useMTLS: true,
 });
 
 const { data: tokens } = await auth.oauth.clientCredentialsGrant({
   audience: 'you-api',
 });
-
 ```
 
 ## Management Client
