@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 import * as jose from 'jose';
 import { AuthenticationClient } from '../../src/index.js';
 import { TEST_PUBLIC_KEY, TEST_PRIVATE_KEY } from '../constants.js';
-
+import { Agent } from 'undici';
 const URL = 'https://tenant.auth0.com/';
 const clientId = 'test-client-id';
 const verifyOpts = {
@@ -241,9 +241,9 @@ describe('mTLS-authentication', () => {
     const auth0 = new AuthenticationClient({
       domain: 'tenant.auth0.com',
       clientId,
-      agent: {
-        options: { key: 'my-key', cert: 'my-cert' },
-      },
+      agent: new Agent({
+        connect: { cert: 'my-cert', key: 'my-key' },
+      }),
       useMTLS: true,
     });
     await auth0.oauth.clientCredentialsGrant({

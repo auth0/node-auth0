@@ -274,7 +274,7 @@ export class OAuth extends BaseAuthAPI {
   constructor(options: AuthenticationClientOptions) {
     super({
       ...options,
-      domain: options.useMTLS ? `${mtlsPrefix}.` + options.domain : options.domain,
+      domain: options.useMTLS ? `${mtlsPrefix}.${options.domain}` : options.domain,
     });
     this.idTokenValidator = new IDTokenValidator(options);
   }
