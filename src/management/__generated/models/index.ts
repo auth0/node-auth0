@@ -10424,8 +10424,8 @@ export type ResourceServerSigningAlgEnum =
   (typeof ResourceServerSigningAlgEnum)[keyof typeof ResourceServerSigningAlgEnum];
 
 export const ResourceServerTokenDialectEnum = {
-  access_token: 'access_token',
-  access_token_authz: 'access_token_authz',
+  token: 'access_token',
+  token_authz: 'access_token_authz',
   rfc9068_profile: 'rfc9068_profile',
   rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
@@ -10500,8 +10500,8 @@ export type ResourceServerCreateSigningAlgEnum =
   (typeof ResourceServerCreateSigningAlgEnum)[keyof typeof ResourceServerCreateSigningAlgEnum];
 
 export const ResourceServerCreateTokenDialectEnum = {
-  access_token: 'access_token',
-  access_token_authz: 'access_token_authz',
+  token: 'access_token',
+  token_authz: 'access_token_authz',
   rfc9068_profile: 'rfc9068_profile',
   rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
@@ -10571,8 +10571,8 @@ export type ResourceServerUpdateSigningAlgEnum =
   (typeof ResourceServerUpdateSigningAlgEnum)[keyof typeof ResourceServerUpdateSigningAlgEnum];
 
 export const ResourceServerUpdateTokenDialectEnum = {
-  access_token: 'access_token',
-  access_token_authz: 'access_token_authz',
+  token: 'access_token',
+  token_authz: 'access_token_authz',
   rfc9068_profile: 'rfc9068_profile',
   rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
