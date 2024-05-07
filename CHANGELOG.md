@@ -1,5 +1,17 @@
 # Change Log
 
+## [v4.4.0](https://github.com/auth0/node-auth0/tree/v4.4.0) (2024-05-07)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.3.1...v4.4.0)
+
+**Added**
+
+- Added new values of token_dialect in management api generated section [\#1003](https://github.com/auth0/node-auth0/pull/1003) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added changes to support mTLS authentication [\#1002](https://github.com/auth0/node-auth0/pull/1002) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added additional request parameter to support PAR with JAR requests [\#995](https://github.com/auth0/node-auth0/pull/995) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added new authorization_details parameter to support RAR requests [\#997](https://github.com/auth0/node-auth0/pull/997) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Bump jose from 4.14.4 to 4.15.5 [\#993](https://github.com/auth0/node-auth0/pull/993) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.3.1](https://github.com/auth0/node-auth0/tree/v4.3.1) (2024-02-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.3.0...v4.3.1)
