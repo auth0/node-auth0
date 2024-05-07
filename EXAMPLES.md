@@ -6,6 +6,7 @@
   - [Use Refresh Tokens](#use-refresh-tokens)
   - [Complete the Authorization Code flow with PKCE](#complete-the-authorization-code-flow-with-pkce)
   - [Login with Passwordless](#login-with-passwordless)
+  - [mTLS request](#mtls-request)
 - [Management Client](#management-client)
   - [Paginate through a list of users](#paginate-through-a-list-of-users)
   - [Paginate through a list of logs using checkpoint pagination](#paginate-through-a-list-of-logs-using-checkpoint-pagination)
@@ -126,6 +127,28 @@ await auth.passwordless.sendEmail({
 const { data: tokens } = await auth.passwordless.loginWithEmail({
   email: '{user email}',
   code: '{code from email}',
+});
+```
+
+### mTLS request
+
+Refer mTLS documentation for more info - [Link](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authenticate-with-mtls)
+
+```js
+import { AuthenticationClient } from 'auth0';
+const { Agent } = require('undici');
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  agent: new Agent({
+    connect: { cert: 'your_cert', key: 'your_key' },
+  }),
+  useMTLS: true,
+});
+
+const { data: tokens } = await auth.oauth.clientCredentialsGrant({
+  audience: 'you-api',
 });
 ```
 
