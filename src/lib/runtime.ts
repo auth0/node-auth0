@@ -73,7 +73,7 @@ export class BaseAPI {
       method: context.method,
       headers,
       body: context.body,
-      agent: this.configuration.agent,
+      dispatcher: this.configuration.agent,
     };
 
     const overriddenInit: RequestInit = {

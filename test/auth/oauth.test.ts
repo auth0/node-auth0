@@ -310,7 +310,9 @@ describe('OAuth', () => {
           response_type: 'code',
           redirect_uri: 'https://example.com',
         } as PushedAuthorizationRequest)
-      ).rejects.toThrow('The client_secret or client_assertion field is required.');
+      ).rejects.toThrow(
+        'The client_secret or client_assertion field is required, or it should be mTLS request.'
+      );
     });
 
     it('should return the par response', async () => {

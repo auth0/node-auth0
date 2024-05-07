@@ -17,6 +17,7 @@ interface AddClientAuthenticationOptions {
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
   clientSecret?: string;
+  useMTLS?: boolean;
 }
 
 /**
@@ -34,6 +35,7 @@ export const addClientAuthentication = async ({
   clientAssertionSigningKey,
   clientAssertionSigningAlg,
   clientSecret,
+  useMTLS,
 }: AddClientAuthenticationOptions): Promise<Record<string, unknown>> => {
   const cid = payload.client_id || clientId;
   if (clientAssertionSigningKey && !payload.client_assertion) {
@@ -55,9 +57,12 @@ export const addClientAuthentication = async ({
   }
   if (
     (!payload.client_secret || payload.client_secret.trim().length === 0) &&
-    (!payload.client_assertion || payload.client_assertion.trim().length === 0)
+    (!payload.client_assertion || payload.client_assertion.trim().length === 0) &&
+    !useMTLS
   ) {
-    throw new Error('The client_secret or client_assertion field is required.');
+    throw new Error(
+      'The client_secret or client_assertion field is required, or it should be mTLS request.'
+    );
   }
   return payload;
 };
