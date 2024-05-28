@@ -1,5 +1,5 @@
 import { RetryConfiguration } from './retry.js';
-import { Dispatcher } from 'undici';
+import { Dispatcher } from 'undici-types';
 
 /**
  * @private
