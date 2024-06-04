@@ -1,30 +1,30 @@
-import nock from 'nock';
 import { jest } from '@jest/globals';
+import nock from 'nock';
 import {
+  AuthApiError,
   AuthenticationClient,
+  ManagementApiError,
   ManagementClient,
+  ResponseError,
   UserInfoClient,
   UserInfoError,
-  ResponseError,
-  ManagementApiError,
-  AuthApiError,
 } from '../../src/index.js';
-import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
+import { FetchResponse, InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
 import { BaseAPI, applyQueryParams } from '../../src/lib/runtime.js';
 
-import * as utils from '../../src/utils.js';
 import { base64url } from 'jose';
+import * as utils from '../../src/utils.js';
 
 export class TestClient extends BaseAPI {
   public async testRequest(
     context: RequestOpts,
     initOverrides?: RequestInit | InitOverrideFunction
-  ): Promise<Response> {
+  ): Promise<FetchResponse> {
     return this.request(context, initOverrides);
   }
 }
 
-const parseError = async (response: Response) => {
+const parseError = async (response: FetchResponse) => {
   const body = await response.text();
   return new ResponseError(
     response.status,
@@ -295,7 +295,7 @@ describe('Runtime', () => {
       middleware: [
         {
           onError() {
-            return new Response(undefined, { status: 418 }) as Response;
+            return new Response(undefined, { status: 418 }) as FetchResponse;
           },
         },
       ],
@@ -321,7 +321,7 @@ describe('Runtime', () => {
           post() {
             return new Response(JSON.stringify({ bar: 'foo' }), {
               status: 200,
-            }) as Response;
+            }) as FetchResponse;
           },
         },
       ],

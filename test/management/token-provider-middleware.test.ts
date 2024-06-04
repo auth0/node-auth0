@@ -1,7 +1,7 @@
-import nock from 'nock';
 import { jest } from '@jest/globals';
-import { RequestOpts, InitOverrideFunction, FetchAPI } from '../../src/lib/index.js';
-import { BaseAPI } from '../../src/lib/runtime.js';
+import nock from 'nock';
+import { FetchAPI, InitOverrideFunction, RequestOpts } from '../../src/lib/index.js';
+import { BaseAPI, FetchResponse } from '../../src/lib/runtime.js';
 import { TokenProviderMiddleware } from '../../src/management/token-provider-middleware.js';
 
 const domain = 'test-domain.auth0.com';
@@ -15,7 +15,7 @@ const opts = {
   clientId: 'test-client-id',
   clientSecret: 'test-client-secret',
   audience: 'my-api',
-  parseError: async (response: Response) => {
+  parseError: async (response: FetchResponse) => {
     return new Error(`${response.status}`);
   },
   fetch: customFetch,
@@ -25,7 +25,7 @@ export class TestClient extends BaseAPI {
   public async testRequest(
     context: RequestOpts,
     initOverrides?: RequestInit | InitOverrideFunction
-  ): Promise<Response> {
+  ): Promise<FetchResponse> {
     return this.request(context, initOverrides);
   }
 }

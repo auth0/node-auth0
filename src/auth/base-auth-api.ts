@@ -1,7 +1,9 @@
 import { ResponseError } from '../lib/errors.js';
+import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 import {
   BaseAPI,
   ClientOptions,
+  FetchResponse,
   InitOverrideFunction,
   JSONApiResponse,
   RequestOpts,
@@ -12,7 +14,6 @@ import {
 } from './client-authentication.js';
 import { IDTokenValidator } from './id-token-validator.js';
 import { GrantOptions, TokenSet } from './oauth.js';
-import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 
 export interface AuthenticationClientOptions extends ClientOptions {
   domain: string;
@@ -59,7 +60,7 @@ function parseErrorBody(body: any): AuthApiErrorResponse {
   return data;
 }
 
-async function parseError(response: Response) {
+async function parseError(response: FetchResponse) {
   // Errors typically have a specific format:
   // {
   //    error: 'invalid_body',
@@ -143,7 +144,7 @@ export async function grant(
   request: (
     context: RequestOpts,
     initOverrides?: RequestInit | InitOverrideFunction
-  ) => Promise<Response>
+  ) => Promise<FetchResponse>
 ): Promise<JSONApiResponse<TokenSet>> {
   const response = await request(
     {

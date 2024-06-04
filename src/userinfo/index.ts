@@ -1,6 +1,6 @@
 import { ResponseError } from '../lib/errors.js';
 import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
-import { ClientOptions, InitOverride, JSONApiResponse } from '../lib/models.js';
+import { ClientOptions, FetchResponse, InitOverride, JSONApiResponse } from '../lib/models.js';
 import { BaseAPI } from '../lib/runtime.js';
 
 export interface UserInfoResponse {
@@ -47,7 +47,7 @@ export class UserInfoError extends Error {
   }
 }
 
-export async function parseError(response: Response) {
+export async function parseError(response: FetchResponse) {
   // Errors typically have a specific format:
   // {
   //    error: 'invalid_body',

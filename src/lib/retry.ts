@@ -1,3 +1,5 @@
+import { FetchResponse } from './models.js';
+
 const MAX_REQUEST_RETRY_JITTER = 250;
 const MAX_REQUEST_RETRY_DELAY = 10000;
 const DEFAULT_NUMBER_RETRIES = 3;
@@ -54,14 +56,14 @@ export interface RetryConfiguration {
  * Function that retries the provided action callback for a configurable amount of time, defaults to 3.
  */
 export function retry(
-  action: () => Promise<Response>,
+  action: () => Promise<FetchResponse>,
   { maxRetries, retryWhen }: RetryConfiguration
 ) {
   const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
   let nrOfTries = 0;
 
   const retryAndWait = async () => {
-    let result: Response;
+    let result: FetchResponse;
 
     result = await action();
 

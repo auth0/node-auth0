@@ -1,10 +1,21 @@
-import { RetryConfiguration } from './retry.js';
 import { Dispatcher } from 'undici';
+import { RetryConfiguration } from './retry.js';
 
 /**
  * @private
  */
-export type FetchAPI = (url: URL | RequestInfo, init?: RequestInit) => Promise<Response>;
+export type FetchAPI = (url: URL | RequestInfo, init?: RequestInit) => Promise<FetchResponse>;
+
+export interface FetchResponse {
+  headers: Headers;
+  readonly ok: boolean;
+  readonly status: number;
+  readonly statusText: string;
+
+  clone(): FetchResponse;
+  text(): Promise<string>;
+  json(): Promise<unknown>;
+}
 
 export interface ClientOptions
   extends Omit<Configuration, 'baseUrl' | 'parseError' | 'middleware'> {
@@ -14,7 +25,7 @@ export interface ClientOptions
 
 export interface Configuration {
   baseUrl: string; // override base path
-  parseError: (response: Response) => Promise<Error>; // Custom error parser
+  parseError: (response: FetchResponse) => Promise<Error>; // Custom error parser
   /**
    * Provide your own fetch implementation.
    */
@@ -93,7 +104,7 @@ export class JSONApiResponse<T> implements ApiResponse<T> {
     readonly statusText: string
   ) {}
 
-  static async fromResponse<T = unknown>(raw: Response) {
+  static async fromResponse<T = unknown>(raw: FetchResponse) {
     const value = (await raw.json()) as T;
     return new JSONApiResponse<T>(value, raw.headers, raw.status, raw.statusText);
   }
@@ -103,7 +114,7 @@ export class VoidApiResponse implements ApiResponse<undefined> {
   public data: undefined;
   constructor(public headers: Headers, readonly status: number, readonly statusText: string) {}
 
-  static async fromResponse(raw: Response) {
+  static async fromResponse(raw: FetchResponse) {
     return new VoidApiResponse(raw.headers, raw.status, raw.statusText);
   }
 }
@@ -116,7 +127,7 @@ export class TextApiResponse implements ApiResponse<string> {
     readonly statusText: string
   ) {}
 
-  static async fromResponse(raw: Response) {
+  static async fromResponse(raw: FetchResponse) {
     const value = await raw.text();
     return new TextApiResponse(value, raw.headers, raw.status, raw.statusText);
   }
@@ -137,7 +148,7 @@ export interface ResponseContext {
   fetch: FetchAPI;
   url: URL | RequestInfo;
   init: RequestInit;
-  response: Response;
+  response: FetchResponse;
 }
 
 export interface ErrorContext {
@@ -145,11 +156,11 @@ export interface ErrorContext {
   url: URL | RequestInfo;
   init: RequestInit;
   error: unknown;
-  response?: Response;
+  response?: FetchResponse;
 }
 
 export interface Middleware {
   pre?(context: RequestContext): Promise<FetchParams | void> | FetchParams | void;
-  post?(context: ResponseContext): Promise<Response | void> | Response | void;
-  onError?(context: ErrorContext): Promise<Response | void> | Response | void;
+  post?(context: ResponseContext): Promise<FetchResponse | void> | FetchResponse | void;
+  onError?(context: ErrorContext): Promise<FetchResponse | void> | FetchResponse | void;
 }

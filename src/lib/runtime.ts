@@ -1,13 +1,14 @@
-import { retry } from './retry.js';
 import { FetchError, RequiredError, TimeoutError } from './errors.js';
 import {
-  RequestOpts,
-  InitOverrideFunction,
-  HTTPQuery,
   Configuration,
-  Middleware,
   FetchAPI,
+  FetchResponse,
+  HTTPQuery,
+  InitOverrideFunction,
+  Middleware,
+  RequestOpts,
 } from './models.js';
+import { retry } from './retry.js';
 
 export * from './models.js';
 
@@ -18,7 +19,7 @@ export * from './models.js';
 export class BaseAPI {
   private middleware: Middleware[];
   private fetchApi: FetchAPI;
-  private parseError: (response: Response) => Promise<Error> | Error;
+  private parseError: (response: FetchResponse) => Promise<Error> | Error;
   private timeoutDuration: number;
 
   constructor(protected configuration: Configuration) {
@@ -40,7 +41,7 @@ export class BaseAPI {
   protected async request(
     context: RequestOpts,
     initOverrides?: RequestInit | InitOverrideFunction
-  ): Promise<Response> {
+  ): Promise<FetchResponse> {
     const { url, init } = await this.createFetchParams(context, initOverrides);
     const response = await this.fetch(url, init);
     if (response && response.status >= 200 && response.status < 300) {
@@ -124,7 +125,7 @@ export class BaseAPI {
           })) || fetchParams;
       }
     }
-    let response: Response | undefined = undefined;
+    let response: FetchResponse | undefined = undefined;
     let error: Error | undefined = undefined;
     try {
       response =
@@ -136,7 +137,7 @@ export class BaseAPI {
     } catch (e: any) {
       error = e;
     }
-    if (error || !(response as Response).ok) {
+    if (error || !(response as FetchResponse).ok) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
           response =
@@ -161,13 +162,13 @@ export class BaseAPI {
             (await middleware.post({
               fetch: this.fetchApi,
               ...fetchParams,
-              response: (response as Response).clone(),
+              response: (response as FetchResponse).clone(),
             })) || response;
         }
       }
     }
 
-    return response as Response;
+    return response as FetchResponse;
   };
 }
 

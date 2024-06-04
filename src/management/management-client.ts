@@ -1,11 +1,11 @@
+import { FetchResponse, ResponseError } from '../lib/index.js';
+import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 import { ManagementClientBase } from './__generated/index.js';
 import {
   ManagementClientOptionsWithClientCredentials,
   ManagementClientOptionsWithToken,
 } from './management-client-options.js';
 import { TokenProviderMiddleware } from './token-provider-middleware.js';
-import { ResponseError } from '../lib/index.js';
-import { TelemetryMiddleware } from '../lib/middleware/telemetry-middleware.js';
 
 interface ManagementApiErrorResponse {
   errorCode: string | undefined;
@@ -28,7 +28,7 @@ export class ManagementApiError extends Error {
   }
 }
 
-async function parseError(response: Response) {
+async function parseError(response: FetchResponse) {
   // Errors typically have a specific format:
   // {
   //    errorCode: 'invalid_body',
