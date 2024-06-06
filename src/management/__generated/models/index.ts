@@ -2562,6 +2562,10 @@ export interface Connection {
    */
   is_domain_connection: boolean;
   /**
+   * The identifiers of the clients for which the connection is to be enabled. If the array is empty or the property is not specified, no clients are enabled
+   */
+  enabled_clients: Array<string>;
+  /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
