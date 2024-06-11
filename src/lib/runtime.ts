@@ -137,7 +137,7 @@ export class BaseAPI {
     } catch (e: any) {
       error = e;
     }
-    if (error || !(response as FetchResponse).ok) {
+    if (error || !response?.ok) {
       for (const middleware of this.middleware) {
         if (middleware.onError) {
           response =
@@ -145,7 +145,7 @@ export class BaseAPI {
               fetch: this.fetchWithTimeout,
               ...fetchParams,
               error,
-              response: response ? response.clone() : undefined,
+              response: response?.clone(),
             })) || response;
         }
       }
