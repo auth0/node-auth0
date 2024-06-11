@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.4.1](https://github.com/auth0/node-auth0/tree/v4.4.1) (2024-06-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.4.0...v4.4.1)
+
+**Fixed**
+
+- fix: Fixed undici-types error by updating the dependecy [\#1008](https://github.com/auth0/node-auth0/pull/1008) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+
 ## [v4.4.0](https://github.com/auth0/node-auth0/tree/v4.4.0) (2024-05-07)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.3.1...v4.4.0)
