@@ -1,5 +1,19 @@
 # Change Log
 
+## [v4.5.0](https://github.com/auth0/node-auth0/tree/v4.5.0) (2024-06-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.4.1...v4.5.0)
+
+**Changed**
+
+- Support signing up with organization membership. [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
+
+**⚠️ BREAKING CHANGES**
+
+- Changes to `ResourceServer` interfaces (`ResourceServerTokenDialectEnum`, `ResourceServerCreateTokenDialectEnum` and `ResourceServerUpdateTokenDialectEnum`). [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
+  - The key `token` is changed to `access_token`.
+  - The key `token_authz` is changed to `access_token_authz`.
+
 ## [v4.4.1](https://github.com/auth0/node-auth0/tree/v4.4.1) (2024-06-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.4.0...v4.4.1)
