@@ -8,6 +8,7 @@ import {
   ClientCreateOidcLogout,
   ClientOidcLogout,
   ClientUpdateOidcLogout,
+  PostOrganizations201ResponseEnabledConnectionsInnerConnection,
 } from './management/__generated/models/index.js';
 
 /**
@@ -42,3 +43,9 @@ export type ClientOidcBackchannelLogout = ClientOidcLogout;
  * @deprecated Use {@link ClientUpdateOidcLogout} instead.
  */
 export type ClientUpdateOidcBackchannelLogout = ClientUpdateOidcLogout;
+/**
+ * @deprecated use {@link PostOrganizations201ResponseEnabledConnectionsInnerConnection} instead.
+ */
+// eslint-disable-next-line
+export type GetEnabledConnections200ResponseOneOfInnerConnection =
+  PostOrganizations201ResponseEnabledConnectionsInnerConnection;

@@ -4889,29 +4889,18 @@ export interface GetEnabledConnections200ResponseOneOfInner {
    */
   assign_membership_on_login: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button: boolean;
   /**
-   */
-  connection: GetEnabledConnections200ResponseOneOfInnerConnection;
-}
-/**
- *
- */
-export interface GetEnabledConnections200ResponseOneOfInnerConnection {
-  [key: string]: any | any;
-  /**
-   * The name of the enabled connection.
+   * Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false.
    *
    */
-  name: string;
+  is_signup_enabled: boolean;
   /**
-   * The strategy of the enabled connection.
-   *
    */
-  strategy: string;
+  connection: PostOrganizations201ResponseEnabledConnectionsInnerConnection;
 }
 /**
  *
@@ -7546,7 +7535,12 @@ export interface PatchEnabledConnectionsByConnectionIdRequest {
    */
   assign_membership_on_login?: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false.
+   *
+   */
+  is_signup_enabled?: boolean;
+  /**
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button?: boolean;
@@ -8801,7 +8795,12 @@ export interface PostEnabledConnectionsRequest {
    */
   assign_membership_on_login?: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false.
+   *
+   */
+  is_signup_enabled?: boolean;
+  /**
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button?: boolean;
@@ -9494,10 +9493,34 @@ export interface PostOrganizations201ResponseEnabledConnectionsInner {
    */
   assign_membership_on_login: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button: boolean;
+  /**
+   * Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false.
+   *
+   */
+  is_signup_enabled: boolean;
+  /**
+   */
+  connection: PostOrganizations201ResponseEnabledConnectionsInnerConnection;
+}
+/**
+ *
+ */
+export interface PostOrganizations201ResponseEnabledConnectionsInnerConnection {
+  [key: string]: any | any;
+  /**
+   * The name of the enabled connection.
+   *
+   */
+  name: string;
+  /**
+   * The strategy of the enabled connection.
+   *
+   */
+  strategy: string;
 }
 /**
  *
@@ -9555,10 +9578,15 @@ export interface PostOrganizationsRequestEnabledConnectionsInner {
    */
   assign_membership_on_login?: boolean;
   /**
-   * Enables showing a button for the connection in the organization login page. If false, it will be usable only by HRD.
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
    *
    */
   show_as_button?: boolean;
+  /**
+   * Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false.
+   *
+   */
+  is_signup_enabled?: boolean;
 }
 /**
  *
@@ -10424,8 +10452,8 @@ export type ResourceServerSigningAlgEnum =
   (typeof ResourceServerSigningAlgEnum)[keyof typeof ResourceServerSigningAlgEnum];
 
 export const ResourceServerTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
   rfc9068_profile: 'rfc9068_profile',
   rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
@@ -10500,8 +10528,8 @@ export type ResourceServerCreateSigningAlgEnum =
   (typeof ResourceServerCreateSigningAlgEnum)[keyof typeof ResourceServerCreateSigningAlgEnum];
 
 export const ResourceServerCreateTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
   rfc9068_profile: 'rfc9068_profile',
   rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
@@ -10571,8 +10599,8 @@ export type ResourceServerUpdateSigningAlgEnum =
   (typeof ResourceServerUpdateSigningAlgEnum)[keyof typeof ResourceServerUpdateSigningAlgEnum];
 
 export const ResourceServerUpdateTokenDialectEnum = {
-  token: 'access_token',
-  token_authz: 'access_token_authz',
+  access_token: 'access_token',
+  access_token_authz: 'access_token_authz',
   rfc9068_profile: 'rfc9068_profile',
   rfc9068_profile_authz: 'rfc9068_profile_authz',
 } as const;
@@ -13764,6 +13792,7 @@ export const GetPartialsPromptEnum = {
   signup: 'signup',
   signup_id: 'signup-id',
   signup_password: 'signup-password',
+  customized_consent: 'customized-consent',
 } as const;
 export type GetPartialsPromptEnum =
   (typeof GetPartialsPromptEnum)[keyof typeof GetPartialsPromptEnum];
@@ -13889,6 +13918,7 @@ export interface PutCustomTextByLanguageRequest {
    */
   language: PutCustomTextByLanguageLanguageEnum;
 }
+
 /**
  *
  */
@@ -13899,6 +13929,7 @@ export const PutPartialsPromptEnum = {
   signup: 'signup',
   signup_id: 'signup-id',
   signup_password: 'signup-password',
+  customized_consent: 'customized-consent',
 } as const;
 export type PutPartialsPromptEnum =
   (typeof PutPartialsPromptEnum)[keyof typeof PutPartialsPromptEnum];
