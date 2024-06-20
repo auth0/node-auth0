@@ -1,5 +1,21 @@
 # Change Log
 
+## [v4.6.0](https://github.com/auth0/node-auth0/tree/v4.6.0) (2024-06-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.5.0...v4.6.0)
+
+**Added**
+
+- Added enabled_clients in connection interface [\#1014](https://github.com/auth0/node-auth0/pull/1014) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+
+**Fixed**
+
+- Fixed bugs in the EXAMPLES.md's code snippets [\#994](https://github.com/auth0/node-auth0/pull/994) ([grjan7](https://github.com/grjan7))
+
+**Security**
+
+- Bump braces from 3.0.2 to 3.0.3 [\#1010](https://github.com/auth0/node-auth0/pull/1010) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.5.0](https://github.com/auth0/node-auth0/tree/v4.5.0) (2024-06-14)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.4.1...v4.5.0)
