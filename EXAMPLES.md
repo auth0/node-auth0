@@ -250,8 +250,8 @@ const management = new ManagementClient({
   agent: new https.Agent({ ... }),
   timeoutDuration: 5000
 });
-await management.users.get({ id: '{user id}' }, 
-{ headers: { 'bar': 'applied to this request' } });
+
+await management.users.get({ id: '{user id}' }, { headers: { 'bar': 'applied to this request' } });
 ```
 
 ### Overriding `fetch`
