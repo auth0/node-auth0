@@ -22,6 +22,7 @@ export interface AuthenticationClientOptions extends ClientOptions {
   clientAssertionSigningAlg?: string;
   idTokenSigningAlg?: string; // default 'RS256'
   clockTolerance?: number; // default 60s,
+  useMTLS?: boolean;
 }
 
 interface AuthApiErrorResponse {
@@ -92,6 +93,7 @@ export class BaseAuthAPI extends BaseAPI {
   clientSecret?: string;
   clientAssertionSigningKey?: string;
   clientAssertionSigningAlg?: string;
+  useMTLS?: boolean;
 
   constructor(options: AuthenticationClientOptions) {
     super({
@@ -107,6 +109,7 @@ export class BaseAuthAPI extends BaseAPI {
     this.clientSecret = options.clientSecret;
     this.clientAssertionSigningKey = options.clientAssertionSigningKey;
     this.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
+    this.useMTLS = options.useMTLS;
   }
 
   /**
@@ -122,6 +125,7 @@ export class BaseAuthAPI extends BaseAPI {
       clientSecret: this.clientSecret,
       clientAssertionSigningKey: this.clientAssertionSigningKey,
       clientAssertionSigningAlg: this.clientAssertionSigningAlg,
+      useMTLS: this.useMTLS,
     });
   }
 }

@@ -1,4 +1,5 @@
 import { RetryConfiguration } from './retry.js';
+import { Dispatcher } from 'undici-types';
 
 /**
  * @private
@@ -25,8 +26,7 @@ export interface Configuration {
   /**
    * Pass your own http agent to support proxies.
    */
-  // https://github.com/octokit/types.ts/blob/v10.0.0/src/RequestRequestOptions.ts#L13
-  agent?: unknown;
+  agent?: Dispatcher;
   /**
    * Custom headers that will be added to every request.
    */

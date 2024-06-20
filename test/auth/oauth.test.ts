@@ -310,7 +310,9 @@ describe('OAuth', () => {
           response_type: 'code',
           redirect_uri: 'https://example.com',
         } as PushedAuthorizationRequest)
-      ).rejects.toThrow('The client_secret or client_assertion field is required.');
+      ).rejects.toThrow(
+        'The client_secret or client_assertion field is required, or it should be mTLS request.'
+      );
     });
 
     it('should return the par response', async () => {
@@ -320,6 +322,42 @@ describe('OAuth', () => {
           client_id: 'test-client-id',
           response_type: 'code',
           redirect_uri: 'https://example.com',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          request_uri: 'https://www.request.uri',
+          expires_in: 86400,
+        },
+      });
+    });
+
+    it('should send authorization_details when provided', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+          redirect_uri: 'https://example.com',
+          authorization_details: JSON.stringify([
+            { type: 'payment_initiation', actions: ['write'] },
+          ]),
+        })
+      ).resolves.toMatchObject({
+        data: {
+          request_uri: 'https://www.request.uri',
+          expires_in: 86400,
+        },
+      });
+    });
+
+    it('should send request param when provided', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+          redirect_uri: 'https://example.com',
+          request: 'my-jwt-request',
         })
       ).resolves.toMatchObject({
         data: {

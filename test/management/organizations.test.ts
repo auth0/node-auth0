@@ -430,6 +430,7 @@ describe('OrganizationsManager', () => {
       id: 'org_id',
       connectionId: 'conn_id',
       show_as_button: false,
+      is_signup_enabled: true,
     };
 
     beforeEach(() => {
@@ -485,7 +486,12 @@ describe('OrganizationsManager', () => {
       id: 'org_123',
     };
 
-    const body = { connection_id: '123', assign_membership_on_login: false, show_as_button: false };
+    const body = {
+      connection_id: '123',
+      assign_membership_on_login: false,
+      show_as_button: false,
+      is_signup_enabled: true,
+    };
 
     beforeEach(() => {
       request = nock(API_URL).post(`/organizations/${data.id}/enabled_connections`).reply(200, {});
@@ -553,6 +559,7 @@ describe('OrganizationsManager', () => {
       id: 'org_123',
       connectionId: '123',
       show_as_button: false,
+      is_signup_enabled: true,
     };
     const body = { assign_membership_on_login: false };
 

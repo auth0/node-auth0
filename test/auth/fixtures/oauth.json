@@ -167,5 +167,27 @@
       "request_uri": "https://www.request.uri",
       "expires_in": 86400
     }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/par",
+    "body": "client_id=test-client-id&response_type=code&redirect_uri=https%3A%2F%2Fexample.com&authorization_details=%5B%7B%22type%22%3A%22payment_initiation%22%2C%22actions%22%3A%5B%22write%22%5D%7D%5D&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "request_uri": "https://www.request.uri",
+      "expires_in": 86400
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/par",
+    "body": "client_id=test-client-id&response_type=code&redirect_uri=https%3A%2F%2Fexample.com&request=my-jwt-request&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "request_uri": "https://www.request.uri",
+      "expires_in": 86400
+    }
   }
 ]

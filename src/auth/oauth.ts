@@ -6,6 +6,7 @@ import {
 } from '../lib/runtime.js';
 import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api.js';
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
+import { mtlsPrefix } from '../utils.js';
 
 export interface TokenSet {
   /**
@@ -147,6 +148,16 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
   code_challenge?: string;
 
   /**
+   * Allows JWT-Secured Authorization Request (JAR), when JAR & PAR request are used together. {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-par-and-jar | Reference}
+   */
+  request?: string;
+
+  /**
+   * A JSON stringified array of objects. It can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests (RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
+   */
+  authorization_details?: string;
+
+  /**
    * Allow for any custom property to be sent to Auth0
    */
   [key: string]: any;
@@ -261,7 +272,10 @@ export interface TokenExchangeGrantRequest {
 export class OAuth extends BaseAuthAPI {
   private idTokenValidator: IDTokenValidator;
   constructor(options: AuthenticationClientOptions) {
-    super(options);
+    super({
+      ...options,
+      domain: options.useMTLS ? `${mtlsPrefix}.${options.domain}` : options.domain,
+    });
     this.idTokenValidator = new IDTokenValidator(options);
   }
 
