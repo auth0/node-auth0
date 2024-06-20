@@ -55,6 +55,7 @@ describe('ConnectionsManager', () => {
         strategy: 'auth0',
         realms: ['test'],
         is_domain_connection: false,
+        enabled_clients: ['test'],
         metadata: {
           test: 'test value',
         },
@@ -97,6 +98,7 @@ describe('ConnectionsManager', () => {
         expect(connections.data[0].realms?.[0]).toBe(response[0].realms[0]);
         expect(connections.data[0].is_domain_connection).toBe(response[0].is_domain_connection);
         expect(connections.data[0].metadata?.test).toBe(response[0].metadata.test);
+        expect(connections.data[0].enabled_clients[0]).toBe(response[0].enabled_clients[0]);
 
         done();
       });
@@ -172,6 +174,7 @@ describe('ConnectionsManager', () => {
       strategy: 'auth0',
       realms: ['test'],
       is_domain_connection: false,
+      enabled_clients: ['test'],
       metadata: {
         test: 'test value',
       },
@@ -209,6 +212,7 @@ describe('ConnectionsManager', () => {
         expect(connection.data.realms?.[0]).toBe(response.realms[0]);
         expect(connection.data.is_domain_connection).toBe(response.is_domain_connection);
         expect(connection.data.metadata?.test).toBe(response.metadata.test);
+        expect(connection.data.enabled_clients[0]).toBe(response.enabled_clients[0]);
 
         done();
       });
