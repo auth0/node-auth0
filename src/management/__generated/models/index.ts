@@ -2557,6 +2557,11 @@ export interface Connection {
    */
   realms: Array<string>;
   /**
+   * The ids of the clients for which the connection is enabled
+   *
+   */
+  enabled_clients: Array<string>;
+  /**
    * True if the connection is domain level
    *
    */
