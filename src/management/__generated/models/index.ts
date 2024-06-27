@@ -4769,6 +4769,16 @@ export type GetCredentials200ResponseInnerAlgEnum =
 /**
  *
  */
+export interface GetDefaultMapping200Response {
+  /**
+   * The mapping between auth0 and SCIM
+   *
+   */
+  mapping: Array<GetScimConfiguration200ResponseMappingInner>;
+}
+/**
+ *
+ */
 export type GetDeviceCredentials200Response =
   | Array<DeviceCredential>
   | GetDeviceCredentials200ResponseOneOf;
@@ -6400,6 +6410,98 @@ export interface GetRulesConfigs200ResponseInner {
 /**
  *
  */
+export interface GetScimConfiguration200Response {
+  /**
+   * The connection's identifier
+   *
+   */
+  connection_id: string;
+  /**
+   * The connection's identifier
+   *
+   */
+  connection_name: string;
+  /**
+   * The connection's strategy
+   *
+   */
+  strategy: string;
+  /**
+   * The tenant's name
+   *
+   */
+  tenant_name: string;
+  /**
+   * User ID attribute for generating unique user ids
+   *
+   */
+  user_id_attribute: string;
+  /**
+   * The mapping between auth0 and SCIM
+   *
+   */
+  mapping: Array<GetScimConfiguration200ResponseMappingInner>;
+  /**
+   * The Date Time Scim Configuration was created
+   *
+   */
+  created_at: string;
+  /**
+   * The Date Time Scim Configuration was last updated
+   *
+   */
+  updated_on: string;
+}
+/**
+ *
+ */
+export interface GetScimConfiguration200ResponseMappingInner {
+  [key: string]: any | any;
+  /**
+   * The field location in the auth0 schema
+   *
+   */
+  auth0: string;
+  /**
+   * The field location in the SCIM schema
+   *
+   */
+  scim: string;
+}
+/**
+ *
+ */
+export interface GetScimTokens200ResponseInner {
+  [key: string]: any | any;
+  /**
+   * The token's identifier
+   *
+   */
+  token_id: string;
+  /**
+   * The scim client's token
+   *
+   */
+  token: string;
+  /**
+   * The scopes of the scim token
+   *
+   */
+  scopes: Array<string>;
+  /**
+   * The token's created at timestamp
+   *
+   */
+  created_at: string;
+  /**
+   * The token's valid until at timestamp
+   *
+   */
+  valid_until: string | null;
+}
+/**
+ *
+ */
 export interface GetSigningKeys200ResponseInner {
   /**
    * The key id of the signing key
@@ -7720,6 +7822,37 @@ export interface PatchOrganizationsByIdRequestBranding {
   /**
    */
   colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+}
+/**
+ *
+ */
+export interface PatchScimConfigurationRequest {
+  /**
+   * User ID attribute for generating unique user ids
+   *
+   */
+  user_id_attribute: string;
+  /**
+   * The mapping between auth0 and SCIM
+   *
+   */
+  mapping: Array<PatchScimConfigurationRequestMappingInner>;
+}
+/**
+ *
+ */
+export interface PatchScimConfigurationRequestMappingInner {
+  [key: string]: any | any;
+  /**
+   * The field location in the auth0 schema
+   *
+   */
+  auth0?: string;
+  /**
+   * The field location in the SCIM schema
+   *
+   */
+  scim?: string;
 }
 /**
  *
@@ -9709,6 +9842,51 @@ export interface PostRoleUsersRequest {
    *
    */
   users: Array<string>;
+}
+/**
+ *
+ */
+export interface PostScimToken201Response {
+  /**
+   * The token's identifier
+   *
+   */
+  token_id: string;
+  /**
+   * The scim client's token
+   *
+   */
+  token: string;
+  /**
+   * The scopes of the scim token
+   *
+   */
+  scopes: Array<string>;
+  /**
+   * The token's created at timestamp
+   *
+   */
+  created_at: string;
+  /**
+   * The token's valid until at timestamp
+   *
+   */
+  valid_until: string | null;
+}
+/**
+ * SCIM Token
+ */
+export interface PostScimTokenRequest {
+  /**
+   * The scopes of the scim token
+   *
+   */
+  scopes?: Array<string>;
+  /**
+   * Lifetime of the token in seconds. Must be greater than 900
+   *
+   */
+  token_lifetime?: number;
 }
 /**
  *
@@ -12536,6 +12714,31 @@ export interface DeleteConnectionsByIdRequest {
 /**
  *
  */
+export interface DeleteScimConfigurationRequest {
+  /**
+   * The id of the connection to delete its SCIM configuration
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteTokensByTokenIdRequest {
+  /**
+   * The connection id that owns the SCIM token to delete
+   *
+   */
+  id: string;
+  /**
+   * The id of the scim token to delete
+   *
+   */
+  tokenId: string;
+}
+/**
+ *
+ */
 export interface DeleteUsersByEmailRequest {
   /**
    * The id of the connection (currently only database connections are supported)
@@ -12692,6 +12895,36 @@ export interface GetConnectionsByIdRequest {
 /**
  *
  */
+export interface GetDefaultMappingRequest {
+  /**
+   * The id of the connection to retrieve its default SCIM mapping
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetScimConfigurationRequest {
+  /**
+   * The id of the connection to retrieve its SCIM configuration
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetScimTokensRequest {
+  /**
+   * The id of the connection to retrieve its SCIM configuration
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface GetStatusRequest {
   /**
    * ID of the connection to check
@@ -12705,6 +12938,36 @@ export interface GetStatusRequest {
 export interface PatchConnectionsByIdRequest {
   /**
    * The id of the connection to retrieve
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchScimConfigurationOperationRequest {
+  /**
+   * The id of the connection to update its SCIM configuration
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostScimConfigurationRequest {
+  /**
+   * The id of the connection to create its SCIM configuration
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostScimTokenOperationRequest {
+  /**
+   * The id of the connection to create its SCIM token
    *
    */
   id: string;
