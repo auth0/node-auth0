@@ -513,7 +513,7 @@ export class ConnectionsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async createScimTokens(
+  async createScimToken(
     requestParameters: PostScimTokenOperationRequest,
     bodyParameters: PostScimTokenRequest,
     initOverrides?: InitOverride
