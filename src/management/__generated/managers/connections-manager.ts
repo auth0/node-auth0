@@ -9,6 +9,7 @@ import type {
   GetScimConfiguration200Response,
   GetScimTokens200ResponseInner,
   PatchScimConfigurationRequest,
+  PostScimConfigurationRequest,
   PostScimToken201Response,
   PostScimTokenRequest,
   GetConnections200ResponseOneOf,
@@ -24,7 +25,7 @@ import type {
   GetStatusRequest,
   PatchConnectionsByIdRequest,
   PatchScimConfigurationOperationRequest,
-  PostScimConfigurationRequest,
+  PostScimConfigurationOperationRequest,
   PostScimTokenOperationRequest,
 } from '../models/index.js';
 
@@ -479,10 +480,15 @@ export class ConnectionsManager extends BaseAPI {
    * @throws {RequiredError}
    */
   async createScimConfiguration(
-    requestParameters: PostScimConfigurationRequest,
+    requestParameters: PostScimConfigurationOperationRequest,
+    bodyParameters: PostScimConfigurationRequest | null,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetScimConfiguration200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
 
     const response = await this.request(
       {
@@ -491,6 +497,8 @@ export class ConnectionsManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
       },
       initOverrides
     );

@@ -6479,11 +6479,6 @@ export interface GetScimTokens200ResponseInner {
    */
   token_id: string;
   /**
-   * The scim client's token
-   *
-   */
-  token: string;
-  /**
    * The scopes of the scim token
    *
    */
@@ -6494,10 +6489,15 @@ export interface GetScimTokens200ResponseInner {
    */
   created_at: string;
   /**
-   * The token's valid until at timestamp
+   * The token's valid until timestamp
    *
    */
-  valid_until: string | null;
+  valid_until: string;
+  /**
+   * The token's last used at timestamp
+   *
+   */
+  last_used_at: string;
 }
 /**
  *
@@ -7836,23 +7836,7 @@ export interface PatchScimConfigurationRequest {
    * The mapping between auth0 and SCIM
    *
    */
-  mapping: Array<PatchScimConfigurationRequestMappingInner>;
-}
-/**
- *
- */
-export interface PatchScimConfigurationRequestMappingInner {
-  [key: string]: any | any;
-  /**
-   * The field location in the auth0 schema
-   *
-   */
-  auth0?: string;
-  /**
-   * The field location in the SCIM schema
-   *
-   */
-  scim?: string;
+  mapping: Array<PostScimConfigurationRequestMappingInner>;
 }
 /**
  *
@@ -9846,6 +9830,37 @@ export interface PostRoleUsersRequest {
 /**
  *
  */
+export interface PostScimConfigurationRequest {
+  /**
+   * User ID attribute for generating unique user ids
+   *
+   */
+  user_id_attribute?: string;
+  /**
+   * The mapping between auth0 and SCIM
+   *
+   */
+  mapping?: Array<PostScimConfigurationRequestMappingInner>;
+}
+/**
+ *
+ */
+export interface PostScimConfigurationRequestMappingInner {
+  [key: string]: any | any;
+  /**
+   * The field location in the auth0 schema
+   *
+   */
+  auth0?: string;
+  /**
+   * The field location in the SCIM schema
+   *
+   */
+  scim?: string;
+}
+/**
+ *
+ */
 export interface PostScimToken201Response {
   /**
    * The token's identifier
@@ -9871,7 +9886,7 @@ export interface PostScimToken201Response {
    * The token's valid until at timestamp
    *
    */
-  valid_until: string | null;
+  valid_until: string;
 }
 /**
  * SCIM Token
@@ -9886,7 +9901,7 @@ export interface PostScimTokenRequest {
    * Lifetime of the token in seconds. Must be greater than 900
    *
    */
-  token_lifetime?: number;
+  token_lifetime?: number | null;
 }
 /**
  *
@@ -12955,7 +12970,7 @@ export interface PatchScimConfigurationOperationRequest {
 /**
  *
  */
-export interface PostScimConfigurationRequest {
+export interface PostScimConfigurationOperationRequest {
   /**
    * The id of the connection to create its SCIM configuration
    *
