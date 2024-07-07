@@ -580,7 +580,7 @@ describe('ConnectionsManager', () => {
 
   describe('#createScimConfiguration', () => {
     const connectionId = 'con_KYp633cmKtnEQ31C';
-    const data = {
+    const payload = {
       mapping: [
         {
           scim: 'userName',
@@ -617,13 +617,13 @@ describe('ConnectionsManager', () => {
     let request: nock.Scope;
     beforeEach(() => {
       request = nock(API_URL)
-        .post(`/connections/${connectionId}/scim-configuration`, data)
-        .reply(200, response);
+        .post(`/connections/${connectionId}/scim-configuration`, payload)
+        .reply(201, response);
     });
 
     it('should return a promise if no callback is given', (done) => {
       connections
-        .createScimConfiguration({ id: connectionId })
+        .createScimConfiguration({ id: connectionId }, payload)
         .then(done.bind(null, null))
         .catch(done.bind(null, null));
     });
@@ -631,23 +631,23 @@ describe('ConnectionsManager', () => {
     it('should pass any errors to the promise catch handler', (done) => {
       nock.cleanAll();
       nock(API_URL).post(`/connections/${connectionId}/scim-configuration`).reply(500, {});
-      connections.createScimConfiguration({ id: connectionId }).catch((err) => {
+      connections.createScimConfiguration({ id: connectionId }, payload).catch((err) => {
         expect(err).toBeDefined();
 
         done();
       });
     });
 
-    it.skip('should perform a POST request to /api/v2/connections/${connectionId}/scim-configuration', (done) => {
-      connections.createScimConfiguration({ id: connectionId }).then(() => {
+    it('should perform a POST request to /api/v2/connections/${connectionId}/scim-configuration', (done) => {
+      connections.createScimConfiguration({ id: connectionId }, payload).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
       });
     });
 
-    it.skip('should pass the data in the body of the request', (done) => {
-      connections.createScimConfiguration({ id: connectionId }).then(() => {
+    it('should pass the data in the body of the request', (done) => {
+      connections.createScimConfiguration({ id: connectionId }, payload).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
@@ -656,15 +656,15 @@ describe('ConnectionsManager', () => {
 
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
-      nock(API_URL).post(`/connections/${connectionId}/scim-configuration`).reply(200, response);
-      connections.createScimConfiguration({ id: connectionId }).then((connection) => {
-        console.log('>>>>>>>>>>>>', connection);
+      nock(API_URL).post(`/connections/${connectionId}/scim-configuration`).reply(201, response);
+
+      connections.createScimConfiguration({ id: connectionId }, payload).then((connection) => {
         expect(connection.data.connection_id).toBe(response.connection_id);
         expect(connection.data.connection_name).toBe(response.connection_name);
         expect(connection.data.strategy).toBe(response.strategy);
         expect(connection.data.tenant_name).toBe(response.tenant_name);
         expect(connection.data.user_id_attribute).toBe(response.user_id_attribute);
-        expect(connection.data.mapping).toBe(response.mapping);
+        expect(connection.data.mapping).toStrictEqual(response.mapping);
         expect(connection.data.created_at).toBe(response.created_at);
         expect(connection.data.updated_on).toBe(response.updated_on);
 
@@ -678,9 +678,559 @@ describe('ConnectionsManager', () => {
       const request = nock(API_URL)
         .post(`/connections/${connectionId}/scim-configuration`)
         .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(201, response);
+
+      connections.createScimConfiguration({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateScimConfiguration', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const payload = {
+      mapping: [
+        {
+          scim: 'userName',
+          auth0: 'username',
+        },
+        {
+          scim: 'emails[primary eq true].value',
+          auth0: 'email',
+        },
+      ],
+      user_id_attribute: 'externalId',
+    };
+
+    const response = {
+      connection_id: 'test_connection',
+      connection_name: 'Test Connection',
+      strategy: 'auth0',
+      tenant_name: 'test_connection_id',
+      user_id_attribute: 'externalId',
+      mapping: [
+        {
+          scim: 'userName',
+          auth0: 'username',
+        },
+        {
+          scim: 'emails[primary eq true].value',
+          auth0: 'email',
+        },
+      ],
+      created_at: false,
+      updated_on: '25/06/2024',
+    };
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .patch(`/connections/${connectionId}/scim-configuration`, payload)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .updateScimConfiguration({ id: connectionId }, payload)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).patch(`/connections/${connectionId}/scim-configuration`).reply(500, {});
+      connections.updateScimConfiguration({ id: connectionId }, payload).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a PATCH request to /api/v2/connections/${connectionId}/scim-configuration', (done) => {
+      connections.updateScimConfiguration({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      connections.updateScimConfiguration({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).patch(`/connections/${connectionId}/scim-configuration`).reply(200, response);
+
+      connections.updateScimConfiguration({ id: connectionId }, payload).then((connection) => {
+        expect(connection.data.connection_id).toBe(response.connection_id);
+        expect(connection.data.connection_name).toBe(response.connection_name);
+        expect(connection.data.strategy).toBe(response.strategy);
+        expect(connection.data.tenant_name).toBe(response.tenant_name);
+        expect(connection.data.user_id_attribute).toBe(response.user_id_attribute);
+        expect(connection.data.mapping).toStrictEqual(response.mapping);
+        expect(connection.data.created_at).toBe(response.created_at);
+        expect(connection.data.updated_on).toBe(response.updated_on);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/connections/${connectionId}/scim-configuration`)
+        .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200, response);
 
-      connections.createScimConfiguration({ id: connectionId }).then(() => {
+      connections.updateScimConfiguration({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getScimConfiguration', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = {
+      connection_id: 'test_connection',
+      connection_name: 'Test Connection',
+      strategy: 'auth0',
+      tenant_name: 'test_connection_id',
+      user_id_attribute: 'externalId',
+      mapping: [
+        {
+          scim: 'userName',
+          auth0: 'username',
+        },
+        {
+          scim: 'emails[primary eq true].value',
+          auth0: 'email',
+        },
+      ],
+      created_at: false,
+      updated_on: '25/06/2024',
+    };
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration`)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .getScimConfiguration({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/scim-configuration`).reply(500, {});
+      connections.getScimConfiguration({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/connections/${connectionId}/scim-configuration', (done) => {
+      connections.getScimConfiguration({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/scim-configuration`).reply(200, response);
+
+      connections.getScimConfiguration({ id: connectionId }).then((connection) => {
+        expect(connection.data.connection_id).toBe(response.connection_id);
+        expect(connection.data.connection_name).toBe(response.connection_name);
+        expect(connection.data.strategy).toBe(response.strategy);
+        expect(connection.data.tenant_name).toBe(response.tenant_name);
+        expect(connection.data.user_id_attribute).toBe(response.user_id_attribute);
+        expect(connection.data.mapping).toStrictEqual(response.mapping);
+        expect(connection.data.created_at).toBe(response.created_at);
+        expect(connection.data.updated_on).toBe(response.updated_on);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.getScimConfiguration({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#deleteScimConfiguration', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = {};
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .delete(`/connections/${connectionId}/scim-configuration`)
+        .reply(204, {});
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .deleteScimConfiguration({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).delete(`/connections/${connectionId}/scim-configuration`).reply(500, {});
+      connections.deleteScimConfiguration({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/connections/${connectionId}/scim-configuration', (done) => {
+      connections.deleteScimConfiguration({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/connections/${connectionId}/scim-configuration`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.deleteScimConfiguration({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#createScimToken', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const payload = {
+      scopes: ['get:users', 'post:users'],
+      token_lifetime: 950,
+    };
+
+    const response = {
+      token_id: 'tok_Gf3Q54Mjm88rifWy',
+      token:
+        'tok_Gf3Q54Mjm88rifWy.1a76dccc1de257668e6f071b557ee282671ae31ed5c1d07c3a85262ce88e161a',
+      scopes: ['get:users', 'post:users'],
+      created_at: '2024-07-07T17:02:43.527Z',
+      valid_until: '2024-07-07T19:32:43.527Z',
+    };
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .post(`/connections/${connectionId}/scim-configuration/tokens`, payload)
+        .reply(201, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .createScimToken({ id: connectionId }, payload)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).post(`/connections/${connectionId}/scim-configuration/tokens`).reply(500, {});
+      connections.createScimToken({ id: connectionId }, payload).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/connections/${connectionId}/scim-configuration/tokens', (done) => {
+      connections.createScimToken({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      connections.createScimToken({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL)
+        .post(`/connections/${connectionId}/scim-configuration/tokens`)
+        .reply(201, response);
+
+      connections.createScimToken({ id: connectionId }, payload).then((connection) => {
+        expect(connection.data.token_id).toBe(response.token_id);
+        expect(connection.data.token).toBe(response.token);
+        expect(connection.data.scopes).toStrictEqual(response.scopes);
+        expect(connection.data.created_at).toBe(response.created_at);
+        expect(connection.data.valid_until).toBe(response.valid_until);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/connections/${connectionId}/scim-configuration/tokens`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(201, response);
+
+      connections.createScimToken({ id: connectionId }, payload).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getScimTokens', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = [
+      {
+        token_id: 'tok_WT39vSnAo4Xi4rrn',
+        created_at: '2024-07-07T17:02:41.622Z',
+        scopes: ['get:users', 'post:users'],
+        valid_until: '2024-07-07T19:32:41.622Z',
+      },
+      {
+        token_id: 'tok_Gf3Q54Mjm88rifWy',
+        created_at: '2024-07-07T17:02:43.527Z',
+        scopes: ['get:users', 'post:users'],
+        valid_until: '2024-07-07T19:32:43.527Z',
+      },
+    ];
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/tokens`)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .getScimTokens({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/scim-configuration/tokens`).reply(500, {});
+      connections.getScimTokens({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/connections/${connectionId}/scim-configuration/tokens', (done) => {
+      connections.getScimTokens({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/tokens`)
+        .reply(200, response);
+
+      connections.getScimTokens({ id: connectionId }).then((connection) => {
+        expect(connection.data).toStrictEqual(response);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/tokens`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.getScimTokens({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#deleteScimToken', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const tokenId = 'tok_WT39vSnAo4Xi4rrn';
+    const response = {};
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .delete(`/connections/${connectionId}/scim-configuration/tokens/${tokenId}`)
+        .reply(204, {});
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .deleteScimToken({ id: connectionId, tokenId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL)
+        .delete(`/connections/${connectionId}/scim-configuration/tokens/${tokenId}`)
+        .reply(500, {});
+      connections.deleteScimToken({ id: connectionId, tokenId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/connections/${connectionId}/scim-configuration/tokens/${tokenId}`', (done) => {
+      connections.deleteScimToken({ id: connectionId, tokenId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/connections/${connectionId}/scim-configuration/tokens/${tokenId}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.deleteScimToken({ id: connectionId, tokenId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getDefaultScimMapping', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = {
+      mapping: [
+        {
+          auth0: 'preferred_username',
+          scim: 'userName',
+        },
+        {
+          auth0: 'email',
+          scim: 'emails[primary eq true].value',
+        },
+      ],
+    };
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/default-mapping`)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .getDefaultScimMapping({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/default-mapping`)
+        .reply(500, {});
+      connections.getDefaultScimMapping({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/connections/${connectionId}/scim-configuration/tokens', (done) => {
+      connections.getDefaultScimMapping({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/default-mapping`)
+        .reply(200, response);
+
+      connections.getDefaultScimMapping({ id: connectionId }).then((connection) => {
+        expect(connection.data).toStrictEqual(response);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/connections/${connectionId}/scim-configuration/default-mapping`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.getDefaultScimMapping({ id: connectionId }).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();
