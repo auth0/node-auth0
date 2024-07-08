@@ -5,13 +5,28 @@ import type {
   ConnectionCreate,
   ConnectionUpdate,
   GetConnections200Response,
+  GetDefaultMapping200Response,
+  GetScimConfiguration200Response,
+  GetScimTokens200ResponseInner,
+  PatchScimConfigurationRequest,
+  PostScimConfigurationRequest,
+  PostScimToken201Response,
+  PostScimTokenRequest,
   GetConnections200ResponseOneOf,
   DeleteConnectionsByIdRequest,
+  DeleteScimConfigurationRequest,
+  DeleteTokensByTokenIdRequest,
   DeleteUsersByEmailRequest,
   GetConnectionsRequest,
   GetConnectionsByIdRequest,
+  GetDefaultMappingRequest,
+  GetScimConfigurationRequest,
+  GetScimTokensRequest,
   GetStatusRequest,
   PatchConnectionsByIdRequest,
+  PatchScimConfigurationOperationRequest,
+  PostScimConfigurationOperationRequest,
+  PostScimTokenOperationRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -36,6 +51,59 @@ export class ConnectionsManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/connections/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Deletes a scim configuration by its <code>connectionId</code>.
+   *
+   * Delete a connection's SCIM configuration
+   *
+   * @throws {RequiredError}
+   */
+  async deleteScimConfiguration(
+    requestParameters: DeleteScimConfigurationRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Deletes a scim token by its connection <code>id</code> and <code>tokenId</code>.
+   *
+   * Delete a connection's SCIM token
+   *
+   * @throws {RequiredError}
+   */
+  async deleteScimToken(
+    requestParameters: DeleteTokensByTokenIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'tokenId']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration/tokens/{tokenId}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace('{tokenId}', encodeURIComponent(String(requestParameters.tokenId))),
         method: 'DELETE',
       },
       initOverrides
@@ -205,6 +273,87 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
+   * Retrieves a scim configuration's default mapping by its <code>connectionId</code>.
+   *
+   * Get a connection's default SCIM mapping
+   *
+   * @throws {RequiredError}
+   */
+  async getDefaultScimMapping(
+    requestParameters: GetDefaultMappingRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetDefaultMapping200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration/default-mapping`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieves a scim configuration by its <code>connectionId</code>.
+   *
+   * Get a connection's SCIM configuration
+   *
+   * @throws {RequiredError}
+   */
+  async getScimConfiguration(
+    requestParameters: GetScimConfigurationRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetScimConfiguration200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieves all scim tokens by its connection <code>id</code>.
+   *
+   * Get a connection's SCIM tokens
+   *
+   * @throws {RequiredError}
+   */
+  async getScimTokens(
+    requestParameters: GetScimTokensRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetScimTokens200ResponseInner>>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration/tokens`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Retrieves the status of an ad/ldap connection referenced by its <code>ID</code>. <code>200 OK</code> http status code response is returned  when the connection is online, otherwise a <code>404</code> status code is returned along with an error message
    * Check connection status
    *
@@ -262,6 +411,40 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
+   * Update a scim configuration by its <code>connectionId</code>.
+   *
+   * Patch a connection's SCIM configuration
+   *
+   * @throws {RequiredError}
+   */
+  async updateScimConfiguration(
+    requestParameters: PatchScimConfigurationOperationRequest,
+    bodyParameters: PatchScimConfigurationRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetScimConfiguration200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Creates a new connection according to the JSON object received in <code>body</code>.
    *
    * Create a connection
@@ -279,6 +462,74 @@ export class ConnectionsManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/connections`,
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Create a scim configuration for a connection.
+   *
+   * Create a SCIM configuration
+   *
+   * @throws {RequiredError}
+   */
+  async createScimConfiguration(
+    requestParameters: PostScimConfigurationOperationRequest,
+    bodyParameters: PostScimConfigurationRequest | null,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetScimConfiguration200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Create a scim token for a scim client.
+   *
+   * Create a SCIM Token
+   *
+   * @throws {RequiredError}
+   */
+  async createScimToken(
+    requestParameters: PostScimTokenOperationRequest,
+    bodyParameters: PostScimTokenRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PostScimToken201Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/scim-configuration/tokens`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
