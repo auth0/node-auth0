@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.7.0](https://github.com/auth0/node-auth0/tree/v4.7.0) (2024-07-08)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.6.0...v4.7.0)
+
+**Added**
+
+- Support SCIM features. [\#1016](https://github.com/auth0/node-auth0/pull/1016) ([nandan-bhat](https://github.com/nandan-bhat))
+
 ## [v4.6.0](https://github.com/auth0/node-auth0/tree/v4.6.0) (2024-06-20)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.5.0...v4.6.0)
