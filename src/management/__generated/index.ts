@@ -23,10 +23,12 @@ import {
   LogsManager,
   OrganizationsManager,
   PromptsManager,
+  RefreshTokensManager,
   ResourceServersManager,
   RolesManager,
   RulesManager,
   RulesConfigsManager,
+  SessionsManager,
   StatsManager,
   TenantsManager,
   TicketsManager,
@@ -59,10 +61,12 @@ export abstract class ManagementClientBase {
   public readonly logs = new LogsManager(this.configuration);
   public readonly organizations = new OrganizationsManager(this.configuration);
   public readonly prompts = new PromptsManager(this.configuration);
+  public readonly refreshTokens = new RefreshTokensManager(this.configuration);
   public readonly resourceServers = new ResourceServersManager(this.configuration);
   public readonly roles = new RolesManager(this.configuration);
   public readonly rules = new RulesManager(this.configuration);
   public readonly rulesConfigs = new RulesConfigsManager(this.configuration);
+  public readonly sessions = new SessionsManager(this.configuration);
   public readonly stats = new StatsManager(this.configuration);
   public readonly tenants = new TenantsManager(this.configuration);
   public readonly tickets = new TicketsManager(this.configuration);
