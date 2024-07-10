@@ -6274,6 +6274,79 @@ export type GetPnProviders200ResponseProviderEnum =
 /**
  *
  */
+export interface GetRefreshToken200Response {
+  [key: string]: any | any;
+  /**
+   * The ID of the refresh token
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetRefreshToken200ResponseCreatedAt | null;
+  /**
+   */
+  idle_expires_at: GetRefreshToken200ResponseIdleExpiresAt | null;
+  /**
+   */
+  expires_at: GetRefreshToken200ResponseExpiresAt | null;
+  /**
+   * ID of the client application granted with this refresh token
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the authenticated session used to obtain this refresh-token
+   *
+   */
+  session_id: string | null;
+  /**
+   * True if the token is a rotating refresh token
+   *
+   */
+  rotating: boolean;
+  /**
+   * A list of the resource server IDs associated to this refresh-token and their granted scopes
+   *
+   */
+  resource_servers: Array<GetRefreshToken200ResponseResourceServersInner>;
+}
+/**
+ *
+ */
+export type GetRefreshToken200ResponseCreatedAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshToken200ResponseExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshToken200ResponseIdleExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export interface GetRefreshToken200ResponseResourceServersInner {
+  [key: string]: any | any;
+  /**
+   * Resource server ID
+   *
+   */
+  audience: string;
+  /**
+   * List of scopes for the refresh token
+   *
+   */
+  scopes: string;
+}
+/**
+ *
+ */
 export type GetResourceServers200Response =
   | Array<ResourceServer>
   | GetResourceServers200ResponseOneOf;
@@ -6499,6 +6572,146 @@ export interface GetScimTokens200ResponseInner {
    */
   last_used_at: string;
 }
+/**
+ *
+ */
+export interface GetSession200Response {
+  [key: string]: any | any;
+  /**
+   * The ID of the session
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetSession200ResponseCreatedAt | null;
+  /**
+   */
+  updated_at: GetSession200ResponseUpdatedAt | null;
+  /**
+   */
+  authenticated_at: GetSession200ResponseAuthenticatedAt | null;
+  /**
+   */
+  idle_expires_at: GetSession200ResponseIdleExpiresAt | null;
+  /**
+   */
+  expires_at: GetSession200ResponseExpiresAt | null;
+  /**
+   */
+  device: GetSession200ResponseDevice;
+  /**
+   * List of client details for the session
+   *
+   */
+  clients: Array<GetSession200ResponseClientsInner>;
+  /**
+   */
+  authentication: GetSession200ResponseAuthentication;
+}
+/**
+ *
+ */
+export type GetSession200ResponseAuthenticatedAt = string | { [key: string]: any };
+/**
+ * Details about authentication signals obtained during the login flow
+ */
+export interface GetSession200ResponseAuthentication {
+  [key: string]: any | any;
+  /**
+   * Contains the authentication methods a user has completed during their session
+   *
+   */
+  methods: Array<GetSession200ResponseAuthenticationMethodsInner>;
+}
+/**
+ * Authentication signal details
+ */
+export interface GetSession200ResponseAuthenticationMethodsInner {
+  [key: string]: any | any;
+  /**
+   * One of: "federated", "passkey", "pwd", "sms", "email", "mfa", "mock" or a custom method denoted by a URL
+   *
+   */
+  name: string;
+  /**
+   */
+  timestamp: GetSession200ResponseAuthenticationMethodsInnerTimestamp | null;
+  /**
+   * A specific MFA factor. Only present when "name" is set to "mfa"
+   *
+   */
+  type$: string;
+}
+/**
+ *
+ */
+export type GetSession200ResponseAuthenticationMethodsInnerTimestamp =
+  | string
+  | { [key: string]: any };
+/**
+ * Client details
+ */
+export interface GetSession200ResponseClientsInner {
+  [key: string]: any | any;
+  /**
+   * ID of client for the session
+   *
+   */
+  client_id: string;
+}
+/**
+ *
+ */
+export type GetSession200ResponseCreatedAt = string | { [key: string]: any };
+/**
+ * Metadata related to the device used in the session
+ */
+export interface GetSession200ResponseDevice {
+  [key: string]: any | any;
+  /**
+   * First IP address associated with this session
+   *
+   */
+  initial_ip: string | null;
+  /**
+   * First autonomous system number associated with this session
+   *
+   */
+  initial_asn: string;
+  /**
+   * Last user agent of the device from which this user logged in
+   *
+   */
+  last_user_agent: string;
+  /**
+   * Last IP address from which this user logged in
+   *
+   */
+  last_ip: string | null;
+  /**
+   * Last autonomous system number from which this user logged in
+   *
+   */
+  last_asn: string;
+}
+/**
+ *
+ */
+export type GetSession200ResponseExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetSession200ResponseIdleExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetSession200ResponseUpdatedAt = string | { [key: string]: any };
 /**
  *
  */
@@ -14230,6 +14443,26 @@ export interface PutPartialsRequest {
 /**
  *
  */
+export interface DeleteRefreshTokenRequest {
+  /**
+   * ID of the refresh token to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetRefreshTokenRequest {
+  /**
+   * ID refresh token to retrieve
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface DeleteResourceServersByIdRequest {
   /**
    * ID or the audience of the resource server to delete.
@@ -14526,6 +14759,26 @@ export interface PutRulesConfigsByKeyOperationRequest {
    *
    */
   key: string;
+}
+/**
+ *
+ */
+export interface DeleteSessionRequest {
+  /**
+   * ID of the session to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetSessionRequest {
+  /**
+   * ID of session to retrieve
+   *
+   */
+  id: string;
 }
 /**
  *
