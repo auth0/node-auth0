@@ -6347,6 +6347,78 @@ export interface GetRefreshToken200ResponseResourceServersInner {
 /**
  *
  */
+export interface GetRefreshTokensForUser200Response {
+  [key: string]: any | any;
+  /**
+   */
+  sessions: Array<GetRefreshTokensForUser200ResponseSessionsInner>;
+}
+/**
+ *
+ */
+export interface GetRefreshTokensForUser200ResponseSessionsInner {
+  [key: string]: any | any;
+  /**
+   * The ID of the refresh token
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetRefreshTokensForUser200ResponseSessionsInnerCreatedAt;
+  /**
+   */
+  idle_expires_at: GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt;
+  /**
+   */
+  expires_at: GetRefreshTokensForUser200ResponseSessionsInnerExpiresAt;
+  /**
+   * ID of the client application granted with this refresh token
+   *
+   */
+  client_id: string;
+  /**
+   * ID of the authenticated session used to obtain this refresh-token
+   *
+   */
+  session_id: string;
+  /**
+   * True if the token is a rotating refresh token
+   *
+   */
+  rotating: boolean;
+  /**
+   * A list of the resource server IDs associated to this refresh-token and their granted scopes
+   *
+   */
+  resource_servers: Array<GetRefreshToken200ResponseResourceServersInner>;
+}
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseSessionsInnerCreatedAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseSessionsInnerExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
 export type GetResourceServers200Response =
   | Array<ResourceServer>
   | GetResourceServers200ResponseOneOf;
@@ -6712,6 +6784,148 @@ export type GetSession200ResponseIdleExpiresAt = string | { [key: string]: any }
  *
  */
 export type GetSession200ResponseUpdatedAt = string | { [key: string]: any };
+/**
+ *
+ */
+export interface GetSessionsForUser200Response {
+  [key: string]: any | any;
+  /**
+   */
+  sessions: Array<GetSessionsForUser200ResponseSessionsInner>;
+}
+/**
+ *
+ */
+export interface GetSessionsForUser200ResponseSessionsInner {
+  [key: string]: any | any;
+  /**
+   * The ID of the session
+   *
+   */
+  id: string;
+  /**
+   * ID of the user which can be used when interacting with other APIs.
+   *
+   */
+  user_id: string;
+  /**
+   */
+  created_at: GetSessionsForUser200ResponseSessionsInnerCreatedAt;
+  /**
+   */
+  updated_at: GetSessionsForUser200ResponseSessionsInnerUpdatedAt;
+  /**
+   */
+  authenticated_at: GetSessionsForUser200ResponseSessionsInnerAuthenticatedAt;
+  /**
+   */
+  idle_expires_at: GetSessionsForUser200ResponseSessionsInnerIdleExpiresAt;
+  /**
+   */
+  expires_at: GetSessionsForUser200ResponseSessionsInnerExpiresAt;
+  /**
+   */
+  device: GetSessionsForUser200ResponseSessionsInnerDevice;
+  /**
+   * List of client details for the session
+   *
+   */
+  clients: Array<GetSession200ResponseClientsInner>;
+  /**
+   */
+  authentication: GetSessionsForUser200ResponseSessionsInnerAuthentication;
+}
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerAuthenticatedAt =
+  | string
+  | { [key: string]: any };
+/**
+ * Details about authentication signals obtained during the login flow
+ */
+export interface GetSessionsForUser200ResponseSessionsInnerAuthentication {
+  [key: string]: any | any;
+  /**
+   * Contains the authentication methods a user has completed during their session
+   *
+   */
+  methods: Array<GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInner>;
+}
+/**
+ * Authentication signal details
+ */
+export interface GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInner {
+  [key: string]: any | any;
+  /**
+   * One of: "federated", "passkey", "pwd", "sms", "email", "mfa", "mock" or a custom method denoted by a URL
+   *
+   */
+  name: string;
+  /**
+   */
+  timestamp: GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInnerTimestamp;
+  /**
+   * A specific MFA factor. Only present when "name" is set to "mfa"
+   *
+   */
+  type$: string;
+}
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerAuthenticationMethodsInnerTimestamp =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerCreatedAt = string | { [key: string]: any };
+/**
+ * Metadata related to the device used in the session
+ */
+export interface GetSessionsForUser200ResponseSessionsInnerDevice {
+  [key: string]: any | any;
+  /**
+   * First IP address associated with this session
+   *
+   */
+  initial_ip: string;
+  /**
+   * First autonomous system number associated with this session
+   *
+   */
+  initial_asn: string;
+  /**
+   * Last user agent of the device from which this user logged in
+   *
+   */
+  last_user_agent: string;
+  /**
+   * Last IP address from which this user logged in
+   *
+   */
+  last_ip: string;
+  /**
+   * Last autonomous system number from which this user logged in
+   *
+   */
+  last_asn: string;
+}
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerIdleExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerUpdatedAt = string | { [key: string]: any };
 /**
  *
  */
@@ -14937,6 +15151,26 @@ export interface DeletePermissionsOperationRequest {
    */
   id: string;
 }
+/**
+ *
+ */
+export interface DeleteRefreshTokensForUserRequest {
+  /**
+   * ID of the user to get remove refresh tokens for
+   *
+   */
+  user_id: string;
+}
+/**
+ *
+ */
+export interface DeleteSessionsForUserRequest {
+  /**
+   * ID of the user to get sessions for
+   *
+   */
+  user_id: string;
+}
 
 /**
  *
@@ -15151,6 +15385,56 @@ export interface GetPermissionsRequest {
    *
    */
   include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetRefreshTokensForUserRequest {
+  /**
+   * ID of the user to get refresh tokens for
+   *
+   */
+  user_id: string;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional token ID from which to start selection (exclusive).
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetSessionsForUserRequest {
+  /**
+   * ID of the user to get sessions for
+   *
+   */
+  user_id: string;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional session ID from which to start selection (exclusive).
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
 }
 /**
  *

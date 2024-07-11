@@ -1384,4 +1384,192 @@ describe('UsersManager', () => {
       expect(scope.isDone()).toBe(true);
     });
   });
+
+  describe('#getSessions', () => {
+    const data = {
+      id: '5',
+      name: 'Test rule',
+      enabled: true,
+      script: "function (user, contest, callback) { console.log('Test'); }",
+      stage: 'login_success',
+    };
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).get(`/users/${data.id}/sessions`).reply(200, data);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.getSessions({ user_id: data.id }).then(() => done())).toBeInstanceOf(
+        Promise
+      );
+    });
+
+    it('should perform a POST request to /api/v2/users/5', async () => {
+      await usersManager.getSessions({ user_id: data.id });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/users/${data.id}/sessions`).reply(500, {});
+
+      try {
+        await usersManager.getSessions({ user_id: data.id });
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/sessions`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, []);
+
+      await usersManager.getSessions({ user_id: data.id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
+
+  describe('#deleteSessions', () => {
+    const id = 'USER_5';
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).delete(`/users/${id}/sessions`).reply(200, {});
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.deleteSessions({ user_id: id }).then(() => done())).toBeInstanceOf(
+        Promise
+      );
+    });
+
+    it(`should perform a delete request to /users/${id}`, async () => {
+      await usersManager.deleteSessions({ user_id: id });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).delete(`/users/${id}`).reply(500, {});
+
+      try {
+        await usersManager.deleteSessions({ user_id: id });
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/users/${id}/sessions`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      await usersManager.deleteSessions({ user_id: id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
+
+  describe('#getRefreshTokens', () => {
+    const data = {
+      id: '5',
+      name: 'Test rule',
+      enabled: true,
+      script: "function (user, contest, callback) { console.log('Test'); }",
+      stage: 'login_success',
+    };
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).get(`/users/${data.id}/refresh-tokens`).reply(200, data);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.getRefreshTokens({ user_id: data.id }).then(() => done())).toBeInstanceOf(
+        Promise
+      );
+    });
+
+    it('should perform a POST request to /api/v2/users/5', async () => {
+      await usersManager.getRefreshTokens({ user_id: data.id });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/users/${data.id}/refresh-tokens`).reply(500, {});
+
+      try {
+        await usersManager.getRefreshTokens({ user_id: data.id });
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/refresh-tokens`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, []);
+
+      await usersManager.getRefreshTokens({ user_id: data.id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
+
+  describe('#deleteRefreshTokens', () => {
+    const id = 'USER_5';
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).delete(`/users/${id}/refresh-tokens`).reply(200, {});
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.deleteRefreshTokens({ user_id: id }).then(() => done())).toBeInstanceOf(
+        Promise
+      );
+    });
+
+    it(`should perform a delete request to /users/${id}`, async () => {
+      await usersManager.deleteRefreshTokens({ user_id: id });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).delete(`/users/${id}`).reply(500, {});
+
+      try {
+        await usersManager.deleteRefreshTokens({ user_id: id });
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/users/${id}/refresh-tokens`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      await usersManager.deleteRefreshTokens({ user_id: id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
 });

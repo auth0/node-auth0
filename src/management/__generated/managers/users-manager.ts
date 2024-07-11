@@ -9,6 +9,8 @@ import type {
   GetLogs200Response,
   GetOrganizationMemberRoles200Response,
   GetPermissions200Response,
+  GetRefreshTokensForUser200Response,
+  GetSessionsForUser200Response,
   GetUserOrganizations200Response,
   GetUsers200Response,
   GetUsers200ResponseOneOfInner,
@@ -40,6 +42,8 @@ import type {
   DeleteAuthenticatorsRequest,
   DeleteMultifactorByProviderRequest,
   DeletePermissionsOperationRequest,
+  DeleteRefreshTokensForUserRequest,
+  DeleteSessionsForUserRequest,
   DeleteUserIdentityByUserIdRequest,
   DeleteUserRolesOperationRequest,
   DeleteUsersByIdRequest,
@@ -48,6 +52,8 @@ import type {
   GetEnrollmentsRequest,
   GetLogsByUserRequest,
   GetPermissionsRequest,
+  GetRefreshTokensForUserRequest,
+  GetSessionsForUserRequest,
   GetUserOrganizationsRequest,
   GetUserRolesRequest,
   GetUsersRequest,
@@ -198,6 +204,58 @@ export class UsersManager extends BaseAPI {
         method: 'DELETE',
         headers: headerParameters,
         body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Delete all refresh tokens for a user.
+   * Delete refresh tokens for a user
+   *
+   * @throws {RequiredError}
+   */
+  async deleteRefreshTokens(
+    requestParameters: DeleteRefreshTokensForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/refresh-tokens`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Delete all sessions for a user.
+   * Delete sessions for user
+   *
+   * @throws {RequiredError}
+   */
+  async deleteSessions(
+    requestParameters: DeleteSessionsForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/sessions`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
+        ),
+        method: 'DELETE',
       },
       initOverrides
     );
@@ -483,6 +541,90 @@ export class UsersManager extends BaseAPI {
         path: `/users/{id}/permissions`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details for a user's refresh tokens.
+   * Get refresh tokens for a user
+   *
+   * @throws {RequiredError}
+   */
+  async getRefreshTokens(
+    requestParameters: GetRefreshTokensForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRefreshTokensForUser200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/refresh-tokens`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details for a user's sessions.
+   * Get sessions for user
+   *
+   * @throws {RequiredError}
+   */
+  async getSessions(
+    requestParameters: GetSessionsForUserRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetSessionsForUser200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['user_id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/users/{user_id}/sessions`.replace(
+          '{user_id}',
+          encodeURIComponent(String(requestParameters.user_id))
         ),
         method: 'GET',
         query: queryParameters,
