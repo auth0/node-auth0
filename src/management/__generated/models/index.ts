@@ -192,6 +192,24 @@ export interface Client {
   /**
    */
   client_authentication_methods: ClientClientAuthenticationMethods | null;
+  /**
+   * Makes the use of Pushed Authorization Requests mandatory for this client
+   *
+   */
+  require_pushed_authorization_requests: boolean;
+  /**
+   */
+  signed_request_object: ClientSignedRequestObject;
+  /**
+   * Makes the use of Proof-of-Possession mandatory for this client
+   *
+   */
+  require_proof_of_possession: boolean;
+  /**
+   * Defines the compliance level for this client, which may restrict it's capabilities
+   *
+   */
+  compliance_level: ClientComplianceLevelEnum;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -217,6 +235,15 @@ export const ClientOrganizationRequireBehaviorEnum = {
 } as const;
 export type ClientOrganizationRequireBehaviorEnum =
   (typeof ClientOrganizationRequireBehaviorEnum)[keyof typeof ClientOrganizationRequireBehaviorEnum];
+
+export const ClientComplianceLevelEnum = {
+  none: 'none',
+  fapi1_adv_pkj_par: 'fapi1_adv_pkj_par',
+  fapi1_adv_mtls_par: 'fapi1_adv_mtls_par',
+  null: 'null',
+} as const;
+export type ClientComplianceLevelEnum =
+  (typeof ClientComplianceLevelEnum)[keyof typeof ClientComplianceLevelEnum];
 
 /**
  * Addons enabled for this client and their associated configurations.
@@ -846,6 +873,12 @@ export interface ClientClientAuthenticationMethods {
   /**
    */
   private_key_jwt: ClientClientAuthenticationMethodsPrivateKeyJwt;
+  /**
+   */
+  tls_client_auth: ClientClientAuthenticationMethodsTlsClientAuth;
+  /**
+   */
+  self_signed_tls_client_auth: ClientClientAuthenticationMethodsSelfSignedTlsClientAuth;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
@@ -866,6 +899,26 @@ export interface ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner 
    *
    */
   id: string;
+}
+/**
+ * Defines `self_signed_tls_client_auth` client authentication method. If the property is defined, the client is configured to use mTLS authentication method utilizing self-signed certificate.
+ */
+export interface ClientClientAuthenticationMethodsSelfSignedTlsClientAuth {
+  /**
+   * A list of unique and previously created credential IDs enabled on the client for mTLS authentication utilizing self-signed certificate.
+   *
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
+}
+/**
+ * Defines `tls_client_auth` client authentication method. If the property is defined, the client is configured to use CA-based mTLS authentication method.
+ */
+export interface ClientClientAuthenticationMethodsTlsClientAuth {
+  /**
+   * A list of unique and previously created credential IDs enabled on the client for CA-based mTLS authentication.
+   *
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  *
@@ -1025,6 +1078,24 @@ export interface ClientCreate {
   /**
    */
   client_authentication_methods?: ClientCreateClientAuthenticationMethods;
+  /**
+   * Makes the use of Pushed Authorization Requests mandatory for this client
+   *
+   */
+  require_pushed_authorization_requests?: boolean;
+  /**
+   */
+  signed_request_object?: ClientCreateSignedRequestObject;
+  /**
+   * Makes the use of Proof-of-Possession mandatory for this client
+   *
+   */
+  require_proof_of_possession?: boolean;
+  /**
+   * Defines the compliance level for this client, which may restrict it's capabilities
+   *
+   */
+  compliance_level?: ClientCreateComplianceLevelEnum;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -1078,6 +1149,15 @@ export const ClientCreateOrganizationRequireBehaviorEnum = {
 } as const;
 export type ClientCreateOrganizationRequireBehaviorEnum =
   (typeof ClientCreateOrganizationRequireBehaviorEnum)[keyof typeof ClientCreateOrganizationRequireBehaviorEnum];
+
+export const ClientCreateComplianceLevelEnum = {
+  none: 'none',
+  fapi1_adv_pkj_par: 'fapi1_adv_pkj_par',
+  fapi1_adv_mtls_par: 'fapi1_adv_mtls_par',
+  null: 'null',
+} as const;
+export type ClientCreateComplianceLevelEnum =
+  (typeof ClientCreateComplianceLevelEnum)[keyof typeof ClientCreateComplianceLevelEnum];
 
 /**
  * Addons enabled for this client and their associated configurations.
@@ -1639,6 +1719,12 @@ export interface ClientCreateClientAuthenticationMethods {
   /**
    */
   private_key_jwt?: ClientCreateClientAuthenticationMethodsPrivateKeyJwt;
+  /**
+   */
+  tls_client_auth?: ClientCreateClientAuthenticationMethodsTlsClientAuth;
+  /**
+   */
+  self_signed_tls_client_auth?: ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuth;
 }
 /**
  * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
@@ -1700,6 +1786,79 @@ export const ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInne
 } as const;
 export type ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum =
   (typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum)[keyof typeof ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInnerAlgEnum];
+
+/**
+ * Defines `self_signed_tls_client_auth` client authentication method. If the property is defined, the client is configured to use mTLS authentication method utilizing self-signed certificate.
+ */
+export interface ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuth {
+  /**
+   * Fully defined credentials that will be enabled on the client for mTLS authentication utilizing self-signed certificate.
+   *
+   */
+  credentials: Array<ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInner>;
+}
+/**
+ *
+ */
+export interface ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInner {
+  /**
+   */
+  credential_type: ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum;
+  /**
+   */
+  name?: string;
+  /**
+   * PEM-formatted X509 certificate. Must be JSON escaped.
+   *
+   */
+  pem: string;
+}
+
+export const ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  {
+    x509_cert: 'x509_cert',
+  } as const;
+export type ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  (typeof ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsSelfSignedTlsClientAuthCredentialsInnerCredentialTypeEnum];
+
+/**
+ * Defines `tls_client_auth` client authentication method. If the property is defined, the client is configured to use CA-based mTLS authentication method.
+ */
+export interface ClientCreateClientAuthenticationMethodsTlsClientAuth {
+  /**
+   * Fully defined credentials that will be enabled on the client for CA-based mTLS authentication.
+   *
+   */
+  credentials: Array<ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInner>;
+}
+/**
+ *
+ */
+export interface ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInner {
+  /**
+   */
+  credential_type?: ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum;
+  /**
+   */
+  name?: string;
+  /**
+   * Subject Distinguished Name. Mutually exclusive with `pem` property.
+   *
+   */
+  subject_dn?: string;
+  /**
+   * PEM-formatted X509 certificate. Must be JSON escaped. Mutually exclusive with `subject_dn` property.
+   *
+   */
+  pem?: string;
+}
+
+export const ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  {
+    cert_subject_dn: 'cert_subject_dn',
+  } as const;
+export type ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum =
+  (typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum];
 
 /**
  * Encryption used for WsFed responses with this client.
@@ -1831,6 +1990,19 @@ export interface ClientCreateOidcLogout {
    *
    */
   backchannel_logout_urls: Array<string>;
+}
+/**
+ * JWT-secured Authorization Requests (JAR) settings.
+ */
+export interface ClientCreateSignedRequestObject {
+  /**
+   * Indicates whether the JAR requests are mandatory
+   *
+   */
+  required?: boolean;
+  /**
+   */
+  credentials?: Array<ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  * Encryption used for WsFed responses with this client.
@@ -2075,6 +2247,19 @@ export type ClientRefreshTokenExpirationTypeEnum =
   (typeof ClientRefreshTokenExpirationTypeEnum)[keyof typeof ClientRefreshTokenExpirationTypeEnum];
 
 /**
+ * JWT-secured Authorization Requests (JAR) settings.
+ */
+export interface ClientSignedRequestObject {
+  /**
+   * Indicates whether the JAR requests are mandatory
+   *
+   */
+  required: boolean;
+  /**
+   */
+  credentials: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
+}
+/**
  *
  */
 export interface ClientSigningKeysInner {
@@ -2256,6 +2441,24 @@ export interface ClientUpdate {
   /**
    */
   client_authentication_methods?: ClientUpdateClientAuthenticationMethods | null;
+  /**
+   * Makes the use of Pushed Authorization Requests mandatory for this client
+   *
+   */
+  require_pushed_authorization_requests?: boolean;
+  /**
+   */
+  signed_request_object?: ClientUpdateSignedRequestObject | null;
+  /**
+   * Makes the use of Proof-of-Possession mandatory for this client
+   *
+   */
+  require_proof_of_possession?: boolean;
+  /**
+   * Defines the compliance level for this client, which may restrict it's capabilities
+   *
+   */
+  compliance_level?: ClientUpdateComplianceLevelEnum;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
@@ -2310,6 +2513,15 @@ export const ClientUpdateOrganizationRequireBehaviorEnum = {
 } as const;
 export type ClientUpdateOrganizationRequireBehaviorEnum =
   (typeof ClientUpdateOrganizationRequireBehaviorEnum)[keyof typeof ClientUpdateOrganizationRequireBehaviorEnum];
+
+export const ClientUpdateComplianceLevelEnum = {
+  none: 'none',
+  fapi1_adv_pkj_par: 'fapi1_adv_pkj_par',
+  fapi1_adv_mtls_par: 'fapi1_adv_mtls_par',
+  null: 'null',
+} as const;
+export type ClientUpdateComplianceLevelEnum =
+  (typeof ClientUpdateComplianceLevelEnum)[keyof typeof ClientUpdateComplianceLevelEnum];
 
 /**
  * Addons enabled for this client and their associated configurations.
@@ -2425,6 +2637,12 @@ export interface ClientUpdateClientAuthenticationMethods {
   /**
    */
   private_key_jwt?: ClientClientAuthenticationMethodsPrivateKeyJwt;
+  /**
+   */
+  tls_client_auth?: ClientClientAuthenticationMethodsTlsClientAuth;
+  /**
+   */
+  self_signed_tls_client_auth?: ClientClientAuthenticationMethodsSelfSignedTlsClientAuth;
 }
 /**
  * The client's encryption key
@@ -2523,6 +2741,19 @@ export interface ClientUpdateOidcLogout {
    *
    */
   backchannel_logout_urls?: Array<string>;
+}
+/**
+ * JWT-secured Authorization Requests (JAR) settings.
+ */
+export interface ClientUpdateSignedRequestObject {
+  /**
+   * Indicates whether the JAR requests are mandatory
+   *
+   */
+  required?: boolean;
+  /**
+   */
+  credentials?: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
  *
@@ -4741,6 +4972,16 @@ export interface GetCredentials200ResponseInner {
    *
    */
   credential_type: string;
+  /**
+   * The X509 certificate's Subject Distinguished Name
+   *
+   */
+  subject_dn: string;
+  /**
+   * The X509 certificate's SHA256 thumbprint
+   *
+   */
+  thumbprint_sha256: string;
   /**
    * The ISO 8601 formatted date the credential was created.
    *
@@ -11066,6 +11307,18 @@ export interface ResourceServer {
   /**
    */
   client: object;
+  /**
+   */
+  token_encryption: ResourceServerTokenEncryption | null;
+  /**
+   */
+  consent_policy: ResourceServerConsentPolicyEnum;
+  /**
+   */
+  authorization_details: Array<any>;
+  /**
+   */
+  proof_of_possession: ResourceServerProofOfPossession | null;
 }
 
 export const ResourceServerSigningAlgEnum = {
@@ -11084,6 +11337,13 @@ export const ResourceServerTokenDialectEnum = {
 } as const;
 export type ResourceServerTokenDialectEnum =
   (typeof ResourceServerTokenDialectEnum)[keyof typeof ResourceServerTokenDialectEnum];
+
+export const ResourceServerConsentPolicyEnum = {
+  transactional_authorization_with_mfa: 'transactional-authorization-with-mfa',
+  null: 'null',
+} as const;
+export type ResourceServerConsentPolicyEnum =
+  (typeof ResourceServerConsentPolicyEnum)[keyof typeof ResourceServerConsentPolicyEnum];
 
 /**
  *
@@ -11125,7 +11385,7 @@ export interface ResourceServerCreate {
    */
   token_lifetime?: number;
   /**
-   * Dialect of access tokens that should be issued. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
+   * Dialect of issued access token. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
    *
    */
   token_dialect?: ResourceServerCreateTokenDialectEnum;
@@ -11142,6 +11402,18 @@ export interface ResourceServerCreate {
   /**
    */
   client?: object;
+  /**
+   */
+  token_encryption?: ResourceServerTokenEncryption | null;
+  /**
+   */
+  consent_policy?: ResourceServerCreateConsentPolicyEnum;
+  /**
+   */
+  authorization_details?: Array<any>;
+  /**
+   */
+  proof_of_possession?: ResourceServerProofOfPossession | null;
 }
 
 export const ResourceServerCreateSigningAlgEnum = {
@@ -11160,6 +11432,89 @@ export const ResourceServerCreateTokenDialectEnum = {
 } as const;
 export type ResourceServerCreateTokenDialectEnum =
   (typeof ResourceServerCreateTokenDialectEnum)[keyof typeof ResourceServerCreateTokenDialectEnum];
+
+export const ResourceServerCreateConsentPolicyEnum = {
+  transactional_authorization_with_mfa: 'transactional-authorization-with-mfa',
+  null: 'null',
+} as const;
+export type ResourceServerCreateConsentPolicyEnum =
+  (typeof ResourceServerCreateConsentPolicyEnum)[keyof typeof ResourceServerCreateConsentPolicyEnum];
+
+/**
+ * Proof-of-Possession configuration for access tokens
+ */
+export interface ResourceServerProofOfPossession {
+  /**
+   * Intended mechanism for Proof-of-Possession
+   *
+   */
+  mechanism: ResourceServerProofOfPossessionMechanismEnum;
+  /**
+   * Whether the use of Proof-of-Possession is required for the resource server
+   *
+   */
+  required: boolean;
+}
+
+export const ResourceServerProofOfPossessionMechanismEnum = {
+  mtls: 'mtls',
+} as const;
+export type ResourceServerProofOfPossessionMechanismEnum =
+  (typeof ResourceServerProofOfPossessionMechanismEnum)[keyof typeof ResourceServerProofOfPossessionMechanismEnum];
+
+/**
+ *
+ */
+export interface ResourceServerTokenEncryption {
+  /**
+   * Format of the encrypted JWT payload.
+   *
+   */
+  format: ResourceServerTokenEncryptionFormatEnum;
+  /**
+   */
+  encryption_key: ResourceServerTokenEncryptionEncryptionKey;
+}
+
+export const ResourceServerTokenEncryptionFormatEnum = {
+  compact_nested_jwe: 'compact-nested-jwe',
+} as const;
+export type ResourceServerTokenEncryptionFormatEnum =
+  (typeof ResourceServerTokenEncryptionFormatEnum)[keyof typeof ResourceServerTokenEncryptionFormatEnum];
+
+/**
+ *
+ */
+export interface ResourceServerTokenEncryptionEncryptionKey {
+  /**
+   * Name of the encryption key.
+   *
+   */
+  name?: string;
+  /**
+   * Algorithm used to encrypt the token.
+   *
+   */
+  alg: ResourceServerTokenEncryptionEncryptionKeyAlgEnum;
+  /**
+   * Key ID.
+   *
+   */
+  kid?: string;
+  /**
+   * PEM-formatted public key. Must be JSON escaped.
+   *
+   */
+  pem: string;
+}
+
+export const ResourceServerTokenEncryptionEncryptionKeyAlgEnum = {
+  _256: 'RSA-OAEP-256',
+  _384: 'RSA-OAEP-384',
+  _512: 'RSA-OAEP-512',
+} as const;
+export type ResourceServerTokenEncryptionEncryptionKeyAlgEnum =
+  (typeof ResourceServerTokenEncryptionEncryptionKeyAlgEnum)[keyof typeof ResourceServerTokenEncryptionEncryptionKeyAlgEnum];
 
 /**
  *
@@ -11201,7 +11556,7 @@ export interface ResourceServerUpdate {
    */
   token_lifetime?: number;
   /**
-   * Dialect of access tokens that should be issued. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
+   * Dialect of issued access token. `access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims.
    *
    */
   token_dialect?: ResourceServerUpdateTokenDialectEnum;
@@ -11213,6 +11568,18 @@ export interface ResourceServerUpdate {
   /**
    */
   client?: object;
+  /**
+   */
+  token_encryption?: ResourceServerTokenEncryption | null;
+  /**
+   */
+  consent_policy?: ResourceServerUpdateConsentPolicyEnum;
+  /**
+   */
+  authorization_details?: Array<any>;
+  /**
+   */
+  proof_of_possession?: ResourceServerProofOfPossession | null;
 }
 
 export const ResourceServerUpdateSigningAlgEnum = {
@@ -11231,6 +11598,13 @@ export const ResourceServerUpdateTokenDialectEnum = {
 } as const;
 export type ResourceServerUpdateTokenDialectEnum =
   (typeof ResourceServerUpdateTokenDialectEnum)[keyof typeof ResourceServerUpdateTokenDialectEnum];
+
+export const ResourceServerUpdateConsentPolicyEnum = {
+  transactional_authorization_with_mfa: 'transactional-authorization-with-mfa',
+  null: 'null',
+} as const;
+export type ResourceServerUpdateConsentPolicyEnum =
+  (typeof ResourceServerUpdateConsentPolicyEnum)[keyof typeof ResourceServerUpdateConsentPolicyEnum];
 
 /**
  *
@@ -11558,6 +11932,19 @@ export interface TenantSettings {
    *
    */
   customize_mfa_in_postlogin_action: boolean;
+  /**
+   * Supported ACR values
+   *
+   */
+  acr_values_supported: Array<string>;
+  /**
+   */
+  mtls: TenantSettingsMtls | null;
+  /**
+   * Enables the use of Pushed Authorization Requests
+   *
+   */
+  pushed_authorization_requests_supported: boolean;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
@@ -11786,6 +12173,11 @@ export interface TenantSettingsFlags {
    *
    */
   mfa_show_factor_list_on_enrollment: boolean;
+  /**
+   * Removes alg property from jwks .well-known endpoint
+   *
+   */
+  remove_alg_from_jwks: boolean;
 }
 /**
  * Guardian page customization.
@@ -11801,6 +12193,16 @@ export interface TenantSettingsGuardianMfaPage {
    *
    */
   html: string;
+}
+/**
+ * mTLS configuration.
+ */
+export interface TenantSettingsMtls {
+  /**
+   * If true, enables mTLS endpoint aliases
+   *
+   */
+  enable_endpoint_aliases: boolean;
 }
 /**
  * Session cookie configuration
@@ -11925,6 +12327,19 @@ export interface TenantSettingsUpdate {
    *
    */
   allow_organization_name_in_authentication_api?: boolean | null;
+  /**
+   * Supported ACR values
+   *
+   */
+  acr_values_supported?: Array<string>;
+  /**
+   */
+  mtls?: TenantSettingsUpdateMtls | null;
+  /**
+   * Enables the use of Pushed Authorization Requests
+   *
+   */
+  pushed_authorization_requests_supported?: boolean | null;
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
@@ -12163,6 +12578,11 @@ export interface TenantSettingsUpdateFlags {
    *
    */
   mfa_show_factor_list_on_enrollment?: boolean;
+  /**
+   * Removes alg property from jwks .well-known endpoint
+   *
+   */
+  remove_alg_from_jwks?: boolean;
 }
 
 export const TenantSettingsUpdateFlagsChangePwdFlowV1Enum = {
@@ -12185,6 +12605,16 @@ export interface TenantSettingsUpdateGuardianMfaPage {
    *
    */
   html?: string;
+}
+/**
+ * mTLS configuration.
+ */
+export interface TenantSettingsUpdateMtls {
+  /**
+   * If true, enables mTLS endpoint aliases
+   *
+   */
+  enable_endpoint_aliases?: boolean;
 }
 /**
  * Sessions related settings for tenant
