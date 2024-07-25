@@ -434,6 +434,8 @@ describe('ClientsManager', () => {
         created_at: '',
         updated_at: '',
         expires_at: '',
+        subject_dn: '',
+        thumbprint_sha256: '',
       },
     ];
 
@@ -519,6 +521,8 @@ describe('ClientsManager', () => {
       created_at: '',
       updated_at: '',
       expires_at: '',
+      subject_dn: '',
+      thumbprint_sha256: '',
     };
     beforeEach(() => {
       request = nock(API_URL).get('/clients/123/credentials/abc').reply(200, response);
@@ -615,6 +619,8 @@ describe('ClientsManager', () => {
       created_at: '',
       updated_at: '',
       expires_at: '',
+      subject_dn: '',
+      thumbprint_sha256: '',
     };
     let request: nock.Scope;
 
@@ -683,6 +689,8 @@ describe('ClientsManager', () => {
       created_at: '',
       updated_at: '',
       expires_at: '',
+      subject_dn: '',
+      thumbprint_sha256: '',
     };
 
     let request: nock.Scope;
