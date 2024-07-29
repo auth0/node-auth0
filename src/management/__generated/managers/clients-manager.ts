@@ -54,6 +54,7 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
+   * Delete a client credential you previously created. May be enabled or disabled. For more information, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
    * Delete a client credential
    *
    * @throws {RequiredError}
@@ -242,9 +243,9 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Get the list of client credentials that are associated to the client.
+   * Get the details of a client credential.
    *
-   * Important: To enable credentials to be used
+   * <b>Important</b>: To enable credentials to be used for Private Key JWT authentication method, set the <code>client_authentication_methods</code> property on the client.
    * Get client credentials
    *
    * @throws {RequiredError}
@@ -271,7 +272,9 @@ export class ClientsManager extends BaseAPI {
 
   /**
    * Get the details of a client credential.
-   * Get client credential
+   *
+   * <b>Important</b>: To enable credentials to be used for Private Key JWT authentication method, set the <code>client_authentication_methods</code> property on the client.
+   * Get client credential details
    *
    * @throws {RequiredError}
    */
@@ -336,6 +339,7 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
+   * Change a client credential you previously created. May be enabled or disabled. For more information, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
    * Update a client credential
    *
    * @throws {RequiredError}
@@ -407,7 +411,8 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
-   * Create a client credential associated to the client. The credential will be created but not yet enabled
+   * Create a client credential associated to your application. The credential will be created but not yet enabled for use with Private Key JWT authentication method. To enable the credential, set the <code>client_authentication_methods</code> property on the client.
+   * For more information, read <a href="https://www.auth0.com//docs/get-started/applications/configure-private-key-jwt">Configure Private Key JWT Authentication</a>.
    * Create a client credential
    *
    * @throws {RequiredError}
