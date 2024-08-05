@@ -1,5 +1,15 @@
 # Change Log
 
+## [v4.8.0](https://github.com/auth0/node-auth0/tree/v4.8.0) (2024-08-02)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.7.0...v4.8.0)
+
+**Added**
+
+- Added support for client, tenant and resource level properties related to HRI [\#1024](https://github.com/auth0/node-auth0/pull/1024) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added support for users getSessions & getRefreshTokens endpoint in management api client [\#1021](https://github.com/auth0/node-auth0/pull/1021) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added support for Session & Refresh token in management api client [\#1019](https://github.com/auth0/node-auth0/pull/1019) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+
 ## [v4.7.0](https://github.com/auth0/node-auth0/tree/v4.7.0) (2024-07-08)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.6.0...v4.7.0)
