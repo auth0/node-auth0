@@ -24,6 +24,7 @@ export * from './resource-servers-manager.js';
 export * from './roles-manager.js';
 export * from './rules-manager.js';
 export * from './rules-configs-manager.js';
+export * from './self-service-profiles-manager.js';
 export * from './sessions-manager.js';
 export * from './stats-manager.js';
 export * from './tenants-manager.js';

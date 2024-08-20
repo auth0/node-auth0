@@ -11784,6 +11784,182 @@ export interface SnsFactorProvider {
 /**
  *
  */
+export interface SsProfile {
+  /**
+   * The unique ID of the self-service Profile.
+   *
+   */
+  id: string;
+  /**
+   * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
+   *
+   */
+  user_attributes: Array<SsProfileUserAttributesInner>;
+  /**
+   * The time when this self-service Profile was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this self-service Profile was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   */
+  branding: SsProfileBranding;
+}
+/**
+ *
+ */
+export interface SsProfileBranding {
+  [key: string]: any | any;
+  /**
+   */
+  logo_url: string;
+  /**
+   */
+  colors: SsProfileBrandingColors;
+}
+/**
+ *
+ */
+export interface SsProfileBrandingColors {
+  [key: string]: any | any;
+  /**
+   */
+  primary: string;
+}
+/**
+ *
+ */
+export interface SsProfileCreate {
+  /**
+   * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
+   *
+   */
+  user_attributes?: Array<SsProfileUserAttributesInner>;
+  /**
+   */
+  branding?: SsProfileCreateBranding;
+}
+/**
+ *
+ */
+export interface SsProfileCreateBranding {
+  [key: string]: any | any;
+  /**
+   */
+  logo_url?: string;
+  /**
+   */
+  colors?: SsProfileBrandingColors;
+}
+/**
+ *
+ */
+export interface SsProfileList extends Array<SsProfile> {}
+/**
+ *
+ */
+export interface SsProfileUpdate {
+  /**
+   * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
+   *
+   */
+  user_attributes?: Array<SsProfileUserAttributesInner> | null;
+  /**
+   */
+  branding?: SsProfileUpdateBranding | null;
+}
+/**
+ *
+ */
+export interface SsProfileUpdateBranding {
+  [key: string]: any | any;
+  /**
+   */
+  logo_url?: string;
+  /**
+   */
+  colors?: SsProfileBrandingColors;
+}
+/**
+ *
+ */
+export interface SsProfileUserAttributesInner {
+  /**
+   * Identifier of this attribute.
+   *
+   */
+  name: string;
+  /**
+   * Description of this attribute.
+   *
+   */
+  description: string;
+  /**
+   * Determines if this attribute is required
+   *
+   */
+  is_optional: boolean;
+}
+/**
+ *
+ */
+export interface SsoAccessTicketResponse {
+  /**
+   * The URL for the created ticket.
+   *
+   */
+  ticket: string;
+}
+/**
+ *
+ */
+export interface SsoTicketRequestJson {
+  /**
+   * If provided, this will allow editing of the provided connection during the SSO Flow
+   *
+   */
+  connection_id?: string;
+  /**
+   */
+  connection_config?: SsoTicketRequestJsonConnectionConfig;
+  /**
+   * List of client_ids that the connection will be enabled for.
+   *
+   */
+  enabled_clients?: Array<string>;
+  /**
+   * List of organizations that the connection will be enabled for.
+   *
+   */
+  enabled_organizations?: Array<SsoTicketRequestJsonEnabledOrganizationsInner>;
+}
+/**
+ * If provided, this will create a new connection for the SSO flow with the given configuration
+ */
+export interface SsoTicketRequestJsonConnectionConfig {
+  /**
+   * The name of the connection that will be created as a part of the SSO flow.
+   *
+   */
+  name: string;
+}
+/**
+ *
+ */
+export interface SsoTicketRequestJsonEnabledOrganizationsInner {
+  /**
+   * Organization identifier
+   *
+   */
+  organization_id: string;
+}
+/**
+ *
+ */
 export interface StatsEntry {
   [key: string]: any | any;
   /**
@@ -15403,6 +15579,46 @@ export interface PutRulesConfigsByKeyOperationRequest {
    *
    */
   key: string;
+}
+/**
+ *
+ */
+export interface DeleteSelfServiceProfilesByIdRequest {
+  /**
+   * The id of the self-service profile to delete
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetSelfServiceProfilesByIdRequest {
+  /**
+   * The id of the self-service profile to retrieve
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchSelfServiceProfilesByIdRequest {
+  /**
+   * The id of the self-service profile to update
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostSsoTicketRequest {
+  /**
+   * The id of the sso-profile to retrieve
+   *
+   */
+  id: string;
 }
 /**
  *
