@@ -9,7 +9,10 @@ import {
   GetSelfServiceProfilesByIdRequest,
   ManagementClient,
   PatchSelfServiceProfilesByIdRequest,
+  PostSsoTicketRequest,
   SelfServiceProfilesManager,
+  SsoAccessTicketResponse,
+  SsoTicketRequestJson,
   SsProfile,
   SsProfileCreate,
   SsProfileList,
@@ -254,6 +257,58 @@ describe('SelfServiceProfilesManager', () => {
         .reply(200, nockedResponse);
 
       const patchResult = await selfServiceProfileManager.patchSelfServiceProfiles(
+        requestParameters,
+        requestBody
+      );
+
+      expect(isEqual(patchResult.data, nockedResponse)).toBe(true);
+    });
+  });
+
+  describe('postSsoTicket', () => {
+    const requestParameters: PostSsoTicketRequest = {
+      id: 'testing_id_123',
+    };
+    const requestBody: SsoTicketRequestJson = {
+      connection_id: 'connection_id',
+      connection_config: { name: 'test_connection_config' },
+      enabled_clients: ['client1'],
+      enabled_organizations: [{ organization_id: requestParameters.id }],
+    };
+
+    it('should return a promise if no callback is given', (done) => {
+      selfServiceProfileManager
+        .postSsoTicket(requestParameters, requestBody)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', () => {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .post(`/self-service-profiles/${requestParameters.id}/sso-ticket`)
+        .reply(500, {});
+
+      return selfServiceProfileManager
+        .postSsoTicket(requestParameters, requestBody)
+        .catch((err) => {
+          expect(err).toBeDefined();
+        });
+    });
+
+    // this unit test is for the getSelfServiceProfileById() method
+    it('should update one of self-service profile by id', async () => {
+      const nockedResponse: SsoAccessTicketResponse = {
+        ticket: 'https://example.com/ticket',
+      };
+
+      // eslint-disable-next-line prettier/prettier
+      nockedRequest = nock(API_URL)
+        .post(`/self-service-profiles/${requestParameters.id}/sso-ticket`)
+        .reply(200, nockedResponse);
+
+      const patchResult = await selfServiceProfileManager.postSsoTicket(
         requestParameters,
         requestBody
       );
