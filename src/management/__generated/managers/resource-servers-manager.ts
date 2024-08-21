@@ -45,7 +45,7 @@ export class ResourceServersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve <a href="https://auth0.com/docs/apis">APIs</a> (also known as resource servers) that you can consume from your authorized applications.
+   * Retrieve details of all APIs associated with your tenant.
    * Get resource servers
    *
    * @throws {RequiredError}
@@ -63,6 +63,13 @@ export class ResourceServersManager extends BaseAPI {
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetResourceServers200Response>> {
     const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'identifiers',
+        config: {
+          isArray: true,
+          isCollectionFormatMulti: true,
+        },
+      },
       {
         key: 'page',
         config: {},

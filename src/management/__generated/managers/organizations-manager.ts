@@ -8,6 +8,7 @@ import type {
   GetInvitations200Response,
   GetInvitations200ResponseOneOfInner,
   GetMembers200Response,
+  GetOrganizationClientGrants200Response,
   GetOrganizationMemberRoles200Response,
   GetOrganizations200Response,
   GetOrganizations200ResponseOneOfInner,
@@ -23,6 +24,8 @@ import type {
   GetInvitations200ResponseOneOf,
   GetMembers200ResponseOneOf,
   GetMembers200ResponseOneOfInner,
+  GetOrganizationClientGrants200ResponseOneOf,
+  GetOrganizationClientGrants200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetOrganizations200ResponseOneOf,
@@ -37,6 +40,7 @@ import type {
   GetInvitationsByInvitationIdRequest,
   GetMembersRequest,
   GetNameByNameRequest,
+  GetOrganizationClientGrantsRequest,
   GetOrganizationMemberRolesRequest,
   GetOrganizationsRequest,
   GetOrganizationsByIdRequest,
@@ -476,6 +480,70 @@ export class OrganizationsManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.name))
         ),
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Get client grants associated to an organization
+   *
+   * @throws {RequiredError}
+   */
+  async getOrganizationClientGrants(
+    requestParameters: GetOrganizationClientGrantsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationClientGrants200ResponseOneOf>>;
+  async getOrganizationClientGrants(
+    requestParameters?: GetOrganizationClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetOrganizationClientGrants200ResponseOneOfInner>>>;
+  async getOrganizationClientGrants(
+    requestParameters: GetOrganizationClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationClientGrants200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'audience',
+        config: {},
+      },
+      {
+        key: 'client_id',
+        config: {},
+      },
+      {
+        key: 'grant_ids',
+        config: {
+          isArray: true,
+          isCollectionFormatMulti: true,
+        },
+      },
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
       },
       initOverrides
     );

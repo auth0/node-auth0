@@ -4903,7 +4903,10 @@ export interface GetClientGrants200ResponseOneOf {
 /**
  *
  */
-export type GetClients200Response = Array<Client> | GetClients200ResponseOneOf;
+export type GetClients200Response =
+  | Array<Client>
+  | GetClients200ResponseOneOf
+  | GetClients200ResponseOneOf1;
 /**
  *
  */
@@ -4917,6 +4920,17 @@ export interface GetClients200ResponseOneOf {
   /**
    */
   total: number;
+  /**
+   */
+  clients: Array<Client>;
+}
+/**
+ *
+ */
+export interface GetClients200ResponseOneOf1 {
+  /**
+   */
+  next: string;
   /**
    */
   clients: Array<Client>;
@@ -6292,6 +6306,54 @@ export const GetMessageTypes200ResponseMessageTypesEnum = {
 export type GetMessageTypes200ResponseMessageTypesEnum =
   (typeof GetMessageTypes200ResponseMessageTypesEnum)[keyof typeof GetMessageTypes200ResponseMessageTypesEnum];
 
+/**
+ *
+ */
+export type GetOrganizationClientGrants200Response =
+  | Array<GetOrganizationClientGrants200ResponseOneOfInner>
+  | GetOrganizationClientGrants200ResponseOneOf;
+/**
+ *
+ */
+export interface GetOrganizationClientGrants200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  grants: Array<GetOrganizationClientGrants200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetOrganizationClientGrants200ResponseOneOfInner {
+  /**
+   * ID of the client grant.
+   *
+   */
+  id: string;
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
+  /**
+   * The audience (API identifier) of this client grant
+   *
+   */
+  audience: string;
+  /**
+   * Scopes allowed for this client grant.
+   *
+   */
+  scope: Array<string>;
+}
 /**
  *
  */
@@ -13468,6 +13530,16 @@ export interface GetClientsRequest {
    */
   include_totals?: boolean;
   /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
    * Optional filter on the global client parameter.
    *
    */
@@ -13482,6 +13554,16 @@ export interface GetClientsRequest {
    *
    */
   app_type?: string;
+  /**
+   * A comma separated list of client_ids used to filter the returned clients
+   *
+   */
+  client_ids?: string;
+  /**
+   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
+   *
+   */
+  q?: string;
 }
 /**
  *
@@ -14668,6 +14750,46 @@ export interface GetNameByNameRequest {
 /**
  *
  */
+export interface GetOrganizationClientGrantsRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Optional filter on audience of the client grant.
+   *
+   */
+  audience?: string;
+  /**
+   * Optional filter on client_id of the client grant.
+   *
+   */
+  client_id?: string;
+  /**
+   * A list of grant ids, which will filter the results.
+   *
+   */
+  grant_ids?: Array<string>;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface GetOrganizationMemberRolesRequest {
   /**
    * Organization identifier
@@ -15119,12 +15241,17 @@ export interface DeleteResourceServersByIdRequest {
  */
 export interface GetResourceServersRequest {
   /**
+   * A list of URI encoded identifiers to filter the results by. Consider URL limits when using this parameter, if the URL is too long, consider chunking the requests
+   *
+   */
+  identifiers?: Array<string>;
+  /**
    * Page index of the results to return. First page is 0.
    *
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
