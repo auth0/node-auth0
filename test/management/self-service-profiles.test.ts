@@ -1,5 +1,4 @@
 import nock from 'nock';
-import { isEqual } from 'lodash-es';
 
 const DOMAIN = `tenant.auth0.com`;
 const API_URL = `https://${DOMAIN}/api/v2`;
@@ -74,7 +73,7 @@ describe('SelfServiceProfilesManager', () => {
 
       const createResult = await selfServiceProfileManager.postSelfServiceProfiles(requestBody);
 
-      expect(isEqual(createResult.data, nockedResponse)).toBe(true);
+      expect(createResult.data).toEqual(nockedResponse);
     });
   });
 
@@ -115,7 +114,7 @@ describe('SelfServiceProfilesManager', () => {
 
       const getResult = await selfServiceProfileManager.getSelfServiceProfiles();
 
-      expect(isEqual(getResult.data, nockedResponse)).toBe(true);
+      expect(getResult.data).toEqual(nockedResponse);
       expect(getResult.data.length).toBeGreaterThan(0);
     });
   });
@@ -165,8 +164,7 @@ describe('SelfServiceProfilesManager', () => {
       const getResult = await selfServiceProfileManager.getSelfServiceProfilesById(
         requestParameters
       );
-
-      expect(isEqual(getResult.data, nockedResponse)).toBe(true);
+      expect(getResult.data).toEqual(nockedResponse);
     });
   });
 
@@ -261,7 +259,7 @@ describe('SelfServiceProfilesManager', () => {
         requestBody
       );
 
-      expect(isEqual(patchResult.data, nockedResponse)).toBe(true);
+      expect(patchResult.data).toEqual(nockedResponse);
     });
   });
 
@@ -308,12 +306,9 @@ describe('SelfServiceProfilesManager', () => {
         .post(`/self-service-profiles/${requestParameters.id}/sso-ticket`)
         .reply(200, nockedResponse);
 
-      const patchResult = await selfServiceProfileManager.postSsoTicket(
-        requestParameters,
-        requestBody
-      );
+      const result = await selfServiceProfileManager.postSsoTicket(requestParameters, requestBody);
 
-      expect(isEqual(patchResult.data, nockedResponse)).toBe(true);
+      expect(result.data).toEqual(nockedResponse);
     });
   });
 });
