@@ -190,7 +190,7 @@ describe('SelfServiceProfilesManager', () => {
       });
     });
 
-    // this unit test is for the getSelfServiceProfileById() method
+    // this unit test is for the deleteSelfServiceProfiles() method
     it('should delete one of self-service profile by id', async () => {
       // eslint-disable-next-line prettier/prettier
       nockedRequest = nock(API_URL)
@@ -233,7 +233,7 @@ describe('SelfServiceProfilesManager', () => {
         });
     });
 
-    // this unit test is for the getSelfServiceProfileById() method
+    // this unit test is for the patchSelfServiceProfiles() method
     it('should update one of self-service profile by id', async () => {
       const nockedResponse: SsProfile = {
         id: requestParameters.id,
@@ -295,8 +295,8 @@ describe('SelfServiceProfilesManager', () => {
         });
     });
 
-    // this unit test is for the getSelfServiceProfileById() method
-    it('should update one of self-service profile by id', async () => {
+    // this unit test is for the postSsoTicket() method
+    it('should set sso ticket for one sso profile', async () => {
       const nockedResponse: SsoAccessTicketResponse = {
         ticket: 'https://example.com/ticket',
       };
