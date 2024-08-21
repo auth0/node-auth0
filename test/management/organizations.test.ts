@@ -2,7 +2,14 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { OrganizationsManager, ManagementClient, RequiredError } from '../../src/index.js';
+import {
+  OrganizationsManager,
+  ManagementClient,
+  RequiredError,
+  GetOrganizationClientGrantsRequest,
+  GetOrganizationClientGrants200Response,
+  ApiResponse,
+} from '../../src/index.js';
 
 describe('OrganizationsManager', () => {
   let organizations: OrganizationsManager;
@@ -1383,6 +1390,87 @@ describe('OrganizationsManager', () => {
         expect(request.isDone()).toBe(true);
 
         done();
+      });
+    });
+  });
+
+  describe('#getOrganizationClientGrants', () => {
+    const token = 'test_token';
+
+    const data: GetOrganizationClientGrantsRequest | any = {
+      id: 'org_123',
+      audience: 'audience',
+      client_id: 'client_id',
+      grant_ids: ['grant_id1', 'grant_id2'],
+      page: 1,
+      per_page: 10,
+      include_totals: true,
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/client-grants`)
+        .query({
+          audience: data.audience,
+          client_id: data.client_id,
+          grant_ids: data.grant_ids,
+          page: data.page,
+          per_page: data.per_page,
+          include_totals: data.include_totals,
+        })
+        .reply(200, { grants: [] });
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      const promise = organizations.getOrganizationClientGrants(data);
+      expect(promise).toBeInstanceOf(Promise);
+      await promise;
+    });
+
+    it('should perform a GET request to /api/v2/organizations/:id/client-grants', async () => {
+      await organizations.getOrganizationClientGrants(data);
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      nock(API_URL, {
+        reqheaders: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+        .get(`/organizations/${data.id}/client-grants`)
+        .query({
+          audience: data.audience,
+          client_id: data.client_id,
+          grant_ids: data.grant_ids,
+          page: data.page,
+          per_page: data.per_page,
+          include_totals: data.include_totals,
+        })
+        .reply(200, { grants: [] });
+
+      const result: ApiResponse<GetOrganizationClientGrants200Response> =
+        await organizations.getOrganizationClientGrants(data);
+      expect(result.status).toBe(200);
+    });
+
+    it('should pass the query parameters correctly', async () => {
+      await organizations.getOrganizationClientGrants(data);
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/client-grants`)
+        .query(true)
+        .reply(500, {});
+
+      organizations.getOrganizationClientGrants(data).catch((err) => {
+        expect(err).toBeDefined();
       });
     });
   });
