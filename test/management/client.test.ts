@@ -12,6 +12,7 @@ import {
   PostCredentialsOperationRequest,
   PostCredentialsRequest,
   ManagementClient,
+  GetClientsRequest,
 } from '../../src/index.js';
 
 import { RequiredError } from '../../src/lib/errors.js';
@@ -138,16 +139,25 @@ describe('ClientsManager', () => {
     it('should pass the parameters in the query-string', (done) => {
       nock.cleanAll();
 
-      const data = [{ client_id: '1' }];
-      const request = nock(API_URL)
-        .get('/clients')
-        .query({
-          include_fields: true,
-          fields: 'test',
-        })
-        .reply(200, data);
+      const queryParameters: GetClientsRequest | any = {
+        fields: 'name,email',
+        include_fields: true,
+        page: 0,
+        per_page: 50,
+        include_totals: false,
+        from: '12345',
+        take: 50,
+        is_global: true,
+        is_first_party: false,
+        app_type: 'web,mobile',
+        client_ids: 'client1,client2,client3',
+        q: 'name:John AND email:john@example.com',
+      };
 
-      clients.getAll({ include_fields: true, fields: 'test' }).then(() => {
+      const data = [{ client_id: '1' }];
+      const request = nock(API_URL).get('/clients').query(queryParameters).reply(200, data);
+
+      clients.getAll({ ...queryParameters }).then(() => {
         expect(request.isDone()).toBe(true);
         done();
       });

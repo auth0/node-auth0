@@ -1,4 +1,5 @@
 import nock from 'nock';
+import queryString from 'querystring';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
@@ -81,18 +82,25 @@ describe('ResourceServersManager', () => {
       });
     });
 
-    it('should include the token in the Authorization header', (done) => {
+    it('should include the token in the Authorization header', async () => {
       nock.cleanAll();
 
+      const queryParams = {
+        identifiers: ['123'],
+        page: 0,
+        per_page: 10,
+        include_totals: true,
+        include_fields: true,
+      };
+
       const request = nock(API_URL)
-        .get('/resource-servers')
+        .get(`/resource-servers?${queryString.stringify(queryParams)}`)
         .matchHeader('Authorization', `Bearer ${token}`)
+        // .query(queryParams)
         .reply(200, []);
 
-      resourceServers.getAll().then(() => {
-        expect(request.isDone()).toBe(true);
-        done();
-      });
+      await resourceServers.getAll(queryParams);
+      expect(request.isDone()).toBe(true);
     });
   });
 
