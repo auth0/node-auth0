@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.9.0](https://github.com/auth0/node-auth0/tree/v4.9.0) (2024-08-26)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.8.0...v4.9.0)
+
+**Added**
+
+- Feature/SDK-4921 [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
+- Update Codecov Action with Token [\#1029](https://github.com/auth0/node-auth0/pull/1029) ([developerkunal](https://github.com/developerkunal))
+
+**Changed**
+
+- Update codeowner file with new GitHub team name [\#1025](https://github.com/auth0/node-auth0/pull/1025) ([stevenwong-okta](https://github.com/stevenwong-okta))
+
 ## [v4.8.0](https://github.com/auth0/node-auth0/tree/v4.8.0) (2024-08-02)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.7.0...v4.8.0)
