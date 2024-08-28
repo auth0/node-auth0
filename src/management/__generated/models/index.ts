@@ -175,10 +175,13 @@ export interface Client {
   initiate_login_uri: string;
   /**
    */
-  native_social_login: ClientNativeSocialLogin | null;
+  native_social_login: any | null;
   /**
    */
   refresh_token: ClientRefreshToken | null;
+  /**
+   */
+  default_organization: ClientDefaultOrganization | null;
   /**
    * Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`.
    *
@@ -198,13 +201,13 @@ export interface Client {
    */
   require_pushed_authorization_requests: boolean;
   /**
-   */
-  signed_request_object: ClientSignedRequestObject;
-  /**
    * Makes the use of Proof-of-Possession mandatory for this client
    *
    */
   require_proof_of_possession: boolean;
+  /**
+   */
+  signed_request_object: ClientSignedRequestObject;
   /**
    * Defines the compliance level for this client, which may restrict it's capabilities
    *
@@ -1174,10 +1177,10 @@ export interface ClientCreateAddons {
   azure_sb?: ClientCreateAddonsAzureSb;
   /**
    */
-  rms?: ClientAddonsRms;
+  rms?: ClientCreateAddonsRms;
   /**
    */
-  mscrm?: ClientAddonsMscrm;
+  mscrm?: ClientCreateAddonsMscrm;
   /**
    */
   slack?: ClientAddonsSlack;
@@ -1443,6 +1446,17 @@ export interface ClientCreateAddonsFirebase {
   lifetime_in_seconds?: number;
 }
 /**
+ * Microsoft Dynamics CRM SSO configuration.
+ */
+export interface ClientCreateAddonsMscrm {
+  [key: string]: any | any;
+  /**
+   * Microsoft Dynamics CRM application URL.
+   *
+   */
+  url: string;
+}
+/**
  * New Relic SSO configuration.
  */
 export interface ClientCreateAddonsNewrelic {
@@ -1468,6 +1482,17 @@ export interface ClientCreateAddonsOffice365 {
    *
    */
   connection?: string;
+}
+/**
+ * Active Directory Rights Management Service SSO configuration.
+ */
+export interface ClientCreateAddonsRms {
+  [key: string]: any | any;
+  /**
+   * URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
+   *
+   */
+  url: string;
 }
 /**
  * Salesforce SSO configuration.
@@ -2005,6 +2030,28 @@ export interface ClientCreateSignedRequestObject {
   credentials?: Array<ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
+ * Defines the default Organization ID and flows
+ */
+export interface ClientDefaultOrganization {
+  /**
+   * The default Organization ID to be used
+   *
+   */
+  organization_id: string;
+  /**
+   * The default Organization usage
+   *
+   */
+  flows: Array<ClientDefaultOrganizationFlowsEnum>;
+}
+
+export const ClientDefaultOrganizationFlowsEnum = {
+  client_credentials: 'client_credentials',
+} as const;
+export type ClientDefaultOrganizationFlowsEnum =
+  (typeof ClientDefaultOrganizationFlowsEnum)[keyof typeof ClientDefaultOrganizationFlowsEnum];
+
+/**
  * Encryption used for WsFed responses with this client.
  */
 export interface ClientEncryptionKey {
@@ -2150,37 +2197,6 @@ export interface ClientMobileIos {
   app_bundle_identifier: string;
 }
 /**
- * Configure native social settings
- */
-export interface ClientNativeSocialLogin {
-  /**
-   */
-  apple: ClientNativeSocialLoginApple | null;
-  /**
-   */
-  facebook: ClientNativeSocialLoginFacebook | null;
-}
-/**
- * Native Social Login support for the Apple connection
- */
-export interface ClientNativeSocialLoginApple {
-  /**
-   * Determine whether or not to allow signing in natively using an Apple authorization code
-   *
-   */
-  enabled: boolean;
-}
-/**
- * Native Social Login support for the Facebook connection
- */
-export interface ClientNativeSocialLoginFacebook {
-  /**
-   * Determine whether or not to allow signing in natively using Facebook
-   *
-   */
-  enabled: boolean;
-}
-/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientOidcLogout {
@@ -2190,7 +2206,46 @@ export interface ClientOidcLogout {
    *
    */
   backchannel_logout_urls: Array<string>;
+  /**
+   */
+  backchannel_logout_initiators: ClientOidcLogoutBackchannelLogoutInitiators;
 }
+/**
+ * Configuration for OIDC backchannel logout initiators
+ */
+export interface ClientOidcLogoutBackchannelLogoutInitiators {
+  [key: string]: any | any;
+  /**
+   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
+   *
+   */
+  mode: ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum;
+  /**
+   */
+  selected_initiators: Array<ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
+}
+
+export const ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
+  custom: 'custom',
+  all: 'all',
+} as const;
+export type ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum =
+  (typeof ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum];
+
+export const ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
+  rp_logout: 'rp-logout',
+  idp_logout: 'idp-logout',
+  password_changed: 'password-changed',
+  session_expired: 'session-expired',
+  session_revoked: 'session-revoked',
+  account_deleted: 'account-deleted',
+  email_identifier_changed: 'email-identifier-changed',
+  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
+  account_deactivated: 'account-deactivated',
+} as const;
+export type ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
+  (typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
+
 /**
  * Refresh token configuration
  */
@@ -2538,10 +2593,10 @@ export interface ClientUpdateAddons {
   azure_sb?: ClientCreateAddonsAzureSb;
   /**
    */
-  rms?: ClientAddonsRms;
+  rms?: ClientCreateAddonsRms;
   /**
    */
-  mscrm?: ClientAddonsMscrm;
+  mscrm?: ClientCreateAddonsMscrm;
   /**
    */
   slack?: ClientAddonsSlack;
