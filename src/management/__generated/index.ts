@@ -28,6 +28,7 @@ import {
   RolesManager,
   RulesManager,
   RulesConfigsManager,
+  SelfServiceProfilesManager,
   SessionsManager,
   StatsManager,
   TenantsManager,
@@ -66,6 +67,7 @@ export abstract class ManagementClientBase {
   public readonly roles = new RolesManager(this.configuration);
   public readonly rules = new RulesManager(this.configuration);
   public readonly rulesConfigs = new RulesConfigsManager(this.configuration);
+  public readonly selfServiceProfiles = new SelfServiceProfilesManager(this.configuration);
   public readonly sessions = new SessionsManager(this.configuration);
   public readonly stats = new StatsManager(this.configuration);
   public readonly tenants = new TenantsManager(this.configuration);
