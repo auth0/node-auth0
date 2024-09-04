@@ -41,7 +41,7 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * Get template partials for a prompt - In Early Access
+   * Get template partials for a prompt
    * Get partials for a prompt
    *
    * @throws {RequiredError}
@@ -144,7 +144,7 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * Set template partials for a prompt - In Early Access
+   * Set template partials for a prompt
    * Set partials for a prompt
    *
    * @throws {RequiredError}
