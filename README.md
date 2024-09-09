@@ -49,13 +49,13 @@ See [more examples](https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md#
 
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
-Initialize your client class with a client ID, client secret and a domain.
+Initialize your client class with a client ID, client secret and a domain. In the Auth0 dashboard, you can find the domain in your Identifier within the Auth0 Management API under Applications and APIs.
 
 ```js
 import { ManagementClient } from 'auth0';
 
 var management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -67,7 +67,7 @@ Or, initialize your client class with an API v2 token and a domain.
 import { ManagementClient } from 'auth0';
 
 var management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   token: '{YOUR_API_V2_TOKEN}',
 });
 ```
