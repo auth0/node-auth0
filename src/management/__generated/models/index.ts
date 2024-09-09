@@ -175,10 +175,13 @@ export interface Client {
   initiate_login_uri: string;
   /**
    */
-  native_social_login: ClientNativeSocialLogin | null;
+  native_social_login: any | null;
   /**
    */
   refresh_token: ClientRefreshToken | null;
+  /**
+   */
+  default_organization: ClientDefaultOrganization | null;
   /**
    * Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`.
    *
@@ -198,13 +201,13 @@ export interface Client {
    */
   require_pushed_authorization_requests: boolean;
   /**
-   */
-  signed_request_object: ClientSignedRequestObject;
-  /**
    * Makes the use of Proof-of-Possession mandatory for this client
    *
    */
   require_proof_of_possession: boolean;
+  /**
+   */
+  signed_request_object: ClientSignedRequestObject;
   /**
    * Defines the compliance level for this client, which may restrict it's capabilities
    *
@@ -1174,10 +1177,10 @@ export interface ClientCreateAddons {
   azure_sb?: ClientCreateAddonsAzureSb;
   /**
    */
-  rms?: ClientAddonsRms;
+  rms?: ClientCreateAddonsRms;
   /**
    */
-  mscrm?: ClientAddonsMscrm;
+  mscrm?: ClientCreateAddonsMscrm;
   /**
    */
   slack?: ClientAddonsSlack;
@@ -1443,6 +1446,17 @@ export interface ClientCreateAddonsFirebase {
   lifetime_in_seconds?: number;
 }
 /**
+ * Microsoft Dynamics CRM SSO configuration.
+ */
+export interface ClientCreateAddonsMscrm {
+  [key: string]: any | any;
+  /**
+   * Microsoft Dynamics CRM application URL.
+   *
+   */
+  url: string;
+}
+/**
  * New Relic SSO configuration.
  */
 export interface ClientCreateAddonsNewrelic {
@@ -1468,6 +1482,17 @@ export interface ClientCreateAddonsOffice365 {
    *
    */
   connection?: string;
+}
+/**
+ * Active Directory Rights Management Service SSO configuration.
+ */
+export interface ClientCreateAddonsRms {
+  [key: string]: any | any;
+  /**
+   * URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
+   *
+   */
+  url: string;
 }
 /**
  * Salesforce SSO configuration.
@@ -2005,6 +2030,28 @@ export interface ClientCreateSignedRequestObject {
   credentials?: Array<ClientCreateClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
 }
 /**
+ * Defines the default Organization ID and flows
+ */
+export interface ClientDefaultOrganization {
+  /**
+   * The default Organization ID to be used
+   *
+   */
+  organization_id: string;
+  /**
+   * The default Organization usage
+   *
+   */
+  flows: Array<ClientDefaultOrganizationFlowsEnum>;
+}
+
+export const ClientDefaultOrganizationFlowsEnum = {
+  client_credentials: 'client_credentials',
+} as const;
+export type ClientDefaultOrganizationFlowsEnum =
+  (typeof ClientDefaultOrganizationFlowsEnum)[keyof typeof ClientDefaultOrganizationFlowsEnum];
+
+/**
  * Encryption used for WsFed responses with this client.
  */
 export interface ClientEncryptionKey {
@@ -2049,7 +2096,26 @@ export interface ClientGrant {
    *
    */
   scope: Array<string>;
+  /**
+   * Defines whether organizations can be used with client credentials exchanges for this grant.
+   *
+   */
+  organization_usage: ClientGrantOrganizationUsageEnum;
+  /**
+   * If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
+   *
+   */
+  allow_any_organization: boolean;
 }
+
+export const ClientGrantOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+} as const;
+export type ClientGrantOrganizationUsageEnum =
+  (typeof ClientGrantOrganizationUsageEnum)[keyof typeof ClientGrantOrganizationUsageEnum];
+
 /**
  *
  */
@@ -2065,11 +2131,30 @@ export interface ClientGrantCreate {
    */
   audience: string;
   /**
+   * Defines whether organizations can be used with client credentials exchanges for this grant.
+   *
+   */
+  organization_usage?: ClientGrantCreateOrganizationUsageEnum;
+  /**
+   * If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
+   *
+   */
+  allow_any_organization?: boolean;
+  /**
    * Scopes allowed for this client grant.
    *
    */
   scope: Array<string>;
 }
+
+export const ClientGrantCreateOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+} as const;
+export type ClientGrantCreateOrganizationUsageEnum =
+  (typeof ClientGrantCreateOrganizationUsageEnum)[keyof typeof ClientGrantCreateOrganizationUsageEnum];
+
 /**
  * Configuration related to JWTs for the client.
  */
@@ -2150,37 +2235,6 @@ export interface ClientMobileIos {
   app_bundle_identifier: string;
 }
 /**
- * Configure native social settings
- */
-export interface ClientNativeSocialLogin {
-  /**
-   */
-  apple: ClientNativeSocialLoginApple | null;
-  /**
-   */
-  facebook: ClientNativeSocialLoginFacebook | null;
-}
-/**
- * Native Social Login support for the Apple connection
- */
-export interface ClientNativeSocialLoginApple {
-  /**
-   * Determine whether or not to allow signing in natively using an Apple authorization code
-   *
-   */
-  enabled: boolean;
-}
-/**
- * Native Social Login support for the Facebook connection
- */
-export interface ClientNativeSocialLoginFacebook {
-  /**
-   * Determine whether or not to allow signing in natively using Facebook
-   *
-   */
-  enabled: boolean;
-}
-/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientOidcLogout {
@@ -2190,7 +2244,46 @@ export interface ClientOidcLogout {
    *
    */
   backchannel_logout_urls: Array<string>;
+  /**
+   */
+  backchannel_logout_initiators: ClientOidcLogoutBackchannelLogoutInitiators;
 }
+/**
+ * Configuration for OIDC backchannel logout initiators
+ */
+export interface ClientOidcLogoutBackchannelLogoutInitiators {
+  [key: string]: any | any;
+  /**
+   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
+   *
+   */
+  mode: ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum;
+  /**
+   */
+  selected_initiators: Array<ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
+}
+
+export const ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
+  custom: 'custom',
+  all: 'all',
+} as const;
+export type ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum =
+  (typeof ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsModeEnum];
+
+export const ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
+  rp_logout: 'rp-logout',
+  idp_logout: 'idp-logout',
+  password_changed: 'password-changed',
+  session_expired: 'session-expired',
+  session_revoked: 'session-revoked',
+  account_deleted: 'account-deleted',
+  email_identifier_changed: 'email-identifier-changed',
+  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
+  account_deactivated: 'account-deactivated',
+} as const;
+export type ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
+  (typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
+
 /**
  * Refresh token configuration
  */
@@ -2424,10 +2517,13 @@ export interface ClientUpdate {
   initiate_login_uri?: string;
   /**
    */
-  native_social_login?: ClientCreateNativeSocialLogin | null;
+  native_social_login?: ClientUpdateNativeSocialLogin | null;
   /**
    */
   refresh_token?: ClientRefreshToken | null;
+  /**
+   */
+  default_organization?: ClientDefaultOrganization | null;
   /**
    * Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`.
    *
@@ -2447,13 +2543,13 @@ export interface ClientUpdate {
    */
   require_pushed_authorization_requests?: boolean;
   /**
-   */
-  signed_request_object?: ClientUpdateSignedRequestObject | null;
-  /**
    * Makes the use of Proof-of-Possession mandatory for this client
    *
    */
   require_proof_of_possession?: boolean;
+  /**
+   */
+  signed_request_object?: ClientUpdateSignedRequestObject | null;
   /**
    * Defines the compliance level for this client, which may restrict it's capabilities
    *
@@ -2585,7 +2681,7 @@ export interface ClientUpdateAddons {
   office365?: ClientCreateAddonsOffice365;
   /**
    */
-  salesforce?: ClientCreateAddonsSalesforce;
+  salesforce?: ClientUpdateAddonsSalesforce;
   /**
    */
   salesforce_api?: ClientCreateAddonsSalesforceApi;
@@ -2600,7 +2696,7 @@ export interface ClientUpdateAddons {
   layer?: ClientAddonsLayer;
   /**
    */
-  sap_api?: ClientCreateAddonsSapApi;
+  sap_api?: ClientUpdateAddonsSapApi;
   /**
    */
   sharepoint?: ClientCreateAddonsSharepoint;
@@ -2629,6 +2725,53 @@ export interface ClientUpdateAddons {
    *
    */
   oag?: object | null;
+}
+/**
+ * Salesforce SSO configuration.
+ */
+export interface ClientUpdateAddonsSalesforce {
+  [key: string]: any | any;
+  /**
+   * Arbitrary logical URL that identifies the Saleforce resource. e.g. `https://acme-org.com`.
+   *
+   */
+  entity_id?: string;
+}
+/**
+ * SAP API addon configuration.
+ */
+export interface ClientUpdateAddonsSapApi {
+  [key: string]: any | any;
+  /**
+   * If activated in the OAuth 2.0 client configuration (transaction SOAUTH2) the SAML attribute client_id must be set and equal the client_id form parameter of the access token request.
+   *
+   */
+  clientid?: string;
+  /**
+   * Name of the property in the user object that maps to a SAP username. e.g. `email`.
+   *
+   */
+  usernameAttribute?: string;
+  /**
+   * Your SAP OData server OAuth2 token endpoint URL.
+   *
+   */
+  tokenEndpointUrl?: string;
+  /**
+   * Requested scope for SAP APIs.
+   *
+   */
+  scope?: string;
+  /**
+   * Service account password to use to authenticate API calls to the token endpoint.
+   *
+   */
+  servicePassword?: string;
+  /**
+   * NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
+   *
+   */
+  nameIdentifierFormat?: string;
 }
 /**
  * Defines client authentication methods.
@@ -2733,6 +2876,30 @@ export interface ClientUpdateMobileIos {
   app_bundle_identifier?: string;
 }
 /**
+ * Configure native social settings
+ */
+export interface ClientUpdateNativeSocialLogin {
+  /**
+   */
+  apple?: ClientCreateNativeSocialLoginApple | null;
+  /**
+   */
+  facebook?: ClientCreateNativeSocialLoginFacebook | null;
+  /**
+   */
+  google?: ClientUpdateNativeSocialLoginGoogle | null;
+}
+/**
+ * Native Social Login support for the google-oauth2 connection
+ */
+export interface ClientUpdateNativeSocialLoginGoogle {
+  /**
+   * Determine whether or not to allow signing in natively using a Google ID token
+   *
+   */
+  enabled?: boolean;
+}
+/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientUpdateOidcLogout {
@@ -2741,7 +2908,46 @@ export interface ClientUpdateOidcLogout {
    *
    */
   backchannel_logout_urls?: Array<string>;
+  /**
+   */
+  backchannel_logout_initiators?: ClientUpdateOidcLogoutBackchannelLogoutInitiators;
 }
+/**
+ * Configuration for OIDC backchannel logout initiators
+ */
+export interface ClientUpdateOidcLogoutBackchannelLogoutInitiators {
+  [key: string]: any | any;
+  /**
+   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
+   *
+   */
+  mode: ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum;
+  /**
+   */
+  selected_initiators?: Array<ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
+}
+
+export const ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
+  custom: 'custom',
+  all: 'all',
+} as const;
+export type ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum =
+  (typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum];
+
+export const ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
+  rp_logout: 'rp-logout',
+  idp_logout: 'idp-logout',
+  password_changed: 'password-changed',
+  session_expired: 'session-expired',
+  session_revoked: 'session-revoked',
+  account_deleted: 'account-deleted',
+  email_identifier_changed: 'email-identifier-changed',
+  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
+  account_deactivated: 'account-deactivated',
+} as const;
+export type ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
+  (typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
+
 /**
  * JWT-secured Authorization Requests (JAR) settings.
  */
@@ -4903,7 +5109,10 @@ export interface GetClientGrants200ResponseOneOf {
 /**
  *
  */
-export type GetClients200Response = Array<Client> | GetClients200ResponseOneOf;
+export type GetClients200Response =
+  | Array<Client>
+  | GetClients200ResponseOneOf
+  | GetClients200ResponseOneOf1;
 /**
  *
  */
@@ -4917,6 +5126,17 @@ export interface GetClients200ResponseOneOf {
   /**
    */
   total: number;
+  /**
+   */
+  clients: Array<Client>;
+}
+/**
+ *
+ */
+export interface GetClients200ResponseOneOf1 {
+  /**
+   */
+  next: string;
   /**
    */
   clients: Array<Client>;
@@ -6292,6 +6512,54 @@ export const GetMessageTypes200ResponseMessageTypesEnum = {
 export type GetMessageTypes200ResponseMessageTypesEnum =
   (typeof GetMessageTypes200ResponseMessageTypesEnum)[keyof typeof GetMessageTypes200ResponseMessageTypesEnum];
 
+/**
+ *
+ */
+export type GetOrganizationClientGrants200Response =
+  | Array<GetOrganizationClientGrants200ResponseOneOfInner>
+  | GetOrganizationClientGrants200ResponseOneOf;
+/**
+ *
+ */
+export interface GetOrganizationClientGrants200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  grants: Array<GetOrganizationClientGrants200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetOrganizationClientGrants200ResponseOneOfInner {
+  /**
+   * ID of the client grant.
+   *
+   */
+  id: string;
+  /**
+   * ID of the client.
+   *
+   */
+  client_id: string;
+  /**
+   * The audience (API identifier) of this client grant
+   *
+   */
+  audience: string;
+  /**
+   * Scopes allowed for this client grant.
+   *
+   */
+  scope: Array<string>;
+}
 /**
  *
  */
@@ -8189,7 +8457,27 @@ export interface PatchClientGrantsByIdRequest {
    *
    */
   scope?: Array<string>;
+  /**
+   * Controls how organizations may be used with this grant
+   *
+   */
+  organization_usage?: PatchClientGrantsByIdRequestOrganizationUsageEnum;
+  /**
+   * Controls allowing any organization to be used with this grant
+   *
+   */
+  allow_any_organization?: boolean | null;
 }
+
+export const PatchClientGrantsByIdRequestOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+  null: 'null',
+} as const;
+export type PatchClientGrantsByIdRequestOrganizationUsageEnum =
+  (typeof PatchClientGrantsByIdRequestOrganizationUsageEnum)[keyof typeof PatchClientGrantsByIdRequestOrganizationUsageEnum];
+
 /**
  *
  */
@@ -13644,6 +13932,16 @@ export interface GetClientsRequest {
    */
   include_totals?: boolean;
   /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
    * Optional filter on the global client parameter.
    *
    */
@@ -13658,6 +13956,16 @@ export interface GetClientsRequest {
    *
    */
   app_type?: string;
+  /**
+   * A comma separated list of client_ids used to filter the returned clients
+   *
+   */
+  client_ids?: string;
+  /**
+   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
+   *
+   */
+  q?: string;
 }
 /**
  *
@@ -14844,6 +15152,46 @@ export interface GetNameByNameRequest {
 /**
  *
  */
+export interface GetOrganizationClientGrantsRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * Optional filter on audience of the client grant.
+   *
+   */
+  audience?: string;
+  /**
+   * Optional filter on client_id of the client grant.
+   *
+   */
+  client_id?: string;
+  /**
+   * A list of grant ids, which will filter the results.
+   *
+   */
+  grant_ids?: Array<string>;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface GetOrganizationMemberRolesRequest {
   /**
    * Organization identifier
@@ -15295,12 +15643,17 @@ export interface DeleteResourceServersByIdRequest {
  */
 export interface GetResourceServersRequest {
   /**
+   * A list of URI encoded identifiers to filter the results by. Consider URL limits when using this parameter, if the URL is too long, consider chunking the requests
+   *
+   */
+  identifiers?: Array<string>;
+  /**
    * Page index of the results to return. First page is 0.
    *
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
