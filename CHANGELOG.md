@@ -1,12 +1,21 @@
 # Change Log
 
+## [v4.10.0](https://github.com/auth0/node-auth0/tree/v4.10.0) (2024-09-10)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.9.0...v4.10.0)
+
+**Added**
+
+- Prompt Partial model changes [\#1035](https://github.com/auth0/node-auth0/pull/1035) ([tusharpandey13](https://github.com/tusharpandey13))
+- Add organization support for client credentials to node-auth0 [\#1033](https://github.com/auth0/node-auth0/pull/1033) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.9.0](https://github.com/auth0/node-auth0/tree/v4.9.0) (2024-08-26)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.8.0...v4.9.0)
 
 **Added**
 
-- Feature/SDK-4921 [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
+- Node SDK support for SS-SSO [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
 - Update Codecov Action with Token [\#1029](https://github.com/auth0/node-auth0/pull/1029) ([developerkunal](https://github.com/developerkunal))
 
 **Changed**
