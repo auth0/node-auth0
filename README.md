@@ -1,3 +1,5 @@
+[![Open in DevZero](https://assets.devzero.io/open-in-devzero.svg)](https://www.devzero.io/dashboard/recipes/new?repo-url=https://github.com/auth0/node-auth0)
+
 ![Node.js client library for Auth0](https://cdn.auth0.com/website/sdks/banner/node-auth0-banner.png)
 
 ![Release](https://img.shields.io/npm/v/auth0)
