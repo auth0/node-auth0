@@ -59,6 +59,24 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Perform rekeying operation on the key hierarchy.
+   * Rekey the key hierarchy
+   *
+   * @throws {RequiredError}
+   */
+  async postEncryptionRekey(initOverrides?: InitOverride): Promise<ApiResponse<void>> {
+    const response = await this.request(
+      {
+        path: `/keys/encryption/rekey`,
+        method: 'POST',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
    * Rotate the Application Signing Key
    *
    * @throws {RequiredError}

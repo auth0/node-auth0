@@ -46,4 +46,10 @@ describe('AnomalyManager', () => {
       status: 200,
     });
   });
+
+  it('should rekey the tenant key heirarchy', async () => {
+    await expect(keysManager.postEncryptionRekey()).resolves.toMatchObject({
+      status: 200,
+    });
+  });
 });
