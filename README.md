@@ -21,7 +21,7 @@ This library supports the following tooling versions:
 
 ### Installation
 
-Using [npm](https://npmjs.org) in your project directory run the following command:
+Using [npm](https://npmjs.org) in your project directory, run the following command:
 
 ```bash
 npm install auth0

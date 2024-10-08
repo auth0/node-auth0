@@ -442,4 +442,15 @@ describe('id-token-validator', () => {
       idTokenValidator.validate(jwt, { organization: 'testOrg' })
     ).resolves.not.toThrow();
   });
+  it('creates an instance of IdTokenValidator', async () => {
+    const idTokenValidator = new IDTokenValidator({
+      domain: DOMAIN,
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+      agent: {} as any, // Stub for the agent parameter,
+      headers: {} as any, // Stub for the headers parameter,
+      timeoutDuration: 5000,
+    });
+    expect(idTokenValidator).toBeInstanceOf(IDTokenValidator);
+  });
 });
