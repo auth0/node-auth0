@@ -837,3 +837,11 @@ describe('Runtime for UserInfoClient', () => {
     expect(request.isDone()).toBe(true);
   });
 });
+
+describe('test baseAPI', () => {
+  // following error is thrown: throw new Error('The provided base URL is invalid');
+  // add expect statement for this error below
+  expect(
+    () => new BaseAPI({ baseUrl: {} as any, parseError: () => Promise.resolve(new Error('tmp')) })
+  ).toThrowError('The provided base URL is invalid');
+});
