@@ -5487,6 +5487,91 @@ export interface GetExecution200ResponseResultsInner {
 /**
  *
  */
+export type GetFlows200Response = Array<GetFlows200ResponseOneOfInner> | GetFlows200ResponseOneOf;
+/**
+ *
+ */
+export interface GetFlows200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  flows: Array<GetFlows200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetFlows200ResponseOneOfInner {
+  /**
+   */
+  id: string;
+  /**
+   */
+  name: string;
+  /**
+   */
+  created_at: string;
+  /**
+   */
+  updated_at: string;
+  /**
+   */
+  executed_at?: string;
+}
+/**
+ *
+ */
+export type GetForms200Response = Array<GetForms200ResponseOneOfInner> | GetForms200ResponseOneOf;
+/**
+ *
+ */
+export interface GetForms200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  forms: Array<GetForms200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetForms200ResponseOneOfInner {
+  /**
+   */
+  id: string;
+  /**
+   */
+  name: string;
+  /**
+   */
+  created_at: string;
+  /**
+   */
+  updated_at: string;
+  /**
+   */
+  embedded_at?: string;
+  /**
+   */
+  submitted_at?: string;
+}
+/**
+ *
+ */
 export type GetGrants200Response = Array<UserGrant> | GetGrants200ResponseOneOf;
 /**
  *
@@ -8611,6 +8696,46 @@ export interface PatchEnabledConnectionsByConnectionIdRequest {
 /**
  *
  */
+export interface PatchFlowsByIdRequest {
+  /**
+   */
+  name?: string;
+  /**
+   */
+  actions?: Array<any>;
+}
+/**
+ *
+ */
+export interface PatchFormsByIdRequest {
+  /**
+   */
+  name?: string;
+  /**
+   */
+  messages?: PostFormsRequestMessages;
+  /**
+   */
+  languages?: PostFormsRequestLanguages;
+  /**
+   */
+  translations?: { [key: string]: any };
+  /**
+   */
+  nodes?: Array<PostFormsRequestNodesInner>;
+  /**
+   */
+  start?: PostFormsRequestStart;
+  /**
+   */
+  ending?: PostFormsRequestEnding;
+  /**
+   */
+  style?: PostFormsRequestStyle;
+}
+/**
+ *
+ */
 export interface PatchLogStreamsByIdRequest {
   /**
    * log stream name
@@ -9882,6 +10007,1278 @@ export interface PostEnabledConnectionsRequest {
    *
    */
   show_as_button?: boolean;
+}
+/**
+ *
+ */
+export interface PostFlows201Response {
+  /**
+   */
+  id: string;
+  /**
+   */
+  name: string;
+  /**
+   */
+  actions?: Array<any>;
+  /**
+   */
+  created_at: string;
+  /**
+   */
+  updated_at: string;
+  /**
+   */
+  executed_at?: string;
+}
+/**
+ *
+ */
+export interface PostFlowsRequest {
+  /**
+   */
+  name: string;
+  /**
+   */
+  actions?: Array<any>;
+}
+/**
+ *
+ */
+export interface PostForms201Response {
+  /**
+   */
+  id: string;
+  /**
+   */
+  name: string;
+  /**
+   */
+  messages?: PostFormsRequestMessages;
+  /**
+   */
+  languages?: PostFormsRequestLanguages;
+  /**
+   */
+  translations?: { [key: string]: any };
+  /**
+   */
+  nodes?: Array<PostFormsRequestNodesInner>;
+  /**
+   */
+  start?: PostFormsRequestStart;
+  /**
+   */
+  ending?: PostFormsRequestEnding;
+  /**
+   */
+  style?: PostFormsRequestStyle;
+  /**
+   */
+  created_at: string;
+  /**
+   */
+  updated_at: string;
+  /**
+   */
+  embedded_at?: string;
+  /**
+   */
+  submitted_at?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequest {
+  /**
+   */
+  name: string;
+  /**
+   */
+  messages?: PostFormsRequestMessages;
+  /**
+   */
+  languages?: PostFormsRequestLanguages;
+  /**
+   */
+  translations?: { [key: string]: any };
+  /**
+   */
+  nodes?: Array<PostFormsRequestNodesInner>;
+  /**
+   */
+  start?: PostFormsRequestStart;
+  /**
+   */
+  ending?: PostFormsRequestEnding;
+  /**
+   */
+  style?: PostFormsRequestStyle;
+}
+/**
+ *
+ */
+export interface PostFormsRequestEnding {
+  /**
+   */
+  redirection?: PostFormsRequestEndingRedirection;
+  /**
+   */
+  after_submit?: PostFormsRequestEndingAfterSubmit;
+  /**
+   */
+  coordinates?: PostFormsRequestNodesInnerAnyOfCoordinates;
+  /**
+   */
+  resume_flow?: PostFormsRequestEndingResumeFlowEnum;
+}
+
+export const PostFormsRequestEndingResumeFlowEnum = {
+  true: true,
+} as const;
+export type PostFormsRequestEndingResumeFlowEnum =
+  (typeof PostFormsRequestEndingResumeFlowEnum)[keyof typeof PostFormsRequestEndingResumeFlowEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestEndingAfterSubmit {
+  /**
+   */
+  flow_id?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestEndingRedirection {
+  /**
+   */
+  delay?: number;
+  /**
+   */
+  target: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestLanguages {
+  /**
+   */
+  primary?: string;
+  /**
+   */
+  _default?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestMessages {
+  /**
+   */
+  errors?: { [key: string]: any };
+  /**
+   */
+  custom?: { [key: string]: any };
+}
+/**
+ *
+ */
+export type PostFormsRequestNodesInner =
+  | PostFormsRequestNodesInnerAnyOf
+  | PostFormsRequestNodesInnerAnyOf1
+  | PostFormsRequestNodesInnerAnyOf2;
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf {
+  /**
+   */
+  id: string;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOfTypeEnum;
+  /**
+   */
+  coordinates?: PostFormsRequestNodesInnerAnyOfCoordinates;
+  /**
+   */
+  alias?: string;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOfConfig;
+}
+
+export const PostFormsRequestNodesInnerAnyOfTypeEnum = {
+  FLOW: 'FLOW',
+} as const;
+export type PostFormsRequestNodesInnerAnyOfTypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOfTypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf1 {
+  /**
+   */
+  id: string;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf1TypeEnum;
+  /**
+   */
+  coordinates?: PostFormsRequestNodesInnerAnyOfCoordinates;
+  /**
+   */
+  alias?: string;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf1Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf1TypeEnum = {
+  ROUTER: 'ROUTER',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf1TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf1TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf1TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf1Config {
+  /**
+   */
+  rules?: Array<PostFormsRequestNodesInnerAnyOf1ConfigRulesInner>;
+  /**
+   */
+  fallback?: PostFormsRequestNodesInnerAnyOfConfigNextNode;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf1ConfigRulesInner {
+  /**
+   */
+  id: string;
+  /**
+   */
+  alias?: string;
+  /**
+   */
+  condition: any | null;
+  /**
+   */
+  next_node?: PostFormsRequestNodesInnerAnyOfConfigNextNode;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2 {
+  /**
+   */
+  id: string;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2TypeEnum;
+  /**
+   */
+  coordinates?: PostFormsRequestNodesInnerAnyOfCoordinates;
+  /**
+   */
+  alias?: string;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2TypeEnum = {
+  STEP: 'STEP',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2Config {
+  /**
+   */
+  components?: Array<PostFormsRequestNodesInnerAnyOf2ConfigComponentsInner>;
+  /**
+   */
+  next_node?: PostFormsRequestNodesInnerAnyOfConfigNextNode;
+}
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInner =
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2;
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf =
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6;
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1 =
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1;
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfTypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfConfig;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfTypeEnum = {
+  GMAPS_ADDRESS: 'GMAPS_ADDRESS',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfTypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfTypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1TypeEnum = {
+  RECAPTCHA: 'RECAPTCHA',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOf1Config {
+  /**
+   */
+  site_key: string;
+  /**
+   */
+  secret_key: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf1AnyOfConfig {
+  /**
+   */
+  api_key: string;
+}
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2 =
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9;
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfTypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfConfig;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfTypeEnum = {
+  BOOLEAN: 'BOOLEAN',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfTypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfTypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1TypeEnum;
+  /**
+   */
+  config?: { [key: string]: any };
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1TypeEnum = {
+  CARDS: 'CARDS',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf1TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10TypeEnum = {
+  PASSWORD: 'PASSWORD',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10Config {
+  /**
+   */
+  hash?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10ConfigHashEnum;
+  /**
+   */
+  placeholder?: string;
+  /**
+   */
+  min_length?: number;
+  /**
+   */
+  max_length?: number;
+  /**
+   */
+  complexity?: boolean;
+  /**
+   */
+  nist?: boolean;
+  /**
+   */
+  strength_meter?: boolean;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10ConfigHashEnum = {
+  NONE: 'NONE',
+  MD5: 'MD5',
+  SHA1: 'SHA1',
+  SHA256: 'SHA256',
+  SHA512: 'SHA512',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10ConfigHashEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10ConfigHashEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf10ConfigHashEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11TypeEnum = {
+  PAYMENT: 'PAYMENT',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11Config {
+  /**
+   */
+  provider?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigProviderEnum;
+  /**
+   */
+  charge: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigCharge;
+  /**
+   */
+  credentials: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigCredentials;
+  /**
+   */
+  customer?: { [key: string]: any };
+  /**
+   */
+  fields?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigFields;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigProviderEnum =
+  {
+    STRIPE: 'STRIPE',
+  } as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigProviderEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigProviderEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigProviderEnum];
+
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigCharge =
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf
+  | PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1;
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf {
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfTypeEnum;
+  /**
+   */
+  one_off: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOff;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfTypeEnum =
+  {
+    ONE_OFF: 'ONE_OFF',
+  } as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfTypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfTypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1 {
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1TypeEnum;
+  /**
+   */
+  subscription: { [key: string]: any };
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1TypeEnum =
+  {
+    SUBSCRIPTION: 'SUBSCRIPTION',
+  } as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOf1TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOff {
+  [key: string]: any | any;
+  /**
+   */
+  amount: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffAmount;
+  /**
+   */
+  currency: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffCurrencyEnum;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffCurrencyEnum =
+  {
+    AUD: 'AUD',
+    CAD: 'CAD',
+    CHF: 'CHF',
+    EUR: 'EUR',
+    GBP: 'GBP',
+    INR: 'INR',
+    MXN: 'MXN',
+    SEK: 'SEK',
+    USD: 'USD',
+  } as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffCurrencyEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffCurrencyEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffCurrencyEnum];
+
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigChargeAnyOfOneOffAmount =
+  number | string;
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigCredentials {
+  /**
+   */
+  public_key: string;
+  /**
+   */
+  private_key: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigFields {
+  /**
+   */
+  card_number?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigFieldsCardNumber;
+  /**
+   */
+  expiration_date?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigFieldsCardNumber;
+  /**
+   */
+  security_code?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigFieldsCardNumber;
+  /**
+   */
+  trustmarks?: boolean;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf11ConfigFieldsCardNumber {
+  /**
+   */
+  label?: string;
+  /**
+   */
+  placeholder?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12TypeEnum;
+  /**
+   */
+  config?: object;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12TypeEnum = {
+  SOCIAL: 'SOCIAL',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf12TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13TypeEnum = {
+  TEL: 'TEL',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13Config {}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf13Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14TypeEnum = {
+  TEXT: 'TEXT',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf14TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15TypeEnum = {
+  URL: 'URL',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf15TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2TypeEnum;
+  /**
+   */
+  config?: { [key: string]: any };
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2TypeEnum = {
+  CHOICE: 'CHOICE',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf2TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3TypeEnum = {
+  CUSTOM: 'CUSTOM',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf3Config {
+  /**
+   */
+  schema: { [key: string]: any };
+  /**
+   */
+  code: string;
+  /**
+   */
+  css?: string;
+  /**
+   */
+  params?: { [key: string]: any };
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4TypeEnum;
+  /**
+   */
+  config: { [key: string]: any };
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4TypeEnum = {
+  DATE: 'DATE',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf4TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5TypeEnum;
+  /**
+   */
+  config?: { [key: string]: any };
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5TypeEnum = {
+  DROPDOWN: 'DROPDOWN',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf5TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6TypeEnum = {
+  EMAIL: 'EMAIL',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf6Config {
+  /**
+   */
+  default_value?: string;
+  /**
+   */
+  placeholder?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7TypeEnum = {
+  FILE: 'FILE',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7Config {
+  /**
+   */
+  multiple?: boolean;
+  /**
+   */
+  storage?: { [key: string]: any };
+  /**
+   */
+  categories?: Array<PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7ConfigCategoriesEnum>;
+  /**
+   */
+  extensions?: Array<string>;
+  /**
+   */
+  maxSize?: number;
+  /**
+   */
+  maxFiles?: number;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7ConfigCategoriesEnum =
+  {
+    AUDIO: 'AUDIO',
+    VIDEO: 'VIDEO',
+    IMAGE: 'IMAGE',
+    DOCUMENT: 'DOCUMENT',
+    ARCHIVE: 'ARCHIVE',
+  } as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7ConfigCategoriesEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7ConfigCategoriesEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf7ConfigCategoriesEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8TypeEnum = {
+  LEGAL: 'LEGAL',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf8Config {
+  /**
+   */
+  text?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9TypeEnum = {
+  NUMBER: 'NUMBER',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOf9Config {
+  /**
+   */
+  default_value?: number;
+  /**
+   */
+  placeholder?: string;
+  /**
+   */
+  min_value?: number;
+  /**
+   */
+  max_value?: number;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfConfig {
+  /**
+   */
+  default_value?: boolean;
+  /**
+   */
+  options?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfConfigOptions;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOf2AnyOfConfigOptions {
+  /**
+   */
+  _true?: string;
+  /**
+   */
+  _false?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfTypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfConfig;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfTypeEnum = {
+  DIVIDER: 'DIVIDER',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfTypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfTypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1TypeEnum = {
+  HTML: 'HTML',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1Config {
+  /**
+   */
+  content?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2TypeEnum = {
+  IMAGE: 'IMAGE',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2Config {
+  /**
+   */
+  src: string;
+  /**
+   */
+  position?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2ConfigPositionEnum;
+  /**
+   */
+  height?: number;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2ConfigPositionEnum = {
+  LEFT: 'LEFT',
+  CENTER: 'CENTER',
+  RIGHT: 'RIGHT',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2ConfigPositionEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2ConfigPositionEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf2ConfigPositionEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3TypeEnum = {
+  JUMP_BUTTON: 'JUMP_BUTTON',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3Config {
+  /**
+   */
+  text: string;
+  /**
+   */
+  next_node: PostFormsRequestNodesInnerAnyOfConfigNextNode;
+  /**
+   */
+  style?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3ConfigStyle;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf3ConfigStyle {
+  /**
+   */
+  background_color?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4TypeEnum = {
+  NEXT_BUTTON: 'NEXT_BUTTON',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4Config {
+  /**
+   */
+  text: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5TypeEnum;
+  /**
+   */
+  config: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf4Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5TypeEnum = {
+  PREVIOUS_BUTTON: 'PREVIOUS_BUTTON',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf5TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6 {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6TypeEnum;
+  /**
+   */
+  config?: PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf1Config;
+}
+
+export const PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6TypeEnum = {
+  RICH_TEXT: 'RICH_TEXT',
+} as const;
+export type PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6TypeEnum =
+  (typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6TypeEnum)[keyof typeof PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOf6TypeEnum];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOf2ConfigComponentsInnerAnyOfAnyOfConfig {
+  /**
+   */
+  text?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOfConfig {
+  /**
+   */
+  flow_id: string;
+  /**
+   */
+  next_node?: PostFormsRequestNodesInnerAnyOfConfigNextNode;
+}
+/**
+ *
+ */
+export type PostFormsRequestNodesInnerAnyOfConfigNextNode =
+  | PostFormsRequestNodesInnerAnyOfConfigNextNodeAnyOf
+  | string;
+
+/**
+ *
+ */
+export const PostFormsRequestNodesInnerAnyOfConfigNextNodeAnyOf = {
+  ending: '$ending',
+} as const;
+export type PostFormsRequestNodesInnerAnyOfConfigNextNodeAnyOf =
+  (typeof PostFormsRequestNodesInnerAnyOfConfigNextNodeAnyOf)[keyof typeof PostFormsRequestNodesInnerAnyOfConfigNextNodeAnyOf];
+
+/**
+ *
+ */
+export interface PostFormsRequestNodesInnerAnyOfCoordinates {
+  /**
+   */
+  x: number;
+  /**
+   */
+  y: number;
+}
+/**
+ *
+ */
+export interface PostFormsRequestStart {
+  /**
+   */
+  hidden_fields?: Array<PostFormsRequestStartHiddenFieldsInner>;
+  /**
+   */
+  next_node?: PostFormsRequestNodesInnerAnyOfConfigNextNode;
+  /**
+   */
+  coordinates?: PostFormsRequestNodesInnerAnyOfCoordinates;
+}
+/**
+ *
+ */
+export interface PostFormsRequestStartHiddenFieldsInner {
+  /**
+   */
+  key: string;
+  /**
+   */
+  value?: string;
+}
+/**
+ *
+ */
+export interface PostFormsRequestStyle {
+  /**
+   */
+  css?: string;
 }
 /**
  *
@@ -14539,6 +15936,151 @@ export interface GetProviderRequest {
    *
    */
   include_fields?: boolean;
+}
+
+/**
+ *
+ */
+export const GetFlowsHydrateEnum = {
+  form_count: 'form_count',
+} as const;
+export type GetFlowsHydrateEnum = (typeof GetFlowsHydrateEnum)[keyof typeof GetFlowsHydrateEnum];
+
+/**
+ *
+ */
+export interface GetFlowsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * hydration param
+   *
+   */
+  hydrate?: Array<GetFlowsHydrateEnum>;
+  /**
+   * flag to filter by sync/async flows
+   *
+   */
+  synchronous?: boolean;
+}
+
+/**
+ *
+ */
+export const GetFlowsByIdHydrateEnum = {
+  form_count: 'form_count',
+} as const;
+export type GetFlowsByIdHydrateEnum =
+  (typeof GetFlowsByIdHydrateEnum)[keyof typeof GetFlowsByIdHydrateEnum];
+
+/**
+ *
+ */
+export interface GetFlowsByIdRequest {
+  /**
+   * Flow identifier
+   *
+   */
+  id: string;
+  /**
+   * hydration param
+   *
+   */
+  hydrate?: Array<GetFlowsByIdHydrateEnum>;
+}
+/**
+ *
+ */
+export interface PatchFlowsByIdOperationRequest {
+  /**
+   * Flow identifier
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const GetFormsHydrateEnum = {
+  flow_count: 'flow_count',
+  links: 'links',
+} as const;
+export type GetFormsHydrateEnum = (typeof GetFormsHydrateEnum)[keyof typeof GetFormsHydrateEnum];
+
+/**
+ *
+ */
+export interface GetFormsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * hydration param
+   *
+   */
+  hydrate?: Array<GetFormsHydrateEnum>;
+}
+
+/**
+ *
+ */
+export const GetFormsByIdHydrateEnum = {
+  flow_count: 'flow_count',
+  links: 'links',
+} as const;
+export type GetFormsByIdHydrateEnum =
+  (typeof GetFormsByIdHydrateEnum)[keyof typeof GetFormsByIdHydrateEnum];
+
+/**
+ *
+ */
+export interface GetFormsByIdRequest {
+  /**
+   * Form identifier
+   *
+   */
+  id: string;
+  /**
+   * hydration param
+   *
+   */
+  hydrate?: Array<GetFormsByIdHydrateEnum>;
+}
+/**
+ *
+ */
+export interface PatchFormsByIdOperationRequest {
+  /**
+   * Form identifier
+   *
+   */
+  id: string;
 }
 /**
  *
