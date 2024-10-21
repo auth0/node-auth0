@@ -10516,6 +10516,16 @@ export interface PostMembersRequest {
 /**
  *
  */
+export interface PostOrganizationClientGrantsRequest {
+  /**
+   * A Client Grant ID to add to the organization.
+   *
+   */
+  grant_id: string;
+}
+/**
+ *
+ */
 export interface PostOrganizationMemberRolesRequest {
   /**
    * List of roles IDs to associated with the user.
@@ -14927,6 +14937,21 @@ export interface GetLogsByIdRequest {
 /**
  *
  */
+export interface DeleteClientGrantsByGrantIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The Client Grant ID to remove from the organization
+   *
+   */
+  grant_id: string;
+}
+/**
+ *
+ */
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
    * Organization identifier
@@ -15313,6 +15338,16 @@ export interface PostInvitationsOperationRequest {
  *
  */
 export interface PostMembersOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostOrganizationClientGrantsOperationRequest {
   /**
    * Organization identifier
    *
