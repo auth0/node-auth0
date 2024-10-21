@@ -10,6 +10,8 @@ export * from './custom-domains-manager.js';
 export * from './device-credentials-manager.js';
 export * from './email-templates-manager.js';
 export * from './emails-manager.js';
+export * from './flows-manager.js';
+export * from './forms-manager.js';
 export * from './grants-manager.js';
 export * from './guardian-manager.js';
 export * from './hooks-manager.js';

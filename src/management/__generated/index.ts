@@ -14,6 +14,8 @@ import {
   DeviceCredentialsManager,
   EmailTemplatesManager,
   EmailsManager,
+  FlowsManager,
+  FormsManager,
   GrantsManager,
   GuardianManager,
   HooksManager,
@@ -53,6 +55,8 @@ export abstract class ManagementClientBase {
   public readonly deviceCredentials = new DeviceCredentialsManager(this.configuration);
   public readonly emailTemplates = new EmailTemplatesManager(this.configuration);
   public readonly emails = new EmailsManager(this.configuration);
+  public readonly flows = new FlowsManager(this.configuration);
+  public readonly forms = new FormsManager(this.configuration);
   public readonly grants = new GrantsManager(this.configuration);
   public readonly guardian = new GuardianManager(this.configuration);
   public readonly hooks = new HooksManager(this.configuration);
