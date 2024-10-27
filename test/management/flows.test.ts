@@ -1,76 +1,57 @@
-import nock from 'nock';
 import { FlowsManager } from '../../src/index.js';
 import { ManagementClient } from '../../src/index.js';
-import {
-  checkForPromise,
-  checkErrorHandler,
-  checkRequestInterceptor,
-  checkOperation,
-} from './tests.util.js';
-import { GetFlows200Response } from '../../src/index.js';
+import { checkMethod } from './tests.util.js';
+import { GetFlows200Response, PostFlows201Response } from '../../src/index.js';
 
 const DOMAIN = `tenant.auth0.com`;
-const API_URL = `https://${DOMAIN}/api/v2`;
 const token = 'TOKEN';
 
 describe('FlowsManager', () => {
   const flowsManager: FlowsManager = new ManagementClient({ domain: DOMAIN, token }).flows;
 
+  // this is the test for the method getFlows()
+  // it calls a GET endpoint and does not take any input parameters or body
   describe('getFlows', () => {
-    // expected response from the API
-    const expectedResponse: GetFlows200Response = [
-      {
-        id: 'flw_123',
-        name: 'test',
-        created_at: '2024-10-23T09:29:24.286Z',
-        updated_at: '2024-10-23T09:29:24.286Z',
-        executed_at: '2024-10-23T09:29:24.286Z',
-      },
-    ];
-
-    // getFlows method
     const operation = flowsManager.getFlows();
+    const expectedResponse: GetFlows200Response = <GetFlows200Response>{};
+    const uri = `/flows`;
+    const method = 'get';
 
-    // clean all previous nocks
-    nock.cleanAll();
-
-    // nock the API with success scenario
-    let request: nock.Scope = nock(API_URL).get('/flows').reply(200, expectedResponse);
-    checkForPromise(operation);
-    checkRequestInterceptor(operation, request, '/flows');
-    checkOperation(operation, expectedResponse);
-
-    // nock the API with error scenario
-    request = nock(API_URL).get('/flows').reply(500);
-    checkErrorHandler(operation);
+    checkMethod({ operation, expectedResponse, uri, method });
   });
 
-  describe('getFlows', () => {
-    // expected response from the API
-    const expectedResponse: GetFlows200Response = [
-      {
-        id: 'flw_123',
-        name: 'test',
-        created_at: '2024-10-23T09:29:24.286Z',
-        updated_at: '2024-10-23T09:29:24.286Z',
-        executed_at: '2024-10-23T09:29:24.286Z',
-      },
-    ];
+  // this is the test for the method getFlowsById()
+  // it calls a GET endpoint and takes input parameters but no input body
+  describe('getFlowsById', () => {
+    const operation = flowsManager.getFlowsById({ id: 'flowId' });
+    const expectedResponse: PostFlows201Response = <PostFlows201Response>{};
+    const uri = `/flows/flowId`;
+    const method = 'get';
 
-    // getFlows method
-    const operation = flowsManager.getFlows();
+    checkMethod({ operation, expectedResponse, uri, method });
+  });
 
-    // clean all previous nocks
-    nock.cleanAll();
+  // this is the test for the method patchFlowsById()
+  // it calls a PATCH endpoint and takes input parameters and body
+  describe('patchFlowsById', () => {
+    const requestBody: { name: string } = { name: 'flowName' };
+    const operation = flowsManager.patchFlowsById({ id: 'flowId' }, requestBody);
+    const expectedResponse: PostFlows201Response = <PostFlows201Response>{};
+    const uri = `/flows/flowId`;
+    const method = 'patch';
 
-    // nock the API with success scenario
-    let request: nock.Scope = nock(API_URL).get('/flows').reply(200, expectedResponse);
-    checkForPromise(operation);
-    checkRequestInterceptor(operation, request, '/flows');
-    checkOperation(operation, expectedResponse);
+    checkMethod({ operation, expectedResponse, uri, method, requestBody });
+  });
 
-    // nock the API with error scenario
-    request = nock(API_URL).get('/flows').reply(500);
-    checkErrorHandler(operation);
+  // this is the test for the method postFlows()
+  // it calls a POST endpoint and takes only a body
+  describe('postFlows', () => {
+    const requestBody: { name: string } = { name: 'flowName' };
+    const operation = flowsManager.postFlows(requestBody);
+    const expectedResponse: PostFlows201Response = <PostFlows201Response>{};
+    const uri = `/flows`;
+    const method = 'post';
+
+    checkMethod({ operation, expectedResponse, uri, method, requestBody });
   });
 });
