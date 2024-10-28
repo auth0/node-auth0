@@ -1,16 +1,17 @@
 coverage:
   precision: 2
   round: down
-  range: "70...100"
+  range: '70...100'
   status:
     patch:
       default:
+        target: 99%
         threshold: 50
         if_no_uploads: error
     changes: true
     project:
       default:
-        target: auto
+        target: 99%
         if_no_uploads: error
   ignore:
     - test/
