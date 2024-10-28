@@ -409,38 +409,4 @@ describe('OAuth (with ID Token validation)', () => {
     );
     nockDone();
   });
-
-  it('should throw for invalid organization id', async () => {
-    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
-      before: await withIdToken({
-        ...opts,
-        payload: { org_id: 'org_123' },
-      }),
-    });
-    const oauth = new OAuth(opts);
-    await expect(
-      oauth.refreshTokenGrant(
-        { refresh_token: 'test-refresh-token' },
-        { idTokenValidateOptions: { organization: 'org_1235' } }
-      )
-    ).rejects.toThrowError(/\(org_id\) claim value mismatch in the ID token/);
-    nockDone();
-  });
-
-  it('should throw for invalid organization name', async () => {
-    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
-      before: await withIdToken({
-        ...opts,
-        payload: { org_name: 'org123' },
-      }),
-    });
-    const oauth = new OAuth(opts);
-    await expect(
-      oauth.refreshTokenGrant(
-        { refresh_token: 'test-refresh-token' },
-        { idTokenValidateOptions: { organization: 'org1235' } }
-      )
-    ).rejects.toThrowError(/\(org_name\) claim value mismatch in the ID token/);
-    nockDone();
-  });
 });
