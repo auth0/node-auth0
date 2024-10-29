@@ -16,8 +16,6 @@ import {
 import { checkMethod } from '../utils/index.js';
 
 describe('OrganizationsManager', () => {
-  let organizations: OrganizationsManager;
-
   let request: nock.Scope;
   const token = 'TOKEN';
 
@@ -25,7 +23,7 @@ describe('OrganizationsManager', () => {
     domain: 'tenant.auth0.com',
     token: token,
   });
-  organizations = client.organizations;
+  const organizations: OrganizationsManager = client.organizations;
 
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
