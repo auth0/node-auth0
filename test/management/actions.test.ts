@@ -1110,7 +1110,7 @@ describe('ActionsManager', () => {
       const data = [
         {
           id: '123',
-          trigger_id: 'iga-approval',
+          trigger_id: 'post-user-registration',
           display_name: 'test',
           action: {
             id: 'action-id',
