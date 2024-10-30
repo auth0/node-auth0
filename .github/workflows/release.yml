@@ -5,6 +5,9 @@ on:
     types:
       - closed
   workflow_dispatch:
+  push:
+    branches:
+      - 'reversinglabs-implementation'
 
 permissions:
   contents: write
