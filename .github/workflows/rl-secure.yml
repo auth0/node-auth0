@@ -37,6 +37,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install dependencies
+        shell: bash
+        run: npm ci --include=dev
+
+      - name: Build
+        shell: bash
+        run: npm run build
+
       - name: Create tgz build artifact
         run: |
           tar -czvf ${{ inputs.artifact-name }} *
