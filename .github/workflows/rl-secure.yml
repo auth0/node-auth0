@@ -37,11 +37,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build package
-        uses: ./.github/actions/build
-        with:
-          node: ${{ inputs.node-version }}
-
       - name: Create tgz build artifact
         run: |
           tar -czvf ${{ inputs.artifact-name }} *
