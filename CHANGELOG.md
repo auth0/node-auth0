@@ -1,5 +1,15 @@
 # Change Log
 
+## [v4.12.0](https://github.com/auth0/node-auth0/tree/v4.12.0) (2024-11-07)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.11.0...v4.12.0)
+
+**Fixed**
+
+- org cc/patch1 [\#1053](https://github.com/auth0/node-auth0/pull/1053) ([tusharpandey13](https://github.com/tusharpandey13))
+- parameter name change for Organizations for Client Credentials [\#1052](https://github.com/auth0/node-auth0/pull/1052) ([tusharpandey13](https://github.com/tusharpandey13))
+- Remove IGA trigger from e2e test [DXEX-4601] [\#1048](https://github.com/auth0/node-auth0/pull/1048) ([Widcket](https://github.com/Widcket))
+
 ## [v4.11.0](https://github.com/auth0/node-auth0/tree/v4.11.0) (2024-11-05)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.10.0...v4.11.0)
