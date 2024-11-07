@@ -6533,7 +6533,7 @@ export interface GetOrganizationClientGrants200ResponseOneOf {
   total: number;
   /**
    */
-  'client-grants': Array<GetOrganizationClientGrants200ResponseOneOfInner>;
+  grants: Array<GetOrganizationClientGrants200ResponseOneOfInner>;
 }
 /**
  *
