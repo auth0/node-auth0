@@ -5528,6 +5528,195 @@ export interface GetFlows200ResponseOneOfInner {
 /**
  *
  */
+export type GetFlowsExecutions200Response =
+  | Array<GetFlowsExecutions200ResponseOneOfInner>
+  | GetFlowsExecutions200ResponseOneOf;
+/**
+ *
+ */
+export interface GetFlowsExecutions200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  executions: Array<GetFlowsExecutions200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetFlowsExecutions200ResponseOneOfInner {
+  /**
+   * Flow execution identifier
+   *
+   */
+  id: string;
+  /**
+   * Trace id
+   *
+   */
+  trace_id: string;
+  /**
+   * Journey id
+   *
+   */
+  journey_id?: string;
+  /**
+   * Execution status
+   *
+   */
+  status: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution started.
+   *
+   */
+  started_at?: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution ended.
+   *
+   */
+  ended_at?: string;
+}
+/**
+ *
+ */
+export interface GetFlowsExecutionsByExecutionId200Response {
+  /**
+   * Flow execution identifier
+   *
+   */
+  id: string;
+  /**
+   * Trace id
+   *
+   */
+  trace_id: string;
+  /**
+   * Journey id
+   *
+   */
+  journey_id?: string;
+  /**
+   * Execution status
+   *
+   */
+  status: string;
+  /**
+   * Flow execution debug.
+   *
+   */
+  debug?: { [key: string]: any };
+  /**
+   * The ISO 8601 formatted date when this flow execution was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution started.
+   *
+   */
+  started_at?: string;
+  /**
+   * The ISO 8601 formatted date when this flow execution ended.
+   *
+   */
+  ended_at?: string;
+}
+/**
+ *
+ */
+export type GetFlowsVaultConnections200Response =
+  | Array<GetFlowsVaultConnections200ResponseOneOfInner>
+  | GetFlowsVaultConnections200ResponseOneOf;
+/**
+ *
+ */
+export interface GetFlowsVaultConnections200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  connections: Array<GetFlowsVaultConnections200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetFlowsVaultConnections200ResponseOneOfInner {
+  /**
+   * Flows Vault Connection identifier.
+   *
+   */
+  id: string;
+  /**
+   * Flows Vault Connection app identifier.
+   *
+   */
+  app_id: string;
+  /**
+   * Flows Vault Connection name.
+   *
+   */
+  name: string;
+  /**
+   * Flows Vault Connection custom account name.
+   *
+   */
+  account_name?: string;
+  /**
+   * Whether the Flows Vault Connection is configured.
+   *
+   */
+  ready: boolean;
+  /**
+   * The ISO 8601 formatted date when this Flows Vault Connection was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The ISO 8601 formatted date when this Flows Vault Connection was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   * The ISO 8601 formatted date when this Flows Vault Connection was refreshed.
+   *
+   */
+  refreshed_at?: string;
+  /**
+   */
+  fingerprint: string;
+}
+/**
+ *
+ */
 export type GetForms200Response = Array<GetForms200ResponseOneOfInner> | GetForms200ResponseOneOf;
 /**
  *
@@ -8707,6 +8896,37 @@ export interface PatchFlowsByIdRequest {
 /**
  *
  */
+export interface PatchFlowsVaultConnectionsByIdRequest {
+  /**
+   * Flows Vault Connection name.
+   *
+   */
+  name?: string;
+  /**
+   */
+  setup?: PatchFlowsVaultConnectionsByIdRequestSetup;
+}
+/**
+ * Flows Vault Connection configuration.
+ */
+export type PatchFlowsVaultConnectionsByIdRequestSetup =
+  | PostFlowsVaultConnectionsRequestAnyOf11Setup
+  | PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1
+  | PostFlowsVaultConnectionsRequestAnyOf18Setup
+  | PostFlowsVaultConnectionsRequestAnyOf1Setup
+  | PostFlowsVaultConnectionsRequestAnyOf2Setup
+  | PostFlowsVaultConnectionsRequestAnyOf3Setup
+  | PostFlowsVaultConnectionsRequestAnyOf4Setup
+  | PostFlowsVaultConnectionsRequestAnyOf5Setup
+  | PostFlowsVaultConnectionsRequestAnyOf7Setup
+  | PostFlowsVaultConnectionsRequestAnyOf9Setup
+  | PostFlowsVaultConnectionsRequestAnyOfSetup;
+/**
+ *
+ */
 export interface PatchFormsByIdRequest {
   /**
    */
@@ -10042,6 +10262,819 @@ export interface PostFlowsRequest {
    */
   actions?: Array<any>;
 }
+/**
+ *
+ */
+export interface PostFlowsVaultConnections201Response {
+  /**
+   * Flows Vault Connection identifier.
+   *
+   */
+  id: string;
+  /**
+   * Flows Vault Connection app identifier.
+   *
+   */
+  app_id: string;
+  /**
+   * Flows Vault Connection environment.
+   *
+   */
+  environment?: string;
+  /**
+   * Flows Vault Connection name.
+   *
+   */
+  name: string;
+  /**
+   * Flows Vault Connection custom account name.
+   *
+   */
+  account_name?: string;
+  /**
+   * Whether the Flows Vault Connection is configured.
+   *
+   */
+  ready: boolean;
+  /**
+   * The ISO 8601 formatted date when this Flows Vault Connection was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The ISO 8601 formatted date when this Flows Vault Connection was updated.
+   *
+   */
+  updated_at: string;
+  /**
+   * The ISO 8601 formatted date when this Flows Vault Connection was refreshed.
+   *
+   */
+  refreshed_at?: string;
+  /**
+   */
+  fingerprint: string;
+}
+/**
+ *
+ */
+export type PostFlowsVaultConnectionsRequest =
+  | PostFlowsVaultConnectionsRequestAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf1
+  | PostFlowsVaultConnectionsRequestAnyOf10
+  | PostFlowsVaultConnectionsRequestAnyOf11
+  | PostFlowsVaultConnectionsRequestAnyOf12
+  | PostFlowsVaultConnectionsRequestAnyOf13
+  | PostFlowsVaultConnectionsRequestAnyOf14
+  | PostFlowsVaultConnectionsRequestAnyOf15
+  | PostFlowsVaultConnectionsRequestAnyOf16
+  | PostFlowsVaultConnectionsRequestAnyOf17
+  | PostFlowsVaultConnectionsRequestAnyOf18
+  | PostFlowsVaultConnectionsRequestAnyOf19
+  | PostFlowsVaultConnectionsRequestAnyOf2
+  | PostFlowsVaultConnectionsRequestAnyOf20
+  | PostFlowsVaultConnectionsRequestAnyOf3
+  | PostFlowsVaultConnectionsRequestAnyOf4
+  | PostFlowsVaultConnectionsRequestAnyOf5
+  | PostFlowsVaultConnectionsRequestAnyOf6
+  | PostFlowsVaultConnectionsRequestAnyOf7
+  | PostFlowsVaultConnectionsRequestAnyOf8
+  | PostFlowsVaultConnectionsRequestAnyOf9;
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOfAppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOfSetup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOfAppIdEnum = {
+  ACTIVECAMPAIGN: 'ACTIVECAMPAIGN',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOfAppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOfAppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOfAppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf1AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf1Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf1AppIdEnum = {
+  AIRTABLE: 'AIRTABLE',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf1AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf1AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf1AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf10 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf10AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf10Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf10AppIdEnum = {
+  MAILCHIMP: 'MAILCHIMP',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf10AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf10AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf10AppIdEnum];
+
+/**
+ *
+ */
+export type PostFlowsVaultConnectionsRequestAnyOf10Setup =
+  | PostFlowsVaultConnectionsRequestAnyOf4Setup
+  | PostFlowsVaultConnectionsRequestAnyOf5Setup;
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf11 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf11AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf11Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf11AppIdEnum = {
+  MAILJET: 'MAILJET',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf11AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf11AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf11AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf11Setup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf11SetupTypeEnum;
+  /**
+   */
+  api_key: string;
+  /**
+   */
+  secret_key: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf11SetupTypeEnum = {
+  API_KEY: 'API_KEY',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf11SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf11SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf11SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf12 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf12AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf12Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf12AppIdEnum = {
+  PIPEDRIVE: 'PIPEDRIVE',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf12AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf12AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf12AppIdEnum];
+
+/**
+ *
+ */
+export type PostFlowsVaultConnectionsRequestAnyOf12Setup =
+  | PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf5Setup;
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOf {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOfTypeEnum;
+  /**
+   */
+  token: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOfTypeEnum = {
+  TOKEN: 'TOKEN',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOfTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOfTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf13 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf13AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf5Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf13AppIdEnum = {
+  SALESFORCE: 'SALESFORCE',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf13AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf13AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf13AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf14 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf14AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf1Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf14AppIdEnum = {
+  SENDGRID: 'SENDGRID',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf14AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf14AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf14AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf15 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf15AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf15Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf15AppIdEnum = {
+  SLACK: 'SLACK',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf15AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf15AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf15AppIdEnum];
+
+/**
+ *
+ */
+export type PostFlowsVaultConnectionsRequestAnyOf15Setup =
+  | PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf5Setup;
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOf {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOfTypeEnum;
+  /**
+   */
+  url: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOfTypeEnum = {
+  WEBHOOK: 'WEBHOOK',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOfTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOfTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf16 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf16AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf16Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf16AppIdEnum = {
+  STRIPE: 'STRIPE',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf16AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf16AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf16AppIdEnum];
+
+/**
+ *
+ */
+export type PostFlowsVaultConnectionsRequestAnyOf16Setup =
+  | PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf
+  | PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1;
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOfTypeEnum;
+  /**
+   */
+  private_key: string;
+  /**
+   */
+  public_key: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOfTypeEnum = {
+  KEY_PAIR: 'KEY_PAIR',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOfTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOfTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOfTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  type?: PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1TypeEnum;
+  /**
+   */
+  code?: string;
+  /**
+   */
+  environment?: PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1EnvironmentEnum;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1TypeEnum = {
+  OAUTH_CODE: 'OAUTH_CODE',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1TypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1TypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1TypeEnum];
+
+export const PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1EnvironmentEnum = {
+  live: 'live',
+  test: 'test',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1EnvironmentEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1EnvironmentEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf16SetupAnyOf1EnvironmentEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf17 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf17AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOf;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf17AppIdEnum = {
+  TELEGRAM: 'TELEGRAM',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf17AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf17AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf17AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf18 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf18AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf18Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf18AppIdEnum = {
+  TWILIO: 'TWILIO',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf18AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf18AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf18AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf18Setup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf18SetupTypeEnum;
+  /**
+   */
+  account_id: string;
+  /**
+   */
+  api_key: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf18SetupTypeEnum = {
+  API_KEY: 'API_KEY',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf18SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf18SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf18SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf19 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf19AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf12SetupAnyOf;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf19AppIdEnum = {
+  WHATSAPP: 'WHATSAPP',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf19AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf19AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf19AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf1Setup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf1SetupTypeEnum;
+  /**
+   */
+  api_key: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf1SetupTypeEnum = {
+  API_KEY: 'API_KEY',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf1SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf1SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf1SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf2 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf2AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf2Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf2AppIdEnum = {
+  AUTH0: 'AUTH0',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf2AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf2AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf2AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf20 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf20AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf15SetupAnyOf;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf20AppIdEnum = {
+  ZAPIER: 'ZAPIER',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf20AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf20AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf20AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf2Setup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf2SetupTypeEnum;
+  /**
+   */
+  client_id: string;
+  /**
+   */
+  client_secret: string;
+  /**
+   */
+  domain: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf2SetupTypeEnum = {
+  OAUTH_APP: 'OAUTH_APP',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf2SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf2SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf2SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf3 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf3AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf3Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf3AppIdEnum = {
+  BIGQUERY: 'BIGQUERY',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf3AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf3AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf3AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf3Setup {
+  /**
+   */
+  type?: PostFlowsVaultConnectionsRequestAnyOf3SetupTypeEnum;
+  /**
+   */
+  project_id?: string;
+  /**
+   */
+  private_key?: string;
+  /**
+   */
+  client_email?: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf3SetupTypeEnum = {
+  OAUTH_JWT: 'OAUTH_JWT',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf3SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf3SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf3SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf4 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf4AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf4Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf4AppIdEnum = {
+  CLEARBIT: 'CLEARBIT',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf4AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf4AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf4AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf4Setup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf4SetupTypeEnum;
+  /**
+   */
+  secret_key: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf4SetupTypeEnum = {
+  API_KEY: 'API_KEY',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf4SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf4SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf4SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf5 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf5AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf5Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf5AppIdEnum = {
+  DOCUSIGN: 'DOCUSIGN',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf5AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf5AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf5AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf5Setup {
+  [key: string]: any | any;
+  /**
+   */
+  type?: PostFlowsVaultConnectionsRequestAnyOf5SetupTypeEnum;
+  /**
+   */
+  code?: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf5SetupTypeEnum = {
+  OAUTH_CODE: 'OAUTH_CODE',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf5SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf5SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf5SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf6 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf6AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf5Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf6AppIdEnum = {
+  GOOGLE_SHEETS: 'GOOGLE_SHEETS',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf6AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf6AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf6AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf7 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf7AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf7Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf7AppIdEnum = {
+  HTTP: 'HTTP',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf7AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf7AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf7AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf7Setup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf7SetupTypeEnum;
+  /**
+   */
+  token: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf7SetupTypeEnum = {
+  BEARER: 'BEARER',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf7SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf7SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf7SetupTypeEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf8 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf8AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf8Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf8AppIdEnum = {
+  HUBSPOT: 'HUBSPOT',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf8AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf8AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf8AppIdEnum];
+
+/**
+ *
+ */
+export type PostFlowsVaultConnectionsRequestAnyOf8Setup =
+  | PostFlowsVaultConnectionsRequestAnyOf1Setup
+  | PostFlowsVaultConnectionsRequestAnyOf5Setup;
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf9 {
+  [key: string]: any | any;
+  /**
+   */
+  app_id?: PostFlowsVaultConnectionsRequestAnyOf9AppIdEnum;
+  /**
+   */
+  setup?: PostFlowsVaultConnectionsRequestAnyOf9Setup;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf9AppIdEnum = {
+  JWT: 'JWT',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf9AppIdEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf9AppIdEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf9AppIdEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOf9Setup {
+  [key: string]: any | any;
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOf9SetupTypeEnum;
+  /**
+   */
+  algorithm: PostFlowsVaultConnectionsRequestAnyOf9SetupAlgorithmEnum;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOf9SetupTypeEnum = {
+  JWT: 'JWT',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf9SetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf9SetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf9SetupTypeEnum];
+
+export const PostFlowsVaultConnectionsRequestAnyOf9SetupAlgorithmEnum = {
+  HS256: 'HS256',
+  HS384: 'HS384',
+  HS512: 'HS512',
+  RS256: 'RS256',
+  RS384: 'RS384',
+  RS512: 'RS512',
+  ES256: 'ES256',
+  ES384: 'ES384',
+  ES512: 'ES512',
+  PS256: 'PS256',
+  PS384: 'PS384',
+  PS512: 'PS512',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOf9SetupAlgorithmEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOf9SetupAlgorithmEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOf9SetupAlgorithmEnum];
+
+/**
+ *
+ */
+export interface PostFlowsVaultConnectionsRequestAnyOfSetup {
+  /**
+   */
+  type: PostFlowsVaultConnectionsRequestAnyOfSetupTypeEnum;
+  /**
+   */
+  api_key: string;
+  /**
+   */
+  base_url?: string;
+}
+
+export const PostFlowsVaultConnectionsRequestAnyOfSetupTypeEnum = {
+  API_KEY: 'API_KEY',
+} as const;
+export type PostFlowsVaultConnectionsRequestAnyOfSetupTypeEnum =
+  (typeof PostFlowsVaultConnectionsRequestAnyOfSetupTypeEnum)[keyof typeof PostFlowsVaultConnectionsRequestAnyOfSetupTypeEnum];
+
 /**
  *
  */
@@ -15937,6 +16970,41 @@ export interface GetProviderRequest {
    */
   include_fields?: boolean;
 }
+/**
+ *
+ */
+export interface DeleteFlowsByIdRequest {
+  /**
+   * Flow id
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteFlowsExecutionsByExecutionIdRequest {
+  /**
+   * Flows id
+   *
+   */
+  flow_id: string;
+  /**
+   * Flow execution identifier
+   *
+   */
+  execution_id: string;
+}
+/**
+ *
+ */
+export interface DeleteFlowsVaultConnectionsByIdRequest {
+  /**
+   * Vault connection id
+   *
+   */
+  id: string;
+}
 
 /**
  *
@@ -16004,9 +17072,124 @@ export interface GetFlowsByIdRequest {
 /**
  *
  */
+export interface GetFlowsExecutionsRequest {
+  /**
+   * Flow id
+   *
+   */
+  flow_id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+
+/**
+ *
+ */
+export const GetFlowsExecutionsByExecutionIdHydrateEnum = {
+  debug: 'debug',
+} as const;
+export type GetFlowsExecutionsByExecutionIdHydrateEnum =
+  (typeof GetFlowsExecutionsByExecutionIdHydrateEnum)[keyof typeof GetFlowsExecutionsByExecutionIdHydrateEnum];
+
+/**
+ *
+ */
+export interface GetFlowsExecutionsByExecutionIdRequest {
+  /**
+   * Flow id
+   *
+   */
+  flow_id: string;
+  /**
+   * Flow execution id
+   *
+   */
+  execution_id: string;
+  /**
+   * Hydration param
+   *
+   */
+  hydrate?: Array<GetFlowsExecutionsByExecutionIdHydrateEnum>;
+}
+/**
+ *
+ */
+export interface GetFlowsVaultConnectionsRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetFlowsVaultConnectionsByIdRequest {
+  /**
+   * Flows Vault connection ID
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface PatchFlowsByIdOperationRequest {
   /**
    * Flow identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchFlowsVaultConnectionsByIdOperationRequest {
+  /**
+   * Flows Vault connection ID
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteFormsByIdRequest {
+  /**
+   * Form id
    *
    */
   id: string;

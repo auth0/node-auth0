@@ -7,6 +7,7 @@ import type {
   PostFormsRequest,
   GetForms200ResponseOneOf,
   GetForms200ResponseOneOfInner,
+  DeleteFormsByIdRequest,
   GetFormsRequest,
   GetFormsByIdRequest,
   PatchFormsByIdOperationRequest,
@@ -19,19 +20,41 @@ const { BaseAPI } = runtime;
  */
 export class FormsManager extends BaseAPI {
   /**
+   * Delete a form
+   *
+   * @throws {RequiredError}
+   */
+  async delete(
+    requestParameters: DeleteFormsByIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/forms/{id}`.replace('{id}', encodeURIComponent(String(requestParameters.id))),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
    * Get forms
    *
    * @throws {RequiredError}
    */
-  async getForms(
+  async getAll(
     requestParameters: GetFormsRequest & { include_totals: true },
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetForms200ResponseOneOf>>;
-  async getForms(
+  async getAll(
     requestParameters?: GetFormsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<Array<GetForms200ResponseOneOfInner>>>;
-  async getForms(
+  async getAll(
     requestParameters: GetFormsRequest = {},
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetForms200Response>> {
@@ -74,7 +97,7 @@ export class FormsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getFormsById(
+  async get(
     requestParameters: GetFormsByIdRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostForms201Response>> {
@@ -107,7 +130,7 @@ export class FormsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async patchFormsById(
+  async update(
     requestParameters: PatchFormsByIdOperationRequest,
     bodyParameters: PatchFormsByIdRequest,
     initOverrides?: InitOverride
@@ -136,7 +159,7 @@ export class FormsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async postForms(
+  async create(
     bodyParameters: PostFormsRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<PostForms201Response>> {
