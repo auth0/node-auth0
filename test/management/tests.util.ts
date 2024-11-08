@@ -72,13 +72,17 @@ export function checkRequestInterceptor<T>(operation: Promise<T>, request: nock.
 export function checkOperation<T>(operation: Promise<ApiResponse<T>>, expectedResponse: T): void {
   it('should test the method', async () => {
     const result = await operation;
-    expect(result.data).toEqual(expectedResponse);
+    expect(result.data).toEqual(
+      // only compare if the expected response is defined (api returns data), in this case
+      // expectedResponse is an empty object
+      result.data ? expectedResponse : undefined
+    );
   });
 }
 
 export type CheckMethodParams<T> = {
   operation: Promise<ApiResponse<T>>;
-  expectedResponse: any;
+  expectedResponse?: T;
   uri: string | RegExp | { (uri: string): boolean };
   method: string;
   requestBody?: RequestBodyMatcher | any;
@@ -102,22 +106,25 @@ export type CheckMethodParams<T> = {
  * @param {string} params.method - The HTTP method to intercept (e.g., 'GET', 'POST').
  * @param {RequestBodyMatcher | any} [params.requestBody] - The optional request body to match.
  */
-export const checkMethod = <T>({
+export const checkMethod = <T, MethodParams extends CheckMethodParams<T>>({
   operation,
-  expectedResponse,
   uri,
   method,
   requestBody,
-}: CheckMethodParams<T>): void => {
+  expectedResponse,
+}: MethodParams): void => {
+  // set the expected response to an empty object if it is not provided
+  const finalExpectedResponse: T = expectedResponse ?? <T>{};
+
   // nock the API with success scenario
   let request: nock.Scope = nock(API_URL)
     .intercept(uri, method, requestBody)
-    .reply(200, expectedResponse);
+    .reply(200, finalExpectedResponse as any);
 
   // check for various success checks
   checkForPromise(operation);
   checkRequestInterceptor(operation, request);
-  checkOperation(operation, expectedResponse);
+  checkOperation(operation, finalExpectedResponse);
 
   // nock the API with error scenario
   request = nock(API_URL).intercept(uri, method, requestBody).reply(500);
