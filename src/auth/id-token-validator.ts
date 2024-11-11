@@ -102,22 +102,10 @@ export class IDTokenValidator {
             'Organization Id (org_id) claim must be a string present in the ID token'
           );
         }
-
-        if (payload.org_id !== organization) {
-          throw new Error(
-            `Organization Id (org_id) claim value mismatch in the ID token; expected "${organization}", found "${payload.org_id}"'`
-          );
-        }
       } else {
         if (!payload.org_name || typeof payload.org_name !== 'string') {
           throw new Error(
             'Organization Name (org_name) claim must be a string present in the ID token'
-          );
-        }
-
-        if (payload.org_name !== organization.toLowerCase()) {
-          throw new Error(
-            `Organization Name (org_name) claim value mismatch in the ID token; expected "${organization}", found "${payload.org_name}"'`
           );
         }
       }

@@ -6533,7 +6533,7 @@ export interface GetOrganizationClientGrants200ResponseOneOf {
   total: number;
   /**
    */
-  grants: Array<GetOrganizationClientGrants200ResponseOneOfInner>;
+  client_grants: Array<GetOrganizationClientGrants200ResponseOneOfInner>;
 }
 /**
  *
@@ -10512,6 +10512,16 @@ export interface PostMembersRequest {
    *
    */
   members: Array<string>;
+}
+/**
+ *
+ */
+export interface PostOrganizationClientGrantsRequest {
+  /**
+   * A Client Grant ID to add to the organization.
+   *
+   */
+  grant_id: string;
 }
 /**
  *
@@ -14927,6 +14937,21 @@ export interface GetLogsByIdRequest {
 /**
  *
  */
+export interface DeleteClientGrantsByGrantIdRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The Client Grant ID to remove from the organization
+   *
+   */
+  grant_id: string;
+}
+/**
+ *
+ */
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
    * Organization identifier
@@ -15313,6 +15338,16 @@ export interface PostInvitationsOperationRequest {
  *
  */
 export interface PostMembersOperationRequest {
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostOrganizationClientGrantsOperationRequest {
   /**
    * Organization identifier
    *

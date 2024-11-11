@@ -9,21 +9,21 @@ import {
   GetOrganizationClientGrantsRequest,
   GetOrganizationClientGrants200Response,
   ApiResponse,
+  DeleteClientGrantsByGrantIdRequest,
+  GetOrganizationClientGrants200ResponseOneOfInner,
 } from '../../src/index.js';
 
-describe('OrganizationsManager', () => {
-  let organizations: OrganizationsManager;
+import { checkMethod } from '../utils/index.js';
 
+describe('OrganizationsManager', () => {
   let request: nock.Scope;
   const token = 'TOKEN';
 
-  beforeAll(() => {
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-    });
-    organizations = client.organizations;
+  const client = new ManagementClient({
+    domain: 'tenant.auth0.com',
+    token: token,
   });
+  const organizations: OrganizationsManager = client.organizations;
 
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
@@ -1473,5 +1473,36 @@ describe('OrganizationsManager', () => {
         expect(err).toBeDefined();
       });
     });
+  });
+
+  describe('#deleteClientGrantsById', () => {
+    const requestParameters: DeleteClientGrantsByGrantIdRequest = {
+      id: 'org_123',
+      grant_id: 'grant_id',
+    };
+    const operation = organizations.deleteClientGrantsByGrantId(requestParameters);
+    const expectedResponse = undefined;
+    const uri = `/organizations/{id}/client-grants/{grant_id}`
+      .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+      .replace('{grant_id}', encodeURIComponent(String(requestParameters.grant_id)));
+    const method = 'delete';
+
+    checkMethod({ operation, expectedResponse, uri, method });
+  });
+
+  describe('#postOrganizationClientGrants', () => {
+    const requestParameters = { id: 'org_123' };
+    const requestBody = { grant_id: 'grant_id' };
+    const operation = organizations.postOrganizationClientGrants(requestParameters, requestBody);
+    const expectedResponse: GetOrganizationClientGrants200ResponseOneOfInner = <
+      GetOrganizationClientGrants200ResponseOneOfInner
+    >{};
+    const uri = `/organizations/{id}/client-grants`.replace(
+      '{id}',
+      encodeURIComponent(String(requestParameters.id))
+    );
+    const method = 'post';
+
+    checkMethod({ operation, expectedResponse, uri, method, requestBody });
   });
 });
