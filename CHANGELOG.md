@@ -1,5 +1,24 @@
 # Change Log
 
+## [v4.12.0](https://github.com/auth0/node-auth0/tree/v4.12.0) (2024-11-07)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.11.0...v4.12.0)
+
+**Fixed**
+
+- org cc/patch1 [\#1053](https://github.com/auth0/node-auth0/pull/1053) ([tusharpandey13](https://github.com/tusharpandey13))
+- parameter name change for Organizations for Client Credentials [\#1052](https://github.com/auth0/node-auth0/pull/1052) ([tusharpandey13](https://github.com/tusharpandey13))
+- Remove IGA trigger from e2e test [DXEX-4601] [\#1048](https://github.com/auth0/node-auth0/pull/1048) ([Widcket](https://github.com/Widcket))
+
+## [v4.11.0](https://github.com/auth0/node-auth0/tree/v4.11.0) (2024-11-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.10.0...v4.11.0)
+
+**Added**
+
+- Fixed missing endpoints for feature Organizations for Client Credentials changes [\#1046](https://github.com/auth0/node-auth0/pull/1046) ([tusharpandey13](https://github.com/tusharpandey13))
+- Creating RL workflow for node-auth0 repo [\#1044](https://github.com/auth0/node-auth0/pull/1044) ([arpit-jn](https://github.com/arpit-jn))
+
 ## [v4.10.0](https://github.com/auth0/node-auth0/tree/v4.10.0) (2024-09-10)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.9.0...v4.10.0)
