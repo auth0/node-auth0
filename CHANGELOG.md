@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.13.0](https://github.com/auth0/node-auth0/tree/v4.13.0) (2024-11-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.12.0...v4.13.0)
+
+**Added**
+
+- CYOK implementation [\#1041](https://github.com/auth0/node-auth0/pull/1041) ([tusharpandey13](https://github.com/tusharpandey13))
+- Feature/forms [\#1055](https://github.com/auth0/node-auth0/pull/1055) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.12.0](https://github.com/auth0/node-auth0/tree/v4.12.0) (2024-11-07)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.11.0...v4.12.0)
