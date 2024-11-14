@@ -7430,6 +7430,29 @@ export interface GetScimTokens200ResponseInner {
 /**
  *
  */
+export type GetSelfServiceProfiles200Response =
+  | Array<SsProfile>
+  | GetSelfServiceProfiles200ResponseOneOf;
+/**
+ *
+ */
+export interface GetSelfServiceProfiles200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  self_service_profiles: Array<SsProfile>;
+}
+/**
+ *
+ */
 export interface GetSession200Response {
   [key: string]: any | any;
   /**
@@ -13318,6 +13341,95 @@ export interface PostSigningKeys201Response {
 /**
  *
  */
+export interface PostSsoTicketRequest {
+  /**
+   * If provided, this will allow editing of the provided connection during the SSO Flow
+   *
+   */
+  connection_id?: string;
+  /**
+   */
+  connection_config?: PostSsoTicketRequestConnectionConfig;
+  /**
+   * List of client_ids that the connection will be enabled for.
+   *
+   */
+  enabled_clients?: Array<string>;
+  /**
+   * List of organizations that the connection will be enabled for.
+   *
+   */
+  enabled_organizations?: Array<PostSsoTicketRequestEnabledOrganizationsInner>;
+  /**
+   * Number of seconds for which the ticket is valid before expiration. If unspecified or set to 0, this value defaults to 432000 seconds (5 days).
+   *
+   */
+  ttl_sec?: number;
+}
+/**
+ * If provided, this will create a new connection for the SSO flow with the given configuration
+ */
+export interface PostSsoTicketRequestConnectionConfig {
+  /**
+   * The name of the connection that will be created as a part of the SSO flow.
+   *
+   */
+  name: string;
+  /**
+   * Connection name used in the new universal login experience
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
+  /**
+   */
+  options?: PostSsoTicketRequestConnectionConfigOptions | null;
+}
+/**
+ * The connection's options (depend on the connection strategy)
+ */
+export interface PostSsoTicketRequestConnectionConfigOptions {
+  /**
+   * URL for the icon. Must use HTTPS.
+   *
+   */
+  icon_url?: string | null;
+  /**
+   * List of domain_aliases that can be authenticated in the Identity Provider
+   *
+   */
+  domain_aliases?: Array<string>;
+}
+/**
+ *
+ */
+export interface PostSsoTicketRequestEnabledOrganizationsInner {
+  /**
+   * Organization identifier
+   *
+   */
+  organization_id: string;
+  /**
+   * When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
+   *
+   */
+  assign_membership_on_login?: boolean;
+  /**
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
+   *
+   */
+  show_as_button?: boolean;
+}
+/**
+ *
+ */
 export interface PostTestAction200Response {
   /**
    * The resulting payload after an action was executed.
@@ -14519,6 +14631,16 @@ export interface SsProfile {
    */
   id: string;
   /**
+   * The name of the self-service Profile.
+   *
+   */
+  name: string;
+  /**
+   * The description of the self-service Profile.
+   *
+   */
+  description: string;
+  /**
    * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
    *
    */
@@ -14536,7 +14658,26 @@ export interface SsProfile {
   /**
    */
   branding: SsProfileBranding;
+  /**
+   * List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`]
+   *
+   */
+  allowed_strategies: Array<SsProfileAllowedStrategiesEnum>;
 }
+
+export const SsProfileAllowedStrategiesEnum = {
+  oidc: 'oidc',
+  samlp: 'samlp',
+  waad: 'waad',
+  google_apps: 'google-apps',
+  adfs: 'adfs',
+  okta: 'okta',
+  keycloak_samlp: 'keycloak-samlp',
+  pingfederate: 'pingfederate',
+} as const;
+export type SsProfileAllowedStrategiesEnum =
+  (typeof SsProfileAllowedStrategiesEnum)[keyof typeof SsProfileAllowedStrategiesEnum];
+
 /**
  *
  */
@@ -14563,6 +14704,16 @@ export interface SsProfileBrandingColors {
  */
 export interface SsProfileCreate {
   /**
+   * The name of the self-service Profile.
+   *
+   */
+  name: string;
+  /**
+   * The description of the self-service Profile.
+   *
+   */
+  description?: string;
+  /**
    * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
    *
    */
@@ -14570,7 +14721,26 @@ export interface SsProfileCreate {
   /**
    */
   branding?: SsProfileCreateBranding;
+  /**
+   * List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`]
+   *
+   */
+  allowed_strategies?: Array<SsProfileCreateAllowedStrategiesEnum>;
 }
+
+export const SsProfileCreateAllowedStrategiesEnum = {
+  oidc: 'oidc',
+  samlp: 'samlp',
+  waad: 'waad',
+  google_apps: 'google-apps',
+  adfs: 'adfs',
+  okta: 'okta',
+  keycloak_samlp: 'keycloak-samlp',
+  pingfederate: 'pingfederate',
+} as const;
+export type SsProfileCreateAllowedStrategiesEnum =
+  (typeof SsProfileCreateAllowedStrategiesEnum)[keyof typeof SsProfileCreateAllowedStrategiesEnum];
+
 /**
  *
  */
@@ -14586,11 +14756,17 @@ export interface SsProfileCreateBranding {
 /**
  *
  */
-export interface SsProfileList extends Array<SsProfile> {}
-/**
- *
- */
 export interface SsProfileUpdate {
+  /**
+   * The name of the self-service Profile.
+   *
+   */
+  name?: string;
+  /**
+   * The description of the self-service Profile.
+   *
+   */
+  description?: string | null;
   /**
    * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
    *
@@ -14599,7 +14775,26 @@ export interface SsProfileUpdate {
   /**
    */
   branding?: SsProfileUpdateBranding | null;
+  /**
+   * List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`]
+   *
+   */
+  allowed_strategies?: Array<SsProfileUpdateAllowedStrategiesEnum>;
 }
+
+export const SsProfileUpdateAllowedStrategiesEnum = {
+  oidc: 'oidc',
+  samlp: 'samlp',
+  waad: 'waad',
+  google_apps: 'google-apps',
+  adfs: 'adfs',
+  okta: 'okta',
+  keycloak_samlp: 'keycloak-samlp',
+  pingfederate: 'pingfederate',
+} as const;
+export type SsProfileUpdateAllowedStrategiesEnum =
+  (typeof SsProfileUpdateAllowedStrategiesEnum)[keyof typeof SsProfileUpdateAllowedStrategiesEnum];
+
 /**
  *
  */
@@ -18705,6 +18900,65 @@ export interface DeleteSelfServiceProfilesByIdRequest {
    */
   id: string;
 }
+
+/**
+ *
+ */
+export const GetSelfServiceProfileCustomTextLanguageEnum = {
+  en: 'en',
+} as const;
+export type GetSelfServiceProfileCustomTextLanguageEnum =
+  (typeof GetSelfServiceProfileCustomTextLanguageEnum)[keyof typeof GetSelfServiceProfileCustomTextLanguageEnum];
+
+/**
+ *
+ */
+export const GetSelfServiceProfileCustomTextPageEnum = {
+  get_started: 'get-started',
+} as const;
+export type GetSelfServiceProfileCustomTextPageEnum =
+  (typeof GetSelfServiceProfileCustomTextPageEnum)[keyof typeof GetSelfServiceProfileCustomTextPageEnum];
+
+/**
+ *
+ */
+export interface GetSelfServiceProfileCustomTextRequest {
+  /**
+   * The id of the self-service profile.
+   *
+   */
+  id: string;
+  /**
+   * The language of the custom text.
+   *
+   */
+  language: GetSelfServiceProfileCustomTextLanguageEnum;
+  /**
+   * The page where the custom text is shown.
+   *
+   */
+  page: GetSelfServiceProfileCustomTextPageEnum;
+}
+/**
+ *
+ */
+export interface GetSelfServiceProfilesRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
 /**
  *
  */
@@ -18728,12 +18982,66 @@ export interface PatchSelfServiceProfilesByIdRequest {
 /**
  *
  */
-export interface PostSsoTicketRequest {
+export interface PostRevokeRequest {
   /**
-   * The id of the sso-profile to retrieve
+   * The id of the self-service profile
+   *
+   */
+  profileId: string;
+  /**
+   * The id of the ticket to revoke
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface PostSsoTicketOperationRequest {
+  /**
+   * The id of the self-service profile to retrieve
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const PutSelfServiceProfileCustomTextLanguageEnum = {
+  en: 'en',
+} as const;
+export type PutSelfServiceProfileCustomTextLanguageEnum =
+  (typeof PutSelfServiceProfileCustomTextLanguageEnum)[keyof typeof PutSelfServiceProfileCustomTextLanguageEnum];
+
+/**
+ *
+ */
+export const PutSelfServiceProfileCustomTextPageEnum = {
+  get_started: 'get-started',
+} as const;
+export type PutSelfServiceProfileCustomTextPageEnum =
+  (typeof PutSelfServiceProfileCustomTextPageEnum)[keyof typeof PutSelfServiceProfileCustomTextPageEnum];
+
+/**
+ *
+ */
+export interface PutSelfServiceProfileCustomTextRequest {
+  /**
+   * The id of the self-service profile.
+   *
+   */
+  id: string;
+  /**
+   * The language of the custom text.
+   *
+   */
+  language: PutSelfServiceProfileCustomTextLanguageEnum;
+  /**
+   * The page where the custom text is shown.
+   *
+   */
+  page: PutSelfServiceProfileCustomTextPageEnum;
 }
 /**
  *
