@@ -108,6 +108,6 @@ describe('selfServiceProfilesManager', () => {
     const uri = `/self-service-profiles/profile1/sso-ticket/id1/revoke`;
     const method = 'post';
 
-    checkMethod({ operation, uri, method, expectedResponse: {} });
+    checkMethod({ operation, uri, method, expectedResponse: '{}' });
   });
 });
