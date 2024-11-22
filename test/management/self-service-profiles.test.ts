@@ -1,10 +1,5 @@
-import {
-  ManagementClient,
-  SelfServiceProfilesManager,
-  SsProfileCreate,
-  SsProfileUpdate,
-} from '../../src/index.js';
-import { checkMethod, CheckMethodParams } from './tests.util.js';
+import { ManagementClient, SelfServiceProfilesManager, SsProfileCreate } from '../../src/index.js';
+import { checkMethod } from './tests.util.js';
 
 const DOMAIN = `tenant.auth0.com`;
 const token = 'TOKEN';
