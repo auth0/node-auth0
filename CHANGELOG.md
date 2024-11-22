@@ -7,6 +7,9 @@
 **⚠️ BREAKING CHANGES**
 
 - Self Service SSO GA release changes [\#1057](https://github.com/auth0/node-auth0/pull/1057) ([tusharpandey13](https://github.com/tusharpandey13))
+  - Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
+  - Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
+  - Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
 
 ## [v4.13.0](https://github.com/auth0/node-auth0/tree/v4.13.0) (2024-11-12)
 
