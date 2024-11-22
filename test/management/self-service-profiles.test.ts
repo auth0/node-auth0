@@ -1,314 +1,108 @@
-import nock from 'nock';
+import { ManagementClient, SelfServiceProfilesManager, SsProfileCreate } from '../../src/index.js';
+import { checkMethod } from './tests.util.js';
 
 const DOMAIN = `tenant.auth0.com`;
-const API_URL = `https://${DOMAIN}/api/v2`;
+const token = 'TOKEN';
 
-import {
-  DeleteSelfServiceProfilesByIdRequest,
-  GetSelfServiceProfilesByIdRequest,
-  ManagementClient,
-  PatchSelfServiceProfilesByIdRequest,
-  PostSsoTicketRequest,
-  SelfServiceProfilesManager,
-  SsoAccessTicketResponse,
-  SsoTicketRequestJson,
-  SsProfile,
-  SsProfileCreate,
-  SsProfileList,
-  SsProfileUpdate,
-} from '../../src/index.js';
+describe('selfServiceProfilesManager', () => {
+  const flowsManager: SelfServiceProfilesManager = new ManagementClient({ domain: DOMAIN, token })
+    .selfServiceProfiles;
 
-describe('SelfServiceProfilesManager', () => {
-  let selfServiceProfileManager: SelfServiceProfilesManager;
-  let nockedRequest: nock.Scope;
-  const token = 'TOKEN';
+  const dummyBody: SsProfileCreate = {
+    name: 'profileName',
+    description: 'description',
+    allowed_strategies: ['oidc', 'samlp'],
+    user_attributes: [{ name: 'name', description: 'description', is_optional: false }],
+    branding: {
+      logo_url: 'logoUrl',
+      colors: { primary: 'primary', page_background: 'pageBackground' },
+    },
+  };
 
-  beforeAll(() => {
-    const client = new ManagementClient({
-      domain: DOMAIN,
-      token: token,
-    });
-    selfServiceProfileManager = client.selfServiceProfiles;
+  // this is the test for the method flowsManager.create
+  describe('create', () => {
+    const operation = flowsManager.create(dummyBody);
+    const uri = `/self-service-profiles`;
+    const method = 'post';
+
+    checkMethod({ operation, uri, method });
   });
 
-  describe('createSelfServiceProfiles', () => {
-    const requestBody: SsProfileCreate | any = {
-      user_attributes: [{ name: 'testAttribute', description: 'testAttribute', is_optional: true }],
-      branding: { logo_url: 'https://example.com', colors: { primary: '#1c1c1c' } },
-    };
+  // this is the test for the method flowsManager.update
+  describe('update', () => {
+    const operation = flowsManager.update({ id: 'profile1' }, dummyBody);
+    const uri = `/self-service-profiles/profile1`;
+    const method = 'patch';
 
-    it('should return a promise if no callback is given', (done) => {
-      selfServiceProfileManager
-        .postSelfServiceProfiles(requestBody)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-    it('should pass any errors to the promise catch handler', () => {
-      nock.cleanAll();
-
-      nock(API_URL).post('/self-service-profiles').reply(500, {});
-
-      return selfServiceProfileManager.postSelfServiceProfiles(requestBody).catch((err) => {
-        expect(err).toBeDefined();
-      });
-    });
-
-    // this test is for the method postSelfServiceProfiles, uses SsProfileCreate as body
-    it('should return the created self-service profile', async () => {
-      const nockedResponse: SsProfile = {
-        id: 'testing_id_123',
-        user_attributes: [
-          { name: 'testAttribute', description: 'testAttribute', is_optional: true },
-        ],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        branding: { logo_url: 'https://example.com', colors: { primary: '#1c1c1c' } },
-      };
-
-      // eslint-disable-next-line prettier/prettier
-      nockedRequest = nock(API_URL)
-        .post('/self-service-profiles', requestBody)
-        .reply(200, nockedResponse);
-
-      const createResult = await selfServiceProfileManager.postSelfServiceProfiles(requestBody);
-
-      expect(createResult.data).toEqual(nockedResponse);
-    });
+    checkMethod({ operation, uri, method });
   });
 
-  describe('getSelfServiceProfiles', () => {
-    it('should return a promise if no callback is given', (done) => {
-      selfServiceProfileManager
-        .getSelfServiceProfiles()
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
+  // this is the test for the method flowsManager.delete
+  describe('delete', () => {
+    const operation = flowsManager.delete({ id: 'profile1' });
+    const uri = `/self-service-profiles/profile1`;
+    const method = 'delete';
 
-    it('should pass any errors to the promise catch handler', () => {
-      nock.cleanAll();
-
-      nock(API_URL).get('/self-service-profiles').reply(500, {});
-
-      return selfServiceProfileManager.getSelfServiceProfiles().catch((err) => {
-        expect(err).toBeDefined();
-      });
-    });
-
-    // this unit test is for the getSelfServiceProfiles() method
-    it('should return the list of self-service profiles', async () => {
-      const exampleData: SsProfile = {
-        id: 'testing_id_123',
-        user_attributes: [
-          { name: 'testAttribute', description: 'testAttribute', is_optional: true },
-        ],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        branding: { logo_url: 'https://example.com', colors: { primary: '#1c1c1c' } },
-      };
-
-      const nockedResponse: SsProfileList = [exampleData];
-
-      // eslint-disable-next-line prettier/prettier
-      nockedRequest = nock(API_URL).get('/self-service-profiles').reply(200, nockedResponse);
-
-      const getResult = await selfServiceProfileManager.getSelfServiceProfiles();
-
-      expect(getResult.data).toEqual(nockedResponse);
-      expect(getResult.data.length).toBeGreaterThan(0);
-    });
+    checkMethod({ operation, uri, method });
   });
 
-  describe('getSelfServiceProfilesById', () => {
-    const requestParameters: GetSelfServiceProfilesByIdRequest = {
-      id: 'testing_id_123',
-    };
+  // this is the test for the method flowsManager.get
+  describe('get', () => {
+    const operation = flowsManager.get({ id: 'profile1' });
+    const uri = `/self-service-profiles/profile1`;
+    const method = 'get';
 
-    it('should return a promise if no callback is given', (done) => {
-      selfServiceProfileManager
-        .getSelfServiceProfilesById(requestParameters)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-    it('should pass any errors to the promise catch handler', () => {
-      nock.cleanAll();
-
-      nock(API_URL).get(`/self-service-profiles/${requestParameters.id}`).reply(500, {});
-
-      return selfServiceProfileManager
-        .getSelfServiceProfilesById(requestParameters)
-        .catch((err) => {
-          expect(err).toBeDefined();
-        });
-    });
-
-    // this unit test is for the getSelfServiceProfileById() method
-    it('should return one of self-service profile by id', async () => {
-      const nockedResponse: SsProfile = {
-        id: 'testing_id_123',
-        user_attributes: [
-          { name: 'testAttribute', description: 'testAttribute', is_optional: true },
-        ],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        branding: { logo_url: 'https://example.com', colors: { primary: '#1c1c1c' } },
-      };
-
-      nock.cleanAll();
-      // eslint-disable-next-line prettier/prettier
-      nockedRequest = nock(API_URL)
-        .get(`/self-service-profiles/${requestParameters.id}`)
-        .reply(200, nockedResponse);
-
-      const getResult = await selfServiceProfileManager.getSelfServiceProfilesById(
-        requestParameters
-      );
-      expect(getResult.data).toEqual(nockedResponse);
-    });
+    checkMethod({ operation, uri, method });
   });
 
-  describe('deleteSelfServiceProfiles', () => {
-    const requestParameters: DeleteSelfServiceProfilesByIdRequest = {
-      id: 'testing_id_123',
-    };
+  // this is the test for the method flowsManager.getAll
+  describe('getAll', () => {
+    const operation = flowsManager.getAll();
+    const uri = `/self-service-profiles`;
+    const method = 'get';
 
-    it('should return a promise if no callback is given', (done) => {
-      selfServiceProfileManager
-        .deleteSelfServiceProfiles(requestParameters)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-    it('should pass any errors to the promise catch handler', () => {
-      nock.cleanAll();
-
-      nock(API_URL).get(`/self-service-profiles/${requestParameters.id}`).reply(500, {});
-
-      return selfServiceProfileManager.deleteSelfServiceProfiles(requestParameters).catch((err) => {
-        expect(err).toBeDefined();
-      });
-    });
-
-    // this unit test is for the deleteSelfServiceProfiles() method
-    it('should delete one of self-service profile by id', async () => {
-      // eslint-disable-next-line prettier/prettier
-      nockedRequest = nock(API_URL)
-        .delete(`/self-service-profiles/${requestParameters.id}`)
-        .reply(200);
-
-      await selfServiceProfileManager.deleteSelfServiceProfiles(requestParameters);
-
-      expect(nockedRequest.isDone()).toBe(true);
-    });
+    checkMethod({ operation, uri, method });
   });
 
-  describe('patchSelfServiceProfiles', () => {
-    const requestParameters: PatchSelfServiceProfilesByIdRequest = {
-      id: 'testing_id_123',
-    };
-    const requestBody: SsProfileUpdate = {
-      user_attributes: [
-        { name: 'modifiedTestAttribute', description: 'modifiedTestAttribute', is_optional: true },
-      ],
-      branding: { logo_url: 'https://example.com', colors: { primary: '#ff00ff' } },
-    };
+  // this is the test for the method flowsManager.updateCustomText
+  describe('updateCustomText', () => {
+    const operation = flowsManager.updateCustomText(
+      { id: 'profile1', language: 'en', page: 'get-started' },
+      { custom_text: 'new custom text' }
+    );
+    const uri = `/self-service-profiles/profile1/custom-text/en/get-started`;
+    const method = 'put';
 
-    it('should return a promise if no callback is given', (done) => {
-      selfServiceProfileManager
-        .patchSelfServiceProfiles(requestParameters, requestBody)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
-
-    it('should pass any errors to the promise catch handler', () => {
-      nock.cleanAll();
-
-      nock(API_URL).patch(`/self-service-profiles/${requestParameters.id}`).reply(500, {});
-
-      return selfServiceProfileManager
-        .patchSelfServiceProfiles(requestParameters, requestBody)
-        .catch((err) => {
-          expect(err).toBeDefined();
-        });
-    });
-
-    // this unit test is for the patchSelfServiceProfiles() method
-    it('should update one of self-service profile by id', async () => {
-      const nockedResponse: SsProfile = {
-        id: requestParameters.id,
-        user_attributes: [
-          {
-            name: 'modifiedTestAttribute',
-            description: 'modifiedTestAttribute',
-            is_optional: true,
-          },
-        ],
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        branding: { logo_url: 'https://example.com', colors: { primary: '#ff00ff' } },
-      };
-
-      // eslint-disable-next-line prettier/prettier
-      nockedRequest = nock(API_URL)
-        .patch(`/self-service-profiles/${requestParameters.id}`)
-        .reply(200, nockedResponse);
-
-      const patchResult = await selfServiceProfileManager.patchSelfServiceProfiles(
-        requestParameters,
-        requestBody
-      );
-
-      expect(patchResult.data).toEqual(nockedResponse);
-    });
+    checkMethod({ operation, uri, method });
   });
 
-  describe('postSsoTicket', () => {
-    const requestParameters: PostSsoTicketRequest = {
-      id: 'testing_id_123',
-    };
-    const requestBody: SsoTicketRequestJson = {
-      connection_id: 'connection_id',
-      connection_config: { name: 'test_connection_config' },
-      enabled_clients: ['client1'],
-      enabled_organizations: [{ organization_id: requestParameters.id }],
-    };
+  // this is the test for the method flowsManager.createSsoTicket
+  describe('createSsoTicket', () => {
+    const operation = flowsManager.createSsoTicket(
+      { id: 'id1' },
+      {
+        connection_id: 'connection1',
+        connection_config: {
+          name: 'config1',
+          display_name: 'config1',
+          is_domain_connection: false,
+          metadata: {},
+          options: null,
+        },
+      }
+    );
+    const uri = `/self-service-profiles/id1/sso-ticket`;
+    const method = 'post';
 
-    it('should return a promise if no callback is given', (done) => {
-      selfServiceProfileManager
-        .postSsoTicket(requestParameters, requestBody)
-        .then(done.bind(null, null))
-        .catch(done.bind(null, null));
-    });
+    checkMethod({ operation, uri, method });
+  });
 
-    it('should pass any errors to the promise catch handler', () => {
-      nock.cleanAll();
+  // this is the test for the method flowsManager.revokeSsoTicket
+  describe('revokeSsoTicket', () => {
+    const operation = flowsManager.revokeSsoTicket({ profileId: 'profile1', id: 'id1' });
+    const uri = `/self-service-profiles/profile1/sso-ticket/id1/revoke`;
+    const method = 'post';
 
-      nock(API_URL)
-        .post(`/self-service-profiles/${requestParameters.id}/sso-ticket`)
-        .reply(500, {});
-
-      return selfServiceProfileManager
-        .postSsoTicket(requestParameters, requestBody)
-        .catch((err) => {
-          expect(err).toBeDefined();
-        });
-    });
-
-    // this unit test is for the postSsoTicket() method
-    it('should set sso ticket for one sso profile', async () => {
-      const nockedResponse: SsoAccessTicketResponse = {
-        ticket: 'https://example.com/ticket',
-      };
-
-      // eslint-disable-next-line prettier/prettier
-      nockedRequest = nock(API_URL)
-        .post(`/self-service-profiles/${requestParameters.id}/sso-ticket`)
-        .reply(200, nockedResponse);
-
-      const result = await selfServiceProfileManager.postSsoTicket(requestParameters, requestBody);
-
-      expect(result.data).toEqual(nockedResponse);
-    });
+    checkMethod({ operation, uri, method, expectedResponse: '{}' });
   });
 });
