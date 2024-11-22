@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.14.0](https://github.com/auth0/node-auth0/tree/v4.14.0) (2024-11-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.13.0...v4.14.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Self Service SSO GA release changes [\#1057](https://github.com/auth0/node-auth0/pull/1057) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.13.0](https://github.com/auth0/node-auth0/tree/v4.13.0) (2024-11-12)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.12.0...v4.13.0)
