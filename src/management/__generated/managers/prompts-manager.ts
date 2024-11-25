@@ -1,10 +1,14 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetRendering200Response,
+  PatchRenderingRequest,
   PromptsSettings,
   PromptsSettingsUpdate,
   GetCustomTextByLanguageRequest,
   GetPartialsRequest,
+  GetRenderingRequest,
+  PatchRenderingOperationRequest,
   PutCustomTextByLanguageRequest,
   PutPartialsRequest,
 } from '../models/index.js';
@@ -85,6 +89,31 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
+   * View the render settings for a specific screen
+   * Get render settings for a prompt
+   *
+   * @throws {RequiredError}
+   */
+  async getRendering(
+    requestParameters: GetRenderingRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRendering200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'screen']);
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/screen/{screen}/rendering`
+          .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
+          .replace('{screen}', encodeURIComponent(String(requestParameters.screen))),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Update the Universal Login configuration of your tenant. This includes the <a href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier First Authentication</a> and <a href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn with Device Biometrics for MFA</a> features.
    * Update prompt settings
    *
@@ -109,6 +138,38 @@ export class PromptsManager extends BaseAPI {
     );
 
     return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Configure the render settings for a specific screen
+   * Configure render settings for a prompt
+   *
+   * @throws {RequiredError}
+   */
+  async updateRendering(
+    requestParameters: PatchRenderingOperationRequest,
+    bodyParameters: PatchRenderingRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'screen']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/screen/{screen}/rendering`
+          .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
+          .replace('{screen}', encodeURIComponent(String(requestParameters.screen))),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**

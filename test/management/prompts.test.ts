@@ -12,19 +12,19 @@ import {
   RequiredError,
   GetPartialsPromptEnum,
   PutPartialsPromptEnum,
+  GetRendering200Response,
+  PatchRenderingRequest,
 } from '../../src/index.js';
 
-describe('PromptsManager', () => {
-  let prompts: PromptsManager;
-  const token = 'TOKEN';
+import { checkMethod } from './tests.util.js';
 
-  beforeAll(() => {
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-    });
-    prompts = client.prompts;
+describe('PromptsManager', () => {
+  const token = 'TOKEN';
+  const client = new ManagementClient({
+    domain: 'tenant.auth0.com',
+    token: token,
   });
+  const prompts: PromptsManager = client.prompts;
 
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
@@ -445,5 +445,34 @@ describe('PromptsManager', () => {
         done();
       });
     });
+  });
+
+  describe('getRendering', () => {
+    const operation = prompts.getRendering({ prompt: 'login', screen: 'consent' });
+    const uri = `/prompts/login/screen/consent/rendering`;
+    const method = 'get';
+    const expectedResposne: GetRendering200Response = {
+      screen: 'consent',
+      prompt: 'login',
+      tenant: 'tenant',
+      context_configuration: ['context'],
+      default_head_tags_disabled: false,
+      head_tags: [],
+      rendering_mode: 'advanced',
+    };
+    checkMethod({ operation, uri, method, expectedResposne });
+  });
+
+  describe('updateRendering', () => {
+    const patchBody: PatchRenderingRequest = {
+      context_configuration: ['context2'],
+      default_head_tags_disabled: true,
+      head_tags: [{ title: 'title' }],
+      rendering_mode: 'advanced',
+    };
+    const operation = prompts.updateRendering({ prompt: 'login', screen: 'consent' }, patchBody);
+    const uri = `/prompts/login/screen/consent/rendering`;
+    const method = 'patch';
+    checkMethod({ operation, uri, method });
   });
 });
