@@ -7202,6 +7202,55 @@ export type GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt =
 /**
  *
  */
+export interface GetRendering200Response {
+  [key: string]: any | any;
+  /**
+   * Tenant ID
+   *
+   */
+  tenant: string;
+  /**
+   * Name of the prompt
+   *
+   */
+  prompt: string;
+  /**
+   * Name of the screen
+   *
+   */
+  screen: string;
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode: GetRendering200ResponseRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled: boolean;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags: Array<{ [key: string]: any }>;
+}
+
+export const GetRendering200ResponseRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type GetRendering200ResponseRenderingModeEnum =
+  (typeof GetRendering200ResponseRenderingModeEnum)[keyof typeof GetRendering200ResponseRenderingModeEnum];
+
+/**
+ *
+ */
 export type GetResourceServers200Response =
   | Array<ResourceServer>
   | GetResourceServers200ResponseOneOf;
@@ -9147,6 +9196,39 @@ export interface PatchOrganizationsByIdRequestBranding {
    */
   colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
 }
+/**
+ * ACUL settings for the given screen.
+ */
+export interface PatchRenderingRequest {
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode?: PatchRenderingRequestRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration?: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled?: boolean;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags?: Array<{ [key: string]: any }>;
+}
+
+export const PatchRenderingRequestRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type PatchRenderingRequestRenderingModeEnum =
+  (typeof PatchRenderingRequestRenderingModeEnum)[keyof typeof PatchRenderingRequestRenderingModeEnum];
+
 /**
  *
  */
@@ -18426,6 +18508,298 @@ export interface GetPartialsRequest {
    *
    */
   prompt: GetPartialsPromptEnum;
+}
+
+/**
+ *
+ */
+export const GetRenderingPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password: 'reset-password',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  mfa_push: 'mfa-push',
+  mfa_otp: 'mfa-otp',
+  mfa_voice: 'mfa-voice',
+  mfa_phone: 'mfa-phone',
+  mfa_webauthn: 'mfa-webauthn',
+  mfa_sms: 'mfa-sms',
+  mfa_email: 'mfa-email',
+  mfa_recovery_code: 'mfa-recovery-code',
+  mfa: 'mfa',
+  status: 'status',
+  device_flow: 'device-flow',
+  email_verification: 'email-verification',
+  email_otp_challenge: 'email-otp-challenge',
+  organizations: 'organizations',
+  invitation: 'invitation',
+  common: 'common',
+  passkeys: 'passkeys',
+  captcha: 'captcha',
+} as const;
+export type GetRenderingPromptEnum =
+  (typeof GetRenderingPromptEnum)[keyof typeof GetRenderingPromptEnum];
+
+/**
+ *
+ */
+export const GetRenderingScreenEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless_email_code: 'login-passwordless-email-code',
+  login_passwordless_email_link: 'login-passwordless-email-link',
+  login_passwordless_sms_otp: 'login-passwordless-sms-otp',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password_request: 'reset-password-request',
+  reset_password_email: 'reset-password-email',
+  reset_password: 'reset-password',
+  reset_password_success: 'reset-password-success',
+  reset_password_error: 'reset-password-error',
+  reset_password_mfa_email_challenge: 'reset-password-mfa-email-challenge',
+  reset_password_mfa_otp_challenge: 'reset-password-mfa-otp-challenge',
+  reset_password_mfa_phone_challenge: 'reset-password-mfa-phone-challenge',
+  reset_password_mfa_push_challenge_push: 'reset-password-mfa-push-challenge-push',
+  reset_password_mfa_recovery_code_challenge: 'reset-password-mfa-recovery-code-challenge',
+  reset_password_mfa_sms_challenge: 'reset-password-mfa-sms-challenge',
+  reset_password_mfa_voice_challenge: 'reset-password-mfa-voice-challenge',
+  reset_password_mfa_webauthn_platform_challenge: 'reset-password-mfa-webauthn-platform-challenge',
+  reset_password_mfa_webauthn_roaming_challenge: 'reset-password-mfa-webauthn-roaming-challenge',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  logout_complete: 'logout-complete',
+  logout_aborted: 'logout-aborted',
+  mfa_push_welcome: 'mfa-push-welcome',
+  mfa_push_enrollment_qr: 'mfa-push-enrollment-qr',
+  mfa_push_enrollment_code: 'mfa-push-enrollment-code',
+  mfa_push_success: 'mfa-push-success',
+  mfa_push_challenge_push: 'mfa-push-challenge-push',
+  mfa_push_list: 'mfa-push-list',
+  mfa_otp_enrollment_qr: 'mfa-otp-enrollment-qr',
+  mfa_otp_enrollment_code: 'mfa-otp-enrollment-code',
+  mfa_otp_challenge: 'mfa-otp-challenge',
+  mfa_voice_enrollment: 'mfa-voice-enrollment',
+  mfa_voice_challenge: 'mfa-voice-challenge',
+  mfa_phone_challenge: 'mfa-phone-challenge',
+  mfa_phone_enrollment: 'mfa-phone-enrollment',
+  mfa_webauthn_platform_enrollment: 'mfa-webauthn-platform-enrollment',
+  mfa_webauthn_roaming_enrollment: 'mfa-webauthn-roaming-enrollment',
+  mfa_webauthn_platform_challenge: 'mfa-webauthn-platform-challenge',
+  mfa_webauthn_roaming_challenge: 'mfa-webauthn-roaming-challenge',
+  mfa_webauthn_change_key_nickname: 'mfa-webauthn-change-key-nickname',
+  mfa_webauthn_enrollment_success: 'mfa-webauthn-enrollment-success',
+  mfa_webauthn_error: 'mfa-webauthn-error',
+  mfa_webauthn_not_available_error: 'mfa-webauthn-not-available-error',
+  mfa_country_codes: 'mfa-country-codes',
+  mfa_sms_enrollment: 'mfa-sms-enrollment',
+  mfa_sms_challenge: 'mfa-sms-challenge',
+  mfa_sms_list: 'mfa-sms-list',
+  mfa_email_challenge: 'mfa-email-challenge',
+  mfa_email_list: 'mfa-email-list',
+  mfa_recovery_code_enrollment: 'mfa-recovery-code-enrollment',
+  mfa_recovery_code_challenge: 'mfa-recovery-code-challenge',
+  mfa_detect_browser_capabilities: 'mfa-detect-browser-capabilities',
+  mfa_enroll_result: 'mfa-enroll-result',
+  mfa_login_options: 'mfa-login-options',
+  mfa_begin_enroll_options: 'mfa-begin-enroll-options',
+  status: 'status',
+  device_code_activation: 'device-code-activation',
+  device_code_activation_allowed: 'device-code-activation-allowed',
+  device_code_activation_denied: 'device-code-activation-denied',
+  device_code_confirmation: 'device-code-confirmation',
+  email_verification_result: 'email-verification-result',
+  email_otp_challenge: 'email-otp-challenge',
+  organization_selection: 'organization-selection',
+  organization_picker: 'organization-picker',
+  accept_invitation: 'accept-invitation',
+  redeem_ticket: 'redeem-ticket',
+  passkey_enrollment: 'passkey-enrollment',
+  passkey_enrollment_local: 'passkey-enrollment-local',
+  interstitial_captcha: 'interstitial-captcha',
+} as const;
+export type GetRenderingScreenEnum =
+  (typeof GetRenderingScreenEnum)[keyof typeof GetRenderingScreenEnum];
+
+/**
+ *
+ */
+export interface GetRenderingRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: GetRenderingPromptEnum;
+  /**
+   * Name of the screen.
+   *
+   */
+  screen: GetRenderingScreenEnum;
+}
+
+/**
+ *
+ */
+export const PatchRenderingOperationPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password: 'reset-password',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  mfa_push: 'mfa-push',
+  mfa_otp: 'mfa-otp',
+  mfa_voice: 'mfa-voice',
+  mfa_phone: 'mfa-phone',
+  mfa_webauthn: 'mfa-webauthn',
+  mfa_sms: 'mfa-sms',
+  mfa_email: 'mfa-email',
+  mfa_recovery_code: 'mfa-recovery-code',
+  mfa: 'mfa',
+  status: 'status',
+  device_flow: 'device-flow',
+  email_verification: 'email-verification',
+  email_otp_challenge: 'email-otp-challenge',
+  organizations: 'organizations',
+  invitation: 'invitation',
+  common: 'common',
+  passkeys: 'passkeys',
+  captcha: 'captcha',
+} as const;
+export type PatchRenderingOperationPromptEnum =
+  (typeof PatchRenderingOperationPromptEnum)[keyof typeof PatchRenderingOperationPromptEnum];
+
+/**
+ *
+ */
+export const PatchRenderingOperationScreenEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless_email_code: 'login-passwordless-email-code',
+  login_passwordless_email_link: 'login-passwordless-email-link',
+  login_passwordless_sms_otp: 'login-passwordless-sms-otp',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password_request: 'reset-password-request',
+  reset_password_email: 'reset-password-email',
+  reset_password: 'reset-password',
+  reset_password_success: 'reset-password-success',
+  reset_password_error: 'reset-password-error',
+  reset_password_mfa_email_challenge: 'reset-password-mfa-email-challenge',
+  reset_password_mfa_otp_challenge: 'reset-password-mfa-otp-challenge',
+  reset_password_mfa_phone_challenge: 'reset-password-mfa-phone-challenge',
+  reset_password_mfa_push_challenge_push: 'reset-password-mfa-push-challenge-push',
+  reset_password_mfa_recovery_code_challenge: 'reset-password-mfa-recovery-code-challenge',
+  reset_password_mfa_sms_challenge: 'reset-password-mfa-sms-challenge',
+  reset_password_mfa_voice_challenge: 'reset-password-mfa-voice-challenge',
+  reset_password_mfa_webauthn_platform_challenge: 'reset-password-mfa-webauthn-platform-challenge',
+  reset_password_mfa_webauthn_roaming_challenge: 'reset-password-mfa-webauthn-roaming-challenge',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  logout_complete: 'logout-complete',
+  logout_aborted: 'logout-aborted',
+  mfa_push_welcome: 'mfa-push-welcome',
+  mfa_push_enrollment_qr: 'mfa-push-enrollment-qr',
+  mfa_push_enrollment_code: 'mfa-push-enrollment-code',
+  mfa_push_success: 'mfa-push-success',
+  mfa_push_challenge_push: 'mfa-push-challenge-push',
+  mfa_push_list: 'mfa-push-list',
+  mfa_otp_enrollment_qr: 'mfa-otp-enrollment-qr',
+  mfa_otp_enrollment_code: 'mfa-otp-enrollment-code',
+  mfa_otp_challenge: 'mfa-otp-challenge',
+  mfa_voice_enrollment: 'mfa-voice-enrollment',
+  mfa_voice_challenge: 'mfa-voice-challenge',
+  mfa_phone_challenge: 'mfa-phone-challenge',
+  mfa_phone_enrollment: 'mfa-phone-enrollment',
+  mfa_webauthn_platform_enrollment: 'mfa-webauthn-platform-enrollment',
+  mfa_webauthn_roaming_enrollment: 'mfa-webauthn-roaming-enrollment',
+  mfa_webauthn_platform_challenge: 'mfa-webauthn-platform-challenge',
+  mfa_webauthn_roaming_challenge: 'mfa-webauthn-roaming-challenge',
+  mfa_webauthn_change_key_nickname: 'mfa-webauthn-change-key-nickname',
+  mfa_webauthn_enrollment_success: 'mfa-webauthn-enrollment-success',
+  mfa_webauthn_error: 'mfa-webauthn-error',
+  mfa_webauthn_not_available_error: 'mfa-webauthn-not-available-error',
+  mfa_country_codes: 'mfa-country-codes',
+  mfa_sms_enrollment: 'mfa-sms-enrollment',
+  mfa_sms_challenge: 'mfa-sms-challenge',
+  mfa_sms_list: 'mfa-sms-list',
+  mfa_email_challenge: 'mfa-email-challenge',
+  mfa_email_list: 'mfa-email-list',
+  mfa_recovery_code_enrollment: 'mfa-recovery-code-enrollment',
+  mfa_recovery_code_challenge: 'mfa-recovery-code-challenge',
+  mfa_detect_browser_capabilities: 'mfa-detect-browser-capabilities',
+  mfa_enroll_result: 'mfa-enroll-result',
+  mfa_login_options: 'mfa-login-options',
+  mfa_begin_enroll_options: 'mfa-begin-enroll-options',
+  status: 'status',
+  device_code_activation: 'device-code-activation',
+  device_code_activation_allowed: 'device-code-activation-allowed',
+  device_code_activation_denied: 'device-code-activation-denied',
+  device_code_confirmation: 'device-code-confirmation',
+  email_verification_result: 'email-verification-result',
+  email_otp_challenge: 'email-otp-challenge',
+  organization_selection: 'organization-selection',
+  organization_picker: 'organization-picker',
+  accept_invitation: 'accept-invitation',
+  redeem_ticket: 'redeem-ticket',
+  passkey_enrollment: 'passkey-enrollment',
+  passkey_enrollment_local: 'passkey-enrollment-local',
+  interstitial_captcha: 'interstitial-captcha',
+} as const;
+export type PatchRenderingOperationScreenEnum =
+  (typeof PatchRenderingOperationScreenEnum)[keyof typeof PatchRenderingOperationScreenEnum];
+
+/**
+ *
+ */
+export interface PatchRenderingOperationRequest {
+  /**
+   * Name of the prompt.
+   *
+   */
+  prompt: PatchRenderingOperationPromptEnum;
+  /**
+   * Name of the screen.
+   *
+   */
+  screen: PatchRenderingOperationScreenEnum;
 }
 
 /**
