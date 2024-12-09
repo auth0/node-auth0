@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.15.0](https://github.com/auth0/node-auth0/tree/v4.15.0) (2024-12-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.14.0...v4.15.0)
+
+**Added**
+
+- ACUL implementation [\#1060](https://github.com/auth0/node-auth0/pull/1060) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.14.0](https://github.com/auth0/node-auth0/tree/v4.14.0) (2024-11-22)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.13.0...v4.14.0)
