@@ -37,7 +37,7 @@ This client can be used to access Auth0's [Authentication API](https://auth0.com
 import { AuthenticationClient } from 'auth0';
 
 const auth0 = new AuthenticationClient({
-  domain: '{YOUR_ACCOUNT}.auth0.com',
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
   clientId: '{OPTIONAL_CLIENT_ID}',
   clientSecret: '{OPTIONAL_CLIENT_SECRET}',
 });
