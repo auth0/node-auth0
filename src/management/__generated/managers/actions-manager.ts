@@ -36,8 +36,7 @@ const { BaseAPI } = runtime;
  */
 export class ActionsManager extends BaseAPI {
   /**
-   * Deletes an action and all of its associated versions. An action must be unbound from all triggers
-   * before it can be deleted.
+   * Deletes an action and all of its associated versions. An action must be unbound from all triggers before it can be deleted.
    *
    * Delete an action
    *
@@ -99,8 +98,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve a specific version of an action. An action version is created whenever
-   * an action is deployed. An action version is immutable, once created.
+   * Retrieve a specific version of an action. An action version is created whenever an action is deployed. An action version is immutable, once created.
    *
    * Get a specific version of an action
    *
@@ -126,8 +124,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve all of an action's versions. An action version is created whenever
-   * an action is deployed. An action version is immutable, once created.
+   * Retrieve all of an action's versions. An action version is created whenever an action is deployed. An action version is immutable, once created.
    *
    * Get an action's versions
    *
@@ -216,9 +213,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve the actions that are bound to a trigger. Once an action is created and deployed, it must be
-   * attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions returned
-   * reflects the order in which they will be executed during the appropriate flow.
+   * Retrieve the actions that are bound to a trigger. Once an action is created and deployed, it must be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions returned reflects the order in which they will be executed during the appropriate flow.
    *
    * Get trigger bindings
    *
@@ -257,8 +252,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve information about a specific execution of a trigger. Relevant execution IDs will be included in tenant logs
-   * generated as part of that authentication flow. Executions will only be stored for 10 days after their creation.
+   * Retrieve information about a specific execution of a trigger. Relevant execution IDs will be included in tenant logs generated as part of that authentication flow. Executions will only be stored for 10 days after their creation.
    *
    * Get an execution
    *
@@ -285,8 +279,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve the set of triggers currently available within actions. A trigger is an extensibility point to which actions
-   * can be bound.
+   * Retrieve the set of triggers currently available within actions. A trigger is an extensibility point to which actions can be bound.
    *
    * Get triggers
    *
@@ -305,8 +298,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Update an existing action. If this action is currently bound to a trigger, updating it will <strong>not</strong> affect
-   * any user flows until the action is deployed.
+   * Update an existing action. If this action is currently bound to a trigger, updating it will <strong>not</strong> affect any user flows until the action is deployed.
    *
    * Update an action
    *
@@ -340,10 +332,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Update the actions that are bound (i.e. attached) to a trigger. Once an action is created and deployed, it must be
-   * attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The order in which the actions are
-   * provided will determine the order in which they are executed.
-   *
+   * Update the actions that are bound (i.e. attached) to a trigger. Once an action is created and deployed, it must be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The order in which the actions are provided will determine the order in which they are executed.
    * Update trigger bindings
    *
    * @throws {RequiredError}
@@ -376,8 +365,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Create an action. Once an action is created, it must be deployed, and then
-   * bound to a trigger before it will be executed as part of a flow.
+   * Create an action. Once an action is created, it must be deployed, and then bound to a trigger before it will be executed as part of a flow.
    *
    * Create an action
    *
@@ -405,8 +393,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Deploy an action. Deploying an action will create a new immutable version of the action. If the action is
-   * currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately. Otherwise, the action will only be executed as a part of a flow once it is bound to that flow.
+   * Deploy an action. Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately. Otherwise, the action will only be executed as a part of a flow once it is bound to that flow.
    *
    * Deploy an action
    *
@@ -433,9 +420,7 @@ export class ActionsManager extends BaseAPI {
   }
 
   /**
-   * Performs the equivalent of a roll-back of an action to an earlier, specified version. Creates a new, deployed
-   * action version that is identical to the specified version. If this action is currently bound to a trigger, the
-   * system will begin executing the newly-created version immediately.
+   * Performs the equivalent of a roll-back of an action to an earlier, specified version. Creates a new, deployed action version that is identical to the specified version. If this action is currently bound to a trigger, the system will begin executing the newly-created version immediately.
    *
    * Roll back to a previous action version
    *

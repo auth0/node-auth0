@@ -14,7 +14,8 @@ const { BaseAPI } = runtime;
  */
 export class TicketsManager extends BaseAPI {
   /**
-   * Create a <a href="https://auth0.com/docs/email/custom#verification-email">ticket to verify a user's email address</a>.
+   * Create an email verification ticket for a given user. An email verification ticket is a generated URL that the user can consume to verify their email address.
+   *
    * Create an email verification ticket
    *
    * @throws {RequiredError}
@@ -41,7 +42,10 @@ export class TicketsManager extends BaseAPI {
   }
 
   /**
-   * Create a <a href="https://auth0.com/docs/connections/database/password-change">password change ticket</a> for a user.
+   * Create a password change ticket for a given user. A password change ticket is a generated URL that the user can consume to start a reset password flow.
+   *
+   * Note: This endpoint does not verify the given user’s identity. If you call this endpoint within your application, you must design your application to verify the user’s identity.
+   *
    * Create a password change ticket
    *
    * @throws {RequiredError}

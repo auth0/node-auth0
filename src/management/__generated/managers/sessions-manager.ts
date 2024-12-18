@@ -4,6 +4,7 @@ import type {
   GetSession200Response,
   DeleteSessionRequest,
   GetSessionRequest,
+  RevokeSessionRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -56,5 +57,31 @@ export class SessionsManager extends BaseAPI {
     );
 
     return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Revokes a session by ID and all associated refresh tokens.
+   * Revokes a session
+   *
+   * @throws {RequiredError}
+   */
+  async revokeSession(
+    requestParameters: RevokeSessionRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/sessions/{id}/revoke`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }

@@ -5,7 +5,6 @@ import {
   ActionsManager,
   AnomalyManager,
   AttackProtectionManager,
-  BlacklistsManager,
   BrandingManager,
   ClientGrantsManager,
   ClientsManager,
@@ -46,7 +45,6 @@ export abstract class ManagementClientBase {
   public readonly actions = new ActionsManager(this.configuration);
   public readonly anomaly = new AnomalyManager(this.configuration);
   public readonly attackProtection = new AttackProtectionManager(this.configuration);
-  public readonly blacklists = new BlacklistsManager(this.configuration);
   public readonly branding = new BrandingManager(this.configuration);
   public readonly clientGrants = new ClientGrantsManager(this.configuration);
   public readonly clients = new ClientsManager(this.configuration);

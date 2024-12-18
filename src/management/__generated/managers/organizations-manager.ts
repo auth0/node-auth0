@@ -1,8 +1,10 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  CreateOrganizationClientGrantsRequest,
   DeleteMembersRequest,
   DeleteOrganizationMemberRolesRequest,
+  GetClientGrantOrganizations200ResponseOneOfInner,
   GetEnabledConnections200Response,
   GetEnabledConnections200ResponseOneOfInner,
   GetInvitations200Response,
@@ -12,13 +14,11 @@ import type {
   GetOrganizationClientGrants200ResponseOneOfInner,
   GetOrganizationMemberRoles200Response,
   GetOrganizations200Response,
-  GetOrganizations200ResponseOneOfInner,
   PatchEnabledConnectionsByConnectionIdRequest,
   PatchOrganizationsByIdRequest,
   PostEnabledConnectionsRequest,
   PostInvitationsRequest,
   PostMembersRequest,
-  PostOrganizationClientGrantsRequest,
   PostOrganizationMemberRolesRequest,
   PostOrganizations201Response,
   PostOrganizationsRequest,
@@ -29,7 +29,8 @@ import type {
   GetOrganizationClientGrants200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
-  GetOrganizations200ResponseOneOf,
+  GetClientGrantOrganizations200ResponseOneOf,
+  CreateOrganizationClientGrantsOperationRequest,
   DeleteClientGrantsByGrantIdRequest,
   DeleteEnabledConnectionsByConnectionIdRequest,
   DeleteInvitationsByInvitationIdRequest,
@@ -51,7 +52,6 @@ import type {
   PostEnabledConnectionsOperationRequest,
   PostInvitationsOperationRequest,
   PostMembersOperationRequest,
-  PostOrganizationClientGrantsOperationRequest,
   PostOrganizationMemberRolesOperationRequest,
 } from '../models/index.js';
 
@@ -61,6 +61,38 @@ const { BaseAPI } = runtime;
  *
  */
 export class OrganizationsManager extends BaseAPI {
+  /**
+   * Associate a client grant with an organization
+   *
+   * @throws {RequiredError}
+   */
+  async postOrganizationClientGrants(
+    requestParameters: CreateOrganizationClientGrantsOperationRequest,
+    bodyParameters: CreateOrganizationClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationClientGrants200ResponseOneOfInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
   /**
    * Remove a client grant from an organization
    *
@@ -86,6 +118,10 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Disable a specific connection for an Organization. Once disabled, Organization members can no longer use that connection to authenticate.
+   *
+   * <b>Note</b>: This action does not remove the connection from your tenant.
+   *
    * Delete connections from an organization
    *
    * @throws {RequiredError}
@@ -110,7 +146,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Delete an invitation to organization
+   * Delete an invitation to an Organization
    *
    * @throws {RequiredError}
    */
@@ -166,7 +202,11 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Remove one or more roles from a given user in the context of the provided organization
+   * Remove one or more Organization-specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> from a given user.
+   *
+   * Users can be members of multiple Organizations with unique roles assigned for each membership. This action removes roles from a user in relation to the specified Organization. Roles assigned to the user within a different Organization cannot be managed in the same call.
+   *
+   * Delete user roles from an Organization member
    *
    * @throws {RequiredError}
    */
@@ -197,7 +237,9 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Delete a specific organization
+   * Remove an Organization from your tenant.  This action cannot be undone.
+   *
+   * <b>Note</b>: Members are automatically disassociated from an Organization when it is deleted. However, this action does <b>not</b> delete these users from your tenant.
    *
    * Delete organization
    *
@@ -224,6 +266,8 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Retrieve details about a specific connection currently enabled for an Organization. Information returned includes details such as connection ID, name, strategy, and whether the connection automatically grants membership upon login.
+   *
    * Get connections enabled for an organization
    *
    * @throws {RequiredError}
@@ -273,6 +317,8 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Retrieve details about a specific connection currently enabled for an Organization. Information returned includes details such as connection ID, name, strategy, and whether the connection automatically grants membership upon login.
+   *
    * Get an enabled connection for an organization
    *
    * @throws {RequiredError}
@@ -297,7 +343,9 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get invitations to organization
+   * Retrieve a detailed list of invitations sent to users for a specific Organization. The list includes details such as inviter and invitee information, invitation URLs, and dates of creation and expiration. To learn more about Organization invitations, review <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite Organization Members</a>.
+   *
+   * Get invitations to an organization
    *
    * @throws {RequiredError}
    */
@@ -358,7 +406,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get an invitation to organization
+   * Get a specific invitation to an Organization
    *
    * @throws {RequiredError}
    */
@@ -488,7 +536,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get a specific organization by name
+   * Retrieve details about a single Organization specified by name.
    *
    * Get organization by name
    *
@@ -497,7 +545,7 @@ export class OrganizationsManager extends BaseAPI {
   async getByName(
     requestParameters: GetNameByNameRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['name']);
 
     const response = await this.request(
@@ -579,7 +627,11 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get the roles assigned to an organization member
+   * Retrieve detailed list of roles assigned to a given user within the context of a specific Organization.
+   *
+   * Users can be members of multiple Organizations with unique roles assigned for each membership. This action only returns the roles associated with the specified Organization; any roles assigned to the user within other Organizations are not included.
+   *
+   * Get user roles assigned to an Organization member
    *
    * @throws {RequiredError}
    */
@@ -627,19 +679,25 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * List available organizations. This endpoint supports two types of pagination:
-   * - Offset pagination
-   * - Checkpoint pagination
+   * Retrieve detailed list of all Organizations available in your tenant. For more information, see Auth0 Organizations.
+   *
+   * This endpoint supports two types of pagination:
+   * <ul>
+   * <li>Offset pagination</li>
+   * <li>Checkpoint pagination</li>
+   * </ul>
    *
    * Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.
    *
    * <h2>Checkpoint Pagination</h2>
    *
    * To search by checkpoint, use the following parameters:
-   * - from: Optional id from which to start selection.
-   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   * <ul>
+   * <li><code>from</code>: Optional id from which to start selection.</li>
+   * <li><code>take</code>: The total number of entries to retrieve when using the <code>from</code> parameter. Defaults to 50.</li>
+   * </ul>
    *
-   * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
    *
    * Get organizations
    *
@@ -648,11 +706,11 @@ export class OrganizationsManager extends BaseAPI {
   async getAll(
     requestParameters: GetOrganizationsRequest & { include_totals: true },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOf>>;
   async getAll(
     requestParameters?: GetOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
+  ): Promise<ApiResponse<Array<GetClientGrantOrganizations200ResponseOneOfInner>>>;
   async getAll(
     requestParameters: GetOrganizationsRequest = {},
     initOverrides?: InitOverride
@@ -697,7 +755,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get a specific organization
+   * Retrieve details about a single Organization specified by ID.
    *
    * Get organization
    *
@@ -706,7 +764,7 @@ export class OrganizationsManager extends BaseAPI {
   async get(
     requestParameters: GetOrganizationsByIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const response = await this.request(
@@ -724,9 +782,9 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Modify an enabled_connection belonging to an Organization.
+   * Modify the details of a specific connection currently enabled for an Organization.
    *
-   * Modify an Organizations Connection
+   * Update the Connection of an Organization
    *
    * @throws {RequiredError}
    */
@@ -757,7 +815,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Modify an organization
+   * Update the details of a specific <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/create-organizations">Organization</a>, such as name and display name, branding options, and metadata.
    *
    * Modify an Organization
    *
@@ -767,7 +825,7 @@ export class OrganizationsManager extends BaseAPI {
     requestParameters: PatchOrganizationsByIdOperationRequest,
     bodyParameters: PatchOrganizationsByIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOfInner>> {
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOfInner>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -791,6 +849,10 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Enable a specific connection for a given Organization. To enable a connection, it must already exist within your tenant; connections cannot be created through this action.
+   *
+   * <a href="https://auth0.com/docs/authenticate/identity-providers">Connections</a> represent the relationship between Auth0 and a source of users. Available types of connections include database, enterprise, and social.
+   *
    * Add connections to an organization
    *
    * @throws {RequiredError}
@@ -823,7 +885,9 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Create invitations to organization
+   * Create a user invitation for a specific Organization. Upon creation, the listed user receives an email inviting them to join the Organization. To learn more about Organization invitations, review <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite Organization Members</a>.
+   *
+   * Create invitations to an organization
    *
    * @throws {RequiredError}
    */
@@ -855,6 +919,10 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Set one or more existing users as members of a specific <a href="https://auth0.com/docs/manage-users/organizations">Organization</a>.
+   *
+   * To add a user to an Organization through this action, the user must already exist in your tenant. If a user does not yet exist, you can <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">invite them to create an account</a>, manually create them through the Auth0 Dashboard, or use the Management API.
+   *
    * Add members to an organization
    *
    * @throws {RequiredError}
@@ -887,39 +955,11 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Associate a client grant with an organization
+   * Assign one or more <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> to a user to determine their access for a specific Organization.
    *
-   * @throws {RequiredError}
-   */
-  async postOrganizationClientGrants(
-    requestParameters: PostOrganizationClientGrantsOperationRequest,
-    bodyParameters: PostOrganizationClientGrantsRequest,
-    initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizationClientGrants200ResponseOneOfInner>> {
-    runtime.validateRequiredRequestParams(requestParameters, ['id']);
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    headerParameters['Content-Type'] = 'application/json';
-
-    const response = await this.request(
-      {
-        path: `/organizations/{id}/client-grants`.replace(
-          '{id}',
-          encodeURIComponent(String(requestParameters.id))
-        ),
-        method: 'POST',
-        headers: headerParameters,
-        body: bodyParameters,
-      },
-      initOverrides
-    );
-
-    return runtime.JSONApiResponse.fromResponse(response);
-  }
-
-  /**
-   * Assign one or more roles to a given user that will be applied in the context of the provided organization
+   * Users can be members of multiple Organizations with unique roles assigned for each membership. This action assigns roles to a user only for the specified Organization. Roles cannot be assigned to a user across multiple Organizations in the same call.
+   *
+   * Assign user roles to an Organization member
    *
    * @throws {RequiredError}
    */
@@ -950,7 +990,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Create an organization
+   * Create a new Organization within your tenant.  To learn more about Organization settings, behavior, and configuration options, review <a href="https://auth0.com/docs/manage-users/organizations/create-first-organization">Create Your First Organization</a>.
    *
    * Create an Organization
    *

@@ -3,10 +3,14 @@ import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   ClientGrant,
   ClientGrantCreate,
+  GetClientGrantOrganizations200Response,
   GetClientGrants200Response,
   PatchClientGrantsByIdRequest,
+  GetClientGrantOrganizations200ResponseOneOf,
+  GetClientGrantOrganizations200ResponseOneOfInner,
   GetClientGrants200ResponseOneOf,
   DeleteClientGrantsByIdRequest,
+  GetClientGrantOrganizationsRequest,
   GetClientGrantsRequest,
   PatchClientGrantsByIdOperationRequest,
 } from '../models/index.js';
@@ -18,7 +22,8 @@ const { BaseAPI } = runtime;
  */
 export class ClientGrantsManager extends BaseAPI {
   /**
-   * Delete a client grant.
+   * Delete the <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a> from your machine-to-machine application.
+   *
    * Delete client grant
    *
    * @throws {RequiredError}
@@ -44,7 +49,64 @@ export class ClientGrantsManager extends BaseAPI {
   }
 
   /**
-   * Retrieve <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>.
+   * Get the organizations associated to a client grant
+   *
+   * @throws {RequiredError}
+   */
+  async getOrganizations(
+    requestParameters: GetClientGrantOrganizationsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOf>>;
+  async getOrganizations(
+    requestParameters?: GetClientGrantOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetClientGrantOrganizations200ResponseOneOfInner>>>;
+  async getOrganizations(
+    requestParameters: GetClientGrantOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrantOrganizations200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/client-grants/{id}/organizations`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve a list of <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>, including the scopes associated with the application/API pair.
    *
    * Get client grants
    *
@@ -76,11 +138,23 @@ export class ClientGrantsManager extends BaseAPI {
         config: {},
       },
       {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+      {
         key: 'audience',
         config: {},
       },
       {
         key: 'client_id',
+        config: {},
+      },
+      {
+        key: 'allow_any_organization',
         config: {},
       },
     ]);
@@ -131,7 +205,7 @@ export class ClientGrantsManager extends BaseAPI {
   }
 
   /**
-   * Create a client grant.
+   * Create a client grant for a machine-to-machine login flow. To learn more, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
    * Create client grant
    *
    * @throws {RequiredError}

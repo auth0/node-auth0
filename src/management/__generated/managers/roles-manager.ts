@@ -32,7 +32,7 @@ const { BaseAPI } = runtime;
  */
 export class RolesManager extends BaseAPI {
   /**
-   * Remove permissions associated with a role.
+   * Remove one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> from a specified user role.
    *
    * Remove permissions from a role
    *
@@ -66,7 +66,7 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Delete a role.
+   * Delete a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> from your tenant. Once deleted, it is removed from any user who was previously assigned that role. This action cannot be undone.
    *
    * Delete a role
    *
@@ -90,7 +90,7 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Retrieve list of permissions granted by a role.
+   * Retrieve detailed list (name, description, resource server) of permissions granted by a specified user role.
    *
    * Get permissions granted by role
    *
@@ -141,19 +141,25 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Retrieve users associated with a role. This endpoint supports two types of pagination:
-   * - Offset pagination
-   * - Checkpoint pagination
+   * Retrieve list of users associated with a specific role. For Dashboard instructions, review <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles">View Users Assigned to Roles</a>.
    *
-   * Checkpoint pagination must be used if you need to retrieve more than 1000 users for a given role.
+   * This endpoint supports two types of pagination:
+   * <ul>
+   * <li>Offset pagination</li>
+   * <li>Checkpoint pagination</li>
+   * </ul>
+   *
+   * Checkpoint pagination must be used if you need to retrieve more than 1000 organization members.
    *
    * <h2>Checkpoint Pagination</h2>
    *
    * To search by checkpoint, use the following parameters:
-   * - from: Optional id from which to start selection.
-   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   * <ul>
+   * <li><code>from</code>: Optional id from which to start selection.</li>
+   * <li><code>take</code>: The total amount of entries to retrieve when using the from parameter. Defaults to 50.</li>
+   * </ul>
    *
-   * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
    *
    * Get a role's users
    *
@@ -209,7 +215,9 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Retrieve filtered list of roles that can be assigned to users.
+   * Retrieve detailed list of user roles created in your tenant.
+   *
+   * <b>Note</b>: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
    *
    * Get roles
    *
@@ -259,7 +267,7 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Retrieve a role.
+   * Retrieve details about a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> specified by ID.
    *
    * Get a role
    *
@@ -283,7 +291,7 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Update a role.
+   * Modify the details of a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> specified by ID.
    *
    * Update a role
    *
@@ -314,7 +322,7 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Associate permissions with a role.
+   * Add one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> to a specified user role.
    *
    * Associate permissions with a role
    *
@@ -348,7 +356,10 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Assign users to a role.
+   * Assign one or more users to an existing user role. To learn more, review <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
+   *
+   * <b>Note</b>: New roles cannot be created through this action.
+   *
    * Assign users to a role
    *
    * @throws {RequiredError}
@@ -378,7 +389,9 @@ export class RolesManager extends BaseAPI {
   }
 
   /**
-   * Create a new role.
+   * Create a user role for <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
+   *
+   * <b>Note</b>: New roles are not associated with any permissions by default. To assign existing permissions to your role, review Associate Permissions with a Role. To create new permissions, review Add API Permissions.
    *
    * Create a role
    *

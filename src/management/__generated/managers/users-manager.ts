@@ -14,6 +14,7 @@ import type {
   GetUserOrganizations200Response,
   GetUsers200Response,
   GetUsers200ResponseOneOfInner,
+  PatchAuthenticationMethodsByAuthenticationMethodId200Response,
   PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
   PostAuthenticationMethods201Response,
   PostAuthenticationMethodsRequest,
@@ -26,14 +27,15 @@ import type {
   UserCreate,
   UserEnrollment,
   UserIdentity,
+  UserRevokeAccessRequest,
   UserUpdate,
   GetAuthenticationMethods200ResponseOneOf,
   GetLogs200ResponseOneOf,
   Log,
   GetPermissions200ResponseOneOf,
   GetPermissions200ResponseOneOfInner,
-  GetOrganizations200ResponseOneOf,
-  GetOrganizations200ResponseOneOfInner,
+  GetClientGrantOrganizations200ResponseOneOf,
+  GetClientGrantOrganizations200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetUsers200ResponseOneOf,
@@ -67,6 +69,7 @@ import type {
   PostRecoveryCodeRegenerationRequest,
   PostUserRolesOperationRequest,
   PutAuthenticationMethodsRequest,
+  UserRevokeAccessOperationRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -76,7 +79,8 @@ const { BaseAPI } = runtime;
  */
 export class UsersManager extends BaseAPI {
   /**
-   * Deletes all authentication methods for the given user
+   * Remove all authentication methods (i.e., enrolled MFA factors) from the specified user account. This action cannot be undone.
+   * Delete all authentication methods for the given user
    *
    * @throws {RequiredError}
    */
@@ -101,7 +105,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Deletes an authentication method by ID
+   * Remove the authentication method with the given ID from the specified user. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage Authentication Methods with Management API</a>.
+   * Delete an authentication method by ID
    *
    * @throws {RequiredError}
    */
@@ -128,6 +133,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
+   * Remove all authenticators registered to a given user ID, such as OTP, email, phone, and push-notification. This action cannot be undone. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage Authentication Methods with Management API</a>.
    * Delete All Authenticators
    *
    * @throws {RequiredError}
@@ -153,7 +159,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Delete a <a href="https://auth0.com/docs/multifactor-authentication">multifactor</a> configuration for a user. This forces the user to re-configure the multi-factor provider.
+   * Remove a <a href="https://auth0.com/docs/multifactor-authentication">multifactor</a> authentication configuration from a user's account. This forces the user to manually reconfigure the multi-factor provider.
    * Delete a User's Multi-factor Provider
    *
    * @throws {RequiredError}
@@ -264,7 +270,10 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Unlink an identity from the target user making it a separate user account again.
+   * Unlink a specific secondary account from a target user. This action requires the ID of both the target user and the secondary account.
+   *
+   * Unlinking the secondary account removes it from the identities array of the target user and creates a new standalone profile for the secondary account. To learn more, review <a href="https://auth0.com/docs/manage-users/user-accounts/user-account-linking/unlink-user-accounts">Unlink User Accounts</a>.
+   *
    * Unlink a User Identity
    *
    * @throws {RequiredError}
@@ -290,7 +299,10 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Remove roles from a user.
+   * Remove one or more specified user roles assigned to a user.
+   *
+   * <b>Note</b>: This action removes a role from a user in the context of your whole tenant. If you want to unassign a role from a user in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/delete-organization-member-roles">Delete user roles from an Organization member</a>.
+   *
    * Removes roles from a user
    *
    * @throws {RequiredError}
@@ -320,7 +332,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Delete a user.
+   * Delete a user by user ID. This action cannot be undone. For Auth0 Dashboard instructions, see <a href="https://auth0.com/docs/manage-users/user-accounts/delete-users">Delete Users</a>.
+   *
    * Delete a User
    *
    * @throws {RequiredError}
@@ -343,7 +356,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Gets a list of authentication methods
+   * Retrieve detailed list of authentication methods associated with a specified user.
+   * Get a list of authentication methods
    *
    * @throws {RequiredError}
    */
@@ -392,7 +406,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Gets an authentication method by ID.
+   * Get an authentication method by ID
    *
    * @throws {RequiredError}
    */
@@ -419,7 +433,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve the first confirmed <a href="https://auth0.com/docs/multifactor-authentication/guardian">Guardian</a> enrollment for a user.
+   * Retrieve the first <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor authentication</a> enrollment that a specific user has confirmed.
    * Get the First Confirmed Multi-factor Authentication Enrollment
    *
    * @throws {RequiredError}
@@ -636,7 +650,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * This endpoint will retrieve all organizations that the specified user is a member of.
+   * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review <a href="https://auth0.com/docs/manage-users/organizations">Auth0 Organizations</a>.
    *
    * List user's organizations
    *
@@ -645,11 +659,11 @@ export class UsersManager extends BaseAPI {
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest & { include_totals: true },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOf>>;
   async getUserOrganizations(
     requestParameters?: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
+  ): Promise<ApiResponse<Array<GetClientGrantOrganizations200ResponseOneOfInner>>>;
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
@@ -687,7 +701,10 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * List the the roles associated with a user.
+   * Retrieve detailed list of all user roles currently assigned to a user.
+   *
+   * <b>Note</b>: This action retrieves all roles assigned to a user in the context of your whole tenant. To retrieve Organization-specific roles, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles">Get user roles assigned to an Organization member</a>.
+   *
    * Get a user's roles
    *
    * @throws {RequiredError}
@@ -817,7 +834,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Retrieve user details. A list of fields to include or exclude may also be specified.
+   * Retrieve user details. A list of fields to include or exclude may also be specified. For more information, see <a href="https://auth0.com/docs/manage-users/user-search/retrieve-users-with-get-users-endpoint">Retrieve Users with the Get Users Endpoint</a>.
+   *
    * Get a User
    *
    * @throws {RequiredError}
@@ -852,7 +870,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Updates an authentication method.
+   * Modify the authentication method with the given ID from the specified user. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage Authentication Methods with Management API</a>.
+   * Update an authentication method
    *
    * @throws {RequiredError}
    */
@@ -860,7 +879,7 @@ export class UsersManager extends BaseAPI {
     requestParameters: PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
     bodyParameters: PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<PutAuthenticationMethods200ResponseInner>> {
+  ): Promise<ApiResponse<PatchAuthenticationMethodsByAuthenticationMethodId200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['id', 'authentication_method_id']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -916,6 +935,7 @@ export class UsersManager extends BaseAPI {
    *     <li>If you are updating <code>email</code> or <code>phone_number</code> you can specify, optionally, the <code>client_id</code> property.</li>
    *     <li>Updating <code>email_verified</code> is not supported for enterprise and passwordless sms connections.</li>
    *     <li>Updating the <code>blocked</code> to <code>false</code> does not affect the user's blocked state from an excessive amount of incorrectly provided credentials. Use the "Unblock a user" endpoint from the "User Blocks" API to change the user's state.</li>
+   *     <li>Supported attributes can be unset by supplying <code>null</code> as the value.</li>
    * </ul>
    *
    * <h5>Updating a field (non-metadata property)</h5>
@@ -985,7 +1005,8 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Creates an authentication method for a given user. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
+   * Create an authentication method. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
+   * Creates an authentication method for a given user
    *
    * @throws {RequiredError}
    */
@@ -1136,7 +1157,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Remove the current <a href="https://auth0.com/docs/multifactor-authentication/guardian">multi-factor authentication</a> recovery code and generate a new one.
+   * Remove an existing multi-factor authentication (MFA) <a href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">recovery code</a> and generate a new one. If a user cannot access the original device or account used for MFA enrollment, they can use a recovery code to authenticate.
    * Generate New Multi-factor Authentication Recovery Code
    *
    * @throws {RequiredError}
@@ -1162,7 +1183,10 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Associate roles with a user.
+   * Assign one or more existing user roles to a user. For more information, review <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
+   *
+   * <b>Note</b>: New roles cannot be created through this action. Additionally, this action is used to assign roles to a user in the context of your whole tenant. To assign roles in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/post-organization-member-roles">Assign user roles to an Organization member</a>.
+   *
    * Assign roles to a user
    *
    * @throws {RequiredError}
@@ -1221,7 +1245,10 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * Updates all authentication methods by replacing them with the given ones.
+   * Replace the specified user <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors"> authentication methods</a> with supplied values.
+   *
+   *     <b>Note</b>: Authentication methods supplied through this action do not iterate on existing methods. Instead, any methods passed will overwrite the user&#8217s existing settings.
+   * Update all authentication methods by replacing them with the given ones
    *
    * @throws {RequiredError}
    */
@@ -1250,5 +1277,38 @@ export class UsersManager extends BaseAPI {
     );
 
     return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Revokes selected resources related to a user (sessions, refresh tokens, ...).
+   * Revokes selected resources from a user
+   *
+   * @throws {RequiredError}
+   */
+  async revokeAccess(
+    requestParameters: UserRevokeAccessOperationRequest,
+    bodyParameters: UserRevokeAccessRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/users/{id}/revoke-access`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 }
