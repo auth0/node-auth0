@@ -9,6 +9,7 @@ import {
   ClientOidcLogout,
   PostOrganizations201ResponseEnabledConnectionsInnerConnection,
 } from './management/__generated/models/index.js';
+import { ClientUpdateOidcLogout } from './mods.js';
 
 /**
  * @deprecated Use {@link EmailProviderUpdate} instead.
@@ -39,13 +40,9 @@ export type ClientCreateOidcBackchannelLogout = ClientCreateOidcLogout;
  */
 export type ClientOidcBackchannelLogout = ClientOidcLogout;
 /**
- * @deprecated Use {@link ClientCreateOidcLogout} instead.
+ * @deprecated Use {@link ClientUpdateOidcLogout} instead.
  */
-export type ClientUpdateOidcBackchannelLogout = ClientCreateOidcLogout;
-/**
- * @deprecated Use {@link ClientCreateOidcLogout} instead.
- */
-export type ClientUpdateOidcLogout = ClientCreateOidcLogout;
+export type ClientUpdateOidcBackchannelLogout = ClientUpdateOidcLogout;
 /**
  * @deprecated use {@link PostOrganizations201ResponseEnabledConnectionsInnerConnection} instead.
  */
