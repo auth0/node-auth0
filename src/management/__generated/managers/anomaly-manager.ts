@@ -9,7 +9,7 @@ const { BaseAPI } = runtime;
  */
 export class AnomalyManager extends BaseAPI {
   /**
-   * Unblock an IP address currently blocked by the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
+   * Remove a block imposed by <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> for the given IP address.
    * Remove the blocked IP address
    *
    * @throws {RequiredError}
@@ -35,7 +35,7 @@ export class AnomalyManager extends BaseAPI {
   }
 
   /**
-   * Check if a given IP address is blocked via the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
+   * Check if the given IP address is blocked via the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
    * Check if an IP address is blocked
    *
    * @throws {RequiredError}

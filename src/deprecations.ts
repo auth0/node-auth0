@@ -7,9 +7,9 @@ import {
   EmailProviderUpdateCredentials,
   ClientCreateOidcLogout,
   ClientOidcLogout,
-  ClientUpdateOidcLogout,
   PostOrganizations201ResponseEnabledConnectionsInnerConnection,
 } from './management/__generated/models/index.js';
+import { ClientUpdateOidcLogout } from './mods.js';
 
 /**
  * @deprecated Use {@link EmailProviderUpdate} instead.

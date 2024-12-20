@@ -16,7 +16,8 @@ const { BaseAPI } = runtime;
  */
 export class AttackProtectionManager extends BaseAPI {
   /**
-   * Get breached password detection settings
+   * Retrieve details of the Breached Password Detection configuration of your tenant.
+   * Get Breached Password Detection settings
    *
    * @throws {RequiredError}
    */
@@ -35,7 +36,8 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Get the brute force configuration
+   * Retrieve details of the Brute-force Protection configuration of your tenant.
+   * Get Brute-force settings
    *
    * @throws {RequiredError}
    */
@@ -54,7 +56,8 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Get the suspicious IP throttling configuration
+   * Retrieve details of the Suspicious IP Throttling configuration of your tenant.
+   * Get Suspicious IP Throttling settings
    *
    * @throws {RequiredError}
    */
@@ -73,7 +76,8 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Update breached password detection settings
+   * Update details of the Breached Password Detection configuration of your tenant.
+   * Update Breached Password Detection settings
    *
    * @throws {RequiredError}
    */
@@ -99,7 +103,8 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Update the brute force configuration
+   * Update the Brute-force Protection configuration of your tenant.
+   * Update Brute-force settings
    *
    * @throws {RequiredError}
    */
@@ -125,7 +130,8 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Update the suspicious IP throttling configuration
+   * Update the details of the Suspicious IP Throttling configuration of your tenant.
+   * Update Suspicious IP Throttling settings
    *
    * @throws {RequiredError}
    */

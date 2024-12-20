@@ -1,10 +1,21 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetEncryptionKeys200Response,
+  GetEncryptionKeys200ResponseOneOfInner,
   GetSigningKeys200ResponseInner,
+  PostEncryptionKeyRequest,
+  PostEncryptionRequest,
+  PostEncryptionWrappingKey201Response,
   PostSigningKeys201Response,
   PutSigningKeys200Response,
+  GetEncryptionKeys200ResponseOneOf,
+  DeleteEncryptionKeyRequest,
+  GetEncryptionKeyRequest,
+  GetEncryptionKeysRequest,
   GetSigningKeyRequest,
+  PostEncryptionKeyOperationRequest,
+  PostEncryptionWrappingKeyRequest,
   PutSigningKeysRequest,
 } from '../models/index.js';
 
@@ -15,6 +26,104 @@ const { BaseAPI } = runtime;
  */
 export class KeysManager extends BaseAPI {
   /**
+   * Delete the custom provided encryption key with the given ID and move back to using native encryption key.
+   * Delete the encryption key by its key id
+   *
+   * @throws {RequiredError}
+   */
+  async deleteEncryptionKey(
+    requestParameters: DeleteEncryptionKeyRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['kid']);
+
+    const response = await this.request(
+      {
+        path: `/keys/encryption/{kid}`.replace(
+          '{kid}',
+          encodeURIComponent(String(requestParameters.kid))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details of the encryption key with the given ID.
+   * Get the encryption key by its key id
+   *
+   * @throws {RequiredError}
+   */
+  async getEncryptionKey(
+    requestParameters: GetEncryptionKeyRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetEncryptionKeys200ResponseOneOfInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['kid']);
+
+    const response = await this.request(
+      {
+        path: `/keys/encryption/{kid}`.replace(
+          '{kid}',
+          encodeURIComponent(String(requestParameters.kid))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details of all the encryption keys associated with your tenant.
+   * Get all encryption keys
+   *
+   * @throws {RequiredError}
+   */
+  async getEncryptionKeys(
+    requestParameters: GetEncryptionKeysRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetEncryptionKeys200ResponseOneOf>>;
+  async getEncryptionKeys(
+    requestParameters?: GetEncryptionKeysRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetEncryptionKeys200ResponseOneOfInner>>>;
+  async getEncryptionKeys(
+    requestParameters: GetEncryptionKeysRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetEncryptionKeys200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/keys/encryption`,
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details of the application signing key with the given ID.
    * Get an Application Signing Key by its key id
    *
    * @throws {RequiredError}
@@ -40,6 +149,7 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Retrieve details of all the application signing keys associated with your tenant.
    * Get all Application Signing Keys
    *
    * @throws {RequiredError}
@@ -51,6 +161,66 @@ export class KeysManager extends BaseAPI {
       {
         path: `/keys/signing`,
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Create the new, pre-activated encryption key, without the key material.
+   * Create the new encryption key
+   *
+   * @throws {RequiredError}
+   */
+  async createEncryptionKey(
+    bodyParameters: PostEncryptionRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetEncryptionKeys200ResponseOneOfInner>> {
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/keys/encryption`,
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Import wrapped key material and activate encryption key.
+   * Import the encryption key
+   *
+   * @throws {RequiredError}
+   */
+  async importEncryptionKey(
+    requestParameters: PostEncryptionKeyOperationRequest,
+    bodyParameters: PostEncryptionKeyRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetEncryptionKeys200ResponseOneOfInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['kid']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/keys/encryption/{kid}`.replace(
+          '{kid}',
+          encodeURIComponent(String(requestParameters.kid))
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
       },
       initOverrides
     );
@@ -77,6 +247,33 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Create the public wrapping key to wrap your own encryption key material.
+   * Create the public wrapping key
+   *
+   * @throws {RequiredError}
+   */
+  async createEncryptionPublicWrappingKey(
+    requestParameters: PostEncryptionWrappingKeyRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PostEncryptionWrappingKey201Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['kid']);
+
+    const response = await this.request(
+      {
+        path: `/keys/encryption/{kid}/wrapping-key`.replace(
+          '{kid}',
+          encodeURIComponent(String(requestParameters.kid))
+        ),
+        method: 'POST',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Rotate the application signing key of your tenant.
    * Rotate the Application Signing Key
    *
    * @throws {RequiredError}
@@ -94,6 +291,7 @@ export class KeysManager extends BaseAPI {
   }
 
   /**
+   * Revoke the application signing key with the given ID.
    * Revoke an Application Signing Key by its key id
    *
    * @throws {RequiredError}

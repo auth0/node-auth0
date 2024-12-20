@@ -89,12 +89,12 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * View the render settings for a specific screen
-   * Get render settings for a prompt
+   * Get render settings for a screen.
+   * Get render settings for a screen
    *
    * @throws {RequiredError}
    */
-  async getRendering(
+  async getRenderSettings(
     requestParameters: GetRenderingRequest,
     initOverrides?: InitOverride
   ): Promise<ApiResponse<GetRendering200Response>> {
@@ -141,12 +141,40 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * Configure the render settings for a specific screen
-   * Configure render settings for a prompt
+   * Learn more about <a href='https://auth0.com/docs/customize/login-pages/universal-login/advanced-customizations/getting-started/configure-screens'>configuring render settings</a> for advanced customization.
+   *
+   * <p>
+   *   Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/universal-login/advanced-customizations/getting-started/configure-screens'>documentation</a> on using Liquid variables within head tags.
+   * </p>
+   * <pre>{
+   *   "head_tags": [
+   *     {
+   *       "tag": "script",
+   *       "attributes": {
+   *         "defer": true,
+   *         "src": "URL_TO_ASSET",
+   *         "async": true,
+   *         "integrity": [
+   *           "ASSET_SHA"
+   *         ]
+   *       }
+   *     },
+   *     {
+   *       "tag": "link",
+   *       "attributes": {
+   *         "href": "URL_TO_ASSET",
+   *         "rel": "stylesheet"
+   *       }
+   *     }
+   *   ]
+   * }
+   * </pre>
+   *
+   * Update render settings for a screen
    *
    * @throws {RequiredError}
    */
-  async updateRendering(
+  async updateRenderSettings(
     requestParameters: PatchRenderingOperationRequest,
     bodyParameters: PatchRenderingRequest,
     initOverrides?: InitOverride

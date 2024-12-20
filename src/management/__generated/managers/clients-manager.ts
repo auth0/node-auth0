@@ -171,10 +171,6 @@ export class ClientsManager extends BaseAPI {
         config: {},
       },
       {
-        key: 'client_ids',
-        config: {},
-      },
-      {
         key: 'q',
         config: {},
       },
@@ -469,10 +465,9 @@ export class ClientsManager extends BaseAPI {
   /**
    * Rotate a client secret.
    *
-   * This endpoint cannot be used with clients configured with Private Key JWT authentication method (client_authentication_methods configured with private_key_jwt).
+   * This endpoint cannot be used with clients configured with Private Key JWT authentication method (client_authentication_methods configured with private_key_jwt). The generated secret is NOT base64 encoded.
    *
-   * Note: The generated secret is NOT base64 encoded.
-   *
+   * For more information, read <a href="https://www.auth0.com/docs/get-started/applications/rotate-client-secret">Rotate Client Secrets</a>.
    * Rotate a client secret
    *
    * @throws {RequiredError}

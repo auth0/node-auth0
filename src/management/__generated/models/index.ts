@@ -97,7 +97,7 @@ export interface Client {
    */
   oidc_logout: ClientOidcLogout;
   /**
-   * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, and `urn:ietf:params:oauth:grant-type:device_code`.
+   * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, and `urn:ietf:params:oauth:grant-type:device_code`.
    *
    */
   grant_types: Array<string>;
@@ -949,7 +949,7 @@ export interface ClientCreate {
   callbacks?: Array<string>;
   /**
    */
-  oidc_logout?: ClientCreateOidcLogout;
+  oidc_logout?: ClientCreateOidcLogout | null;
   /**
    * Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs.
    *
@@ -976,7 +976,7 @@ export interface ClientCreate {
    */
   allowed_logout_urls?: Array<string>;
   /**
-   * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, and `urn:ietf:params:oauth:grant-type:device_code`.
+   * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, and `urn:ietf:params:oauth:grant-type:device_code`.
    *
    */
   grant_types?: Array<string>;
@@ -1064,10 +1064,13 @@ export interface ClientCreate {
   initiate_login_uri?: string;
   /**
    */
-  native_social_login?: ClientCreateNativeSocialLogin | null;
+  native_social_login?: ClientCreateNativeSocialLogin;
   /**
    */
   refresh_token?: ClientRefreshToken | null;
+  /**
+   */
+  default_organization?: ClientCreateDefaultOrganization;
   /**
    * Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`.
    *
@@ -1087,13 +1090,13 @@ export interface ClientCreate {
    */
   require_pushed_authorization_requests?: boolean;
   /**
-   */
-  signed_request_object?: ClientCreateSignedRequestObject;
-  /**
    * Makes the use of Proof-of-Possession mandatory for this client
    *
    */
   require_proof_of_possession?: boolean;
+  /**
+   */
+  signed_request_object?: ClientCreateSignedRequestObject;
   /**
    * Defines the compliance level for this client, which may restrict it's capabilities
    *
@@ -1177,10 +1180,10 @@ export interface ClientCreateAddons {
   azure_sb?: ClientCreateAddonsAzureSb;
   /**
    */
-  rms?: ClientCreateAddonsRms;
+  rms?: ClientAddonsRms;
   /**
    */
-  mscrm?: ClientCreateAddonsMscrm;
+  mscrm?: ClientAddonsMscrm;
   /**
    */
   slack?: ClientAddonsSlack;
@@ -1446,17 +1449,6 @@ export interface ClientCreateAddonsFirebase {
   lifetime_in_seconds?: number;
 }
 /**
- * Microsoft Dynamics CRM SSO configuration.
- */
-export interface ClientCreateAddonsMscrm {
-  [key: string]: any | any;
-  /**
-   * Microsoft Dynamics CRM application URL.
-   *
-   */
-  url: string;
-}
-/**
  * New Relic SSO configuration.
  */
 export interface ClientCreateAddonsNewrelic {
@@ -1482,17 +1474,6 @@ export interface ClientCreateAddonsOffice365 {
    *
    */
   connection?: string;
-}
-/**
- * Active Directory Rights Management Service SSO configuration.
- */
-export interface ClientCreateAddonsRms {
-  [key: string]: any | any;
-  /**
-   * URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
-   *
-   */
-  url: string;
 }
 /**
  * Salesforce SSO configuration.
@@ -1886,6 +1867,28 @@ export type ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInner
   (typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum];
 
 /**
+ * Defines the default Organization ID and flows
+ */
+export interface ClientCreateDefaultOrganization {
+  /**
+   * The default Organization ID to be used
+   *
+   */
+  organization_id: string;
+  /**
+   * The default Organization usage
+   *
+   */
+  flows: Array<ClientCreateDefaultOrganizationFlowsEnum>;
+}
+
+export const ClientCreateDefaultOrganizationFlowsEnum = {
+  client_credentials: 'client_credentials',
+} as const;
+export type ClientCreateDefaultOrganizationFlowsEnum =
+  (typeof ClientCreateDefaultOrganizationFlowsEnum)[keyof typeof ClientCreateDefaultOrganizationFlowsEnum];
+
+/**
  * Encryption used for WsFed responses with this client.
  */
 export interface ClientCreateEncryptionKey {
@@ -1929,6 +1932,7 @@ export interface ClientCreateJwtConfiguration {
 export const ClientCreateJwtConfigurationAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  RS512: 'RS512',
   PS256: 'PS256',
 } as const;
 export type ClientCreateJwtConfigurationAlgEnum =
@@ -1981,10 +1985,13 @@ export interface ClientCreateMobileIos {
 export interface ClientCreateNativeSocialLogin {
   /**
    */
-  apple?: ClientCreateNativeSocialLoginApple | null;
+  apple?: ClientCreateNativeSocialLoginApple;
   /**
    */
-  facebook?: ClientCreateNativeSocialLoginFacebook | null;
+  facebook?: ClientCreateNativeSocialLoginFacebook;
+  /**
+   */
+  google?: ClientCreateNativeSocialLoginGoogle;
 }
 /**
  * Native Social Login support for the Apple connection
@@ -2007,6 +2014,16 @@ export interface ClientCreateNativeSocialLoginFacebook {
   enabled?: boolean;
 }
 /**
+ * Native Social Login support for the google-oauth2 connection
+ */
+export interface ClientCreateNativeSocialLoginGoogle {
+  /**
+   * Determine whether or not to allow signing in natively using a Google ID token
+   *
+   */
+  enabled?: boolean;
+}
+/**
  * Configuration for OIDC backchannel logout
  */
 export interface ClientCreateOidcLogout {
@@ -2014,8 +2031,47 @@ export interface ClientCreateOidcLogout {
    * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
    *
    */
-  backchannel_logout_urls: Array<string>;
+  backchannel_logout_urls?: Array<string>;
+  /**
+   */
+  backchannel_logout_initiators?: ClientCreateOidcLogoutBackchannelLogoutInitiators;
 }
+/**
+ * Configuration for OIDC backchannel logout initiators
+ */
+export interface ClientCreateOidcLogoutBackchannelLogoutInitiators {
+  [key: string]: any | any;
+  /**
+   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
+   *
+   */
+  mode: ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum;
+  /**
+   */
+  selected_initiators?: Array<ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
+}
+
+export const ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
+  custom: 'custom',
+  all: 'all',
+} as const;
+export type ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum =
+  (typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsModeEnum];
+
+export const ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
+  rp_logout: 'rp-logout',
+  idp_logout: 'idp-logout',
+  password_changed: 'password-changed',
+  session_expired: 'session-expired',
+  session_revoked: 'session-revoked',
+  account_deleted: 'account-deleted',
+  email_identifier_changed: 'email-identifier-changed',
+  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
+  account_deactivated: 'account-deactivated',
+} as const;
+export type ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
+  (typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientCreateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
+
 /**
  * JWT-secured Authorization Requests (JAR) settings.
  */
@@ -2185,6 +2241,7 @@ export interface ClientJwtConfiguration {
 export const ClientJwtConfigurationAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  RS512: 'RS512',
   PS256: 'PS256',
 } as const;
 export type ClientJwtConfigurationAlgEnum =
@@ -2404,7 +2461,7 @@ export interface ClientUpdate {
   callbacks?: Array<string>;
   /**
    */
-  oidc_logout?: ClientUpdateOidcLogout | null;
+  oidc_logout?: ClientCreateOidcLogout | null;
   /**
    * A set of URLs that represents valid origins for CORS
    *
@@ -2416,7 +2473,7 @@ export interface ClientUpdate {
    */
   web_origins?: Array<string>;
   /**
-   * A set of grant types that the client is authorized to use
+   * A set of grant types that the client is authorized to use. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, and `urn:ietf:params:oauth:grant-type:device_code`.
    *
    */
   grant_types?: Array<string>;
@@ -2681,7 +2738,7 @@ export interface ClientUpdateAddons {
   office365?: ClientCreateAddonsOffice365;
   /**
    */
-  salesforce?: ClientUpdateAddonsSalesforce;
+  salesforce?: ClientCreateAddonsSalesforce;
   /**
    */
   salesforce_api?: ClientCreateAddonsSalesforceApi;
@@ -2696,7 +2753,7 @@ export interface ClientUpdateAddons {
   layer?: ClientAddonsLayer;
   /**
    */
-  sap_api?: ClientUpdateAddonsSapApi;
+  sap_api?: ClientCreateAddonsSapApi;
   /**
    */
   sharepoint?: ClientCreateAddonsSharepoint;
@@ -2725,53 +2782,6 @@ export interface ClientUpdateAddons {
    *
    */
   oag?: object | null;
-}
-/**
- * Salesforce SSO configuration.
- */
-export interface ClientUpdateAddonsSalesforce {
-  [key: string]: any | any;
-  /**
-   * Arbitrary logical URL that identifies the Saleforce resource. e.g. `https://acme-org.com`.
-   *
-   */
-  entity_id?: string;
-}
-/**
- * SAP API addon configuration.
- */
-export interface ClientUpdateAddonsSapApi {
-  [key: string]: any | any;
-  /**
-   * If activated in the OAuth 2.0 client configuration (transaction SOAUTH2) the SAML attribute client_id must be set and equal the client_id form parameter of the access token request.
-   *
-   */
-  clientid?: string;
-  /**
-   * Name of the property in the user object that maps to a SAP username. e.g. `email`.
-   *
-   */
-  usernameAttribute?: string;
-  /**
-   * Your SAP OData server OAuth2 token endpoint URL.
-   *
-   */
-  tokenEndpointUrl?: string;
-  /**
-   * Requested scope for SAP APIs.
-   *
-   */
-  scope?: string;
-  /**
-   * Service account password to use to authenticate API calls to the token endpoint.
-   *
-   */
-  servicePassword?: string;
-  /**
-   * NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
-   *
-   */
-  nameIdentifierFormat?: string;
 }
 /**
  * Defines client authentication methods.
@@ -2829,6 +2839,7 @@ export interface ClientUpdateJwtConfiguration {
 export const ClientUpdateJwtConfigurationAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  RS512: 'RS512',
   PS256: 'PS256',
 } as const;
 export type ClientUpdateJwtConfigurationAlgEnum =
@@ -2881,13 +2892,33 @@ export interface ClientUpdateMobileIos {
 export interface ClientUpdateNativeSocialLogin {
   /**
    */
-  apple?: ClientCreateNativeSocialLoginApple | null;
+  apple?: ClientUpdateNativeSocialLoginApple | null;
   /**
    */
-  facebook?: ClientCreateNativeSocialLoginFacebook | null;
+  facebook?: ClientUpdateNativeSocialLoginFacebook | null;
   /**
    */
   google?: ClientUpdateNativeSocialLoginGoogle | null;
+}
+/**
+ * Native Social Login support for the Apple connection
+ */
+export interface ClientUpdateNativeSocialLoginApple {
+  /**
+   * Determine whether or not to allow signing in natively using an Apple authorization code
+   *
+   */
+  enabled?: boolean;
+}
+/**
+ * Native Social Login support for the Facebook connection
+ */
+export interface ClientUpdateNativeSocialLoginFacebook {
+  /**
+   * Determine whether or not to allow signing in natively using Facebook
+   *
+   */
+  enabled?: boolean;
 }
 /**
  * Native Social Login support for the google-oauth2 connection
@@ -2899,55 +2930,6 @@ export interface ClientUpdateNativeSocialLoginGoogle {
    */
   enabled?: boolean;
 }
-/**
- * Configuration for OIDC backchannel logout
- */
-export interface ClientUpdateOidcLogout {
-  /**
-   * Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
-   *
-   */
-  backchannel_logout_urls?: Array<string>;
-  /**
-   */
-  backchannel_logout_initiators?: ClientUpdateOidcLogoutBackchannelLogoutInitiators;
-}
-/**
- * Configuration for OIDC backchannel logout initiators
- */
-export interface ClientUpdateOidcLogoutBackchannelLogoutInitiators {
-  [key: string]: any | any;
-  /**
-   * The `mode` property determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the selected_initiators array, `all` enables all current and future initiators.
-   *
-   */
-  mode: ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum;
-  /**
-   */
-  selected_initiators?: Array<ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum>;
-}
-
-export const ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum = {
-  custom: 'custom',
-  all: 'all',
-} as const;
-export type ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum =
-  (typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsModeEnum];
-
-export const ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum = {
-  rp_logout: 'rp-logout',
-  idp_logout: 'idp-logout',
-  password_changed: 'password-changed',
-  session_expired: 'session-expired',
-  session_revoked: 'session-revoked',
-  account_deleted: 'account-deleted',
-  email_identifier_changed: 'email-identifier-changed',
-  mfa_phone_unenrolled: 'mfa-phone-unenrolled',
-  account_deactivated: 'account-deactivated',
-} as const;
-export type ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
-  (typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientUpdateOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
-
 /**
  * JWT-secured Authorization Requests (JAR) settings.
  */
@@ -2976,6 +2958,8 @@ export interface Connection {
    */
   display_name: string;
   /**
+   * In order to return options in the response, the `read:connections_options` scope must be present
+   *
    */
   options: { [key: string]: any };
   /**
@@ -3037,8 +3021,15 @@ export interface ConnectionCreate {
    */
   enabled_clients?: Array<string>;
   /**
+   * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
+   *
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
@@ -3131,6 +3122,14 @@ export interface ConnectionCreateOptions {
    */
   non_persistent_attrs?: Array<string>;
   /**
+   * Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used.
+   *
+   */
+  precedence?: Array<ConnectionCreateOptionsPrecedenceEnum>;
+  /**
+   */
+  attributes?: ConnectionCreateOptionsAttributes;
+  /**
    */
   enable_script_context?: boolean;
   /**
@@ -3202,14 +3201,25 @@ export interface ConnectionCreateOptions {
    */
   upstream_params?: { [key: string]: any } | null;
   /**
-   * Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using an external IdP. Possible values are 'on_each_login' (default value, it configures the connection to automatically update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to only set the root attributes on first login, allowing them to be independently updated thereafter)
+   * When using an external IdP, this flag determines  whether 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes are updated. In addition, it also determines whether the user is created when user doesnt exist previously. Possible values are 'on_each_login' (default value, it configures the connection to automatically create the user if necessary and update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to create the user and set the root attributes on first login only, allowing them to be independently updated thereafter), and 'never_on_login' (configures the connection not to create the user and not to set the root attributes from the external IdP, allowing them to be independently updated).
    *
    */
   set_user_root_attributes?: ConnectionCreateOptionsSetUserRootAttributesEnum;
   /**
    */
   gateway_authentication?: ConnectionCreateOptionsGatewayAuthentication | null;
+  /**
+   */
+  configuration?: ConnectionCreateOptionsConfiguration;
 }
+
+export const ConnectionCreateOptionsPrecedenceEnum = {
+  email: 'email',
+  phone_number: 'phone_number',
+  username: 'username',
+} as const;
+export type ConnectionCreateOptionsPrecedenceEnum =
+  (typeof ConnectionCreateOptionsPrecedenceEnum)[keyof typeof ConnectionCreateOptionsPrecedenceEnum];
 
 export const ConnectionCreateOptionsPasswordPolicyEnum = {
   none: 'none',
@@ -3223,12 +3233,163 @@ export type ConnectionCreateOptionsPasswordPolicyEnum =
   (typeof ConnectionCreateOptionsPasswordPolicyEnum)[keyof typeof ConnectionCreateOptionsPasswordPolicyEnum];
 
 export const ConnectionCreateOptionsSetUserRootAttributesEnum = {
-  each_login: 'on_each_login',
-  first_login: 'on_first_login',
+  on_each_login: 'on_each_login',
+  on_first_login: 'on_first_login',
+  never_on_login: 'never_on_login',
 } as const;
 export type ConnectionCreateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionCreateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionCreateOptionsSetUserRootAttributesEnum];
 
+/**
+ * Attribute configuration
+ */
+export interface ConnectionCreateOptionsAttributes {
+  /**
+   */
+  email?: ConnectionCreateOptionsAttributesEmail;
+  /**
+   */
+  phone_number?: ConnectionCreateOptionsAttributesPhoneNumber;
+  /**
+   */
+  username?: ConnectionCreateOptionsAttributesUsername;
+}
+/**
+ * Configuration for the email attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesEmail {
+  [key: string]: any | any;
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailIdentifier {
+  /**
+   * Determines if the attribute is used for identification
+   *
+   */
+  active?: boolean;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailSignup {
+  /**
+   */
+  status?: ConnectionCreateOptionsAttributesEmailSignupStatusEnum;
+  /**
+   */
+  verification?: ConnectionCreateOptionsAttributesEmailSignupVerification;
+}
+
+export const ConnectionCreateOptionsAttributesEmailSignupStatusEnum = {
+  required: 'required',
+  optional: 'optional',
+  inactive: 'inactive',
+} as const;
+export type ConnectionCreateOptionsAttributesEmailSignupStatusEnum =
+  (typeof ConnectionCreateOptionsAttributesEmailSignupStatusEnum)[keyof typeof ConnectionCreateOptionsAttributesEmailSignupStatusEnum];
+
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailSignupVerification {
+  /**
+   */
+  active?: boolean;
+}
+/**
+ * Configuration for the phone number attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesPhoneNumber {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+}
+/**
+ * Configuration for the username attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesUsername {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesUsernameSignup;
+  /**
+   */
+  validation?: ConnectionCreateOptionsAttributesUsernameValidation;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameSignup {
+  /**
+   */
+  status?: ConnectionCreateOptionsAttributesUsernameSignupStatusEnum;
+}
+
+export const ConnectionCreateOptionsAttributesUsernameSignupStatusEnum = {
+  required: 'required',
+  optional: 'optional',
+  inactive: 'inactive',
+} as const;
+export type ConnectionCreateOptionsAttributesUsernameSignupStatusEnum =
+  (typeof ConnectionCreateOptionsAttributesUsernameSignupStatusEnum)[keyof typeof ConnectionCreateOptionsAttributesUsernameSignupStatusEnum];
+
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameValidation {
+  /**
+   * Minimum allowed length
+   *
+   */
+  min_length?: number;
+  /**
+   * Maximum allowed length
+   *
+   */
+  max_length?: number;
+  /**
+   */
+  allowed_types?: ConnectionCreateOptionsAttributesUsernameValidationAllowedTypes;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameValidationAllowedTypes {
+  /**
+   */
+  email?: boolean;
+  /**
+   */
+  phone_number?: boolean;
+}
 /**
  * Options for enabling authentication methods.
  */
@@ -3261,6 +3422,10 @@ export interface ConnectionCreateOptionsAuthenticationMethodsPassword {
   enabled?: boolean;
 }
 /**
+ * Stores encrypted string only configurations for connections
+ */
+export type ConnectionCreateOptionsConfiguration = Array<any> | { [key: string]: any };
+/**
  * A map of scripts used to integrate with a custom database.
  */
 export interface ConnectionCreateOptionsCustomScripts {
@@ -3283,6 +3448,15 @@ export interface ConnectionCreateOptionsCustomScripts {
   /**
    */
   create?: string;
+  /**
+   */
+  change_username?: string;
+  /**
+   */
+  change_email?: string;
+  /**
+   */
+  change_phone_number?: string;
 }
 /**
  * Token-based authentication settings to be applied when connection is using an sms strategy.
@@ -3379,7 +3553,7 @@ export interface ConnectionCreateOptionsPasswordHistory {
   size?: number;
 }
 /**
- * Options for password expiration policy
+ * Options for personal info in passwords policy
  */
 export interface ConnectionCreateOptionsPasswordNoPersonalInfo {
   /**
@@ -3408,6 +3582,51 @@ export interface ConnectionCreateOptionsValidationUsername {
 /**
  *
  */
+export interface ConnectionForList {
+  /**
+   * The name of the connection
+   *
+   */
+  name?: string;
+  /**
+   * Connection name used in login screen
+   *
+   */
+  display_name?: string;
+  /**
+   * In order to return options in the response, the `read:connections_options` scope must be present
+   *
+   */
+  options?: { [key: string]: any };
+  /**
+   * The connection's identifier
+   *
+   */
+  id?: string;
+  /**
+   * The type of the connection, related to the identity provider
+   *
+   */
+  strategy?: string;
+  /**
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
+   *
+   */
+  realms?: Array<string>;
+  /**
+   * True if the connection is domain level
+   *
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
+}
+/**
+ *
+ */
 export interface ConnectionUpdate {
   /**
    * The connection name used in the new universal login experience. If display_name is not included in the request, the field will be overwritten with the name value.
@@ -3423,8 +3642,15 @@ export interface ConnectionUpdate {
    */
   enabled_clients?: Array<string>;
   /**
+   * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
+   *
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
@@ -3437,7 +3663,7 @@ export interface ConnectionUpdate {
   metadata?: { [key: string]: any };
 }
 /**
- * The connection's options (depend on the connection strategy)
+ * The connection's options (depend on the connection strategy). To update these options, the `update:connections_options` scope must be present. To verify your changes, also include the `read:connections_options` scope. If this scope is not specified, you will not be able to review the updated object.
  */
 export interface ConnectionUpdateOptions {
   [key: string]: any | any;
@@ -3449,6 +3675,14 @@ export interface ConnectionUpdateOptions {
    *
    */
   non_persistent_attrs?: Array<string>;
+  /**
+   * Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used.
+   *
+   */
+  precedence?: Array<ConnectionUpdateOptionsPrecedenceEnum>;
+  /**
+   */
+  attributes?: ConnectionCreateOptionsAttributes;
   /**
    */
   enable_script_context?: boolean;
@@ -3521,14 +3755,25 @@ export interface ConnectionUpdateOptions {
    */
   upstream_params?: { [key: string]: any } | null;
   /**
-   * Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using an external IdP. Possible values are 'on_each_login' (default value, it configures the connection to automatically update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to only set the root attributes on first login, allowing them to be independently updated thereafter)
+   * When using an external IdP, this flag determines  whether 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes are updated. In addition, it also determines whether the user is created when user doesnt exist previously. Possible values are 'on_each_login' (default value, it configures the connection to automatically create the user if necessary and update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to create the user and set the root attributes on first login only, allowing them to be independently updated thereafter), and 'never_on_login' (configures the connection not to create the user and not to set the root attributes from the external IdP, allowing them to be independently updated).
    *
    */
   set_user_root_attributes?: ConnectionUpdateOptionsSetUserRootAttributesEnum;
   /**
    */
   gateway_authentication?: ConnectionCreateOptionsGatewayAuthentication | null;
+  /**
+   */
+  configuration?: ConnectionCreateOptionsConfiguration;
 }
+
+export const ConnectionUpdateOptionsPrecedenceEnum = {
+  email: 'email',
+  phone_number: 'phone_number',
+  username: 'username',
+} as const;
+export type ConnectionUpdateOptionsPrecedenceEnum =
+  (typeof ConnectionUpdateOptionsPrecedenceEnum)[keyof typeof ConnectionUpdateOptionsPrecedenceEnum];
 
 export const ConnectionUpdateOptionsPasswordPolicyEnum = {
   none: 'none',
@@ -3542,11 +3787,93 @@ export type ConnectionUpdateOptionsPasswordPolicyEnum =
   (typeof ConnectionUpdateOptionsPasswordPolicyEnum)[keyof typeof ConnectionUpdateOptionsPasswordPolicyEnum];
 
 export const ConnectionUpdateOptionsSetUserRootAttributesEnum = {
-  each_login: 'on_each_login',
-  first_login: 'on_first_login',
+  on_each_login: 'on_each_login',
+  on_first_login: 'on_first_login',
+  never_on_login: 'never_on_login',
 } as const;
 export type ConnectionUpdateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionUpdateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
+
+/**
+ *
+ */
+export interface CreateOrganizationClientGrantsRequest {
+  /**
+   * A Client Grant ID to add to the organization.
+   *
+   */
+  grant_id: string;
+}
+/**
+ * Phone provider configuration schema
+ */
+export interface CreatePhoneProviderRequest {
+  [key: string]: any | any;
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name: CreatePhoneProviderRequestNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+  /**
+   */
+  credentials: CreatePhoneProviderRequestCredentials;
+}
+
+export const CreatePhoneProviderRequestNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type CreatePhoneProviderRequestNameEnum =
+  (typeof CreatePhoneProviderRequestNameEnum)[keyof typeof CreatePhoneProviderRequestNameEnum];
+
+/**
+ * Provider credentials required to use authenticate to the provider.
+ */
+export type CreatePhoneProviderRequestCredentials =
+  | CreatePhoneProviderRequestCredentialsAnyOf
+  | object;
+/**
+ *
+ */
+export interface CreatePhoneProviderRequestCredentialsAnyOf {
+  /**
+   */
+  auth_token: string;
+}
+/**
+ *
+ */
+export interface CreatePhoneTemplateRequest {
+  /**
+   */
+  type?: CreatePhoneTemplateRequestTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  content?: GetPhoneTemplates200ResponseTemplatesInnerContent;
+}
+
+export const CreatePhoneTemplateRequestTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type CreatePhoneTemplateRequestTypeEnum =
+  (typeof CreatePhoneTemplateRequestTypeEnum)[keyof typeof CreatePhoneTemplateRequestTypeEnum];
 
 /**
  *
@@ -3783,35 +4110,15 @@ export type DeviceCredentialCreateTypeEnum =
  */
 export interface EmailProvider {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
-   *
    */
-  name: string;
-  /**
-   * Whether the provider is enabled (true) or disabled (false).
-   *
-   */
-  enabled: boolean;
-  /**
-   * Email address to use as "from" when no other address specified.
-   *
-   */
-  default_from_address: string;
-  /**
-   */
-  credentials: EmailProviderCredentials;
-  /**
-   * Specific provider setting
-   *
-   */
-  settings: { [key: string]: any };
+  getPayloadSchema: any | null;
 }
 /**
  *
  */
 export interface EmailProviderCreate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name: EmailProviderCreateNameEnum;
@@ -3827,7 +4134,7 @@ export interface EmailProviderCreate {
   default_from_address?: string;
   /**
    */
-  credentials: EmailProviderUpdateCredentials;
+  credentials: EmailProviderCreateCredentials;
   /**
    * Specific provider setting
    *
@@ -3844,6 +4151,7 @@ export const EmailProviderCreateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderCreateNameEnum =
   (typeof EmailProviderCreateNameEnum)[keyof typeof EmailProviderCreateNameEnum];
@@ -3851,22 +4159,42 @@ export type EmailProviderCreateNameEnum =
 /**
  * Credentials required to use the provider.
  */
-export interface EmailProviderCredentials {
+export type EmailProviderCreateCredentials =
+  | EmailProviderCreateCredentialsAnyOf
+  | EmailProviderCreateCredentialsAnyOf1
+  | EmailProviderCreateCredentialsAnyOf2
+  | EmailProviderCreateCredentialsAnyOf3
+  | EmailProviderCreateCredentialsAnyOf4
+  | EmailProviderCreateCredentialsAnyOf5
+  | EmailProviderUpdateCredentialsAnyOf
+  | object;
+/**
+ *
+ */
+export interface EmailProviderCreateCredentialsAnyOf {
   /**
-   * API User.
+   * AWS Access Key ID.
    *
    */
-  api_user: string;
+  accessKeyId: string;
   /**
-   * AWS or SparkPost region.
+   * AWS Secret Access Key.
+   *
+   */
+  secretAccessKey: string;
+  /**
+   * AWS region.
    *
    */
   region: string;
+}
+/**
+ *
+ */
+export interface EmailProviderCreateCredentialsAnyOf1 {
   /**
-   * SMTP host.
-   *
    */
-  smtp_host: string;
+  smtp_host: EmailProviderUpdateCredentialsAnyOf2SmtpHost;
   /**
    * SMTP port.
    *
@@ -3877,13 +4205,99 @@ export interface EmailProviderCredentials {
    *
    */
   smtp_user: string;
+  /**
+   * SMTP password.
+   *
+   */
+  smtp_pass: string;
+}
+/**
+ *
+ */
+export interface EmailProviderCreateCredentialsAnyOf2 {
+  /**
+   * API Key
+   *
+   */
+  api_key: string;
+  /**
+   * Set to <code>eu</code> to use SparkPost service hosted in Western Europe. To use SparkPost hosted in North America, set it to <code>null</code>.
+   *
+   */
+  region?: EmailProviderCreateCredentialsAnyOf2RegionEnum;
+}
+
+export const EmailProviderCreateCredentialsAnyOf2RegionEnum = {
+  eu: 'eu',
+  null: 'null',
+} as const;
+export type EmailProviderCreateCredentialsAnyOf2RegionEnum =
+  (typeof EmailProviderCreateCredentialsAnyOf2RegionEnum)[keyof typeof EmailProviderCreateCredentialsAnyOf2RegionEnum];
+
+/**
+ *
+ */
+export interface EmailProviderCreateCredentialsAnyOf3 {
+  /**
+   * API Key
+   *
+   */
+  api_key: string;
+  /**
+   * Domain
+   *
+   */
+  domain: string;
+  /**
+   * Set to <code>eu</code> if your domain is provisioned to use Mailgun's EU region. Otherwise, set to <code>null</code>.
+   *
+   */
+  region?: EmailProviderCreateCredentialsAnyOf3RegionEnum;
+}
+
+export const EmailProviderCreateCredentialsAnyOf3RegionEnum = {
+  eu: 'eu',
+  null: 'null',
+} as const;
+export type EmailProviderCreateCredentialsAnyOf3RegionEnum =
+  (typeof EmailProviderCreateCredentialsAnyOf3RegionEnum)[keyof typeof EmailProviderCreateCredentialsAnyOf3RegionEnum];
+
+/**
+ *
+ */
+export interface EmailProviderCreateCredentialsAnyOf4 {
+  /**
+   * Azure Communication Services Connection String.
+   *
+   */
+  connectionString: string;
+}
+/**
+ *
+ */
+export interface EmailProviderCreateCredentialsAnyOf5 {
+  /**
+   * Microsoft 365 Tenant ID.
+   *
+   */
+  tenantId: string;
+  /**
+   * Microsoft 365 Client ID.
+   *
+   */
+  clientId: string;
+  /**
+   * Microsoft 365 Client Secret.
+   *
+   */
+  clientSecret: string;
 }
 /**
  *
  */
 export interface EmailProviderUpdate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name?: EmailProviderUpdateNameEnum;
@@ -3916,6 +4330,7 @@ export const EmailProviderUpdateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderUpdateNameEnum =
   (typeof EmailProviderUpdateNameEnum)[keyof typeof EmailProviderUpdateNameEnum];
@@ -3923,13 +4338,159 @@ export type EmailProviderUpdateNameEnum =
 /**
  * Credentials required to use the provider.
  */
-export type EmailProviderUpdateCredentials = any;
+export type EmailProviderUpdateCredentials =
+  | EmailProviderUpdateCredentialsAnyOf
+  | EmailProviderUpdateCredentialsAnyOf1
+  | EmailProviderUpdateCredentialsAnyOf2
+  | EmailProviderUpdateCredentialsAnyOf3
+  | EmailProviderUpdateCredentialsAnyOf4
+  | EmailProviderUpdateCredentialsAnyOf5
+  | EmailProviderUpdateCredentialsAnyOf6
+  | object;
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf {
+  /**
+   * API Key
+   *
+   */
+  api_key: string;
+}
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf1 {
+  /**
+   * AWS Access Key ID.
+   *
+   */
+  accessKeyId?: string;
+  /**
+   * AWS Secret Access Key.
+   *
+   */
+  secretAccessKey?: string;
+  /**
+   * AWS region.
+   *
+   */
+  region?: string;
+}
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf2 {
+  /**
+   */
+  smtp_host?: EmailProviderUpdateCredentialsAnyOf2SmtpHost;
+  /**
+   * SMTP port.
+   *
+   */
+  smtp_port?: number;
+  /**
+   * SMTP username.
+   *
+   */
+  smtp_user?: string;
+  /**
+   * SMTP password.
+   *
+   */
+  smtp_pass?: string;
+}
+/**
+ * SMTP host.
+ */
+export type EmailProviderUpdateCredentialsAnyOf2SmtpHost = string;
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf3 {
+  /**
+   * API Key
+   *
+   */
+  api_key?: string;
+  /**
+   * Set to <code>eu</code> to use SparkPost service hosted in Western Europe. To use SparkPost hosted in North America, set it to <code>null</code>.
+   *
+   */
+  region?: EmailProviderUpdateCredentialsAnyOf3RegionEnum;
+}
+
+export const EmailProviderUpdateCredentialsAnyOf3RegionEnum = {
+  eu: 'eu',
+  null: 'null',
+} as const;
+export type EmailProviderUpdateCredentialsAnyOf3RegionEnum =
+  (typeof EmailProviderUpdateCredentialsAnyOf3RegionEnum)[keyof typeof EmailProviderUpdateCredentialsAnyOf3RegionEnum];
+
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf4 {
+  /**
+   * API Key
+   *
+   */
+  api_key?: string;
+  /**
+   * Domain
+   *
+   */
+  domain?: string;
+  /**
+   * Set to <code>eu</code> if your domain is provisioned to use Mailgun's EU region. Otherwise, set to <code>null</code>.
+   *
+   */
+  region?: EmailProviderUpdateCredentialsAnyOf4RegionEnum;
+}
+
+export const EmailProviderUpdateCredentialsAnyOf4RegionEnum = {
+  eu: 'eu',
+  null: 'null',
+} as const;
+export type EmailProviderUpdateCredentialsAnyOf4RegionEnum =
+  (typeof EmailProviderUpdateCredentialsAnyOf4RegionEnum)[keyof typeof EmailProviderUpdateCredentialsAnyOf4RegionEnum];
+
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf5 {
+  /**
+   * Azure Communication Services Connection String.
+   *
+   */
+  connectionString?: string;
+}
+/**
+ *
+ */
+export interface EmailProviderUpdateCredentialsAnyOf6 {
+  /**
+   * Microsoft 365 Tenant ID.
+   *
+   */
+  tenantId?: string;
+  /**
+   * Microsoft 365 Client ID.
+   *
+   */
+  clientId?: string;
+  /**
+   * Microsoft 365 Client Secret.
+   *
+   */
+  clientSecret?: string;
+}
 /**
  *
  */
 export interface EmailTemplateUpdate {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: EmailTemplateUpdateTemplateEnum;
@@ -3979,6 +4540,7 @@ export const EmailTemplateUpdateTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -4021,11 +4583,15 @@ export interface Enrollment {
    */
   phone_number?: string;
   /**
+   * Enrollment date and time.
+   *
    */
-  enrolled_at?: EnrollmentEnrolledAt;
+  enrolled_at?: string;
   /**
+   * Last authentication date and time.
+   *
    */
-  last_auth?: EnrollmentLastAuth;
+  last_auth?: string;
 }
 
 export const EnrollmentStatusEnum = {
@@ -4053,15 +4619,12 @@ export interface EnrollmentCreate {
    *
    */
   send_mail?: boolean;
+  /**
+   * Optional. Specify the locale of the enrollment email. Used with send_email.
+   *
+   */
+  email_locale?: string;
 }
-/**
- *
- */
-export type EnrollmentEnrolledAt = string;
-/**
- *
- */
-export type EnrollmentLastAuth = string;
 /**
  *
  */
@@ -4110,7 +4673,7 @@ export interface GetActionVersions200Response {
    */
   page: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page: number;
@@ -4173,10 +4736,8 @@ export interface GetActionVersions200ResponseVersionsInner {
    */
   errors: Array<GetActionVersions200ResponseVersionsInnerErrorsInner>;
   /**
-   * The action to which this verison belongs.
-   *
    */
-  action: any | null;
+  action: GetActionVersions200ResponseVersionsInnerAction;
   /**
    * The time when this version was built successfully.
    *
@@ -4188,7 +4749,7 @@ export interface GetActionVersions200ResponseVersionsInner {
    */
   created_at: string;
   /**
-   * The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is beiing built.
+   * The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is being built.
    *
    */
   updated_at: string;
@@ -4210,6 +4771,41 @@ export const GetActionVersions200ResponseVersionsInnerStatusEnum = {
 export type GetActionVersions200ResponseVersionsInnerStatusEnum =
   (typeof GetActionVersions200ResponseVersionsInnerStatusEnum)[keyof typeof GetActionVersions200ResponseVersionsInnerStatusEnum];
 
+/**
+ * The action to which this version belongs.
+ */
+export interface GetActionVersions200ResponseVersionsInnerAction {
+  /**
+   * The unique ID of the action.
+   *
+   */
+  id: string;
+  /**
+   * The name of an action.
+   *
+   */
+  name: string;
+  /**
+   * The list of triggers that this action supports. At this time, an action can only target a single trigger at a time.
+   *
+   */
+  supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
+  /**
+   * True if all of an Action's contents have been deployed.
+   *
+   */
+  all_changes_deployed: boolean;
+  /**
+   * The time when this action was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this action was updated.
+   *
+   */
+  updated_at: string;
+}
 /**
  * Error is a generic error with a human readable id which should be easily referenced in support tickets.
  */
@@ -4269,6 +4865,21 @@ export interface GetActions200ResponseActionsInner {
    */
   supported_triggers: Array<GetActions200ResponseActionsInnerSupportedTriggersInner>;
   /**
+   * True if all of an Action's contents have been deployed.
+   *
+   */
+  all_changes_deployed: boolean;
+  /**
+   * The time when this action was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this action was updated.
+   *
+   */
+  updated_at: string;
+  /**
    * The source code of the action.
    *
    */
@@ -4307,25 +4918,10 @@ export interface GetActions200ResponseActionsInner {
    */
   status: GetActions200ResponseActionsInnerStatusEnum;
   /**
-   * True if all of an Action's contents have been deployed.
-   *
-   */
-  all_changes_deployed: boolean;
-  /**
    * The time when this action was built successfully.
    *
    */
   built_at: string;
-  /**
-   * The time when this action was created.
-   *
-   */
-  created_at: string;
-  /**
-   * The time when this action was updated.
-   *
-   */
-  updated_at: string;
 }
 
 export const GetActions200ResponseActionsInnerStatusEnum = {
@@ -4586,8 +5182,10 @@ export interface GetActions200ResponseActionsInnerSecretsInner {
  */
 export interface GetActions200ResponseActionsInnerSupportedTriggersInner {
   /**
+   * An actions extensibility point.
+   *
    */
-  id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  id: GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum;
   /**
    * The version of a trigger. v1, v2, etc.
    *
@@ -4613,45 +5211,69 @@ export interface GetActions200ResponseActionsInnerSupportedTriggersInner {
    *
    */
   compatible_triggers?: Array<GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInner>;
-}
-/**
- *
- */
-export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInner {
-  [key: string]: any | any;
   /**
-   */
-  id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
-  /**
-   * The version of a trigger. v1, v2, etc.
+   * In order to execute an Action, it must be bound to a trigger using a binding. `trigger-bound` means that bindings are managed by the tenant. `entity-bound` means that the bindings are automatically managed by Auth0 and other internal resouces will control those bindings. Tenants cannot manage `entity-bound` bindings.
    *
    */
-  version: string;
+  binding_policy?: GetActions200ResponseActionsInnerSupportedTriggersInnerBindingPolicyEnum;
 }
-/**
- * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
- */
-export type GetActions200ResponseActionsInnerSupportedTriggersInnerId =
-  GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf;
 
-/**
- *
- */
-export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf = {
+export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum = {
   post_login: 'post-login',
   credentials_exchange: 'credentials-exchange',
   pre_user_registration: 'pre-user-registration',
   post_user_registration: 'post-user-registration',
   post_change_password: 'post-change-password',
   send_phone_message: 'send-phone-message',
-  iga_approval: 'iga-approval',
-  iga_certification: 'iga-certification',
-  iga_fulfillment_assignment: 'iga-fulfillment-assignment',
-  iga_fulfillment_execution: 'iga-fulfillment-execution',
+  custom_phone_provider: 'custom-phone-provider',
+  custom_email_provider: 'custom-email-provider',
   password_reset_post_challenge: 'password-reset-post-challenge',
+  custom_token_exchange_beta: 'custom-token-exchange-beta',
+  custom_token_exchange: 'custom-token-exchange',
 } as const;
-export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
-  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf];
+export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum =
+  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerIdEnum];
+
+export const GetActions200ResponseActionsInnerSupportedTriggersInnerBindingPolicyEnum = {
+  trigger_bound: 'trigger-bound',
+  entity_bound: 'entity-bound',
+} as const;
+export type GetActions200ResponseActionsInnerSupportedTriggersInnerBindingPolicyEnum =
+  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerBindingPolicyEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerBindingPolicyEnum];
+
+/**
+ *
+ */
+export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInner {
+  [key: string]: any | any;
+  /**
+   * An actions extensibility point.
+   *
+   */
+  id: GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum;
+  /**
+   * The version of a trigger. v1, v2, etc.
+   *
+   */
+  version: string;
+}
+
+export const GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
+  {
+    post_login: 'post-login',
+    credentials_exchange: 'credentials-exchange',
+    pre_user_registration: 'pre-user-registration',
+    post_user_registration: 'post-user-registration',
+    post_change_password: 'post-change-password',
+    send_phone_message: 'send-phone-message',
+    custom_phone_provider: 'custom-phone-provider',
+    custom_email_provider: 'custom-email-provider',
+    password_reset_post_challenge: 'password-reset-post-challenge',
+    custom_token_exchange_beta: 'custom-token-exchange-beta',
+    custom_token_exchange: 'custom-token-exchange',
+  } as const;
+export type GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum =
+  (typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum)[keyof typeof GetActions200ResponseActionsInnerSupportedTriggersInnerCompatibleTriggersInnerIdEnum];
 
 /**
  *
@@ -4724,7 +5346,7 @@ export interface GetAuthenticationMethods200ResponseOneOfInner {
    */
   authentication_methods?: Array<GetAuthenticationMethods200ResponseOneOfInnerAuthenticationMethodsInner>;
   /**
-   * The authentication method preferred for phone authenticators.
+   * Applies to phone authentication methods only. The preferred communication method.
    *
    */
   preferred_authentication_method?: GetAuthenticationMethods200ResponseOneOfInnerPreferredAuthenticationMethodEnum;
@@ -4869,8 +5491,10 @@ export interface GetBindings200ResponseBindingsInner {
    */
   id: string;
   /**
+   * An actions extensibility point.
+   *
    */
-  trigger_id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  trigger_id: GetBindings200ResponseBindingsInnerTriggerIdEnum;
   /**
    * The name of the binding.
    *
@@ -4890,6 +5514,23 @@ export interface GetBindings200ResponseBindingsInner {
    */
   updated_at: string;
 }
+
+export const GetBindings200ResponseBindingsInnerTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  custom_phone_provider: 'custom-phone-provider',
+  custom_email_provider: 'custom-email-provider',
+  password_reset_post_challenge: 'password-reset-post-challenge',
+  custom_token_exchange_beta: 'custom-token-exchange-beta',
+  custom_token_exchange: 'custom-token-exchange',
+} as const;
+export type GetBindings200ResponseBindingsInnerTriggerIdEnum =
+  (typeof GetBindings200ResponseBindingsInnerTriggerIdEnum)[keyof typeof GetBindings200ResponseBindingsInnerTriggerIdEnum];
+
 /**
  *
  */
@@ -4949,6 +5590,93 @@ export interface GetBranding200ResponseFont {
    */
   url: string;
 }
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200Response {
+  [key: string]: any | any;
+  /**
+   */
+  providers: Array<GetBrandingPhoneProviders200ResponseProvidersInner>;
+}
+/**
+ * Phone provider configuration schema
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInner {
+  /**
+   */
+  id?: string;
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name: GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum];
+
+/**
+ *
+ */
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration =
+  | GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf
+  | GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1;
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf {
+  /**
+   */
+  default_from?: string;
+  /**
+   */
+  mssid?: string;
+  /**
+   */
+  sid: string;
+  /**
+   */
+  delivery_methods: Array<GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum>;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum =
+  {
+    text: 'text',
+    voice: 'voice',
+  } as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum];
+
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1 {
+  /**
+   */
+  delivery_methods: Array<GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum>;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum =
+  {
+    text: 'text',
+    voice: 'voice',
+  } as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum];
+
 /**
  *
  */
@@ -5084,11 +5812,108 @@ export type GetBruteForceProtection200ResponseModeEnum =
 /**
  *
  */
-export type GetBruteForceProtection200ResponseAllowlistInner = any;
+export type GetBruteForceProtection200ResponseAllowlistInner = string;
 /**
  *
  */
-export type GetClientGrants200Response = Array<ClientGrant> | GetClientGrants200ResponseOneOf;
+export type GetClientGrantOrganizations200Response =
+  | Array<GetClientGrantOrganizations200ResponseOneOfInner>
+  | GetClientGrantOrganizations200ResponseOneOf
+  | GetClientGrantOrganizations200ResponseOneOf1;
+/**
+ *
+ */
+export interface GetClientGrantOrganizations200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  organizations: Array<GetClientGrantOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetClientGrantOrganizations200ResponseOneOf1 {
+  /**
+   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
+   *
+   */
+  next: string;
+  /**
+   */
+  organizations: Array<GetClientGrantOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetClientGrantOrganizations200ResponseOneOfInner {
+  [key: string]: any | any;
+  /**
+   * Organization identifier.
+   *
+   */
+  id: string;
+  /**
+   * The name of this organization.
+   *
+   */
+  name: string;
+  /**
+   * Friendly name of this organization.
+   *
+   */
+  display_name: string;
+  /**
+   */
+  branding: GetClientGrantOrganizations200ResponseOneOfInnerBranding;
+  /**
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
+   *
+   */
+  metadata: { [key: string]: any };
+}
+/**
+ * Theme defines how to style the login pages.
+ */
+export interface GetClientGrantOrganizations200ResponseOneOfInnerBranding {
+  /**
+   * URL of logo to display on login page.
+   *
+   */
+  logo_url: string;
+  /**
+   */
+  colors: GetClientGrantOrganizations200ResponseOneOfInnerBrandingColors;
+}
+/**
+ * Color scheme used to customize the login pages.
+ */
+export interface GetClientGrantOrganizations200ResponseOneOfInnerBrandingColors {
+  /**
+   * HEX Color for primary elements.
+   *
+   */
+  primary: string;
+  /**
+   * HEX Color for background.
+   *
+   */
+  page_background: string;
+}
+/**
+ *
+ */
+export type GetClientGrants200Response =
+  | Array<ClientGrant>
+  | GetClientGrants200ResponseOneOf
+  | GetClientGrants200ResponseOneOf1;
 /**
  *
  */
@@ -5102,6 +5927,19 @@ export interface GetClientGrants200ResponseOneOf {
   /**
    */
   total: number;
+  /**
+   */
+  client_grants: Array<ClientGrant>;
+}
+/**
+ *
+ */
+export interface GetClientGrants200ResponseOneOf1 {
+  /**
+   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
+   *
+   */
+  next: string;
   /**
    */
   client_grants: Array<ClientGrant>;
@@ -5135,6 +5973,8 @@ export interface GetClients200ResponseOneOf {
  */
 export interface GetClients200ResponseOneOf1 {
   /**
+   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
+   *
    */
   next: string;
   /**
@@ -5144,7 +5984,7 @@ export interface GetClients200ResponseOneOf1 {
 /**
  *
  */
-export type GetConnections200Response = Array<Connection> | GetConnections200ResponseOneOf;
+export type GetConnections200Response = Array<ConnectionForList> | GetConnections200ResponseOneOf;
 /**
  *
  */
@@ -5160,7 +6000,7 @@ export interface GetConnections200ResponseOneOf {
   total: number;
   /**
    */
-  connections: Array<Connection>;
+  connections: Array<ConnectionForList>;
 }
 /**
  *
@@ -5265,7 +6105,7 @@ export interface GetDeviceCredentials200ResponseOneOf {
  */
 export interface GetEmailTemplatesByTemplateName200Response {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: GetEmailTemplatesByTemplateName200ResponseTemplateEnum;
@@ -5315,6 +6155,7 @@ export const GetEmailTemplatesByTemplateName200ResponseTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -5381,6 +6222,96 @@ export interface GetEnabledConnections200ResponseOneOfInner {
 /**
  *
  */
+export type GetEncryptionKeys200Response =
+  | Array<GetEncryptionKeys200ResponseOneOfInner>
+  | GetEncryptionKeys200ResponseOneOf;
+/**
+ *
+ */
+export interface GetEncryptionKeys200ResponseOneOf {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  start: number;
+  /**
+   * Number of results per page.
+   *
+   */
+  limit: number;
+  /**
+   * Total amount of encryption keys.
+   *
+   */
+  total: number;
+  /**
+   * Encryption keys.
+   *
+   */
+  keys: Array<GetEncryptionKeys200ResponseOneOfInner>;
+}
+/**
+ * Encryption key
+ */
+export interface GetEncryptionKeys200ResponseOneOfInner {
+  /**
+   * Key ID
+   *
+   */
+  kid: string;
+  /**
+   * Key type
+   *
+   */
+  type: GetEncryptionKeys200ResponseOneOfInnerTypeEnum;
+  /**
+   * Key state
+   *
+   */
+  state: GetEncryptionKeys200ResponseOneOfInnerStateEnum;
+  /**
+   * Key creation timestamp
+   *
+   */
+  created_at: string;
+  /**
+   * Key update timestamp
+   *
+   */
+  updated_at: string;
+  /**
+   * ID of parent wrapping key
+   *
+   */
+  parent_kid: string;
+  /**
+   * Public key in PEM format
+   *
+   */
+  public_key?: string;
+}
+
+export const GetEncryptionKeys200ResponseOneOfInnerTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  environment_root_key: 'environment-root-key',
+  tenant_master_key: 'tenant-master-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerTypeEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum];
+
+export const GetEncryptionKeys200ResponseOneOfInnerStateEnum = {
+  pre_activation: 'pre-activation',
+  active: 'active',
+  deactivated: 'deactivated',
+  destroyed: 'destroyed',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerStateEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum];
+
+/**
+ *
+ */
 export type GetErrors200Response = Array<GetErrors200ResponseOneOfInner> | Job;
 /**
  *
@@ -5428,8 +6359,10 @@ export interface GetExecution200Response {
    */
   id: string;
   /**
+   * An actions extensibility point.
+   *
    */
-  trigger_id: GetActions200ResponseActionsInnerSupportedTriggersInnerId;
+  trigger_id: GetExecution200ResponseTriggerIdEnum;
   /**
    * The overall status of an execution.
    *
@@ -5449,6 +6382,22 @@ export interface GetExecution200Response {
    */
   updated_at: string;
 }
+
+export const GetExecution200ResponseTriggerIdEnum = {
+  post_login: 'post-login',
+  credentials_exchange: 'credentials-exchange',
+  pre_user_registration: 'pre-user-registration',
+  post_user_registration: 'post-user-registration',
+  post_change_password: 'post-change-password',
+  send_phone_message: 'send-phone-message',
+  custom_phone_provider: 'custom-phone-provider',
+  custom_email_provider: 'custom-email-provider',
+  password_reset_post_challenge: 'password-reset-post-challenge',
+  custom_token_exchange_beta: 'custom-token-exchange-beta',
+  custom_token_exchange: 'custom-token-exchange',
+} as const;
+export type GetExecution200ResponseTriggerIdEnum =
+  (typeof GetExecution200ResponseTriggerIdEnum)[keyof typeof GetExecution200ResponseTriggerIdEnum];
 
 export const GetExecution200ResponseStatusEnum = {
   unspecified: 'unspecified',
@@ -5483,6 +6432,20 @@ export interface GetExecution200ResponseResultsInner {
    *
    */
   ended_at: string;
+}
+/**
+ *
+ */
+export interface GetFactorDuoSettings200Response {
+  /**
+   */
+  ikey: string;
+  /**
+   */
+  skey: string;
+  /**
+   */
+  host: string;
 }
 /**
  *
@@ -5782,6 +6745,23 @@ export interface GetGrants200ResponseOneOf {
 /**
  *
  */
+export interface GetGuardianPhoneProviders200Response {
+  /**
+   */
+  provider: GetGuardianPhoneProviders200ResponseProviderEnum;
+}
+
+export const GetGuardianPhoneProviders200ResponseProviderEnum = {
+  auth0: 'auth0',
+  twilio: 'twilio',
+  phone_message_hook: 'phone-message-hook',
+} as const;
+export type GetGuardianPhoneProviders200ResponseProviderEnum =
+  (typeof GetGuardianPhoneProviders200ResponseProviderEnum)[keyof typeof GetGuardianPhoneProviders200ResponseProviderEnum];
+
+/**
+ *
+ */
 export type GetHooks200Response = Array<Hook> | GetHooks200ResponseOneOf;
 /**
  *
@@ -5830,7 +6810,7 @@ export interface GetInvitations200ResponseOneOfInner {
    */
   id: string;
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   organization_id: string;
@@ -5891,19 +6871,31 @@ export interface GetInvitations200ResponseOneOfInnerAppMetadata {
   [key: string]: any | any;
   /**
    */
+  __tenant: any | null;
+  /**
+   */
+  _id: any | null;
+  /**
+   */
+  blocked: any | null;
+  /**
+   */
   clientID: any | null;
+  /**
+   */
+  created_at: any | null;
+  /**
+   */
+  email_verified: any | null;
+  /**
+   */
+  email: any | null;
   /**
    */
   globalClientID: any | null;
   /**
    */
   global_client_id: any | null;
-  /**
-   */
-  email_verified: any | null;
-  /**
-   */
-  user_id: any | null;
   /**
    */
   identities: any | null;
@@ -5915,28 +6907,22 @@ export interface GetInvitations200ResponseOneOfInnerAppMetadata {
   lastLogin: any | null;
   /**
    */
-  metadata: any | null;
-  /**
-   */
-  created_at: any | null;
-  /**
-   */
   loginsCount: any | null;
   /**
    */
-  _id: any | null;
+  metadata: any | null;
   /**
    */
-  email: any | null;
+  multifactor_last_modified: any | null;
   /**
    */
-  blocked: any | null;
-  /**
-   */
-  __tenant: any | null;
+  multifactor: any | null;
   /**
    */
   updated_at: any | null;
+  /**
+   */
+  user_id: any | null;
 }
 /**
  *
@@ -5994,6 +6980,11 @@ export interface GetLogStreams200ResponseInnerOneOf {
    */
   type: GetLogStreams200ResponseInnerOneOfTypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -6040,6 +7031,11 @@ export interface GetLogStreams200ResponseInnerOneOf1 {
   /**
    */
   type: GetLogStreams200ResponseInnerOneOf1TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -6137,6 +7133,11 @@ export interface GetLogStreams200ResponseInnerOneOf2 {
    */
   type: GetLogStreams200ResponseInnerOneOf2TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -6211,6 +7212,7 @@ export const GetLogStreams200ResponseInnerOneOf2SinkAzureRegionEnum = {
   southcentralus: 'southcentralus',
   southeastasia: 'southeastasia',
   southindia: 'southindia',
+  swedencentral: 'swedencentral',
   switzerlandnorth: 'switzerlandnorth',
   uaenorth: 'uaenorth',
   uksouth: 'uksouth',
@@ -6247,6 +7249,11 @@ export interface GetLogStreams200ResponseInnerOneOf3 {
   /**
    */
   type: GetLogStreams200ResponseInnerOneOf3TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -6320,6 +7327,11 @@ export interface GetLogStreams200ResponseInnerOneOf4 {
    */
   type: GetLogStreams200ResponseInnerOneOf4TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -6392,6 +7404,11 @@ export interface GetLogStreams200ResponseInnerOneOf5 {
    */
   type: GetLogStreams200ResponseInnerOneOf5TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -6449,6 +7466,11 @@ export interface GetLogStreams200ResponseInnerOneOf6 {
    */
   type: GetLogStreams200ResponseInnerOneOf6TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -6505,6 +7527,11 @@ export interface GetLogStreams200ResponseInnerOneOf7 {
   /**
    */
   type: GetLogStreams200ResponseInnerOneOf7TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -6601,6 +7628,7 @@ export const GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum = {
   auth_token_exchange_success: 'auth.token_exchange.success',
   management_fail: 'management.fail',
   management_success: 'management.success',
+  scim_event: 'scim.event',
   system_notification: 'system.notification',
   user_fail: 'user.fail',
   user_notification: 'user.notification',
@@ -6833,7 +7861,26 @@ export interface GetOrganizationClientGrants200ResponseOneOfInner {
    *
    */
   scope: Array<string>;
+  /**
+   * Defines whether organizations can be used with client credentials exchanges for this grant.
+   *
+   */
+  organization_usage: GetOrganizationClientGrants200ResponseOneOfInnerOrganizationUsageEnum;
+  /**
+   * If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations.
+   *
+   */
+  allow_any_organization: boolean;
 }
+
+export const GetOrganizationClientGrants200ResponseOneOfInnerOrganizationUsageEnum = {
+  deny: 'deny',
+  allow: 'allow',
+  require: 'require',
+} as const;
+export type GetOrganizationClientGrants200ResponseOneOfInnerOrganizationUsageEnum =
+  (typeof GetOrganizationClientGrants200ResponseOneOfInnerOrganizationUsageEnum)[keyof typeof GetOrganizationClientGrants200ResponseOneOfInnerOrganizationUsageEnum];
+
 /**
  *
  */
@@ -6881,93 +7928,19 @@ export interface GetOrganizationMemberRoles200ResponseOneOfInner {
  *
  */
 export type GetOrganizations200Response =
-  | Array<GetOrganizations200ResponseOneOfInner>
-  | GetOrganizations200ResponseOneOf
-  | GetOrganizations200ResponseOneOf1;
+  | Array<GetClientGrantOrganizations200ResponseOneOfInner>
+  | GetClientGrantOrganizations200ResponseOneOf
+  | GetOrganizations200ResponseOneOf;
 /**
  *
  */
 export interface GetOrganizations200ResponseOneOf {
   /**
    */
-  start: number;
-  /**
-   */
-  limit: number;
-  /**
-   */
-  total: number;
-  /**
-   */
-  organizations: Array<GetOrganizations200ResponseOneOfInner>;
-}
-/**
- *
- */
-export interface GetOrganizations200ResponseOneOf1 {
-  /**
-   */
   next: string;
   /**
    */
-  organizations: Array<GetOrganizations200ResponseOneOfInner>;
-}
-/**
- *
- */
-export interface GetOrganizations200ResponseOneOfInner {
-  [key: string]: any | any;
-  /**
-   * Organization identifier
-   *
-   */
-  id: string;
-  /**
-   * The name of this organization.
-   *
-   */
-  name: string;
-  /**
-   * Friendly name of this organization.
-   *
-   */
-  display_name: string;
-  /**
-   */
-  branding: GetOrganizations200ResponseOneOfInnerBranding;
-  /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
-   *
-   */
-  metadata: { [key: string]: any };
-}
-/**
- * Theme defines how to style the login pages
- */
-export interface GetOrganizations200ResponseOneOfInnerBranding {
-  /**
-   * URL of logo to display on login page
-   *
-   */
-  logo_url: string;
-  /**
-   */
-  colors: GetOrganizations200ResponseOneOfInnerBrandingColors;
-}
-/**
- * Color scheme used to customize the login pages
- */
-export interface GetOrganizations200ResponseOneOfInnerBrandingColors {
-  /**
-   * HEX Color for primary elements
-   *
-   */
-  primary: string;
-  /**
-   * HEX Color for background
-   *
-   */
-  page_background: string;
+  organizations: Array<GetClientGrantOrganizations200ResponseOneOfInner>;
 }
 /**
  *
@@ -7023,20 +7996,81 @@ export interface GetPermissions200ResponseOneOfInner {
 /**
  *
  */
-export interface GetPhoneProviders200Response {
+export interface GetPhoneTemplates200Response {
   /**
    */
-  provider: GetPhoneProviders200ResponseProviderEnum;
+  templates: Array<GetPhoneTemplates200ResponseTemplatesInner>;
+}
+/**
+ *
+ */
+export interface GetPhoneTemplates200ResponseTemplatesInner {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: GetPhoneTemplates200ResponseTemplatesInnerContent;
+  /**
+   */
+  type: GetPhoneTemplates200ResponseTemplatesInnerTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
 }
 
-export const GetPhoneProviders200ResponseProviderEnum = {
-  auth0: 'auth0',
-  twilio: 'twilio',
-  phone_message_hook: 'phone-message-hook',
+export const GetPhoneTemplates200ResponseTemplatesInnerTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
 } as const;
-export type GetPhoneProviders200ResponseProviderEnum =
-  (typeof GetPhoneProviders200ResponseProviderEnum)[keyof typeof GetPhoneProviders200ResponseProviderEnum];
+export type GetPhoneTemplates200ResponseTemplatesInnerTypeEnum =
+  (typeof GetPhoneTemplates200ResponseTemplatesInnerTypeEnum)[keyof typeof GetPhoneTemplates200ResponseTemplatesInnerTypeEnum];
 
+/**
+ *
+ */
+export interface GetPhoneTemplates200ResponseTemplatesInnerContent {
+  /**
+   */
+  syntax?: string;
+  /**
+   * Default phone number to be used as 'from' when sending a phone notification
+   *
+   */
+  from?: string;
+  /**
+   */
+  body?: GetPhoneTemplates200ResponseTemplatesInnerContentBody;
+}
+/**
+ *
+ */
+export interface GetPhoneTemplates200ResponseTemplatesInnerContentBody {
+  /**
+   * Content of the phone template for text notifications
+   *
+   */
+  text?: string;
+  /**
+   * Content of the phone template for voice notifications
+   *
+   */
+  voice?: string;
+}
 /**
  *
  */
@@ -7079,6 +8113,9 @@ export interface GetRefreshToken200Response {
    */
   expires_at: GetRefreshToken200ResponseExpiresAt | null;
   /**
+   */
+  device: GetRefreshToken200ResponseDevice;
+  /**
    * ID of the client application granted with this refresh token
    *
    */
@@ -7098,11 +8135,50 @@ export interface GetRefreshToken200Response {
    *
    */
   resource_servers: Array<GetRefreshToken200ResponseResourceServersInner>;
+  /**
+   */
+  last_exchanged_at: GetRefreshToken200ResponseLastExchangedAt | null;
 }
 /**
  *
  */
 export type GetRefreshToken200ResponseCreatedAt = string | { [key: string]: any };
+/**
+ * Device used while issuing/exchanging the refresh token
+ */
+export interface GetRefreshToken200ResponseDevice {
+  [key: string]: any | any;
+  /**
+   * First IP address associated with the refresh token
+   *
+   */
+  initial_ip: string;
+  /**
+   * First autonomous system number associated with the refresh token
+   *
+   */
+  initial_asn: string;
+  /**
+   * First user agent associated with the refresh token
+   *
+   */
+  initial_user_agent: string;
+  /**
+   * Last IP address associated with the refresh token
+   *
+   */
+  last_ip: string;
+  /**
+   * Last autonomous system number associated with the refresh token
+   *
+   */
+  last_asn: string;
+  /**
+   * Last user agent associated with the refresh token
+   *
+   */
+  last_user_agent: string;
+}
 /**
  *
  */
@@ -7111,6 +8187,10 @@ export type GetRefreshToken200ResponseExpiresAt = string | { [key: string]: any 
  *
  */
 export type GetRefreshToken200ResponseIdleExpiresAt = string | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshToken200ResponseLastExchangedAt = string | { [key: string]: any };
 /**
  *
  */
@@ -7134,12 +8214,17 @@ export interface GetRefreshTokensForUser200Response {
   [key: string]: any | any;
   /**
    */
-  sessions: Array<GetRefreshTokensForUser200ResponseSessionsInner>;
+  tokens: Array<GetRefreshTokensForUser200ResponseTokensInner>;
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next: string;
 }
 /**
  *
  */
-export interface GetRefreshTokensForUser200ResponseSessionsInner {
+export interface GetRefreshTokensForUser200ResponseTokensInner {
   [key: string]: any | any;
   /**
    * The ID of the refresh token
@@ -7153,13 +8238,16 @@ export interface GetRefreshTokensForUser200ResponseSessionsInner {
   user_id: string;
   /**
    */
-  created_at: GetRefreshTokensForUser200ResponseSessionsInnerCreatedAt;
+  created_at: GetRefreshTokensForUser200ResponseTokensInnerCreatedAt;
   /**
    */
-  idle_expires_at: GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt;
+  idle_expires_at: GetRefreshTokensForUser200ResponseTokensInnerIdleExpiresAt;
   /**
    */
-  expires_at: GetRefreshTokensForUser200ResponseSessionsInnerExpiresAt;
+  expires_at: GetRefreshTokensForUser200ResponseTokensInnerExpiresAt;
+  /**
+   */
+  device: GetRefreshToken200ResponseDevice;
   /**
    * ID of the client application granted with this refresh token
    *
@@ -7180,23 +8268,32 @@ export interface GetRefreshTokensForUser200ResponseSessionsInner {
    *
    */
   resource_servers: Array<GetRefreshToken200ResponseResourceServersInner>;
+  /**
+   */
+  last_exchanged_at: GetRefreshTokensForUser200ResponseTokensInnerLastExchangedAt;
 }
 /**
  *
  */
-export type GetRefreshTokensForUser200ResponseSessionsInnerCreatedAt =
+export type GetRefreshTokensForUser200ResponseTokensInnerCreatedAt =
   | string
   | { [key: string]: any };
 /**
  *
  */
-export type GetRefreshTokensForUser200ResponseSessionsInnerExpiresAt =
+export type GetRefreshTokensForUser200ResponseTokensInnerExpiresAt =
   | string
   | { [key: string]: any };
 /**
  *
  */
-export type GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt =
+export type GetRefreshTokensForUser200ResponseTokensInnerIdleExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetRefreshTokensForUser200ResponseTokensInnerLastExchangedAt =
   | string
   | { [key: string]: any };
 /**
@@ -7238,7 +8335,7 @@ export interface GetRendering200Response {
    * An array of head tags
    *
    */
-  head_tags: Array<{ [key: string]: any }>;
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
 }
 
 export const GetRendering200ResponseRenderingModeEnum = {
@@ -7248,6 +8345,34 @@ export const GetRendering200ResponseRenderingModeEnum = {
 export type GetRendering200ResponseRenderingModeEnum =
   (typeof GetRendering200ResponseRenderingModeEnum)[keyof typeof GetRendering200ResponseRenderingModeEnum];
 
+/**
+ *
+ */
+export interface GetRendering200ResponseHeadTagsInner {
+  [key: string]: any | any;
+  /**
+   * Any HTML element valid for use in the head tag
+   *
+   */
+  tag: string;
+  /**
+   */
+  attributes: GetRendering200ResponseHeadTagsInnerAttributes;
+  /**
+   * Text/content within the opening and closing tags of the element.  See <a href="https://auth0.com/docs">documentation</a> on using context variables
+   *
+   */
+  content: string;
+}
+/**
+ * Attributes of the HTML tag
+ */
+export interface GetRendering200ResponseHeadTagsInnerAttributes {
+  [key: string]: any | any;
+  /**
+   */
+  integrity: Array<string>;
+}
 /**
  *
  */
@@ -7531,6 +8656,9 @@ export interface GetSession200Response {
   expires_at: GetSession200ResponseExpiresAt | null;
   /**
    */
+  last_interacted_at: GetSession200ResponseLastInteractedAt | null;
+  /**
+   */
   device: GetSession200ResponseDevice;
   /**
    * List of client details for the session
@@ -7602,6 +8730,11 @@ export type GetSession200ResponseCreatedAt = string | { [key: string]: any };
 export interface GetSession200ResponseDevice {
   [key: string]: any | any;
   /**
+   * First user agent of the device from which this user logged in
+   *
+   */
+  initial_user_agent: string;
+  /**
    * First IP address associated with this session
    *
    */
@@ -7638,6 +8771,10 @@ export type GetSession200ResponseIdleExpiresAt = string | { [key: string]: any }
 /**
  *
  */
+export type GetSession200ResponseLastInteractedAt = string | { [key: string]: any };
+/**
+ *
+ */
 export type GetSession200ResponseUpdatedAt = string | { [key: string]: any };
 /**
  *
@@ -7647,6 +8784,11 @@ export interface GetSessionsForUser200Response {
   /**
    */
   sessions: Array<GetSessionsForUser200ResponseSessionsInner>;
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next: string;
 }
 /**
  *
@@ -7678,6 +8820,9 @@ export interface GetSessionsForUser200ResponseSessionsInner {
   /**
    */
   expires_at: GetSessionsForUser200ResponseSessionsInnerExpiresAt;
+  /**
+   */
+  last_interacted_at: GetSessionsForUser200ResponseSessionsInnerLastInteractedAt;
   /**
    */
   device: GetSessionsForUser200ResponseSessionsInnerDevice;
@@ -7742,6 +8887,11 @@ export type GetSessionsForUser200ResponseSessionsInnerCreatedAt = string | { [ke
 export interface GetSessionsForUser200ResponseSessionsInnerDevice {
   [key: string]: any | any;
   /**
+   * First user agent of the device from which this user logged in
+   *
+   */
+  initial_user_agent: string;
+  /**
    * First IP address associated with this session
    *
    */
@@ -7775,6 +8925,12 @@ export type GetSessionsForUser200ResponseSessionsInnerExpiresAt = string | { [ke
  *
  */
 export type GetSessionsForUser200ResponseSessionsInnerIdleExpiresAt =
+  | string
+  | { [key: string]: any };
+/**
+ *
+ */
+export type GetSessionsForUser200ResponseSessionsInnerLastInteractedAt =
   | string
   | { [key: string]: any };
 /**
@@ -7952,8 +9108,8 @@ export interface GetUniversalLogin200ResponseOneOf {
  *
  */
 export type GetUserOrganizations200Response =
-  | Array<GetOrganizations200ResponseOneOfInner>
-  | GetOrganizations200ResponseOneOf;
+  | Array<GetClientGrantOrganizations200ResponseOneOfInner>
+  | GetClientGrantOrganizations200ResponseOneOf;
 /**
  *
  */
@@ -8004,7 +9160,7 @@ export interface GetUsers200ResponseOneOfInner {
    */
   username: string;
   /**
-   * Phone number for this user when using SMS connections. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>.
+   * Phone number for this user. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>.
    *
    */
   phone_number: string;
@@ -8088,19 +9244,31 @@ export interface GetUsers200ResponseOneOfInnerAppMetadata {
   [key: string]: any | any;
   /**
    */
+  __tenant: any | null;
+  /**
+   */
+  _id: any | null;
+  /**
+   */
+  blocked: any | null;
+  /**
+   */
   clientID: any | null;
+  /**
+   */
+  created_at: any | null;
+  /**
+   */
+  email_verified: any | null;
+  /**
+   */
+  email: any | null;
   /**
    */
   globalClientID: any | null;
   /**
    */
   global_client_id: any | null;
-  /**
-   */
-  email_verified: any | null;
-  /**
-   */
-  user_id: any | null;
   /**
    */
   identities: any | null;
@@ -8112,28 +9280,22 @@ export interface GetUsers200ResponseOneOfInnerAppMetadata {
   lastLogin: any | null;
   /**
    */
-  metadata: any | null;
-  /**
-   */
-  created_at: any | null;
-  /**
-   */
   loginsCount: any | null;
   /**
    */
-  _id: any | null;
+  metadata: any | null;
   /**
    */
-  email: any | null;
+  multifactor_last_modified: any | null;
   /**
    */
-  blocked: any | null;
-  /**
-   */
-  __tenant: any | null;
+  multifactor: any | null;
   /**
    */
   updated_at: any | null;
+  /**
+   */
+  user_id: any | null;
 }
 /**
  *
@@ -8157,7 +9319,7 @@ export interface GetUsers200ResponseOneOfInnerIdentitiesInner {
    * The type of identity provider
    *
    */
-  provider: string;
+  provider: GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum;
   /**
    * Whether this identity is from a social provider (true) or not (false).
    *
@@ -8182,6 +9344,73 @@ export interface GetUsers200ResponseOneOfInnerIdentitiesInner {
    */
   profileData: UserProfile;
 }
+
+export const GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum = {
+  ad: 'ad',
+  adfs: 'adfs',
+  amazon: 'amazon',
+  apple: 'apple',
+  dropbox: 'dropbox',
+  bitbucket: 'bitbucket',
+  aol: 'aol',
+  auth0_oidc: 'auth0-oidc',
+  auth0: 'auth0',
+  baidu: 'baidu',
+  bitly: 'bitly',
+  box: 'box',
+  custom: 'custom',
+  daccount: 'daccount',
+  dwolla: 'dwolla',
+  email: 'email',
+  evernote_sandbox: 'evernote-sandbox',
+  evernote: 'evernote',
+  exact: 'exact',
+  facebook: 'facebook',
+  fitbit: 'fitbit',
+  flickr: 'flickr',
+  github: 'github',
+  google_apps: 'google-apps',
+  google_oauth2: 'google-oauth2',
+  instagram: 'instagram',
+  ip: 'ip',
+  line: 'line',
+  linkedin: 'linkedin',
+  miicard: 'miicard',
+  oauth1: 'oauth1',
+  oauth2: 'oauth2',
+  office365: 'office365',
+  oidc: 'oidc',
+  okta: 'okta',
+  paypal: 'paypal',
+  paypal_sandbox: 'paypal-sandbox',
+  pingfederate: 'pingfederate',
+  planningcenter: 'planningcenter',
+  renren: 'renren',
+  salesforce_community: 'salesforce-community',
+  salesforce_sandbox: 'salesforce-sandbox',
+  salesforce: 'salesforce',
+  samlp: 'samlp',
+  sharepoint: 'sharepoint',
+  shopify: 'shopify',
+  sms: 'sms',
+  soundcloud: 'soundcloud',
+  thecity_sandbox: 'thecity-sandbox',
+  thecity: 'thecity',
+  thirtysevensignals: 'thirtysevensignals',
+  twitter: 'twitter',
+  untappd: 'untappd',
+  vkontakte: 'vkontakte',
+  waad: 'waad',
+  weibo: 'weibo',
+  windowslive: 'windowslive',
+  wordpress: 'wordpress',
+  yahoo: 'yahoo',
+  yammer: 'yammer',
+  yandex: 'yandex',
+} as const;
+export type GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum =
+  (typeof GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum)[keyof typeof GetUsers200ResponseOneOfInnerIdentitiesInnerProviderEnum];
+
 /**
  *
  */
@@ -8532,6 +9761,86 @@ export interface PatchActionRequest {
   secrets?: Array<PostActionRequestSecretsInner>;
 }
 /**
+ * The successfully created authentication method.
+ */
+export interface PatchAuthenticationMethodsByAuthenticationMethodId200Response {
+  [key: string]: any | any;
+  /**
+   * The ID of the newly created authentication method (automatically generated by the application)
+   *
+   */
+  id?: string;
+  /**
+   */
+  type: PatchAuthenticationMethodsByAuthenticationMethodId200ResponseTypeEnum;
+  /**
+   * A human-readable label to identify the authentication method.
+   *
+   */
+  name?: string;
+  /**
+   * Base32 encoded secret for TOTP generation
+   *
+   */
+  totp_secret?: string;
+  /**
+   * Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice.
+   *
+   */
+  phone_number?: string;
+  /**
+   * Applies to email authentication methods only. The email address used to send verification messages.
+   *
+   */
+  email?: string;
+  /**
+   */
+  authentication_methods?: Array<PutAuthenticationMethods200ResponseInnerAuthenticationMethodsInner>;
+  /**
+   * Applies to phone authentication methods only. The preferred communication method.
+   *
+   */
+  preferred_authentication_method?: PatchAuthenticationMethodsByAuthenticationMethodId200ResponsePreferredAuthenticationMethodEnum;
+  /**
+   * Applies to webauthn authentication methods only. The id of the credential.
+   *
+   */
+  key_id?: string;
+  /**
+   * Applies to webauthn authentication methods only. The public key.
+   *
+   */
+  public_key?: string;
+  /**
+   * Applies to webauthn authentication methods only. The relying party identifier.
+   *
+   */
+  relying_party_identifier?: string;
+  /**
+   * Authentication method creation date
+   *
+   */
+  created_at?: string;
+}
+
+export const PatchAuthenticationMethodsByAuthenticationMethodId200ResponseTypeEnum = {
+  phone: 'phone',
+  email: 'email',
+  totp: 'totp',
+  webauthn_roaming: 'webauthn-roaming',
+} as const;
+export type PatchAuthenticationMethodsByAuthenticationMethodId200ResponseTypeEnum =
+  (typeof PatchAuthenticationMethodsByAuthenticationMethodId200ResponseTypeEnum)[keyof typeof PatchAuthenticationMethodsByAuthenticationMethodId200ResponseTypeEnum];
+
+export const PatchAuthenticationMethodsByAuthenticationMethodId200ResponsePreferredAuthenticationMethodEnum =
+  {
+    voice: 'voice',
+    sms: 'sms',
+  } as const;
+export type PatchAuthenticationMethodsByAuthenticationMethodId200ResponsePreferredAuthenticationMethodEnum =
+  (typeof PatchAuthenticationMethodsByAuthenticationMethodId200ResponsePreferredAuthenticationMethodEnum)[keyof typeof PatchAuthenticationMethodsByAuthenticationMethodId200ResponsePreferredAuthenticationMethodEnum];
+
+/**
  *
  */
 export interface PatchAuthenticationMethodsByAuthenticationMethodIdRequest {
@@ -8576,14 +9885,10 @@ export interface PatchBindingsRequest {
 /**
  *
  */
-export type PatchBindingsRequestBindingsInner = PatchBindingsRequestBindingsInnerOneOf;
-/**
- *
- */
-export interface PatchBindingsRequestBindingsInnerOneOf {
+export interface PatchBindingsRequestBindingsInner {
   /**
    */
-  ref: PatchBindingsRequestBindingsInnerOneOfRef;
+  ref: PatchBindingsRequestBindingsInnerRef;
   /**
    * The name of the binding.
    *
@@ -8598,13 +9903,13 @@ export interface PatchBindingsRequestBindingsInnerOneOf {
 /**
  * A reference to an action. An action can be referred to by ID or by Name.
  */
-export interface PatchBindingsRequestBindingsInnerOneOfRef {
+export interface PatchBindingsRequestBindingsInnerRef {
   [key: string]: any | any;
   /**
    * How the action is being referred to: `action_id` or `action_name`.
    *
    */
-  type?: PatchBindingsRequestBindingsInnerOneOfRefTypeEnum;
+  type?: PatchBindingsRequestBindingsInnerRefTypeEnum;
   /**
    * The id or name of an action that is being bound to a trigger.
    *
@@ -8612,13 +9917,13 @@ export interface PatchBindingsRequestBindingsInnerOneOfRef {
   value?: string;
 }
 
-export const PatchBindingsRequestBindingsInnerOneOfRefTypeEnum = {
+export const PatchBindingsRequestBindingsInnerRefTypeEnum = {
   binding_id: 'binding_id',
   action_id: 'action_id',
   action_name: 'action_name',
 } as const;
-export type PatchBindingsRequestBindingsInnerOneOfRefTypeEnum =
-  (typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum)[keyof typeof PatchBindingsRequestBindingsInnerOneOfRefTypeEnum];
+export type PatchBindingsRequestBindingsInnerRefTypeEnum =
+  (typeof PatchBindingsRequestBindingsInnerRefTypeEnum)[keyof typeof PatchBindingsRequestBindingsInnerRefTypeEnum];
 
 /**
  * Branding settings
@@ -8839,7 +10144,7 @@ export interface PatchCredentialsByCredentialIdRequest {
  */
 export interface PatchCustomDomainsByIdRequest {
   /**
-   * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
+   * recommended includes TLS 1.2
    *
    */
   tls_policy?: PatchCustomDomainsByIdRequestTlsPolicyEnum;
@@ -8852,7 +10157,6 @@ export interface PatchCustomDomainsByIdRequest {
 
 export const PatchCustomDomainsByIdRequestTlsPolicyEnum = {
   recommended: 'recommended',
-  compatible: 'compatible',
 } as const;
 export type PatchCustomDomainsByIdRequestTlsPolicyEnum =
   (typeof PatchCustomDomainsByIdRequestTlsPolicyEnum)[keyof typeof PatchCustomDomainsByIdRequestTlsPolicyEnum];
@@ -8872,7 +10176,7 @@ export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template?: PatchEmailTemplatesByTemplateNameRequestTemplateEnum;
@@ -8922,6 +10226,7 @@ export const PatchEmailTemplatesByTemplateNameRequestTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -9039,6 +10344,11 @@ export interface PatchLogStreamsByIdRequest {
    *
    */
   status?: PatchLogStreamsByIdRequestStatusEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -9178,26 +10488,26 @@ export interface PatchOrganizationsByIdRequest {
    */
   branding?: PatchOrganizationsByIdRequestBranding | null;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata?: { [key: string]: any } | null;
 }
 /**
- * Theme defines how to style the login pages
+ * Theme defines how to style the login pages.
  */
 export interface PatchOrganizationsByIdRequestBranding {
   /**
-   * URL of logo to display on login page
+   * URL of logo to display on login page.
    *
    */
   logo_url?: string;
   /**
    */
-  colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+  colors?: GetClientGrantOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
- * ACUL settings for the given screen.
+ * Render settings for the given screen
  */
 export interface PatchRenderingRequest {
   /**
@@ -9219,7 +10529,7 @@ export interface PatchRenderingRequest {
    * An array of head tags
    *
    */
-  head_tags?: Array<{ [key: string]: any }>;
+  head_tags?: Array<PatchRenderingRequestHeadTagsInner>;
 }
 
 export const PatchRenderingRequestRenderingModeEnum = {
@@ -9229,6 +10539,35 @@ export const PatchRenderingRequestRenderingModeEnum = {
 export type PatchRenderingRequestRenderingModeEnum =
   (typeof PatchRenderingRequestRenderingModeEnum)[keyof typeof PatchRenderingRequestRenderingModeEnum];
 
+/**
+ *
+ */
+export interface PatchRenderingRequestHeadTagsInner {
+  [key: string]: any | any;
+  /**
+   * Any HTML element valid for use in the head tag
+   *
+   */
+  tag?: string;
+  /**
+   */
+  attributes?: PatchRenderingRequestHeadTagsInnerAttributes;
+  /**
+   * Text/content within the opening and closing tags of the element
+   * See <a href="https://auth0.com/docs/customize/login-pages/universal-login/advanced-customizations/getting-started/configure-screens">documentation</a> on using context variables
+   *
+   */
+  content?: string;
+}
+/**
+ * Attributes of the HTML tag
+ */
+export interface PatchRenderingRequestHeadTagsInnerAttributes {
+  [key: string]: any | any;
+  /**
+   */
+  integrity?: Array<string>;
+}
 /**
  *
  */
@@ -9480,6 +10819,7 @@ export const PostAuthenticationMethods201ResponseTypeEnum = {
   email: 'email',
   totp: 'totp',
   webauthn_roaming: 'webauthn-roaming',
+  passkey: 'passkey',
 } as const;
 export type PostAuthenticationMethods201ResponseTypeEnum =
   (typeof PostAuthenticationMethods201ResponseTypeEnum)[keyof typeof PostAuthenticationMethods201ResponseTypeEnum];
@@ -9519,22 +10859,22 @@ export interface PostAuthenticationMethodsRequest {
    */
   email?: string;
   /**
-   * Preferred phone authentication method.
+   * Applies to phone authentication methods only. The preferred communication method.
    *
    */
   preferred_authentication_method?: PostAuthenticationMethodsRequestPreferredAuthenticationMethodEnum;
   /**
-   * Applies to email webauthn authenticators only. The id of the credential.
+   * Applies to webauthn authentication methods only. The id of the credential.
    *
    */
   key_id?: string;
   /**
-   * Applies to email webauthn authenticators only. The public key.
+   * Applies to webauthn authentication methods only. The public key.
    *
    */
   public_key?: string;
   /**
-   * Applies to email webauthn authenticators only. The relying party identifier.
+   * Applies to webauthn authentication methods only. The relying party identifier.
    *
    */
   relying_party_identifier?: string;
@@ -9545,6 +10885,7 @@ export const PostAuthenticationMethodsRequestTypeEnum = {
   email: 'email',
   totp: 'totp',
   webauthn_roaming: 'webauthn-roaming',
+  passkey: 'passkey',
 } as const;
 export type PostAuthenticationMethodsRequestTypeEnum =
   (typeof PostAuthenticationMethodsRequestTypeEnum)[keyof typeof PostAuthenticationMethodsRequestTypeEnum];
@@ -9698,6 +11039,11 @@ export interface PostBrandingThemeRequestColors {
    */
   body_text: string;
   /**
+   * Captcha Widget Theme
+   *
+   */
+  captcha_widget_theme?: PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum;
+  /**
    * Error
    *
    */
@@ -9773,6 +11119,15 @@ export interface PostBrandingThemeRequestColors {
    */
   widget_border: string;
 }
+
+export const PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum = {
+  auto: 'auto',
+  dark: 'dark',
+  light: 'light',
+} as const;
+export type PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum =
+  (typeof PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum)[keyof typeof PostBrandingThemeRequestColorsCaptchaWidgetThemeEnum];
+
 /**
  *
  */
@@ -10136,7 +11491,7 @@ export interface PostCustomDomainsRequest {
    */
   verification_method?: PostCustomDomainsRequestVerificationMethodEnum;
   /**
-   * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
+   * recommended includes TLS 1.2
    *
    */
   tls_policy?: PostCustomDomainsRequestTlsPolicyEnum;
@@ -10197,7 +11552,7 @@ export interface PostDeviceCredentials201Response {
  */
 export interface PostEmailTemplatesRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: PostEmailTemplatesRequestTemplateEnum;
@@ -10247,6 +11602,7 @@ export const PostEmailTemplatesRequestTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -10285,7 +11641,7 @@ export interface PostEmailVerificationRequest {
    */
   user_id: string;
   /**
-   * ID of the client. If provided for tenants using New Universal Login experience, the user will be prompted to redirect to the default login route of the corresponding application once the ticket is used. See <a target='' href='https://manage.local.dev.auth0.com/docs/universal-login/configure-default-login-routes#completing-the-password-reset-flow'>Configuring Default Login Routes</a> for more details.
+   * ID of the client (application). If provided for tenants using the New Universal Login experience, the email template and UI displays application details, and the user is prompted to redirect to the application's <a target='' href='https://manage.local.dev.auth0.com/docs/authenticate/login/auth0-universal-login/configure-default-login-routes#completing-the-password-reset-flow'>default login route</a> after the ticket is used. client_id is required to use the <a target='' href='https://manage.local.dev.auth0.com/docs/customize/actions/flows-and-triggers/post-change-password-flow'>Password Reset Post Challenge</a> trigger.
    *
    */
   client_id?: string;
@@ -10333,6 +11689,59 @@ export interface PostEnabledConnectionsRequest {
    */
   show_as_button?: boolean;
 }
+/**
+ *
+ */
+export interface PostEncryptionKeyRequest {
+  [key: string]: any | any;
+  /**
+   * Base64 encoded ciphertext of key material wrapped by public wrapping key.
+   *
+   */
+  wrapped_key: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionRequest {
+  [key: string]: any | any;
+  /**
+   * Type of the encryption key to be created.
+   *
+   */
+  type: PostEncryptionRequestTypeEnum;
+}
+
+export const PostEncryptionRequestTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type PostEncryptionRequestTypeEnum =
+  (typeof PostEncryptionRequestTypeEnum)[keyof typeof PostEncryptionRequestTypeEnum];
+
+/**
+ *
+ */
+export interface PostEncryptionWrappingKey201Response {
+  [key: string]: any | any;
+  /**
+   * Public wrapping key in PEM format
+   *
+   */
+  public_key: string;
+  /**
+   * Encryption algorithm that shall be used to wrap your key material
+   *
+   */
+  algorithm: PostEncryptionWrappingKey201ResponseAlgorithmEnum;
+}
+
+export const PostEncryptionWrappingKey201ResponseAlgorithmEnum = {
+  CKM_RSA_AES_KEY_WRAP: 'CKM_RSA_AES_KEY_WRAP',
+} as const;
+export type PostEncryptionWrappingKey201ResponseAlgorithmEnum =
+  (typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum)[keyof typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum];
+
 /**
  *
  */
@@ -12563,19 +13972,31 @@ export interface PostInvitationsRequestAppMetadata {
   [key: string]: any | any;
   /**
    */
+  __tenant?: any | null;
+  /**
+   */
+  _id?: any | null;
+  /**
+   */
+  blocked?: any | null;
+  /**
+   */
   clientID?: any | null;
+  /**
+   */
+  created_at?: any | null;
+  /**
+   */
+  email_verified?: any | null;
+  /**
+   */
+  email?: any | null;
   /**
    */
   globalClientID?: any | null;
   /**
    */
   global_client_id?: any | null;
-  /**
-   */
-  email_verified?: any | null;
-  /**
-   */
-  user_id?: any | null;
   /**
    */
   identities?: any | null;
@@ -12587,28 +14008,22 @@ export interface PostInvitationsRequestAppMetadata {
   lastLogin?: any | null;
   /**
    */
-  metadata?: any | null;
-  /**
-   */
-  created_at?: any | null;
-  /**
-   */
   loginsCount?: any | null;
   /**
    */
-  _id?: any | null;
+  metadata?: any | null;
   /**
    */
-  email?: any | null;
+  multifactor_last_modified?: any | null;
   /**
    */
-  blocked?: any | null;
-  /**
-   */
-  __tenant?: any | null;
+  multifactor?: any | null;
   /**
    */
   updated_at?: any | null;
+  /**
+   */
+  user_id?: any | null;
 }
 /**
  *
@@ -12634,6 +14049,11 @@ export interface PostLogStreamsRequestOneOf {
   /**
    */
   type: PostLogStreamsRequestOneOfTypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -12667,6 +14087,11 @@ export interface PostLogStreamsRequestOneOf1 {
   /**
    */
   type: PostLogStreamsRequestOneOf1TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -12745,6 +14170,11 @@ export interface PostLogStreamsRequestOneOf2 {
    */
   type: PostLogStreamsRequestOneOf2TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -12811,6 +14241,7 @@ export const PostLogStreamsRequestOneOf2SinkAzureRegionEnum = {
   southcentralus: 'southcentralus',
   southeastasia: 'southeastasia',
   southindia: 'southindia',
+  swedencentral: 'swedencentral',
   switzerlandnorth: 'switzerlandnorth',
   uaenorth: 'uaenorth',
   uksouth: 'uksouth',
@@ -12836,6 +14267,11 @@ export interface PostLogStreamsRequestOneOf3 {
   /**
    */
   type: PostLogStreamsRequestOneOf3TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -12870,6 +14306,11 @@ export interface PostLogStreamsRequestOneOf4 {
    */
   type: PostLogStreamsRequestOneOf4TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -12902,6 +14343,11 @@ export interface PostLogStreamsRequestOneOf5 {
   /**
    */
   type: PostLogStreamsRequestOneOf5TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -12936,6 +14382,11 @@ export interface PostLogStreamsRequestOneOf6 {
    */
   type: PostLogStreamsRequestOneOf6TypeEnum;
   /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
+  /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
    */
@@ -12968,6 +14419,11 @@ export interface PostLogStreamsRequestOneOf7 {
   /**
    */
   type: PostLogStreamsRequestOneOf7TypeEnum;
+  /**
+   * True for priority log streams, false for non-priority
+   *
+   */
+  isPriority?: boolean;
   /**
    * Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered.
    *
@@ -13028,6 +14484,7 @@ export const PostLogStreamsRequestOneOfFiltersInnerNameEnum = {
   auth_token_exchange_success: 'auth.token_exchange.success',
   management_fail: 'management.fail',
   management_success: 'management.success',
+  scim_event: 'scim.event',
   system_notification: 'system.notification',
   user_fail: 'user.fail',
   user_notification: 'user.notification',
@@ -13051,16 +14508,6 @@ export interface PostMembersRequest {
 /**
  *
  */
-export interface PostOrganizationClientGrantsRequest {
-  /**
-   * A Client Grant ID to add to the organization.
-   *
-   */
-  grant_id: string;
-}
-/**
- *
- */
 export interface PostOrganizationMemberRolesRequest {
   /**
    * List of roles IDs to associated with the user.
@@ -13074,7 +14521,7 @@ export interface PostOrganizationMemberRolesRequest {
 export interface PostOrganizations201Response {
   [key: string]: any | any;
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -13090,9 +14537,9 @@ export interface PostOrganizations201Response {
   display_name: string;
   /**
    */
-  branding: GetOrganizations200ResponseOneOfInnerBranding;
+  branding: GetClientGrantOrganizations200ResponseOneOfInnerBranding;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata: { [key: string]: any };
@@ -13163,7 +14610,7 @@ export interface PostOrganizationsRequest {
    */
   branding?: PostOrganizationsRequestBranding;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata?: { [key: string]: any };
@@ -13174,17 +14621,17 @@ export interface PostOrganizationsRequest {
   enabled_connections?: Array<PostOrganizationsRequestEnabledConnectionsInner>;
 }
 /**
- * Theme defines how to style the login pages
+ * Theme defines how to style the login pages.
  */
 export interface PostOrganizationsRequestBranding {
   /**
-   * URL of logo to display on login page
+   * URL of logo to display on login page.
    *
    */
   logo_url?: string;
   /**
    */
-  colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+  colors?: GetClientGrantOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
  * Connection to be added to the organization.
@@ -13237,7 +14684,7 @@ export interface PostPasswordChangeRequest {
    */
   user_id?: string;
   /**
-   * ID of the client. If provided for tenants using New Universal Login experience, the user will be prompted to redirect to the default login route of the corresponding application once the ticket is used. See <a target='' href='https://manage.local.dev.auth0.com/docs/universal-login/configure-default-login-routes#completing-the-password-reset-flow'>Configuring Default Login Routes</a> for more details.
+   * ID of the client (application). If provided for tenants using the New Universal Login experience, the email template and UI displays application details, and the user is prompted to redirect to the application's <a target='' href='https://manage.local.dev.auth0.com/docs/authenticate/login/auth0-universal-login/configure-default-login-routes#completing-the-password-reset-flow'>default login route</a> after the ticket is used. client_id is required to use the <a target='' href='https://manage.local.dev.auth0.com/docs/customize/actions/flows-and-triggers/post-change-password-flow'>Password Reset Post Challenge</a> trigger.
    *
    */
   client_id?: string;
@@ -13463,8 +14910,15 @@ export interface PostSsoTicketRequestConnectionConfig {
    */
   display_name?: string;
   /**
+   * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
+   *
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -13494,7 +14948,7 @@ export interface PostSsoTicketRequestConnectionConfigOptions {
  */
 export interface PostSsoTicketRequestEnabledOrganizationsInner {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   organization_id: string;
@@ -13969,7 +15423,7 @@ export interface PutAuthenticationMethodsRequestInner {
    */
   type: PutAuthenticationMethodsRequestInnerTypeEnum;
   /**
-   * The preferred authentication method for phone authentication method.
+   * Applies to phone authentication methods only. The preferred communication method.
    *
    */
   preferred_authentication_method?: PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnum;
@@ -14013,6 +15467,20 @@ export type PutAuthenticationMethodsRequestInnerPreferredAuthenticationMethodEnu
 /**
  *
  */
+export interface PutFactorDuoSettingsRequest {
+  /**
+   */
+  ikey?: string;
+  /**
+   */
+  skey?: string;
+  /**
+   */
+  host?: string;
+}
+/**
+ *
+ */
 export interface PutFactorsByName200Response {
   /**
    * Whether this factor is enabled (true) or disabled (false).
@@ -14037,6 +15505,14 @@ export interface PutFcmRequest {
   /**
    */
   server_key?: string | null;
+}
+/**
+ *
+ */
+export interface PutFcmv1Request {
+  /**
+   */
+  server_credentials?: string | null;
 }
 /**
  *
@@ -14246,6 +15722,7 @@ export interface ResourceServer {
 export const ResourceServerSigningAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  RS512: 'RS512',
   PS256: 'PS256',
 } as const;
 export type ResourceServerSigningAlgEnum =
@@ -14341,6 +15818,7 @@ export interface ResourceServerCreate {
 export const ResourceServerCreateSigningAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  RS512: 'RS512',
   PS256: 'PS256',
 } as const;
 export type ResourceServerCreateSigningAlgEnum =
@@ -14507,6 +15985,7 @@ export interface ResourceServerUpdate {
 export const ResourceServerUpdateSigningAlgEnum = {
   HS256: 'HS256',
   RS256: 'RS256',
+  RS512: 'RS512',
   PS256: 'PS256',
 } as const;
 export type ResourceServerUpdateSigningAlgEnum =
@@ -14922,49 +16401,6 @@ export interface SsoAccessTicketResponse {
 /**
  *
  */
-export interface SsoTicketRequestJson {
-  /**
-   * If provided, this will allow editing of the provided connection during the SSO Flow
-   *
-   */
-  connection_id?: string;
-  /**
-   */
-  connection_config?: SsoTicketRequestJsonConnectionConfig;
-  /**
-   * List of client_ids that the connection will be enabled for.
-   *
-   */
-  enabled_clients?: Array<string>;
-  /**
-   * List of organizations that the connection will be enabled for.
-   *
-   */
-  enabled_organizations?: Array<SsoTicketRequestJsonEnabledOrganizationsInner>;
-}
-/**
- * If provided, this will create a new connection for the SSO flow with the given configuration
- */
-export interface SsoTicketRequestJsonConnectionConfig {
-  /**
-   * The name of the connection that will be created as a part of the SSO flow.
-   *
-   */
-  name: string;
-}
-/**
- *
- */
-export interface SsoTicketRequestJsonEnabledOrganizationsInner {
-  /**
-   * Organization identifier
-   *
-   */
-  organization_id: string;
-}
-/**
- *
- */
 export interface StatsEntry {
   [key: string]: any | any;
   /**
@@ -15083,6 +16519,11 @@ export interface TenantSettings {
    */
   sandbox_version: string;
   /**
+   * Selected sandbox version for rules and hooks extensibility.
+   *
+   */
+  legacy_sandbox_version: string;
+  /**
    * Available sandbox versions for the extensibility environment.
    *
    */
@@ -15103,6 +16544,9 @@ export interface TenantSettings {
   /**
    */
   sessions: TenantSettingsSessions | null;
+  /**
+   */
+  oidc_logout: TenantSettingsOidcLogout;
   /**
    * Whether to accept an organization name instead of an ID on auth endpoints
    *
@@ -15129,39 +16573,62 @@ export interface TenantSettings {
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -15170,13 +16637,22 @@ export const TenantSettingsEnabledLocalesEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsEnabledLocalesEnum =
@@ -15359,6 +16835,11 @@ export interface TenantSettingsFlags {
    *
    */
   remove_alg_from_jwks: boolean;
+  /**
+   * Improves bot detection during signup in classic universal login
+   *
+   */
+  improved_signup_bot_detection_in_classic: boolean;
 }
 /**
  * Guardian page customization.
@@ -15384,6 +16865,16 @@ export interface TenantSettingsMtls {
    *
    */
   enable_endpoint_aliases: boolean;
+}
+/**
+ * Settings related to OIDC RP-initiated Logout
+ */
+export interface TenantSettingsOidcLogout {
+  /**
+   * Enable the end_session_endpoint URL in the .well-known discovery configuration
+   *
+   */
+  rp_logout_end_session_endpoint_discovery: boolean;
 }
 /**
  * Session cookie configuration
@@ -15483,6 +16974,11 @@ export interface TenantSettingsUpdate {
    */
   sandbox_version?: string;
   /**
+   * Selected legacy sandbox version for the extensibility environment
+   *
+   */
+  legacy_sandbox_version?: string;
+  /**
    * The default absolute redirection uri, must be https
    *
    */
@@ -15498,6 +16994,9 @@ export interface TenantSettingsUpdate {
   /**
    */
   sessions?: TenantSettingsUpdateSessions | null;
+  /**
+   */
+  oidc_logout?: TenantSettingsUpdateOidcLogout;
   /**
    * Whether to enable flexible factors for MFA in the PostLogin action
    *
@@ -15524,39 +17023,62 @@ export interface TenantSettingsUpdate {
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -15565,13 +17087,22 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsUpdateEnabledLocalesEnum =
@@ -15760,10 +17291,20 @@ export interface TenantSettingsUpdateFlags {
    */
   mfa_show_factor_list_on_enrollment?: boolean;
   /**
+   * Require the use of JWT Secured Authorization Requests (JAR)
+   *
+   */
+  require_signed_request_object?: boolean;
+  /**
    * Removes alg property from jwks .well-known endpoint
    *
    */
   remove_alg_from_jwks?: boolean;
+  /**
+   * Improves bot detection during signup in classic universal login
+   *
+   */
+  improved_signup_bot_detection_in_classic?: boolean;
 }
 
 export const TenantSettingsUpdateFlagsChangePwdFlowV1Enum = {
@@ -15798,6 +17339,16 @@ export interface TenantSettingsUpdateMtls {
   enable_endpoint_aliases?: boolean;
 }
 /**
+ * Settings related to OIDC RP-initiated Logout
+ */
+export interface TenantSettingsUpdateOidcLogout {
+  /**
+   * Enable the end_session_endpoint URL in the .well-known discovery configuration
+   *
+   */
+  rp_logout_end_session_endpoint_discovery?: boolean;
+}
+/**
  * Sessions related settings for tenant
  */
 export interface TenantSettingsUpdateSessions {
@@ -15810,18 +17361,74 @@ export interface TenantSettingsUpdateSessions {
 /**
  *
  */
-export interface Token {
+export interface TryPhoneProvider202Response {
   /**
-   * JWT's aud claim (the client_id to which the JWT was issued).
+   * The status code of the operation.
    *
    */
-  aud?: string;
+  code: number;
   /**
-   * jti (unique ID within aud) of the blacklisted JWT.
+   * The description of the operation status.
    *
    */
-  jti: string;
+  message: string;
 }
+/**
+ *
+ */
+export interface TryPhoneProviderRequest {
+  /**
+   * The recipient phone number to receive a given notification.
+   *
+   */
+  to: string;
+  /**
+   * The delivery method for the notification
+   *
+   */
+  delivery_method?: TryPhoneProviderRequestDeliveryMethodEnum;
+}
+
+export const TryPhoneProviderRequestDeliveryMethodEnum = {
+  text: 'text',
+  voice: 'voice',
+} as const;
+export type TryPhoneProviderRequestDeliveryMethodEnum =
+  (typeof TryPhoneProviderRequestDeliveryMethodEnum)[keyof typeof TryPhoneProviderRequestDeliveryMethodEnum];
+
+/**
+ *
+ */
+export interface TryPhoneTemplate202Response {
+  [key: string]: any | any;
+  /**
+   */
+  message: string;
+}
+/**
+ *
+ */
+export interface TryPhoneTemplateRequest {
+  [key: string]: any | any;
+  /**
+   * Destination of the testing phone notification
+   *
+   */
+  to: string;
+  /**
+   * Medium to use to send the notification
+   *
+   */
+  delivery_method?: TryPhoneTemplateRequestDeliveryMethodEnum;
+}
+
+export const TryPhoneTemplateRequestDeliveryMethodEnum = {
+  text: 'text',
+  voice: 'voice',
+} as const;
+export type TryPhoneTemplateRequestDeliveryMethodEnum =
+  (typeof TryPhoneTemplateRequestDeliveryMethodEnum)[keyof typeof TryPhoneTemplateRequestDeliveryMethodEnum];
+
 /**
  *
  */
@@ -15846,6 +17453,61 @@ export interface TwilioFactorProvider {
    *
    */
   sid: string | null;
+}
+/**
+ *
+ */
+export interface UpdatePhoneProviderRequest {
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name?: UpdatePhoneProviderRequestNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  credentials?: CreatePhoneProviderRequestCredentials;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+}
+
+export const UpdatePhoneProviderRequestNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type UpdatePhoneProviderRequestNameEnum =
+  (typeof UpdatePhoneProviderRequestNameEnum)[keyof typeof UpdatePhoneProviderRequestNameEnum];
+
+/**
+ *
+ */
+export interface UpdatePhoneTemplateRequest {
+  /**
+   */
+  content?: UpdatePhoneTemplateRequestContent;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
+export interface UpdatePhoneTemplateRequestContent {
+  /**
+   * Default phone number to be used as 'from' when sending a phone notification
+   *
+   */
+  from?: string;
+  /**
+   */
+  body?: GetPhoneTemplates200ResponseTemplatesInnerContentBody;
 }
 /**
  *
@@ -15888,7 +17550,7 @@ export interface UserCreate {
    */
   email?: string;
   /**
-   * The user's phone number (following the E.164 recommendation), only valid for users from SMS connections.
+   * The user's phone number (following the E.164 recommendation).
    *
    */
   phone_number?: string;
@@ -15951,7 +17613,7 @@ export interface UserCreate {
    */
   connection: string;
   /**
-   * Initial password for this user (mandatory only for auth0 connection strategy).
+   * Initial password for this user. Only valid for auth0 connection strategy.
    *
    */
   password?: string;
@@ -16159,6 +17821,21 @@ export interface UserProfile {
 /**
  *
  */
+export interface UserRevokeAccessRequest {
+  /**
+   * ID of the session to revoke.
+   *
+   */
+  session_id?: string;
+  /**
+   * Whether to preserve the refresh tokens associated with the session.
+   *
+   */
+  preserve_refresh_tokens?: boolean;
+}
+/**
+ *
+ */
 export interface UserUpdate {
   [key: string]: any | any;
   /**
@@ -16175,12 +17852,12 @@ export interface UserUpdate {
    * Email address of this user.
    *
    */
-  email?: string;
+  email?: string | null;
   /**
-   * The user's phone number (following the E.164 recommendation), only valid for users from SMS connections.
+   * The user's phone number (following the E.164 recommendation).
    *
    */
-  phone_number?: string;
+  phone_number?: string | null;
   /**
    * Whether this phone number has been verified (true) or not (false).
    *
@@ -16225,17 +17902,17 @@ export interface UserUpdate {
    */
   verify_email?: boolean;
   /**
-   * Whether this user will receive a text after changing the phone number (true) or no text (false). Only valid when changing phone number.
+   * Whether this user will receive a text after changing the phone number (true) or no text (false). Only valid when changing phone number for SMS connections.
    *
    */
   verify_phone_number?: boolean;
   /**
-   * New password for this user (mandatory for non-SMS connections).
+   * New password for this user. Only valid for database connections.
    *
    */
   password?: string;
   /**
-   * ID of the connection this user should be created in.
+   * Name of the connection to target for this user update.
    *
    */
   connection?: string;
@@ -16248,7 +17925,7 @@ export interface UserUpdate {
    * The user's username. Only valid if the connection requires a username.
    *
    */
-  username?: string;
+  username?: string | null;
 }
 /**
  * User metadata to which this user has read-only access.
@@ -16257,19 +17934,31 @@ export interface UserUpdateAppMetadata {
   [key: string]: any | any;
   /**
    */
+  __tenant?: any | null;
+  /**
+   */
+  _id?: any | null;
+  /**
+   */
+  blocked?: any | null;
+  /**
+   */
   clientID?: any | null;
+  /**
+   */
+  created_at?: any | null;
+  /**
+   */
+  email_verified?: any | null;
+  /**
+   */
+  email?: any | null;
   /**
    */
   globalClientID?: any | null;
   /**
    */
   global_client_id?: any | null;
-  /**
-   */
-  email_verified?: any | null;
-  /**
-   */
-  user_id?: any | null;
   /**
    */
   identities?: any | null;
@@ -16281,28 +17970,22 @@ export interface UserUpdateAppMetadata {
   lastLogin?: any | null;
   /**
    */
-  metadata?: any | null;
-  /**
-   */
-  created_at?: any | null;
-  /**
-   */
   loginsCount?: any | null;
   /**
    */
-  _id?: any | null;
+  metadata?: any | null;
   /**
    */
-  email?: any | null;
+  multifactor_last_modified?: any | null;
   /**
    */
-  blocked?: any | null;
-  /**
-   */
-  __tenant?: any | null;
+  multifactor?: any | null;
   /**
    */
   updated_at?: any | null;
+  /**
+   */
+  user_id?: any | null;
 }
 /**
  *
@@ -16369,7 +18052,7 @@ export interface GetActionVersionsRequest {
  */
 export interface GetActionsRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point.
    *
    */
   triggerId?: string;
@@ -16404,7 +18087,7 @@ export interface GetActionsRequest {
  */
 export interface GetBindingsRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point.
    *
    */
   triggerId: string;
@@ -16444,7 +18127,7 @@ export interface PatchActionOperationRequest {
  */
 export interface PatchBindingsOperationRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point.
    *
    */
   triggerId: string;
@@ -16507,22 +18190,38 @@ export interface GetIpsByIdRequest {
 /**
  *
  */
-export interface GetTokensRequest {
-  /**
-   * Optional filter on the JWT's aud claim (the client_id to which the JWT was issued).
-   *
-   */
-  aud?: string;
-}
-/**
- *
- */
 export interface DeleteBrandingThemeRequest {
   /**
    * The ID of the theme
    *
    */
   themeId: string;
+}
+/**
+ *
+ */
+export interface DeletePhoneProviderRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeletePhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetBrandingPhoneProvidersRequest {
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
 }
 /**
  *
@@ -16537,12 +18236,78 @@ export interface GetBrandingThemeRequest {
 /**
  *
  */
+export interface GetPhoneProviderRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetPhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetPhoneTemplatesRequest {
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
 export interface PatchBrandingThemeRequest {
   /**
    * The ID of the theme
    *
    */
   themeId: string;
+}
+/**
+ *
+ */
+export interface ResetPhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface TryPhoneProviderOperationRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface TryPhoneTemplateOperationRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface UpdatePhoneProviderOperationRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface UpdatePhoneTemplateOperationRequest {
+  /**
+   */
+  id: string;
 }
 /**
  *
@@ -16557,9 +18322,54 @@ export interface DeleteClientGrantsByIdRequest {
 /**
  *
  */
+export interface GetClientGrantOrganizationsRequest {
+  /**
+   * ID of the client grant
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+
+/**
+ *
+ */
+export const GetClientGrantsAllowAnyOrganizationEnum = {
+  true: true,
+} as const;
+export type GetClientGrantsAllowAnyOrganizationEnum =
+  (typeof GetClientGrantsAllowAnyOrganizationEnum)[keyof typeof GetClientGrantsAllowAnyOrganizationEnum];
+
+/**
+ *
+ */
 export interface GetClientGrantsRequest {
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -16574,6 +18384,16 @@ export interface GetClientGrantsRequest {
    */
   include_totals?: boolean;
   /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
    * Optional filter on audience.
    *
    */
@@ -16583,6 +18403,11 @@ export interface GetClientGrantsRequest {
    *
    */
   client_id?: string;
+  /**
+   * Optional filter on allow_any_organization.
+   *
+   */
+  allow_any_organization?: GetClientGrantsAllowAnyOrganizationEnum;
 }
 /**
  *
@@ -16674,12 +18499,7 @@ export interface GetClientsRequest {
    */
   app_type?: string;
   /**
-   * A comma separated list of client_ids used to filter the returned clients
-   *
-   */
-  client_ids?: string;
-  /**
-   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
+   * Advanced Query in <a href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i>
    *
    */
   q?: string;
@@ -16900,7 +18720,7 @@ export type GetConnectionsStrategyEnum =
  */
 export interface GetConnectionsRequest {
   /**
-   * The amount of entries per page. Default: no paging is used, all connections are returned
+   * The amount of entries per page. Defaults to 100 if not provided
    *
    */
   per_page?: number;
@@ -17010,7 +18830,7 @@ export interface GetStatusRequest {
  */
 export interface PatchConnectionsByIdRequest {
   /**
-   * The id of the connection to retrieve
+   * The id of the connection to update
    *
    */
   id: string;
@@ -17160,6 +18980,7 @@ export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17177,7 +18998,7 @@ export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface GetEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -17190,6 +19011,7 @@ export const PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17207,7 +19029,7 @@ export type PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameOperationRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum;
@@ -17220,6 +19042,7 @@ export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17237,7 +19060,7 @@ export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface PutEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -17577,7 +19400,7 @@ export interface DeleteGrantsByUserIdRequest {
  */
 export interface GetGrantsRequest {
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -17698,7 +19521,7 @@ export interface GetHooksRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -17829,9 +19652,69 @@ export interface PostUsersImportsData {
 /**
  *
  */
+export interface DeleteEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeysRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Default value is 50, maximum value is 100.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface GetSigningKeyRequest {
   /**
    * Key id of the key to retrieve
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionKeyOperationRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionWrappingKeyRequest {
+  /**
+   * Encryption key ID
    *
    */
   kid: string;
@@ -17939,9 +19822,19 @@ export interface GetLogsByIdRequest {
 /**
  *
  */
+export interface CreateOrganizationClientGrantsOperationRequest {
+  /**
+   * Organization identifier.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface DeleteClientGrantsByGrantIdRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -17956,12 +19849,12 @@ export interface DeleteClientGrantsByGrantIdRequest {
  */
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
   /**
-   * Connection identifier
+   * Connection identifier.
    *
    */
   connectionId: string;
@@ -17971,7 +19864,7 @@ export interface DeleteEnabledConnectionsByConnectionIdRequest {
  */
 export interface DeleteInvitationsByInvitationIdRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -17986,7 +19879,7 @@ export interface DeleteInvitationsByInvitationIdRequest {
  */
 export interface DeleteMembersOperationRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -17996,7 +19889,7 @@ export interface DeleteMembersOperationRequest {
  */
 export interface DeleteOrganizationMemberRolesOperationRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18011,7 +19904,7 @@ export interface DeleteOrganizationMemberRolesOperationRequest {
  */
 export interface DeleteOrganizationsByIdRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18021,7 +19914,7 @@ export interface DeleteOrganizationsByIdRequest {
  */
 export interface GetEnabledConnectionsRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18046,12 +19939,12 @@ export interface GetEnabledConnectionsRequest {
  */
 export interface GetEnabledConnectionsByConnectionIdRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
   /**
-   * Connection identifier
+   * Connection identifier.
    *
    */
   connectionId: string;
@@ -18061,7 +19954,7 @@ export interface GetEnabledConnectionsByConnectionIdRequest {
  */
 export interface GetInvitationsRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18101,7 +19994,7 @@ export interface GetInvitationsRequest {
  */
 export interface GetInvitationsByInvitationIdRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18126,7 +20019,7 @@ export interface GetInvitationsByInvitationIdRequest {
  */
 export interface GetMembersRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18181,7 +20074,7 @@ export interface GetNameByNameRequest {
  */
 export interface GetOrganizationClientGrantsRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18196,7 +20089,7 @@ export interface GetOrganizationClientGrantsRequest {
    */
   client_id?: string;
   /**
-   * A list of grant ids, which will filter the results.
+   * Optional filter on the ID of the client grant. Must be URL encoded and may be specified multiple times (max 10).<br /><b>e.g.</b> <i>../client-grants?grant_ids=id1&grant_ids=id2</i>
    *
    */
   grant_ids?: Array<string>;
@@ -18221,7 +20114,7 @@ export interface GetOrganizationClientGrantsRequest {
  */
 export interface GetOrganizationMemberRolesRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18296,12 +20189,12 @@ export interface GetOrganizationsByIdRequest {
  */
 export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
   /**
-   * Connection identifier
+   * Connection identifier.
    *
    */
   connectionId: string;
@@ -18321,7 +20214,7 @@ export interface PatchOrganizationsByIdOperationRequest {
  */
 export interface PostEnabledConnectionsOperationRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18331,7 +20224,7 @@ export interface PostEnabledConnectionsOperationRequest {
  */
 export interface PostInvitationsOperationRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18341,17 +20234,7 @@ export interface PostInvitationsOperationRequest {
  */
 export interface PostMembersOperationRequest {
   /**
-   * Organization identifier
-   *
-   */
-  id: string;
-}
-/**
- *
- */
-export interface PostOrganizationClientGrantsOperationRequest {
-  /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18361,7 +20244,7 @@ export interface PostOrganizationClientGrantsOperationRequest {
  */
 export interface PostOrganizationMemberRolesOperationRequest {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -18386,8 +20269,11 @@ export const GetCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
+  custom_form: 'custom-form',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -18406,6 +20292,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
@@ -18414,39 +20301,62 @@ export type GetCustomTextByLanguagePromptEnum =
  *
  */
 export const GetCustomTextByLanguageLanguageEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -18455,13 +20365,22 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
@@ -18645,12 +20564,12 @@ export type GetRenderingScreenEnum =
  */
 export interface GetRenderingRequest {
   /**
-   * Name of the prompt.
+   * Name of the prompt
    *
    */
   prompt: GetRenderingPromptEnum;
   /**
-   * Name of the screen.
+   * Name of the screen
    *
    */
   screen: GetRenderingScreenEnum;
@@ -18791,12 +20710,12 @@ export type PatchRenderingOperationScreenEnum =
  */
 export interface PatchRenderingOperationRequest {
   /**
-   * Name of the prompt.
+   * Name of the prompt
    *
    */
   prompt: PatchRenderingOperationPromptEnum;
   /**
-   * Name of the screen.
+   * Name of the screen
    *
    */
   screen: PatchRenderingOperationScreenEnum;
@@ -18816,8 +20735,11 @@ export const PutCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
+  custom_form: 'custom-form',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -18836,6 +20758,7 @@ export const PutCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
@@ -18844,39 +20767,62 @@ export type PutCustomTextByLanguagePromptEnum =
  *
  */
 export const PutCustomTextByLanguageLanguageEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -18885,13 +20831,22 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type PutCustomTextByLanguageLanguageEnum =
@@ -18974,7 +20929,7 @@ export interface DeleteResourceServersByIdRequest {
  */
 export interface GetResourceServersRequest {
   /**
-   * A list of URI encoded identifiers to filter the results by. Consider URL limits when using this parameter, if the URL is too long, consider chunking the requests
+   * An optional filter on the resource server identifier. Must be URL encoded and may be specified multiple times (max 10).<br /><b>e.g.</b> <i>../resource-servers?identifiers=id1&identifiers=id2</i>
    *
    */
   identifiers?: Array<string>;
@@ -19189,7 +21144,7 @@ export interface GetRulesRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -19433,6 +21388,16 @@ export interface DeleteSessionRequest {
 export interface GetSessionRequest {
   /**
    * ID of session to retrieve
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface RevokeSessionRequest {
+  /**
+   * ID of the session to revoke.
    *
    */
   id: string;
@@ -19814,7 +21779,7 @@ export interface GetPermissionsRequest {
    */
   id: string;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -19844,7 +21809,7 @@ export interface GetRefreshTokensForUserRequest {
    */
   include_totals?: boolean;
   /**
-   * Optional token ID from which to start selection (exclusive).
+   * An optional cursor from which to start the selection (exclusive).
    *
    */
   from?: string;
@@ -19869,7 +21834,7 @@ export interface GetSessionsForUserRequest {
    */
   include_totals?: boolean;
   /**
-   * Optional session ID from which to start selection (exclusive).
+   * An optional cursor from which to start the selection (exclusive).
    *
    */
   from?: string;
@@ -19914,7 +21879,7 @@ export interface GetUserRolesRequest {
    */
   id: string;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -19951,7 +21916,7 @@ export interface GetUsersRequest {
    */
   page?: number;
   /**
-   * Number of results per page. Paging is disabled if parameter not sent.
+   * Number of results per page.
    *
    */
   per_page?: number;
@@ -20102,6 +22067,16 @@ export interface PostUserRolesOperationRequest {
 export interface PutAuthenticationMethodsRequest {
   /**
    * The ID of the user in question.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface UserRevokeAccessOperationRequest {
+  /**
+   * ID of the user.
    *
    */
   id: string;

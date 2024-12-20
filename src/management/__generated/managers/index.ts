@@ -1,7 +1,6 @@
 export * from './actions-manager.js';
 export * from './anomaly-manager.js';
 export * from './attack-protection-manager.js';
-export * from './blacklists-manager.js';
 export * from './branding-manager.js';
 export * from './client-grants-manager.js';
 export * from './clients-manager.js';
