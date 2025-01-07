@@ -1,3 +1,4 @@
+import { Backchannel } from './backchannel.js';
 import { AuthenticationClientOptions } from './base-auth-api.js';
 import { Database } from './database.js';
 import { OAuth } from './oauth.js';
@@ -13,10 +14,12 @@ export class AuthenticationClient {
   database: Database;
   oauth: OAuth;
   passwordless: Passwordless;
+  backchannel: Backchannel;
 
   constructor(options: AuthenticationClientOptions) {
     this.database = new Database(options);
     this.oauth = new OAuth(options);
     this.passwordless = new Passwordless(options);
+    this.backchannel = new Backchannel(options);
   }
 }
