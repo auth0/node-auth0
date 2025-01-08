@@ -1,5 +1,17 @@
 # Change Log
 
+## [v4.16.0](https://github.com/auth0/node-auth0/tree/v4.16.0) (2025-01-08)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.15.0...v4.16.0)
+
+**Added**
+
+- CIBA implementation [\#1066](https://github.com/auth0/node-auth0/pull/1066) ([tusharpandey13](https://github.com/tusharpandey13))
+
+**Changed**
+
+- update README for clarity [\#1067](https://github.com/auth0/node-auth0/pull/1067) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.15.0](https://github.com/auth0/node-auth0/tree/v4.15.0) (2024-12-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.14.0...v4.15.0)
