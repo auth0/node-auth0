@@ -60,9 +60,11 @@ type LoginHint = {
  * @returns {string} - The login hint as a JSON string.
  */
 const getLoginHint = (userId: string, domain: string): string => {
+  // remove trailing '/' from domain, added later for uniformity
+  const trimmedDomain = domain.endsWith('/') ? domain.slice(0, -1) : domain;
   const loginHint: LoginHint = {
     format: 'iss_sub',
-    iss: `https://${domain}/`,
+    iss: `https://${trimmedDomain}/`,
     sub: `${userId}`,
   };
   return JSON.stringify(loginHint);
