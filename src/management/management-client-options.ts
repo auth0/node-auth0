@@ -6,7 +6,7 @@ export interface ManagementClientOptions extends ClientOptions {
 }
 
 export interface ManagementClientOptionsWithToken extends ManagementClientOptions {
-  token: string;
+  token: string | (() => Promise<string>) | (() => string);
 }
 
 export interface ManagementClientOptionsWithClientSecret extends ManagementClientOptions {

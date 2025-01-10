@@ -99,4 +99,59 @@ describe('TokenProviderMiddleware', () => {
     ).resolves.toMatchObject({});
     expect(customFetch).toHaveBeenCalled();
   });
+
+  it('should use provided access token as a string', async () => {
+    await expect(tokenClient.testRequest({ path: '/foo', method: 'GET' })).resolves.toMatchObject(
+      {}
+    );
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authorization: 'Bearer token',
+      })
+    );
+  });
+
+  it('should use provided access token as a sync function', async () => {
+    const syncTokenClient = new TestClient({
+      ...opts,
+      middleware: [
+        new TokenProviderMiddleware({
+          ...opts,
+          domain,
+          token: () => 'sync-token',
+        }),
+      ],
+    });
+
+    await expect(
+      syncTokenClient.testRequest({ path: '/foo', method: 'GET' })
+    ).resolves.toMatchObject({});
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authorization: 'Bearer sync-token',
+      })
+    );
+  });
+
+  it('should use provided access token as an async function', async () => {
+    const asyncTokenClient = new TestClient({
+      ...opts,
+      middleware: [
+        new TokenProviderMiddleware({
+          ...opts,
+          domain,
+          token: async () => 'async-token',
+        }),
+      ],
+    });
+
+    await expect(
+      asyncTokenClient.testRequest({ path: '/foo', method: 'GET' })
+    ).resolves.toMatchObject({});
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        authorization: 'Bearer async-token',
+      })
+    );
+  });
 });
