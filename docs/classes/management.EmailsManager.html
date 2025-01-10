@@ -23,7 +23,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">EmailsManager</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/management/__generated/managers/emails-manager.ts#L15">src/management/__generated/managers/emails-manager.ts:15</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/management/__generated/managers/emails-manager.ts#L15">src/management/__generated/managers/emails-manager.ts:15</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -59,7 +59,7 @@
 <h4 class="tsd-returns-title">Returns <a href="management.EmailsManager.html" class="tsd-signature-type tsd-kind-class">EmailsManager</a></h4><aside class="tsd-sources">
 <p>Inherited from BaseAPI.constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/lib/runtime.ts#L24">src/lib/runtime.ts:24</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/lib/runtime.ts#L24">src/lib/runtime.ts:24</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited"><a id="configuration" class="tsd-anchor"></a>
@@ -67,7 +67,7 @@
 <div class="tsd-signature"><span class="tsd-kind-property">configuration</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/lib.Configuration.html" class="tsd-signature-type tsd-kind-interface">Configuration</a></div><aside class="tsd-sources">
 <p>Inherited from BaseAPI.configuration</p>
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/lib/runtime.ts#L24">src/lib/runtime.ts:24</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/lib/runtime.ts#L24">src/lib/runtime.ts:24</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member"><a id="configure" class="tsd-anchor"></a>
@@ -75,10 +75,48 @@
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="configure.configure-1"><span class="tsd-kind-call-signature">configure</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">bodyParameters</span>, <span class="tsd-kind-parameter">initOverrides</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/lib.ApiResponse.html" class="tsd-signature-type tsd-kind-interface">ApiResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.EmailProvider.html" class="tsd-signature-type tsd-kind-interface">EmailProvider</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#configure.configure-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Create an <a href="https://auth0.com/docs/email/providers">email provider</a>.
-The <code>credentials</code> object requires different properties depending on the email provider (which is specified using the <code>name</code> property):</p>
-<ul><li><code>mandrill</code> requires <code>api_key</code></li><li><code>sendgrid</code> requires <code>api_key</code></li><li><code>sparkpost</code> requires <code>api_key</code>. Optionally, set <code>region</code> to <code>eu</code> to use the SparkPost service hosted in Western Europe; set to <code>null</code> to use the SparkPost service hosted in North America. <code>eu</code> or <code>null</code> are the only valid values for <code>region</code>.</li><li><code>mailgun</code> requires <code>api_key</code> and <code>domain</code>. Optionally, set <code>region</code> to <code>eu</code> to use the Mailgun service hosted in Europe; set to <code>null</code> otherwise. <code>eu</code> or <code>null</code> are the only valid values for <code>region</code>.</li><li><code>ses</code> requires <code>accessKeyId</code>, <code>secretAccessKey</code>, and <code>region</code></li><li><code>smtp</code> requires <code>smtp_host</code>, <code>smtp_port</code>, <code>smtp_user</code>, and <code>smtp_pass</code></li></ul>Depending on the type of provider it is possible to specify <code>settings</code> object with different configuration options, which will be used when sending an email:
-<ul><li><code>smtp</code> provider, <code>settings</code> may contain <code>headers</code> object. When using AWS SES SMTP host, you may provide a name of configuration set in <code>X-SES-Configuration-Set</code> header. Value must be a string.</li><li>for <code>ses</code> provider, <code>settings</code> may contain <code>message</code> object, where you can provide a name of configuration set in <code>configuration_set_name</code> property. Value must be a string.</li></ul>
+<div class="tsd-comment tsd-typography"><p>Create an <a href="https://auth0.com/docs/email/providers">email provider</a>. The <code>credentials</code> object
+requires different properties depending on the email provider (which is specified using the <code>name</code> property):</p>
+<ul>
+  <li><code>mandrill</code> requires <code>api_key</code></li>
+  <li><code>sendgrid</code> requires <code>api_key</code></li>
+  <li>
+    <code>sparkpost</code> requires <code>api_key</code>. Optionally, set <code>region</code> to <code>eu</code> to use
+    the SparkPost service hosted in Western Europe; set to <code>null</code> to use the SparkPost service hosted in
+    North America. <code>eu</code> or <code>null</code> are the only valid values for <code>region</code>.
+  </li>
+  <li>
+    <code>mailgun</code> requires <code>api_key</code> and <code>domain</code>. Optionally, set <code>region</code> to
+    <code>eu</code> to use the Mailgun service hosted in Europe; set to <code>null</code> otherwise. <code>eu</code> or
+    <code>null</code> are the only valid values for <code>region</code>.
+  </li>
+  <li><code>ses</code> requires <code>accessKeyId</code>, <code>secretAccessKey</code>, and <code>region</code></li>
+  <li>
+    <code>smtp</code> requires <code>smtp_host</code>, <code>smtp_port</code>, <code>smtp_user</code>, and
+    <code>smtp_pass</code>
+  </li>
+</ul>
+Depending on the type of provider it is possible to specify <code>settings</code> object with different configuration
+options, which will be used when sending an email:
+<ul>
+  <li>
+    <code>smtp</code> provider, <code>settings</code> may contain <code>headers</code> object.
+    <ul>
+      <li>
+        When using AWS SES SMTP host, you may provide a name of configuration set in
+        <code>X-SES-Configuration-Set</code> header. Value must be a string.
+      </li>
+      <li>
+        When using Sparkpost host, you may provide value for
+        <code>X-MSYS_API</code> header. Value must be an object.
+      </li>
+    </ul>
+  </li>
+  <li>
+    for <code>ses</code> provider, <code>settings</code> may contain <code>message</code> object, where you can provide
+    a name of configuration set in <code>configuration_set_name</code> property. Value must be a string.
+  </li>
+</ul>
 
 <p>Configure the email provider</p>
 
@@ -92,7 +130,7 @@ The <code>credentials</code> object requires different properties depending on t
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">initOverrides</span>: <a href="../types/lib.InitOverride.html" class="tsd-signature-type tsd-kind-type-alias">InitOverride</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/lib.ApiResponse.html" class="tsd-signature-type tsd-kind-interface">ApiResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.EmailProvider.html" class="tsd-signature-type tsd-kind-interface">EmailProvider</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/management/__generated/managers/emails-manager.ts#L91">src/management/__generated/managers/emails-manager.ts:91</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/management/__generated/managers/emails-manager.ts#L165">src/management/__generated/managers/emails-manager.ts:165</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="get" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get</span><a href="#get" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -111,7 +149,7 @@ The <code>credentials</code> object requires different properties depending on t
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">initOverrides</span>: <a href="../types/lib.InitOverride.html" class="tsd-signature-type tsd-kind-type-alias">InitOverride</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/lib.ApiResponse.html" class="tsd-signature-type tsd-kind-interface">ApiResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.EmailProvider.html" class="tsd-signature-type tsd-kind-interface">EmailProvider</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/management/__generated/managers/emails-manager.ts#L23">src/management/__generated/managers/emails-manager.ts:23</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/management/__generated/managers/emails-manager.ts#L23">src/management/__generated/managers/emails-manager.ts:23</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-protected tsd-is-inherited"><a id="request" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagProtected">Protected</code> <span>request</span><a href="#request" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-protected tsd-is-inherited">
@@ -127,16 +165,52 @@ The <code>credentials</code> object requires different properties depending on t
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Response</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <p>Inherited from BaseAPI.request</p>
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/lib/runtime.ts#L40">src/lib/runtime.ts:40</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/lib/runtime.ts#L40">src/lib/runtime.ts:40</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="update" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>update</span><a href="#update" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="update.update-1"><span class="tsd-kind-call-signature">update</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">bodyParameters</span>, <span class="tsd-kind-parameter">initOverrides</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/lib.ApiResponse.html" class="tsd-signature-type tsd-kind-interface">ApiResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.EmailProvider.html" class="tsd-signature-type tsd-kind-interface">EmailProvider</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#update.update-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Update an <a href="https://auth0.com/docs/email/providers">email provider</a>.
-The <code>credentials</code> object requires different properties depending on the email provider (which is specified using the <code>name</code> property):</p>
-<ul><li><code>mandrill</code> requires <code>api_key</code></li><li><code>sendgrid</code> requires <code>api_key</code></li><li><code>sparkpost</code> requires <code>api_key</code>. Optionally, set <code>region</code> to <code>eu</code> to use the SparkPost service hosted in Western Europe; set to <code>null</code> to use the SparkPost service hosted in North America. <code>eu</code> or <code>null</code> are the only valid values for <code>region</code>.</li><li><code>mailgun</code> requires <code>api_key</code> and <code>domain</code>. Optionally, set <code>region</code> to <code>eu</code> to use the Mailgun service hosted in Europe; set to <code>null</code> otherwise. <code>eu</code> or <code>null</code> are the only valid values for <code>region</code>.</li><li><code>ses</code> requires <code>accessKeyId</code>, <code>secretAccessKey</code>, and <code>region</code></li><li><code>smtp</code> requires <code>smtp_host</code>, <code>smtp_port</code>, <code>smtp_user</code>, and <code>smtp_pass</code></li></ul>Depending on the type of provider it is possible to specify <code>settings</code> object with different configuration options, which will be used when sending an email:
-<ul><li><code>smtp</code> provider, <code>settings</code> may contain <code>headers</code> object. When using AWS SES SMTP host, you may provide a name of configuration set in <code>X-SES-Configuration-Set</code> header. Value must be a string.</li><li>for <code>ses</code> provider, <code>settings</code> may contain <code>message</code> object, where you can provide a name of configuration set in <code>configuration_set_name</code> property. Value must be a string.</li></ul>
+<div class="tsd-comment tsd-typography"><p>Update an <a href="https://auth0.com/docs/email/providers">email provider</a>. The <code>credentials</code> object
+requires different properties depending on the email provider (which is specified using the <code>name</code> property):</p>
+<ul>
+  <li><code>mandrill</code> requires <code>api_key</code></li>
+  <li><code>sendgrid</code> requires <code>api_key</code></li>
+  <li>
+    <code>sparkpost</code> requires <code>api_key</code>. Optionally, set <code>region</code> to <code>eu</code> to use
+    the SparkPost service hosted in Western Europe; set to <code>null</code> to use the SparkPost service hosted in
+    North America. <code>eu</code> or <code>null</code> are the only valid values for <code>region</code>.
+  </li>
+  <li>
+    <code>mailgun</code> requires <code>api_key</code> and <code>domain</code>. Optionally, set <code>region</code> to
+    <code>eu</code> to use the Mailgun service hosted in Europe; set to <code>null</code> otherwise. <code>eu</code> or
+    <code>null</code> are the only valid values for <code>region</code>.
+  </li>
+  <li><code>ses</code> requires <code>accessKeyId</code>, <code>secretAccessKey</code>, and <code>region</code></li>
+  <li>
+    <code>smtp</code> requires <code>smtp_host</code>, <code>smtp_port</code>, <code>smtp_user</code>, and
+    <code>smtp_pass</code>
+  </li>
+</ul>
+Depending on the type of provider it is possible to specify <code>settings</code> object with different configuration
+options, which will be used when sending an email:
+<ul>
+  <li>
+    <code>smtp</code> provider, <code>settings</code> may contain <code>headers</code> object.
+    <ul>
+      <li>
+        When using AWS SES SMTP host, you may provide a name of configuration set in
+        <code>X-SES-Configuration-Set</code> header. Value must be a string.
+      </li>
+      <li>
+        When using Sparkpost host, you may provide value for
+        <code>X-MSYS_API</code> header. Value must be an object.
+      </li>
+    </ul>
+    for <code>ses</code> provider, <code>settings</code> may contain <code>message</code> object, where you can provide
+    a name of configuration set in <code>configuration_set_name</code> property. Value must be a string.
+  </li>
+</ul>
 
 <p>Update the email provider</p>
 
@@ -150,7 +224,7 @@ The <code>credentials</code> object requires different properties depending on t
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">initOverrides</span>: <a href="../types/lib.InitOverride.html" class="tsd-signature-type tsd-kind-type-alias">InitOverride</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/lib.ApiResponse.html" class="tsd-signature-type tsd-kind-interface">ApiResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.EmailProvider.html" class="tsd-signature-type tsd-kind-interface">EmailProvider</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/62e1890b/src/management/__generated/managers/emails-manager.ts#L60">src/management/__generated/managers/emails-manager.ts:60</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/auth0/node-auth0/blob/5717ccf1/src/management/__generated/managers/emails-manager.ts#L96">src/management/__generated/managers/emails-manager.ts:96</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

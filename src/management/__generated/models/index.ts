@@ -3783,7 +3783,7 @@ export type DeviceCredentialCreateTypeEnum =
  */
 export interface EmailProvider {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name: string;
@@ -3811,7 +3811,7 @@ export interface EmailProvider {
  */
 export interface EmailProviderCreate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name: EmailProviderCreateNameEnum;
@@ -3844,6 +3844,7 @@ export const EmailProviderCreateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderCreateNameEnum =
   (typeof EmailProviderCreateNameEnum)[keyof typeof EmailProviderCreateNameEnum];

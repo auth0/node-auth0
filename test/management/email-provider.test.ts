@@ -248,6 +248,87 @@ describe('EmailProviderManager', () => {
     });
   });
 
+  describe('#configure.custom', () => {
+    const data: PostProviderRequest = {
+      name: PostProviderRequestNameEnum.custom,
+      enabled: true,
+      default_from_address: 'from@test.com',
+      credentials: {},
+    };
+    const response = {
+      name: PostProviderRequestNameEnum.custom,
+      enabled: true,
+      default_from_address: 'from@test.com',
+      credentials: {},
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .post('/emails/provider', data as any)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      emails.configure(data).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post('/emails/provider').reply(500, {});
+
+      emails.configure(data).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/emails/provider', (done) => {
+      emails.configure(data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      emails.configure(data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      emails.configure(data).then((provider) => {
+        expect(provider.data.name).toBe(response.name);
+        expect(provider.data.enabled).toBe(response.enabled);
+        expect(provider.data.default_from_address).toBe(response.default_from_address);
+
+        expect(provider.data.credentials).toStrictEqual(response.credentials);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post('/emails/provider')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      emails.configure(data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
   describe('#update', () => {
     const data: PatchProviderRequest = {
       name: PatchProviderRequestNameEnum.smtp,
