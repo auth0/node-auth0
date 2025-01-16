@@ -3783,7 +3783,7 @@ export type DeviceCredentialCreateTypeEnum =
  */
 export interface EmailProvider {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name: string;
@@ -3811,7 +3811,7 @@ export interface EmailProvider {
  */
 export interface EmailProviderCreate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name: EmailProviderCreateNameEnum;
@@ -3844,6 +3844,7 @@ export const EmailProviderCreateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderCreateNameEnum =
   (typeof EmailProviderCreateNameEnum)[keyof typeof EmailProviderCreateNameEnum];
@@ -3883,7 +3884,7 @@ export interface EmailProviderCredentials {
  */
 export interface EmailProviderUpdate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name?: EmailProviderUpdateNameEnum;
@@ -3916,6 +3917,7 @@ export const EmailProviderUpdateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderUpdateNameEnum =
   (typeof EmailProviderUpdateNameEnum)[keyof typeof EmailProviderUpdateNameEnum];
@@ -4629,7 +4631,7 @@ export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatib
   version: string;
 }
 /**
- * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+ * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, custom-email-provider, password-reset-post-challenge</code>
  */
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerId =
   GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf;
@@ -4648,6 +4650,7 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  custom_email_provider: 'custom-email-provider',
   password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
@@ -16404,7 +16407,7 @@ export interface GetActionsRequest {
  */
 export interface GetBindingsRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, custom-email-provider, password-reset-post-challenge</code>
    *
    */
   triggerId: string;
@@ -16444,7 +16447,7 @@ export interface PatchActionOperationRequest {
  */
 export interface PatchBindingsOperationRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, custom-email-provider, password-reset-post-challenge</code>
    *
    */
   triggerId: string;
