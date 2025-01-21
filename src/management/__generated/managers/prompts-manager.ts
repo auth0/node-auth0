@@ -2,6 +2,7 @@ import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   GetRendering200Response,
+  PatchRendering200Response,
   PatchRenderingRequest,
   PromptsSettings,
   PromptsSettingsUpdate,
@@ -89,8 +90,8 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * View the render settings for a specific screen
-   * Get render settings for a prompt
+   * Get render settings for a screen.
+   * Get render settings for a screen
    *
    * @throws {RequiredError}
    */
@@ -141,8 +142,36 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
-   * Configure the render settings for a specific screen
-   * Configure render settings for a prompt
+   * Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
+   *
+   * <p>
+   *   Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>documentation</a> on using Liquid variables within head tags.
+   * </p>
+   * <pre>{
+   *   "head_tags": [
+   *     {
+   *       "tag": "script",
+   *       "attributes": {
+   *         "defer": true,
+   *         "src": "URL_TO_ASSET",
+   *         "async": true,
+   *         "integrity": [
+   *           "ASSET_SHA"
+   *         ]
+   *       }
+   *     },
+   *     {
+   *       "tag": "link",
+   *       "attributes": {
+   *         "href": "URL_TO_ASSET",
+   *         "rel": "stylesheet"
+   *       }
+   *     }
+   *   ]
+   * }
+   * </pre>
+   *
+   * Update render settings for a screen
    *
    * @throws {RequiredError}
    */
@@ -150,7 +179,7 @@ export class PromptsManager extends BaseAPI {
     requestParameters: PatchRenderingOperationRequest,
     bodyParameters: PatchRenderingRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<void>> {
+  ): Promise<ApiResponse<PatchRendering200Response>> {
     runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'screen']);
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -169,7 +198,7 @@ export class PromptsManager extends BaseAPI {
       initOverrides
     );
 
-    return runtime.VoidApiResponse.fromResponse(response);
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**

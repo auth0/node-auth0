@@ -3783,7 +3783,7 @@ export type DeviceCredentialCreateTypeEnum =
  */
 export interface EmailProvider {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`, or `custom`.
    *
    */
   name: string;
@@ -3811,7 +3811,7 @@ export interface EmailProvider {
  */
 export interface EmailProviderCreate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`, or `custom`.
    *
    */
   name: EmailProviderCreateNameEnum;
@@ -5268,7 +5268,7 @@ export interface GetDeviceCredentials200ResponseOneOf {
  */
 export interface GetEmailTemplatesByTemplateName200Response {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: GetEmailTemplatesByTemplateName200ResponseTemplateEnum;
@@ -5318,6 +5318,7 @@ export const GetEmailTemplatesByTemplateName200ResponseTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -7241,7 +7242,7 @@ export interface GetRendering200Response {
    * An array of head tags
    *
    */
-  head_tags: Array<{ [key: string]: any }>;
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
 }
 
 export const GetRendering200ResponseRenderingModeEnum = {
@@ -7251,6 +7252,35 @@ export const GetRendering200ResponseRenderingModeEnum = {
 export type GetRendering200ResponseRenderingModeEnum =
   (typeof GetRendering200ResponseRenderingModeEnum)[keyof typeof GetRendering200ResponseRenderingModeEnum];
 
+/**
+ *
+ */
+export interface GetRendering200ResponseHeadTagsInner {
+  [key: string]: any | any;
+  /**
+   * Any HTML element valid for use in the head tag
+   *
+   */
+  tag: string;
+  /**
+   */
+  attributes: GetRendering200ResponseHeadTagsInnerAttributes;
+  /**
+   * Text/content within the opening and closing tags of the element.
+   * See <a href="https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens">documentation</a> on using context variables
+   *
+   */
+  content: string;
+}
+/**
+ * Attributes of the HTML tag
+ */
+export interface GetRendering200ResponseHeadTagsInnerAttributes {
+  [key: string]: any | any;
+  /**
+   */
+  integrity: Array<string>;
+}
 /**
  *
  */
@@ -8875,7 +8905,7 @@ export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template?: PatchEmailTemplatesByTemplateNameRequestTemplateEnum;
@@ -8925,6 +8955,7 @@ export const PatchEmailTemplatesByTemplateNameRequestTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -9200,7 +9231,41 @@ export interface PatchOrganizationsByIdRequestBranding {
   colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
- * ACUL settings for the given screen.
+ *
+ */
+export interface PatchRendering200Response {
+  [key: string]: any | any;
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode: PatchRendering200ResponseRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled: boolean;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+}
+
+export const PatchRendering200ResponseRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type PatchRendering200ResponseRenderingModeEnum =
+  (typeof PatchRendering200ResponseRenderingModeEnum)[keyof typeof PatchRendering200ResponseRenderingModeEnum];
+
+/**
+ * Render settings for the given screen
  */
 export interface PatchRenderingRequest {
   /**
@@ -9222,7 +9287,7 @@ export interface PatchRenderingRequest {
    * An array of head tags
    *
    */
-  head_tags?: Array<{ [key: string]: any }>;
+  head_tags?: Array<PatchRenderingRequestHeadTagsInner>;
 }
 
 export const PatchRenderingRequestRenderingModeEnum = {
@@ -9232,6 +9297,35 @@ export const PatchRenderingRequestRenderingModeEnum = {
 export type PatchRenderingRequestRenderingModeEnum =
   (typeof PatchRenderingRequestRenderingModeEnum)[keyof typeof PatchRenderingRequestRenderingModeEnum];
 
+/**
+ *
+ */
+export interface PatchRenderingRequestHeadTagsInner {
+  [key: string]: any | any;
+  /**
+   * Any HTML element valid for use in the head tag
+   *
+   */
+  tag?: string;
+  /**
+   */
+  attributes?: PatchRenderingRequestHeadTagsInnerAttributes;
+  /**
+   * Text/content within the opening and closing tags of the element
+   * See <a href="https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens">documentation</a> on using context variables
+   *
+   */
+  content?: string;
+}
+/**
+ * Attributes of the HTML tag
+ */
+export interface PatchRenderingRequestHeadTagsInnerAttributes {
+  [key: string]: any | any;
+  /**
+   */
+  integrity?: Array<string>;
+}
 /**
  *
  */
@@ -10200,7 +10294,7 @@ export interface PostDeviceCredentials201Response {
  */
 export interface PostEmailTemplatesRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: PostEmailTemplatesRequestTemplateEnum;
@@ -10250,6 +10344,7 @@ export const PostEmailTemplatesRequestTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17163,6 +17258,7 @@ export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17180,7 +17276,7 @@ export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface GetEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -17193,6 +17289,7 @@ export const PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17210,7 +17307,7 @@ export type PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameOperationRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum;
@@ -17223,6 +17320,7 @@ export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -17240,7 +17338,7 @@ export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface PutEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -18648,12 +18746,12 @@ export type GetRenderingScreenEnum =
  */
 export interface GetRenderingRequest {
   /**
-   * Name of the prompt.
+   * Name of the prompt
    *
    */
   prompt: GetRenderingPromptEnum;
   /**
-   * Name of the screen.
+   * Name of the screen
    *
    */
   screen: GetRenderingScreenEnum;
@@ -18794,12 +18892,12 @@ export type PatchRenderingOperationScreenEnum =
  */
 export interface PatchRenderingOperationRequest {
   /**
-   * Name of the prompt.
+   * Name of the prompt
    *
    */
   prompt: PatchRenderingOperationPromptEnum;
   /**
-   * Name of the screen.
+   * Name of the screen
    *
    */
   screen: PatchRenderingOperationScreenEnum;
