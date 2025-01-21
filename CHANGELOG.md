@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.17.0](https://github.com/auth0/node-auth0/tree/v4.17.0) (2025-01-21)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.16.0...v4.17.0)
+
+**Changed**
+
+- updated email template manager, added reset_email_by_code to multiple places [\#1071](https://github.com/auth0/node-auth0/pull/1071) ([tusharpandey13](https://github.com/tusharpandey13))
+- feature/customEmailProvider [\#1070](https://github.com/auth0/node-auth0/pull/1070) ([tusharpandey13](https://github.com/tusharpandey13))
+
+**Fixed**
+
+- accept a function as token [\#1069](https://github.com/auth0/node-auth0/pull/1069) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.16.0](https://github.com/auth0/node-auth0/tree/v4.16.0) (2025-01-08)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.15.0...v4.16.0)
