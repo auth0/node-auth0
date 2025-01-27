@@ -35,6 +35,7 @@ import {
   StatsManager,
   TenantsManager,
   TicketsManager,
+  TokenExchangeProfilesManager,
   UserBlocksManager,
   UsersManager,
   UsersByEmailManager,
@@ -76,6 +77,7 @@ export abstract class ManagementClientBase {
   public readonly stats = new StatsManager(this.configuration);
   public readonly tenants = new TenantsManager(this.configuration);
   public readonly tickets = new TicketsManager(this.configuration);
+  public readonly tokenExchangeProfiles = new TokenExchangeProfilesManager(this.configuration);
   public readonly userBlocks = new UserBlocksManager(this.configuration);
   public readonly users = new UsersManager(this.configuration);
   public readonly usersByEmail = new UsersByEmailManager(this.configuration);
