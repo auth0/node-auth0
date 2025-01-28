@@ -277,7 +277,7 @@ export interface TokenExchangeGrantRequest {
  *  OAuth 2.0 flows.
  */
 export class OAuth extends BaseAuthAPI {
-  private idTokenValidator: IDTokenValidator;
+  readonly idTokenValidator: IDTokenValidator;
   constructor(options: AuthenticationClientOptions) {
     super({
       ...options,
