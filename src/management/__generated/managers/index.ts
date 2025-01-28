@@ -31,6 +31,7 @@ export * from './sessions-manager.js';
 export * from './stats-manager.js';
 export * from './tenants-manager.js';
 export * from './tickets-manager.js';
+export * from './token-exchange-profiles-manager.js';
 export * from './user-blocks-manager.js';
 export * from './users-manager.js';
 export * from './users-by-email-manager.js';

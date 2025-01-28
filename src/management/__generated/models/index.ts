@@ -7964,6 +7964,65 @@ export interface GetSuspiciousIpThrottling200ResponseStagePreUserRegistration {
 /**
  *
  */
+export interface GetTokenExchangeProfiles200Response {
+  /**
+   */
+  pagination: { [key: string]: any };
+  /**
+   */
+  token_exchange_profiles: Array<GetTokenExchangeProfilesById200Response>;
+}
+/**
+ *
+ */
+export interface GetTokenExchangeProfilesById200Response {
+  [key: string]: any | any;
+  /**
+   * The unique ID of the token exchange profile.
+   *
+   */
+  id: string;
+  /**
+   * Friendly name of this profile.
+   *
+   */
+  name: string;
+  /**
+   * Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI.
+   *
+   */
+  subject_token_type: string;
+  /**
+   * The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger.
+   *
+   */
+  action_id: string;
+  /**
+   * The type of the profile, which controls how the profile will be executed when receiving a token exchange request.
+   *
+   */
+  type: GetTokenExchangeProfilesById200ResponseTypeEnum;
+  /**
+   * The time when this profile was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this profile was updated.
+   *
+   */
+  updated_at: string;
+}
+
+export const GetTokenExchangeProfilesById200ResponseTypeEnum = {
+  custom_authentication: 'custom_authentication',
+} as const;
+export type GetTokenExchangeProfilesById200ResponseTypeEnum =
+  (typeof GetTokenExchangeProfilesById200ResponseTypeEnum)[keyof typeof GetTokenExchangeProfilesById200ResponseTypeEnum];
+
+/**
+ *
+ */
 export interface GetTriggers200Response {
   /**
    */
@@ -9415,6 +9474,21 @@ export interface PatchSuspiciousIpThrottlingRequestStagePreUserRegistration {
    *
    */
   rate?: number;
+}
+/**
+ *
+ */
+export interface PatchTokenExchangeProfilesByIdRequest {
+  /**
+   * Friendly name of this profile.
+   *
+   */
+  name?: string;
+  /**
+   * Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI.
+   *
+   */
+  subject_token_type?: string;
 }
 /**
  *
@@ -13645,6 +13719,38 @@ export interface PostTicket200Response {
    */
   ticket_url: string;
 }
+/**
+ *
+ */
+export interface PostTokenExchangeProfilesRequest {
+  /**
+   * Friendly name of this profile.
+   *
+   */
+  name: string;
+  /**
+   * Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI.
+   *
+   */
+  subject_token_type: string;
+  /**
+   * The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger.
+   *
+   */
+  action_id: string;
+  /**
+   * The type of the profile, which controls how the profile will be executed when receiving a token exchange request.
+   *
+   */
+  type: PostTokenExchangeProfilesRequestTypeEnum;
+}
+
+export const PostTokenExchangeProfilesRequestTypeEnum = {
+  custom_authentication: 'custom_authentication',
+} as const;
+export type PostTokenExchangeProfilesRequestTypeEnum =
+  (typeof PostTokenExchangeProfilesRequestTypeEnum)[keyof typeof PostTokenExchangeProfilesRequestTypeEnum];
+
 /**
  *
  */
@@ -19564,6 +19670,51 @@ export interface TenantSettingsRouteRequest {
    *
    */
   include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface DeleteTokenExchangeProfilesByIdRequest {
+  /**
+   * ID of the Token Exchange Profile to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetTokenExchangeProfilesRequest {
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetTokenExchangeProfilesByIdRequest {
+  /**
+   * ID of the Token Exchange Profile to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchTokenExchangeProfilesByIdOperationRequest {
+  /**
+   * ID of the Token Exchange Profile to update.
+   *
+   */
+  id: string;
 }
 /**
  *
