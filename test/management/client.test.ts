@@ -150,7 +150,6 @@ describe('ClientsManager', () => {
         is_global: true,
         is_first_party: false,
         app_type: 'web,mobile',
-        client_ids: 'client1,client2,client3',
         q: 'name:John AND email:john@example.com',
       };
 

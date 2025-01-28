@@ -5138,6 +5138,8 @@ export interface GetClients200ResponseOneOf {
  */
 export interface GetClients200ResponseOneOf1 {
   /**
+   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
+   *
    */
   next: string;
   /**
@@ -16878,12 +16880,7 @@ export interface GetClientsRequest {
    */
   app_type?: string;
   /**
-   * A comma separated list of client_ids used to filter the returned clients
-   *
-   */
-  client_ids?: string;
-  /**
-   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
+   * Advanced Query in <a href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i>
    *
    */
   q?: string;
