@@ -85,11 +85,18 @@ export interface AuthorizationCodeGrantWithPKCERequest extends AuthorizationCode
   code_verifier: string;
 }
 
+/**
+ * Represents a request for a client credentials grant in the OAuth 2.0 framework, specific to Auth0 implementation.
+ *
+ * @property audience - The unique identifier of the target API you want to access.
+ * @property organization - The identifier of the organization for which the request is being made.
+ */
 export interface ClientCredentialsGrantRequest extends ClientCredentials {
   /**
    * The unique identifier of the target API you want to access.
    */
   audience: string;
+  organization?: string;
 }
 
 export interface PushedAuthorizationRequest extends ClientCredentials {
