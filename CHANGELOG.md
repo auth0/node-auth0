@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.18.0](https://github.com/auth0/node-auth0/tree/v4.18.0) (2025-01-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.17.0...v4.18.0)
+
+**Added**
+
+- add optional organization parameter in ClientCredentialsGrantRequest of clientCredentialsGrant call of oauth of authenticationClient [\#1075](https://github.com/auth0/node-auth0/pull/1075) ([tusharpandey13](https://github.com/tusharpandey13))
+- feature/customTokenExchange [\#1074](https://github.com/auth0/node-auth0/pull/1074) ([tusharpandey13](https://github.com/tusharpandey13))
+
+**Removed**
+
+- remove redundant client_ids parameter from getAll() methood of clientsManager [\#1076](https://github.com/auth0/node-auth0/pull/1076) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.17.0](https://github.com/auth0/node-auth0/tree/v4.17.0) (2025-01-21)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.16.0...v4.17.0)
