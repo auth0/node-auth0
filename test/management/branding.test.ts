@@ -946,9 +946,7 @@ describe('BrandingManager', () => {
     };
 
     beforeEach(() => {
-      const request = nock(API_URL)
-        .delete(`/branding/phone/providers/${requestParameters.id}`)
-        .reply(200, {});
+      nock(API_URL).delete(`/branding/phone/providers/${requestParameters.id}`).reply(200, {});
     });
 
     it('should return a promise when no callback is given', (done) => {
