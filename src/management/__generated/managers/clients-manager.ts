@@ -171,6 +171,10 @@ export class ClientsManager extends BaseAPI {
         config: {},
       },
       {
+        key: 'client_ids',
+        config: {},
+      },
+      {
         key: 'q',
         config: {},
       },
