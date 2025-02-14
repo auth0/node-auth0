@@ -3549,6 +3549,50 @@ export type ConnectionUpdateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionUpdateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
 
 /**
+ * Phone provider configuration schema
+ */
+export interface CreatePhoneProviderRequest {
+  [key: string]: any | any;
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name: CreatePhoneProviderRequestNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+  /**
+   */
+  credentials: CreatePhoneProviderRequestCredentials;
+}
+
+export const CreatePhoneProviderRequestNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type CreatePhoneProviderRequestNameEnum =
+  (typeof CreatePhoneProviderRequestNameEnum)[keyof typeof CreatePhoneProviderRequestNameEnum];
+
+/**
+ * Provider credentials required to use authenticate to the provider.
+ */
+export type CreatePhoneProviderRequestCredentials =
+  | CreatePhoneProviderRequestCredentialsAnyOf
+  | object;
+/**
+ *
+ */
+export interface CreatePhoneProviderRequestCredentialsAnyOf {
+  /**
+   */
+  auth_token: string;
+}
+/**
  *
  */
 export interface CustomDomain {
@@ -4955,6 +4999,93 @@ export interface GetBranding200ResponseFont {
 /**
  *
  */
+export interface GetBrandingPhoneProviders200Response {
+  [key: string]: any | any;
+  /**
+   */
+  providers: Array<GetBrandingPhoneProviders200ResponseProvidersInner>;
+}
+/**
+ * Phone provider configuration schema
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInner {
+  /**
+   */
+  id?: string;
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name: GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum];
+
+/**
+ *
+ */
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration =
+  | GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf
+  | GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1;
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf {
+  /**
+   */
+  default_from?: string;
+  /**
+   */
+  mssid?: string;
+  /**
+   */
+  sid: string;
+  /**
+   */
+  delivery_methods: Array<GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum>;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum =
+  {
+    text: 'text',
+    voice: 'voice',
+  } as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum];
+
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1 {
+  /**
+   */
+  delivery_methods: Array<GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum>;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum =
+  {
+    text: 'text',
+    voice: 'voice',
+  } as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum];
+
+/**
+ *
+ */
 export interface GetBreachedPasswordDetection200Response {
   [key: string]: any | any;
   /**
@@ -5138,8 +5269,6 @@ export interface GetClients200ResponseOneOf {
  */
 export interface GetClients200ResponseOneOf1 {
   /**
-   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
-   *
    */
   next: string;
   /**
@@ -16056,6 +16185,35 @@ export interface TwilioFactorProvider {
 /**
  *
  */
+export interface UpdatePhoneProviderRequest {
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name?: UpdatePhoneProviderRequestNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  credentials?: CreatePhoneProviderRequestCredentials;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+}
+
+export const UpdatePhoneProviderRequestNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type UpdatePhoneProviderRequestNameEnum =
+  (typeof UpdatePhoneProviderRequestNameEnum)[keyof typeof UpdatePhoneProviderRequestNameEnum];
+
+/**
+ *
+ */
 export interface UserBlock {
   /**
    * Array of identifier + IP address pairs.  IP address is optional, and may be omitted in certain circumstances (such as Account Lockout mode).
@@ -16733,6 +16891,24 @@ export interface DeleteBrandingThemeRequest {
 /**
  *
  */
+export interface DeletePhoneProviderRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetBrandingPhoneProvidersRequest {
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
 export interface GetBrandingThemeRequest {
   /**
    * The ID of the theme
@@ -16743,12 +16919,28 @@ export interface GetBrandingThemeRequest {
 /**
  *
  */
+export interface GetPhoneProviderRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface PatchBrandingThemeRequest {
   /**
    * The ID of the theme
    *
    */
   themeId: string;
+}
+/**
+ *
+ */
+export interface UpdatePhoneProviderOperationRequest {
+  /**
+   */
+  id: string;
 }
 /**
  *
@@ -16880,7 +17072,12 @@ export interface GetClientsRequest {
    */
   app_type?: string;
   /**
-   * Advanced Query in <a href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i>
+   * A comma separated list of client_ids used to filter the returned clients
+   *
+   */
+  client_ids?: string;
+  /**
+   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
    *
    */
   q?: string;
