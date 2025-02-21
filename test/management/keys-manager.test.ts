@@ -18,11 +18,11 @@ const DOMAIN = `tenant.auth0.com`;
 const token = 'TOKEN';
 
 describe('KeysManager', () => {
-  const flowsManager: KeysManager = new ManagementClient({ domain: DOMAIN, token }).keys;
+  const keysManager: KeysManager = new ManagementClient({ domain: DOMAIN, token }).keys;
 
   // this is the test for the method flowsManager.getAll
   describe('getAll', () => {
-    const operation = flowsManager.getAll();
+    const operation = keysManager.getAll();
     const uri = `/keys/signing`;
     const method = 'get';
 
@@ -34,7 +34,7 @@ describe('KeysManager', () => {
     const requestParameters: GetSigningKeyRequest = {
       kid: 'kid',
     };
-    const operation = flowsManager.get(requestParameters);
+    const operation = keysManager.get(requestParameters);
     const uri = `/keys/signing/kid`;
     const method = 'get';
 
@@ -43,7 +43,7 @@ describe('KeysManager', () => {
 
   // this is the test for the method flowsManager.rotate
   describe('rotate', () => {
-    const operation = flowsManager.rotate();
+    const operation = keysManager.rotate();
     const uri = `/keys/signing/rotate`;
     const method = 'post';
 
@@ -55,7 +55,7 @@ describe('KeysManager', () => {
     const requestBody: PutSigningKeysRequest = {
       kid: 'kid',
     };
-    const operation = flowsManager.revoke(requestBody);
+    const operation = keysManager.revoke(requestBody);
     const uri = `/keys/signing/kid/revoke`;
     const method = 'put';
 
@@ -64,7 +64,7 @@ describe('KeysManager', () => {
 
   // this is the test for the method flowsManager.revoke
   describe('postEncryptionRekey', () => {
-    const operation = flowsManager.postEncryptionRekey();
+    const operation = keysManager.postEncryptionRekey();
     const uri = `/keys/encryption/rekey`;
     const method = 'post';
 
@@ -76,7 +76,7 @@ describe('KeysManager', () => {
     const requestParameters: DeleteEncryptionKeyRequest = {
       kid: 'kid',
     };
-    const operation = flowsManager.deleteEncryptionKey(requestParameters);
+    const operation = keysManager.deleteEncryptionKey(requestParameters);
     const uri = `/keys/encryption/kid`;
     const method = 'delete';
 
@@ -88,7 +88,7 @@ describe('KeysManager', () => {
     const requestParameters: GetEncryptionKeyRequest = {
       kid: 'kid',
     };
-    const operation = flowsManager.getEncryptionKey(requestParameters);
+    const operation = keysManager.getEncryptionKey(requestParameters);
     const uri = `/keys/encryption/kid`;
     const method = 'get';
 
@@ -97,7 +97,7 @@ describe('KeysManager', () => {
 
   // this is the test for the method flowsManager.getAllEncryptionKeys
   describe('getAllEncryptionKeys', () => {
-    const operation = flowsManager.getAllEncryptionKeys();
+    const operation = keysManager.getAllEncryptionKeys();
     const uri = `/keys/encryption`;
     const method = 'get';
 
@@ -110,7 +110,7 @@ describe('KeysManager', () => {
       type: 'customer-provided-root-key' as PostEncryptionRequestTypeEnum,
     };
 
-    const operation = flowsManager.createEncryptionKey(requestBody);
+    const operation = keysManager.createEncryptionKey(requestBody);
     const uri = `/keys/encryption`;
     const method = 'post';
 
@@ -126,7 +126,7 @@ describe('KeysManager', () => {
     const requestParameters: PostEncryptionKeyOperationRequest = {
       kid: 'kid',
     };
-    const operation = flowsManager.importEncryptionKey(requestParameters, requestBody);
+    const operation = keysManager.importEncryptionKey(requestParameters, requestBody);
     const uri = `/keys/encryption/kid`;
     const method = 'post';
 
@@ -138,7 +138,7 @@ describe('KeysManager', () => {
     const requestParameters: PostEncryptionWrappingKeyRequest = {
       kid: 'kid',
     };
-    const operation = flowsManager.createPublicWrappingKey(requestParameters);
+    const operation = keysManager.createPublicWrappingKey(requestParameters);
     const uri = `/keys/encryption/kid/wrapping-key`;
     const method = 'post';
 
