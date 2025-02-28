@@ -1,4 +1,6 @@
-import { BaseAuthAPI, TokenResponse } from './base-auth-api.js';
+import { JSONApiResponse } from '../lib/models.js';
+import { BaseAuthAPI } from './base-auth-api.js';
+import { TokenResponse } from './tokenExchange.js';
 
 type TokenForConnectionTokenSet = {
   refresh_token?: string;
@@ -37,12 +39,14 @@ export interface ITokenForConnection {
   exchangeToken(options: TokenForConnectionOptions): Promise<TokenResponse>;
 }
 
-const FCAT_GRANT_TYPE =
+export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
   'urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token';
 
-const FCAT_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:refresh_token';
-const FCAT_REQUESTED_TOKEN_TYPE =
+export const TOKEN_FOR_CONNECTION_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:refresh_token';
+export const TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE =
   'http://auth0.com/oauth/token-type/federated-connection-access-token';
+export const TOKEN_URL = '/oauth/token';
+
 /**
  * Class implementing the federated connection access token exchange.
  */
@@ -69,10 +73,10 @@ export class TokenForConnection extends BaseAuthAPI implements ITokenForConnecti
     const subjectToken = getValidRefreshToken(tokenSet);
 
     const body: Record<string, string> = {
-      grant_type: FCAT_GRANT_TYPE,
+      grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,
       subject_token: subjectToken,
-      subject_token_type: FCAT_TOKEN_TYPE,
-      requested_token_type: FCAT_REQUESTED_TOKEN_TYPE,
+      subject_token_type: TOKEN_FOR_CONNECTION_TOKEN_TYPE,
+      requested_token_type: TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE,
       connection: connection,
     };
 
@@ -84,6 +88,19 @@ export class TokenForConnection extends BaseAuthAPI implements ITokenForConnecti
     // Append client authentication information (e.g. client secret or assertions)
     await this.addClientAuthentication(body);
 
-    return await this.getGenericResponseData<TokenResponse>({ body });
+    const response = await this.request(
+      {
+        path: TOKEN_URL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(body),
+      },
+      {}
+    );
+
+    const r: JSONApiResponse<TokenResponse> = await JSONApiResponse.fromResponse(response);
+    return r.data;
   }
 }
