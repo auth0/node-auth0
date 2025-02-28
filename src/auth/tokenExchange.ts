@@ -164,8 +164,6 @@ export class CustomTokenExchange extends BaseAuthAPI implements ICustomTokenExch
    * - Auth0 returns error responses (4xx/5xx)
    */
   async exchangeToken(options: CustomTokenExchangeOptions): Promise<TokenResponse> {
-    this.validateTokenType(options.subject_token_type);
-
     const body: CustomTokenExchangeRequestBody = {
       ...options,
       grant_type: TOKEN_EXCHANGE_GRANT_TYPE,
@@ -188,32 +186,6 @@ export class CustomTokenExchange extends BaseAuthAPI implements ICustomTokenExch
 
     const r: JSONApiResponse<TokenResponse> = await JSONApiResponse.fromResponse(response);
     return r.data;
-  }
-
-  /**
-   * Enforces namespace ownership requirements for token types
-   *
-   * @param tokenType - Proposed subject_token_type value
-   * @throws {Error} When reserved namespace pattern detected
-   *
-   * @privateRemarks
-   * Implements RFC 8693 Section 4.1 requirements for token type URIs
-   *
-   * @see {@link https://www.rfc-editor.org/rfc/rfc8693#section-4.1 | RFC 8693 Section 4.1}
-   */
-  private validateTokenType(tokenType: string): void {
-    const reservedPatterns = [
-      /^urn:ietf:params:oauth:/i,
-      /^https:\/\/auth0\.com\//i,
-      /^urn:auth0:/i,
-    ];
-
-    if (reservedPatterns.some((pattern) => pattern.test(tokenType))) {
-      throw new Error(
-        `Invalid subject_token_type '${tokenType}'. ` +
-          `Reserved namespaces are prohibited. Use URIs under your organization's control.`
-      );
-    }
   }
 }
 
