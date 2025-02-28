@@ -1,5 +1,4 @@
-import { JSONApiResponse } from '../lib/models.js';
-import { BaseAuthAPI } from './base-auth-api.js';
+import { BaseAuthAPI, TokenResponse } from './base-auth-api.js';
 
 /**
  * Represents the configuration options required for initiating a Custom Token Exchange request
@@ -123,7 +122,6 @@ export interface ICustomTokenExchange {
 /** RFC 8693-defined grant type for token exchange */
 const TOKEN_EXCHANGE_GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:token-exchange';
 /** Auth0 token endpoint path */
-const TOKEN_URL = '/oauth/token';
 
 /**
  * Implements Auth0's Custom Token Exchange functionality with security best practices
@@ -164,8 +162,6 @@ export class CustomTokenExchange extends BaseAuthAPI implements ICustomTokenExch
    * - Auth0 returns error responses (4xx/5xx)
    */
   async exchangeToken(options: CustomTokenExchangeOptions): Promise<TokenResponse> {
-    this.validateTokenType(options.subject_token_type);
-
     const body: CustomTokenExchangeRequestBody = {
       ...options,
       grant_type: TOKEN_EXCHANGE_GRANT_TYPE,
@@ -173,79 +169,8 @@ export class CustomTokenExchange extends BaseAuthAPI implements ICustomTokenExch
     };
 
     await this.addClientAuthentication(body);
-
-    const response = await this.request(
-      {
-        path: TOKEN_URL,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams(body as Record<string, string>),
-      },
-      {}
-    );
-
-    const r: JSONApiResponse<TokenResponse> = await JSONApiResponse.fromResponse(response);
-    return r.data;
-  }
-
-  /**
-   * Enforces namespace ownership requirements for token types
-   *
-   * @param tokenType - Proposed subject_token_type value
-   * @throws {Error} When reserved namespace pattern detected
-   *
-   * @privateRemarks
-   * Implements RFC 8693 Section 4.1 requirements for token type URIs
-   *
-   * @see {@link https://www.rfc-editor.org/rfc/rfc8693#section-4.1 | RFC 8693 Section 4.1}
-   */
-  private validateTokenType(tokenType: string): void {
-    const reservedPatterns = [
-      /^urn:ietf:params:oauth:/i,
-      /^https:\/\/auth0\.com\//i,
-      /^urn:auth0:/i,
-    ];
-
-    if (reservedPatterns.some((pattern) => pattern.test(tokenType))) {
-      throw new Error(
-        `Invalid subject_token_type '${tokenType}'. ` +
-          `Reserved namespaces are prohibited. Use URIs under your organization's control.`
-      );
-    }
+    return await this.getGenericResponseData<TokenResponse>({
+      body: body as Record<string, string>,
+    });
   }
 }
-
-/**
- * Standardized token response structure for Auth0 authentication flows
- *
- * @remarks
- * **Token Lifetime Management**:
- * - Cache tokens according to `expires_in` value
- * - Rotate refresh tokens using `offline_access` scope
- * - Revoke compromised tokens immediately
- *
- * @security
- * - Store tokens in secure, encrypted storage
- * - Never expose in client-side code or logs
- */
-export type TokenResponse = {
-  /** Bearer token for API authorization */
-  access_token: string;
-
-  /** Refresh token (requires `offline_access` scope) */
-  refresh_token?: string;
-
-  /** JWT containing user identity claims */
-  id_token: string;
-
-  /** Typically "Bearer" */
-  token_type?: string;
-
-  /** Token validity in seconds (default: 86400) */
-  expires_in: number;
-
-  /** Granted permissions space */
-  scope: string;
-};

@@ -6,8 +6,7 @@
 // directly on the device that receives the ID or access tokens (the “Consumption Device”), but
 // instead on a separate “Authorization Device”.
 
-import { JSONApiResponse } from '../lib/models.js';
-import { BaseAuthAPI } from './base-auth-api.js';
+import { BaseAuthAPI, TokenResponse } from './base-auth-api.js';
 
 /**
  * The response from the authorize endpoint.
@@ -106,36 +105,6 @@ type AuthorizeRequest = Omit<AuthorizeOptions, 'userId'> &
   };
 
 /**
- * The response from the token endpoint.
- */
-export type TokenResponse = {
-  /**
-   * The access token.
-   */
-  access_token: string;
-  /**
-   * The refresh token, available with the `offline_access` scope.
-   */
-  refresh_token?: string;
-  /**
-   * The user's ID Token.
-   */
-  id_token: string;
-  /**
-   * The token type of the access token.
-   */
-  token_type?: string;
-  /**
-   * The duration in seconds that the access token is valid.
-   */
-  expires_in: number;
-  /**
-   * The scopes associated with the token.
-   */
-  scope: string;
-};
-
-/**
  * Options for the token request.
  */
 export type TokenOptions = {
@@ -160,7 +129,6 @@ export interface IBackchannel {
 
 const CIBA_GRANT_TYPE = 'urn:openid:params:grant-type:ciba';
 const CIBA_AUTHORIZE_URL = '/bc-authorize';
-const CIBA_TOKEN_URL = '/oauth/token';
 
 /**
  * Class implementing the backchannel authentication flow.
@@ -182,19 +150,7 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
     };
 
     await this.addClientAuthentication(body);
-
-    const response = await this.request.bind(this)(
-      {
-        path: CIBA_AUTHORIZE_URL,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(body),
-      },
-      {}
-    );
-
-    const r: JSONApiResponse<AuthorizeResponse> = await JSONApiResponse.fromResponse(response);
-    return r.data;
+    return await this.getGenericResponseData<AuthorizeResponse>({ path: CIBA_AUTHORIZE_URL, body });
   }
 
   /**
@@ -237,18 +193,6 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
     };
 
     await this.addClientAuthentication(body);
-
-    const response = await this.request.bind(this)(
-      {
-        path: CIBA_TOKEN_URL,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(body),
-      },
-      {}
-    );
-
-    const r: JSONApiResponse<TokenResponse> = await JSONApiResponse.fromResponse(response);
-    return r.data;
+    return await this.getGenericResponseData<TokenResponse>({ body });
   }
 }
