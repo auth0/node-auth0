@@ -5364,6 +5364,23 @@ export type GetCredentials200ResponseInnerAlgEnum =
 /**
  *
  */
+export type GetCustomDomains200Response = Array<CustomDomain> | GetCustomDomains200ResponseOneOf;
+/**
+ *
+ */
+export interface GetCustomDomains200ResponseOneOf {
+  /**
+   */
+  custom_domains: Array<CustomDomain>;
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next?: string;
+}
+/**
+ *
+ */
 export interface GetDefaultMapping200Response {
   /**
    * The mapping between auth0 and SCIM
@@ -17456,6 +17473,21 @@ export interface DeleteCustomDomainsByIdRequest {
 /**
  *
  */
+export interface GetCustomDomainsRequest {
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+}
+/**
+ *
+ */
 export interface GetCustomDomainsByIdRequest {
   /**
    * ID of the custom domain to retrieve.
@@ -18787,11 +18819,8 @@ export const GetCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
-  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
-  custom_form: 'custom-form',
   consent: 'consent',
-  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -18810,7 +18839,6 @@ export const GetCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
-  captcha: 'captcha',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
@@ -18819,62 +18847,39 @@ export type GetCustomTextByLanguagePromptEnum =
  *
  */
 export const GetCustomTextByLanguageLanguageEnum = {
-  am: 'am',
   ar: 'ar',
-  ar_EG: 'ar-EG',
-  ar_SA: 'ar-SA',
-  az: 'az',
   bg: 'bg',
-  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
-  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
-  en_CA: 'en-CA',
   es: 'es',
-  es_419: 'es-419',
-  es_AR: 'es-AR',
-  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
-  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
-  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
-  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
-  ka: 'ka',
-  kk: 'kk',
-  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
-  mk: 'mk',
-  ml: 'ml',
-  mn: 'mn',
-  mr: 'mr',
-  ms: 'ms',
-  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
-  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -18883,22 +18888,13 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
-  so: 'so',
-  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
-  sw: 'sw',
-  ta: 'ta',
-  te: 'te',
   th: 'th',
-  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
-  ur: 'ur',
   vi: 'vi',
-  zgh: 'zgh',
   zh_CN: 'zh-CN',
-  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
@@ -19253,11 +19249,8 @@ export const PutCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
-  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
-  custom_form: 'custom-form',
   consent: 'consent',
-  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -19276,7 +19269,6 @@ export const PutCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
-  captcha: 'captcha',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
@@ -19285,62 +19277,39 @@ export type PutCustomTextByLanguagePromptEnum =
  *
  */
 export const PutCustomTextByLanguageLanguageEnum = {
-  am: 'am',
   ar: 'ar',
-  ar_EG: 'ar-EG',
-  ar_SA: 'ar-SA',
-  az: 'az',
   bg: 'bg',
-  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
-  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
-  en_CA: 'en-CA',
   es: 'es',
-  es_419: 'es-419',
-  es_AR: 'es-AR',
-  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
-  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
-  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
-  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
-  ka: 'ka',
-  kk: 'kk',
-  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
-  mk: 'mk',
-  ml: 'ml',
-  mn: 'mn',
-  mr: 'mr',
-  ms: 'ms',
-  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
-  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -19349,22 +19318,13 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
-  so: 'so',
-  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
-  sw: 'sw',
-  ta: 'ta',
-  te: 'te',
   th: 'th',
-  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
-  ur: 'ur',
   vi: 'vi',
-  zgh: 'zgh',
   zh_CN: 'zh-CN',
-  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type PutCustomTextByLanguageLanguageEnum =
