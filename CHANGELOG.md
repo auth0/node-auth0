@@ -7,7 +7,7 @@
 **Added**
 
 - Added tenant, channel in Branding Phone Providers [\#1085](https://github.com/auth0/node-auth0/pull/1085) ([tanya732](https://github.com/tanya732))
-- Sdk 4859 byok support for node auth0 [\#1080](https://github.com/auth0/node-auth0/pull/1080) ([tanya732](https://github.com/tanya732))
+- Added byok support for node auth0 [\#1080](https://github.com/auth0/node-auth0/pull/1080) ([tanya732](https://github.com/tanya732))
 - feature/formsCustomText [\#1082](https://github.com/auth0/node-auth0/pull/1082) ([tusharpandey13](https://github.com/tusharpandey13))
 - Add Support For Extensibility as Custom Provider in BrandingManager [\#1079](https://github.com/auth0/node-auth0/pull/1079) ([tanya732](https://github.com/tanya732))
 
