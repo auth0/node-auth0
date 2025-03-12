@@ -27,7 +27,7 @@ const { BaseAPI } = runtime;
  */
 export class BrandingManager extends BaseAPI {
   /**
-   * Create an <a href="https://auth0.com/docs/phone/providers">phone provider</a>.
+   * Create a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
    * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
    *
    * Configure the phone provider
@@ -144,9 +144,9 @@ export class BrandingManager extends BaseAPI {
   }
 
   /**
-   * Retrieve a list of<a href="https://auth0.com/docs/phone/providers">phone providers</a> details set for a Tenant. A list of fields to include or exclude may also be specified.
+   * Retrieve a list of <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone providers</a> details set for a Tenant. A list of fields to include or exclude may also be specified.
    *
-   * Get the phone providers set for a Tenant
+   * Get a list of phone providers
    *
    * @throws {RequiredError}
    */
@@ -220,9 +220,9 @@ export class BrandingManager extends BaseAPI {
   }
 
   /**
-   * Retrieve <a href="https://auth0.com/docs/phone/providers">phone provider</a> details. A list of fields to include or exclude may also be specified.
+   * Retrieve <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a> details. A list of fields to include or exclude may also be specified.
    *
-   * Get the phone provider
+   * Get a phone provider
    *
    * @throws {RequiredError}
    */
@@ -405,8 +405,8 @@ export class BrandingManager extends BaseAPI {
   }
 
   /**
-   * Update an <a href="https://auth0.com/docs/phone/providers">phone provider</a>.
-   * The <code>credentials</code> object requires different properties depending on the email provider (which is specified using the <code>name</code> property).
+   * Update a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
+   * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
    *
    * Update the phone provider
    *

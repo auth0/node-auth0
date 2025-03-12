@@ -5000,7 +5000,6 @@ export interface GetBranding200ResponseFont {
  *
  */
 export interface GetBrandingPhoneProviders200Response {
-  [key: string]: any | any;
   /**
    */
   providers: Array<GetBrandingPhoneProviders200ResponseProvidersInner>;
@@ -5013,10 +5012,20 @@ export interface GetBrandingPhoneProviders200ResponseProvidersInner {
    */
   id?: string;
   /**
+   * The name of the tenant
+   *
+   */
+  tenant?: string;
+  /**
    * Name of the phone notification provider
    *
    */
   name: GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum;
+  /**
+   * This depicts the type of notifications this provider can receive.
+   *
+   */
+  channel?: GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum;
   /**
    * Whether the provider is enabled (false) or disabled (true).
    *
@@ -5025,6 +5034,16 @@ export interface GetBrandingPhoneProviders200ResponseProvidersInner {
   /**
    */
   configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+  /**
+   * The provider's creation date and time in ISO 8601 format
+   *
+   */
+  created_at?: string;
+  /**
+   * The date and time of the last update to the provider in ISO 8601 format
+   *
+   */
+  updated_at?: string;
 }
 
 export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
@@ -5033,6 +5052,12 @@ export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
 } as const;
 export type GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum =
   (typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum];
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum = {
+  phone: 'phone',
+} as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum];
 
 /**
  *
@@ -5530,6 +5555,96 @@ export interface GetEnabledConnections200ResponseOneOfInner {
    */
   connection: PostOrganizations201ResponseEnabledConnectionsInnerConnection;
 }
+/**
+ *
+ */
+export type GetEncryptionKeys200Response =
+  | Array<GetEncryptionKeys200ResponseOneOfInner>
+  | GetEncryptionKeys200ResponseOneOf;
+/**
+ *
+ */
+export interface GetEncryptionKeys200ResponseOneOf {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  start: number;
+  /**
+   * Number of results per page.
+   *
+   */
+  limit: number;
+  /**
+   * Total amount of encryption keys.
+   *
+   */
+  total: number;
+  /**
+   * Encryption keys.
+   *
+   */
+  keys: Array<GetEncryptionKeys200ResponseOneOfInner>;
+}
+/**
+ * Encryption key
+ */
+export interface GetEncryptionKeys200ResponseOneOfInner {
+  /**
+   * Key ID
+   *
+   */
+  kid: string;
+  /**
+   * Key type
+   *
+   */
+  type: GetEncryptionKeys200ResponseOneOfInnerTypeEnum;
+  /**
+   * Key state
+   *
+   */
+  state: GetEncryptionKeys200ResponseOneOfInnerStateEnum;
+  /**
+   * Key creation timestamp
+   *
+   */
+  created_at: string;
+  /**
+   * Key update timestamp
+   *
+   */
+  updated_at: string;
+  /**
+   * ID of parent wrapping key
+   *
+   */
+  parent_kid: string;
+  /**
+   * Public key in PEM format
+   *
+   */
+  public_key?: string;
+}
+
+export const GetEncryptionKeys200ResponseOneOfInnerTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  environment_root_key: 'environment-root-key',
+  tenant_master_key: 'tenant-master-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerTypeEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum];
+
+export const GetEncryptionKeys200ResponseOneOfInnerStateEnum = {
+  pre_activation: 'pre-activation',
+  active: 'active',
+  deactivated: 'deactivated',
+  destroyed: 'destroyed',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerStateEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum];
+
 /**
  *
  */
@@ -10653,6 +10768,59 @@ export interface PostEnabledConnectionsRequest {
    */
   show_as_button?: boolean;
 }
+/**
+ *
+ */
+export interface PostEncryptionKeyRequest {
+  [key: string]: any | any;
+  /**
+   * Base64 encoded ciphertext of key material wrapped by public wrapping key.
+   *
+   */
+  wrapped_key: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionRequest {
+  [key: string]: any | any;
+  /**
+   * Type of the encryption key to be created.
+   *
+   */
+  type: PostEncryptionRequestTypeEnum;
+}
+
+export const PostEncryptionRequestTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type PostEncryptionRequestTypeEnum =
+  (typeof PostEncryptionRequestTypeEnum)[keyof typeof PostEncryptionRequestTypeEnum];
+
+/**
+ *
+ */
+export interface PostEncryptionWrappingKey201Response {
+  [key: string]: any | any;
+  /**
+   * Public wrapping key in PEM format
+   *
+   */
+  public_key: string;
+  /**
+   * Encryption algorithm that shall be used to wrap your key material
+   *
+   */
+  algorithm: PostEncryptionWrappingKey201ResponseAlgorithmEnum;
+}
+
+export const PostEncryptionWrappingKey201ResponseAlgorithmEnum = {
+  CKM_RSA_AES_KEY_WRAP: 'CKM_RSA_AES_KEY_WRAP',
+} as const;
+export type PostEncryptionWrappingKey201ResponseAlgorithmEnum =
+  (typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum)[keyof typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum];
+
 /**
  *
  */
@@ -18262,9 +18430,69 @@ export interface PostUsersImportsData {
 /**
  *
  */
+export interface DeleteEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeysRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Default value is 50, maximum value is 100.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface GetSigningKeyRequest {
   /**
    * Key id of the key to retrieve
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionKeyOperationRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionWrappingKeyRequest {
+  /**
+   * Encryption key ID
    *
    */
   kid: string;
