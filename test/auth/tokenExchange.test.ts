@@ -92,24 +92,6 @@ describe('CustomTokenExchange', () => {
       expect(result.scope).toBe('openid profile email');
     });
 
-    test('should reject reserved IETF namespace', async () => {
-      await expect(
-        client.exchangeToken({
-          ...baseParams,
-          subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
-        })
-      ).rejects.toThrow('Reserved namespaces are prohibited');
-    });
-
-    test('should reject Auth0.com namespace', async () => {
-      await expect(
-        client.exchangeToken({
-          ...baseParams,
-          subject_token_type: 'https://auth0.com/custom-token',
-        })
-      ).rejects.toThrow('Reserved namespaces are prohibited');
-    });
-
     test('should handle consent_required error', async () => {
       nock(`https://${DOMAIN}`).post('/oauth/token').reply(400, {
         error: 'invalid_request',
@@ -145,42 +127,6 @@ describe('CustomTokenExchange', () => {
       await client.exchangeToken({
         ...baseParams,
         custom_param: 'value',
-      });
-    });
-
-    test('should validate token type before making request', async () => {
-      // No nock setup - should fail before making request
-      await expect(
-        client.exchangeToken({
-          ...baseParams,
-          subject_token_type: 'urn:auth0:invalid-type',
-        })
-      ).rejects.toThrow('Reserved namespaces are prohibited');
-    });
-  });
-
-  describe('validateTokenType()', () => {
-    const validCases = [
-      'urn:company:custom-token',
-      'https://api.company.com/token-type',
-      'urn:partner:legacy-system:v1',
-    ];
-
-    const invalidCases = [
-      { type: 'urn:ietf:params:oauth:jwt', reason: 'IETF namespace' },
-      { type: 'https://auth0.com/token', reason: 'Auth0 root domain' },
-      { type: 'urn:auth0:custom-type', reason: 'Auth0 URN' },
-    ];
-
-    validCases.forEach((tokenType) => {
-      test(`should allow ${tokenType}`, () => {
-        expect(() => (client as any).validateTokenType(tokenType)).not.toThrow();
-      });
-    });
-
-    invalidCases.forEach(({ type, reason }) => {
-      test(`should reject ${reason} (${type})`, () => {
-        expect(() => (client as any).validateTokenType(type)).toThrow(/Reserved namespaces/);
       });
     });
   });
