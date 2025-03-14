@@ -116,6 +116,29 @@ describe('Backchannel', () => {
       expect(receivedAuthorizationDetails[0].type).toBe('test-type');
     });
 
+    it('should pass custom parameters to /bc-authorize', async () => {
+      let receivedCustomParam = '';
+      nock(`https://${opts.domain}`)
+        .post('/bc-authorize')
+        .reply(201, (uri, requestBody, cb) => {
+          receivedCustomParam = querystring.parse(requestBody as any)['custom_param'] as string;
+          cb(null, {
+            auth_req_id: 'test-auth-req-id',
+            expires_in: 300,
+            interval: 5,
+          });
+        });
+
+      await backchannel.authorize({
+        userId: 'auth0|test-user-id',
+        binding_message: 'Test binding message',
+        scope: 'openid',
+        custom_param: '<custom_param>',
+      });
+
+      expect(receivedCustomParam).toBe('<custom_param>');
+    });
+
     it('should throw for invalid request', async () => {
       nock(`https://${opts.domain}`).post('/bc-authorize').reply(400, {
         error: 'invalid_request',

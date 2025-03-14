@@ -103,7 +103,7 @@ export type AuthorizeOptions = {
    * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
    */
   authorization_details?: string;
-};
+} & Record<string, string>;
 
 type AuthorizeRequest = Omit<AuthorizeOptions, 'userId'> &
   AuthorizeCredentialsPartial & {
