@@ -98,6 +98,11 @@ export type AuthorizeOptions = {
    * Optional parameter for subject issuer context.
    */
   subjectIssuerContext?: string;
+  /**
+   * Optional authorization details to use Rich Authorization Requests (RAR).
+   * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
+   */
+  authorization_details?: string;
 };
 
 type AuthorizeRequest = Omit<AuthorizeOptions, 'userId'> &
@@ -133,6 +138,11 @@ export type TokenResponse = {
    * The scopes associated with the token.
    */
   scope: string;
+  /**
+   * Optional authorization details when using Rich Authorization Requests (RAR).
+   * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
+   */
+  authorization_details?: string;
 };
 
 /**

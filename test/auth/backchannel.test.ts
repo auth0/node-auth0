@@ -1,4 +1,5 @@
 import nock from 'nock';
+import querystring from 'querystring';
 
 import { AuthorizeOptions, Backchannel } from '../../src/auth/backchannel.js';
 
@@ -88,6 +89,31 @@ describe('Backchannel', () => {
         expires_in: 300,
         interval: 5,
       });
+    });
+
+    it('should pass authorization_details to /bc-authorize', async () => {
+      let receivedAuthorizationDetails: { type: string }[] = [];
+      nock(`https://${opts.domain}`)
+        .post('/bc-authorize')
+        .reply(201, (uri, requestBody, cb) => {
+          receivedAuthorizationDetails = JSON.parse(
+            querystring.parse(requestBody as any)['authorization_details'] as string
+          );
+          cb(null, {
+            auth_req_id: 'test-auth-req-id',
+            expires_in: 300,
+            interval: 5,
+          });
+        });
+
+      await backchannel.authorize({
+        userId: 'auth0|test-user-id',
+        binding_message: 'Test binding message',
+        scope: 'openid',
+        authorization_details: JSON.stringify([{ type: 'test-type' }]),
+      });
+
+      expect(receivedAuthorizationDetails[0].type).toBe('test-type');
     });
 
     it('should throw for invalid request', async () => {
@@ -185,6 +211,29 @@ describe('Backchannel', () => {
         id_token: 'test-id-token',
         expires_in: 86400,
         scope: 'openid',
+      });
+    });
+
+    it('should return token response, including authorization_details when available', async () => {
+      const authorization_details = JSON.stringify([{ type: 'test-type' }]);
+      nock(`https://${opts.domain}`).post('/oauth/token').reply(200, {
+        access_token: 'test-access-token',
+        id_token: 'test-id-token',
+        expires_in: 86400,
+        scope: 'openid',
+        authorization_details,
+      });
+
+      await expect(
+        backchannel.backchannelGrant({
+          auth_req_id: 'test-auth-req-id',
+        })
+      ).resolves.toMatchObject({
+        access_token: 'test-access-token',
+        id_token: 'test-id-token',
+        expires_in: 86400,
+        scope: 'openid',
+        authorization_details,
       });
     });
 
