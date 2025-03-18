@@ -5389,6 +5389,23 @@ export type GetCredentials200ResponseInnerAlgEnum =
 /**
  *
  */
+export type GetCustomDomains200Response = Array<CustomDomain> | GetCustomDomains200ResponseOneOf;
+/**
+ *
+ */
+export interface GetCustomDomains200ResponseOneOf {
+  /**
+   */
+  custom_domains: Array<CustomDomain>;
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next?: string;
+}
+/**
+ *
+ */
 export interface GetDefaultMapping200Response {
   /**
    * The mapping between auth0 and SCIM
@@ -17620,6 +17637,21 @@ export interface DeleteCustomDomainsByIdRequest {
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface GetCustomDomainsRequest {
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
 }
 /**
  *
