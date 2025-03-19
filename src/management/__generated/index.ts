@@ -23,6 +23,7 @@ import {
   KeysManager,
   LogStreamsManager,
   LogsManager,
+  NetworkAclsManager,
   OrganizationsManager,
   PromptsManager,
   RefreshTokensManager,
@@ -65,6 +66,7 @@ export abstract class ManagementClientBase {
   public readonly keys = new KeysManager(this.configuration);
   public readonly logStreams = new LogStreamsManager(this.configuration);
   public readonly logs = new LogsManager(this.configuration);
+  public readonly networkAcls = new NetworkAclsManager(this.configuration);
   public readonly organizations = new OrganizationsManager(this.configuration);
   public readonly prompts = new PromptsManager(this.configuration);
   public readonly refreshTokens = new RefreshTokensManager(this.configuration);
