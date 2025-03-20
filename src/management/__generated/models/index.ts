@@ -5754,6 +5754,30 @@ export interface GetExecution200ResponseResultsInner {
 /**
  *
  */
+export interface GetFederatedConnectionsTokensets200ResponseInner {
+  [key: string]: any | any;
+  /**
+   */
+  id: string;
+  /**
+   */
+  connection: string;
+  /**
+   */
+  scope: string;
+  /**
+   */
+  expires_at: string;
+  /**
+   */
+  issued_at: string;
+  /**
+   */
+  last_used_at: string;
+}
+/**
+ *
+ */
 export type GetFlows200Response = Array<GetFlows200ResponseOneOfInner> | GetFlows200ResponseOneOf;
 /**
  *
@@ -20264,6 +20288,21 @@ export interface DeleteAuthenticatorsRequest {
    */
   id: string;
 }
+/**
+ *
+ */
+export interface DeleteFederatedConnectionsTokensetsByTokensetIdRequest {
+  /**
+   * Id of the user that owns the tokenset
+   *
+   */
+  id: string;
+  /**
+   * The tokenset id
+   *
+   */
+  tokenset_id: string;
+}
 
 /**
  *
@@ -20476,6 +20515,16 @@ export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
 export interface GetEnrollmentsRequest {
   /**
    * ID of the user to list enrollments for.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetFederatedConnectionsTokensetsRequest {
+  /**
+   * User identifier
    *
    */
   id: string;

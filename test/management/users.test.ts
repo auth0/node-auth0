@@ -1572,4 +1572,107 @@ describe('UsersManager', () => {
       expect(request.isDone()).toBe(true);
     });
   });
+
+  describe('#getAllTokensets', () => {
+    const id = 'USER_5';
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).get(`/users/${id}/federated-connections-tokensets`).reply(200, []);
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getAllTokensets({ id: id }).then(() => done())).toBeInstanceOf(Promise);
+    });
+
+    it(`should perform a GET request to /users/${id}/federated-connections-tokensets`, async () => {
+      await usersManager.getAllTokensets({ id: id });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/users/${id}/federated-connections-tokensets`).reply(500, {});
+
+      try {
+        await usersManager.getAllTokensets({ id: id });
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/users/${id}/federated-connections-tokensets`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, []);
+
+      await usersManager.getAllTokensets({ id: id });
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should pass the body of the response to the "then" handler', async () => {
+      nock.cleanAll();
+
+      const data = [{ token: 'test-token' }];
+      nock(API_URL).get(`/users/${id}/federated-connections-tokensets`).reply(200, data);
+
+      const tokensets = await usersManager.getAllTokensets({ id: id });
+      expect(tokensets.data).toBeInstanceOf(Array);
+      expect(tokensets.data.length).toBe(data.length);
+      expect(tokensets.data[0].token).toBe(data[0].token);
+    });
+  });
+
+  describe('#deleteTokenset', () => {
+    const id = 'USER_5';
+    const tokenset_id = 'TOKENSET_1';
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL)
+        .delete(`/users/${id}/federated-connections-tokensets/${tokenset_id}`)
+        .reply(200, {});
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      expect(
+        usersManager.deleteTokenset({ id: id, tokenset_id: tokenset_id }).then(() => done())
+      ).toBeInstanceOf(Promise);
+    });
+
+    it(`should perform a DELETE request to /users/${id}/federated-connections-tokensets/${tokenset_id}`, async () => {
+      await usersManager.deleteTokenset({ id: id, tokenset_id: tokenset_id });
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .delete(`/users/${id}/federated-connections-tokensets/${tokenset_id}`)
+        .reply(500, {});
+
+      try {
+        await usersManager.deleteTokenset({ id: id, tokenset_id: tokenset_id });
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/users/${id}/federated-connections-tokensets/${tokenset_id}`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      await usersManager.deleteTokenset({ id: id, tokenset_id: tokenset_id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
 });
