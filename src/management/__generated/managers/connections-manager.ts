@@ -380,8 +380,9 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * <b>Note:</b> if you use the options parameter, the whole options object will be overridden, so ensure that all parameters are present
+   * Update details for a specific <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a>, including option properties for identity provider configuration.
    *
+   * <b>Note</b>: If you use the <code>options</code> parameter, the entire <code>options</code> object is overriden. To avoid partial data or other issues, ensure all parameters are present when using this option.
    * Update a connection
    *
    * @throws {RequiredError}
