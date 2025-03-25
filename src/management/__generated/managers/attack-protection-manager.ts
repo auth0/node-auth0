@@ -16,7 +16,8 @@ const { BaseAPI } = runtime;
  */
 export class AttackProtectionManager extends BaseAPI {
   /**
-   * Get breached password detection settings
+   * Retrieve details of the Breached Password Detection configuration of your tenant.
+   * Get Breached Password Detection settings
    *
    * @throws {RequiredError}
    */
@@ -73,7 +74,8 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
-   * Update breached password detection settings
+   * Update details of the Breached Password Detection configuration of your tenant.
+   * Update Breached Password Detection settings
    *
    * @throws {RequiredError}
    */
