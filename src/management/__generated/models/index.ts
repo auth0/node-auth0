@@ -5172,7 +5172,29 @@ export interface GetBreachedPasswordDetection200ResponseStage {
   /**
    */
   'pre-user-registration': GetBreachedPasswordDetection200ResponseStagePreUserRegistration;
+  /**
+   */
+  'pre-change-password': GetBreachedPasswordDetection200ResponseStagePreChangePassword;
 }
+/**
+ *
+ */
+export interface GetBreachedPasswordDetection200ResponseStagePreChangePassword {
+  /**
+   * Action to take when a breached password is detected during a password reset.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields: Array<GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum>;
+}
+
+export const GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum =
+  (typeof GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum)[keyof typeof GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum];
+
 /**
  *
  */
@@ -9333,7 +9355,29 @@ export interface PatchBreachedPasswordDetectionRequestStage {
   /**
    */
   'pre-user-registration'?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
+  /**
+   */
+  'pre-change-password'?: PatchBreachedPasswordDetectionRequestStagePreChangePassword;
 }
+/**
+ *
+ */
+export interface PatchBreachedPasswordDetectionRequestStagePreChangePassword {
+  /**
+   * Action to take when a breached password is detected during a password reset.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum>;
+}
+
+export const PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum =
+  (typeof PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum];
+
 /**
  *
  */
