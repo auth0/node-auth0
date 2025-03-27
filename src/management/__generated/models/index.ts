@@ -14230,6 +14230,9 @@ export interface PostSsoTicketRequest {
    *
    */
   ttl_sec?: number;
+  /**
+   */
+  domain_aliases_config?: PostSsoTicketRequestDomainAliasesConfig;
 }
 /**
  * If provided, this will create a new connection for the SSO flow with the given configuration
@@ -14246,8 +14249,15 @@ export interface PostSsoTicketRequestConnectionConfig {
    */
   display_name?: string;
   /**
+   * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
+   *
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -14271,13 +14281,69 @@ export interface PostSsoTicketRequestConnectionConfigOptions {
    *
    */
   domain_aliases?: Array<string>;
+  /**
+   */
+  idpinitiated?: PostSsoTicketRequestConnectionConfigOptionsIdpinitiated | null;
 }
+/**
+ * Allows IdP-initiated login
+ */
+export interface PostSsoTicketRequestConnectionConfigOptionsIdpinitiated {
+  /**
+   * Enables IdP-initiated login for this connection
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Default application <code>client_id</code> user is redirected to after validated SAML response
+   *
+   */
+  client_id?: string;
+  /**
+   * The protocol used to connect to the the default application
+   *
+   */
+  client_protocol?: PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum;
+  /**
+   * Query string options to customize the behaviour for OpenID Connect when <code>idpinitiated.client_protocol</code> is <code>oauth2</code>. Allowed parameters: <code>redirect_uri</code>, <code>scope</code>, <code>response_type</code>. For example, <code>redirect_uri=https://jwt.io&scope=openid email&response_type=token</code>
+   *
+   */
+  client_authorizequery?: string;
+}
+
+export const PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum = {
+  samlp: 'samlp',
+  wsfed: 'wsfed',
+  oauth2: 'oauth2',
+} as const;
+export type PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum =
+  (typeof PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum)[keyof typeof PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * Configuration for the setup of the connection’s domain_aliases in the self-service SSO flow.
+ */
+export interface PostSsoTicketRequestDomainAliasesConfig {
+  /**
+   * Whether the end user should complete the domain verification step. Possible values are 'none' (the step is not shown to the user), 'optional' (the user may add a domain alias in the domain verification step) or 'required' (the user must add a domain alias in order to enable the connection). Defaults to 'none'.
+   *
+   */
+  domain_verification: PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum;
+}
+
+export const PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum = {
+  none: 'none',
+  optional: 'optional',
+  required: 'required',
+} as const;
+export type PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum =
+  (typeof PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum)[keyof typeof PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum];
+
 /**
  *
  */
 export interface PostSsoTicketRequestEnabledOrganizationsInner {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   organization_id: string;
@@ -17971,7 +18037,7 @@ export interface GetStatusRequest {
  */
 export interface PatchConnectionsByIdRequest {
   /**
-   * The id of the connection to retrieve
+   * The id of the connection to update
    *
    */
   id: string;
