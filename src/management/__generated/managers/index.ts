@@ -19,6 +19,7 @@ export * from './jobs-manager.js';
 export * from './keys-manager.js';
 export * from './log-streams-manager.js';
 export * from './logs-manager.js';
+export * from './network-acls-manager.js';
 export * from './organizations-manager.js';
 export * from './prompts-manager.js';
 export * from './refresh-tokens-manager.js';
