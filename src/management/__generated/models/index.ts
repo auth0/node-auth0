@@ -7080,6 +7080,233 @@ export type GetMessageTypes200ResponseMessageTypesEnum =
 /**
  *
  */
+export type GetNetworkAcls200Response =
+  | Array<GetNetworkAclsById200Response>
+  | GetNetworkAcls200ResponseOneOf;
+/**
+ *
+ */
+export interface GetNetworkAcls200ResponseOneOf {
+  /**
+   */
+  network_acls: Array<GetNetworkAclsById200Response>;
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsById200Response {
+  [key: string]: any | any;
+  /**
+   */
+  id: string;
+  /**
+   */
+  description: string;
+  /**
+   */
+  active: boolean;
+  /**
+   */
+  priority: number;
+  /**
+   */
+  rule: GetNetworkAclsById200ResponseRule;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  created_at: string;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  updated_at: string;
+}
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRule =
+  | GetNetworkAclsById200ResponseRuleAnyOf
+  | GetNetworkAclsById200ResponseRuleAnyOf1;
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  scope: GetNetworkAclsById200ResponseRuleAnyOfScopeEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfScopeEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfScopeEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfScopeEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  scope: GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum];
+
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfAction =
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3;
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf {
+  /**
+   */
+  block: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1 {
+  /**
+   */
+  allow: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2 {
+  /**
+   */
+  log: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3 {
+  /**
+   */
+  redirect: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum;
+  /**
+   */
+  redirect_uri: string;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfMatch {
+  /**
+   * Anonymous Proxy as reported by GeoIP
+   *
+   */
+  anonymous_proxy?: boolean;
+  /**
+   */
+  asns?: Array<number>;
+  /**
+   */
+  geo_country_codes?: Array<string>;
+  /**
+   */
+  geo_subdivision_codes?: Array<string>;
+  /**
+   */
+  ipv4_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner>;
+  /**
+   */
+  ipv6_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner>;
+  /**
+   */
+  ja3_fingerprints?: Array<string>;
+  /**
+   */
+  ja4_fingerprints?: Array<string>;
+  /**
+   */
+  user_agents?: Array<string>;
+}
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner = string;
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner = string;
+/**
+ *
+ */
 export type GetOrganizationClientGrants200Response =
   | Array<GetOrganizationClientGrants200ResponseOneOfInner>
   | GetOrganizationClientGrants200ResponseOneOf;
@@ -14585,6 +14812,89 @@ export interface PutFcmRequest {
 /**
  *
  */
+export interface PutNetworkAclsByIdRequest {
+  /**
+   */
+  description: string;
+  /**
+   * Indicates whether or not this access control list is actively being used
+   *
+   */
+  active: boolean;
+  /**
+   * Indicates the order in which the ACL will be evaluated relative to other ACL rules.
+   *
+   */
+  priority: number;
+  /**
+   */
+  rule: PutNetworkAclsByIdRequestRule;
+}
+/**
+ *
+ */
+export type PutNetworkAclsByIdRequestRule =
+  | PutNetworkAclsByIdRequestRuleAnyOf
+  | PutNetworkAclsByIdRequestRuleAnyOf1;
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequestRuleAnyOf {
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   * Identifies the origin of the request as the Management API (management), Authentication API (authentication), or either (tenant)
+   *
+   */
+  scope: PutNetworkAclsByIdRequestRuleAnyOfScopeEnum;
+}
+
+export const PutNetworkAclsByIdRequestRuleAnyOfScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PutNetworkAclsByIdRequestRuleAnyOfScopeEnum =
+  (typeof PutNetworkAclsByIdRequestRuleAnyOfScopeEnum)[keyof typeof PutNetworkAclsByIdRequestRuleAnyOfScopeEnum];
+
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequestRuleAnyOf1 {
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  not_match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   * Scope defines the different scopes of network requests the rule can be applied to.
+   *
+   */
+  scope: PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum;
+}
+
+export const PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum =
+  (typeof PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum)[keyof typeof PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum];
+
+/**
+ *
+ */
 export interface PutRulesConfigsByKey200Response {
   [key: string]: any | any;
   /**
@@ -18624,6 +18934,56 @@ export interface GetLogsByIdRequest {
 /**
  *
  */
+export interface DeleteNetworkAclsByIdRequest {
+  /**
+   * The id of the ACL to delete
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsRequest {
+  /**
+   * Use this field to request a specific page of the list results.
+   *
+   */
+  page?: number;
+  /**
+   * The amount of results per page.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsByIdRequest {
+  /**
+   * The id of the access control list to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PutNetworkAclsByIdOperationRequest {
+  /**
+   * The id of the ACL to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface DeleteClientGrantsByGrantIdRequest {
   /**
    * Organization identifier
@@ -19071,8 +19431,11 @@ export const GetCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
+  custom_form: 'custom-form',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -19091,6 +19454,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
@@ -19099,39 +19463,62 @@ export type GetCustomTextByLanguagePromptEnum =
  *
  */
 export const GetCustomTextByLanguageLanguageEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -19140,13 +19527,22 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
@@ -19501,8 +19897,11 @@ export const PutCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
+  custom_form: 'custom-form',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -19521,6 +19920,7 @@ export const PutCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
@@ -19529,39 +19929,62 @@ export type PutCustomTextByLanguagePromptEnum =
  *
  */
 export const PutCustomTextByLanguageLanguageEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -19570,13 +19993,22 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type PutCustomTextByLanguageLanguageEnum =

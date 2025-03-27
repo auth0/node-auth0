@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.20.0](https://github.com/auth0/node-auth0/tree/v4.20.0) (2025-03-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.19.0...v4.20.0)
+
+**Added**
+
+- Add support for RAR when using CIBA [\#1088](https://github.com/auth0/node-auth0/pull/1088) ([frederikprijck](https://github.com/frederikprijck))
+- Get all custom domains paginate support [\#1089](https://github.com/auth0/node-auth0/pull/1089) ([kushalshit27](https://github.com/kushalshit27))
+
 ## [v4.19.0](https://github.com/auth0/node-auth0/tree/v4.19.0) (2025-03-12)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.18.0...v4.19.0)
