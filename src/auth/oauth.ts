@@ -292,6 +292,14 @@ export interface TokenForConnectionRequest {
   login_hint?: string;
 }
 
+export interface TokenForConnectionResponse {
+  access_token: string;
+  scope?: string;
+  expires_at: number; // the time at which the access token expires in seconds since epoch
+  connection: string;
+  [key: string]: unknown;
+}
+
 export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
   'urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token';
 
@@ -600,7 +608,7 @@ export class OAuth extends BaseAuthAPI {
   public async tokenForConnection(
     bodyParameters: TokenForConnectionRequest,
     options: { initOverrides?: InitOverride } = {}
-  ): Promise<JSONApiResponse<TokenResponse>> {
+  ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['connection', 'subject_token']);
 
     const body: Record<string, string> = {
