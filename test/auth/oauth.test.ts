@@ -367,6 +367,110 @@ describe('OAuth', () => {
       });
     });
   });
+
+  describe('#tokenForConnection', () => {
+    const REFRESH_TOKEN = 'test-refresh-token';
+    const CONNECTION = 'google-oauth2';
+
+    it('should require a refresh token', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: '',
+          connection: CONNECTION,
+        })
+      ).rejects.toThrow('refresh_token not present');
+    });
+
+    it('should require a connection', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: REFRESH_TOKEN,
+          connection: '',
+        })
+      ).rejects.toThrow('Required parameter connection was null or undefined.');
+    });
+
+    it('should return federated connection access token', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: REFRESH_TOKEN,
+          connection: CONNECTION,
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'federated-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        },
+      });
+    });
+
+    it('should include login_hint when provided', async () => {
+      const oauth = new OAuth(opts);
+      const loginHint = 'user@example.com';
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: REFRESH_TOKEN,
+          connection: CONNECTION,
+          loginHint,
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'federated-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        },
+      });
+    });
+
+    it('should handle API error responses', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: 'invalid-refresh-token',
+          connection: CONNECTION,
+        })
+      ).rejects.toThrowError(
+        expect.objectContaining({
+          body: expect.anything(),
+        })
+      );
+    });
+
+    it('should handle unauthorized errors', async () => {
+      const oauth = new OAuth({
+        ...opts,
+        clientSecret: 'invalid-secret',
+      });
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: REFRESH_TOKEN,
+          connection: CONNECTION,
+        })
+      ).rejects.toThrowError(
+        expect.objectContaining({
+          body: expect.anything(),
+        })
+      );
+    });
+
+    it('should handle connection not found errors', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          refreshToken: REFRESH_TOKEN,
+          connection: 'non-existent-connection',
+        })
+      ).rejects.toThrowError(
+        expect.objectContaining({
+          body: expect.anything(),
+        })
+      );
+    });
+  });
 });
 
 describe('OAuth (with ID Token validation)', () => {

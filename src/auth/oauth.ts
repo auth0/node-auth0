@@ -7,6 +7,7 @@ import {
 import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api.js';
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
 import { mtlsPrefix } from '../utils.js';
+import { TokenResponse } from './tokenExchange.js';
 
 export interface TokenSet {
   /**
@@ -272,6 +273,33 @@ export interface TokenExchangeGrantRequest {
    */
   user_profile: string;
 }
+
+/**
+ * Options to exchange a federated connection token.
+ */
+export interface TokenForConnectionOptions {
+  /**
+   * The refresh token to exchange for a federated connection access token.
+   */
+  refreshToken: string;
+  /**
+   * The target social provider connection (e.g., "google-oauth2").
+   */
+  connection: string;
+  /**
+   * Optional login hint
+   */
+  loginHint?: string;
+}
+
+export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
+  'urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token';
+
+export const TOKEN_FOR_CONNECTION_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:refresh_token';
+export const TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE =
+  'http://auth0.com/oauth/token-type/federated-connection-access-token';
+
+export const TOKEN_URL = '/oauth/token';
 
 /**
  *  OAuth 2.0 flows.
@@ -553,5 +581,61 @@ export class OAuth extends BaseAuthAPI {
     );
 
     return VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Exchanges a subject token (e.g. a refresh token) for a federated connection access token.
+   *
+   * The request body includes:
+   * - client_id (and client_secret via addClientAuthentication)
+   * - grant_type set to FCAT_GRANT_TYPE
+   * - subject_token and fixed subject_token_type value for refresh tokens
+   * - requested_token_type indicating that a federated connection access token is desired
+   * - connection name and an optional login_hint if provided
+   *
+   * @param options - The federated connection options.
+   * @returns A promise with the token response data.
+   * @throws An error if the exchange fails.
+   */
+  public async tokenForConnection({
+    refreshToken,
+    connection,
+    loginHint,
+  }: TokenForConnectionOptions): Promise<JSONApiResponse<TokenResponse>> {
+    if (!connection) {
+      throw new Error('Required parameter connection was null or undefined.');
+    }
+
+    if (!refreshToken) {
+      throw new Error('refresh_token not present');
+    }
+
+    const body: Record<string, string> = {
+      grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,
+      subject_token: refreshToken,
+      subject_token_type: TOKEN_FOR_CONNECTION_TOKEN_TYPE,
+      requested_token_type: TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE,
+      connection,
+    };
+
+    if (loginHint) {
+      body.login_hint = loginHint;
+    }
+
+    await this.addClientAuthentication(body);
+
+    const response = await this.request(
+      {
+        path: TOKEN_URL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(body),
+      },
+      {}
+    );
+
+    return JSONApiResponse.fromResponse(response);
   }
 }

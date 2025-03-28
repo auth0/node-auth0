@@ -4,7 +4,6 @@ import { Database } from './database.js';
 import { OAuth } from './oauth.js';
 import { Passwordless } from './passwordless.js';
 import { CustomTokenExchange, ICustomTokenExchange } from './tokenExchange.js';
-import { ITokenForConnection, TokenForConnection } from './tokenForConnection.js';
 
 export * from './database.js';
 export * from './oauth.js';
@@ -18,7 +17,6 @@ export class AuthenticationClient {
   passwordless: Passwordless;
   backchannel: IBackchannel;
   tokenExchange: ICustomTokenExchange;
-  tokensForConnection: ITokenForConnection;
 
   constructor(options: AuthenticationClientOptions) {
     this.database = new Database(options);
@@ -26,6 +24,5 @@ export class AuthenticationClient {
     this.passwordless = new Passwordless(options);
     this.backchannel = new Backchannel(options);
     this.tokenExchange = new CustomTokenExchange(options);
-    this.tokensForConnection = new TokenForConnection(options);
   }
 }

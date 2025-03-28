@@ -152,6 +152,29 @@ const { data: tokens } = await auth.oauth.clientCredentialsGrant({
 });
 ```
 
+### Exchange a Refresh Token for a Federated Connection Access Token
+
+```js
+import { AuthenticationClient } from 'auth0';
+
+const auth = new AuthenticationClient({
+  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  clientId: '{YOUR_CLIENT_ID}',
+  clientSecret: '{YOUR_CLIENT_SECRET}',
+});
+
+const { data: token } = await auth.oauth.tokenForConnection({
+  refreshToken: '{refresh_token}',
+  connection: 'google-oauth2', // The target social provider connection
+  loginHint: 'user@example.com', // Optional: to target a specific account
+});
+
+// Access the token properties
+console.log(token.access_token);
+console.log(token.token_type);
+console.log(token.expires_in);
+```
+
 ## Management Client
 
 ### Paginate through a list of users

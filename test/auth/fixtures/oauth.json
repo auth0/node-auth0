@@ -189,5 +189,62 @@
       "request_uri": "https://www.request.uri",
       "expires_in": 86400
     }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token=test-refresh-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&connection=google-oauth2&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "access_token": "federated-access-token",
+      "token_type": "Bearer",
+      "expires_in": 3600
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token=test-refresh-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&connection=google-oauth2&login_hint=user%40example.com&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "access_token": "federated-access-token",
+      "token_type": "Bearer",
+      "expires_in": 3600
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token=invalid-refresh-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&connection=google-oauth2&client_secret=test-client-secret",
+    "status": 400,
+    "response": {
+      "error": "invalid_grant",
+      "error_description": "Invalid refresh token"
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token=test-refresh-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&connection=google-oauth2&client_secret=invalid-secret",
+    "status": 401,
+    "response": {
+      "error": "invalid_client",
+      "error_description": "Invalid client credentials"
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token=test-refresh-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&connection=non-existent-connection&client_secret=test-client-secret",
+    "status": 400,
+    "response": {
+      "error": "invalid_request",
+      "error_description": "Connection not found"
+    }
   }
 ]
