@@ -589,7 +589,7 @@ export class OAuth extends BaseAuthAPI {
    * The request body includes:
    * - client_id (and client_secret/client_assertion via addClientAuthentication)
    * - grant_type set to `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`
-   * - subject_token(refresh token) and fixed subject_token_type (`urn:ietf:params:oauth:token-type:refresh_token`) for refresh tokens
+   * - subject_token (refresh token) and fixed subject_token_type for refresh tokens (`urn:ietf:params:oauth:token-type:refresh_token`)
    * - requested_token_type (`http://auth0.com/oauth/token-type/federated-connection-access-token`) indicating that a federated connection access token is desired
    * - connection name and an optional `login_hint` if provided
    *
