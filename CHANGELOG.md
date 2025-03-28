@@ -1,5 +1,17 @@
 # Change Log
 
+## [v4.21.0](https://github.com/auth0/node-auth0/tree/v4.21.0) (2025-03-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.20.0...v4.21.0)
+
+**Added**
+
+- Add tokenForConnection method to OAuth [\#1083](https://github.com/auth0/node-auth0/pull/1083) ([tusharpandey13](https://github.com/tusharpandey13))
+- Added pre-change-password field in attackprotection-manager [\#1096](https://github.com/auth0/node-auth0/pull/1096) ([tanya732](https://github.com/tanya732))
+- Added support for Federated Login Connection Tokenset for User [\#1090](https://github.com/auth0/node-auth0/pull/1090) ([tanya732](https://github.com/tanya732))
+- Added tenant ACL EA support [\#1091](https://github.com/auth0/node-auth0/pull/1091) ([kushalshit27](https://github.com/kushalshit27))
+- Add new language and prompt identifiers to custom text enums [\#1095](https://github.com/auth0/node-auth0/pull/1095) ([kushalshit27](https://github.com/kushalshit27))
+
 ## [v4.20.0](https://github.com/auth0/node-auth0/tree/v4.20.0) (2025-03-19)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.19.0...v4.20.0)
