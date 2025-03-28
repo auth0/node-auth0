@@ -8,6 +8,7 @@ import {
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
   PushedAuthorizationRequest,
+  TokenForConnectionOptions,
 } from '../../src/index.js';
 import { withIdToken } from '../utils/index.js';
 
@@ -376,10 +377,10 @@ describe('OAuth', () => {
       const oauth = new OAuth(opts);
       await expect(
         oauth.tokenForConnection({
-          refreshToken: '',
+          refreshToken: undefined,
           connection: CONNECTION,
-        })
-      ).rejects.toThrow('refresh_token not present');
+        } as unknown as TokenForConnectionOptions)
+      ).rejects.toThrow('Required parameter requestParameters.refreshToken was null or undefined.');
     });
 
     it('should require a connection', async () => {
@@ -387,9 +388,9 @@ describe('OAuth', () => {
       await expect(
         oauth.tokenForConnection({
           refreshToken: REFRESH_TOKEN,
-          connection: '',
-        })
-      ).rejects.toThrow('Required parameter connection was null or undefined.');
+          connection: undefined,
+        } as unknown as TokenForConnectionOptions)
+      ).rejects.toThrow('Required parameter requestParameters.connection was null or undefined.');
     });
 
     it('should return federated connection access token', async () => {

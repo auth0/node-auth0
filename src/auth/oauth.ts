@@ -584,31 +584,25 @@ export class OAuth extends BaseAuthAPI {
   }
 
   /**
-   * Exchanges a subject token (e.g. a refresh token) for a federated connection access token.
+   * Exchanges a subject token (refresh token in this case) for an access token for the connection.
    *
    * The request body includes:
-   * - client_id (and client_secret via addClientAuthentication)
-   * - grant_type set to FCAT_GRANT_TYPE
-   * - subject_token and fixed subject_token_type value for refresh tokens
-   * - requested_token_type indicating that a federated connection access token is desired
-   * - connection name and an optional login_hint if provided
+   * - client_id (and client_secret/client_assertion via addClientAuthentication)
+   * - grant_type set to `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`
+   * - subject_token(refresh token) and fixed subject_token_type (`urn:ietf:params:oauth:token-type:refresh_token`) for refresh tokens
+   * - requested_token_type (`http://auth0.com/oauth/token-type/federated-connection-access-token`) indicating that a federated connection access token is desired
+   * - connection name and an optional `login_hint` if provided
    *
-   * @param options - The federated connection options.
+   * @param options - The options to retrieve a token for a connection.
    * @returns A promise with the token response data.
    * @throws An error if the exchange fails.
    */
-  public async tokenForConnection({
-    refreshToken,
-    connection,
-    loginHint,
-  }: TokenForConnectionOptions): Promise<JSONApiResponse<TokenResponse>> {
-    if (!connection) {
-      throw new Error('Required parameter connection was null or undefined.');
-    }
+  public async tokenForConnection(
+    options: TokenForConnectionOptions
+  ): Promise<JSONApiResponse<TokenResponse>> {
+    const { refreshToken, connection, loginHint } = options;
 
-    if (!refreshToken) {
-      throw new Error('refresh_token not present');
-    }
+    validateRequiredRequestParams(options, ['connection', 'refreshToken']);
 
     const body: Record<string, string> = {
       grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,

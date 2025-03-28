@@ -152,7 +152,7 @@ const { data: tokens } = await auth.oauth.clientCredentialsGrant({
 });
 ```
 
-### Exchange a Refresh Token for a Federated Connection Access Token
+### Exchange a Refresh Token for an Access Token for a connection
 
 ```js
 import { AuthenticationClient } from 'auth0';
