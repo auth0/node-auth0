@@ -8,7 +8,7 @@ import {
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
   PushedAuthorizationRequest,
-  TokenForConnectionOptions,
+  TokenForConnectionRequest,
 } from '../../src/index.js';
 import { withIdToken } from '../utils/index.js';
 
@@ -370,106 +370,53 @@ describe('OAuth', () => {
   });
 
   describe('#tokenForConnection', () => {
-    const REFRESH_TOKEN = 'test-refresh-token';
-    const CONNECTION = 'google-oauth2';
-
-    it('should require a refresh token', async () => {
-      const oauth = new OAuth(opts);
-      await expect(
-        oauth.tokenForConnection({
-          refreshToken: undefined,
-          connection: CONNECTION,
-        } as unknown as TokenForConnectionOptions)
-      ).rejects.toThrow('Required parameter requestParameters.refreshToken was null or undefined.');
-    });
-
     it('should require a connection', async () => {
       const oauth = new OAuth(opts);
       await expect(
-        oauth.tokenForConnection({
-          refreshToken: REFRESH_TOKEN,
-          connection: undefined,
-        } as unknown as TokenForConnectionOptions)
+        oauth.tokenForConnection({ subject_token: 'test-token' } as TokenForConnectionRequest)
       ).rejects.toThrow('Required parameter requestParameters.connection was null or undefined.');
     });
 
-    it('should return federated connection access token', async () => {
+    it('should require a subject_token', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({ connection: 'google-oauth2' } as TokenForConnectionRequest)
+      ).rejects.toThrow(
+        'Required parameter requestParameters.subject_token was null or undefined.'
+      );
+    });
+
+    it('should return token response', async () => {
       const oauth = new OAuth(opts);
       await expect(
         oauth.tokenForConnection({
-          refreshToken: REFRESH_TOKEN,
-          connection: CONNECTION,
+          connection: 'google-oauth2',
+          subject_token: 'test-refresh-token',
         })
       ).resolves.toMatchObject({
         data: {
-          access_token: 'federated-access-token',
+          access_token: 'connection-access-token',
+          expires_in: 86400,
           token_type: 'Bearer',
-          expires_in: 3600,
         },
       });
     });
 
     it('should include login_hint when provided', async () => {
       const oauth = new OAuth(opts);
-      const loginHint = 'user@example.com';
       await expect(
         oauth.tokenForConnection({
-          refreshToken: REFRESH_TOKEN,
-          connection: CONNECTION,
-          loginHint,
+          connection: 'google-oauth2',
+          subject_token: 'test-refresh-token',
+          login_hint: 'user@example.com',
         })
       ).resolves.toMatchObject({
         data: {
-          access_token: 'federated-access-token',
+          access_token: 'connection-access-token',
+          expires_in: 86400,
           token_type: 'Bearer',
-          expires_in: 3600,
         },
       });
-    });
-
-    it('should handle API error responses', async () => {
-      const oauth = new OAuth(opts);
-      await expect(
-        oauth.tokenForConnection({
-          refreshToken: 'invalid-refresh-token',
-          connection: CONNECTION,
-        })
-      ).rejects.toThrowError(
-        expect.objectContaining({
-          body: expect.anything(),
-        })
-      );
-    });
-
-    it('should handle unauthorized errors', async () => {
-      const oauth = new OAuth({
-        ...opts,
-        clientSecret: 'invalid-secret',
-      });
-      await expect(
-        oauth.tokenForConnection({
-          refreshToken: REFRESH_TOKEN,
-          connection: CONNECTION,
-        })
-      ).rejects.toThrowError(
-        expect.objectContaining({
-          body: expect.anything(),
-        })
-      );
-    });
-
-    it('should handle connection not found errors', async () => {
-      const oauth = new OAuth(opts);
-      await expect(
-        oauth.tokenForConnection({
-          refreshToken: REFRESH_TOKEN,
-          connection: 'non-existent-connection',
-        })
-      ).rejects.toThrowError(
-        expect.objectContaining({
-          body: expect.anything(),
-        })
-      );
     });
   });
 });

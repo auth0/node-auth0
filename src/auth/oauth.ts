@@ -277,11 +277,11 @@ export interface TokenExchangeGrantRequest {
 /**
  * Options to exchange a federated connection token.
  */
-export interface TokenForConnectionOptions {
+export interface TokenForConnectionRequest {
   /**
-   * The refresh token to exchange for a federated connection access token.
+   * The subject token(refresh token in this case) to exchange for an access token for a connection.
    */
-  refreshToken: string;
+  subject_token: string;
   /**
    * The target social provider connection (e.g., "google-oauth2").
    */
@@ -289,7 +289,7 @@ export interface TokenForConnectionOptions {
   /**
    * Optional login hint
    */
-  loginHint?: string;
+  login_hint?: string;
 }
 
 export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
@@ -593,28 +593,22 @@ export class OAuth extends BaseAuthAPI {
    * - requested_token_type (`http://auth0.com/oauth/token-type/federated-connection-access-token`) indicating that a federated connection access token is desired
    * - connection name and an optional `login_hint` if provided
    *
-   * @param options - The options to retrieve a token for a connection.
+   * @param bodyParameters - The options to retrieve a token for a connection.
    * @returns A promise with the token response data.
    * @throws An error if the exchange fails.
    */
   public async tokenForConnection(
-    options: TokenForConnectionOptions
+    bodyParameters: TokenForConnectionRequest,
+    options: { initOverrides?: InitOverride } = {}
   ): Promise<JSONApiResponse<TokenResponse>> {
-    const { refreshToken, connection, loginHint } = options;
-
-    validateRequiredRequestParams(options, ['connection', 'refreshToken']);
+    validateRequiredRequestParams(bodyParameters, ['connection', 'subject_token']);
 
     const body: Record<string, string> = {
+      ...bodyParameters,
       grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,
-      subject_token: refreshToken,
       subject_token_type: TOKEN_FOR_CONNECTION_TOKEN_TYPE,
       requested_token_type: TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE,
-      connection,
     };
-
-    if (loginHint) {
-      body.login_hint = loginHint;
-    }
 
     await this.addClientAuthentication(body);
 
@@ -627,7 +621,7 @@ export class OAuth extends BaseAuthAPI {
         },
         body: new URLSearchParams(body),
       },
-      {}
+      options.initOverrides
     );
 
     return JSONApiResponse.fromResponse(response);

@@ -164,9 +164,9 @@ const auth = new AuthenticationClient({
 });
 
 const { data: token } = await auth.oauth.tokenForConnection({
-  refreshToken: '{refresh_token}',
+  subject_token: '{refresh_token}',
   connection: 'google-oauth2', // The target social provider connection
-  loginHint: 'user@example.com', // Optional: to target a specific account
+  login_hint: 'user@example.com', // Optional: to target a specific account
 });
 
 // Access the token properties
