@@ -5000,7 +5000,6 @@ export interface GetBranding200ResponseFont {
  *
  */
 export interface GetBrandingPhoneProviders200Response {
-  [key: string]: any | any;
   /**
    */
   providers: Array<GetBrandingPhoneProviders200ResponseProvidersInner>;
@@ -5013,10 +5012,20 @@ export interface GetBrandingPhoneProviders200ResponseProvidersInner {
    */
   id?: string;
   /**
+   * The name of the tenant
+   *
+   */
+  tenant?: string;
+  /**
    * Name of the phone notification provider
    *
    */
   name: GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum;
+  /**
+   * This depicts the type of notifications this provider can receive.
+   *
+   */
+  channel?: GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum;
   /**
    * Whether the provider is enabled (false) or disabled (true).
    *
@@ -5025,6 +5034,16 @@ export interface GetBrandingPhoneProviders200ResponseProvidersInner {
   /**
    */
   configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+  /**
+   * The provider's creation date and time in ISO 8601 format
+   *
+   */
+  created_at?: string;
+  /**
+   * The date and time of the last update to the provider in ISO 8601 format
+   *
+   */
+  updated_at?: string;
 }
 
 export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
@@ -5033,6 +5052,12 @@ export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
 } as const;
 export type GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum =
   (typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum];
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum = {
+  phone: 'phone',
+} as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum];
 
 /**
  *
@@ -5147,7 +5172,29 @@ export interface GetBreachedPasswordDetection200ResponseStage {
   /**
    */
   'pre-user-registration': GetBreachedPasswordDetection200ResponseStagePreUserRegistration;
+  /**
+   */
+  'pre-change-password': GetBreachedPasswordDetection200ResponseStagePreChangePassword;
 }
+/**
+ *
+ */
+export interface GetBreachedPasswordDetection200ResponseStagePreChangePassword {
+  /**
+   * Action to take when a breached password is detected during a password reset.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields: Array<GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum>;
+}
+
+export const GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum =
+  (typeof GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum)[keyof typeof GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum];
+
 /**
  *
  */
@@ -5364,6 +5411,23 @@ export type GetCredentials200ResponseInnerAlgEnum =
 /**
  *
  */
+export type GetCustomDomains200Response = Array<CustomDomain> | GetCustomDomains200ResponseOneOf;
+/**
+ *
+ */
+export interface GetCustomDomains200ResponseOneOf {
+  /**
+   */
+  custom_domains: Array<CustomDomain>;
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next?: string;
+}
+/**
+ *
+ */
 export interface GetDefaultMapping200Response {
   /**
    * The mapping between auth0 and SCIM
@@ -5516,6 +5580,96 @@ export interface GetEnabledConnections200ResponseOneOfInner {
 /**
  *
  */
+export type GetEncryptionKeys200Response =
+  | Array<GetEncryptionKeys200ResponseOneOfInner>
+  | GetEncryptionKeys200ResponseOneOf;
+/**
+ *
+ */
+export interface GetEncryptionKeys200ResponseOneOf {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  start: number;
+  /**
+   * Number of results per page.
+   *
+   */
+  limit: number;
+  /**
+   * Total amount of encryption keys.
+   *
+   */
+  total: number;
+  /**
+   * Encryption keys.
+   *
+   */
+  keys: Array<GetEncryptionKeys200ResponseOneOfInner>;
+}
+/**
+ * Encryption key
+ */
+export interface GetEncryptionKeys200ResponseOneOfInner {
+  /**
+   * Key ID
+   *
+   */
+  kid: string;
+  /**
+   * Key type
+   *
+   */
+  type: GetEncryptionKeys200ResponseOneOfInnerTypeEnum;
+  /**
+   * Key state
+   *
+   */
+  state: GetEncryptionKeys200ResponseOneOfInnerStateEnum;
+  /**
+   * Key creation timestamp
+   *
+   */
+  created_at: string;
+  /**
+   * Key update timestamp
+   *
+   */
+  updated_at: string;
+  /**
+   * ID of parent wrapping key
+   *
+   */
+  parent_kid: string;
+  /**
+   * Public key in PEM format
+   *
+   */
+  public_key?: string;
+}
+
+export const GetEncryptionKeys200ResponseOneOfInnerTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  environment_root_key: 'environment-root-key',
+  tenant_master_key: 'tenant-master-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerTypeEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum];
+
+export const GetEncryptionKeys200ResponseOneOfInnerStateEnum = {
+  pre_activation: 'pre-activation',
+  active: 'active',
+  deactivated: 'deactivated',
+  destroyed: 'destroyed',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerStateEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum];
+
+/**
+ *
+ */
 export type GetErrors200Response = Array<GetErrors200ResponseOneOfInner> | Job;
 /**
  *
@@ -5618,6 +5772,30 @@ export interface GetExecution200ResponseResultsInner {
    *
    */
   ended_at: string;
+}
+/**
+ *
+ */
+export interface GetFederatedConnectionsTokensets200ResponseInner {
+  [key: string]: any | any;
+  /**
+   */
+  id: string;
+  /**
+   */
+  connection: string;
+  /**
+   */
+  scope: string;
+  /**
+   */
+  expires_at: string;
+  /**
+   */
+  issued_at: string;
+  /**
+   */
+  last_used_at: string;
 }
 /**
  *
@@ -6921,6 +7099,233 @@ export const GetMessageTypes200ResponseMessageTypesEnum = {
 export type GetMessageTypes200ResponseMessageTypesEnum =
   (typeof GetMessageTypes200ResponseMessageTypesEnum)[keyof typeof GetMessageTypes200ResponseMessageTypesEnum];
 
+/**
+ *
+ */
+export type GetNetworkAcls200Response =
+  | Array<GetNetworkAclsById200Response>
+  | GetNetworkAcls200ResponseOneOf;
+/**
+ *
+ */
+export interface GetNetworkAcls200ResponseOneOf {
+  /**
+   */
+  network_acls: Array<GetNetworkAclsById200Response>;
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsById200Response {
+  [key: string]: any | any;
+  /**
+   */
+  id: string;
+  /**
+   */
+  description: string;
+  /**
+   */
+  active: boolean;
+  /**
+   */
+  priority: number;
+  /**
+   */
+  rule: GetNetworkAclsById200ResponseRule;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  created_at: string;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  updated_at: string;
+}
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRule =
+  | GetNetworkAclsById200ResponseRuleAnyOf
+  | GetNetworkAclsById200ResponseRuleAnyOf1;
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  scope: GetNetworkAclsById200ResponseRuleAnyOfScopeEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfScopeEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfScopeEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfScopeEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  scope: GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum];
+
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfAction =
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3;
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf {
+  /**
+   */
+  block: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1 {
+  /**
+   */
+  allow: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2 {
+  /**
+   */
+  log: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3 {
+  /**
+   */
+  redirect: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum;
+  /**
+   */
+  redirect_uri: string;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfMatch {
+  /**
+   * Anonymous Proxy as reported by GeoIP
+   *
+   */
+  anonymous_proxy?: boolean;
+  /**
+   */
+  asns?: Array<number>;
+  /**
+   */
+  geo_country_codes?: Array<string>;
+  /**
+   */
+  geo_subdivision_codes?: Array<string>;
+  /**
+   */
+  ipv4_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner>;
+  /**
+   */
+  ipv6_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner>;
+  /**
+   */
+  ja3_fingerprints?: Array<string>;
+  /**
+   */
+  ja4_fingerprints?: Array<string>;
+  /**
+   */
+  user_agents?: Array<string>;
+}
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner = string;
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner = string;
 /**
  *
  */
@@ -8950,7 +9355,29 @@ export interface PatchBreachedPasswordDetectionRequestStage {
   /**
    */
   'pre-user-registration'?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
+  /**
+   */
+  'pre-change-password'?: PatchBreachedPasswordDetectionRequestStagePreChangePassword;
 }
+/**
+ *
+ */
+export interface PatchBreachedPasswordDetectionRequestStagePreChangePassword {
+  /**
+   * Action to take when a breached password is detected during a password reset.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum>;
+}
+
+export const PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum =
+  (typeof PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum];
+
 /**
  *
  */
@@ -10636,6 +11063,59 @@ export interface PostEnabledConnectionsRequest {
    */
   show_as_button?: boolean;
 }
+/**
+ *
+ */
+export interface PostEncryptionKeyRequest {
+  [key: string]: any | any;
+  /**
+   * Base64 encoded ciphertext of key material wrapped by public wrapping key.
+   *
+   */
+  wrapped_key: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionRequest {
+  [key: string]: any | any;
+  /**
+   * Type of the encryption key to be created.
+   *
+   */
+  type: PostEncryptionRequestTypeEnum;
+}
+
+export const PostEncryptionRequestTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type PostEncryptionRequestTypeEnum =
+  (typeof PostEncryptionRequestTypeEnum)[keyof typeof PostEncryptionRequestTypeEnum];
+
+/**
+ *
+ */
+export interface PostEncryptionWrappingKey201Response {
+  [key: string]: any | any;
+  /**
+   * Public wrapping key in PEM format
+   *
+   */
+  public_key: string;
+  /**
+   * Encryption algorithm that shall be used to wrap your key material
+   *
+   */
+  algorithm: PostEncryptionWrappingKey201ResponseAlgorithmEnum;
+}
+
+export const PostEncryptionWrappingKey201ResponseAlgorithmEnum = {
+  CKM_RSA_AES_KEY_WRAP: 'CKM_RSA_AES_KEY_WRAP',
+} as const;
+export type PostEncryptionWrappingKey201ResponseAlgorithmEnum =
+  (typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum)[keyof typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum];
+
 /**
  *
  */
@@ -14376,6 +14856,89 @@ export interface PutFcmRequest {
 /**
  *
  */
+export interface PutNetworkAclsByIdRequest {
+  /**
+   */
+  description: string;
+  /**
+   * Indicates whether or not this access control list is actively being used
+   *
+   */
+  active: boolean;
+  /**
+   * Indicates the order in which the ACL will be evaluated relative to other ACL rules.
+   *
+   */
+  priority: number;
+  /**
+   */
+  rule: PutNetworkAclsByIdRequestRule;
+}
+/**
+ *
+ */
+export type PutNetworkAclsByIdRequestRule =
+  | PutNetworkAclsByIdRequestRuleAnyOf
+  | PutNetworkAclsByIdRequestRuleAnyOf1;
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequestRuleAnyOf {
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   * Identifies the origin of the request as the Management API (management), Authentication API (authentication), or either (tenant)
+   *
+   */
+  scope: PutNetworkAclsByIdRequestRuleAnyOfScopeEnum;
+}
+
+export const PutNetworkAclsByIdRequestRuleAnyOfScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PutNetworkAclsByIdRequestRuleAnyOfScopeEnum =
+  (typeof PutNetworkAclsByIdRequestRuleAnyOfScopeEnum)[keyof typeof PutNetworkAclsByIdRequestRuleAnyOfScopeEnum];
+
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequestRuleAnyOf1 {
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  not_match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   * Scope defines the different scopes of network requests the rule can be applied to.
+   *
+   */
+  scope: PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum;
+}
+
+export const PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum =
+  (typeof PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum)[keyof typeof PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum];
+
+/**
+ *
+ */
 export interface PutRulesConfigsByKey200Response {
   [key: string]: any | any;
   /**
@@ -17456,6 +18019,21 @@ export interface DeleteCustomDomainsByIdRequest {
 /**
  *
  */
+export interface GetCustomDomainsRequest {
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+}
+/**
+ *
+ */
 export interface GetCustomDomainsByIdRequest {
   /**
    * ID of the custom domain to retrieve.
@@ -18230,9 +18808,69 @@ export interface PostUsersImportsData {
 /**
  *
  */
+export interface DeleteEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeysRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Default value is 50, maximum value is 100.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface GetSigningKeyRequest {
   /**
    * Key id of the key to retrieve
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionKeyOperationRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionWrappingKeyRequest {
+  /**
+   * Encryption key ID
    *
    */
   kid: string;
@@ -18333,6 +18971,56 @@ export interface GetLogsRequest {
 export interface GetLogsByIdRequest {
   /**
    * log_id of the log to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteNetworkAclsByIdRequest {
+  /**
+   * The id of the ACL to delete
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsRequest {
+  /**
+   * Use this field to request a specific page of the list results.
+   *
+   */
+  page?: number;
+  /**
+   * The amount of results per page.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsByIdRequest {
+  /**
+   * The id of the access control list to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PutNetworkAclsByIdOperationRequest {
+  /**
+   * The id of the ACL to update.
    *
    */
   id: string;
@@ -20076,6 +20764,21 @@ export interface DeleteAuthenticatorsRequest {
    */
   id: string;
 }
+/**
+ *
+ */
+export interface DeleteFederatedConnectionsTokensetsByTokensetIdRequest {
+  /**
+   * Id of the user that owns the tokenset
+   *
+   */
+  id: string;
+  /**
+   * The tokenset id
+   *
+   */
+  tokenset_id: string;
+}
 
 /**
  *
@@ -20288,6 +20991,16 @@ export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
 export interface GetEnrollmentsRequest {
   /**
    * ID of the user to list enrollments for.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetFederatedConnectionsTokensetsRequest {
+  /**
+   * User identifier
    *
    */
   id: string;

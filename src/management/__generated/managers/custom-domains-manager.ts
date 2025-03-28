@@ -2,11 +2,13 @@ import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   CustomDomain,
+  GetCustomDomains200Response,
   PatchCustomDomainsByIdRequest,
   PostCustomDomains201Response,
   PostCustomDomainsRequest,
   PostVerify200Response,
   DeleteCustomDomainsByIdRequest,
+  GetCustomDomainsRequest,
   GetCustomDomainsByIdRequest,
   PatchCustomDomainsByIdOperationRequest,
   PostVerifyRequest,
@@ -50,11 +52,26 @@ export class CustomDomainsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getAll(initOverrides?: InitOverride): Promise<ApiResponse<Array<CustomDomain>>> {
+  async getAll(
+    requestParameters: GetCustomDomainsRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetCustomDomains200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'take',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+    ]);
+
     const response = await this.request(
       {
         path: `/custom-domains`,
         method: 'GET',
+        query: queryParameters,
       },
       initOverrides
     );

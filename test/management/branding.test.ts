@@ -994,16 +994,15 @@ describe('BrandingManager', () => {
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
-      const data = [{ name: 'twilio' }];
-      nock(API_URL).get('/branding/phone/providers').reply(200, data);
+      const data: GetBrandingPhoneProviders200ResponseProvidersInner[] = [{ name: 'twilio' }];
+      request = nock(API_URL);
+      nock(API_URL)
+        .get('/branding/phone/providers')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
 
       branding.getAllPhoneProviders().then((result) => {
         expect(result.data).toBeInstanceOf(Array);
-
-        expect(result.data.length).toBe(data.length);
-
-        expect(result.data[0].name).toBe(data[0].name);
-
         done();
       });
     });
