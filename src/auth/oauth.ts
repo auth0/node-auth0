@@ -7,7 +7,6 @@ import {
 import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api.js';
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
 import { mtlsPrefix } from '../utils.js';
-import { TokenResponse } from './tokenExchange.js';
 
 export interface TokenSet {
   /**
