@@ -7,7 +7,7 @@ export const generateClientInfo = () => ({
   name: 'node-auth0',
   version: version,
   env: {
-    node: process.version.replace('v', ''),
+    node: process.version?.replace('v', ''),
   },
 });
 
