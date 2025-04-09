@@ -213,6 +213,14 @@ export interface Client {
    *
    */
   compliance_level: ClientComplianceLevelEnum;
+  /**
+   * Specifies how long, in seconds, a Pushed Authorization Request URI remains valid
+   *
+   */
+  par_request_expiry: number | null;
+  /**
+   */
+  token_quota: ClientTokenQuota;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -1069,6 +1077,9 @@ export interface ClientCreate {
    */
   refresh_token?: ClientRefreshToken | null;
   /**
+   */
+  default_organization?: ClientCreateDefaultOrganization;
+  /**
    * Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`.
    *
    */
@@ -1099,6 +1110,14 @@ export interface ClientCreate {
    *
    */
   compliance_level?: ClientCreateComplianceLevelEnum;
+  /**
+   * Specifies how long, in seconds, a Pushed Authorization Request URI remains valid
+   *
+   */
+  par_request_expiry?: number | null;
+  /**
+   */
+  token_quota?: ClientTokenQuota;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -1886,6 +1905,28 @@ export type ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInner
   (typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum)[keyof typeof ClientCreateClientAuthenticationMethodsTlsClientAuthCredentialsInnerCredentialTypeEnum];
 
 /**
+ * Defines the default Organization ID and flows
+ */
+export interface ClientCreateDefaultOrganization {
+  /**
+   * The default Organization ID to be used
+   *
+   */
+  organization_id: string;
+  /**
+   * The default Organization usage
+   *
+   */
+  flows: Array<ClientCreateDefaultOrganizationFlowsEnum>;
+}
+
+export const ClientCreateDefaultOrganizationFlowsEnum = {
+  client_credentials: 'client_credentials',
+} as const;
+export type ClientCreateDefaultOrganizationFlowsEnum =
+  (typeof ClientCreateDefaultOrganizationFlowsEnum)[keyof typeof ClientCreateDefaultOrganizationFlowsEnum];
+
+/**
  * Encryption used for WsFed responses with this client.
  */
 export interface ClientCreateEncryptionKey {
@@ -2376,6 +2417,34 @@ export interface ClientSigningKeysInner {
 /**
  *
  */
+export interface ClientTokenQuota {
+  /**
+   */
+  client_credentials: ClientTokenQuotaClientCredentials;
+}
+/**
+ * The token quota configuration
+ */
+export interface ClientTokenQuotaClientCredentials {
+  /**
+   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+   *
+   */
+  enforce?: boolean;
+  /**
+   * Maximum number of issued tokens per day
+   *
+   */
+  per_day?: number;
+  /**
+   * Maximum number of issued tokens per hour
+   *
+   */
+  per_hour?: number;
+}
+/**
+ *
+ */
 export interface ClientUpdate {
   /**
    * The name of the client. Must contain at least one character. Does not allow '<' or '>'.
@@ -2494,6 +2563,9 @@ export interface ClientUpdate {
   /**
    */
   custom_login_page_preview?: string;
+  /**
+   */
+  token_quota?: ClientUpdateTokenQuota | null;
   /**
    * Form template for WS-Federation protocol
    *
@@ -2960,6 +3032,14 @@ export interface ClientUpdateSignedRequestObject {
   /**
    */
   credentials?: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
+}
+/**
+ *
+ */
+export interface ClientUpdateTokenQuota {
+  /**
+   */
+  client_credentials: ClientTokenQuotaClientCredentials;
 }
 /**
  *
@@ -16161,27 +16241,7 @@ export interface TenantSettingsDefaultTokenQuotaClients {
   [key: string]: any | any;
   /**
    */
-  client_credentials: TenantSettingsDefaultTokenQuotaClientsClientCredentials;
-}
-/**
- * The token quota configuration
- */
-export interface TenantSettingsDefaultTokenQuotaClientsClientCredentials {
-  /**
-   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
-   *
-   */
-  enforce?: boolean;
-  /**
-   * Maximum number of issued tokens per day
-   *
-   */
-  per_day?: number;
-  /**
-   * Maximum number of issued tokens per hour
-   *
-   */
-  per_hour?: number;
+  client_credentials: ClientTokenQuotaClientCredentials;
 }
 /**
  * Device Flow configuration
