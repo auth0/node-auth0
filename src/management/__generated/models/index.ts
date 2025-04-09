@@ -15939,6 +15939,9 @@ export interface TenantSettings {
   device_flow: TenantSettingsDeviceFlow | null;
   /**
    */
+  default_token_quota: TenantSettingsDefaultTokenQuota | null;
+  /**
+   */
   flags: TenantSettingsFlags;
   /**
    * Friendly name for this tenant.
@@ -15981,6 +15984,11 @@ export interface TenantSettings {
    */
   sandbox_version: string;
   /**
+   * Selected sandbox version for rules and hooks extensibility.
+   *
+   */
+  legacy_sandbox_version: string;
+  /**
    * Available sandbox versions for the extensibility environment.
    *
    */
@@ -16001,6 +16009,9 @@ export interface TenantSettings {
   /**
    */
   sessions: TenantSettingsSessions | null;
+  /**
+   */
+  oidc_logout: TenantSettingsOidcLogout;
   /**
    * Whether to accept an organization name instead of an ID on auth endpoints
    *
@@ -16024,42 +16035,70 @@ export interface TenantSettings {
    *
    */
   pushed_authorization_requests_supported: boolean;
+  /**
+   * Supports iss parameter in authorization responses
+   *
+   */
+  authorization_response_iss_parameter_supported: boolean | null;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -16068,13 +16107,22 @@ export const TenantSettingsEnabledLocalesEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsEnabledLocalesEnum =
@@ -16094,6 +16142,46 @@ export interface TenantSettingsChangePassword {
    *
    */
   html: string;
+}
+/**
+ * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
+ */
+export interface TenantSettingsDefaultTokenQuota {
+  /**
+   */
+  clients: TenantSettingsDefaultTokenQuotaClients;
+  /**
+   */
+  organizations: TenantSettingsDefaultTokenQuotaClients;
+}
+/**
+ *
+ */
+export interface TenantSettingsDefaultTokenQuotaClients {
+  [key: string]: any | any;
+  /**
+   */
+  client_credentials: TenantSettingsDefaultTokenQuotaClientsClientCredentials;
+}
+/**
+ * The token quota configuration
+ */
+export interface TenantSettingsDefaultTokenQuotaClientsClientCredentials {
+  /**
+   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+   *
+   */
+  enforce?: boolean;
+  /**
+   * Maximum number of issued tokens per day
+   *
+   */
+  per_day?: number;
+  /**
+   * Maximum number of issued tokens per hour
+   *
+   */
+  per_hour?: number;
 }
 /**
  * Device Flow configuration
@@ -16257,6 +16345,36 @@ export interface TenantSettingsFlags {
    *
    */
   remove_alg_from_jwks: boolean;
+  /**
+   * Improves bot detection during signup in classic universal login
+   *
+   */
+  improved_signup_bot_detection_in_classic: boolean;
+  /**
+   * This tenant signed up for the Auth4GenAI trail
+   *
+   */
+  genai_trial: boolean;
+  /**
+   * Whether third-party developers can <a href="https://auth0.com/docs/api-auth/dynamic-client-registration">dynamically register</a> applications for your APIs (true) or not (false). This flag enables dynamic client registration.
+   *
+   */
+  enable_dynamic_client_registration: boolean;
+  /**
+   * If true, SMS phone numbers will not be obfuscated in Management API GET calls.
+   *
+   */
+  disable_management_api_sms_obfuscation: boolean;
+  /**
+   * Changes email_verified behavior for Azure AD/ADFS connections when enabled. Sets email_verified to false otherwise.
+   *
+   */
+  trust_azure_adfs_email_verified_connection_property: boolean;
+  /**
+   * If true, custom domains feature will be enabled for tenant.
+   *
+   */
+  custom_domains_provisioning: boolean;
 }
 /**
  * Guardian page customization.
@@ -16282,6 +16400,16 @@ export interface TenantSettingsMtls {
    *
    */
   enable_endpoint_aliases: boolean;
+}
+/**
+ * Settings related to OIDC RP-initiated Logout
+ */
+export interface TenantSettingsOidcLogout {
+  /**
+   * Enable the end_session_endpoint URL in the .well-known discovery configuration
+   *
+   */
+  rp_logout_end_session_endpoint_discovery: boolean;
 }
 /**
  * Session cookie configuration
@@ -16339,6 +16467,9 @@ export interface TenantSettingsUpdate {
   error_page?: TenantSettingsUpdateErrorPage | null;
   /**
    */
+  default_token_quota?: TenantSettingsUpdateDefaultTokenQuota | null;
+  /**
+   */
   flags?: TenantSettingsUpdateFlags;
   /**
    * Friendly name for this tenant.
@@ -16381,6 +16512,11 @@ export interface TenantSettingsUpdate {
    */
   sandbox_version?: string;
   /**
+   * Selected legacy sandbox version for the extensibility environment
+   *
+   */
+  legacy_sandbox_version?: string;
+  /**
    * The default absolute redirection uri, must be https
    *
    */
@@ -16396,6 +16532,9 @@ export interface TenantSettingsUpdate {
   /**
    */
   sessions?: TenantSettingsUpdateSessions | null;
+  /**
+   */
+  oidc_logout?: TenantSettingsUpdateOidcLogout;
   /**
    * Whether to enable flexible factors for MFA in the PostLogin action
    *
@@ -16419,42 +16558,70 @@ export interface TenantSettingsUpdate {
    *
    */
   pushed_authorization_requests_supported?: boolean | null;
+  /**
+   * Supports iss parameter in authorization responses
+   *
+   */
+  authorization_response_iss_parameter_supported?: boolean | null;
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -16463,13 +16630,22 @@ export const TenantSettingsUpdateEnabledLocalesEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type TenantSettingsUpdateEnabledLocalesEnum =
@@ -16489,6 +16665,17 @@ export interface TenantSettingsUpdateChangePassword {
    *
    */
   html?: string;
+}
+/**
+ * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
+ */
+export interface TenantSettingsUpdateDefaultTokenQuota {
+  /**
+   */
+  clients?: TenantSettingsDefaultTokenQuotaClients;
+  /**
+   */
+  organizations?: TenantSettingsDefaultTokenQuotaClients;
 }
 /**
  * Device Flow configuration.
@@ -16658,10 +16845,20 @@ export interface TenantSettingsUpdateFlags {
    */
   mfa_show_factor_list_on_enrollment?: boolean;
   /**
+   * Require the use of JWT Secured Authorization Requests (JAR)
+   *
+   */
+  require_signed_request_object?: boolean;
+  /**
    * Removes alg property from jwks .well-known endpoint
    *
    */
   remove_alg_from_jwks?: boolean;
+  /**
+   * Improves bot detection during signup in classic universal login
+   *
+   */
+  improved_signup_bot_detection_in_classic?: boolean;
 }
 
 export const TenantSettingsUpdateFlagsChangePwdFlowV1Enum = {
@@ -16694,6 +16891,16 @@ export interface TenantSettingsUpdateMtls {
    *
    */
   enable_endpoint_aliases?: boolean;
+}
+/**
+ * Settings related to OIDC RP-initiated Logout
+ */
+export interface TenantSettingsUpdateOidcLogout {
+  /**
+   * Enable the end_session_endpoint URL in the .well-known discovery configuration
+   *
+   */
+  rp_logout_end_session_endpoint_discovery?: boolean;
 }
 /**
  * Sessions related settings for tenant
