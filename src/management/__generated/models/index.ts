@@ -3004,6 +3004,11 @@ export interface Connection {
    */
   is_domain_connection: boolean;
   /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button: boolean;
+  /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
@@ -3039,6 +3044,11 @@ export interface ConnectionCreate {
   /**
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
@@ -3408,6 +3418,56 @@ export interface ConnectionCreateOptionsValidationUsername {
 /**
  *
  */
+export interface ConnectionForList {
+  /**
+   * The name of the connection
+   *
+   */
+  name?: string;
+  /**
+   * Connection name used in login screen
+   *
+   */
+  display_name?: string;
+  /**
+   * In order to return options in the response, the `read:connections_options` scope must be present
+   *
+   */
+  options?: { [key: string]: any };
+  /**
+   * The connection's identifier
+   *
+   */
+  id?: string;
+  /**
+   * The type of the connection, related to the identity provider
+   *
+   */
+  strategy?: string;
+  /**
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
+   *
+   */
+  realms?: Array<string>;
+  /**
+   * True if the connection is domain level
+   *
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
+}
+/**
+ *
+ */
 export interface ConnectionUpdate {
   /**
    * The connection name used in the new universal login experience. If display_name is not included in the request, the field will be overwritten with the name value.
@@ -3430,6 +3490,11 @@ export interface ConnectionUpdate {
    *
    */
   realms?: Array<string>;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -5325,7 +5390,7 @@ export interface GetClients200ResponseOneOf1 {
 /**
  *
  */
-export type GetConnections200Response = Array<Connection> | GetConnections200ResponseOneOf;
+export type GetConnections200Response = Array<ConnectionForList> | GetConnections200ResponseOneOf;
 /**
  *
  */
@@ -5341,7 +5406,7 @@ export interface GetConnections200ResponseOneOf {
   total: number;
   /**
    */
-  connections: Array<Connection>;
+  connections: Array<ConnectionForList>;
 }
 /**
  *
@@ -17927,7 +17992,7 @@ export type GetConnectionsStrategyEnum =
  */
 export interface GetConnectionsRequest {
   /**
-   * The amount of entries per page. Default: no paging is used, all connections are returned
+   * The amount of entries per page. Defaults to 100 if not provided
    *
    */
   per_page?: number;
