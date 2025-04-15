@@ -6,8 +6,10 @@ import { version } from './version.js';
 export const generateClientInfo = () => ({
   name: 'node-auth0',
   version: version,
-  env: {
+  env: 'version' in process ? {
     node: process.version.replace('v', ''),
+  } : {
+    edge: true,
   },
 });
 
