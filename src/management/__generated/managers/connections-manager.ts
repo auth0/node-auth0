@@ -13,6 +13,7 @@ import type {
   PostScimToken201Response,
   PostScimTokenRequest,
   GetConnections200ResponseOneOf,
+  ConnectionForList,
   DeleteConnectionsByIdRequest,
   DeleteScimConfigurationRequest,
   DeleteTokensByTokenIdRequest,
@@ -148,24 +149,26 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieves every connection matching the specified strategy. All connections are retrieved if no strategy is being specified. Accepts a list of fields to include or exclude in the resulting list of connection objects.
-   * This endpoint supports two types of pagination:
-   * - Offset pagination
-   * - Checkpoint pagination
+   * Retrieves detailed list of all <a href="https://auth0.com/docs/authenticate/identity-providers">connections</a> that match the specified strategy. If no strategy is provided, all connections within your tenant are retrieved. This action can accept a list of fields to include or exclude from the resulting list of connections.
    *
-   * Checkpoint pagination should be used if you need to retrieve more than 1000 connections.
+   * This endpoint supports two types of pagination:
+   * <ul>
+   * <li>Offset pagination</li>
+   * <li>Checkpoint pagination</li>
+   * </ul>
+   *
+   * Checkpoint pagination must be used if you need to retrieve more than 1000 connections.
    *
    * <h2>Checkpoint Pagination</h2>
    *
    * To search by checkpoint, use the following parameters:
-   * - from: Optional id from which to start selection.
-   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   * <ul>
+   * <li><code>from</code>: Optional id from which to start selection.</li>
+   * <li><code>take</code>: The total amount of entries to retrieve when using the from parameter. Defaults to 50.</li>
+   * </ul>
    *
-   * The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter.
-   * If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls.
-   * When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
    *
-   * Note: The <code>include_totals</code> parameter is not supported when using checkpoint pagination.
    * Get all connections
    *
    * @throws {RequiredError}
@@ -177,7 +180,7 @@ export class ConnectionsManager extends BaseAPI {
   async getAll(
     requestParameters?: GetConnectionsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<Connection>>>;
+  ): Promise<ApiResponse<Array<ConnectionForList>>>;
   async getAll(
     requestParameters: GetConnectionsRequest = {},
     initOverrides?: InitOverride
@@ -237,8 +240,7 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieves a connection by its <code>ID</code>.
-   *
+   * Retrieve details for a specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> along with options that can be used for identity provider configuration.
    * Get a connection
    *
    * @throws {RequiredError}
@@ -380,8 +382,9 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * <b>Note:</b> if you use the options parameter, the whole options object will be overridden, so ensure that all parameters are present
+   * Update details for a specific <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a>, including option properties for identity provider configuration.
    *
+   * <b>Note</b>: If you use the <code>options</code> parameter, the entire <code>options</code> object is overriden. To avoid partial data or other issues, ensure all parameters are present when using this option.
    * Update a connection
    *
    * @throws {RequiredError}
