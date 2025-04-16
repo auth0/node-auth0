@@ -6,7 +6,12 @@
 
 **Added**
 
+⚠️ BREAKING CHANGES
+
 - Added Support for SS-SSO-FF for Node Auth0 [\#1093](https://github.com/auth0/node-auth0/pull/1093) ([tanya732](https://github.com/tanya732))
+
+> Please look at #1093 PR for changes
+> Updated response from Array<Connection> to Array<ConnectionForList> for /connections : 'GET' endpoint
 
 ## [v4.21.0](https://github.com/auth0/node-auth0/tree/v4.21.0) (2025-03-28)
 
