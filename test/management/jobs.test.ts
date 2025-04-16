@@ -373,6 +373,33 @@ describe('JobsManager', () => {
       });
     });
 
+    it('should set the `external_id` parameter correctly', (done) => {
+      nock.cleanAll();
+      let boundary: string | null = null;
+      const external_id = 'some_job_correlation_id';
+
+      const request = nock(API_URL)
+        .matchHeader('Content-Type', (header) => {
+          boundary = `--${header.match(/boundary=([^\n]*)/)?.[1]}`;
+
+          return true;
+        })
+        .post('/jobs/users-imports', (body) => {
+          const parts = extractParts(body, boundary);
+
+          expect(parts.external_id).toBe(external_id);
+
+          return true;
+        })
+        .reply(200, {});
+
+      jobs.importUsers(Object.assign({}, data, { external_id })).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
     it('should include the token in the Authorization header', (done) => {
       nock.cleanAll();
 
