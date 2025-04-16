@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.22.0](https://github.com/auth0/node-auth0/tree/v4.22.0) (2025-04-16)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.21.0...v4.22.0)
+
+**Added**
+
+- Added Support for SS-SSO-FF for Node Auth0 [\#1093](https://github.com/auth0/node-auth0/pull/1093) ([tanya732](https://github.com/tanya732))
+
 ## [v4.21.0](https://github.com/auth0/node-auth0/tree/v4.21.0) (2025-03-28)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.20.0...v4.21.0)
