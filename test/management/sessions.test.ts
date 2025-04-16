@@ -137,4 +137,52 @@ describe('SessionsManager', () => {
       });
     });
   });
+  describe('#revoke', () => {
+    const id = '6';
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).post(`/sessions/${id}/revoke`).reply(200, {});
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      sessions.revoke({ id }).then(done.bind(null, null));
+    });
+
+    it(`should perform a revoke request to /sessions/${id}/revoke`, (done) => {
+      sessions.revoke({ id }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`/sessions/${id}/revoke`).reply(500, {});
+
+      sessions.revoke({ id }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should include the token in the authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/sessions/${id}/revoke`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      sessions.revoke({ id }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
 });
