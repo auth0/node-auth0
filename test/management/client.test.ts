@@ -109,6 +109,7 @@ describe('ClientsManager', () => {
         expect(clients.data[0].client_secret).toBe(response[0].client_secret);
         expect(clients.data[0].app_type).toBe(response[0].app_type);
         expect(clients.data[0].logo_uri).toBe(response[0].logo_uri);
+        expect(clients.data[0].refresh_token).toBe(response[0].refresh_token);
 
         done();
       });
@@ -283,6 +284,7 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
+        expect(client.data.refresh_token).toBe(response.refresh_token);
 
         done();
       });
@@ -350,6 +352,7 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
+        expect(client.data.refresh_token).toBe(response.refresh_token);
 
         done();
       });
