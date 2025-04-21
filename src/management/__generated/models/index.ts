@@ -3024,6 +3024,11 @@ export interface Connection {
    */
   is_domain_connection: boolean;
   /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button: boolean;
+  /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
@@ -3059,6 +3064,11 @@ export interface ConnectionCreate {
   /**
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
@@ -3428,6 +3438,56 @@ export interface ConnectionCreateOptionsValidationUsername {
 /**
  *
  */
+export interface ConnectionForList {
+  /**
+   * The name of the connection
+   *
+   */
+  name?: string;
+  /**
+   * Connection name used in login screen
+   *
+   */
+  display_name?: string;
+  /**
+   * In order to return options in the response, the `read:connections_options` scope must be present
+   *
+   */
+  options?: { [key: string]: any };
+  /**
+   * The connection's identifier
+   *
+   */
+  id?: string;
+  /**
+   * The type of the connection, related to the identity provider
+   *
+   */
+  strategy?: string;
+  /**
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
+   *
+   */
+  realms?: Array<string>;
+  /**
+   * True if the connection is domain level
+   *
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
+}
+/**
+ *
+ */
 export interface ConnectionUpdate {
   /**
    * The connection name used in the new universal login experience. If display_name is not included in the request, the field will be overwritten with the name value.
@@ -3450,6 +3510,11 @@ export interface ConnectionUpdate {
    *
    */
   realms?: Array<string>;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -5347,7 +5412,7 @@ export interface GetClients200ResponseOneOf1 {
 /**
  *
  */
-export type GetConnections200Response = Array<Connection> | GetConnections200ResponseOneOf;
+export type GetConnections200Response = Array<ConnectionForList> | GetConnections200ResponseOneOf;
 /**
  *
  */
@@ -5363,7 +5428,7 @@ export interface GetConnections200ResponseOneOf {
   total: number;
   /**
    */
-  connections: Array<Connection>;
+  connections: Array<ConnectionForList>;
 }
 /**
  *
@@ -14252,6 +14317,9 @@ export interface PostSsoTicketRequest {
    *
    */
   ttl_sec?: number;
+  /**
+   */
+  domain_aliases_config?: PostSsoTicketRequestDomainAliasesConfig;
 }
 /**
  * If provided, this will create a new connection for the SSO flow with the given configuration
@@ -14268,8 +14336,15 @@ export interface PostSsoTicketRequestConnectionConfig {
    */
   display_name?: string;
   /**
+   * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
+   *
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -14293,13 +14368,69 @@ export interface PostSsoTicketRequestConnectionConfigOptions {
    *
    */
   domain_aliases?: Array<string>;
+  /**
+   */
+  idpinitiated?: PostSsoTicketRequestConnectionConfigOptionsIdpinitiated | null;
 }
+/**
+ * Allows IdP-initiated login
+ */
+export interface PostSsoTicketRequestConnectionConfigOptionsIdpinitiated {
+  /**
+   * Enables IdP-initiated login for this connection
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Default application <code>client_id</code> user is redirected to after validated SAML response
+   *
+   */
+  client_id?: string;
+  /**
+   * The protocol used to connect to the the default application
+   *
+   */
+  client_protocol?: PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum;
+  /**
+   * Query string options to customize the behaviour for OpenID Connect when <code>idpinitiated.client_protocol</code> is <code>oauth2</code>. Allowed parameters: <code>redirect_uri</code>, <code>scope</code>, <code>response_type</code>. For example, <code>redirect_uri=https://jwt.io&scope=openid email&response_type=token</code>
+   *
+   */
+  client_authorizequery?: string;
+}
+
+export const PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum = {
+  samlp: 'samlp',
+  wsfed: 'wsfed',
+  oauth2: 'oauth2',
+} as const;
+export type PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum =
+  (typeof PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum)[keyof typeof PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * Configuration for the setup of the connection’s domain_aliases in the self-service SSO flow.
+ */
+export interface PostSsoTicketRequestDomainAliasesConfig {
+  /**
+   * Whether the end user should complete the domain verification step. Possible values are 'none' (the step is not shown to the user), 'optional' (the user may add a domain alias in the domain verification step) or 'required' (the user must add a domain alias in order to enable the connection). Defaults to 'none'.
+   *
+   */
+  domain_verification: PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum;
+}
+
+export const PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum = {
+  none: 'none',
+  optional: 'optional',
+  required: 'required',
+} as const;
+export type PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum =
+  (typeof PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum)[keyof typeof PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum];
+
 /**
  *
  */
 export interface PostSsoTicketRequestEnabledOrganizationsInner {
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   organization_id: string;
@@ -17883,7 +18014,7 @@ export type GetConnectionsStrategyEnum =
  */
 export interface GetConnectionsRequest {
   /**
-   * The amount of entries per page. Default: no paging is used, all connections are returned
+   * The amount of entries per page. Defaults to 100 if not provided
    *
    */
   per_page?: number;
@@ -17993,7 +18124,7 @@ export interface GetStatusRequest {
  */
 export interface PatchConnectionsByIdRequest {
   /**
-   * The id of the connection to retrieve
+   * The id of the connection to update
    *
    */
   id: string;
