@@ -220,7 +220,7 @@ export interface Client {
   par_request_expiry: number | null;
   /**
    */
-  token_quota: ClientTokenQuota;
+  token_quota: GetOrganizations200ResponseOneOfInnerTokenQuota;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -1117,7 +1117,7 @@ export interface ClientCreate {
   par_request_expiry?: number | null;
   /**
    */
-  token_quota?: ClientTokenQuota;
+  token_quota?: GetOrganizations200ResponseOneOfInnerTokenQuota;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -2417,34 +2417,6 @@ export interface ClientSigningKeysInner {
 /**
  *
  */
-export interface ClientTokenQuota {
-  /**
-   */
-  client_credentials: ClientTokenQuotaClientCredentials;
-}
-/**
- * The token quota configuration
- */
-export interface ClientTokenQuotaClientCredentials {
-  /**
-   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
-   *
-   */
-  enforce?: boolean;
-  /**
-   * Maximum number of issued tokens per day
-   *
-   */
-  per_day?: number;
-  /**
-   * Maximum number of issued tokens per hour
-   *
-   */
-  per_hour?: number;
-}
-/**
- *
- */
 export interface ClientUpdate {
   /**
    * The name of the client. Must contain at least one character. Does not allow '<' or '>'.
@@ -2565,7 +2537,7 @@ export interface ClientUpdate {
   custom_login_page_preview?: string;
   /**
    */
-  token_quota?: ClientUpdateTokenQuota | null;
+  token_quota?: PatchOrganizationsByIdRequestTokenQuota | null;
   /**
    * Form template for WS-Federation protocol
    *
@@ -3032,14 +3004,6 @@ export interface ClientUpdateSignedRequestObject {
   /**
    */
   credentials?: Array<ClientClientAuthenticationMethodsPrivateKeyJwtCredentialsInner>;
-}
-/**
- *
- */
-export interface ClientUpdateTokenQuota {
-  /**
-   */
-  client_credentials: ClientTokenQuotaClientCredentials;
 }
 /**
  *
@@ -7603,7 +7567,7 @@ export interface GetOrganizations200ResponseOneOf1 {
 export interface GetOrganizations200ResponseOneOfInner {
   [key: string]: any | any;
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -7621,17 +7585,20 @@ export interface GetOrganizations200ResponseOneOfInner {
    */
   branding: GetOrganizations200ResponseOneOfInnerBranding;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata: { [key: string]: any };
+  /**
+   */
+  token_quota: GetOrganizations200ResponseOneOfInnerTokenQuota;
 }
 /**
- * Theme defines how to style the login pages
+ * Theme defines how to style the login pages.
  */
 export interface GetOrganizations200ResponseOneOfInnerBranding {
   /**
-   * URL of logo to display on login page
+   * URL of logo to display on login page.
    *
    */
   logo_url: string;
@@ -7640,19 +7607,47 @@ export interface GetOrganizations200ResponseOneOfInnerBranding {
   colors: GetOrganizations200ResponseOneOfInnerBrandingColors;
 }
 /**
- * Color scheme used to customize the login pages
+ * Color scheme used to customize the login pages.
  */
 export interface GetOrganizations200ResponseOneOfInnerBrandingColors {
   /**
-   * HEX Color for primary elements
+   * HEX Color for primary elements.
    *
    */
   primary: string;
   /**
-   * HEX Color for background
+   * HEX Color for background.
    *
    */
   page_background: string;
+}
+/**
+ *
+ */
+export interface GetOrganizations200ResponseOneOfInnerTokenQuota {
+  /**
+   */
+  client_credentials: GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials;
+}
+/**
+ * The token quota configuration
+ */
+export interface GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials {
+  /**
+   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+   *
+   */
+  enforce?: boolean;
+  /**
+   * Maximum number of issued tokens per day
+   *
+   */
+  per_day?: number;
+  /**
+   * Maximum number of issued tokens per hour
+   *
+   */
+  per_hour?: number;
 }
 /**
  *
@@ -8725,8 +8720,82 @@ export interface GetUniversalLogin200ResponseOneOf {
  *
  */
 export type GetUserOrganizations200Response =
-  | Array<GetOrganizations200ResponseOneOfInner>
-  | GetOrganizations200ResponseOneOf;
+  | Array<GetUserOrganizations200ResponseOneOfInner>
+  | GetUserOrganizations200ResponseOneOf;
+/**
+ *
+ */
+export interface GetUserOrganizations200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  organizations: Array<GetUserOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetUserOrganizations200ResponseOneOfInner {
+  [key: string]: any | any;
+  /**
+   * Organization identifier
+   *
+   */
+  id: string;
+  /**
+   * The name of this organization.
+   *
+   */
+  name: string;
+  /**
+   * Friendly name of this organization.
+   *
+   */
+  display_name: string;
+  /**
+   */
+  branding: GetUserOrganizations200ResponseOneOfInnerBranding;
+  /**
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata: { [key: string]: any };
+}
+/**
+ * Theme defines how to style the login pages
+ */
+export interface GetUserOrganizations200ResponseOneOfInnerBranding {
+  /**
+   * URL of logo to display on login page
+   *
+   */
+  logo_url: string;
+  /**
+   */
+  colors: GetUserOrganizations200ResponseOneOfInnerBrandingColors;
+}
+/**
+ * Color scheme used to customize the login pages
+ */
+export interface GetUserOrganizations200ResponseOneOfInnerBrandingColors {
+  /**
+   * HEX Color for primary elements
+   *
+   */
+  primary: string;
+  /**
+   * HEX Color for background
+   *
+   */
+  page_background: string;
+}
 /**
  *
  */
@@ -9974,23 +10043,34 @@ export interface PatchOrganizationsByIdRequest {
    */
   branding?: PatchOrganizationsByIdRequestBranding | null;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata?: { [key: string]: any } | null;
+  /**
+   */
+  token_quota?: PatchOrganizationsByIdRequestTokenQuota | null;
 }
 /**
- * Theme defines how to style the login pages
+ * Theme defines how to style the login pages.
  */
 export interface PatchOrganizationsByIdRequestBranding {
   /**
-   * URL of logo to display on login page
+   * URL of logo to display on login page.
    *
    */
   logo_url?: string;
   /**
    */
   colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
+}
+/**
+ *
+ */
+export interface PatchOrganizationsByIdRequestTokenQuota {
+  /**
+   */
+  client_credentials: GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials;
 }
 /**
  *
@@ -14002,7 +14082,7 @@ export interface PostOrganizationMemberRolesRequest {
 export interface PostOrganizations201Response {
   [key: string]: any | any;
   /**
-   * Organization identifier
+   * Organization identifier.
    *
    */
   id: string;
@@ -14020,10 +14100,13 @@ export interface PostOrganizations201Response {
    */
   branding: GetOrganizations200ResponseOneOfInnerBranding;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata: { [key: string]: any };
+  /**
+   */
+  token_quota: GetOrganizations200ResponseOneOfInnerTokenQuota;
   /**
    */
   enabled_connections: Array<PostOrganizations201ResponseEnabledConnectionsInner>;
@@ -14091,7 +14174,7 @@ export interface PostOrganizationsRequest {
    */
   branding?: PostOrganizationsRequestBranding;
   /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
    *
    */
   metadata?: { [key: string]: any };
@@ -14100,13 +14183,16 @@ export interface PostOrganizationsRequest {
    *
    */
   enabled_connections?: Array<PostOrganizationsRequestEnabledConnectionsInner>;
+  /**
+   */
+  token_quota?: GetOrganizations200ResponseOneOfInnerTokenQuota;
 }
 /**
- * Theme defines how to style the login pages
+ * Theme defines how to style the login pages.
  */
 export interface PostOrganizationsRequestBranding {
   /**
-   * URL of logo to display on login page
+   * URL of logo to display on login page.
    *
    */
   logo_url?: string;
@@ -16372,7 +16458,7 @@ export interface TenantSettingsDefaultTokenQuotaClients {
   [key: string]: any | any;
   /**
    */
-  client_credentials: ClientTokenQuotaClientCredentials;
+  client_credentials: GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials;
 }
 /**
  * Device Flow configuration
