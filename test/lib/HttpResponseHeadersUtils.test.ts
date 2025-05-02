@@ -1,4 +1,4 @@
-import { HttpResponseHeadersUtils } from '../../src/lib/HttpResponseHeadersUtils.js';
+import { HttpResponseHeadersUtils } from '../../src/lib/httpResponseHeadersUtils.js';
 
 describe('HttpResponseHeadersUtils', () => {
   describe('getClientQuotaLimit', () => {
