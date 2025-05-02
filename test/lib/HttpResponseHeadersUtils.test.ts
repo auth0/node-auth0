@@ -1,4 +1,4 @@
-import { HttpResponseHeadersUtils, TokenQuotaBucket } from '../../src/lib/HttpResponseHeadersUtils';
+import { HttpResponseHeadersUtils } from '../../src/lib/HttpResponseHeadersUtils.js';
 
 describe('HttpResponseHeadersUtils', () => {
   describe('getClientQuotaLimit', () => {
