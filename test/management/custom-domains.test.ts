@@ -7,6 +7,8 @@ import {
   CustomDomainsManager,
   PostCustomDomainsRequestTypeEnum,
   ManagementClient,
+  ApiResponse,
+  GetCustomDomains200Response,
 } from '../../src/index.js';
 
 describe('CustomDomainsManager', () => {
@@ -49,7 +51,7 @@ describe('CustomDomainsManager', () => {
 
   describe('#getAll', () => {
     let request: nock.Scope;
-    const response: CustomDomain[] = [
+    const response: Array<CustomDomain> = [
       {
         custom_domain_id: 'test_domain',
         domain: 'Test Domain',
@@ -91,29 +93,29 @@ describe('CustomDomainsManager', () => {
     });
 
     it('should pass the body of the response to the "then" handler', (done) => {
-      customDomains.getAll().then((customDomains) => {
+      customDomains.getAll().then((customDomains: ApiResponse<GetCustomDomains200Response>) => {
         expect(customDomains.data).toBeInstanceOf(Array);
-        expect(customDomains.data.length).toBe(response.length);
+        expect((customDomains.data as Array<CustomDomain>).length).toBe(response.length);
 
-        expect(customDomains.data[0].custom_domain_id).toBe(response[0].custom_domain_id);
-        expect(customDomains.data[0].domain).toBe(response[0].domain);
-        expect(customDomains.data[0].primary).toBe(response[0].primary);
-        expect(customDomains.data[0].status).toBe(response[0].status);
-        expect(customDomains.data[0].type).toBe(response[0].type);
-        expect(customDomains.data[0].origin_domain_name).toBe(response[0].origin_domain_name);
-        expect(customDomains.data[0].verification?.methods?.[0].name).toBe(
+        const customDomainData: CustomDomain = (customDomains.data as Array<CustomDomain>)[0];
+
+        expect(customDomainData.custom_domain_id).toBe(response[0].custom_domain_id);
+        expect(customDomainData.domain).toBe(response[0].domain);
+        expect(customDomainData.primary).toBe(response[0].primary);
+        expect(customDomainData.status).toBe(response[0].status);
+        expect(customDomainData.type).toBe(response[0].type);
+        expect(customDomainData.origin_domain_name).toBe(response[0].origin_domain_name);
+        expect(customDomainData.verification?.methods?.[0].name).toBe(
           response[0].verification?.methods?.[0].name
         );
-        expect(customDomains.data[0].verification?.methods?.[0].record).toBe(
+        expect(customDomainData.verification?.methods?.[0].record).toBe(
           response[0].verification?.methods?.[0].record
         );
-        expect(customDomains.data[0].verification?.methods?.[0].domain).toBe(
+        expect(customDomainData.verification?.methods?.[0].domain).toBe(
           response[0].verification?.methods?.[0].domain
         );
-        expect(customDomains.data[0].custom_client_ip_header).toBe(
-          response[0].custom_client_ip_header
-        );
-        expect(customDomains.data[0].tls_policy).toBe(response[0].tls_policy);
+        expect(customDomainData.custom_client_ip_header).toBe(response[0].custom_client_ip_header);
+        expect(customDomainData.tls_policy).toBe(response[0].tls_policy);
 
         done();
       });

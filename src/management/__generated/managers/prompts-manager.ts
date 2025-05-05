@@ -1,10 +1,15 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetRendering200Response,
+  PatchRendering200Response,
+  PatchRenderingRequest,
   PromptsSettings,
   PromptsSettingsUpdate,
   GetCustomTextByLanguageRequest,
   GetPartialsRequest,
+  GetRenderingRequest,
+  PatchRenderingOperationRequest,
   PutCustomTextByLanguageRequest,
   PutPartialsRequest,
 } from '../models/index.js';
@@ -85,6 +90,31 @@ export class PromptsManager extends BaseAPI {
   }
 
   /**
+   * Get render settings for a screen.
+   * Get render settings for a screen
+   *
+   * @throws {RequiredError}
+   */
+  async getRendering(
+    requestParameters: GetRenderingRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetRendering200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'screen']);
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/screen/{screen}/rendering`
+          .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
+          .replace('{screen}', encodeURIComponent(String(requestParameters.screen))),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Update the Universal Login configuration of your tenant. This includes the <a href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier First Authentication</a> and <a href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn with Device Biometrics for MFA</a> features.
    * Update prompt settings
    *
@@ -101,6 +131,66 @@ export class PromptsManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/prompts`,
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
+   *
+   * <p>
+   *   Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>documentation</a> on using Liquid variables within head tags.
+   * </p>
+   * <pre>{
+   *   "head_tags": [
+   *     {
+   *       "tag": "script",
+   *       "attributes": {
+   *         "defer": true,
+   *         "src": "URL_TO_ASSET",
+   *         "async": true,
+   *         "integrity": [
+   *           "ASSET_SHA"
+   *         ]
+   *       }
+   *     },
+   *     {
+   *       "tag": "link",
+   *       "attributes": {
+   *         "href": "URL_TO_ASSET",
+   *         "rel": "stylesheet"
+   *       }
+   *     }
+   *   ]
+   * }
+   * </pre>
+   *
+   * Update render settings for a screen
+   *
+   * @throws {RequiredError}
+   */
+  async updateRendering(
+    requestParameters: PatchRenderingOperationRequest,
+    bodyParameters: PatchRenderingRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PatchRendering200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['prompt', 'screen']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/prompts/{prompt}/screen/{screen}/rendering`
+          .replace('{prompt}', encodeURIComponent(String(requestParameters.prompt)))
+          .replace('{screen}', encodeURIComponent(String(requestParameters.screen))),
         method: 'PATCH',
         headers: headerParameters,
         body: bodyParameters,

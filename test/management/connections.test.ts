@@ -98,8 +98,6 @@ describe('ConnectionsManager', () => {
         expect(connections.data[0].realms?.[0]).toBe(response[0].realms[0]);
         expect(connections.data[0].is_domain_connection).toBe(response[0].is_domain_connection);
         expect(connections.data[0].metadata?.test).toBe(response[0].metadata.test);
-        expect(connections.data[0].enabled_clients[0]).toBe(response[0].enabled_clients[0]);
-
         done();
       });
     });

@@ -8,6 +8,7 @@ import {
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
   PushedAuthorizationRequest,
+  TokenForConnectionRequest,
 } from '../../src/index.js';
 import { withIdToken } from '../utils/index.js';
 
@@ -363,6 +364,57 @@ describe('OAuth', () => {
         data: {
           request_uri: 'https://www.request.uri',
           expires_in: 86400,
+        },
+      });
+    });
+  });
+
+  describe('#tokenForConnection', () => {
+    it('should require a connection', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({ subject_token: 'test-token' } as TokenForConnectionRequest)
+      ).rejects.toThrow('Required parameter requestParameters.connection was null or undefined.');
+    });
+
+    it('should require a subject_token', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({ connection: 'google-oauth2' } as TokenForConnectionRequest)
+      ).rejects.toThrow(
+        'Required parameter requestParameters.subject_token was null or undefined.'
+      );
+    });
+
+    it('should return token response', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          connection: 'google-oauth2',
+          subject_token: 'test-refresh-token',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'connection-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
+        },
+      });
+    });
+
+    it('should include login_hint when provided', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          connection: 'google-oauth2',
+          subject_token: 'test-refresh-token',
+          login_hint: 'user@example.com',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'connection-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
         },
       });
     });

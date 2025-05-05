@@ -3004,6 +3004,11 @@ export interface Connection {
    */
   is_domain_connection: boolean;
   /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button: boolean;
+  /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
    */
@@ -3039,6 +3044,11 @@ export interface ConnectionCreate {
   /**
    */
   is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
    *
@@ -3408,6 +3418,56 @@ export interface ConnectionCreateOptionsValidationUsername {
 /**
  *
  */
+export interface ConnectionForList {
+  /**
+   * The name of the connection
+   *
+   */
+  name?: string;
+  /**
+   * Connection name used in login screen
+   *
+   */
+  display_name?: string;
+  /**
+   * In order to return options in the response, the `read:connections_options` scope must be present
+   *
+   */
+  options?: { [key: string]: any };
+  /**
+   * The connection's identifier
+   *
+   */
+  id?: string;
+  /**
+   * The type of the connection, related to the identity provider
+   *
+   */
+  strategy?: string;
+  /**
+   * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
+   *
+   */
+  realms?: Array<string>;
+  /**
+   * True if the connection is domain level
+   *
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD.
+   *
+   */
+  show_as_button?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
+}
+/**
+ *
+ */
 export interface ConnectionUpdate {
   /**
    * The connection name used in the new universal login experience. If display_name is not included in the request, the field will be overwritten with the name value.
@@ -3430,6 +3490,11 @@ export interface ConnectionUpdate {
    *
    */
   realms?: Array<string>;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
   /**
    * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
    *
@@ -3548,6 +3613,50 @@ export const ConnectionUpdateOptionsSetUserRootAttributesEnum = {
 export type ConnectionUpdateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionUpdateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
 
+/**
+ * Phone provider configuration schema
+ */
+export interface CreatePhoneProviderRequest {
+  [key: string]: any | any;
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name: CreatePhoneProviderRequestNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+  /**
+   */
+  credentials: CreatePhoneProviderRequestCredentials;
+}
+
+export const CreatePhoneProviderRequestNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type CreatePhoneProviderRequestNameEnum =
+  (typeof CreatePhoneProviderRequestNameEnum)[keyof typeof CreatePhoneProviderRequestNameEnum];
+
+/**
+ * Provider credentials required to use authenticate to the provider.
+ */
+export type CreatePhoneProviderRequestCredentials =
+  | CreatePhoneProviderRequestCredentialsAnyOf
+  | object;
+/**
+ *
+ */
+export interface CreatePhoneProviderRequestCredentialsAnyOf {
+  /**
+   */
+  auth_token: string;
+}
 /**
  *
  */
@@ -3783,7 +3892,7 @@ export type DeviceCredentialCreateTypeEnum =
  */
 export interface EmailProvider {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`, or `custom`.
    *
    */
   name: string;
@@ -3811,7 +3920,7 @@ export interface EmailProvider {
  */
 export interface EmailProviderCreate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`, or `custom`.
    *
    */
   name: EmailProviderCreateNameEnum;
@@ -3844,6 +3953,7 @@ export const EmailProviderCreateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderCreateNameEnum =
   (typeof EmailProviderCreateNameEnum)[keyof typeof EmailProviderCreateNameEnum];
@@ -3883,7 +3993,7 @@ export interface EmailProviderCredentials {
  */
 export interface EmailProviderUpdate {
   /**
-   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, or `ms365`.
+   * Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`.
    *
    */
   name?: EmailProviderUpdateNameEnum;
@@ -3916,6 +4026,7 @@ export const EmailProviderUpdateNameEnum = {
   smtp: 'smtp',
   azure_cs: 'azure_cs',
   ms365: 'ms365',
+  custom: 'custom',
 } as const;
 export type EmailProviderUpdateNameEnum =
   (typeof EmailProviderUpdateNameEnum)[keyof typeof EmailProviderUpdateNameEnum];
@@ -4629,7 +4740,7 @@ export interface GetActions200ResponseActionsInnerSupportedTriggersInnerCompatib
   version: string;
 }
 /**
- * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+ * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, custom-email-provider, password-reset-post-challenge</code>
  */
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerId =
   GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf;
@@ -4648,6 +4759,7 @@ export const GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf = {
   iga_certification: 'iga-certification',
   iga_fulfillment_assignment: 'iga-fulfillment-assignment',
   iga_fulfillment_execution: 'iga-fulfillment-execution',
+  custom_email_provider: 'custom-email-provider',
   password_reset_post_challenge: 'password-reset-post-challenge',
 } as const;
 export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
@@ -4952,6 +5064,118 @@ export interface GetBranding200ResponseFont {
 /**
  *
  */
+export interface GetBrandingPhoneProviders200Response {
+  /**
+   */
+  providers: Array<GetBrandingPhoneProviders200ResponseProvidersInner>;
+}
+/**
+ * Phone provider configuration schema
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInner {
+  /**
+   */
+  id?: string;
+  /**
+   * The name of the tenant
+   *
+   */
+  tenant?: string;
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name: GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum;
+  /**
+   * This depicts the type of notifications this provider can receive.
+   *
+   */
+  channel?: GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+  /**
+   * The provider's creation date and time in ISO 8601 format
+   *
+   */
+  created_at?: string;
+  /**
+   * The date and time of the last update to the provider in ISO 8601 format
+   *
+   */
+  updated_at?: string;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerNameEnum];
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum = {
+  phone: 'phone',
+} as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerChannelEnum];
+
+/**
+ *
+ */
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration =
+  | GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf
+  | GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1;
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf {
+  /**
+   */
+  default_from?: string;
+  /**
+   */
+  mssid?: string;
+  /**
+   */
+  sid: string;
+  /**
+   */
+  delivery_methods: Array<GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum>;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum =
+  {
+    text: 'text',
+    voice: 'voice',
+  } as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOfDeliveryMethodsEnum];
+
+/**
+ *
+ */
+export interface GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1 {
+  /**
+   */
+  delivery_methods: Array<GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum>;
+}
+
+export const GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum =
+  {
+    text: 'text',
+    voice: 'voice',
+  } as const;
+export type GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum =
+  (typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum)[keyof typeof GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf1DeliveryMethodsEnum];
+
+/**
+ *
+ */
 export interface GetBreachedPasswordDetection200Response {
   [key: string]: any | any;
   /**
@@ -5013,7 +5237,29 @@ export interface GetBreachedPasswordDetection200ResponseStage {
   /**
    */
   'pre-user-registration': GetBreachedPasswordDetection200ResponseStagePreUserRegistration;
+  /**
+   */
+  'pre-change-password': GetBreachedPasswordDetection200ResponseStagePreChangePassword;
 }
+/**
+ *
+ */
+export interface GetBreachedPasswordDetection200ResponseStagePreChangePassword {
+  /**
+   * Action to take when a breached password is detected during a password reset.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields: Array<GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum>;
+}
+
+export const GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum =
+  (typeof GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum)[keyof typeof GetBreachedPasswordDetection200ResponseStagePreChangePasswordShieldsEnum];
+
 /**
  *
  */
@@ -5144,7 +5390,7 @@ export interface GetClients200ResponseOneOf1 {
 /**
  *
  */
-export type GetConnections200Response = Array<Connection> | GetConnections200ResponseOneOf;
+export type GetConnections200Response = Array<ConnectionForList> | GetConnections200ResponseOneOf;
 /**
  *
  */
@@ -5160,7 +5406,7 @@ export interface GetConnections200ResponseOneOf {
   total: number;
   /**
    */
-  connections: Array<Connection>;
+  connections: Array<ConnectionForList>;
 }
 /**
  *
@@ -5230,6 +5476,23 @@ export type GetCredentials200ResponseInnerAlgEnum =
 /**
  *
  */
+export type GetCustomDomains200Response = Array<CustomDomain> | GetCustomDomains200ResponseOneOf;
+/**
+ *
+ */
+export interface GetCustomDomains200ResponseOneOf {
+  /**
+   */
+  custom_domains: Array<CustomDomain>;
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next?: string;
+}
+/**
+ *
+ */
 export interface GetDefaultMapping200Response {
   /**
    * The mapping between auth0 and SCIM
@@ -5265,7 +5528,7 @@ export interface GetDeviceCredentials200ResponseOneOf {
  */
 export interface GetEmailTemplatesByTemplateName200Response {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: GetEmailTemplatesByTemplateName200ResponseTemplateEnum;
@@ -5315,6 +5578,7 @@ export const GetEmailTemplatesByTemplateName200ResponseTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -5378,6 +5642,96 @@ export interface GetEnabledConnections200ResponseOneOfInner {
    */
   connection: PostOrganizations201ResponseEnabledConnectionsInnerConnection;
 }
+/**
+ *
+ */
+export type GetEncryptionKeys200Response =
+  | Array<GetEncryptionKeys200ResponseOneOfInner>
+  | GetEncryptionKeys200ResponseOneOf;
+/**
+ *
+ */
+export interface GetEncryptionKeys200ResponseOneOf {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  start: number;
+  /**
+   * Number of results per page.
+   *
+   */
+  limit: number;
+  /**
+   * Total amount of encryption keys.
+   *
+   */
+  total: number;
+  /**
+   * Encryption keys.
+   *
+   */
+  keys: Array<GetEncryptionKeys200ResponseOneOfInner>;
+}
+/**
+ * Encryption key
+ */
+export interface GetEncryptionKeys200ResponseOneOfInner {
+  /**
+   * Key ID
+   *
+   */
+  kid: string;
+  /**
+   * Key type
+   *
+   */
+  type: GetEncryptionKeys200ResponseOneOfInnerTypeEnum;
+  /**
+   * Key state
+   *
+   */
+  state: GetEncryptionKeys200ResponseOneOfInnerStateEnum;
+  /**
+   * Key creation timestamp
+   *
+   */
+  created_at: string;
+  /**
+   * Key update timestamp
+   *
+   */
+  updated_at: string;
+  /**
+   * ID of parent wrapping key
+   *
+   */
+  parent_kid: string;
+  /**
+   * Public key in PEM format
+   *
+   */
+  public_key?: string;
+}
+
+export const GetEncryptionKeys200ResponseOneOfInnerTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  environment_root_key: 'environment-root-key',
+  tenant_master_key: 'tenant-master-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerTypeEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerTypeEnum];
+
+export const GetEncryptionKeys200ResponseOneOfInnerStateEnum = {
+  pre_activation: 'pre-activation',
+  active: 'active',
+  deactivated: 'deactivated',
+  destroyed: 'destroyed',
+} as const;
+export type GetEncryptionKeys200ResponseOneOfInnerStateEnum =
+  (typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum)[keyof typeof GetEncryptionKeys200ResponseOneOfInnerStateEnum];
+
 /**
  *
  */
@@ -5483,6 +5837,30 @@ export interface GetExecution200ResponseResultsInner {
    *
    */
   ended_at: string;
+}
+/**
+ *
+ */
+export interface GetFederatedConnectionsTokensets200ResponseInner {
+  [key: string]: any | any;
+  /**
+   */
+  id: string;
+  /**
+   */
+  connection: string;
+  /**
+   */
+  scope: string;
+  /**
+   */
+  expires_at: string;
+  /**
+   */
+  issued_at: string;
+  /**
+   */
+  last_used_at: string;
 }
 /**
  *
@@ -6789,6 +7167,233 @@ export type GetMessageTypes200ResponseMessageTypesEnum =
 /**
  *
  */
+export type GetNetworkAcls200Response =
+  | Array<GetNetworkAclsById200Response>
+  | GetNetworkAcls200ResponseOneOf;
+/**
+ *
+ */
+export interface GetNetworkAcls200ResponseOneOf {
+  /**
+   */
+  network_acls: Array<GetNetworkAclsById200Response>;
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsById200Response {
+  [key: string]: any | any;
+  /**
+   */
+  id: string;
+  /**
+   */
+  description: string;
+  /**
+   */
+  active: boolean;
+  /**
+   */
+  priority: number;
+  /**
+   */
+  rule: GetNetworkAclsById200ResponseRule;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  created_at: string;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  updated_at: string;
+}
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRule =
+  | GetNetworkAclsById200ResponseRuleAnyOf
+  | GetNetworkAclsById200ResponseRuleAnyOf1;
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOf {
+  [key: string]: any | any;
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  scope: GetNetworkAclsById200ResponseRuleAnyOfScopeEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfScopeEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfScopeEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfScopeEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOf1 {
+  [key: string]: any | any;
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  scope: GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOf1ScopeEnum];
+
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfAction =
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2
+  | GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3;
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf {
+  /**
+   */
+  block: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOfBlockEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1 {
+  /**
+   */
+  allow: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf1AllowEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2 {
+  /**
+   */
+  log: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf2LogEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3 {
+  /**
+   */
+  redirect: GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum;
+  /**
+   */
+  redirect_uri: string;
+}
+
+export const GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum = {
+  true: true,
+} as const;
+export type GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum =
+  (typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum)[keyof typeof GetNetworkAclsById200ResponseRuleAnyOfActionAnyOf3RedirectEnum];
+
+/**
+ *
+ */
+export interface GetNetworkAclsById200ResponseRuleAnyOfMatch {
+  /**
+   * Anonymous Proxy as reported by GeoIP
+   *
+   */
+  anonymous_proxy?: boolean;
+  /**
+   */
+  asns?: Array<number>;
+  /**
+   */
+  geo_country_codes?: Array<string>;
+  /**
+   */
+  geo_subdivision_codes?: Array<string>;
+  /**
+   */
+  ipv4_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner>;
+  /**
+   */
+  ipv6_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner>;
+  /**
+   */
+  ja3_fingerprints?: Array<string>;
+  /**
+   */
+  ja4_fingerprints?: Array<string>;
+  /**
+   */
+  user_agents?: Array<string>;
+}
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner = string;
+/**
+ *
+ */
+export type GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner = string;
+/**
+ *
+ */
 export type GetOrganizationClientGrants200Response =
   | Array<GetOrganizationClientGrants200ResponseOneOfInner>
   | GetOrganizationClientGrants200ResponseOneOf;
@@ -7202,6 +7807,84 @@ export type GetRefreshTokensForUser200ResponseSessionsInnerIdleExpiresAt =
 /**
  *
  */
+export interface GetRendering200Response {
+  [key: string]: any | any;
+  /**
+   * Tenant ID
+   *
+   */
+  tenant: string;
+  /**
+   * Name of the prompt
+   *
+   */
+  prompt: string;
+  /**
+   * Name of the screen
+   *
+   */
+  screen: string;
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode: GetRendering200ResponseRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled: boolean;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+}
+
+export const GetRendering200ResponseRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type GetRendering200ResponseRenderingModeEnum =
+  (typeof GetRendering200ResponseRenderingModeEnum)[keyof typeof GetRendering200ResponseRenderingModeEnum];
+
+/**
+ *
+ */
+export interface GetRendering200ResponseHeadTagsInner {
+  [key: string]: any | any;
+  /**
+   * Any HTML element valid for use in the head tag
+   *
+   */
+  tag: string;
+  /**
+   */
+  attributes: GetRendering200ResponseHeadTagsInnerAttributes;
+  /**
+   * Text/content within the opening and closing tags of the element.
+   * See <a href="https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens">documentation</a> on using context variables
+   *
+   */
+  content: string;
+}
+/**
+ * Attributes of the HTML tag
+ */
+export interface GetRendering200ResponseHeadTagsInnerAttributes {
+  [key: string]: any | any;
+  /**
+   */
+  integrity: Array<string>;
+}
+/**
+ *
+ */
 export type GetResourceServers200Response =
   | Array<ResourceServer>
   | GetResourceServers200ResponseOneOf;
@@ -7426,6 +8109,29 @@ export interface GetScimTokens200ResponseInner {
    *
    */
   last_used_at: string;
+}
+/**
+ *
+ */
+export type GetSelfServiceProfiles200Response =
+  | Array<SsProfile>
+  | GetSelfServiceProfiles200ResponseOneOf;
+/**
+ *
+ */
+export interface GetSelfServiceProfiles200ResponseOneOf {
+  /**
+   */
+  start: number;
+  /**
+   */
+  limit: number;
+  /**
+   */
+  total: number;
+  /**
+   */
+  self_service_profiles: Array<SsProfile>;
 }
 /**
  *
@@ -7854,6 +8560,65 @@ export interface GetSuspiciousIpThrottling200ResponseStagePreUserRegistration {
    */
   rate: number;
 }
+/**
+ *
+ */
+export interface GetTokenExchangeProfiles200Response {
+  /**
+   */
+  pagination: { [key: string]: any };
+  /**
+   */
+  token_exchange_profiles: Array<GetTokenExchangeProfilesById200Response>;
+}
+/**
+ *
+ */
+export interface GetTokenExchangeProfilesById200Response {
+  [key: string]: any | any;
+  /**
+   * The unique ID of the token exchange profile.
+   *
+   */
+  id: string;
+  /**
+   * Friendly name of this profile.
+   *
+   */
+  name: string;
+  /**
+   * Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI.
+   *
+   */
+  subject_token_type: string;
+  /**
+   * The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger.
+   *
+   */
+  action_id: string;
+  /**
+   * The type of the profile, which controls how the profile will be executed when receiving a token exchange request.
+   *
+   */
+  type: GetTokenExchangeProfilesById200ResponseTypeEnum;
+  /**
+   * The time when this profile was created.
+   *
+   */
+  created_at: string;
+  /**
+   * The time when this profile was updated.
+   *
+   */
+  updated_at: string;
+}
+
+export const GetTokenExchangeProfilesById200ResponseTypeEnum = {
+  custom_authentication: 'custom_authentication',
+} as const;
+export type GetTokenExchangeProfilesById200ResponseTypeEnum =
+  (typeof GetTokenExchangeProfilesById200ResponseTypeEnum)[keyof typeof GetTokenExchangeProfilesById200ResponseTypeEnum];
+
 /**
  *
  */
@@ -8655,7 +9420,29 @@ export interface PatchBreachedPasswordDetectionRequestStage {
   /**
    */
   'pre-user-registration'?: PatchBreachedPasswordDetectionRequestStagePreUserRegistration;
+  /**
+   */
+  'pre-change-password'?: PatchBreachedPasswordDetectionRequestStagePreChangePassword;
 }
+/**
+ *
+ */
+export interface PatchBreachedPasswordDetectionRequestStagePreChangePassword {
+  /**
+   * Action to take when a breached password is detected during a password reset.
+   *               Possible values: <code>block</code>, <code>admin_notification</code>.
+   *
+   */
+  shields?: Array<PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum>;
+}
+
+export const PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum = {
+  block: 'block',
+  admin_notification: 'admin_notification',
+} as const;
+export type PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum =
+  (typeof PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum)[keyof typeof PatchBreachedPasswordDetectionRequestStagePreChangePasswordShieldsEnum];
+
 /**
  *
  */
@@ -8800,7 +9587,7 @@ export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template?: PatchEmailTemplatesByTemplateNameRequestTemplateEnum;
@@ -8850,6 +9637,7 @@ export const PatchEmailTemplatesByTemplateNameRequestTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -9127,6 +9915,102 @@ export interface PatchOrganizationsByIdRequestBranding {
 /**
  *
  */
+export interface PatchRendering200Response {
+  [key: string]: any | any;
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode: PatchRendering200ResponseRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled: boolean;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+}
+
+export const PatchRendering200ResponseRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type PatchRendering200ResponseRenderingModeEnum =
+  (typeof PatchRendering200ResponseRenderingModeEnum)[keyof typeof PatchRendering200ResponseRenderingModeEnum];
+
+/**
+ * Render settings for the given screen
+ */
+export interface PatchRenderingRequest {
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode?: PatchRenderingRequestRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration?: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled?: boolean;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags?: Array<PatchRenderingRequestHeadTagsInner>;
+}
+
+export const PatchRenderingRequestRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type PatchRenderingRequestRenderingModeEnum =
+  (typeof PatchRenderingRequestRenderingModeEnum)[keyof typeof PatchRenderingRequestRenderingModeEnum];
+
+/**
+ *
+ */
+export interface PatchRenderingRequestHeadTagsInner {
+  [key: string]: any | any;
+  /**
+   * Any HTML element valid for use in the head tag
+   *
+   */
+  tag?: string;
+  /**
+   */
+  attributes?: PatchRenderingRequestHeadTagsInnerAttributes;
+  /**
+   * Text/content within the opening and closing tags of the element
+   * See <a href="https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens">documentation</a> on using context variables
+   *
+   */
+  content?: string;
+}
+/**
+ * Attributes of the HTML tag
+ */
+export interface PatchRenderingRequestHeadTagsInnerAttributes {
+  [key: string]: any | any;
+  /**
+   */
+  integrity?: Array<string>;
+}
+/**
+ *
+ */
 export interface PatchScimConfigurationRequest {
   /**
    * User ID attribute for generating unique user ids
@@ -9211,6 +10095,21 @@ export interface PatchSuspiciousIpThrottlingRequestStagePreUserRegistration {
    *
    */
   rate?: number;
+}
+/**
+ *
+ */
+export interface PatchTokenExchangeProfilesByIdRequest {
+  /**
+   * Friendly name of this profile.
+   *
+   */
+  name?: string;
+  /**
+   * Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI.
+   *
+   */
+  subject_token_type?: string;
 }
 /**
  *
@@ -10092,7 +10991,7 @@ export interface PostDeviceCredentials201Response {
  */
 export interface PostEmailTemplatesRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: PostEmailTemplatesRequestTemplateEnum;
@@ -10142,6 +11041,7 @@ export const PostEmailTemplatesRequestTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -10228,6 +11128,59 @@ export interface PostEnabledConnectionsRequest {
    */
   show_as_button?: boolean;
 }
+/**
+ *
+ */
+export interface PostEncryptionKeyRequest {
+  [key: string]: any | any;
+  /**
+   * Base64 encoded ciphertext of key material wrapped by public wrapping key.
+   *
+   */
+  wrapped_key: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionRequest {
+  [key: string]: any | any;
+  /**
+   * Type of the encryption key to be created.
+   *
+   */
+  type: PostEncryptionRequestTypeEnum;
+}
+
+export const PostEncryptionRequestTypeEnum = {
+  customer_provided_root_key: 'customer-provided-root-key',
+  tenant_encryption_key: 'tenant-encryption-key',
+} as const;
+export type PostEncryptionRequestTypeEnum =
+  (typeof PostEncryptionRequestTypeEnum)[keyof typeof PostEncryptionRequestTypeEnum];
+
+/**
+ *
+ */
+export interface PostEncryptionWrappingKey201Response {
+  [key: string]: any | any;
+  /**
+   * Public wrapping key in PEM format
+   *
+   */
+  public_key: string;
+  /**
+   * Encryption algorithm that shall be used to wrap your key material
+   *
+   */
+  algorithm: PostEncryptionWrappingKey201ResponseAlgorithmEnum;
+}
+
+export const PostEncryptionWrappingKey201ResponseAlgorithmEnum = {
+  CKM_RSA_AES_KEY_WRAP: 'CKM_RSA_AES_KEY_WRAP',
+} as const;
+export type PostEncryptionWrappingKey201ResponseAlgorithmEnum =
+  (typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum)[keyof typeof PostEncryptionWrappingKey201ResponseAlgorithmEnum];
+
 /**
  *
  */
@@ -13318,6 +14271,161 @@ export interface PostSigningKeys201Response {
 /**
  *
  */
+export interface PostSsoTicketRequest {
+  /**
+   * If provided, this will allow editing of the provided connection during the SSO Flow
+   *
+   */
+  connection_id?: string;
+  /**
+   */
+  connection_config?: PostSsoTicketRequestConnectionConfig;
+  /**
+   * List of client_ids that the connection will be enabled for.
+   *
+   */
+  enabled_clients?: Array<string>;
+  /**
+   * List of organizations that the connection will be enabled for.
+   *
+   */
+  enabled_organizations?: Array<PostSsoTicketRequestEnabledOrganizationsInner>;
+  /**
+   * Number of seconds for which the ticket is valid before expiration. If unspecified or set to 0, this value defaults to 432000 seconds (5 days).
+   *
+   */
+  ttl_sec?: number;
+  /**
+   */
+  domain_aliases_config?: PostSsoTicketRequestDomainAliasesConfig;
+}
+/**
+ * If provided, this will create a new connection for the SSO flow with the given configuration
+ */
+export interface PostSsoTicketRequestConnectionConfig {
+  /**
+   * The name of the connection that will be created as a part of the SSO flow.
+   *
+   */
+  name: string;
+  /**
+   * Connection name used in the new universal login experience
+   *
+   */
+  display_name?: string;
+  /**
+   * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
+   *
+   */
+  is_domain_connection?: boolean;
+  /**
+   * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
+   *
+   */
+  show_as_button?: boolean;
+  /**
+   * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+   *
+   */
+  metadata?: { [key: string]: any };
+  /**
+   */
+  options?: PostSsoTicketRequestConnectionConfigOptions | null;
+}
+/**
+ * The connection's options (depend on the connection strategy)
+ */
+export interface PostSsoTicketRequestConnectionConfigOptions {
+  /**
+   * URL for the icon. Must use HTTPS.
+   *
+   */
+  icon_url?: string | null;
+  /**
+   * List of domain_aliases that can be authenticated in the Identity Provider
+   *
+   */
+  domain_aliases?: Array<string>;
+  /**
+   */
+  idpinitiated?: PostSsoTicketRequestConnectionConfigOptionsIdpinitiated | null;
+}
+/**
+ * Allows IdP-initiated login
+ */
+export interface PostSsoTicketRequestConnectionConfigOptionsIdpinitiated {
+  /**
+   * Enables IdP-initiated login for this connection
+   *
+   */
+  enabled?: boolean;
+  /**
+   * Default application <code>client_id</code> user is redirected to after validated SAML response
+   *
+   */
+  client_id?: string;
+  /**
+   * The protocol used to connect to the the default application
+   *
+   */
+  client_protocol?: PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum;
+  /**
+   * Query string options to customize the behaviour for OpenID Connect when <code>idpinitiated.client_protocol</code> is <code>oauth2</code>. Allowed parameters: <code>redirect_uri</code>, <code>scope</code>, <code>response_type</code>. For example, <code>redirect_uri=https://jwt.io&scope=openid email&response_type=token</code>
+   *
+   */
+  client_authorizequery?: string;
+}
+
+export const PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum = {
+  samlp: 'samlp',
+  wsfed: 'wsfed',
+  oauth2: 'oauth2',
+} as const;
+export type PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum =
+  (typeof PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum)[keyof typeof PostSsoTicketRequestConnectionConfigOptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * Configuration for the setup of the connection’s domain_aliases in the self-service SSO flow.
+ */
+export interface PostSsoTicketRequestDomainAliasesConfig {
+  /**
+   * Whether the end user should complete the domain verification step. Possible values are 'none' (the step is not shown to the user), 'optional' (the user may add a domain alias in the domain verification step) or 'required' (the user must add a domain alias in order to enable the connection). Defaults to 'none'.
+   *
+   */
+  domain_verification: PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum;
+}
+
+export const PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum = {
+  none: 'none',
+  optional: 'optional',
+  required: 'required',
+} as const;
+export type PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum =
+  (typeof PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum)[keyof typeof PostSsoTicketRequestDomainAliasesConfigDomainVerificationEnum];
+
+/**
+ *
+ */
+export interface PostSsoTicketRequestEnabledOrganizationsInner {
+  /**
+   * Organization identifier.
+   *
+   */
+  organization_id: string;
+  /**
+   * When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
+   *
+   */
+  assign_membership_on_login?: boolean;
+  /**
+   * Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true.
+   *
+   */
+  show_as_button?: boolean;
+}
+/**
+ *
+ */
 export interface PostTestAction200Response {
   /**
    * The resulting payload after an action was executed.
@@ -13351,6 +14459,38 @@ export interface PostTicket200Response {
    */
   ticket_url: string;
 }
+/**
+ *
+ */
+export interface PostTokenExchangeProfilesRequest {
+  /**
+   * Friendly name of this profile.
+   *
+   */
+  name: string;
+  /**
+   * Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI.
+   *
+   */
+  subject_token_type: string;
+  /**
+   * The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger.
+   *
+   */
+  action_id: string;
+  /**
+   * The type of the profile, which controls how the profile will be executed when receiving a token exchange request.
+   *
+   */
+  type: PostTokenExchangeProfilesRequestTypeEnum;
+}
+
+export const PostTokenExchangeProfilesRequestTypeEnum = {
+  custom_authentication: 'custom_authentication',
+} as const;
+export type PostTokenExchangeProfilesRequestTypeEnum =
+  (typeof PostTokenExchangeProfilesRequestTypeEnum)[keyof typeof PostTokenExchangeProfilesRequestTypeEnum];
+
 /**
  *
  */
@@ -13844,6 +14984,89 @@ export interface PutFcmRequest {
    */
   server_key?: string | null;
 }
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequest {
+  /**
+   */
+  description: string;
+  /**
+   * Indicates whether or not this access control list is actively being used
+   *
+   */
+  active: boolean;
+  /**
+   * Indicates the order in which the ACL will be evaluated relative to other ACL rules.
+   *
+   */
+  priority: number;
+  /**
+   */
+  rule: PutNetworkAclsByIdRequestRule;
+}
+/**
+ *
+ */
+export type PutNetworkAclsByIdRequestRule =
+  | PutNetworkAclsByIdRequestRuleAnyOf
+  | PutNetworkAclsByIdRequestRuleAnyOf1;
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequestRuleAnyOf {
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  not_match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   * Identifies the origin of the request as the Management API (management), Authentication API (authentication), or either (tenant)
+   *
+   */
+  scope: PutNetworkAclsByIdRequestRuleAnyOfScopeEnum;
+}
+
+export const PutNetworkAclsByIdRequestRuleAnyOfScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PutNetworkAclsByIdRequestRuleAnyOfScopeEnum =
+  (typeof PutNetworkAclsByIdRequestRuleAnyOfScopeEnum)[keyof typeof PutNetworkAclsByIdRequestRuleAnyOfScopeEnum];
+
+/**
+ *
+ */
+export interface PutNetworkAclsByIdRequestRuleAnyOf1 {
+  /**
+   */
+  action: GetNetworkAclsById200ResponseRuleAnyOfAction;
+  /**
+   */
+  not_match: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   */
+  match?: GetNetworkAclsById200ResponseRuleAnyOfMatch;
+  /**
+   * Scope defines the different scopes of network requests the rule can be applied to.
+   *
+   */
+  scope: PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum;
+}
+
+export const PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum =
+  (typeof PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum)[keyof typeof PutNetworkAclsByIdRequestRuleAnyOf1ScopeEnum];
+
 /**
  *
  */
@@ -14519,6 +15742,16 @@ export interface SsProfile {
    */
   id: string;
   /**
+   * The name of the self-service Profile.
+   *
+   */
+  name: string;
+  /**
+   * The description of the self-service Profile.
+   *
+   */
+  description: string;
+  /**
    * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
    *
    */
@@ -14536,7 +15769,26 @@ export interface SsProfile {
   /**
    */
   branding: SsProfileBranding;
+  /**
+   * List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`]
+   *
+   */
+  allowed_strategies: Array<SsProfileAllowedStrategiesEnum>;
 }
+
+export const SsProfileAllowedStrategiesEnum = {
+  oidc: 'oidc',
+  samlp: 'samlp',
+  waad: 'waad',
+  google_apps: 'google-apps',
+  adfs: 'adfs',
+  okta: 'okta',
+  keycloak_samlp: 'keycloak-samlp',
+  pingfederate: 'pingfederate',
+} as const;
+export type SsProfileAllowedStrategiesEnum =
+  (typeof SsProfileAllowedStrategiesEnum)[keyof typeof SsProfileAllowedStrategiesEnum];
+
 /**
  *
  */
@@ -14563,6 +15815,16 @@ export interface SsProfileBrandingColors {
  */
 export interface SsProfileCreate {
   /**
+   * The name of the self-service Profile.
+   *
+   */
+  name: string;
+  /**
+   * The description of the self-service Profile.
+   *
+   */
+  description?: string;
+  /**
    * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
    *
    */
@@ -14570,7 +15832,26 @@ export interface SsProfileCreate {
   /**
    */
   branding?: SsProfileCreateBranding;
+  /**
+   * List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`]
+   *
+   */
+  allowed_strategies?: Array<SsProfileCreateAllowedStrategiesEnum>;
 }
+
+export const SsProfileCreateAllowedStrategiesEnum = {
+  oidc: 'oidc',
+  samlp: 'samlp',
+  waad: 'waad',
+  google_apps: 'google-apps',
+  adfs: 'adfs',
+  okta: 'okta',
+  keycloak_samlp: 'keycloak-samlp',
+  pingfederate: 'pingfederate',
+} as const;
+export type SsProfileCreateAllowedStrategiesEnum =
+  (typeof SsProfileCreateAllowedStrategiesEnum)[keyof typeof SsProfileCreateAllowedStrategiesEnum];
+
 /**
  *
  */
@@ -14586,11 +15867,17 @@ export interface SsProfileCreateBranding {
 /**
  *
  */
-export interface SsProfileList extends Array<SsProfile> {}
-/**
- *
- */
 export interface SsProfileUpdate {
+  /**
+   * The name of the self-service Profile.
+   *
+   */
+  name?: string;
+  /**
+   * The description of the self-service Profile.
+   *
+   */
+  description?: string | null;
   /**
    * List of attributes to be mapped that will be shown to the user during the SS-SSO flow.
    *
@@ -14599,7 +15886,26 @@ export interface SsProfileUpdate {
   /**
    */
   branding?: SsProfileUpdateBranding | null;
+  /**
+   * List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`]
+   *
+   */
+  allowed_strategies?: Array<SsProfileUpdateAllowedStrategiesEnum>;
 }
+
+export const SsProfileUpdateAllowedStrategiesEnum = {
+  oidc: 'oidc',
+  samlp: 'samlp',
+  waad: 'waad',
+  google_apps: 'google-apps',
+  adfs: 'adfs',
+  okta: 'okta',
+  keycloak_samlp: 'keycloak-samlp',
+  pingfederate: 'pingfederate',
+} as const;
+export type SsProfileUpdateAllowedStrategiesEnum =
+  (typeof SsProfileUpdateAllowedStrategiesEnum)[keyof typeof SsProfileUpdateAllowedStrategiesEnum];
+
 /**
  *
  */
@@ -15573,6 +16879,35 @@ export interface TwilioFactorProvider {
 /**
  *
  */
+export interface UpdatePhoneProviderRequest {
+  /**
+   * Name of the phone notification provider
+   *
+   */
+  name?: UpdatePhoneProviderRequestNameEnum;
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  credentials?: CreatePhoneProviderRequestCredentials;
+  /**
+   */
+  configuration?: GetBrandingPhoneProviders200ResponseProvidersInnerConfiguration;
+}
+
+export const UpdatePhoneProviderRequestNameEnum = {
+  twilio: 'twilio',
+  custom: 'custom',
+} as const;
+export type UpdatePhoneProviderRequestNameEnum =
+  (typeof UpdatePhoneProviderRequestNameEnum)[keyof typeof UpdatePhoneProviderRequestNameEnum];
+
+/**
+ *
+ */
 export interface UserBlock {
   /**
    * Array of identifier + IP address pairs.  IP address is optional, and may be omitted in certain circumstances (such as Account Lockout mode).
@@ -16127,7 +17462,7 @@ export interface GetActionsRequest {
  */
 export interface GetBindingsRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, custom-email-provider, password-reset-post-challenge</code>
    *
    */
   triggerId: string;
@@ -16167,7 +17502,7 @@ export interface PatchActionOperationRequest {
  */
 export interface PatchBindingsOperationRequest {
   /**
-   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, password-reset-post-challenge</code>
+   * An actions extensibility point. Acceptable values: <code>post-login, credentials-exchange, pre-user-registration, post-user-registration, post-change-password, send-phone-message, custom-email-provider, password-reset-post-challenge</code>
    *
    */
   triggerId: string;
@@ -16250,6 +17585,24 @@ export interface DeleteBrandingThemeRequest {
 /**
  *
  */
+export interface DeletePhoneProviderRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetBrandingPhoneProvidersRequest {
+  /**
+   * Whether the provider is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
 export interface GetBrandingThemeRequest {
   /**
    * The ID of the theme
@@ -16260,12 +17613,28 @@ export interface GetBrandingThemeRequest {
 /**
  *
  */
+export interface GetPhoneProviderRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface PatchBrandingThemeRequest {
   /**
    * The ID of the theme
    *
    */
   themeId: string;
+}
+/**
+ *
+ */
+export interface UpdatePhoneProviderOperationRequest {
+  /**
+   */
+  id: string;
 }
 /**
  *
@@ -16623,7 +17992,7 @@ export type GetConnectionsStrategyEnum =
  */
 export interface GetConnectionsRequest {
   /**
-   * The amount of entries per page. Default: no paging is used, all connections are returned
+   * The amount of entries per page. Defaults to 100 if not provided
    *
    */
   per_page?: number;
@@ -16733,7 +18102,7 @@ export interface GetStatusRequest {
  */
 export interface PatchConnectionsByIdRequest {
   /**
-   * The id of the connection to retrieve
+   * The id of the connection to update
    *
    */
   id: string;
@@ -16777,6 +18146,21 @@ export interface DeleteCustomDomainsByIdRequest {
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface GetCustomDomainsRequest {
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
 }
 /**
  *
@@ -16883,6 +18267,7 @@ export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -16900,7 +18285,7 @@ export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface GetEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -16913,6 +18298,7 @@ export const PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -16930,7 +18316,7 @@ export type PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameOperationRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum;
@@ -16943,6 +18329,7 @@ export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -16960,7 +18347,7 @@ export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface PutEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -17552,9 +18939,69 @@ export interface PostUsersImportsData {
 /**
  *
  */
+export interface DeleteEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeyRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface GetEncryptionKeysRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Default value is 50, maximum value is 100.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
 export interface GetSigningKeyRequest {
   /**
    * Key id of the key to retrieve
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionKeyOperationRequest {
+  /**
+   * Encryption key ID
+   *
+   */
+  kid: string;
+}
+/**
+ *
+ */
+export interface PostEncryptionWrappingKeyRequest {
+  /**
+   * Encryption key ID
    *
    */
   kid: string;
@@ -17655,6 +19102,56 @@ export interface GetLogsRequest {
 export interface GetLogsByIdRequest {
   /**
    * log_id of the log to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteNetworkAclsByIdRequest {
+  /**
+   * The id of the ACL to delete
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsRequest {
+  /**
+   * Use this field to request a specific page of the list results.
+   *
+   */
+  page?: number;
+  /**
+   * The amount of results per page.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
+/**
+ *
+ */
+export interface GetNetworkAclsByIdRequest {
+  /**
+   * The id of the access control list to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PutNetworkAclsByIdOperationRequest {
+  /**
+   * The id of the ACL to update.
    *
    */
   id: string;
@@ -18109,8 +19606,11 @@ export const GetCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
+  custom_form: 'custom-form',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -18129,6 +19629,7 @@ export const GetCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type GetCustomTextByLanguagePromptEnum =
   (typeof GetCustomTextByLanguagePromptEnum)[keyof typeof GetCustomTextByLanguagePromptEnum];
@@ -18137,39 +19638,62 @@ export type GetCustomTextByLanguagePromptEnum =
  *
  */
 export const GetCustomTextByLanguageLanguageEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -18178,13 +19702,22 @@ export const GetCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type GetCustomTextByLanguageLanguageEnum =
@@ -18236,7 +19769,7 @@ export interface GetPartialsRequest {
 /**
  *
  */
-export const PutCustomTextByLanguagePromptEnum = {
+export const GetRenderingPromptEnum = {
   login: 'login',
   login_id: 'login-id',
   login_password: 'login-password',
@@ -18247,8 +19780,11 @@ export const PutCustomTextByLanguagePromptEnum = {
   signup_password: 'signup-password',
   phone_identifier_enrollment: 'phone-identifier-enrollment',
   phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
   reset_password: 'reset-password',
+  custom_form: 'custom-form',
   consent: 'consent',
+  customized_consent: 'customized-consent',
   logout: 'logout',
   mfa_push: 'mfa-push',
   mfa_otp: 'mfa-otp',
@@ -18267,6 +19803,299 @@ export const PutCustomTextByLanguagePromptEnum = {
   invitation: 'invitation',
   common: 'common',
   passkeys: 'passkeys',
+  captcha: 'captcha',
+} as const;
+export type GetRenderingPromptEnum =
+  (typeof GetRenderingPromptEnum)[keyof typeof GetRenderingPromptEnum];
+
+/**
+ *
+ */
+export const GetRenderingScreenEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless_email_code: 'login-passwordless-email-code',
+  login_passwordless_email_link: 'login-passwordless-email-link',
+  login_passwordless_sms_otp: 'login-passwordless-sms-otp',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password_request: 'reset-password-request',
+  reset_password_email: 'reset-password-email',
+  reset_password: 'reset-password',
+  reset_password_success: 'reset-password-success',
+  reset_password_error: 'reset-password-error',
+  reset_password_mfa_email_challenge: 'reset-password-mfa-email-challenge',
+  reset_password_mfa_otp_challenge: 'reset-password-mfa-otp-challenge',
+  reset_password_mfa_phone_challenge: 'reset-password-mfa-phone-challenge',
+  reset_password_mfa_push_challenge_push: 'reset-password-mfa-push-challenge-push',
+  reset_password_mfa_recovery_code_challenge: 'reset-password-mfa-recovery-code-challenge',
+  reset_password_mfa_sms_challenge: 'reset-password-mfa-sms-challenge',
+  reset_password_mfa_voice_challenge: 'reset-password-mfa-voice-challenge',
+  reset_password_mfa_webauthn_platform_challenge: 'reset-password-mfa-webauthn-platform-challenge',
+  reset_password_mfa_webauthn_roaming_challenge: 'reset-password-mfa-webauthn-roaming-challenge',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  logout_complete: 'logout-complete',
+  logout_aborted: 'logout-aborted',
+  mfa_push_welcome: 'mfa-push-welcome',
+  mfa_push_enrollment_qr: 'mfa-push-enrollment-qr',
+  mfa_push_enrollment_code: 'mfa-push-enrollment-code',
+  mfa_push_success: 'mfa-push-success',
+  mfa_push_challenge_push: 'mfa-push-challenge-push',
+  mfa_push_list: 'mfa-push-list',
+  mfa_otp_enrollment_qr: 'mfa-otp-enrollment-qr',
+  mfa_otp_enrollment_code: 'mfa-otp-enrollment-code',
+  mfa_otp_challenge: 'mfa-otp-challenge',
+  mfa_voice_enrollment: 'mfa-voice-enrollment',
+  mfa_voice_challenge: 'mfa-voice-challenge',
+  mfa_phone_challenge: 'mfa-phone-challenge',
+  mfa_phone_enrollment: 'mfa-phone-enrollment',
+  mfa_webauthn_platform_enrollment: 'mfa-webauthn-platform-enrollment',
+  mfa_webauthn_roaming_enrollment: 'mfa-webauthn-roaming-enrollment',
+  mfa_webauthn_platform_challenge: 'mfa-webauthn-platform-challenge',
+  mfa_webauthn_roaming_challenge: 'mfa-webauthn-roaming-challenge',
+  mfa_webauthn_change_key_nickname: 'mfa-webauthn-change-key-nickname',
+  mfa_webauthn_enrollment_success: 'mfa-webauthn-enrollment-success',
+  mfa_webauthn_error: 'mfa-webauthn-error',
+  mfa_webauthn_not_available_error: 'mfa-webauthn-not-available-error',
+  mfa_country_codes: 'mfa-country-codes',
+  mfa_sms_enrollment: 'mfa-sms-enrollment',
+  mfa_sms_challenge: 'mfa-sms-challenge',
+  mfa_sms_list: 'mfa-sms-list',
+  mfa_email_challenge: 'mfa-email-challenge',
+  mfa_email_list: 'mfa-email-list',
+  mfa_recovery_code_enrollment: 'mfa-recovery-code-enrollment',
+  mfa_recovery_code_challenge: 'mfa-recovery-code-challenge',
+  mfa_detect_browser_capabilities: 'mfa-detect-browser-capabilities',
+  mfa_enroll_result: 'mfa-enroll-result',
+  mfa_login_options: 'mfa-login-options',
+  mfa_begin_enroll_options: 'mfa-begin-enroll-options',
+  status: 'status',
+  device_code_activation: 'device-code-activation',
+  device_code_activation_allowed: 'device-code-activation-allowed',
+  device_code_activation_denied: 'device-code-activation-denied',
+  device_code_confirmation: 'device-code-confirmation',
+  email_verification_result: 'email-verification-result',
+  email_otp_challenge: 'email-otp-challenge',
+  organization_selection: 'organization-selection',
+  organization_picker: 'organization-picker',
+  accept_invitation: 'accept-invitation',
+  redeem_ticket: 'redeem-ticket',
+  passkey_enrollment: 'passkey-enrollment',
+  passkey_enrollment_local: 'passkey-enrollment-local',
+  interstitial_captcha: 'interstitial-captcha',
+} as const;
+export type GetRenderingScreenEnum =
+  (typeof GetRenderingScreenEnum)[keyof typeof GetRenderingScreenEnum];
+
+/**
+ *
+ */
+export interface GetRenderingRequest {
+  /**
+   * Name of the prompt
+   *
+   */
+  prompt: GetRenderingPromptEnum;
+  /**
+   * Name of the screen
+   *
+   */
+  screen: GetRenderingScreenEnum;
+}
+
+/**
+ *
+ */
+export const PatchRenderingOperationPromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password: 'reset-password',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  mfa_push: 'mfa-push',
+  mfa_otp: 'mfa-otp',
+  mfa_voice: 'mfa-voice',
+  mfa_phone: 'mfa-phone',
+  mfa_webauthn: 'mfa-webauthn',
+  mfa_sms: 'mfa-sms',
+  mfa_email: 'mfa-email',
+  mfa_recovery_code: 'mfa-recovery-code',
+  mfa: 'mfa',
+  status: 'status',
+  device_flow: 'device-flow',
+  email_verification: 'email-verification',
+  email_otp_challenge: 'email-otp-challenge',
+  organizations: 'organizations',
+  invitation: 'invitation',
+  common: 'common',
+  passkeys: 'passkeys',
+  captcha: 'captcha',
+} as const;
+export type PatchRenderingOperationPromptEnum =
+  (typeof PatchRenderingOperationPromptEnum)[keyof typeof PatchRenderingOperationPromptEnum];
+
+/**
+ *
+ */
+export const PatchRenderingOperationScreenEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless_email_code: 'login-passwordless-email-code',
+  login_passwordless_email_link: 'login-passwordless-email-link',
+  login_passwordless_sms_otp: 'login-passwordless-sms-otp',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password_request: 'reset-password-request',
+  reset_password_email: 'reset-password-email',
+  reset_password: 'reset-password',
+  reset_password_success: 'reset-password-success',
+  reset_password_error: 'reset-password-error',
+  reset_password_mfa_email_challenge: 'reset-password-mfa-email-challenge',
+  reset_password_mfa_otp_challenge: 'reset-password-mfa-otp-challenge',
+  reset_password_mfa_phone_challenge: 'reset-password-mfa-phone-challenge',
+  reset_password_mfa_push_challenge_push: 'reset-password-mfa-push-challenge-push',
+  reset_password_mfa_recovery_code_challenge: 'reset-password-mfa-recovery-code-challenge',
+  reset_password_mfa_sms_challenge: 'reset-password-mfa-sms-challenge',
+  reset_password_mfa_voice_challenge: 'reset-password-mfa-voice-challenge',
+  reset_password_mfa_webauthn_platform_challenge: 'reset-password-mfa-webauthn-platform-challenge',
+  reset_password_mfa_webauthn_roaming_challenge: 'reset-password-mfa-webauthn-roaming-challenge',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  logout_complete: 'logout-complete',
+  logout_aborted: 'logout-aborted',
+  mfa_push_welcome: 'mfa-push-welcome',
+  mfa_push_enrollment_qr: 'mfa-push-enrollment-qr',
+  mfa_push_enrollment_code: 'mfa-push-enrollment-code',
+  mfa_push_success: 'mfa-push-success',
+  mfa_push_challenge_push: 'mfa-push-challenge-push',
+  mfa_push_list: 'mfa-push-list',
+  mfa_otp_enrollment_qr: 'mfa-otp-enrollment-qr',
+  mfa_otp_enrollment_code: 'mfa-otp-enrollment-code',
+  mfa_otp_challenge: 'mfa-otp-challenge',
+  mfa_voice_enrollment: 'mfa-voice-enrollment',
+  mfa_voice_challenge: 'mfa-voice-challenge',
+  mfa_phone_challenge: 'mfa-phone-challenge',
+  mfa_phone_enrollment: 'mfa-phone-enrollment',
+  mfa_webauthn_platform_enrollment: 'mfa-webauthn-platform-enrollment',
+  mfa_webauthn_roaming_enrollment: 'mfa-webauthn-roaming-enrollment',
+  mfa_webauthn_platform_challenge: 'mfa-webauthn-platform-challenge',
+  mfa_webauthn_roaming_challenge: 'mfa-webauthn-roaming-challenge',
+  mfa_webauthn_change_key_nickname: 'mfa-webauthn-change-key-nickname',
+  mfa_webauthn_enrollment_success: 'mfa-webauthn-enrollment-success',
+  mfa_webauthn_error: 'mfa-webauthn-error',
+  mfa_webauthn_not_available_error: 'mfa-webauthn-not-available-error',
+  mfa_country_codes: 'mfa-country-codes',
+  mfa_sms_enrollment: 'mfa-sms-enrollment',
+  mfa_sms_challenge: 'mfa-sms-challenge',
+  mfa_sms_list: 'mfa-sms-list',
+  mfa_email_challenge: 'mfa-email-challenge',
+  mfa_email_list: 'mfa-email-list',
+  mfa_recovery_code_enrollment: 'mfa-recovery-code-enrollment',
+  mfa_recovery_code_challenge: 'mfa-recovery-code-challenge',
+  mfa_detect_browser_capabilities: 'mfa-detect-browser-capabilities',
+  mfa_enroll_result: 'mfa-enroll-result',
+  mfa_login_options: 'mfa-login-options',
+  mfa_begin_enroll_options: 'mfa-begin-enroll-options',
+  status: 'status',
+  device_code_activation: 'device-code-activation',
+  device_code_activation_allowed: 'device-code-activation-allowed',
+  device_code_activation_denied: 'device-code-activation-denied',
+  device_code_confirmation: 'device-code-confirmation',
+  email_verification_result: 'email-verification-result',
+  email_otp_challenge: 'email-otp-challenge',
+  organization_selection: 'organization-selection',
+  organization_picker: 'organization-picker',
+  accept_invitation: 'accept-invitation',
+  redeem_ticket: 'redeem-ticket',
+  passkey_enrollment: 'passkey-enrollment',
+  passkey_enrollment_local: 'passkey-enrollment-local',
+  interstitial_captcha: 'interstitial-captcha',
+} as const;
+export type PatchRenderingOperationScreenEnum =
+  (typeof PatchRenderingOperationScreenEnum)[keyof typeof PatchRenderingOperationScreenEnum];
+
+/**
+ *
+ */
+export interface PatchRenderingOperationRequest {
+  /**
+   * Name of the prompt
+   *
+   */
+  prompt: PatchRenderingOperationPromptEnum;
+  /**
+   * Name of the screen
+   *
+   */
+  screen: PatchRenderingOperationScreenEnum;
+}
+
+/**
+ *
+ */
+export const PutCustomTextByLanguagePromptEnum = {
+  login: 'login',
+  login_id: 'login-id',
+  login_password: 'login-password',
+  login_passwordless: 'login-passwordless',
+  login_email_verification: 'login-email-verification',
+  signup: 'signup',
+  signup_id: 'signup-id',
+  signup_password: 'signup-password',
+  phone_identifier_enrollment: 'phone-identifier-enrollment',
+  phone_identifier_challenge: 'phone-identifier-challenge',
+  email_identifier_challenge: 'email-identifier-challenge',
+  reset_password: 'reset-password',
+  custom_form: 'custom-form',
+  consent: 'consent',
+  customized_consent: 'customized-consent',
+  logout: 'logout',
+  mfa_push: 'mfa-push',
+  mfa_otp: 'mfa-otp',
+  mfa_voice: 'mfa-voice',
+  mfa_phone: 'mfa-phone',
+  mfa_webauthn: 'mfa-webauthn',
+  mfa_sms: 'mfa-sms',
+  mfa_email: 'mfa-email',
+  mfa_recovery_code: 'mfa-recovery-code',
+  mfa: 'mfa',
+  status: 'status',
+  device_flow: 'device-flow',
+  email_verification: 'email-verification',
+  email_otp_challenge: 'email-otp-challenge',
+  organizations: 'organizations',
+  invitation: 'invitation',
+  common: 'common',
+  passkeys: 'passkeys',
+  captcha: 'captcha',
 } as const;
 export type PutCustomTextByLanguagePromptEnum =
   (typeof PutCustomTextByLanguagePromptEnum)[keyof typeof PutCustomTextByLanguagePromptEnum];
@@ -18275,39 +20104,62 @@ export type PutCustomTextByLanguagePromptEnum =
  *
  */
 export const PutCustomTextByLanguageLanguageEnum = {
+  am: 'am',
   ar: 'ar',
+  ar_EG: 'ar-EG',
+  ar_SA: 'ar-SA',
+  az: 'az',
   bg: 'bg',
+  bn: 'bn',
   bs: 'bs',
   ca_ES: 'ca-ES',
+  cnr: 'cnr',
   cs: 'cs',
   cy: 'cy',
   da: 'da',
   de: 'de',
   el: 'el',
   en: 'en',
+  en_CA: 'en-CA',
   es: 'es',
+  es_419: 'es-419',
+  es_AR: 'es-AR',
+  es_MX: 'es-MX',
   et: 'et',
   eu_ES: 'eu-ES',
+  fa: 'fa',
   fi: 'fi',
   fr: 'fr',
   fr_CA: 'fr-CA',
   fr_FR: 'fr-FR',
   gl_ES: 'gl-ES',
+  gu: 'gu',
   he: 'he',
   hi: 'hi',
   hr: 'hr',
   hu: 'hu',
+  hy: 'hy',
   id: 'id',
   is: 'is',
   it: 'it',
   ja: 'ja',
+  ka: 'ka',
+  kk: 'kk',
+  kn: 'kn',
   ko: 'ko',
   lt: 'lt',
   lv: 'lv',
+  mk: 'mk',
+  ml: 'ml',
+  mn: 'mn',
+  mr: 'mr',
+  ms: 'ms',
+  my: 'my',
   nb: 'nb',
   nl: 'nl',
   nn: 'nn',
   no: 'no',
+  pa: 'pa',
   pl: 'pl',
   pt: 'pt',
   pt_BR: 'pt-BR',
@@ -18316,13 +20168,22 @@ export const PutCustomTextByLanguageLanguageEnum = {
   ru: 'ru',
   sk: 'sk',
   sl: 'sl',
+  so: 'so',
+  sq: 'sq',
   sr: 'sr',
   sv: 'sv',
+  sw: 'sw',
+  ta: 'ta',
+  te: 'te',
   th: 'th',
+  tl: 'tl',
   tr: 'tr',
   uk: 'uk',
+  ur: 'ur',
   vi: 'vi',
+  zgh: 'zgh',
   zh_CN: 'zh-CN',
+  zh_HK: 'zh-HK',
   zh_TW: 'zh-TW',
 } as const;
 export type PutCustomTextByLanguageLanguageEnum =
@@ -18705,6 +20566,65 @@ export interface DeleteSelfServiceProfilesByIdRequest {
    */
   id: string;
 }
+
+/**
+ *
+ */
+export const GetSelfServiceProfileCustomTextLanguageEnum = {
+  en: 'en',
+} as const;
+export type GetSelfServiceProfileCustomTextLanguageEnum =
+  (typeof GetSelfServiceProfileCustomTextLanguageEnum)[keyof typeof GetSelfServiceProfileCustomTextLanguageEnum];
+
+/**
+ *
+ */
+export const GetSelfServiceProfileCustomTextPageEnum = {
+  get_started: 'get-started',
+} as const;
+export type GetSelfServiceProfileCustomTextPageEnum =
+  (typeof GetSelfServiceProfileCustomTextPageEnum)[keyof typeof GetSelfServiceProfileCustomTextPageEnum];
+
+/**
+ *
+ */
+export interface GetSelfServiceProfileCustomTextRequest {
+  /**
+   * The id of the self-service profile.
+   *
+   */
+  id: string;
+  /**
+   * The language of the custom text.
+   *
+   */
+  language: GetSelfServiceProfileCustomTextLanguageEnum;
+  /**
+   * The page where the custom text is shown.
+   *
+   */
+  page: GetSelfServiceProfileCustomTextPageEnum;
+}
+/**
+ *
+ */
+export interface GetSelfServiceProfilesRequest {
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+}
 /**
  *
  */
@@ -18728,12 +20648,66 @@ export interface PatchSelfServiceProfilesByIdRequest {
 /**
  *
  */
-export interface PostSsoTicketRequest {
+export interface PostRevokeRequest {
   /**
-   * The id of the sso-profile to retrieve
+   * The id of the self-service profile
+   *
+   */
+  profileId: string;
+  /**
+   * The id of the ticket to revoke
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface PostSsoTicketOperationRequest {
+  /**
+   * The id of the self-service profile to retrieve
+   *
+   */
+  id: string;
+}
+
+/**
+ *
+ */
+export const PutSelfServiceProfileCustomTextLanguageEnum = {
+  en: 'en',
+} as const;
+export type PutSelfServiceProfileCustomTextLanguageEnum =
+  (typeof PutSelfServiceProfileCustomTextLanguageEnum)[keyof typeof PutSelfServiceProfileCustomTextLanguageEnum];
+
+/**
+ *
+ */
+export const PutSelfServiceProfileCustomTextPageEnum = {
+  get_started: 'get-started',
+} as const;
+export type PutSelfServiceProfileCustomTextPageEnum =
+  (typeof PutSelfServiceProfileCustomTextPageEnum)[keyof typeof PutSelfServiceProfileCustomTextPageEnum];
+
+/**
+ *
+ */
+export interface PutSelfServiceProfileCustomTextRequest {
+  /**
+   * The id of the self-service profile.
+   *
+   */
+  id: string;
+  /**
+   * The language of the custom text.
+   *
+   */
+  language: PutSelfServiceProfileCustomTextLanguageEnum;
+  /**
+   * The page where the custom text is shown.
+   *
+   */
+  page: PutSelfServiceProfileCustomTextPageEnum;
 }
 /**
  *
@@ -18784,6 +20758,51 @@ export interface TenantSettingsRouteRequest {
    *
    */
   include_fields?: boolean;
+}
+/**
+ *
+ */
+export interface DeleteTokenExchangeProfilesByIdRequest {
+  /**
+   * ID of the Token Exchange Profile to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetTokenExchangeProfilesRequest {
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetTokenExchangeProfilesByIdRequest {
+  /**
+   * ID of the Token Exchange Profile to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchTokenExchangeProfilesByIdOperationRequest {
+  /**
+   * ID of the Token Exchange Profile to update.
+   *
+   */
+  id: string;
 }
 /**
  *
@@ -18875,6 +20894,21 @@ export interface DeleteAuthenticatorsRequest {
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface DeleteFederatedConnectionsTokensetsByTokensetIdRequest {
+  /**
+   * Id of the user that owns the tokenset
+   *
+   */
+  id: string;
+  /**
+   * The tokenset id
+   *
+   */
+  tokenset_id: string;
 }
 
 /**
@@ -19088,6 +21122,16 @@ export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
 export interface GetEnrollmentsRequest {
   /**
    * ID of the user to list enrollments for.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetFederatedConnectionsTokensetsRequest {
+  /**
+   * User identifier
    *
    */
   id: string;

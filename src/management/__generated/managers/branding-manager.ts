@@ -1,15 +1,23 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  CreatePhoneProviderRequest,
   GetBranding200Response,
+  GetBrandingPhoneProviders200Response,
+  GetBrandingPhoneProviders200ResponseProvidersInner,
   GetUniversalLogin200Response,
   PatchBrandingRequest,
   PostBrandingTheme200Response,
   PostBrandingThemeRequest,
   PutUniversalLoginRequest,
+  UpdatePhoneProviderRequest,
   DeleteBrandingThemeRequest,
+  DeletePhoneProviderRequest,
+  GetBrandingPhoneProvidersRequest,
   GetBrandingThemeRequest,
+  GetPhoneProviderRequest,
   PatchBrandingThemeRequest,
+  UpdatePhoneProviderOperationRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -18,6 +26,35 @@ const { BaseAPI } = runtime;
  *
  */
 export class BrandingManager extends BaseAPI {
+  /**
+   * Create a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
+   * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
+   *
+   * Configure the phone provider
+   *
+   * @throws {RequiredError}
+   */
+  async configurePhoneProvider(
+    bodyParameters: CreatePhoneProviderRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetBrandingPhoneProviders200ResponseProvidersInner>> {
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/providers`,
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
   /**
    * Delete branding theme.
    * Delete branding theme
@@ -35,6 +72,33 @@ export class BrandingManager extends BaseAPI {
         path: `/branding/themes/{themeId}`.replace(
           '{themeId}',
           encodeURIComponent(String(requestParameters.themeId))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Delete the configured phone provider.
+   *
+   * Deletes a Phone Provider
+   *
+   * @throws {RequiredError}
+   */
+  async deletePhoneProvider(
+    requestParameters: DeletePhoneProviderRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/providers/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
         ),
         method: 'DELETE',
       },
@@ -80,6 +144,36 @@ export class BrandingManager extends BaseAPI {
   }
 
   /**
+   * Retrieve a list of <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone providers</a> details set for a Tenant. A list of fields to include or exclude may also be specified.
+   *
+   * Get a list of phone providers
+   *
+   * @throws {RequiredError}
+   */
+  async getAllPhoneProviders(
+    requestParameters: GetBrandingPhoneProvidersRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetBrandingPhoneProviders200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'disabled',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/providers`,
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Retrieve branding theme.
    * Get branding theme
    *
@@ -117,6 +211,33 @@ export class BrandingManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/branding/themes/default`,
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a> details. A list of fields to include or exclude may also be specified.
+   *
+   * Get a phone provider
+   *
+   * @throws {RequiredError}
+   */
+  async getPhoneProvider(
+    requestParameters: GetPhoneProviderRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetBrandingPhoneProviders200ResponseProvidersInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/providers/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
         method: 'GET',
       },
       initOverrides
@@ -281,5 +402,40 @@ export class BrandingManager extends BaseAPI {
     );
 
     return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
+   * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
+   *
+   * Update the phone provider
+   *
+   * @throws {RequiredError}
+   */
+  async updatePhoneProvider(
+    requestParameters: UpdatePhoneProviderOperationRequest,
+    bodyParameters: UpdatePhoneProviderRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetBrandingPhoneProviders200ResponseProvidersInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/providers/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 }
