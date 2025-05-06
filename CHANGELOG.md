@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.23.0](https://github.com/auth0/node-auth0/tree/v4.23.0) (2025-05-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.22.0...v4.23.0)
+
+**Added**
+
+- Add test for setting the external_id parameter [\#1038](https://github.com/auth0/node-auth0/pull/1038) ([matthewcarroll](https://github.com/matthewcarroll))
+- Added policies in clients endpoint (GET/PATCH/POST) [\#1103](https://github.com/auth0/node-auth0/pull/1103) ([tanya732](https://github.com/tanya732))
+
 ## [v4.22.0](https://github.com/auth0/node-auth0/tree/v4.22.0) (2025-04-16)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.21.0...v4.22.0)
