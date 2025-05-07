@@ -73,6 +73,13 @@ describe('ClientsManager', () => {
         client_secret: 'tes_secret',
         app_type: 'spa',
         logo_uri: 'test_logo_uri',
+        token_quota: {
+          client_credentials: {
+            per_day: 100,
+            per_hour: 20,
+            enforce: true,
+          },
+        },
       },
     ];
 
@@ -109,7 +116,7 @@ describe('ClientsManager', () => {
         expect(clients.data[0].client_secret).toBe(response[0].client_secret);
         expect(clients.data[0].app_type).toBe(response[0].app_type);
         expect(clients.data[0].logo_uri).toBe(response[0].logo_uri);
-
+        expect(clients.data[0].token_quota).toStrictEqual(response[0].token_quota);
         done();
       });
     });
@@ -169,6 +176,13 @@ describe('ClientsManager', () => {
       description: 'test_description',
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
@@ -179,6 +193,13 @@ describe('ClientsManager', () => {
       client_secret: 'test_secret',
       app_type: data.app_type,
       logo_uri: data.logo_uri,
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     let request: nock.Scope;
 
@@ -236,7 +257,7 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
-
+        expect(client.data.token_quota).toStrictEqual(response.token_quota);
         done();
       });
     });
@@ -252,6 +273,13 @@ describe('ClientsManager', () => {
       client_secret: 'test_secret',
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     let request: nock.Scope;
 
@@ -283,6 +311,7 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
+        expect(client.data.token_quota).toStrictEqual(response.token_quota);
 
         done();
       });
@@ -295,6 +324,13 @@ describe('ClientsManager', () => {
       description: 'test_description',
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
@@ -305,6 +341,13 @@ describe('ClientsManager', () => {
       client_secret: 'test_secret',
       app_type: data.app_type,
       logo_uri: data.logo_uri,
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
 
     let request: nock.Scope;
@@ -350,6 +393,7 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
+        expect(client.data.token_quota).toStrictEqual(response.token_quota);
 
         done();
       });
