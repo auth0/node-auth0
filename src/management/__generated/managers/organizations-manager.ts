@@ -488,7 +488,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get a specific organization by name
+   * Retrieve details about a single Organization specified by name.
    *
    * Get organization by name
    *
@@ -627,19 +627,25 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * List available organizations. This endpoint supports two types of pagination:
-   * - Offset pagination
-   * - Checkpoint pagination
+   * Retrieve detailed list of all Organizations available in your tenant. For more information, see Auth0 Organizations.
+   *
+   * This endpoint supports two types of pagination:
+   * <ul>
+   * <li>Offset pagination</li>
+   * <li>Checkpoint pagination</li>
+   * </ul>
    *
    * Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.
    *
    * <h2>Checkpoint Pagination</h2>
    *
    * To search by checkpoint, use the following parameters:
-   * - from: Optional id from which to start selection.
-   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   * <ul>
+   * <li><code>from</code>: Optional id from which to start selection.</li>
+   * <li><code>take</code>: The total number of entries to retrieve when using the <code>from</code> parameter. Defaults to 50.</li>
+   * </ul>
    *
-   * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
    *
    * Get organizations
    *
@@ -697,7 +703,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get a specific organization
+   * Retrieve details about a single Organization specified by ID.
    *
    * Get organization
    *
@@ -757,7 +763,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Modify an organization
+   * Update the details of a specific <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/create-organizations">Organization</a>, such as name and display name, branding options, and metadata.
    *
    * Modify an Organization
    *
@@ -950,7 +956,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Create an organization
+   * Create a new Organization within your tenant.  To learn more about Organization settings, behavior, and configuration options, review <a href="https://auth0.com/docs/manage-users/organizations/create-first-organization">Create Your First Organization</a>.
    *
    * Create an Organization
    *
