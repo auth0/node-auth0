@@ -1,7 +1,7 @@
 export interface TokenQuotaLimit {
   quota: number;
   remaining: number;
-  time: number;
+  resetAfter: number;
 }
 
 export interface TokenQuotaBucket {
@@ -24,8 +24,7 @@ export class HttpResponseHeadersUtils {
       return headers[key] || null;
     };
 
-    const quotaHeader =
-      getHeaderValue('x-quota-client-limit') || getHeaderValue('auth0-quota-client-limit');
+    const quotaHeader = getHeaderValue('auth0-client-quota-limit');
     return quotaHeader ? this.parseQuota(quotaHeader) : null;
   }
 
@@ -45,9 +44,7 @@ export class HttpResponseHeadersUtils {
       return headers[key] || null;
     };
 
-    const quotaHeader =
-      getHeaderValue('x-quota-Organization-limit') ||
-      getHeaderValue('auth0-quota-Organization-limit');
+    const quotaHeader = getHeaderValue('auth0-organization-quota-limit');
     return quotaHeader ? this.parseQuota(quotaHeader) : null;
   }
 
@@ -66,7 +63,7 @@ export class HttpResponseHeadersUtils {
       const attributes = part.split(';');
       let quota = 0,
         remaining = 0,
-        time = 0;
+        resetAfter = 0;
 
       for (const attribute of attributes) {
         const [key, value] = attribute.split('=').map((s) => s.trim());
@@ -80,15 +77,15 @@ export class HttpResponseHeadersUtils {
             remaining = parseInt(value, 10);
             break;
           case 't':
-            time = parseInt(value, 10);
+            resetAfter = parseInt(value, 10);
             break;
         }
       }
 
       if (attributes[0].includes('per_hour')) {
-        perHour = { quota, remaining, time };
+        perHour = { quota, remaining, resetAfter };
       } else if (attributes[0].includes('per_day')) {
-        perDay = { quota, remaining, time };
+        perDay = { quota, remaining, resetAfter };
       }
     }
 
