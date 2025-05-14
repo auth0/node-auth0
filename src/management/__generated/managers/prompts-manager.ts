@@ -1,11 +1,15 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetAllRendering200Response,
   GetRendering200Response,
   PatchRendering200Response,
   PatchRenderingRequest,
   PromptsSettings,
   PromptsSettingsUpdate,
+  GetAllRendering200ResponseOneOf,
+  GetAllRendering200ResponseOneOfInner,
+  GetAllRenderingRequest,
   GetCustomTextByLanguageRequest,
   GetPartialsRequest,
   GetRenderingRequest,
@@ -20,6 +24,71 @@ const { BaseAPI } = runtime;
  *
  */
 export class PromptsManager extends BaseAPI {
+  /**
+   * Get render setting configurations for all screens.
+   * Get render setting configurations for all screens
+   *
+   * @throws {RequiredError}
+   */
+  async getAllRenderingSettings(
+    requestParameters: GetAllRenderingRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetAllRendering200ResponseOneOf>>;
+  async getAllRenderingSettings(
+    requestParameters?: GetAllRenderingRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetAllRendering200ResponseOneOfInner>>>;
+  async getAllRenderingSettings(
+    requestParameters: GetAllRenderingRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetAllRendering200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'prompt',
+        config: {},
+      },
+      {
+        key: 'screen',
+        config: {},
+      },
+      {
+        key: 'rendering_mode',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/prompts/rendering`,
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
   /**
    * Retrieve custom text for a specific prompt and language.
    * Get custom text for a prompt

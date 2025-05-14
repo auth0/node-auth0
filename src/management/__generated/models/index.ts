@@ -4788,6 +4788,69 @@ export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
 /**
  *
  */
+export type GetAllRendering200Response =
+  | Array<GetAllRendering200ResponseOneOfInner>
+  | GetAllRendering200ResponseOneOf;
+/**
+ *
+ */
+export interface GetAllRendering200ResponseOneOf {
+  /**
+   */
+  configs: Array<GetAllRendering200ResponseOneOfInner>;
+  /**
+   * the index of the first configuration in the response (before filtering)
+   *
+   */
+  start: number;
+  /**
+   * the maximum number of configurations shown per page (before filtering)
+   *
+   */
+  limit: number;
+  /**
+   * the total number of configurations on this tenant
+   *
+   */
+  total: number;
+}
+/**
+ *
+ */
+export interface GetAllRendering200ResponseOneOfInner {
+  [key: string]: any | any;
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode: GetAllRendering200ResponseOneOfInnerRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled: boolean | null;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+}
+
+export const GetAllRendering200ResponseOneOfInnerRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type GetAllRendering200ResponseOneOfInnerRenderingModeEnum =
+  (typeof GetAllRendering200ResponseOneOfInnerRenderingModeEnum)[keyof typeof GetAllRendering200ResponseOneOfInnerRenderingModeEnum];
+
+/**
+ *
+ */
 export interface GetApns200Response {
   /**
    */
@@ -19612,6 +19675,62 @@ export interface PostOrganizationMemberRolesOperationRequest {
    *
    */
   user_id: string;
+}
+
+/**
+ *
+ */
+export const GetAllRenderingRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type GetAllRenderingRenderingModeEnum =
+  (typeof GetAllRenderingRenderingModeEnum)[keyof typeof GetAllRenderingRenderingModeEnum];
+
+/**
+ *
+ */
+export interface GetAllRenderingRequest {
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (default: true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Maximum value is 100, default value is 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total configuration count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Name of the prompt to filter by
+   *
+   */
+  prompt?: string;
+  /**
+   * Name of the screen to filter by
+   *
+   */
+  screen?: string;
+  /**
+   * Rendering mode to filter by
+   *
+   */
+  rendering_mode?: GetAllRenderingRenderingModeEnum;
 }
 
 /**
