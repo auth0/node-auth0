@@ -2,14 +2,14 @@ import { HttpResponseHeadersUtils } from '../../src/lib/httpResponseHeadersUtils
 
 describe('HttpResponseHeadersUtils', () => {
   describe('getClientQuotaLimit', () => {
-    it('should return a valid TokenQuotaBucket when x-quota-client-limit header is present', () => {
+    it('should return a valid TokenQuotaBucket when auth0-client-quota-limit header is present', () => {
       const headers = {
-        'x-quota-client-limit': 'per_hour;q=100;r=50;t=3600,per_day;q=1000;r=500;t=86400',
+        'auth0-client-quota-limit': 'per_hour;q=100;r=50;t=3600,per_day;q=1000;r=500;t=86400',
       };
       const result = HttpResponseHeadersUtils.getClientQuotaLimit(headers);
       expect(result).toEqual({
-        perHour: { quota: 100, remaining: 50, time: 3600 },
-        perDay: { quota: 1000, remaining: 500, time: 86400 },
+        perHour: { quota: 100, remaining: 50, resetAfter: 3600 },
+        perDay: { quota: 1000, remaining: 500, resetAfter: 86400 },
       });
     });
 
@@ -21,11 +21,11 @@ describe('HttpResponseHeadersUtils', () => {
   });
 
   describe('getOrganizationQuotaLimit', () => {
-    it('should return a valid TokenQuotaBucket when x-quota-Organization-limit header is present', () => {
-      const headers = { 'x-quota-Organization-limit': 'per_hour;q=200;r=150;t=3600' };
+    it('should return a valid TokenQuotaBucket when auth0-organization-quota-limit header is present', () => {
+      const headers = { 'auth0-organization-quota-limit': 'per_hour;q=200;r=150;t=3600' };
       const result = HttpResponseHeadersUtils.getOrganizationQuotaLimit(headers);
       expect(result).toEqual({
-        perHour: { quota: 200, remaining: 150, time: 3600 },
+        perHour: { quota: 200, remaining: 150, resetAfter: 3600 },
         perDay: undefined,
       });
     });
@@ -42,8 +42,8 @@ describe('HttpResponseHeadersUtils', () => {
       const tokenQuota = 'per_hour;q=300;r=250;t=3600,per_day;q=3000;r=2500;t=86400';
       const result = HttpResponseHeadersUtils['parseQuota'](tokenQuota);
       expect(result).toEqual({
-        perHour: { quota: 300, remaining: 250, time: 3600 },
-        perDay: { quota: 3000, remaining: 2500, time: 86400 },
+        perHour: { quota: 300, remaining: 250, resetAfter: 3600 },
+        perDay: { quota: 3000, remaining: 2500, resetAfter: 86400 },
       });
     });
 
@@ -51,7 +51,7 @@ describe('HttpResponseHeadersUtils', () => {
       const tokenQuota = 'per_hour;q=300;r=250';
       const result = HttpResponseHeadersUtils['parseQuota'](tokenQuota);
       expect(result).toEqual({
-        perHour: { quota: 300, remaining: 250, time: 0 },
+        perHour: { quota: 300, remaining: 250, resetAfter: 0 },
         perDay: undefined,
       });
     });
