@@ -332,16 +332,33 @@ describe('OAuth', () => {
       });
     });
 
-    it('should send authorization_details when provided', async () => {
+    it('should send authorization_details when provided as string', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.pushedAuthorization({
+          client_id: 'test-client-id',
+          response_type: 'code',
+          redirect_uri: 'https://example-as-string.com',
+          authorization_details: JSON.stringify([
+            { type: 'payment_initiation', actions: ['write'] },
+          ]),
+        })
+      ).resolves.toMatchObject({
+        data: {
+          request_uri: 'https://www.request.uri',
+          expires_in: 86400,
+        },
+      });
+    });
+
+    it('should send authorization_details when provided as array', async () => {
       const oauth = new OAuth(opts);
       await expect(
         oauth.pushedAuthorization({
           client_id: 'test-client-id',
           response_type: 'code',
           redirect_uri: 'https://example.com',
-          authorization_details: JSON.stringify([
-            { type: 'payment_initiation', actions: ['write'] },
-          ]),
+          authorization_details: [{ type: 'payment_initiation', actions: ['write'] }],
         })
       ).resolves.toMatchObject({
         data: {
