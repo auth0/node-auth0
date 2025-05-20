@@ -14,6 +14,7 @@ import {
   PutPartialsPromptEnum,
   GetRendering200Response,
   PatchRenderingRequest,
+  GetAllRendering200ResponseOneOfInner,
 } from '../../src/index.js';
 
 import { checkMethod } from './tests.util.js';
@@ -474,5 +475,70 @@ describe('PromptsManager', () => {
     const uri = `/prompts/login/screen/consent/rendering`;
     const method = 'patch';
     checkMethod({ operation, uri, method });
+  });
+
+  describe('#getAllRenderingSettings', () => {
+    const data: Partial<GetAllRendering200ResponseOneOfInner>[] = [
+      {
+        default_head_tags_disabled: true,
+      },
+    ];
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).get('/prompts/rendering').reply(200, data);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      prompts.getAllRenderingSettings().then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/prompts/rendering').reply(500, {});
+
+      prompts.getAllRenderingSettings().catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/prompts/rendering').reply(200, data);
+
+      prompts.getAllRenderingSettings().then((provider) => {
+        expect(provider.data[0].default_head_tags_disabled).toEqual(
+          data[0].default_head_tags_disabled
+        );
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/prompts/rendering', (done) => {
+      prompts.getAllRenderingSettings().then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get('/prompts/rendering')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      prompts.getAllRenderingSettings().then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
   });
 });
