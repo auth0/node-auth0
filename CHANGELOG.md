@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.23.1](https://github.com/auth0/node-auth0/tree/v4.23.1) (2025-05-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.23.0...v4.23.1)
+
+**Added**
+
+- Added support for ACUL Prompt Rendering Endpoint [\#1110](https://github.com/auth0/node-auth0/pull/1110) ([tanya732](https://github.com/tanya732))
+
 ## [v4.23.0](https://github.com/auth0/node-auth0/tree/v4.23.0) (2025-05-06)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.22.0...v4.23.0)
