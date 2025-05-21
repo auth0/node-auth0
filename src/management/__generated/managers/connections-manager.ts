@@ -4,10 +4,12 @@ import type {
   Connection,
   ConnectionCreate,
   ConnectionUpdate,
+  GetConnectionClients200Response,
   GetConnections200Response,
   GetDefaultMapping200Response,
   GetScimConfiguration200Response,
   GetScimTokens200ResponseInner,
+  PatchClientsRequestInner,
   PatchScimConfigurationRequest,
   PostScimConfigurationRequest,
   PostScimToken201Response,
@@ -18,12 +20,14 @@ import type {
   DeleteScimConfigurationRequest,
   DeleteTokensByTokenIdRequest,
   DeleteUsersByEmailRequest,
+  GetConnectionClientsRequest,
   GetConnectionsRequest,
   GetConnectionsByIdRequest,
   GetDefaultMappingRequest,
   GetScimConfigurationRequest,
   GetScimTokensRequest,
   GetStatusRequest,
+  PatchClientsRequest,
   PatchConnectionsByIdRequest,
   PatchScimConfigurationOperationRequest,
   PostScimConfigurationOperationRequest,
@@ -146,6 +150,47 @@ export class ConnectionsManager extends BaseAPI {
     );
 
     return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve all clients that have the specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> enabled.
+   *
+   * <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+   *
+   * Get enabled clients for a connection
+   *
+   * @throws {RequiredError}
+   */
+  async getEnabledClients(
+    requestParameters: GetConnectionClientsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetConnectionClients200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'take',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/clients`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -374,6 +419,38 @@ export class ConnectionsManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update enabled clients for a connection
+   *
+   * @throws {RequiredError}
+   */
+  async updateEnabledClients(
+    requestParameters: PatchClientsRequest,
+    bodyParameters: Array<PatchClientsRequestInner>,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/clients`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
       },
       initOverrides
     );
