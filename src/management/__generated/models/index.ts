@@ -9639,7 +9639,7 @@ export interface PatchCredentialsByCredentialIdRequest {
  */
 export interface PatchCustomDomainsByIdRequest {
   /**
-   * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
+   * recommended includes TLS 1.2
    *
    */
   tls_policy?: PatchCustomDomainsByIdRequestTlsPolicyEnum;
@@ -9648,11 +9648,15 @@ export interface PatchCustomDomainsByIdRequest {
    *
    */
   custom_client_ip_header?: PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
 }
 
 export const PatchCustomDomainsByIdRequestTlsPolicyEnum = {
   recommended: 'recommended',
-  compatible: 'compatible',
 } as const;
 export type PatchCustomDomainsByIdRequestTlsPolicyEnum =
   (typeof PatchCustomDomainsByIdRequestTlsPolicyEnum)[keyof typeof PatchCustomDomainsByIdRequestTlsPolicyEnum];
@@ -10939,6 +10943,11 @@ export interface PostCustomDomains201Response {
    *
    */
   tls_policy?: string;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
 }
 
 export const PostCustomDomains201ResponseStatusEnum = {
@@ -11015,7 +11024,7 @@ export interface PostCustomDomainsRequest {
    */
   verification_method?: PostCustomDomainsRequestVerificationMethodEnum;
   /**
-   * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
+   * Custom domain TLS policy. Must be `recommended`, includes TLS 1.2.
    *
    */
   tls_policy?: PostCustomDomainsRequestTlsPolicyEnum;
@@ -11024,6 +11033,11 @@ export interface PostCustomDomainsRequest {
    *
    */
   custom_client_ip_header?: PostCustomDomainsRequestCustomClientIpHeaderEnum;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
 }
 
 export const PostCustomDomainsRequestTypeEnum = {
@@ -11041,7 +11055,6 @@ export type PostCustomDomainsRequestVerificationMethodEnum =
 
 export const PostCustomDomainsRequestTlsPolicyEnum = {
   recommended: 'recommended',
-  compatible: 'compatible',
 } as const;
 export type PostCustomDomainsRequestTlsPolicyEnum =
   (typeof PostCustomDomainsRequestTlsPolicyEnum)[keyof typeof PostCustomDomainsRequestTlsPolicyEnum];
@@ -14791,6 +14804,11 @@ export interface PostVerify200Response {
    *
    */
   tls_policy?: string;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
 }
 
 export const PostVerify200ResponseStatusEnum = {
@@ -18246,6 +18264,16 @@ export interface GetCustomDomainsRequest {
    *
    */
   from?: string;
+  /**
+   * Optional filter on domain_metadata.
+   *
+   */
+  domain_metadata_filter?: string;
+  /**
+   * Optional filter on domain_name.
+   *
+   */
+  domain_name_filter?: string;
 }
 /**
  *
