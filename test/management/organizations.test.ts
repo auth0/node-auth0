@@ -62,7 +62,18 @@ describe('OrganizationsManager', () => {
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
-      const data = [{ name: 'org 1' }];
+      const data = [
+        {
+          name: 'org 1',
+          token_quota: {
+            client_credentials: {
+              per_day: 100,
+              per_hour: 20,
+              enforce: true,
+            },
+          },
+        },
+      ];
       nock(API_URL).get('/organizations').reply(200, data);
 
       organizations.getAll().then((result) => {
@@ -71,6 +82,7 @@ describe('OrganizationsManager', () => {
         expect(result.data.length).toBe(data.length);
 
         expect(result.data[0].name).toBe(data[0].name);
+        expect(result.data[0].token_quota).toStrictEqual(data[0].token_quota);
 
         done();
       });
@@ -119,6 +131,13 @@ describe('OrganizationsManager', () => {
       id: 'org_123456',
       name: 'organizations',
       display_name: 'My organization',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
 
     beforeEach(() => {
@@ -224,6 +243,13 @@ describe('OrganizationsManager', () => {
       id: 'org_123',
       name: 'org_name',
       display_name: 'My Organization',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
 
     beforeEach(() => {
@@ -283,7 +309,16 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#update', () => {
-    const data = { id: 'org_123' };
+    const data = {
+      id: 'org_123',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
+    };
 
     beforeEach(() => {
       request = nock(API_URL).patch(`/organizations/${data.id}`).reply(200, data);
