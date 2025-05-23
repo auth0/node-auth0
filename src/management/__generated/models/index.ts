@@ -2364,6 +2364,11 @@ export interface ClientRefreshToken {
    *
    */
   infinite_idle_token_lifetime?: boolean;
+  /**
+   * A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers
+   *
+   */
+  policies?: Array<ClientRefreshTokenPoliciesInner>;
 }
 
 export const ClientRefreshTokenRotationTypeEnum = {
@@ -2380,6 +2385,21 @@ export const ClientRefreshTokenExpirationTypeEnum = {
 export type ClientRefreshTokenExpirationTypeEnum =
   (typeof ClientRefreshTokenExpirationTypeEnum)[keyof typeof ClientRefreshTokenExpirationTypeEnum];
 
+/**
+ *
+ */
+export interface ClientRefreshTokenPoliciesInner {
+  /**
+   * The identifier of the resource server to which the Multi Resource Refresh Token Policy applies
+   *
+   */
+  audience: string;
+  /**
+   * The resource server permissions granted under the Multi Resource Refresh Token Policy, defining the context in which an access token can be used
+   *
+   */
+  scope: Array<string>;
+}
 /**
  * JWT-secured Authorization Requests (JAR) settings.
  */
@@ -4812,6 +4832,69 @@ export type GetActions200ResponseActionsInnerSupportedTriggersInnerIdAnyOf =
 /**
  *
  */
+export type GetAllRendering200Response =
+  | Array<GetAllRendering200ResponseOneOfInner>
+  | GetAllRendering200ResponseOneOf;
+/**
+ *
+ */
+export interface GetAllRendering200ResponseOneOf {
+  /**
+   */
+  configs: Array<GetAllRendering200ResponseOneOfInner>;
+  /**
+   * the index of the first configuration in the response (before filtering)
+   *
+   */
+  start: number;
+  /**
+   * the maximum number of configurations shown per page (before filtering)
+   *
+   */
+  limit: number;
+  /**
+   * the total number of configurations on this tenant
+   *
+   */
+  total: number;
+}
+/**
+ *
+ */
+export interface GetAllRendering200ResponseOneOfInner {
+  [key: string]: any | any;
+  /**
+   * Rendering mode
+   *
+   */
+  rendering_mode: GetAllRendering200ResponseOneOfInnerRenderingModeEnum;
+  /**
+   * Context values to make available
+   *
+   */
+  context_configuration: Array<string>;
+  /**
+   * Override Universal Login default head tags
+   *
+   */
+  default_head_tags_disabled: boolean | null;
+  /**
+   * An array of head tags
+   *
+   */
+  head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+}
+
+export const GetAllRendering200ResponseOneOfInnerRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type GetAllRendering200ResponseOneOfInnerRenderingModeEnum =
+  (typeof GetAllRendering200ResponseOneOfInnerRenderingModeEnum)[keyof typeof GetAllRendering200ResponseOneOfInnerRenderingModeEnum];
+
+/**
+ *
+ */
 export interface GetApns200Response {
   /**
    */
@@ -5425,6 +5508,8 @@ export interface GetClients200ResponseOneOf {
  */
 export interface GetClients200ResponseOneOf1 {
   /**
+   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
+   *
    */
   next: string;
   /**
@@ -18124,7 +18209,7 @@ export interface GetClientsRequest {
    */
   client_ids?: string;
   /**
-   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
+   * Advanced Query in <a href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i>
    *
    */
   q?: string;
@@ -19943,6 +20028,62 @@ export interface PostOrganizationMemberRolesOperationRequest {
    *
    */
   user_id: string;
+}
+
+/**
+ *
+ */
+export const GetAllRenderingRenderingModeEnum = {
+  advanced: 'advanced',
+  standard: 'standard',
+} as const;
+export type GetAllRenderingRenderingModeEnum =
+  (typeof GetAllRenderingRenderingModeEnum)[keyof typeof GetAllRenderingRenderingModeEnum];
+
+/**
+ *
+ */
+export interface GetAllRenderingRequest {
+  /**
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
+   *
+   */
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (default: true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Maximum value is 100, default value is 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total configuration count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Name of the prompt to filter by
+   *
+   */
+  prompt?: string;
+  /**
+   * Name of the screen to filter by
+   *
+   */
+  screen?: string;
+  /**
+   * Rendering mode to filter by
+   *
+   */
+  rendering_mode?: GetAllRenderingRenderingModeEnum;
 }
 
 /**
