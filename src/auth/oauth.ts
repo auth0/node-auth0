@@ -8,7 +8,14 @@ import { BaseAuthAPI, AuthenticationClientOptions, grant } from './base-auth-api
 import { IDTokenValidateOptions, IDTokenValidator } from './id-token-validator.js';
 import { mtlsPrefix } from '../utils.js';
 
-export interface TokenSet {
+interface AuthorizationDetails {
+  readonly type: string;
+  readonly [parameter: string]: unknown;
+}
+
+export interface TokenSet<
+  TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails
+> {
   /**
    * The access token.
    */
@@ -29,6 +36,11 @@ export interface TokenSet {
    * The duration in secs that the access token is valid.
    */
   expires_in: number;
+  /**
+   * The authorization details when using Rich Authorization Requests (RAR).
+   * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
+   */
+  authorization_details?: TAuthorizationDetails[];
 }
 
 export interface GrantOptions {
@@ -99,7 +111,9 @@ export interface ClientCredentialsGrantRequest extends ClientCredentials {
   organization?: string;
 }
 
-export interface PushedAuthorizationRequest extends ClientCredentials {
+export interface PushedAuthorizationRequest<
+  TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails
+> extends ClientCredentials {
   /**
    * URI to redirect to.
    */
@@ -162,7 +176,7 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
   /**
    * A JSON stringified array of objects. It can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests (RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
    */
-  authorization_details?: string;
+  authorization_details?: string | TAuthorizationDetails[];
 
   /**
    * Allow for any custom property to be sent to Auth0
@@ -449,6 +463,15 @@ export class OAuth extends BaseAuthAPI {
     options: { initOverrides?: InitOverride } = {}
   ): Promise<JSONApiResponse<PushedAuthorizationResponse>> {
     validateRequiredRequestParams(bodyParameters, ['client_id', 'response_type', 'redirect_uri']);
+    const { authorization_details } = bodyParameters;
+
+    if (authorization_details) {
+      // Convert to string if not already
+      bodyParameters.authorization_details =
+        typeof authorization_details !== 'string'
+          ? JSON.stringify(authorization_details)
+          : authorization_details;
+    }
 
     const bodyParametersWithClientAuthentication = await this.addClientAuthentication(
       bodyParameters
