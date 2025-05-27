@@ -33,8 +33,8 @@ import type {
   Log,
   GetPermissions200ResponseOneOf,
   GetPermissions200ResponseOneOfInner,
-  GetUserOrganizations200ResponseOneOf,
-  GetUserOrganizations200ResponseOneOfInner,
+  GetOrganizations200ResponseOneOf,
+  GetOrganizations200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetUsers200ResponseOneOf,
@@ -689,7 +689,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * This endpoint will retrieve all organizations that the specified user is a member of.
+   * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review <a href="https://auth0.com/docs/manage-users/organizations">Auth0 Organizations</a>.
    *
    * List user's organizations
    *
@@ -698,11 +698,11 @@ export class UsersManager extends BaseAPI {
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest & { include_totals: true },
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetUserOrganizations200ResponseOneOf>>;
+  ): Promise<ApiResponse<GetOrganizations200ResponseOneOf>>;
   async getUserOrganizations(
     requestParameters?: GetUserOrganizationsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<GetUserOrganizations200ResponseOneOfInner>>>;
+  ): Promise<ApiResponse<Array<GetOrganizations200ResponseOneOfInner>>>;
   async getUserOrganizations(
     requestParameters: GetUserOrganizationsRequest,
     initOverrides?: InitOverride

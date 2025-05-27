@@ -220,7 +220,7 @@ export interface Client {
   par_request_expiry: number | null;
   /**
    */
-  token_quota: GetOrganizations200ResponseOneOfInnerTokenQuota;
+  token_quota: TokenQuota;
 }
 
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -1117,7 +1117,7 @@ export interface ClientCreate {
   par_request_expiry?: number | null;
   /**
    */
-  token_quota?: GetOrganizations200ResponseOneOfInnerTokenQuota;
+  token_quota?: CreateTokenQuota;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -2557,7 +2557,7 @@ export interface ClientUpdate {
   custom_login_page_preview?: string;
   /**
    */
-  token_quota?: PatchOrganizationsByIdRequestTokenQuota | null;
+  token_quota?: UpdateTokenQuota | null;
   /**
    * Form template for WS-Federation protocol
    *
@@ -3724,6 +3724,14 @@ export interface CreatePhoneProviderRequestCredentialsAnyOf {
 /**
  *
  */
+export interface CreateTokenQuota {
+  /**
+   */
+  client_credentials: TokenQuotaClientCredentials;
+}
+/**
+ *
+ */
 export interface CustomDomain {
   /**
    * ID of the custom domain.
@@ -3785,6 +3793,17 @@ export const CustomDomainTypeEnum = {
 } as const;
 export type CustomDomainTypeEnum = (typeof CustomDomainTypeEnum)[keyof typeof CustomDomainTypeEnum];
 
+/**
+ * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
+ */
+export interface DefaultTokenQuota {
+  /**
+   */
+  clients?: TokenQuotaConfiguration;
+  /**
+   */
+  organizations?: TokenQuotaConfiguration;
+}
 /**
  *
  */
@@ -7676,7 +7695,7 @@ export interface GetOrganizations200ResponseOneOfInner {
   metadata: { [key: string]: any };
   /**
    */
-  token_quota: GetOrganizations200ResponseOneOfInnerTokenQuota;
+  token_quota: TokenQuota;
 }
 /**
  * Theme defines how to style the login pages.
@@ -7705,34 +7724,6 @@ export interface GetOrganizations200ResponseOneOfInnerBrandingColors {
    *
    */
   page_background: string;
-}
-/**
- *
- */
-export interface GetOrganizations200ResponseOneOfInnerTokenQuota {
-  /**
-   */
-  client_credentials: GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials;
-}
-/**
- * The token quota configuration
- */
-export interface GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials {
-  /**
-   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
-   *
-   */
-  enforce?: boolean;
-  /**
-   * Maximum number of issued tokens per day
-   *
-   */
-  per_day?: number;
-  /**
-   * Maximum number of issued tokens per hour
-   *
-   */
-  per_hour?: number;
 }
 /**
  *
@@ -8805,82 +8796,8 @@ export interface GetUniversalLogin200ResponseOneOf {
  *
  */
 export type GetUserOrganizations200Response =
-  | Array<GetUserOrganizations200ResponseOneOfInner>
-  | GetUserOrganizations200ResponseOneOf;
-/**
- *
- */
-export interface GetUserOrganizations200ResponseOneOf {
-  /**
-   */
-  start: number;
-  /**
-   */
-  limit: number;
-  /**
-   */
-  total: number;
-  /**
-   */
-  organizations: Array<GetUserOrganizations200ResponseOneOfInner>;
-}
-/**
- *
- */
-export interface GetUserOrganizations200ResponseOneOfInner {
-  [key: string]: any | any;
-  /**
-   * Organization identifier
-   *
-   */
-  id: string;
-  /**
-   * The name of this organization.
-   *
-   */
-  name: string;
-  /**
-   * Friendly name of this organization.
-   *
-   */
-  display_name: string;
-  /**
-   */
-  branding: GetUserOrganizations200ResponseOneOfInnerBranding;
-  /**
-   * Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
-   *
-   */
-  metadata: { [key: string]: any };
-}
-/**
- * Theme defines how to style the login pages
- */
-export interface GetUserOrganizations200ResponseOneOfInnerBranding {
-  /**
-   * URL of logo to display on login page
-   *
-   */
-  logo_url: string;
-  /**
-   */
-  colors: GetUserOrganizations200ResponseOneOfInnerBrandingColors;
-}
-/**
- * Color scheme used to customize the login pages
- */
-export interface GetUserOrganizations200ResponseOneOfInnerBrandingColors {
-  /**
-   * HEX Color for primary elements
-   *
-   */
-  primary: string;
-  /**
-   * HEX Color for background
-   *
-   */
-  page_background: string;
-}
+  | Array<GetOrganizations200ResponseOneOfInner>
+  | GetOrganizations200ResponseOneOf;
 /**
  *
  */
@@ -10134,7 +10051,7 @@ export interface PatchOrganizationsByIdRequest {
   metadata?: { [key: string]: any } | null;
   /**
    */
-  token_quota?: PatchOrganizationsByIdRequestTokenQuota | null;
+  token_quota?: UpdateTokenQuota | null;
 }
 /**
  * Theme defines how to style the login pages.
@@ -10148,14 +10065,6 @@ export interface PatchOrganizationsByIdRequestBranding {
   /**
    */
   colors?: GetOrganizations200ResponseOneOfInnerBrandingColors;
-}
-/**
- *
- */
-export interface PatchOrganizationsByIdRequestTokenQuota {
-  /**
-   */
-  client_credentials: GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials;
 }
 /**
  *
@@ -14191,7 +14100,7 @@ export interface PostOrganizations201Response {
   metadata: { [key: string]: any };
   /**
    */
-  token_quota: GetOrganizations200ResponseOneOfInnerTokenQuota;
+  token_quota: TokenQuota;
   /**
    */
   enabled_connections: Array<PostOrganizations201ResponseEnabledConnectionsInner>;
@@ -14270,7 +14179,7 @@ export interface PostOrganizationsRequest {
   enabled_connections?: Array<PostOrganizationsRequestEnabledConnectionsInner>;
   /**
    */
-  token_quota?: GetOrganizations200ResponseOneOfInnerTokenQuota;
+  token_quota?: CreateTokenQuota;
 }
 /**
  * Theme defines how to style the login pages.
@@ -16321,7 +16230,7 @@ export interface TenantSettings {
   device_flow: TenantSettingsDeviceFlow | null;
   /**
    */
-  default_token_quota: TenantSettingsDefaultTokenQuota | null;
+  default_token_quota: DefaultTokenQuota | null;
   /**
    */
   flags: TenantSettingsFlags;
@@ -16524,26 +16433,6 @@ export interface TenantSettingsChangePassword {
    *
    */
   html: string;
-}
-/**
- * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
- */
-export interface TenantSettingsDefaultTokenQuota {
-  /**
-   */
-  clients: TenantSettingsDefaultTokenQuotaClients;
-  /**
-   */
-  organizations: TenantSettingsDefaultTokenQuotaClients;
-}
-/**
- *
- */
-export interface TenantSettingsDefaultTokenQuotaClients {
-  [key: string]: any | any;
-  /**
-   */
-  client_credentials: GetOrganizations200ResponseOneOfInnerTokenQuotaClientCredentials;
 }
 /**
  * Device Flow configuration
@@ -16829,7 +16718,7 @@ export interface TenantSettingsUpdate {
   error_page?: TenantSettingsUpdateErrorPage | null;
   /**
    */
-  default_token_quota?: TenantSettingsUpdateDefaultTokenQuota | null;
+  default_token_quota?: DefaultTokenQuota | null;
   /**
    */
   flags?: TenantSettingsUpdateFlags;
@@ -17027,17 +16916,6 @@ export interface TenantSettingsUpdateChangePassword {
    *
    */
   html?: string;
-}
-/**
- * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
- */
-export interface TenantSettingsUpdateDefaultTokenQuota {
-  /**
-   */
-  clients?: TenantSettingsDefaultTokenQuotaClients;
-  /**
-   */
-  organizations?: TenantSettingsDefaultTokenQuotaClients;
 }
 /**
  * Device Flow configuration.
@@ -17292,6 +17170,43 @@ export interface Token {
 /**
  *
  */
+export interface TokenQuota {
+  /**
+   */
+  client_credentials: TokenQuotaClientCredentials;
+}
+/**
+ * The token quota configuration
+ */
+export interface TokenQuotaClientCredentials {
+  /**
+   * If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+   *
+   */
+  enforce?: boolean;
+  /**
+   * Maximum number of issued tokens per day
+   *
+   */
+  per_day?: number;
+  /**
+   * Maximum number of issued tokens per hour
+   *
+   */
+  per_hour?: number;
+}
+/**
+ *
+ */
+export interface TokenQuotaConfiguration {
+  [key: string]: any | any;
+  /**
+   */
+  client_credentials: TokenQuotaClientCredentials;
+}
+/**
+ *
+ */
 export interface TwilioFactorProvider {
   /**
    * From number
@@ -17343,6 +17258,14 @@ export const UpdatePhoneProviderRequestNameEnum = {
 export type UpdatePhoneProviderRequestNameEnum =
   (typeof UpdatePhoneProviderRequestNameEnum)[keyof typeof UpdatePhoneProviderRequestNameEnum];
 
+/**
+ *
+ */
+export interface UpdateTokenQuota {
+  /**
+   */
+  client_credentials: TokenQuotaClientCredentials;
+}
 /**
  *
  */
