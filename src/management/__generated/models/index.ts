@@ -9,6 +9,48 @@ export interface ActionsDraftUpdate {
   update_draft?: boolean;
 }
 /**
+ * Certificate information. This object is relevant only for Custom Domains with Auth0-Managed Certificates.
+ */
+export interface Certificate {
+  /**
+   * The provisioning status of the certificate.
+   *
+   */
+  status?: CertificateStatusEnum;
+  /**
+   * A user-friendly error message will be presented if the certificate status is provisioning_failed or renewing_failed.
+   *
+   */
+  error_msg?: string;
+  /**
+   * The Certificate Authority issued the certificate.
+   *
+   */
+  certificate_authority?: CertificateCertificateAuthorityEnum;
+  /**
+   * The certificate will be renewed prior to this date.
+   *
+   */
+  renews_before?: string;
+}
+
+export const CertificateStatusEnum = {
+  provisioning: 'provisioning',
+  provisioning_failed: 'provisioning_failed',
+  provisioned: 'provisioned',
+  renewing_failed: 'renewing_failed',
+} as const;
+export type CertificateStatusEnum =
+  (typeof CertificateStatusEnum)[keyof typeof CertificateStatusEnum];
+
+export const CertificateCertificateAuthorityEnum = {
+  letsencrypt: 'letsencrypt',
+  googletrust: 'googletrust',
+} as const;
+export type CertificateCertificateAuthorityEnum =
+  (typeof CertificateCertificateAuthorityEnum)[keyof typeof CertificateCertificateAuthorityEnum];
+
+/**
  *
  */
 export interface Client {
@@ -3724,6 +3766,14 @@ export interface CustomDomain {
    *
    */
   tls_policy?: string;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
+  /**
+   */
+  certificate?: Certificate;
 }
 
 export const CustomDomainStatusEnum = {
@@ -10885,6 +10935,9 @@ export interface PostCustomDomains201Response {
    *
    */
   domain_metadata?: { [key: string]: any };
+  /**
+   */
+  certificate?: Certificate;
 }
 
 export const PostCustomDomains201ResponseStatusEnum = {
@@ -10912,7 +10965,31 @@ export interface PostCustomDomains201ResponseVerification {
    *
    */
   methods?: Array<PostCustomDomains201ResponseVerificationMethodsInner>;
+  /**
+   * The DNS record verification status. This field is relevant only for Custom Domains with Auth0-Managed Certificates.
+   *
+   */
+  status?: PostCustomDomains201ResponseVerificationStatusEnum;
+  /**
+   * The user0-friendly error message in case of failed verification. This field is relevant only for Custom Domains with Auth0-Managed Certificates.
+   *
+   */
+  error_msg?: string;
+  /**
+   * The date and time when the custom domain was last verified. This field is relevant only for Custom Domains with Auth0-Managed Certificates.
+   *
+   */
+  last_verified_at?: string;
 }
+
+export const PostCustomDomains201ResponseVerificationStatusEnum = {
+  verified: 'verified',
+  pending: 'pending',
+  failed: 'failed',
+} as const;
+export type PostCustomDomains201ResponseVerificationStatusEnum =
+  (typeof PostCustomDomains201ResponseVerificationStatusEnum)[keyof typeof PostCustomDomains201ResponseVerificationStatusEnum];
+
 /**
  *
  */
@@ -14746,6 +14823,9 @@ export interface PostVerify200Response {
    *
    */
   domain_metadata?: { [key: string]: any };
+  /**
+   */
+  certificate?: Certificate;
 }
 
 export const PostVerify200ResponseStatusEnum = {
