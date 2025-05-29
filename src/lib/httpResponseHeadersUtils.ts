@@ -82,9 +82,9 @@ export class HttpResponseHeadersUtils {
         }
       }
 
-      if (attributes[0].includes('per_hour')) {
+      if (attributes.length > 0 && attributes[0].includes('per_hour')) {
         perHour = { quota, remaining, resetAfter };
-      } else if (attributes[0].includes('per_day')) {
+      } else if (attributes.length > 0 && attributes[0].includes('per_day')) {
         perDay = { quota, remaining, resetAfter };
       }
     }
