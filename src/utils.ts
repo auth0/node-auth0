@@ -1,15 +1,39 @@
 import { version } from './version.js';
 
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+function detectRuntime() {
+  // Node.js
+  if (typeof process !== 'undefined' && process.versions?.node) {
+    return 'node';
+  }
+
+  // Cloudflare Workers
+  if (typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers') {
+    return 'cloudflare-workers';
+  }
+
+  // Deno
+  // @ts-ignore
+  if (typeof Deno !== 'undefined') {
+    return 'deno';
+  }
+
+  return 'unknown';
+}
+
 /**
  * @private
  */
-export const generateClientInfo = () => ({
-  name: 'node-auth0',
-  version: version,
-  env: {
-    node: process.version.replace('v', ''),
-  },
-});
+export const generateClientInfo = () => {
+  const runtime = detectRuntime();
+  return {
+    name: 'node-auth0',
+    version: version,
+    env: {
+      [runtime]: process.version?.replace('v', '') ?? 'unknown',
+    },
+  };
+};
 
 /**
  * @private
