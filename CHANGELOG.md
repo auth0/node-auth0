@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.24.0](https://github.com/auth0/node-auth0/tree/v4.24.0) (2025-06-03)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.23.1...v4.24.0)
+
+**Added**
+
+- Added Support for Limit M2M [\#1100](https://github.com/auth0/node-auth0/pull/1100) ([tanya732](https://github.com/tanya732))
+- Added Support for Limit M2M Auth API [\#1107](https://github.com/auth0/node-auth0/pull/1107) ([tanya732](https://github.com/tanya732))
+
 ## [v4.23.1](https://github.com/auth0/node-auth0/tree/v4.23.1) (2025-05-20)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.23.0...v4.23.1)
