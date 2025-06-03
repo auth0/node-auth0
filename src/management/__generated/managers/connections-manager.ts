@@ -259,6 +259,10 @@ export class ConnectionsManager extends BaseAPI {
         },
       },
       {
+        key: 'domain_alias',
+        config: {},
+      },
+      {
         key: 'name',
         config: {},
       },

@@ -3014,7 +3014,7 @@ export interface Connection {
    */
   realms: Array<string>;
   /**
-   * The ids of the clients for which the connection is enabled
+   * DEPRECATED property. Use the GET /connections/:id/clients endpoint to get the ids of the clients for which the connection is enabled
    *
    */
   enabled_clients: Array<string>;
@@ -3057,10 +3057,8 @@ export interface ConnectionCreate {
    */
   options?: ConnectionCreateOptions;
   /**
-   * The identifiers of the clients for which the connection is to be enabled. If the array is empty or the property is not specified, no clients are enabled
+   * DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients.
    *
-   * @deprecated: This field is deprecated and will be removed in future versions.
-   * Use `updateEnabledClients` and `readEnabledClients` methods instead for managing enabled clients
    */
   enabled_clients?: Array<string>;
   /**
@@ -3500,10 +3498,8 @@ export interface ConnectionUpdate {
    */
   options?: ConnectionUpdateOptions | null;
   /**
-   * The identifiers of the clients for which the connection is to be enabled. If the property is not specified, no clients are enabled. If the array is empty, the connection will be disabled for every client.
+   * DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable or disable the connection for any clients.
    *
-   * @deprecated: This field is deprecated and will be removed in future versions.
-   * Use `updateEnabledClients` and `readEnabledClients` methods instead for managing enabled clients
    */
   enabled_clients?: Array<string>;
   /**
@@ -18172,6 +18168,11 @@ export interface GetConnectionsRequest {
    *
    */
   strategy?: Array<GetConnectionsStrategyEnum>;
+  /**
+   * Provide the domain_alias to only retrieve connections with such domain
+   *
+   */
+  domain_alias?: string;
   /**
    * Provide the name of the connection to retrieve
    *
