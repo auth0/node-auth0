@@ -3058,7 +3058,7 @@ export interface Connection {
    */
   realms: Array<string>;
   /**
-   * The ids of the clients for which the connection is enabled
+   * DEPRECATED property. Use the GET /connections/:id/clients endpoint to get the ids of the clients for which the connection is enabled
    *
    */
   enabled_clients: Array<string>;
@@ -3101,7 +3101,7 @@ export interface ConnectionCreate {
    */
   options?: ConnectionCreateOptions;
   /**
-   * The identifiers of the clients for which the connection is to be enabled. If the array is empty or the property is not specified, no clients are enabled
+   * DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients.
    *
    */
   enabled_clients?: Array<string>;
@@ -3542,7 +3542,7 @@ export interface ConnectionUpdate {
    */
   options?: ConnectionUpdateOptions | null;
   /**
-   * The identifiers of the clients for which the connection is to be enabled. If the property is not specified, no clients are enabled. If the array is empty, the connection will be disabled for every client.
+   * DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable or disable the connection for any clients.
    *
    */
   enabled_clients?: Array<string>;
@@ -5534,6 +5534,33 @@ export interface GetClients200ResponseOneOf1 {
   /**
    */
   clients: Array<Client>;
+}
+/**
+ *
+ */
+export interface GetConnectionClients200Response {
+  [key: string]: any | any;
+  /**
+   * Clients for which the connection is enabled
+   *
+   */
+  clients: Array<GetConnectionClients200ResponseClientsInner>;
+  /**
+   * Encoded next token
+   *
+   */
+  next?: string;
+}
+/**
+ *
+ */
+export interface GetConnectionClients200ResponseClientsInner {
+  [key: string]: any | any;
+  /**
+   * The client id
+   *
+   */
+  client_id: string;
 }
 /**
  *
@@ -9690,6 +9717,21 @@ export const PatchClientGrantsByIdRequestOrganizationUsageEnum = {
 export type PatchClientGrantsByIdRequestOrganizationUsageEnum =
   (typeof PatchClientGrantsByIdRequestOrganizationUsageEnum)[keyof typeof PatchClientGrantsByIdRequestOrganizationUsageEnum];
 
+/**
+ *
+ */
+export interface PatchClientsRequestInner {
+  /**
+   * The client_id of the client to be the subject to change status
+   *
+   */
+  client_id: string;
+  /**
+   * Whether the connection is enabled or not for this client_id
+   *
+   */
+  status: boolean;
+}
 /**
  *
  */
@@ -18277,6 +18319,26 @@ export interface DeleteUsersByEmailRequest {
    */
   email: string;
 }
+/**
+ *
+ */
+export interface GetConnectionClientsRequest {
+  /**
+   * The id of the connection for which enabled clients are to be retrieved
+   *
+   */
+  id: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+}
 
 /**
  *
@@ -18383,6 +18445,11 @@ export interface GetConnectionsRequest {
    */
   strategy?: Array<GetConnectionsStrategyEnum>;
   /**
+   * Provide the domain_alias to only retrieve connections with such domain
+   *
+   */
+  domain_alias?: string;
+  /**
    * Provide the name of the connection to retrieve
    *
    */
@@ -18454,6 +18521,16 @@ export interface GetScimTokensRequest {
 export interface GetStatusRequest {
   /**
    * ID of the connection to check
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchClientsRequest {
+  /**
+   * The id of the connection to modify
    *
    */
   id: string;
