@@ -21216,6 +21216,16 @@ export interface DeleteSessionRequest {
 /**
  *
  */
+export interface RevokeSessionRequest {
+  /**
+   * ID of the session to revoke.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface GetSessionRequest {
   /**
    * ID of session to retrieve
