@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.25.0](https://github.com/auth0/node-auth0/tree/v4.25.0) (2025-06-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.24.0...v4.25.0)
+
+**Added**
+
+- Added support for Enabled Client Connections [\#1114](https://github.com/auth0/node-auth0/pull/1114) ([tanya732](https://github.com/tanya732))
+
 ## [v4.24.0](https://github.com/auth0/node-auth0/tree/v4.24.0) (2025-06-03)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.23.1...v4.24.0)
