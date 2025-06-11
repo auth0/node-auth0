@@ -52,6 +52,34 @@ describe('Runtime', () => {
     clearInterval(interval);
   });
 
+  it('should use globalThis.fetch bound to globalThis when fetch is not provided in configuration', () => {
+    // Mock globalThis.fetch to verify it's used
+    const originalFetch = globalThis.fetch;
+    let calledWithGlobalThis = false;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - Ignoring type errors for test purposes
+    globalThis.fetch = async function () {
+      //This is important for "workerd" the process used by cloudflare workers.
+      calledWithGlobalThis = this === globalThis;
+      return new Response();
+    };
+
+    try {
+      const client = new TestClient({
+        baseUrl: URL,
+        parseError,
+      });
+
+      // Call the fetchApi
+      (client as any).fetchApi('https://example.com');
+
+      expect(calledWithGlobalThis).toBe(true);
+    } finally {
+      // Restore the original fetch
+      globalThis.fetch = originalFetch;
+    }
+  });
+
   it('should retry 429 until getting a succesful response', async () => {
     const request = nock(URL, { encodedQueryParams: true })
       .get('/clients')
@@ -524,6 +552,50 @@ describe('Runtime for ManagementClient', () => {
     await client.clients.getAll();
 
     expect(request.isDone()).toBe(true);
+  });
+
+  /* eslint-disable @typescript-eslint/ban-ts-comment */
+  it('should add the telemetry in workerd contexts', async () => {
+    const originalVersion = process.version;
+    const originalNodeVersion = process.versions.node;
+    const originalNavigator = globalThis.navigator;
+    try {
+      // Simulate a workerd context where process.version is not available
+      // @ts-ignore
+      delete process.version;
+
+      // Simulate a workerd context where process.versions.node is not available
+      // @ts-ignore
+      delete process.versions.node;
+
+      // @ts-ignore
+      Object.defineProperty(globalThis, 'navigator', {
+        value: { userAgent: 'Cloudflare-Workers' },
+        configurable: true,
+      });
+
+      const clientInfo = utils.generateClientInfo();
+
+      expect(clientInfo).toEqual({
+        name: 'node-auth0',
+        version: expect.any(String),
+        env: {
+          'cloudflare-workers': 'unknown',
+        },
+      });
+
+      expect(clientInfo.version).toMatch(/^\d+\.\d+\.\d+(?:-[\w.]+)?$/);
+    } finally {
+      // @ts-ignore
+      process.version = originalVersion;
+      // @ts-ignore
+      process.versions.node = originalNodeVersion;
+      //@ts-ignore
+      Object.defineProperty(globalThis, 'navigator', {
+        value: originalNavigator,
+        configurable: true,
+      });
+    }
   });
 
   it('should add custom telemetry when provided', async () => {

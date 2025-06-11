@@ -31,7 +31,7 @@ export class BaseAPI {
     }
 
     this.middleware = configuration.middleware || [];
-    this.fetchApi = configuration.fetch || fetch;
+    this.fetchApi = configuration.fetch || globalThis.fetch.bind(globalThis);
     this.parseError = configuration.parseError;
     this.timeoutDuration =
       typeof configuration.timeoutDuration === 'number' ? configuration.timeoutDuration : 10000;
