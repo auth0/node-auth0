@@ -5530,6 +5530,20 @@ export type GetBruteForceProtection200ResponseAllowlistInner = any;
 /**
  *
  */
+export interface GetClientConnections200Response {
+  [key: string]: any | any;
+  /**
+   */
+  connections: Array<ConnectionForList>;
+  /**
+   * Encoded next token
+   *
+   */
+  next?: string;
+}
+/**
+ *
+ */
 export type GetClientGrants200Response = Array<ClientGrant> | GetClientGrants200ResponseOneOf;
 /**
  *
@@ -18211,6 +18225,111 @@ export interface DeleteCredentialsByCredentialIdRequest {
    *
    */
   credential_id: string;
+}
+
+/**
+ *
+ */
+export const GetClientConnectionsStrategyEnum = {
+  ad: 'ad',
+  adfs: 'adfs',
+  amazon: 'amazon',
+  apple: 'apple',
+  dropbox: 'dropbox',
+  bitbucket: 'bitbucket',
+  aol: 'aol',
+  auth0_oidc: 'auth0-oidc',
+  auth0: 'auth0',
+  baidu: 'baidu',
+  bitly: 'bitly',
+  box: 'box',
+  custom: 'custom',
+  daccount: 'daccount',
+  dwolla: 'dwolla',
+  email: 'email',
+  evernote_sandbox: 'evernote-sandbox',
+  evernote: 'evernote',
+  exact: 'exact',
+  facebook: 'facebook',
+  fitbit: 'fitbit',
+  flickr: 'flickr',
+  github: 'github',
+  google_apps: 'google-apps',
+  google_oauth2: 'google-oauth2',
+  instagram: 'instagram',
+  ip: 'ip',
+  line: 'line',
+  linkedin: 'linkedin',
+  miicard: 'miicard',
+  oauth1: 'oauth1',
+  oauth2: 'oauth2',
+  office365: 'office365',
+  oidc: 'oidc',
+  okta: 'okta',
+  paypal: 'paypal',
+  paypal_sandbox: 'paypal-sandbox',
+  pingfederate: 'pingfederate',
+  planningcenter: 'planningcenter',
+  renren: 'renren',
+  salesforce_community: 'salesforce-community',
+  salesforce_sandbox: 'salesforce-sandbox',
+  salesforce: 'salesforce',
+  samlp: 'samlp',
+  sharepoint: 'sharepoint',
+  shopify: 'shopify',
+  sms: 'sms',
+  soundcloud: 'soundcloud',
+  thecity_sandbox: 'thecity-sandbox',
+  thecity: 'thecity',
+  thirtysevensignals: 'thirtysevensignals',
+  twitter: 'twitter',
+  untappd: 'untappd',
+  vkontakte: 'vkontakte',
+  waad: 'waad',
+  weibo: 'weibo',
+  windowslive: 'windowslive',
+  wordpress: 'wordpress',
+  yahoo: 'yahoo',
+  yammer: 'yammer',
+  yandex: 'yandex',
+} as const;
+export type GetClientConnectionsStrategyEnum =
+  (typeof GetClientConnectionsStrategyEnum)[keyof typeof GetClientConnectionsStrategyEnum];
+
+/**
+ *
+ */
+export interface GetClientConnectionsRequest {
+  /**
+   * ID of the client for which to retrieve enabled connections.
+   *
+   */
+  client_id: string;
+  /**
+   * Provide strategies to only retrieve connections with such strategies
+   *
+   */
+  strategy?: Array<GetClientConnectionsStrategyEnum>;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
+   * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
+   *
+   */
+  fields?: string;
+  /**
+   * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
+   *
+   */
+  include_fields?: boolean;
 }
 /**
  *
