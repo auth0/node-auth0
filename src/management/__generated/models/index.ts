@@ -5600,6 +5600,83 @@ export interface GetConnections200ResponseOneOf {
 /**
  *
  */
+export interface GetConnectionsKeysResponseContent
+  extends Array<GetConnectionsKeysResponseContentInner> {}
+/**
+ *
+ */
+export interface GetConnectionsKeysResponseContentInner {
+  [key: string]: any | any;
+  /**
+   * The key id of the signing key
+   *
+   */
+  kid: string;
+  /**
+   * The public certificate of the signing key
+   *
+   */
+  cert: string;
+  /**
+   * The public certificate of the signing key in pkcs7 format
+   *
+   */
+  pkcs?: string;
+  /**
+   * True if the key is the the current key
+   *
+   */
+  current?: boolean;
+  /**
+   * True if the key is the the next key
+   *
+   */
+  next?: boolean;
+  /**
+   * True if the key is the the previous key
+   *
+   */
+  previous?: boolean;
+  /**
+   * The date and time when the key became the current key
+   *
+   */
+  current_since?: string;
+  /**
+   * The cert fingerprint
+   *
+   */
+  fingerprint: string;
+  /**
+   * The cert thumbprint
+   *
+   */
+  thumbprint: string;
+  /**
+   * Signing key algorithm
+   *
+   */
+  algorithm?: string;
+  /**
+   * Signing key use, whether for encryption or signing
+   *
+   */
+  key_use?: GetConnectionsKeysResponseContentInnerKeyUseEnum;
+  /**
+   */
+  subject_dn?: string;
+}
+
+export const GetConnectionsKeysResponseContentInnerKeyUseEnum = {
+  encryption: 'encryption',
+  signing: 'signing',
+} as const;
+export type GetConnectionsKeysResponseContentInnerKeyUseEnum =
+  (typeof GetConnectionsKeysResponseContentInnerKeyUseEnum)[keyof typeof GetConnectionsKeysResponseContentInnerKeyUseEnum];
+
+/**
+ *
+ */
 export interface GetCredentials200ResponseInner {
   [key: string]: any | any;
   /**
@@ -10996,6 +11073,63 @@ export const PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum = {
 } as const;
 export type PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum =
   (typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum)[keyof typeof PostBrandingThemeRequestWidgetSocialButtonsLayoutEnum];
+
+/**
+ *
+ */
+export interface PostConnectionsKeysRotateResponseContent {
+  [key: string]: any | any;
+  /**
+   * The key id of the signing key
+   *
+   */
+  kid: string;
+  /**
+   * The public certificate of the signing key
+   *
+   */
+  cert: string;
+  /**
+   * The public certificate of the signing key in pkcs7 format
+   *
+   */
+  pkcs?: string;
+  /**
+   * True if the key is the the next key
+   *
+   */
+  next?: boolean;
+  /**
+   * The cert fingerprint
+   *
+   */
+  fingerprint: string;
+  /**
+   * The cert thumbprint
+   *
+   */
+  thumbprint: string;
+  /**
+   * Signing key algorithm
+   *
+   */
+  algorithm?: string;
+  /**
+   * Signing key use, whether for encryption or signing
+   *
+   */
+  key_use?: PostConnectionsKeysRotateResponseContentKeyUseEnum;
+  /**
+   */
+  subject_dn?: string;
+}
+
+export const PostConnectionsKeysRotateResponseContentKeyUseEnum = {
+  encryption: 'encryption',
+  signing: 'signing',
+} as const;
+export type PostConnectionsKeysRotateResponseContentKeyUseEnum =
+  (typeof PostConnectionsKeysRotateResponseContentKeyUseEnum)[keyof typeof PostConnectionsKeysRotateResponseContentKeyUseEnum];
 
 /**
  *
@@ -18617,6 +18751,16 @@ export interface GetDefaultMappingRequest {
 /**
  *
  */
+export interface GetKeysRequest {
+  /**
+   * ID of the connection
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface GetScimConfigurationRequest {
   /**
    * The id of the connection to retrieve its SCIM configuration
@@ -18670,6 +18814,16 @@ export interface PatchConnectionsByIdRequest {
 export interface PatchScimConfigurationOperationRequest {
   /**
    * The id of the connection to update its SCIM configuration
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostRotateRequest {
+  /**
+   * ID of the connection
    *
    */
   id: string;
