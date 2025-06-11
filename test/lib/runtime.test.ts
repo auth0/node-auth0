@@ -10,7 +10,7 @@ import {
   AuthApiError,
 } from '../../src/index.js';
 import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
-import { BaseAPI, applyQueryParams } from '../../src/lib/runtime.js';
+import { BaseAPI, applyQueryParams, CustomDomainHeader } from '../../src/lib/runtime.js';
 
 import * as utils from '../../src/utils.js';
 import { base64url } from 'jose';
@@ -835,5 +835,66 @@ describe('Runtime for UserInfoClient', () => {
     await client.getUserInfo('token');
 
     expect(request.isDone()).toBe(true);
+  });
+});
+
+describe('CustomDomainHeader', () => {
+  const domain = 'custom.domain.com';
+
+  const whitelistedPaths = [
+    '/api/v2/jobs/verification-email',
+    '/api/v2/tickets/email-verification',
+    '/api/v2/tickets/password-change',
+    '/api/v2/organizations/org123/invitations',
+    '/api/v2/users',
+    '/api/v2/users/user123',
+    '/api/v2/guardian/enrollments/ticket',
+  ];
+
+  const nonWhitelistedPath = '/api/v2/not-whitelisted';
+
+  const method = 'GET';
+
+  it('adds the custom domain header for whitelisted paths', async () => {
+    for (const path of whitelistedPaths) {
+      const fn = CustomDomainHeader(domain);
+      const result = await fn({
+        init: { method, headers: {} },
+        context: { method, path },
+      });
+      const headers = result.headers as Record<string, string>;
+      expect(headers['auth0-custom-domain']).toBe(domain);
+    }
+  });
+
+  it('does not add the custom domain header for non-whitelisted paths', async () => {
+    const fn = CustomDomainHeader(domain);
+    const result = await fn({
+      init: { method, headers: {} },
+      context: { method, path: nonWhitelistedPath },
+    });
+    const headers = result.headers as Record<string, string>;
+    expect(headers['auth0-custom-domain']).toBeUndefined();
+  });
+
+  it('prepends /api/v2 to non-prefixed paths', async () => {
+    const fn = CustomDomainHeader(domain);
+    const result = await fn({
+      init: { method, headers: {} },
+      context: { method, path: '/users' },
+    });
+    const headers = result.headers as Record<string, string>;
+    expect(headers['auth0-custom-domain']).toBe(domain);
+  });
+
+  it('preserves existing headers', async () => {
+    const fn = CustomDomainHeader(domain);
+    const result = await fn({
+      init: { method, headers: { 'existing-header': 'value' } },
+      context: { method, path: whitelistedPaths[0] },
+    });
+    const headers = result.headers as Record<string, string>;
+    expect(headers['existing-header']).toBe('value');
+    expect(headers['auth0-custom-domain']).toBe(domain);
   });
 });
