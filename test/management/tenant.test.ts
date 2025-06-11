@@ -2,7 +2,7 @@ import nock from 'nock';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { TenantsManager, ManagementClient } from '../../src/index.js';
+import { TenantsManager, ManagementClient, TenantSettings } from '../../src/index.js';
 
 describe('TenantManager', () => {
   let tenant: TenantsManager;
@@ -65,12 +65,31 @@ describe('TenantManager', () => {
     it('should pass the body of the response to the "then" handler', async () => {
       nock.cleanAll();
 
-      const data = { friendly_name: '123' };
+      const data = {
+        friendly_name: '123',
+        default_token_quota: {
+          clients: {
+            client_credentials: {
+              per_day: 1000,
+              per_hour: 200,
+              enforce: true,
+            },
+          },
+          organizations: {
+            client_credentials: {
+              per_day: 1000,
+              per_hour: 200,
+              enforce: true,
+            },
+          },
+        },
+      };
       nock(API_URL).get('/tenants/settings').reply(200, data);
 
       const blacklistedTokens = await tenant.getSettings();
 
       expect(blacklistedTokens.data.friendly_name).toBe(data.friendly_name);
+      expect(blacklistedTokens.data.default_token_quota).toEqual(data.default_token_quota);
     });
 
     it('should perform a GET request to /api/v2/tenants/settings', async () => {
@@ -109,11 +128,47 @@ describe('TenantManager', () => {
   describe('#updateSettings', () => {
     const data = {
       friendly_name: 'Test name',
+      default_token_quota: {
+        clients: {
+          client_credentials: {
+            per_day: 1000,
+            per_hour: 200,
+            enforce: true,
+          },
+        },
+        organizations: {
+          client_credentials: {
+            per_day: 1000,
+            per_hour: 200,
+            enforce: true,
+          },
+        },
+      },
+    };
+
+    const response: Partial<TenantSettings> = {
+      friendly_name: 'Test name',
+      default_token_quota: {
+        clients: {
+          client_credentials: {
+            per_day: 1000,
+            per_hour: 200,
+            enforce: true,
+          },
+        },
+        organizations: {
+          client_credentials: {
+            per_day: 1000,
+            per_hour: 200,
+            enforce: true,
+          },
+        },
+      },
     };
     let request: nock.Scope;
 
     beforeEach(() => {
-      request = nock(API_URL).patch('/tenants/settings').reply(200, {});
+      request = nock(API_URL).patch('/tenants/settings').reply(200, response);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -132,7 +187,8 @@ describe('TenantManager', () => {
     });
 
     it('should perform a PATCH request to /api/v2/tenants/settings', async () => {
-      await tenant.updateSettings(data);
+      const updatedTenant = await tenant.updateSettings(data);
+      expect(updatedTenant.data.default_token_quota).toStrictEqual(response.default_token_quota);
       expect(request.isDone()).toBe(true);
     });
 
