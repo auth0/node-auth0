@@ -6,11 +6,13 @@ import type {
   ConnectionUpdate,
   GetConnectionClients200Response,
   GetConnections200Response,
+  GetConnectionsKeysResponseContent,
   GetDefaultMapping200Response,
   GetScimConfiguration200Response,
   GetScimTokens200ResponseInner,
   PatchClientsRequestInner,
   PatchScimConfigurationRequest,
+  PostConnectionsKeysRotateResponseContent,
   PostScimConfigurationRequest,
   PostScimToken201Response,
   PostScimTokenRequest,
@@ -24,12 +26,14 @@ import type {
   GetConnectionsRequest,
   GetConnectionsByIdRequest,
   GetDefaultMappingRequest,
+  GetKeysRequest,
   GetScimConfigurationRequest,
   GetScimTokensRequest,
   GetStatusRequest,
   PatchClientsRequest,
   PatchConnectionsByIdRequest,
   PatchScimConfigurationOperationRequest,
+  PostRotateRequest,
   PostScimConfigurationOperationRequest,
   PostScimTokenOperationRequest,
 } from '../models/index.js';
@@ -351,6 +355,33 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
+   * Gets the connection keys for the Okta or OIDC connection strategy.
+   *
+   * Get connection keys
+   *
+   * @throws {RequiredError}
+   */
+  async getKeys(
+    requestParameters: GetKeysRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetConnectionsKeysResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/keys`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Retrieves a scim configuration by its <code>connectionId</code>.
    *
    * Get a connection's SCIM configuration
@@ -549,6 +580,33 @@ export class ConnectionsManager extends BaseAPI {
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Rotates the connection keys for the Okta or OIDC connection strategies.
+   *
+   * Rotate connection keys
+   *
+   * @throws {RequiredError}
+   */
+  async rotateKeys(
+    requestParameters: PostRotateRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PostConnectionsKeysRotateResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/keys/rotate`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
       },
       initOverrides
     );
