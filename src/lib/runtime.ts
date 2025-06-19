@@ -151,7 +151,8 @@ export class BaseAPI {
       if (response === undefined) {
         throw new FetchError(
           error as Error,
-          'The request failed and the interceptors did not return an alternative response'
+          error?.message ??
+            'The request failed and the interceptors did not return an alternative response'
         );
       }
     } else {
