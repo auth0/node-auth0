@@ -1366,4 +1366,143 @@ describe('ConnectionsManager', () => {
       });
     });
   });
+
+  describe('#getKeys', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = [
+      {
+        kid: 'abc123',
+        algorithm: 'RS256',
+        key_use: 'sig',
+      },
+    ];
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).get(`/connections/${connectionId}/keys`).reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .getKeys({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/keys`).reply(500, {});
+      connections.getKeys({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/connections/${connectionId}/keys', (done) => {
+      connections.getKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/keys`).reply(200, response);
+
+      connections.getKeys({ id: connectionId }).then((connection) => {
+        expect(connection.data).toStrictEqual(response);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/connections/${connectionId}/keys`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.getKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#rotateKeys', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = {
+      kid: 'abc123',
+      cert: '-----BEGIN CERTIFICATE-----abc-----END CERTIFICATE-----',
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).post(`/connections/${connectionId}/keys/rotate`).reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .rotateKeys({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`connections/${connectionId}/keys/rotate`).reply(500, {});
+
+      connections.rotateKeys({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/connections/:id/keys/rotate', (done) => {
+      connections.rotateKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      connections.rotateKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      connections.rotateKeys({ id: connectionId }).then((connection) => {
+        expect(connection.data.cert).toBe(response.cert);
+        expect(connection.data.kid).toBe(response.kid);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/connections/${connectionId}/keys/rotate`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.rotateKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
 });
