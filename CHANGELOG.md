@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.26.0](https://github.com/auth0/node-auth0/tree/v4.26.0) (2025-06-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.25.0...v4.26.0)
+
+**Added**
+
+- Added support for Client Assertions JWT [\#1123](https://github.com/auth0/node-auth0/pull/1123) ([tanya732](https://github.com/tanya732))
+- Add `getEnabledConnections` method and related types to `ClientsManager` [\#1122](https://github.com/auth0/node-auth0/pull/1122) ([developerkunal](https://github.com/developerkunal))
+
 ## [v4.25.0](https://github.com/auth0/node-auth0/tree/v4.25.0) (2025-06-06)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.24.0...v4.25.0)
