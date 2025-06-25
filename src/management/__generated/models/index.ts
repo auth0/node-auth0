@@ -9,6 +9,48 @@ export interface ActionsDraftUpdate {
   update_draft?: boolean;
 }
 /**
+ * Certificate information. This object is relevant only for Custom Domains with Auth0-Managed Certificates.
+ */
+export interface Certificate {
+  /**
+   * The provisioning status of the certificate.
+   *
+   */
+  status?: CertificateStatusEnum;
+  /**
+   * A user-friendly error message will be presented if the certificate status is provisioning_failed or renewing_failed.
+   *
+   */
+  error_msg?: string;
+  /**
+   * The Certificate Authority issued the certificate.
+   *
+   */
+  certificate_authority?: CertificateCertificateAuthorityEnum;
+  /**
+   * The certificate will be renewed prior to this date.
+   *
+   */
+  renews_before?: string;
+}
+
+export const CertificateStatusEnum = {
+  provisioning: 'provisioning',
+  provisioning_failed: 'provisioning_failed',
+  provisioned: 'provisioned',
+  renewing_failed: 'renewing_failed',
+} as const;
+export type CertificateStatusEnum =
+  (typeof CertificateStatusEnum)[keyof typeof CertificateStatusEnum];
+
+export const CertificateCertificateAuthorityEnum = {
+  letsencrypt: 'letsencrypt',
+  googletrust: 'googletrust',
+} as const;
+export type CertificateCertificateAuthorityEnum =
+  (typeof CertificateCertificateAuthorityEnum)[keyof typeof CertificateCertificateAuthorityEnum];
+
+/**
  *
  */
 export interface Client {
@@ -3776,6 +3818,14 @@ export interface CustomDomain {
    *
    */
   tls_policy?: string;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
+  /**
+   */
+  certificate?: Certificate;
 }
 
 export const CustomDomainStatusEnum = {
@@ -9838,7 +9888,7 @@ export interface PatchCredentialsByCredentialIdRequest {
  */
 export interface PatchCustomDomainsByIdRequest {
   /**
-   * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
+   * recommended includes TLS 1.2
    *
    */
   tls_policy?: PatchCustomDomainsByIdRequestTlsPolicyEnum;
@@ -9847,11 +9897,15 @@ export interface PatchCustomDomainsByIdRequest {
    *
    */
   custom_client_ip_header?: PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
 }
 
 export const PatchCustomDomainsByIdRequestTlsPolicyEnum = {
   recommended: 'recommended',
-  compatible: 'compatible',
 } as const;
 export type PatchCustomDomainsByIdRequestTlsPolicyEnum =
   (typeof PatchCustomDomainsByIdRequestTlsPolicyEnum)[keyof typeof PatchCustomDomainsByIdRequestTlsPolicyEnum];
@@ -11198,6 +11252,14 @@ export interface PostCustomDomains201Response {
    *
    */
   tls_policy?: string;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
+  /**
+   */
+  certificate?: Certificate;
 }
 
 export const PostCustomDomains201ResponseStatusEnum = {
@@ -11225,7 +11287,31 @@ export interface PostCustomDomains201ResponseVerification {
    *
    */
   methods?: Array<PostCustomDomains201ResponseVerificationMethodsInner>;
+  /**
+   * The DNS record verification status. This field is relevant only for Custom Domains with Auth0-Managed Certificates.
+   *
+   */
+  status?: PostCustomDomains201ResponseVerificationStatusEnum;
+  /**
+   * The user0-friendly error message in case of failed verification. This field is relevant only for Custom Domains with Auth0-Managed Certificates.
+   *
+   */
+  error_msg?: string;
+  /**
+   * The date and time when the custom domain was last verified. This field is relevant only for Custom Domains with Auth0-Managed Certificates.
+   *
+   */
+  last_verified_at?: string;
 }
+
+export const PostCustomDomains201ResponseVerificationStatusEnum = {
+  verified: 'verified',
+  pending: 'pending',
+  failed: 'failed',
+} as const;
+export type PostCustomDomains201ResponseVerificationStatusEnum =
+  (typeof PostCustomDomains201ResponseVerificationStatusEnum)[keyof typeof PostCustomDomains201ResponseVerificationStatusEnum];
+
 /**
  *
  */
@@ -11274,7 +11360,7 @@ export interface PostCustomDomainsRequest {
    */
   verification_method?: PostCustomDomainsRequestVerificationMethodEnum;
   /**
-   * compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2
+   * Custom domain TLS policy. Must be `recommended`, includes TLS 1.2.
    *
    */
   tls_policy?: PostCustomDomainsRequestTlsPolicyEnum;
@@ -11283,6 +11369,11 @@ export interface PostCustomDomainsRequest {
    *
    */
   custom_client_ip_header?: PostCustomDomainsRequestCustomClientIpHeaderEnum;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
 }
 
 export const PostCustomDomainsRequestTypeEnum = {
@@ -11300,7 +11391,6 @@ export type PostCustomDomainsRequestVerificationMethodEnum =
 
 export const PostCustomDomainsRequestTlsPolicyEnum = {
   recommended: 'recommended',
-  compatible: 'compatible',
 } as const;
 export type PostCustomDomainsRequestTlsPolicyEnum =
   (typeof PostCustomDomainsRequestTlsPolicyEnum)[keyof typeof PostCustomDomainsRequestTlsPolicyEnum];
@@ -15056,6 +15146,14 @@ export interface PostVerify200Response {
    *
    */
   tls_policy?: string;
+  /**
+   * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+   *
+   */
+  domain_metadata?: { [key: string]: any };
+  /**
+   */
+  certificate?: Certificate;
 }
 
 export const PostVerify200ResponseStatusEnum = {
@@ -18872,6 +18970,16 @@ export interface GetCustomDomainsRequest {
    *
    */
   from?: string;
+  /**
+   * Optional filter on domain_metadata.
+   *
+   */
+  domain_metadata_filter?: string;
+  /**
+   * Optional filter on domain_name.
+   *
+   */
+  domain_name_filter?: string;
 }
 /**
  *

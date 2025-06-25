@@ -291,6 +291,48 @@ export function applyQueryParams<
   ) as Pick<TRequestParams, ReadonlyArray<Key>[number]>;
 }
 
+// Pre-compiled regex for matching whitelisted paths
+const compiledWhitelistedPathRegexes: RegExp[] = compileWhitelistedPathPatterns();
+
+// Function to compile the whitelisted patterns
+function compileWhitelistedPathPatterns(): RegExp[] {
+  const patterns = [
+    '^/api/v2/jobs/verification-email$',
+    '^/api/v2/tickets/email-verification$',
+    '^/api/v2/tickets/password-change$',
+    '^/api/v2/organizations/[^/]+/invitations$',
+    '^/api/v2/users$',
+    '^/api/v2/users/[^/]+$',
+    '^/api/v2/guardian/enrollments/ticket$',
+  ];
+
+  return patterns.map((pattern) => new RegExp(pattern));
+}
+
+// Function to check if the path matches any whitelisted pattern
+function isCustomDomainPathWhitelisted(path: string): boolean {
+  return compiledWhitelistedPathRegexes.some((regex) => regex.test(path));
+}
+
+// Function to create the custom domain header for a request
+export function CustomDomainHeader(domain: string): InitOverrideFunction {
+  return async ({ init, context }: { init: RequestInit; context: RequestOpts }) => {
+    const headers: Record<string, string> = { ...init.headers } as Record<string, string>;
+
+    // Only add the custom domain header for whitelisted paths
+    const formattedPath = context.path.startsWith('/api/v2/')
+      ? context.path
+      : `/api/v2${context.path}`;
+
+    if (isCustomDomainPathWhitelisted(formattedPath)) {
+      headers['auth0-custom-domain'] = domain;
+    }
+
+    // Return the updated init with custom domain header if needed
+    return { ...init, headers: headers };
+  };
+}
+
 /**
  * @private
  */
