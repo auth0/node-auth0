@@ -4957,6 +4957,14 @@ export interface GetAllRendering200ResponseOneOfInner {
    *
    */
   head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+  /**
+   */
+  filters?: GetRendering200ResponseFilters | null;
+  /**
+   * Use page template with ACUL
+   *
+   */
+  use_page_template?: boolean | null;
 }
 
 export const GetAllRendering200ResponseOneOfInnerRenderingModeEnum = {
