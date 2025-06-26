@@ -4297,6 +4297,11 @@ export interface EnrollmentCreate {
    *
    */
   send_mail?: boolean;
+  /**
+   * Optional. Specify the locale of the enrollment email. Used with send_email.
+   *
+   */
+  email_locale?: string;
 }
 /**
  *
