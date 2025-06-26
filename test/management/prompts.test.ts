@@ -460,6 +460,8 @@ describe('PromptsManager', () => {
       default_head_tags_disabled: false,
       head_tags: [],
       rendering_mode: 'advanced',
+      use_page_template: false,
+      filters: {},
     };
     checkMethod({ operation, uri, method, expectedResposne });
   });
@@ -470,6 +472,7 @@ describe('PromptsManager', () => {
       default_head_tags_disabled: true,
       head_tags: [{ title: 'title' }],
       rendering_mode: 'advanced',
+      use_page_template: false,
     };
     const operation = prompts.updateRendering({ prompt: 'login', screen: 'consent' }, patchBody);
     const uri = `/prompts/login/screen/consent/rendering`;
