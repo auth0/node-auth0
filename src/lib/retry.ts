@@ -39,7 +39,7 @@ export interface RetryConfiguration {
   enabled?: boolean;
   /**
    * Configure the max amount of retries the SDK should do.
-   * Defaults to 5.
+   * Defaults to 3.
    */
   maxRetries?: number;
   /**
