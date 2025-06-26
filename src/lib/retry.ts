@@ -29,7 +29,7 @@ async function pause(delay: number) {
 
 /**
  * Configure the retry logic for http calls.
- * By default, this retries any request that returns a 429 3 times.
+ * By default, this retries any request that returns an HTTP 429 response.
  */
 export interface RetryConfiguration {
   /**
