@@ -8163,6 +8163,14 @@ export interface GetRendering200Response {
    *
    */
   head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+  /**
+   */
+  filters?: GetRendering200ResponseFilters | null;
+  /**
+   * Use page template with ACUL
+   *
+   */
+  use_page_template?: boolean | null;
 }
 
 export const GetRendering200ResponseRenderingModeEnum = {
@@ -8172,6 +8180,84 @@ export const GetRendering200ResponseRenderingModeEnum = {
 export type GetRendering200ResponseRenderingModeEnum =
   (typeof GetRendering200ResponseRenderingModeEnum)[keyof typeof GetRendering200ResponseRenderingModeEnum];
 
+/**
+ * Optional filters to apply rendering rules to specific entities
+ */
+export interface GetRendering200ResponseFilters {
+  /**
+   * Type of match to apply
+   *
+   */
+  match_type?: GetRendering200ResponseFiltersMatchTypeEnum;
+  /**
+   * Clients filter
+   *
+   */
+  clients?: Array<GetRendering200ResponseFiltersClientsInner>;
+  /**
+   * Organizations filter
+   *
+   */
+  organizations?: Array<GetRendering200ResponseFiltersOrganizationsInner>;
+  /**
+   * Domains filter
+   *
+   */
+  domains?: Array<GetRendering200ResponseFiltersDomainsInner>;
+}
+
+export const GetRendering200ResponseFiltersMatchTypeEnum = {
+  includes_any: 'includes_any',
+  excludes_any: 'excludes_any',
+} as const;
+export type GetRendering200ResponseFiltersMatchTypeEnum =
+  (typeof GetRendering200ResponseFiltersMatchTypeEnum)[keyof typeof GetRendering200ResponseFiltersMatchTypeEnum];
+
+/**
+ * Client array filter items
+ */
+export interface GetRendering200ResponseFiltersClientsInner {
+  /**
+   * Client ID
+   *
+   */
+  id?: string;
+  /**
+   * Client metadata key/value pairs
+   *
+   */
+  metadata?: { [key: string]: any };
+}
+/**
+ * Domains array filter items
+ */
+export interface GetRendering200ResponseFiltersDomainsInner {
+  /**
+   * Domain ID
+   *
+   */
+  id?: string;
+  /**
+   * Client metadata key/value pairs
+   *
+   */
+  metadata?: { [key: string]: any };
+}
+/**
+ * Organizations array filter items
+ */
+export interface GetRendering200ResponseFiltersOrganizationsInner {
+  /**
+   * Organization ID
+   *
+   */
+  id?: string;
+  /**
+   * Client metadata key/value pairs
+   *
+   */
+  metadata?: { [key: string]: any };
+}
 /**
  *
  */
@@ -10278,6 +10364,14 @@ export interface PatchRendering200Response {
    *
    */
   head_tags: Array<GetRendering200ResponseHeadTagsInner>;
+  /**
+   */
+  filters?: GetRendering200ResponseFilters | null;
+  /**
+   * Use page template with ACUL
+   *
+   */
+  use_page_template?: boolean | null;
 }
 
 export const PatchRendering200ResponseRenderingModeEnum = {
@@ -10311,6 +10405,14 @@ export interface PatchRenderingRequest {
    *
    */
   head_tags?: Array<PatchRenderingRequestHeadTagsInner>;
+  /**
+   */
+  filters?: GetRendering200ResponseFilters | null;
+  /**
+   * Use page template with ACUL
+   *
+   */
+  use_page_template?: boolean | null;
 }
 
 export const PatchRenderingRequestRenderingModeEnum = {
