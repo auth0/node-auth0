@@ -484,6 +484,7 @@ describe('PromptsManager', () => {
     const data: Partial<GetAllRendering200ResponseOneOfInner>[] = [
       {
         default_head_tags_disabled: true,
+        use_page_template: false,
       },
     ];
     let request: nock.Scope;
@@ -517,6 +518,7 @@ describe('PromptsManager', () => {
         expect(provider.data[0].default_head_tags_disabled).toEqual(
           data[0].default_head_tags_disabled
         );
+        expect(provider.data[0].use_page_template).toEqual(data[0].use_page_template);
         done();
       });
     });
