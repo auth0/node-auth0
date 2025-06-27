@@ -3,7 +3,11 @@ import queryString from 'querystring';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
 
-import { ResourceServersManager, ManagementClient } from '../../src/index.js';
+import {
+  ResourceServersManager,
+  ManagementClient,
+  ResourceServerProofOfPossessionMechanismEnum,
+} from '../../src/index.js';
 
 describe('ResourceServersManager', () => {
   let resourceServers: ResourceServersManager;
@@ -60,7 +64,15 @@ describe('ResourceServersManager', () => {
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
-      const data = [{ id: '123' }];
+      const data = [
+        {
+          id: '123',
+          proof_of_possession: {
+            mechanism: ResourceServerProofOfPossessionMechanismEnum.dpop,
+            required: true,
+          },
+        },
+      ];
       nock(API_URL).get('/resource-servers').reply(200, data);
 
       resourceServers.getAll().then((resourceServers) => {
@@ -69,6 +81,12 @@ describe('ResourceServersManager', () => {
         expect(resourceServers.data.length).toBe(data.length);
 
         expect(resourceServers.data[0].id).toBe(data[0].id);
+        expect(resourceServers.data[0].proof_of_possession?.mechanism).toBe(
+          data[0].proof_of_possession.mechanism
+        );
+        expect(resourceServers.data[0].proof_of_possession?.required).toBe(
+          data[0].proof_of_possession.required
+        );
 
         done();
       });
@@ -109,6 +127,10 @@ describe('ResourceServersManager', () => {
     const data = {
       id: params.id,
       name: 'Test Resource Server',
+      proof_of_possession: {
+        mechanism: ResourceServerProofOfPossessionMechanismEnum.dpop,
+        required: true,
+      },
     };
     let request: nock.Scope;
 
@@ -139,6 +161,12 @@ describe('ResourceServersManager', () => {
 
       resourceServers.get(params).then((resourceServer) => {
         expect(resourceServer.data.id).toBe(data.id);
+        expect(resourceServer.data.proof_of_possession?.mechanism).toBe(
+          data.proof_of_possession.mechanism
+        );
+        expect(resourceServer.data.proof_of_possession?.required).toBe(
+          data.proof_of_possession.required
+        );
 
         done();
       });
@@ -173,6 +201,10 @@ describe('ResourceServersManager', () => {
       name: 'Acme Backend API',
       options: {},
       identifier: '123',
+      proof_of_possession: {
+        mechanism: ResourceServerProofOfPossessionMechanismEnum.dpop,
+        required: true,
+      },
     };
     let request: nock.Scope;
 
@@ -238,6 +270,10 @@ describe('ResourceServersManager', () => {
       id: '5',
       name: 'Acme Backend API',
       options: {},
+      proof_of_possession: {
+        mechanism: ResourceServerProofOfPossessionMechanismEnum.dpop, // use the enum value
+        required: true,
+      },
     };
     let request: nock.Scope;
 
