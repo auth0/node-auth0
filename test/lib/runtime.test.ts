@@ -10,7 +10,7 @@ import {
   AuthApiError,
 } from '../../src/index.js';
 import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
-import { BaseAPI, applyQueryParams } from '../../src/lib/runtime.js';
+import { BaseAPI, applyQueryParams, CustomDomainHeader } from '../../src/lib/runtime.js';
 
 import * as utils from '../../src/utils.js';
 import { base64url } from 'jose';
@@ -50,6 +50,34 @@ describe('Runtime', () => {
     jest.clearAllMocks();
     jest.useRealTimers();
     clearInterval(interval);
+  });
+
+  it('should use globalThis.fetch bound to globalThis when fetch is not provided in configuration', () => {
+    // Mock globalThis.fetch to verify it's used
+    const originalFetch = globalThis.fetch;
+    let calledWithGlobalThis = false;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - Ignoring type errors for test purposes
+    globalThis.fetch = async function () {
+      //This is important for "workerd" the process used by cloudflare workers.
+      calledWithGlobalThis = this === globalThis;
+      return new Response();
+    };
+
+    try {
+      const client = new TestClient({
+        baseUrl: URL,
+        parseError,
+      });
+
+      // Call the fetchApi
+      (client as any).fetchApi('https://example.com');
+
+      expect(calledWithGlobalThis).toBe(true);
+    } finally {
+      // Restore the original fetch
+      globalThis.fetch = originalFetch;
+    }
   });
 
   it('should retry 429 until getting a succesful response', async () => {
@@ -526,6 +554,50 @@ describe('Runtime for ManagementClient', () => {
     expect(request.isDone()).toBe(true);
   });
 
+  /* eslint-disable @typescript-eslint/ban-ts-comment */
+  it('should add the telemetry in workerd contexts', async () => {
+    const originalVersion = process.version;
+    const originalNodeVersion = process.versions.node;
+    const originalNavigator = globalThis.navigator;
+    try {
+      // Simulate a workerd context where process.version is not available
+      // @ts-ignore
+      delete process.version;
+
+      // Simulate a workerd context where process.versions.node is not available
+      // @ts-ignore
+      delete process.versions.node;
+
+      // @ts-ignore
+      Object.defineProperty(globalThis, 'navigator', {
+        value: { userAgent: 'Cloudflare-Workers' },
+        configurable: true,
+      });
+
+      const clientInfo = utils.generateClientInfo();
+
+      expect(clientInfo).toEqual({
+        name: 'node-auth0',
+        version: expect.any(String),
+        env: {
+          'cloudflare-workers': 'unknown',
+        },
+      });
+
+      expect(clientInfo.version).toMatch(/^\d+\.\d+\.\d+(?:-[\w.]+)?$/);
+    } finally {
+      // @ts-ignore
+      process.version = originalVersion;
+      // @ts-ignore
+      process.versions.node = originalNodeVersion;
+      //@ts-ignore
+      Object.defineProperty(globalThis, 'navigator', {
+        value: originalNavigator,
+        configurable: true,
+      });
+    }
+  });
+
   it('should add custom telemetry when provided', async () => {
     const mockClientInfo = { name: 'test', version: '12', env: { node: '16' } };
 
@@ -835,5 +907,66 @@ describe('Runtime for UserInfoClient', () => {
     await client.getUserInfo('token');
 
     expect(request.isDone()).toBe(true);
+  });
+});
+
+describe('CustomDomainHeader', () => {
+  const domain = 'custom.domain.com';
+
+  const whitelistedPaths = [
+    '/api/v2/jobs/verification-email',
+    '/api/v2/tickets/email-verification',
+    '/api/v2/tickets/password-change',
+    '/api/v2/organizations/org123/invitations',
+    '/api/v2/users',
+    '/api/v2/users/user123',
+    '/api/v2/guardian/enrollments/ticket',
+  ];
+
+  const nonWhitelistedPath = '/api/v2/not-whitelisted';
+
+  const method = 'GET';
+
+  it('adds the custom domain header for whitelisted paths', async () => {
+    for (const path of whitelistedPaths) {
+      const fn = CustomDomainHeader(domain);
+      const result = await fn({
+        init: { method, headers: {} },
+        context: { method, path },
+      });
+      const headers = result.headers as Record<string, string>;
+      expect(headers['auth0-custom-domain']).toBe(domain);
+    }
+  });
+
+  it('does not add the custom domain header for non-whitelisted paths', async () => {
+    const fn = CustomDomainHeader(domain);
+    const result = await fn({
+      init: { method, headers: {} },
+      context: { method, path: nonWhitelistedPath },
+    });
+    const headers = result.headers as Record<string, string>;
+    expect(headers['auth0-custom-domain']).toBeUndefined();
+  });
+
+  it('prepends /api/v2 to non-prefixed paths', async () => {
+    const fn = CustomDomainHeader(domain);
+    const result = await fn({
+      init: { method, headers: {} },
+      context: { method, path: '/users' },
+    });
+    const headers = result.headers as Record<string, string>;
+    expect(headers['auth0-custom-domain']).toBe(domain);
+  });
+
+  it('preserves existing headers', async () => {
+    const fn = CustomDomainHeader(domain);
+    const result = await fn({
+      init: { method, headers: { 'existing-header': 'value' } },
+      context: { method, path: whitelistedPaths[0] },
+    });
+    const headers = result.headers as Record<string, string>;
+    expect(headers['existing-header']).toBe('value');
+    expect(headers['auth0-custom-domain']).toBe(domain);
   });
 });

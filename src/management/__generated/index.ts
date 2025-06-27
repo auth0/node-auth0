@@ -14,6 +14,8 @@ import {
   DeviceCredentialsManager,
   EmailTemplatesManager,
   EmailsManager,
+  FlowsManager,
+  FormsManager,
   GrantsManager,
   GuardianManager,
   HooksManager,
@@ -21,6 +23,7 @@ import {
   KeysManager,
   LogStreamsManager,
   LogsManager,
+  NetworkAclsManager,
   OrganizationsManager,
   PromptsManager,
   RefreshTokensManager,
@@ -33,6 +36,7 @@ import {
   StatsManager,
   TenantsManager,
   TicketsManager,
+  TokenExchangeProfilesManager,
   UserBlocksManager,
   UsersManager,
   UsersByEmailManager,
@@ -53,6 +57,8 @@ export abstract class ManagementClientBase {
   public readonly deviceCredentials = new DeviceCredentialsManager(this.configuration);
   public readonly emailTemplates = new EmailTemplatesManager(this.configuration);
   public readonly emails = new EmailsManager(this.configuration);
+  public readonly flows = new FlowsManager(this.configuration);
+  public readonly forms = new FormsManager(this.configuration);
   public readonly grants = new GrantsManager(this.configuration);
   public readonly guardian = new GuardianManager(this.configuration);
   public readonly hooks = new HooksManager(this.configuration);
@@ -60,6 +66,7 @@ export abstract class ManagementClientBase {
   public readonly keys = new KeysManager(this.configuration);
   public readonly logStreams = new LogStreamsManager(this.configuration);
   public readonly logs = new LogsManager(this.configuration);
+  public readonly networkAcls = new NetworkAclsManager(this.configuration);
   public readonly organizations = new OrganizationsManager(this.configuration);
   public readonly prompts = new PromptsManager(this.configuration);
   public readonly refreshTokens = new RefreshTokensManager(this.configuration);
@@ -72,6 +79,7 @@ export abstract class ManagementClientBase {
   public readonly stats = new StatsManager(this.configuration);
   public readonly tenants = new TenantsManager(this.configuration);
   public readonly tickets = new TicketsManager(this.configuration);
+  public readonly tokenExchangeProfiles = new TokenExchangeProfilesManager(this.configuration);
   public readonly userBlocks = new UserBlocksManager(this.configuration);
   public readonly users = new UsersManager(this.configuration);
   public readonly usersByEmail = new UsersByEmailManager(this.configuration);

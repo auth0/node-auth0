@@ -4,6 +4,7 @@ import type {
   Client,
   ClientCreate,
   ClientUpdate,
+  GetClientConnections200Response,
   GetClients200Response,
   GetCredentials200ResponseInner,
   PatchCredentialsByCredentialIdRequest,
@@ -11,6 +12,7 @@ import type {
   GetClients200ResponseOneOf,
   DeleteClientsByIdRequest,
   DeleteCredentialsByCredentialIdRequest,
+  GetClientConnectionsRequest,
   GetClientsRequest,
   GetClientsByIdRequest,
   GetCredentialsRequest,
@@ -79,6 +81,68 @@ export class ClientsManager extends BaseAPI {
   }
 
   /**
+   * Retrieve all connections that are enabled for the specified <a href="https://www.auth0.com/docs/get-started/applications"> Application</a>, using checkpoint pagination. A list of fields to include or exclude for each connection may also be specified.
+   * <ul>
+   *   <li>
+   *     This endpoint requires the <code>read:connections</code> scope and any one of <code>read:clients</code> or <code>read:client_summary</code>.
+   *   </li>
+   *   <li>
+   *     <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+   *   </li>
+   * </ul>
+   *
+   * Get enabled connections for a client
+   *
+   * @throws {RequiredError}
+   */
+  async getEnabledConnections(
+    requestParameters: GetClientConnectionsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientConnections200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['client_id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'strategy',
+        config: {
+          isArray: true,
+          isCollectionFormatMulti: true,
+        },
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+      {
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/clients/{client_id}/connections`.replace(
+          '{client_id}',
+          encodeURIComponent(String(requestParameters.client_id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Retrieve clients (applications and SSO integrations) matching provided filters. A list of fields to include or exclude may also be specified.
    * For more information, read <a href="https://www.auth0.com/docs/get-started/applications"> Applications in Auth0</a> and <a href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single Sign-On</a>.
    *
@@ -102,7 +166,7 @@ export class ClientsManager extends BaseAPI {
    *     <code>token_endpoint_auth_method</code>, <code>is_first_party</code>, <code>oidc_conformant</code>,
    *     <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,
    *     <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,
-   *     <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>organization_usage</code>,
+   *     <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>refresh_token.policies</code>, <code>organization_usage</code>,
    *     <code>organization_require_behavior</code>.
    *   </li>
    *   <li>
@@ -215,7 +279,7 @@ export class ClientsManager extends BaseAPI {
    *     <code>token_endpoint_auth_method</code>, <code>is_first_party</code>, <code>oidc_conformant</code>,
    *     <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,
    *     <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,
-   *     <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>organization_usage</code>,
+   *     <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>refresh_token.policies</code>, <code>organization_usage</code>,
    *     <code>organization_require_behavior</code>.
    *   </li>
    *   <li>

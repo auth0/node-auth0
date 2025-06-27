@@ -56,10 +56,3 @@ jobs:
       - name: Tests
         shell: bash
         run: npm run test:ci
-
-      - name: Upload coverage
-        if: matrix.node-version == '18.17'
-        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # pin@4.5.0
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          

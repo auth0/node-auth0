@@ -85,11 +85,18 @@ export interface AuthorizationCodeGrantWithPKCERequest extends AuthorizationCode
   code_verifier: string;
 }
 
+/**
+ * Represents a request for a client credentials grant in the OAuth 2.0 framework, specific to Auth0 implementation.
+ *
+ * @property audience - The unique identifier of the target API you want to access.
+ * @property organization - The identifier of the organization for which the request is being made.
+ */
 export interface ClientCredentialsGrantRequest extends ClientCredentials {
   /**
    * The unique identifier of the target API you want to access.
    */
   audience: string;
+  organization?: string;
 }
 
 export interface PushedAuthorizationRequest extends ClientCredentials {
@@ -267,10 +274,45 @@ export interface TokenExchangeGrantRequest {
 }
 
 /**
+ * Options to exchange a federated connection token.
+ */
+export interface TokenForConnectionRequest {
+  /**
+   * The subject token(refresh token in this case) to exchange for an access token for a connection.
+   */
+  subject_token: string;
+  /**
+   * The target social provider connection (e.g., "google-oauth2").
+   */
+  connection: string;
+  /**
+   * Optional login hint
+   */
+  login_hint?: string;
+}
+
+export interface TokenForConnectionResponse {
+  access_token: string;
+  scope?: string;
+  expires_at: number; // the time at which the access token expires in seconds since epoch
+  connection: string;
+  [key: string]: unknown;
+}
+
+export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
+  'urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token';
+
+export const TOKEN_FOR_CONNECTION_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:refresh_token';
+export const TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE =
+  'http://auth0.com/oauth/token-type/federated-connection-access-token';
+
+export const TOKEN_URL = '/oauth/token';
+
+/**
  *  OAuth 2.0 flows.
  */
 export class OAuth extends BaseAuthAPI {
-  private idTokenValidator: IDTokenValidator;
+  readonly idTokenValidator: IDTokenValidator;
   constructor(options: AuthenticationClientOptions) {
     super({
       ...options,
@@ -546,5 +588,49 @@ export class OAuth extends BaseAuthAPI {
     );
 
     return VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Exchanges a subject token (refresh token in this case) for an access token for the connection.
+   *
+   * The request body includes:
+   * - client_id (and client_secret/client_assertion via addClientAuthentication)
+   * - grant_type set to `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`
+   * - subject_token (refresh token) and fixed subject_token_type for refresh tokens (`urn:ietf:params:oauth:token-type:refresh_token`)
+   * - requested_token_type (`http://auth0.com/oauth/token-type/federated-connection-access-token`) indicating that a federated connection access token is desired
+   * - connection name and an optional `login_hint` if provided
+   *
+   * @param bodyParameters - The options to retrieve a token for a connection.
+   * @returns A promise with the token response data.
+   * @throws An error if the exchange fails.
+   */
+  public async tokenForConnection(
+    bodyParameters: TokenForConnectionRequest,
+    options: { initOverrides?: InitOverride } = {}
+  ): Promise<JSONApiResponse<TokenSet>> {
+    validateRequiredRequestParams(bodyParameters, ['connection', 'subject_token']);
+
+    const body: Record<string, string> = {
+      ...bodyParameters,
+      grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,
+      subject_token_type: TOKEN_FOR_CONNECTION_TOKEN_TYPE,
+      requested_token_type: TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE,
+    };
+
+    await this.addClientAuthentication(body);
+
+    const response = await this.request(
+      {
+        path: TOKEN_URL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(body),
+      },
+      options.initOverrides
+    );
+
+    return JSONApiResponse.fromResponse(response);
   }
 }

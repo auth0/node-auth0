@@ -9,21 +9,21 @@ import {
   GetOrganizationClientGrantsRequest,
   GetOrganizationClientGrants200Response,
   ApiResponse,
+  DeleteClientGrantsByGrantIdRequest,
+  GetOrganizationClientGrants200ResponseOneOfInner,
 } from '../../src/index.js';
 
-describe('OrganizationsManager', () => {
-  let organizations: OrganizationsManager;
+import { checkMethod } from '../utils/index.js';
 
+describe('OrganizationsManager', () => {
   let request: nock.Scope;
   const token = 'TOKEN';
 
-  beforeAll(() => {
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-    });
-    organizations = client.organizations;
+  const client = new ManagementClient({
+    domain: 'tenant.auth0.com',
+    token: token,
   });
+  const organizations: OrganizationsManager = client.organizations;
 
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
@@ -62,7 +62,18 @@ describe('OrganizationsManager', () => {
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
-      const data = [{ name: 'org 1' }];
+      const data = [
+        {
+          name: 'org 1',
+          token_quota: {
+            client_credentials: {
+              per_day: 100,
+              per_hour: 20,
+              enforce: true,
+            },
+          },
+        },
+      ];
       nock(API_URL).get('/organizations').reply(200, data);
 
       organizations.getAll().then((result) => {
@@ -71,6 +82,7 @@ describe('OrganizationsManager', () => {
         expect(result.data.length).toBe(data.length);
 
         expect(result.data[0].name).toBe(data[0].name);
+        expect(result.data[0].token_quota).toStrictEqual(data[0].token_quota);
 
         done();
       });
@@ -119,6 +131,13 @@ describe('OrganizationsManager', () => {
       id: 'org_123456',
       name: 'organizations',
       display_name: 'My organization',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
 
     beforeEach(() => {
@@ -224,6 +243,13 @@ describe('OrganizationsManager', () => {
       id: 'org_123',
       name: 'org_name',
       display_name: 'My Organization',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
 
     beforeEach(() => {
@@ -283,7 +309,16 @@ describe('OrganizationsManager', () => {
   });
 
   describe('#update', () => {
-    const data = { id: 'org_123' };
+    const data = {
+      id: 'org_123',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
+    };
 
     beforeEach(() => {
       request = nock(API_URL).patch(`/organizations/${data.id}`).reply(200, data);
@@ -1473,5 +1508,36 @@ describe('OrganizationsManager', () => {
         expect(err).toBeDefined();
       });
     });
+  });
+
+  describe('#deleteClientGrantsById', () => {
+    const requestParameters: DeleteClientGrantsByGrantIdRequest = {
+      id: 'org_123',
+      grant_id: 'grant_id',
+    };
+    const operation = organizations.deleteClientGrantsByGrantId(requestParameters);
+    const expectedResponse = undefined;
+    const uri = `/organizations/{id}/client-grants/{grant_id}`
+      .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+      .replace('{grant_id}', encodeURIComponent(String(requestParameters.grant_id)));
+    const method = 'delete';
+
+    checkMethod({ operation, expectedResponse, uri, method });
+  });
+
+  describe('#postOrganizationClientGrants', () => {
+    const requestParameters = { id: 'org_123' };
+    const requestBody = { grant_id: 'grant_id' };
+    const operation = organizations.postOrganizationClientGrants(requestParameters, requestBody);
+    const expectedResponse: GetOrganizationClientGrants200ResponseOneOfInner = <
+      GetOrganizationClientGrants200ResponseOneOfInner
+    >{};
+    const uri = `/organizations/{id}/client-grants`.replace(
+      '{id}',
+      encodeURIComponent(String(requestParameters.id))
+    );
+    const method = 'post';
+
+    checkMethod({ operation, expectedResponse, uri, method, requestBody });
   });
 });

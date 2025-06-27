@@ -6,6 +6,7 @@ import type {
   DeleteUserRolesRequest,
   GetAuthenticationMethods200Response,
   GetAuthenticationMethods200ResponseOneOfInner,
+  GetFederatedConnectionsTokensets200ResponseInner,
   GetLogs200Response,
   GetOrganizationMemberRoles200Response,
   GetPermissions200Response,
@@ -40,6 +41,7 @@ import type {
   DeleteAuthenticationMethodsRequest,
   DeleteAuthenticationMethodsByAuthenticationMethodIdRequest,
   DeleteAuthenticatorsRequest,
+  DeleteFederatedConnectionsTokensetsByTokensetIdRequest,
   DeleteMultifactorByProviderRequest,
   DeletePermissionsOperationRequest,
   DeleteRefreshTokensForUserRequest,
@@ -50,6 +52,7 @@ import type {
   GetAuthenticationMethodsRequest,
   GetAuthenticationMethodsByAuthenticationMethodIdRequest,
   GetEnrollmentsRequest,
+  GetFederatedConnectionsTokensetsRequest,
   GetLogsByUserRequest,
   GetPermissionsRequest,
   GetRefreshTokensForUserRequest,
@@ -144,6 +147,30 @@ export class UsersManager extends BaseAPI {
           '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Deletes a tokenset for federated connections by id.
+   *
+   * @throws {RequiredError}
+   */
+  async deleteTokenset(
+    requestParameters: DeleteFederatedConnectionsTokensetsByTokensetIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'tokenset_id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{id}/federated-connections-tokensets/{tokenset_id}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace('{tokenset_id}', encodeURIComponent(String(requestParameters.tokenset_id))),
         method: 'DELETE',
       },
       initOverrides
@@ -445,6 +472,32 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
+   * List active federated connections tokensets for a provided user
+   * Get tokensets for a user
+   *
+   * @throws {RequiredError}
+   */
+  async getAllTokensets(
+    requestParameters: GetFederatedConnectionsTokensetsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetFederatedConnectionsTokensets200ResponseInner>>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/users/{id}/federated-connections-tokensets`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Retrieve log events for a specific user.
    *
    * Note: For more information on all possible event types, their respective acronyms and descriptions, see <a href="https://auth0.com/docs/logs/log-event-type-codes">Log Event Type Codes</a>.
@@ -636,7 +689,7 @@ export class UsersManager extends BaseAPI {
   }
 
   /**
-   * This endpoint will retrieve all organizations that the specified user is a member of.
+   * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review <a href="https://auth0.com/docs/manage-users/organizations">Auth0 Organizations</a>.
    *
    * List user's organizations
    *

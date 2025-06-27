@@ -9,6 +9,7 @@ import type {
   GetInvitations200ResponseOneOfInner,
   GetMembers200Response,
   GetOrganizationClientGrants200Response,
+  GetOrganizationClientGrants200ResponseOneOfInner,
   GetOrganizationMemberRoles200Response,
   GetOrganizations200Response,
   GetOrganizations200ResponseOneOfInner,
@@ -17,6 +18,7 @@ import type {
   PostEnabledConnectionsRequest,
   PostInvitationsRequest,
   PostMembersRequest,
+  PostOrganizationClientGrantsRequest,
   PostOrganizationMemberRolesRequest,
   PostOrganizations201Response,
   PostOrganizationsRequest,
@@ -25,10 +27,10 @@ import type {
   GetMembers200ResponseOneOf,
   GetMembers200ResponseOneOfInner,
   GetOrganizationClientGrants200ResponseOneOf,
-  GetOrganizationClientGrants200ResponseOneOfInner,
   GetOrganizationMemberRoles200ResponseOneOf,
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetOrganizations200ResponseOneOf,
+  DeleteClientGrantsByGrantIdRequest,
   DeleteEnabledConnectionsByConnectionIdRequest,
   DeleteInvitationsByInvitationIdRequest,
   DeleteMembersOperationRequest,
@@ -49,6 +51,7 @@ import type {
   PostEnabledConnectionsOperationRequest,
   PostInvitationsOperationRequest,
   PostMembersOperationRequest,
+  PostOrganizationClientGrantsOperationRequest,
   PostOrganizationMemberRolesOperationRequest,
 } from '../models/index.js';
 
@@ -58,6 +61,30 @@ const { BaseAPI } = runtime;
  *
  */
 export class OrganizationsManager extends BaseAPI {
+  /**
+   * Remove a client grant from an organization
+   *
+   * @throws {RequiredError}
+   */
+  async deleteClientGrantsByGrantId(
+    requestParameters: DeleteClientGrantsByGrantIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'grant_id']);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants/{grant_id}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace('{grant_id}', encodeURIComponent(String(requestParameters.grant_id))),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
   /**
    * Delete connections from an organization
    *
@@ -461,7 +488,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get a specific organization by name
+   * Retrieve details about a single Organization specified by name.
    *
    * Get organization by name
    *
@@ -600,19 +627,25 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * List available organizations. This endpoint supports two types of pagination:
-   * - Offset pagination
-   * - Checkpoint pagination
+   * Retrieve detailed list of all Organizations available in your tenant. For more information, see Auth0 Organizations.
+   *
+   * This endpoint supports two types of pagination:
+   * <ul>
+   * <li>Offset pagination</li>
+   * <li>Checkpoint pagination</li>
+   * </ul>
    *
    * Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.
    *
    * <h2>Checkpoint Pagination</h2>
    *
    * To search by checkpoint, use the following parameters:
-   * - from: Optional id from which to start selection.
-   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   * <ul>
+   * <li><code>from</code>: Optional id from which to start selection.</li>
+   * <li><code>take</code>: The total number of entries to retrieve when using the <code>from</code> parameter. Defaults to 50.</li>
+   * </ul>
    *
-   * Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
    *
    * Get organizations
    *
@@ -670,7 +703,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Get a specific organization
+   * Retrieve details about a single Organization specified by ID.
    *
    * Get organization
    *
@@ -730,7 +763,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Modify an organization
+   * Update the details of a specific <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/create-organizations">Organization</a>, such as name and display name, branding options, and metadata.
    *
    * Modify an Organization
    *
@@ -860,6 +893,38 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Associate a client grant with an organization
+   *
+   * @throws {RequiredError}
+   */
+  async postOrganizationClientGrants(
+    requestParameters: PostOrganizationClientGrantsOperationRequest,
+    bodyParameters: PostOrganizationClientGrantsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationClientGrants200ResponseOneOfInner>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/client-grants`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Assign one or more roles to a given user that will be applied in the context of the provided organization
    *
    * @throws {RequiredError}
@@ -891,7 +956,7 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
-   * Create an organization
+   * Create a new Organization within your tenant.  To learn more about Organization settings, behavior, and configuration options, review <a href="https://auth0.com/docs/manage-users/organizations/create-first-organization">Create Your First Organization</a>.
    *
    * Create an Organization
    *

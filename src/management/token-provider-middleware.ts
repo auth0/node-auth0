@@ -7,14 +7,16 @@ import {
 } from './management-client-options.js';
 import { TokenProvider } from './token-provider.js';
 
+import { resolveValueToPromise } from '../utils.js';
+
 export class TokenProviderMiddleware implements Middleware {
-  private tokenProvider: { getAccessToken: () => Promise<string> };
+  private readonly tokenProvider: { getAccessToken: () => Promise<string> };
   constructor(
     options: ManagementClientOptionsWithToken | ManagementClientOptionsWithClientCredentials
   ) {
     if ('token' in options) {
       this.tokenProvider = {
-        getAccessToken: () => Promise.resolve(options.token),
+        getAccessToken: () => resolveValueToPromise<string>(options.token),
       };
     } else {
       this.tokenProvider = new TokenProvider({

@@ -13,6 +13,7 @@ import {
   PostCredentialsRequest,
   ManagementClient,
   GetClientsRequest,
+  GetClientConnectionsStrategyEnum,
 } from '../../src/index.js';
 
 import { RequiredError } from '../../src/lib/errors.js';
@@ -36,7 +37,20 @@ describe('ClientsManager', () => {
   });
 
   describe('instance', () => {
-    const methods = ['getAll', 'get', 'create', 'update', 'delete'];
+    const methods = [
+      'getAll',
+      'get',
+      'create',
+      'update',
+      'delete',
+      'rotateClientSecret',
+      'getCredentials',
+      'getCredential',
+      'createCredential',
+      'updateCredential',
+      'deleteCredential',
+      'getEnabledConnections',
+    ];
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, () => {
@@ -73,6 +87,13 @@ describe('ClientsManager', () => {
         client_secret: 'tes_secret',
         app_type: 'spa',
         logo_uri: 'test_logo_uri',
+        token_quota: {
+          client_credentials: {
+            per_day: 100,
+            per_hour: 20,
+            enforce: true,
+          },
+        },
       },
     ];
 
@@ -109,7 +130,8 @@ describe('ClientsManager', () => {
         expect(clients.data[0].client_secret).toBe(response[0].client_secret);
         expect(clients.data[0].app_type).toBe(response[0].app_type);
         expect(clients.data[0].logo_uri).toBe(response[0].logo_uri);
-
+        expect(clients.data[0].token_quota).toStrictEqual(response[0].token_quota);
+        expect(clients.data[0].refresh_token).toBe(response[0].refresh_token);
         done();
       });
     });
@@ -150,7 +172,6 @@ describe('ClientsManager', () => {
         is_global: true,
         is_first_party: false,
         app_type: 'web,mobile',
-        client_ids: 'client1,client2,client3',
         q: 'name:John AND email:john@example.com',
       };
 
@@ -170,6 +191,13 @@ describe('ClientsManager', () => {
       description: 'test_description',
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
@@ -180,6 +208,13 @@ describe('ClientsManager', () => {
       client_secret: 'test_secret',
       app_type: data.app_type,
       logo_uri: data.logo_uri,
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     let request: nock.Scope;
 
@@ -237,7 +272,7 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
-
+        expect(client.data.token_quota).toStrictEqual(response.token_quota);
         done();
       });
     });
@@ -253,6 +288,13 @@ describe('ClientsManager', () => {
       client_secret: 'test_secret',
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     let request: nock.Scope;
 
@@ -284,6 +326,8 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
+        expect(client.data.token_quota).toStrictEqual(response.token_quota);
+        expect(client.data.refresh_token).toBe(response.refresh_token);
 
         done();
       });
@@ -296,6 +340,13 @@ describe('ClientsManager', () => {
       description: 'test_description',
       app_type: 'spa',
       logo_uri: 'test_logo_uri',
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
@@ -306,6 +357,13 @@ describe('ClientsManager', () => {
       client_secret: 'test_secret',
       app_type: data.app_type,
       logo_uri: data.logo_uri,
+      token_quota: {
+        client_credentials: {
+          per_day: 100,
+          per_hour: 20,
+          enforce: true,
+        },
+      },
     };
 
     let request: nock.Scope;
@@ -351,6 +409,8 @@ describe('ClientsManager', () => {
         expect(client.data.client_secret).toBe(response.client_secret);
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
+        expect(client.data.token_quota).toStrictEqual(response.token_quota);
+        expect(client.data.refresh_token).toBe(response.refresh_token);
 
         done();
       });
@@ -768,6 +828,158 @@ describe('ClientsManager', () => {
       clients.deleteCredential({ client_id: '123', credential_id: 'abc' }).then(() => {
         expect(request.isDone()).toBe(true);
 
+        done();
+      });
+    });
+  });
+
+  describe('#getEnabledConnections', () => {
+    const clientId = 'client_123';
+    const baseConnection = {
+      id: 'con_UJfFHnhzQJDdCA8l',
+      options: {
+        scope: ['email', 'openid'],
+        scripts: { fetchUserProfile: 'function( { return callback(null) }' },
+        icon_url: 'https://cdn.paypal.com/assets/logo.png',
+        tokenURL: 'https://api.paypal.com/v1/oauth2/token',
+        client_id: '1234567',
+        pkce_enabled: false,
+        client_secret: '1234567',
+        customHeaders: { bar: 'try', faz: 'b43' },
+        authorizationURL: 'https://www.paypal.com/signin/authorize',
+        set_user_root_attributes: 'on_first_login',
+      },
+      strategy: 'oauth2',
+      name: 'Acceptance232445533',
+      is_domain_connection: false,
+      realms: ['Acceptance232445533'],
+    };
+    const response = { connections: [baseConnection] };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).get(`/clients/${clientId}/connections`).reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      clients
+        .getEnabledConnections({ client_id: clientId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/clients/:client_id/connections', (done) => {
+      clients.getEnabledConnections({ client_id: clientId }).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/clients/${clientId}/connections`).reply(500, {});
+      clients.getEnabledConnections({ client_id: clientId }).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+      const request = nock(API_URL)
+        .get(`/clients/${clientId}/connections`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+      clients.getEnabledConnections({ client_id: clientId }).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass the parameters in the query-string', (done) => {
+      nock.cleanAll();
+      const client_id = clientId;
+      const queryParameters = {
+        strategy: [GetClientConnectionsStrategyEnum.oauth2],
+        from: '',
+        take: 1,
+      };
+      const nockQuery = {
+        strategy: GetClientConnectionsStrategyEnum.oauth2,
+        from: '',
+        take: 1,
+      };
+      const apiResponse = {
+        connections: [baseConnection],
+        next: 'next_token_123',
+      };
+      const request = nock(API_URL)
+        .get(`/clients/${client_id}/connections`)
+        .query(nockQuery)
+        .reply(200, apiResponse);
+      clients.getEnabledConnections({ client_id, ...queryParameters }).then((res) => {
+        expect(request.isDone()).toBe(true);
+        expect(res.data).toBeDefined();
+        expect(Array.isArray(res.data.connections)).toBe(true);
+        expect(res.data.connections[0]).toMatchObject(baseConnection);
+        done();
+      });
+    });
+
+    it('should send correct query params and handle object response with connections array', (done) => {
+      const queryParameters = {
+        strategy: [GetClientConnectionsStrategyEnum.oauth2],
+        from: 'prev_token_123',
+        take: 1,
+      };
+      const nockQuery = {
+        strategy: GetClientConnectionsStrategyEnum.oauth2,
+        from: 'prev_token_123',
+        take: 1,
+      };
+      const apiResponse = {
+        connections: [baseConnection],
+        next: 'next_token_123',
+      };
+      const request = nock(API_URL)
+        .get(`/clients/${clientId}/connections`)
+        .query(nockQuery)
+        .reply(200, apiResponse);
+      clients.getEnabledConnections({ client_id: clientId, ...queryParameters }).then((res) => {
+        expect(request.isDone()).toBe(true);
+        expect(res.data).toBeDefined();
+        expect(Array.isArray(res.data.connections)).toBe(true);
+        expect(res.data.connections[0]).toMatchObject(baseConnection);
+        expect(res.data.next).toBe('next_token_123');
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      const client_id = clientId;
+      const responseObj = { connections: [baseConnection] };
+      nock.cleanAll();
+      const request = nock(API_URL)
+        .get(`/clients/${client_id}/connections`)
+        .reply(200, responseObj);
+      clients.getEnabledConnections({ client_id }).then((res) => {
+        expect(request.isDone()).toBe(true);
+        expect(res.data).toBeDefined();
+        expect(Array.isArray(res.data.connections)).toBe(true);
+        expect(res.data.connections[0]).toMatchObject(baseConnection);
+        done();
+      });
+    });
+
+    it('should handle API responses with a connections array', (done) => {
+      nock.cleanAll();
+      const apiResponse = { connections: [baseConnection] };
+      const request = nock(API_URL).get(`/clients/${clientId}/connections`).reply(200, apiResponse);
+      clients.getEnabledConnections({ client_id: clientId }).then((res) => {
+        expect(request.isDone()).toBe(true);
+        expect(res.data).toBeDefined();
+        expect(Array.isArray(res.data.connections)).toBe(true);
+        expect(res.data.connections[0]).toMatchObject(baseConnection);
         done();
       });
     });

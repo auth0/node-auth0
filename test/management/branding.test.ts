@@ -17,6 +17,14 @@ import {
   PostBrandingTheme200Response,
   PostBrandingThemeRequest,
   ManagementClient,
+  CreatePhoneProviderRequest,
+  GetBrandingPhoneProviders200ResponseProvidersInner,
+  CreatePhoneProviderRequestNameEnum,
+  UpdatePhoneProviderOperationRequest,
+  UpdatePhoneProviderRequest,
+  DeletePhoneProviderRequest,
+  GetPhoneProviderRequest,
+  GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf,
 } from '../../src/index.js';
 
 describe('BrandingManager', () => {
@@ -730,6 +738,377 @@ describe('BrandingManager', () => {
 
       await branding.deleteTheme(params);
       expect(request.isDone()).toBe(true);
+    });
+  });
+
+  describe('#configurePhoneProvider', () => {
+    const data: CreatePhoneProviderRequest = {
+      name: 'twilio' as CreatePhoneProviderRequestNameEnum,
+      credentials: {
+        account_sid: 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        auth_token: 'your_auth_token',
+      },
+      configuration: {
+        default_from: 'default',
+        mssid: 'mssid1',
+        sid: 'sid1',
+        delivery_methods: [],
+      },
+    };
+    const response: GetBrandingPhoneProviders200ResponseProvidersInner = {
+      id: 'provider_id',
+      name: 'twilio',
+      disabled: true,
+      configuration: {
+        default_from: 'default',
+        mssid: 'mssid1',
+        sid: 'sid1',
+        delivery_methods: [],
+      },
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).post('/branding/phone/providers', data).reply(200, response);
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .configurePhoneProvider(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post('/branding/phone/providers').reply(500, {});
+
+      branding.configurePhoneProvider(data).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/branding/phone/providers', (done) => {
+      branding.configurePhoneProvider(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post('/branding/phone/providers', data)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      branding.configurePhoneProvider(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding.configurePhoneProvider(data).then((provider) => {
+        expect(provider.data.id).toBe(response.id);
+        expect(provider.data.name).toBe(response.name);
+        expect(provider.data.disabled).toBe(response.disabled);
+
+        const providerConfig = provider.data
+          .configuration as GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf;
+        const responseConfig =
+          response.configuration as GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf;
+
+        expect(providerConfig.default_from).toBe(responseConfig.default_from);
+        expect(providerConfig.mssid).toBe(responseConfig.mssid);
+        expect(providerConfig.sid).toBe(responseConfig.sid);
+        expect(providerConfig.delivery_methods).toEqual(responseConfig.delivery_methods);
+
+        done();
+      });
+    });
+  });
+
+  describe('#updatePhoneProvider', () => {
+    const requestParameters: UpdatePhoneProviderOperationRequest = {
+      id: 'provider_id',
+    };
+    const bodyParameters: UpdatePhoneProviderRequest = {
+      name: 'twilio' as CreatePhoneProviderRequestNameEnum,
+      credentials: {
+        account_sid: 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        auth_token: 'your_auth_token',
+      },
+      configuration: {
+        default_from: 'default',
+        mssid: 'mssid1',
+        sid: 'sid1',
+        delivery_methods: [],
+      },
+    };
+    const response: GetBrandingPhoneProviders200ResponseProvidersInner = {
+      id: 'provider_id',
+      name: 'twilio',
+      disabled: true,
+      configuration: {
+        default_from: 'default',
+        mssid: 'mssid1',
+        sid: 'sid1',
+        delivery_methods: [], // Add the required delivery_methods field
+      },
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .patch(`/branding/phone/providers/${requestParameters.id}`)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .updatePhoneProvider(requestParameters, bodyParameters)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).patch(`/branding/phone/providers/${requestParameters.id}`).reply(500, {});
+
+      branding.updatePhoneProvider(requestParameters, bodyParameters).catch((err) => {
+        expect(err).toBeInstanceOf(Error);
+
+        done();
+      });
+    });
+
+    it('should perform a PATCH request to /branding/phone/providers/:id', (done) => {
+      nock.cleanAll();
+
+      request = nock(API_URL)
+        .patch(`/branding/phone/providers/${requestParameters.id}`, bodyParameters as any)
+        .reply(200, response);
+
+      branding.updatePhoneProvider(requestParameters, bodyParameters).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/branding/phone/providers/${requestParameters.id}`, bodyParameters as any)
+        .reply(200, response);
+
+      branding.updatePhoneProvider(requestParameters, bodyParameters).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding.updatePhoneProvider(requestParameters, bodyParameters).then((provider) => {
+        expect(provider.data.id).toBe(response.id);
+        expect(provider.data.name).toBe(response.name);
+        expect(provider.data.disabled).toBe(response.disabled);
+
+        const providerConfig = provider.data
+          .configuration as GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf;
+        const responseConfig =
+          response.configuration as GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf;
+
+        expect(providerConfig.default_from).toBe(responseConfig.default_from);
+        expect(providerConfig.mssid).toBe(responseConfig.mssid);
+        expect(providerConfig.sid).toBe(responseConfig.sid);
+        expect(providerConfig.delivery_methods).toEqual(responseConfig.delivery_methods);
+
+        done();
+      });
+    });
+  });
+
+  describe('#deletePhoneProvider', () => {
+    const requestParameters: DeletePhoneProviderRequest = {
+      id: 'provider_id',
+    };
+
+    beforeEach(() => {
+      nock(API_URL).delete(`/branding/phone/providers/${requestParameters.id}`).reply(200, {});
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      branding.deletePhoneProvider(requestParameters).then(done.bind(null, null));
+    });
+
+    it('should perform a DELETE request to /branding/phone/providers/:id', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/branding/phone/providers/${requestParameters.id}`)
+        .reply(204);
+
+      branding.deletePhoneProvider(requestParameters).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getAllPhoneProviders', () => {
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      nock.cleanAll();
+      request = nock(API_URL).get('/branding/phone/providers').reply(200, []);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding.getAllPhoneProviders().then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/branding/phone/providers').reply(500, {});
+
+      branding.getAllPhoneProviders().catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+
+      const data: GetBrandingPhoneProviders200ResponseProvidersInner[] = [{ name: 'twilio' }];
+      request = nock(API_URL);
+      nock(API_URL)
+        .get('/branding/phone/providers')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
+
+      branding.getAllPhoneProviders().then((result) => {
+        expect(result.data).toBeInstanceOf(Array);
+        done();
+      });
+    });
+
+    it('should perform a GET request to /branding/phone/providers', (done) => {
+      branding.getAllPhoneProviders().then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get('/branding/phone/providers')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, []);
+
+      branding.getAllPhoneProviders().then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe('#getPhoneProvider', () => {
+    const requestParameters: GetPhoneProviderRequest = {
+      id: 'provider_id',
+    };
+    const response: GetBrandingPhoneProviders200ResponseProvidersInner = {
+      id: 'provider_id',
+      name: 'twilio',
+      disabled: true,
+      configuration: {
+        default_from: 'deafult',
+        mssid: 'mssid1',
+        sid: 'sid1',
+        delivery_methods: [],
+      },
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      nock.cleanAll();
+      request = nock(API_URL)
+        .get(`/branding/phone/providers/${requestParameters.id}`)
+        .reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .getPhoneProvider(requestParameters)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      request = nock(API_URL)
+        .get(`/branding/phone/providers/${requestParameters.id}`)
+        .reply(500, {});
+
+      branding.getPhoneProvider(requestParameters).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a GET request to /branding/phone/providers/:id', (done) => {
+      branding
+        .getPhoneProvider(requestParameters)
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+      const request = nock(API_URL)
+        .get(`/branding/phone/providers/${requestParameters.id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      branding
+        .getPhoneProvider(requestParameters)
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding
+        .getPhoneProvider(requestParameters)
+        .then((result) => {
+          expect(result.data.id).toBe(response.id);
+          expect(result.data.name).toBe(response.name);
+          expect(result.data.disabled).toBe(response.disabled);
+          done();
+        })
+        .catch(done);
     });
   });
 });

@@ -98,8 +98,6 @@ describe('ConnectionsManager', () => {
         expect(connections.data[0].realms?.[0]).toBe(response[0].realms[0]);
         expect(connections.data[0].is_domain_connection).toBe(response[0].is_domain_connection);
         expect(connections.data[0].metadata?.test).toBe(response[0].metadata.test);
-        expect(connections.data[0].enabled_clients[0]).toBe(response[0].enabled_clients[0]);
-
         done();
       });
     });
@@ -1231,6 +1229,276 @@ describe('ConnectionsManager', () => {
         .reply(200, response);
 
       connections.getDefaultScimMapping({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getEnabledClients', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = [
+      {
+        clients: ['client_1'],
+      },
+    ];
+
+    let request: nock.Scope;
+    beforeEach(() => {
+      request = nock(API_URL).get(`/connections/${connectionId}/clients`).reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .getEnabledClients({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/clients`).reply(500, {});
+      connections.getEnabledClients({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/connections/${connectionId}/clients', (done) => {
+      connections.getEnabledClients({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/clients`).reply(200, response);
+
+      connections.getEnabledClients({ id: connectionId }).then((connection) => {
+        expect(connection.data).toStrictEqual(response);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/connections/${connectionId}/clients`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.getEnabledClients({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#updateEnabledClients', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const data = [
+      {
+        client_id: 'client_1',
+        status: true,
+      },
+    ];
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).patch(`/connections/${connectionId}/clients`, data).reply(204, {});
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .updateEnabledClients({ id: connectionId }, data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).patch(`/connections/${connectionId}`).reply(500, {});
+
+      connections.updateEnabledClients({ id: connectionId }, data).catch((err) => {
+        expect(err).toBeInstanceOf(Error);
+
+        done();
+      });
+    });
+
+    it('should perform a PATCH request to /api/v2/connections/:connectionId', (done) => {
+      connections.updateEnabledClients({ id: connectionId }, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      connections.updateEnabledClients({ id: connectionId }, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/connections/${connectionId}/clients`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(204, {});
+
+      connections.updateEnabledClients({ id: connectionId }, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#getKeys', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = [
+      {
+        kid: 'abc123',
+        algorithm: 'RS256',
+        key_use: 'sig',
+      },
+    ];
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).get(`/connections/${connectionId}/keys`).reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .getKeys({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/keys`).reply(500, {});
+      connections.getKeys({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/connections/${connectionId}/keys', (done) => {
+      connections.getKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+      nock(API_URL).get(`/connections/${connectionId}/keys`).reply(200, response);
+
+      connections.getKeys({ id: connectionId }).then((connection) => {
+        expect(connection.data).toStrictEqual(response);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/connections/${connectionId}/keys`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.getKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('#rotateKeys', () => {
+    const connectionId = 'con_KYp633cmKtnEQ31C';
+    const response = {
+      kid: 'abc123',
+      cert: '-----BEGIN CERTIFICATE-----abc-----END CERTIFICATE-----',
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).post(`/connections/${connectionId}/keys/rotate`).reply(200, response);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      connections
+        .rotateKeys({ id: connectionId })
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`connections/${connectionId}/keys/rotate`).reply(500, {});
+
+      connections.rotateKeys({ id: connectionId }).catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/connections/:id/keys/rotate', (done) => {
+      connections.rotateKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      connections.rotateKeys({ id: connectionId }).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      connections.rotateKeys({ id: connectionId }).then((connection) => {
+        expect(connection.data.cert).toBe(response.cert);
+        expect(connection.data.kid).toBe(response.kid);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/connections/${connectionId}/keys/rotate`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      connections.rotateKeys({ id: connectionId }).then(() => {
         expect(request.isDone()).toBe(true);
 
         done();

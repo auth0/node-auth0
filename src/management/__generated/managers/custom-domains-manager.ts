@@ -2,11 +2,13 @@ import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   CustomDomain,
+  GetCustomDomains200Response,
   PatchCustomDomainsByIdRequest,
   PostCustomDomains201Response,
   PostCustomDomainsRequest,
   PostVerify200Response,
   DeleteCustomDomainsByIdRequest,
+  GetCustomDomainsRequest,
   GetCustomDomainsByIdRequest,
   PatchCustomDomainsByIdOperationRequest,
   PostVerifyRequest,
@@ -50,11 +52,34 @@ export class CustomDomainsManager extends BaseAPI {
    *
    * @throws {RequiredError}
    */
-  async getAll(initOverrides?: InitOverride): Promise<ApiResponse<Array<CustomDomain>>> {
+  async getAll(
+    requestParameters: GetCustomDomainsRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetCustomDomains200Response>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'take',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'domain_metadata_filter',
+        config: {},
+      },
+      {
+        key: 'domain_name_filter',
+        config: {},
+      },
+    ]);
+
     const response = await this.request(
       {
         path: `/custom-domains`,
         method: 'GET',
+        query: queryParameters,
       },
       initOverrides
     );
@@ -101,19 +126,18 @@ export class CustomDomainsManager extends BaseAPI {
    * <pre><code>{ "custom_client_ip_header": "cf-connecting-ip" }</code></pre>
    *
    * <h5>Updating TLS_POLICY for a custom domain</h5>To update the <code>tls_policy</code> for a domain, the body to send should be:
-   * <pre><code>{ "tls_policy": "compatible" }</code></pre>
+   * <pre><code>{ "tls_policy": "recommended" }</code></pre>
    *
    *
    * TLS Policies:
    *
    * - recommended - for modern usage this includes TLS 1.2 only
-   * - compatible - compatible with older browsers this policy includes TLS 1.0, 1.1, 1.2
    *
    *
    * Some considerations:
    *
    * - The TLS ciphers and protocols available in each TLS policy follow industry recommendations, and may be updated occasionally.
-   * - Do not use the <code>compatible</code> TLS policy unless you have clients that require TLS 1.0.
+   * - The <code>compatible</code> TLS policy is no longer supported.
    *
    * Update custom domain configuration
    *

@@ -4,27 +4,36 @@ import type {
   Connection,
   ConnectionCreate,
   ConnectionUpdate,
+  GetConnectionClients200Response,
   GetConnections200Response,
+  GetConnectionsKeysResponseContent,
   GetDefaultMapping200Response,
   GetScimConfiguration200Response,
   GetScimTokens200ResponseInner,
+  PatchClientsRequestInner,
   PatchScimConfigurationRequest,
+  PostConnectionsKeysRotateResponseContent,
   PostScimConfigurationRequest,
   PostScimToken201Response,
   PostScimTokenRequest,
   GetConnections200ResponseOneOf,
+  ConnectionForList,
   DeleteConnectionsByIdRequest,
   DeleteScimConfigurationRequest,
   DeleteTokensByTokenIdRequest,
   DeleteUsersByEmailRequest,
+  GetConnectionClientsRequest,
   GetConnectionsRequest,
   GetConnectionsByIdRequest,
   GetDefaultMappingRequest,
+  GetKeysRequest,
   GetScimConfigurationRequest,
   GetScimTokensRequest,
   GetStatusRequest,
+  PatchClientsRequest,
   PatchConnectionsByIdRequest,
   PatchScimConfigurationOperationRequest,
+  PostRotateRequest,
   PostScimConfigurationOperationRequest,
   PostScimTokenOperationRequest,
 } from '../models/index.js';
@@ -148,24 +157,67 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieves every connection matching the specified strategy. All connections are retrieved if no strategy is being specified. Accepts a list of fields to include or exclude in the resulting list of connection objects.
-   * This endpoint supports two types of pagination:
-   * - Offset pagination
-   * - Checkpoint pagination
+   * Retrieve all clients that have the specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> enabled.
    *
-   * Checkpoint pagination should be used if you need to retrieve more than 1000 connections.
+   * <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+   *
+   * Get enabled clients for a connection
+   *
+   * @throws {RequiredError}
+   */
+  async getEnabledClients(
+    requestParameters: GetConnectionClientsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetConnectionClients200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'take',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/clients`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieves detailed list of all <a href="https://auth0.com/docs/authenticate/identity-providers">connections</a> that match the specified strategy. If no strategy is provided, all connections within your tenant are retrieved. This action can accept a list of fields to include or exclude from the resulting list of connections.
+   *
+   * This endpoint supports two types of pagination:
+   * <ul>
+   * <li>Offset pagination</li>
+   * <li>Checkpoint pagination</li>
+   * </ul>
+   *
+   * Checkpoint pagination must be used if you need to retrieve more than 1000 connections.
    *
    * <h2>Checkpoint Pagination</h2>
    *
    * To search by checkpoint, use the following parameters:
-   * - from: Optional id from which to start selection.
-   * - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+   * <ul>
+   * <li><code>from</code>: Optional id from which to start selection.</li>
+   * <li><code>take</code>: The total amount of entries to retrieve when using the from parameter. Defaults to 50.</li>
+   * </ul>
    *
-   * The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter.
-   * If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls.
-   * When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
+   * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
    *
-   * Note: The <code>include_totals</code> parameter is not supported when using checkpoint pagination.
    * Get all connections
    *
    * @throws {RequiredError}
@@ -177,7 +229,7 @@ export class ConnectionsManager extends BaseAPI {
   async getAll(
     requestParameters?: GetConnectionsRequest,
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<Array<Connection>>>;
+  ): Promise<ApiResponse<Array<ConnectionForList>>>;
   async getAll(
     requestParameters: GetConnectionsRequest = {},
     initOverrides?: InitOverride
@@ -211,6 +263,10 @@ export class ConnectionsManager extends BaseAPI {
         },
       },
       {
+        key: 'domain_alias',
+        config: {},
+      },
+      {
         key: 'name',
         config: {},
       },
@@ -237,8 +293,7 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * Retrieves a connection by its <code>ID</code>.
-   *
+   * Retrieve details for a specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> along with options that can be used for identity provider configuration.
    * Get a connection
    *
    * @throws {RequiredError}
@@ -288,6 +343,33 @@ export class ConnectionsManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/connections/{id}/scim-configuration/default-mapping`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Gets the connection keys for the Okta or OIDC connection strategy.
+   *
+   * Get connection keys
+   *
+   * @throws {RequiredError}
+   */
+  async getKeys(
+    requestParameters: GetKeysRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetConnectionsKeysResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/keys`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
@@ -380,8 +462,41 @@ export class ConnectionsManager extends BaseAPI {
   }
 
   /**
-   * <b>Note:</b> if you use the options parameter, the whole options object will be overridden, so ensure that all parameters are present
+   * Update enabled clients for a connection
    *
+   * @throws {RequiredError}
+   */
+  async updateEnabledClients(
+    requestParameters: PatchClientsRequest,
+    bodyParameters: Array<PatchClientsRequestInner>,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/clients`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update details for a specific <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a>, including option properties for identity provider configuration.
+   *
+   * <b>Note</b>: If you use the <code>options</code> parameter, the entire <code>options</code> object is overriden. To avoid partial data or other issues, ensure all parameters are present when using this option.
    * Update a connection
    *
    * @throws {RequiredError}
@@ -465,6 +580,33 @@ export class ConnectionsManager extends BaseAPI {
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Rotates the connection keys for the Okta or OIDC connection strategies.
+   *
+   * Rotate connection keys
+   *
+   * @throws {RequiredError}
+   */
+  async rotateKeys(
+    requestParameters: PostRotateRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PostConnectionsKeysRotateResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/connections/{id}/keys/rotate`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
       },
       initOverrides
     );

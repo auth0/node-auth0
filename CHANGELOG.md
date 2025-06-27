@@ -1,12 +1,195 @@
 # Change Log
 
+## [v4.26.0](https://github.com/auth0/node-auth0/tree/v4.26.0) (2025-06-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.25.0...v4.26.0)
+
+**Added**
+
+- Updated logger [\#1125](https://github.com/auth0/node-auth0/pull/1125) ([tanya732](https://github.com/tanya732))
+- Added support for Client Assertions JWT [\#1123](https://github.com/auth0/node-auth0/pull/1123) ([tanya732](https://github.com/tanya732))
+- Add `getEnabledConnections` method and related types to `ClientsManager` [\#1122](https://github.com/auth0/node-auth0/pull/1122) ([developerkunal](https://github.com/developerkunal))
+
+## [v4.25.0](https://github.com/auth0/node-auth0/tree/v4.25.0) (2025-06-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.24.0...v4.25.0)
+
+**Added**
+
+- Added support for Enabled Client Connections [\#1114](https://github.com/auth0/node-auth0/pull/1114) ([tanya732](https://github.com/tanya732))
+
+## [v4.24.0](https://github.com/auth0/node-auth0/tree/v4.24.0) (2025-06-03)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.23.1...v4.24.0)
+
+**Added**
+
+- Added Support for Limit M2M [\#1100](https://github.com/auth0/node-auth0/pull/1100) ([tanya732](https://github.com/tanya732))
+- Added Support for Limit M2M Auth API [\#1107](https://github.com/auth0/node-auth0/pull/1107) ([tanya732](https://github.com/tanya732))
+
+## [v4.23.1](https://github.com/auth0/node-auth0/tree/v4.23.1) (2025-05-20)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.23.0...v4.23.1)
+
+**Added**
+
+- Added support for ACUL Prompt Rendering Endpoint [\#1110](https://github.com/auth0/node-auth0/pull/1110) ([tanya732](https://github.com/tanya732))
+
+## [v4.23.0](https://github.com/auth0/node-auth0/tree/v4.23.0) (2025-05-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.22.0...v4.23.0)
+
+**Added**
+
+- Add test for setting the external_id parameter [\#1038](https://github.com/auth0/node-auth0/pull/1038) ([matthewcarroll](https://github.com/matthewcarroll))
+- Added policies in clients endpoint (GET/PATCH/POST) [\#1103](https://github.com/auth0/node-auth0/pull/1103) ([tanya732](https://github.com/tanya732))
+
+## [v4.22.0](https://github.com/auth0/node-auth0/tree/v4.22.0) (2025-04-16)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.21.0...v4.22.0)
+
+**Added**
+
+⚠️ BREAKING CHANGES
+
+- Added Support for SS-SSO-FF for Node Auth0 [\#1093](https://github.com/auth0/node-auth0/pull/1093) ([tanya732](https://github.com/tanya732))
+
+> Please look at #1093 PR for changes
+> Updated response from Array<Connection> to Array<ConnectionForList> for /connections : 'GET' endpoint
+
+## [v4.21.0](https://github.com/auth0/node-auth0/tree/v4.21.0) (2025-03-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.20.0...v4.21.0)
+
+**Added**
+
+- Add tokenForConnection method to OAuth [\#1083](https://github.com/auth0/node-auth0/pull/1083) ([tusharpandey13](https://github.com/tusharpandey13))
+- Added pre-change-password field in attackprotection-manager [\#1096](https://github.com/auth0/node-auth0/pull/1096) ([tanya732](https://github.com/tanya732))
+- Added support for Federated Login Connection Tokenset for User [\#1090](https://github.com/auth0/node-auth0/pull/1090) ([tanya732](https://github.com/tanya732))
+- Added tenant ACL EA support [\#1091](https://github.com/auth0/node-auth0/pull/1091) ([kushalshit27](https://github.com/kushalshit27))
+- Add new language and prompt identifiers to custom text enums [\#1095](https://github.com/auth0/node-auth0/pull/1095) ([kushalshit27](https://github.com/kushalshit27))
+
+## [v4.20.0](https://github.com/auth0/node-auth0/tree/v4.20.0) (2025-03-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.19.0...v4.20.0)
+
+**Added**
+
+- Add support for RAR when using CIBA [\#1088](https://github.com/auth0/node-auth0/pull/1088) ([frederikprijck](https://github.com/frederikprijck))
+- Get all custom domains paginate support [\#1089](https://github.com/auth0/node-auth0/pull/1089) ([kushalshit27](https://github.com/kushalshit27))
+
+## [v4.19.0](https://github.com/auth0/node-auth0/tree/v4.19.0) (2025-03-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.18.0...v4.19.0)
+
+**Added**
+
+- Added tenant, channel in Branding Phone Providers [\#1085](https://github.com/auth0/node-auth0/pull/1085) ([tanya732](https://github.com/tanya732))
+- Added byok support for node auth0 [\#1080](https://github.com/auth0/node-auth0/pull/1080) ([tanya732](https://github.com/tanya732))
+- feature/formsCustomText [\#1082](https://github.com/auth0/node-auth0/pull/1082) ([tusharpandey13](https://github.com/tusharpandey13))
+- Add Support For Extensibility as Custom Provider in BrandingManager [\#1079](https://github.com/auth0/node-auth0/pull/1079) ([tanya732](https://github.com/tanya732))
+
+## [v4.18.0](https://github.com/auth0/node-auth0/tree/v4.18.0) (2025-01-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.17.0...v4.18.0)
+
+**Added**
+
+- add optional organization parameter in ClientCredentialsGrantRequest of clientCredentialsGrant call of oauth of authenticationClient [\#1075](https://github.com/auth0/node-auth0/pull/1075) ([tusharpandey13](https://github.com/tusharpandey13))
+- feature/customTokenExchange [\#1074](https://github.com/auth0/node-auth0/pull/1074) ([tusharpandey13](https://github.com/tusharpandey13))
+
+**Removed**
+
+- remove redundant client_ids parameter from getAll() methood of clientsManager [\#1076](https://github.com/auth0/node-auth0/pull/1076) ([tusharpandey13](https://github.com/tusharpandey13))
+
+## [v4.17.0](https://github.com/auth0/node-auth0/tree/v4.17.0) (2025-01-21)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.16.0...v4.17.0)
+
+**Changed**
+
+- updated email template manager, added reset_email_by_code to multiple places [\#1071](https://github.com/auth0/node-auth0/pull/1071) ([tusharpandey13](https://github.com/tusharpandey13))
+- feature/customEmailProvider [\#1070](https://github.com/auth0/node-auth0/pull/1070) ([tusharpandey13](https://github.com/tusharpandey13))
+
+**Fixed**
+
+- accept a function as token [\#1069](https://github.com/auth0/node-auth0/pull/1069) ([tusharpandey13](https://github.com/tusharpandey13))
+
+## [v4.16.0](https://github.com/auth0/node-auth0/tree/v4.16.0) (2025-01-08)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.15.0...v4.16.0)
+
+**Added**
+
+- CIBA implementation [\#1066](https://github.com/auth0/node-auth0/pull/1066) ([tusharpandey13](https://github.com/tusharpandey13))
+
+**Changed**
+
+- update README for clarity [\#1067](https://github.com/auth0/node-auth0/pull/1067) ([tusharpandey13](https://github.com/tusharpandey13))
+
+## [v4.15.0](https://github.com/auth0/node-auth0/tree/v4.15.0) (2024-12-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.14.0...v4.15.0)
+
+**Added**
+
+- ACUL implementation [\#1060](https://github.com/auth0/node-auth0/pull/1060) ([tusharpandey13](https://github.com/tusharpandey13))
+
+## [v4.14.0](https://github.com/auth0/node-auth0/tree/v4.14.0) (2024-11-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.13.0...v4.14.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Self Service SSO GA release changes [\#1057](https://github.com/auth0/node-auth0/pull/1057) ([tusharpandey13](https://github.com/tusharpandey13))
+  - Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
+  - Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
+  - Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
+
+## [v4.13.0](https://github.com/auth0/node-auth0/tree/v4.13.0) (2024-11-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.12.0...v4.13.0)
+
+**Added**
+
+- CYOK implementation [\#1041](https://github.com/auth0/node-auth0/pull/1041) ([tusharpandey13](https://github.com/tusharpandey13))
+- Feature/forms [\#1055](https://github.com/auth0/node-auth0/pull/1055) ([tusharpandey13](https://github.com/tusharpandey13))
+
+## [v4.12.0](https://github.com/auth0/node-auth0/tree/v4.12.0) (2024-11-07)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.11.0...v4.12.0)
+
+**Fixed**
+
+- org cc/patch1 [\#1053](https://github.com/auth0/node-auth0/pull/1053) ([tusharpandey13](https://github.com/tusharpandey13))
+- parameter name change for Organizations for Client Credentials [\#1052](https://github.com/auth0/node-auth0/pull/1052) ([tusharpandey13](https://github.com/tusharpandey13))
+- Remove IGA trigger from e2e test [DXEX-4601] [\#1048](https://github.com/auth0/node-auth0/pull/1048) ([Widcket](https://github.com/Widcket))
+
+## [v4.11.0](https://github.com/auth0/node-auth0/tree/v4.11.0) (2024-11-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.10.0...v4.11.0)
+
+**Added**
+
+- Fixed missing endpoints for feature Organizations for Client Credentials changes [\#1046](https://github.com/auth0/node-auth0/pull/1046) ([tusharpandey13](https://github.com/tusharpandey13))
+- Creating RL workflow for node-auth0 repo [\#1044](https://github.com/auth0/node-auth0/pull/1044) ([arpit-jn](https://github.com/arpit-jn))
+
+## [v4.10.0](https://github.com/auth0/node-auth0/tree/v4.10.0) (2024-09-10)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.9.0...v4.10.0)
+
+**Added**
+
+- Prompt Partial model changes [\#1035](https://github.com/auth0/node-auth0/pull/1035) ([tusharpandey13](https://github.com/tusharpandey13))
+- Add organization support for client credentials to node-auth0 [\#1033](https://github.com/auth0/node-auth0/pull/1033) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v4.9.0](https://github.com/auth0/node-auth0/tree/v4.9.0) (2024-08-26)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.8.0...v4.9.0)
 
 **Added**
 
-- Feature/SDK-4921 [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
+- Node SDK support for SS-SSO [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
 - Update Codecov Action with Token [\#1029](https://github.com/auth0/node-auth0/pull/1029) ([developerkunal](https://github.com/developerkunal))
 
 **Changed**

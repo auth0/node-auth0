@@ -516,6 +516,7 @@ describe('GuardianManager', () => {
       user_id: '',
       email: '',
       send_mail: false,
+      email_locale: '',
     };
     const data: PostTicket200Response = {
       ticket_id: 'foo',

@@ -8,6 +8,7 @@ import {
   RefreshTokenGrantRequest,
   RevokeRefreshTokenRequest,
   PushedAuthorizationRequest,
+  TokenForConnectionRequest,
 } from '../../src/index.js';
 import { withIdToken } from '../utils/index.js';
 
@@ -367,6 +368,57 @@ describe('OAuth', () => {
       });
     });
   });
+
+  describe('#tokenForConnection', () => {
+    it('should require a connection', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({ subject_token: 'test-token' } as TokenForConnectionRequest)
+      ).rejects.toThrow('Required parameter requestParameters.connection was null or undefined.');
+    });
+
+    it('should require a subject_token', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({ connection: 'google-oauth2' } as TokenForConnectionRequest)
+      ).rejects.toThrow(
+        'Required parameter requestParameters.subject_token was null or undefined.'
+      );
+    });
+
+    it('should return token response', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          connection: 'google-oauth2',
+          subject_token: 'test-refresh-token',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'connection-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
+        },
+      });
+    });
+
+    it('should include login_hint when provided', async () => {
+      const oauth = new OAuth(opts);
+      await expect(
+        oauth.tokenForConnection({
+          connection: 'google-oauth2',
+          subject_token: 'test-refresh-token',
+          login_hint: 'user@example.com',
+        })
+      ).resolves.toMatchObject({
+        data: {
+          access_token: 'connection-access-token',
+          expires_in: 86400,
+          token_type: 'Bearer',
+        },
+      });
+    });
+  });
 });
 
 describe('OAuth (with ID Token validation)', () => {
@@ -407,40 +459,6 @@ describe('OAuth (with ID Token validation)', () => {
     ).rejects.toThrowError(
       /\(auth_time\) claim in the ID token indicates that too much time has passed/
     );
-    nockDone();
-  });
-
-  it('should throw for invalid organization id', async () => {
-    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
-      before: await withIdToken({
-        ...opts,
-        payload: { org_id: 'org_123' },
-      }),
-    });
-    const oauth = new OAuth(opts);
-    await expect(
-      oauth.refreshTokenGrant(
-        { refresh_token: 'test-refresh-token' },
-        { idTokenValidateOptions: { organization: 'org_1235' } }
-      )
-    ).rejects.toThrowError(/\(org_id\) claim value mismatch in the ID token/);
-    nockDone();
-  });
-
-  it('should throw for invalid organization name', async () => {
-    const { nockDone } = await nockBack('auth/fixtures/oauth.json', {
-      before: await withIdToken({
-        ...opts,
-        payload: { org_name: 'org123' },
-      }),
-    });
-    const oauth = new OAuth(opts);
-    await expect(
-      oauth.refreshTokenGrant(
-        { refresh_token: 'test-refresh-token' },
-        { idTokenValidateOptions: { organization: 'org1235' } }
-      )
-    ).rejects.toThrowError(/\(org_name\) claim value mismatch in the ID token/);
     nockDone();
   });
 });

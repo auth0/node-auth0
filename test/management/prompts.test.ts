@@ -12,19 +12,20 @@ import {
   RequiredError,
   GetPartialsPromptEnum,
   PutPartialsPromptEnum,
+  GetRendering200Response,
+  PatchRenderingRequest,
+  GetAllRendering200ResponseOneOfInner,
 } from '../../src/index.js';
 
-describe('PromptsManager', () => {
-  let prompts: PromptsManager;
-  const token = 'TOKEN';
+import { checkMethod } from './tests.util.js';
 
-  beforeAll(() => {
-    const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
-      token: token,
-    });
-    prompts = client.prompts;
+describe('PromptsManager', () => {
+  const token = 'TOKEN';
+  const client = new ManagementClient({
+    domain: 'tenant.auth0.com',
+    token: token,
   });
+  const prompts: PromptsManager = client.prompts;
 
   describe('#constructor', () => {
     it('should throw an error when no base URL is provided', () => {
@@ -440,6 +441,103 @@ describe('PromptsManager', () => {
         .reply(200, {});
 
       prompts.updatePartials(params, body).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe('getRendering', () => {
+    const operation = prompts.getRendering({ prompt: 'login', screen: 'consent' });
+    const uri = `/prompts/login/screen/consent/rendering`;
+    const method = 'get';
+    const expectedResposne: GetRendering200Response = {
+      screen: 'consent',
+      prompt: 'login',
+      tenant: 'tenant',
+      context_configuration: ['context'],
+      default_head_tags_disabled: false,
+      head_tags: [],
+      rendering_mode: 'advanced',
+      use_page_template: false,
+      filters: {},
+    };
+    checkMethod({ operation, uri, method, expectedResposne });
+  });
+
+  describe('updateRendering', () => {
+    const patchBody: PatchRenderingRequest = {
+      context_configuration: ['context2'],
+      default_head_tags_disabled: true,
+      head_tags: [{ title: 'title' }],
+      rendering_mode: 'advanced',
+      use_page_template: false,
+    };
+    const operation = prompts.updateRendering({ prompt: 'login', screen: 'consent' }, patchBody);
+    const uri = `/prompts/login/screen/consent/rendering`;
+    const method = 'patch';
+    checkMethod({ operation, uri, method });
+  });
+
+  describe('#getAllRenderingSettings', () => {
+    const data: Partial<GetAllRendering200ResponseOneOfInner>[] = [
+      {
+        default_head_tags_disabled: true,
+      },
+    ];
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).get('/prompts/rendering').reply(200, data);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      prompts.getAllRenderingSettings().then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/prompts/rendering').reply(500, {});
+
+      prompts.getAllRenderingSettings().catch((err) => {
+        expect(err).toBeDefined();
+
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/prompts/rendering').reply(200, data);
+
+      prompts.getAllRenderingSettings().then((provider) => {
+        expect(provider.data[0].default_head_tags_disabled).toEqual(
+          data[0].default_head_tags_disabled
+        );
+        done();
+      });
+    });
+
+    it('should perform a GET request to /api/v2/prompts/rendering', (done) => {
+      prompts.getAllRenderingSettings().then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get('/prompts/rendering')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      prompts.getAllRenderingSettings().then(() => {
         expect(request.isDone()).toBe(true);
 
         done();

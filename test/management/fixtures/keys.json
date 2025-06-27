@@ -40,6 +40,13 @@
   },
   {
     "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/api/v2/keys/encryption/rekey",
+    "status": 200,
+    "response": {}
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
     "method": "PUT",
     "path": "/api/v2/keys/signing/my-kid/revoke",
     "status": 200,
