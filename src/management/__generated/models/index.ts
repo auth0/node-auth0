@@ -15972,6 +15972,7 @@ export interface ResourceServerProofOfPossession {
 
 export const ResourceServerProofOfPossessionMechanismEnum = {
   mtls: 'mtls',
+  dpop: 'dpop',
 } as const;
 export type ResourceServerProofOfPossessionMechanismEnum =
   (typeof ResourceServerProofOfPossessionMechanismEnum)[keyof typeof ResourceServerProofOfPossessionMechanismEnum];
