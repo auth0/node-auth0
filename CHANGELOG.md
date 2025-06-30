@@ -1,5 +1,17 @@
 # Change Log
 
+## [v4.27.0](https://github.com/auth0/node-auth0/tree/v4.27.0) (2025-06-30)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.26.0...v4.27.0)
+
+**Added**
+
+- Added Support for DPOP in Resource Server [\#1132](https://github.com/auth0/node-auth0/pull/1132) ([tanya732](https://github.com/tanya732))
+- Added Support for ACUL R7 on GetAllRendering Endpoint [\#1130](https://github.com/auth0/node-auth0/pull/1130) ([tanya732](https://github.com/tanya732))
+- Added email_locale field for Create MFA enrollment ticket [\#1129](https://github.com/auth0/node-auth0/pull/1129) ([tanya732](https://github.com/tanya732))
+- Added Support for ACUL R7 [\#1128](https://github.com/auth0/node-auth0/pull/1128) ([tanya732](https://github.com/tanya732))
+- Added Support for Multiple Custom Domain [\#1109](https://github.com/auth0/node-auth0/pull/1109) ([tanya732](https://github.com/tanya732))
+
 ## [v4.26.0](https://github.com/auth0/node-auth0/tree/v4.26.0) (2025-06-20)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.25.0...v4.26.0)
