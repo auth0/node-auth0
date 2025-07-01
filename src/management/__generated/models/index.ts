@@ -6708,6 +6708,9 @@ export interface GetLogStreams200ResponseInnerOneOf {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOfSink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOfStatusEnum = {
@@ -6755,6 +6758,9 @@ export interface GetLogStreams200ResponseInnerOneOf1 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf1Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf1StatusEnum = {
@@ -6851,6 +6857,9 @@ export interface GetLogStreams200ResponseInnerOneOf2 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf2Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf2StatusEnum = {
@@ -6962,6 +6971,9 @@ export interface GetLogStreams200ResponseInnerOneOf3 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf3Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf3StatusEnum = {
@@ -7034,6 +7046,9 @@ export interface GetLogStreams200ResponseInnerOneOf4 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf4Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf4StatusEnum = {
@@ -7106,6 +7121,9 @@ export interface GetLogStreams200ResponseInnerOneOf5 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf5Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf5StatusEnum = {
@@ -7163,6 +7181,9 @@ export interface GetLogStreams200ResponseInnerOneOf6 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf6Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf6StatusEnum = {
@@ -7220,6 +7241,9 @@ export interface GetLogStreams200ResponseInnerOneOf7 {
   /**
    */
   sink: GetLogStreams200ResponseInnerOneOf7Sink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const GetLogStreams200ResponseInnerOneOf7StatusEnum = {
@@ -7316,6 +7340,45 @@ export const GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum = {
 } as const;
 export type GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum =
   (typeof GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfFiltersInnerNameEnum];
+
+/**
+ *
+ */
+export interface GetLogStreams200ResponseInnerOneOfPiiConfig {
+  /**
+   */
+  log_fields: Array<GetLogStreams200ResponseInnerOneOfPiiConfigLogFieldsEnum>;
+  /**
+   */
+  method?: GetLogStreams200ResponseInnerOneOfPiiConfigMethodEnum;
+  /**
+   */
+  algorithm?: GetLogStreams200ResponseInnerOneOfPiiConfigAlgorithmEnum;
+}
+
+export const GetLogStreams200ResponseInnerOneOfPiiConfigLogFieldsEnum = {
+  first_name: 'first_name',
+  last_name: 'last_name',
+  username: 'username',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+} as const;
+export type GetLogStreams200ResponseInnerOneOfPiiConfigLogFieldsEnum =
+  (typeof GetLogStreams200ResponseInnerOneOfPiiConfigLogFieldsEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfPiiConfigLogFieldsEnum];
+
+export const GetLogStreams200ResponseInnerOneOfPiiConfigMethodEnum = {
+  mask: 'mask',
+  hash: 'hash',
+} as const;
+export type GetLogStreams200ResponseInnerOneOfPiiConfigMethodEnum =
+  (typeof GetLogStreams200ResponseInnerOneOfPiiConfigMethodEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfPiiConfigMethodEnum];
+
+export const GetLogStreams200ResponseInnerOneOfPiiConfigAlgorithmEnum = {
+  xxhash: 'xxhash',
+} as const;
+export type GetLogStreams200ResponseInnerOneOfPiiConfigAlgorithmEnum =
+  (typeof GetLogStreams200ResponseInnerOneOfPiiConfigAlgorithmEnum)[keyof typeof GetLogStreams200ResponseInnerOneOfPiiConfigAlgorithmEnum];
 
 /**
  *
@@ -10200,6 +10263,9 @@ export interface PatchLogStreamsByIdRequest {
   /**
    */
   sink?: PatchLogStreamsByIdRequestSink;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PatchLogStreamsByIdRequestStatusEnum = {
@@ -14044,6 +14110,9 @@ export interface PostLogStreamsRequestOneOf {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOfTypeEnum = {
@@ -14077,6 +14146,9 @@ export interface PostLogStreamsRequestOneOf1 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf1TypeEnum = {
@@ -14154,6 +14226,9 @@ export interface PostLogStreamsRequestOneOf2 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf2TypeEnum = {
@@ -14246,6 +14321,9 @@ export interface PostLogStreamsRequestOneOf3 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf3TypeEnum = {
@@ -14279,6 +14357,9 @@ export interface PostLogStreamsRequestOneOf4 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf4TypeEnum = {
@@ -14312,6 +14393,9 @@ export interface PostLogStreamsRequestOneOf5 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf5TypeEnum = {
@@ -14345,6 +14429,9 @@ export interface PostLogStreamsRequestOneOf6 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf6TypeEnum = {
@@ -14378,6 +14465,9 @@ export interface PostLogStreamsRequestOneOf7 {
    *
    */
   startFrom?: string;
+  /**
+   */
+  pii_config?: GetLogStreams200ResponseInnerOneOfPiiConfig;
 }
 
 export const PostLogStreamsRequestOneOf7TypeEnum = {
