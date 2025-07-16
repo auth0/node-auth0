@@ -84,6 +84,7 @@ describe('ActionsManager', () => {
           },
           status: 'building',
           all_changes_deployed: true,
+          deploy: false,
         },
       ];
 
@@ -149,6 +150,7 @@ describe('ActionsManager', () => {
           expect(credentials.data.actions?.[0].all_changes_deployed).toBe(
             data[0].all_changes_deployed
           );
+          expect(credentials.data.actions?.[0].deploy).toBe(data[0].deploy);
 
           done();
         });
@@ -211,6 +213,7 @@ describe('ActionsManager', () => {
         all_changes_deployed: true,
         created_at: '2020-07-29T19:45:15.725999098Z',
         updated_at: '2020-07-29T19:45:15.725999098Z',
+        deploy: false,
       };
       beforeEach(() => {
         request = nock(API_URL).get(`/actions/actions/${data.id}`).reply(200, data);
@@ -270,6 +273,7 @@ describe('ActionsManager', () => {
           expect(credentials.data.installed_integration_id).toBe(data.installed_integration_id);
           expect(credentials.data.integration?.id).toBe(data.integration?.id);
           expect(credentials.data.all_changes_deployed).toBe(data.all_changes_deployed);
+          expect(credentials.data.deploy).toBe(data.deploy);
 
           done();
         });
@@ -306,6 +310,7 @@ describe('ActionsManager', () => {
         ],
         runtime: 'node12',
         secrets: [{ name: 'secret1' }],
+        deploy: false,
       };
 
       beforeEach(() => {
@@ -365,7 +370,7 @@ describe('ActionsManager', () => {
           );
           expect(action.data.runtime).toBe(data.runtime);
           expect(action.data.secrets?.[0].name).toBe(data.secrets?.[0].name);
-
+          expect(action.data.deploy).toBe(data.deploy);
           done();
         });
       });
@@ -1115,6 +1120,7 @@ describe('ActionsManager', () => {
           action: {
             id: 'action-id',
             name: 'test action',
+            deploy: false,
           },
         },
       ];
@@ -1163,6 +1169,7 @@ describe('ActionsManager', () => {
           expect(bindings.data.bindings?.[0].display_name).toBe(data[0].display_name);
           expect(bindings.data.bindings?.[0].action?.id).toBe(data[0].action?.id);
           expect(bindings.data.bindings?.[0].action?.name).toBe(data[0].action?.name);
+          expect(bindings.data.bindings?.[0].action?.deploy).toBe(data[0].action.deploy);
           done();
         });
       });

@@ -4575,6 +4575,11 @@ export interface GetActions200ResponseActionsInner {
    *
    */
   updated_at: string;
+  /**
+   * True if the action should be deployed after creation.
+   *
+   */
+  deploy?: boolean;
 }
 
 export const GetActions200ResponseActionsInnerStatusEnum = {
@@ -10692,6 +10697,11 @@ export interface PostActionRequest {
    *
    */
   secrets?: Array<PostActionRequestSecretsInner>;
+  /**
+   * True if the action should be deployed after creation.
+   *
+   */
+  deploy?: boolean;
 }
 /**
  * Dependency is an npm module. These values are used to produce an immutable artifact, which manifests as a layer_id.
