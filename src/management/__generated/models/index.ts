@@ -8394,6 +8394,26 @@ export interface GetResourceServers200ResponseOneOf {
 /**
  *
  */
+export interface GetRiskAssessmentsSettingsNewDeviceResponseContent {
+  /**
+   * Length of time to remember devices for, in days.
+   *
+   */
+  remember_for: number;
+}
+/**
+ *
+ */
+export interface GetRiskAssessmentsSettingsResponseContent {
+  /**
+   * Whether or not risk assessment is enabled.
+   *
+   */
+  enabled: boolean;
+}
+/**
+ *
+ */
 export type GetRolePermission200Response = Array<Permission> | GetRolePermission200ResponseOneOf;
 /**
  *
@@ -17762,6 +17782,46 @@ export const UpdatePhoneProviderRequestNameEnum = {
 export type UpdatePhoneProviderRequestNameEnum =
   (typeof UpdatePhoneProviderRequestNameEnum)[keyof typeof UpdatePhoneProviderRequestNameEnum];
 
+/**
+ *
+ */
+export interface UpdateRiskAssessmentsSettingsNewDeviceRequestContent {
+  /**
+   * Length of time to remember devices for, in days.
+   *
+   */
+  remember_for: number;
+}
+/**
+ *
+ */
+export interface UpdateRiskAssessmentsSettingsNewDeviceResponseContent {
+  /**
+   * Length of time to remember devices for, in days.
+   *
+   */
+  remember_for: number;
+}
+/**
+ *
+ */
+export interface UpdateRiskAssessmentsSettingsRequestContent {
+  /**
+   * Whether or not risk assessment is enabled.
+   *
+   */
+  enabled: boolean;
+}
+/**
+ *
+ */
+export interface UpdateRiskAssessmentsSettingsResponseContent {
+  /**
+   * Whether or not risk assessment is enabled.
+   *
+   */
+  enabled: boolean;
+}
 /**
  *
  */
