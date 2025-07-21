@@ -28,6 +28,7 @@ import {
   PromptsManager,
   RefreshTokensManager,
   ResourceServersManager,
+  RiskAssessmentsManager,
   RolesManager,
   RulesManager,
   RulesConfigsManager,
@@ -71,6 +72,7 @@ export abstract class ManagementClientBase {
   public readonly prompts = new PromptsManager(this.configuration);
   public readonly refreshTokens = new RefreshTokensManager(this.configuration);
   public readonly resourceServers = new ResourceServersManager(this.configuration);
+  public readonly riskAssessments = new RiskAssessmentsManager(this.configuration);
   public readonly roles = new RolesManager(this.configuration);
   public readonly rules = new RulesManager(this.configuration);
   public readonly rulesConfigs = new RulesConfigsManager(this.configuration);

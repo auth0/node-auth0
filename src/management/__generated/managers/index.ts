@@ -24,6 +24,7 @@ export * from './organizations-manager.js';
 export * from './prompts-manager.js';
 export * from './refresh-tokens-manager.js';
 export * from './resource-servers-manager.js';
+export * from './risk-assessments-manager.js';
 export * from './roles-manager.js';
 export * from './rules-manager.js';
 export * from './rules-configs-manager.js';
