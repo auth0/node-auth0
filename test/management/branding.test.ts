@@ -1288,7 +1288,7 @@ describe('BrandingManager', () => {
       branding
         .getPhoneTemplate(params)
         .then((response) => {
-          const result = response.data ?? response; // adjust if needed
+          const result = response.data ?? response;
           expect(result.id).toBe(data.id);
           expect(result.channel).toBe(data.channel);
           expect(result.customizable).toBe(data.customizable);
