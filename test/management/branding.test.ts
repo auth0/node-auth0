@@ -29,12 +29,8 @@ import {
   CreatePhoneTemplateResponseContent,
   CreatePhoneTemplateRequestContentTypeEnum,
   CreatePhoneTemplateResponseContentTypeEnum,
-  ListPhoneTemplatesResponseContent,
-  GetPhoneTemplateResponseContent,
-  UpdatePhoneTemplateRequest,
   UpdatePhoneTemplateResponseContent,
   UpdatePhoneTemplateRequestContent,
-  DeletePhoneTemplateRequest,
 } from '../../src/index.js';
 
 describe('BrandingManager', () => {
@@ -1394,8 +1390,6 @@ describe('BrandingManager', () => {
       branding
         .getAllPhoneTemplates()
         .then((response) => {
-          const template = response.data.templates ?? [];
-
           expect(response.data.templates?.[0].id).toBe(data.templates?.[0].id);
           expect(response.data.templates?.[0].channel).toBe(data.templates[0].channel);
           expect(response.data.templates?.[0].customizable).toBe(data.templates[0].customizable);
