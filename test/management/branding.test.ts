@@ -25,6 +25,16 @@ import {
   DeletePhoneProviderRequest,
   GetPhoneProviderRequest,
   GetBrandingPhoneProviders200ResponseProvidersInnerConfigurationAnyOf,
+  CreatePhoneTemplateRequestContent,
+  CreatePhoneTemplateResponseContent,
+  CreatePhoneTemplateRequestContentTypeEnum,
+  CreatePhoneTemplateResponseContentTypeEnum,
+  ListPhoneTemplatesResponseContent,
+  GetPhoneTemplateResponseContent,
+  UpdatePhoneTemplateRequest,
+  UpdatePhoneTemplateResponseContent,
+  UpdatePhoneTemplateRequestContent,
+  DeletePhoneTemplateRequest,
 } from '../../src/index.js';
 
 describe('BrandingManager', () => {
@@ -1106,6 +1116,642 @@ describe('BrandingManager', () => {
           expect(result.data.id).toBe(response.id);
           expect(result.data.name).toBe(response.name);
           expect(result.data.disabled).toBe(response.disabled);
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('#createPhoneTemplate', () => {
+    const data: CreatePhoneTemplateRequestContent = {
+      type: 'otp_verify' as CreatePhoneTemplateRequestContentTypeEnum,
+      disabled: false,
+      content: {
+        syntax: 'liquid',
+        from: '+1234567890',
+        body: {
+          text: 'Your verification code is: {{code}}',
+          voice: 'Your verification code is {{code}}',
+        },
+      },
+    };
+    const response: CreatePhoneTemplateResponseContent = {
+      id: 'template_id',
+      channel: 'sms',
+      customizable: true,
+      tenant: 'tenant_id',
+      type: 'otp_verify' as CreatePhoneTemplateResponseContentTypeEnum,
+      disabled: false,
+      content: {
+        syntax: 'liquid',
+        from: '+1234567890',
+        body: {
+          text: 'Your verification code is: {{code}}',
+          voice: 'Your verification code is {{code}}',
+        },
+      },
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .post('/branding/phone/templates', (body) => {
+          return JSON.stringify(body) === JSON.stringify(data);
+        })
+        .reply(201, response);
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .createPhoneTemplate(data)
+        .then(() => done())
+        .catch((err) => done(err));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post('/branding/phone/templates').reply(500, {});
+
+      branding.createPhoneTemplate(data).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/branding/phone/templates', (done) => {
+      branding.createPhoneTemplate(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post('/branding/phone/templates', (body) => JSON.stringify(body) === JSON.stringify(data))
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(201, response);
+
+      branding.createPhoneTemplate(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include Content-Type application/json header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post('/branding/phone/templates', (body) => JSON.stringify(body) === JSON.stringify(data))
+        .matchHeader('Content-Type', 'application/json')
+        .reply(201, response);
+
+      branding.createPhoneTemplate(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding.createPhoneTemplate(data).then((result) => {
+        expect(result.data.id).toBe(response.id);
+        expect(result.data.type).toBe(response.type);
+        expect(result.data.disabled).toBe(response.disabled);
+        expect(result.data.channel).toBe(response.channel);
+        expect(result.data.customizable).toBe(response.customizable);
+        expect(result.data.tenant).toBe(response.tenant);
+        expect(result.data.content.syntax).toBe(response.content.syntax);
+        expect(result.data.content.from).toBe(response.content.from);
+        expect(result.data.content.body?.text).toBe(response.content.body?.text);
+        expect(result.data.content.body?.voice).toBe(response.content.body?.voice);
+        done();
+      });
+    });
+  });
+
+  describe('#getPhoneTemplate', () => {
+    const params = { id: '5' };
+
+    const data = {
+      id: 'template_id',
+      channel: 'sms',
+      customizable: true,
+      tenant: 'tenant_id',
+      type: 'otp_verify' as CreatePhoneTemplateResponseContentTypeEnum,
+      disabled: false,
+      content: {
+        syntax: 'liquid',
+        from: '+1234567890',
+        body: {
+          text: 'Your verification code is: {{code}}',
+          voice: 'Your verification code is {{code}}',
+        },
+      },
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      nock.cleanAll();
+
+      request = nock(API_URL).get(`/branding/phone/templates/${params.id}`).reply(200, data);
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .getPhoneTemplate(params)
+        .then(() => done())
+        .catch((err) => done(err));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/branding/phone/templates/${params.id}`).reply(500, {});
+
+      branding
+        .getPhoneTemplate(params)
+        .then(() => done(new Error('Expected method to reject.')))
+        .catch((err) => {
+          expect(err).toBeDefined();
+          done();
+        });
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding
+        .getPhoneTemplate(params)
+        .then((response) => {
+          const result = response.data ?? response; // adjust if needed
+          expect(result.id).toBe(data.id);
+          expect(result.channel).toBe(data.channel);
+          expect(result.customizable).toBe(data.customizable);
+          expect(result.tenant).toBe(data.tenant);
+          expect(result.type).toBe(data.type);
+          expect(result.disabled).toBe(data.disabled);
+          expect(result.content.syntax).toBe(data.content.syntax);
+          expect(result.content.from).toBe(data.content.from);
+          expect(result.content.body?.text).toBe(data.content.body?.text);
+          expect(result.content.body?.voice).toBe(data.content.body?.voice);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should perform a GET request to /branding/phone/templates/:id', (done) => {
+      branding
+        .getPhoneTemplate(params)
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const authRequest = nock(API_URL)
+        .get(`/branding/phone/templates/${params.id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
+
+      branding
+        .getPhoneTemplate(params)
+        .then(() => {
+          expect(authRequest.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  describe('#getAllPhoneTemplates', () => {
+    const data = {
+      templates: [
+        {
+          id: 'template_id',
+          channel: 'sms',
+          customizable: true,
+          tenant: 'tenant_id',
+          type: 'otp_verify' as CreatePhoneTemplateResponseContentTypeEnum,
+          disabled: false,
+          content: {
+            syntax: 'liquid',
+            from: '+1234567890',
+            body: {
+              text: 'Your verification code is: {{code}}',
+              voice: 'Your verification code is {{code}}',
+            },
+          },
+        },
+      ],
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      nock.cleanAll();
+      request = nock(API_URL).get('/branding/phone/templates').reply(200, data);
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .getAllPhoneTemplates()
+        .then(() => done())
+        .catch((err) => done(err));
+    });
+
+    it('should perform a GET request to /branding/phone/templates', (done) => {
+      branding
+        .getAllPhoneTemplates()
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/branding/phone/templates').reply(200, data);
+
+      branding
+        .getAllPhoneTemplates()
+        .then((response) => {
+          const template = response.data.templates ?? [];
+
+          expect(response.data.templates?.[0].id).toBe(data.templates?.[0].id);
+          expect(response.data.templates?.[0].channel).toBe(data.templates[0].channel);
+          expect(response.data.templates?.[0].customizable).toBe(data.templates[0].customizable);
+          expect(response.data.templates?.[0].tenant).toBe(data.templates[0].tenant);
+          expect(response.data.templates?.[0].type).toBe(data.templates[0].type);
+          expect(response.data.templates?.[0].disabled).toBe(data.templates[0].disabled);
+          expect(response.data.templates?.[0].content.from).toBe(data.templates[0].content.from);
+          expect(response.data.templates?.[0].content.body?.text).toBe(
+            data.templates[0].content.body?.text
+          );
+          expect(response.data.templates?.[0].content.body?.voice).toBe(
+            data.templates[0].content.body?.voice
+          );
+
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const authRequest = nock(API_URL)
+        .get('/branding/phone/templates')
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, data);
+
+      branding
+        .getAllPhoneTemplates()
+        .then(() => {
+          expect(authRequest.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get('/branding/phone/templates').reply(500, {});
+
+      branding
+        .getAllPhoneTemplates()
+        .then(() => done(new Error('Expected method to reject.')))
+        .catch((err) => {
+          expect(err).toBeDefined();
+          done();
+        });
+    });
+  });
+  describe('#updatePhoneTemplate', () => {
+    const params = { id: '5' };
+    const data: UpdatePhoneTemplateRequestContent = {
+      content: {
+        from: '+123456789',
+        body: {
+          text: 'Your verification code is: {{code}}',
+          voice: 'Your verification code is {{code}}',
+        },
+      },
+      disabled: false,
+    };
+
+    const response: UpdatePhoneTemplateResponseContent = {
+      id: 'template_id',
+      channel: 'sms',
+      customizable: true,
+      tenant: 'tenant_id',
+      type: 'otp_verify' as CreatePhoneTemplateResponseContentTypeEnum,
+      disabled: false,
+      content: {
+        syntax: 'liquid',
+        from: '+1234567890',
+        body: {
+          text: 'Your verification code is: {{code}}',
+          voice: 'Your verification code is {{code}}',
+        },
+      },
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      nock.cleanAll();
+      request = nock(API_URL)
+        .patch(`/branding/phone/templates/${params.id}`, (body) => {
+          return JSON.stringify(body) === JSON.stringify(data);
+        })
+        .reply(200, response);
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .updatePhoneTemplate(params, data)
+        .then(() => done())
+        .catch((err) => done(err));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).patch(`/branding/phone/templates/${params.id}`).reply(500, {});
+
+      branding
+        .updatePhoneTemplate(params, data)
+        .then(() => done(new Error('Expected method to reject.')))
+        .catch((err) => {
+          expect(err).toBeDefined();
+          done();
+        });
+    });
+
+    it('should perform a PATCH request to /branding/phone/templates/:id', (done) => {
+      branding
+        .updatePhoneTemplate(params, data)
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const authRequest = nock(API_URL)
+        .patch(
+          `/branding/phone/templates/${params.id}`,
+          (body) => JSON.stringify(body) === JSON.stringify(data)
+        )
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      branding
+        .updatePhoneTemplate(params, data)
+        .then(() => {
+          expect(authRequest.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include Content-Type application/json header', (done) => {
+      nock.cleanAll();
+
+      const contentTypeRequest = nock(API_URL)
+        .patch(
+          `/branding/phone/templates/${params.id}`,
+          (body) => JSON.stringify(body) === JSON.stringify(data)
+        )
+        .matchHeader('Content-Type', 'application/json')
+        .reply(200, response);
+
+      branding
+        .updatePhoneTemplate(params, data)
+        .then(() => {
+          expect(contentTypeRequest.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding
+        .updatePhoneTemplate(params, data)
+        .then((result) => {
+          expect(result.data.id).toBe(response.id);
+          expect(result.data.type).toBe(response.type);
+          expect(result.data.disabled).toBe(response.disabled);
+          expect(result.data.channel).toBe(response.channel);
+          expect(result.data.customizable).toBe(response.customizable);
+          expect(result.data.tenant).toBe(response.tenant);
+          expect(result.data.content.syntax).toBe(response.content.syntax);
+          expect(result.data.content.from).toBe(response.content.from);
+          expect(result.data.content.body?.text).toBe(response.content.body?.text);
+          expect(result.data.content.body?.voice).toBe(response.content.body?.voice);
+          done();
+        })
+        .catch(done);
+    });
+  });
+  describe('#deletePhoneTemplate', () => {
+    const id = '5';
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', async () => {
+      const request = nock(API_URL).delete(`/branding/phone/templates/${id}`).reply(204, {});
+
+      const promise = branding.deletePhoneTemplate({ id });
+      expect(typeof promise.then).toBe('function');
+      expect(typeof promise.catch).toBe('function');
+      await promise;
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      const request = nock(API_URL)
+        .delete(`/branding/phone/templates/${id}`)
+        .reply(404, { message: 'Not Found' });
+
+      try {
+        await branding.deletePhoneTemplate({ id });
+        throw new Error('Expected method to reject.');
+      } catch (err: any) {
+        expect(err).toBeDefined();
+        expect(err.statusCode).toBe(404);
+        expect(request.isDone()).toBe(true);
+      }
+    });
+
+    it('should perform a DELETE request to /branding/phone/templates/:id', async () => {
+      const request = nock(API_URL).delete(`/branding/phone/templates/${id}`).reply(204, {});
+
+      await branding.deletePhoneTemplate({ id });
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      const request = nock(API_URL)
+        .delete(`/branding/phone/templates/${id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(204, {});
+
+      await branding.deletePhoneTemplate({ id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
+
+  describe('#resetTemplate', () => {
+    const params = { id: '5' };
+    const data = {};
+
+    const response: UpdatePhoneTemplateResponseContent = {
+      id: 'template_id',
+      channel: 'sms',
+      customizable: true,
+      tenant: 'tenant_id',
+      type: 'otp_verify' as CreatePhoneTemplateResponseContentTypeEnum,
+      disabled: false,
+      content: {
+        syntax: 'liquid',
+        from: '+1234567890',
+        body: {
+          text: 'Your verification code is: {{code}}',
+          voice: 'Your verification code is {{code}}',
+        },
+      },
+    };
+
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      nock.cleanAll();
+      request = nock(API_URL)
+        .patch(`/branding/phone/templates/${params.id}/reset`, (body) => {
+          return JSON.stringify(body) === JSON.stringify(data);
+        })
+        .reply(200, response);
+    });
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      branding
+        .resetTemplate(params, data)
+        .then(() => done())
+        .catch((err) => done(err));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).patch(`/branding/phone/templates/${params.id}/reset`).reply(500, {});
+
+      branding
+        .resetTemplate(params, data)
+        .then(() => done(new Error('Expected method to reject.')))
+        .catch((err) => {
+          expect(err).toBeDefined();
+          done();
+        });
+    });
+
+    it('should perform a PATCH request to /branding/phone/templates/:id/reset', (done) => {
+      branding
+        .resetTemplate(params, data)
+        .then(() => {
+          expect(request.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const authRequest = nock(API_URL)
+        .patch(
+          `/branding/phone/templates/${params.id}/reset`,
+          (body) => JSON.stringify(body) === JSON.stringify(data)
+        )
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, response);
+
+      branding
+        .resetTemplate(params, data)
+        .then(() => {
+          expect(authRequest.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should include Content-Type application/json header', (done) => {
+      nock.cleanAll();
+
+      const contentTypeRequest = nock(API_URL)
+        .patch(
+          `/branding/phone/templates/${params.id}/reset`,
+          (body) => JSON.stringify(body) === JSON.stringify(data)
+        )
+        .matchHeader('Content-Type', 'application/json')
+        .reply(200, response);
+
+      branding
+        .resetTemplate(params, data)
+        .then(() => {
+          expect(contentTypeRequest.isDone()).toBe(true);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should pass the body of the response to the "then" handler', (done) => {
+      branding
+        .resetTemplate(params, data)
+        .then((result) => {
+          expect(result.data.id).toBe(response.id);
+          expect(result.data.type).toBe(response.type);
+          expect(result.data.disabled).toBe(response.disabled);
+          expect(result.data.channel).toBe(response.channel);
+          expect(result.data.customizable).toBe(response.customizable);
+          expect(result.data.tenant).toBe(response.tenant);
+          expect(result.data.content.syntax).toBe(response.content.syntax);
+          expect(result.data.content.from).toBe(response.content.from);
+          expect(result.data.content.body?.text).toBe(response.content.body?.text);
+          expect(result.data.content.body?.voice).toBe(response.content.body?.voice);
           done();
         })
         .catch(done);
