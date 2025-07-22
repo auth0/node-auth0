@@ -3766,6 +3766,72 @@ export interface CreatePhoneProviderRequestCredentialsAnyOf {
 /**
  *
  */
+export interface CreatePhoneTemplateRequestContent {
+  /**
+   */
+  type?: CreatePhoneTemplateRequestContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  content?: PhoneTemplateContent;
+}
+
+export const CreatePhoneTemplateRequestContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type CreatePhoneTemplateRequestContentTypeEnum =
+  (typeof CreatePhoneTemplateRequestContentTypeEnum)[keyof typeof CreatePhoneTemplateRequestContentTypeEnum];
+
+/**
+ *
+ */
+export interface CreatePhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: CreatePhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const CreatePhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type CreatePhoneTemplateResponseContentTypeEnum =
+  (typeof CreatePhoneTemplateResponseContentTypeEnum)[keyof typeof CreatePhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface CreateTokenQuota {
   /**
    */
@@ -8045,6 +8111,45 @@ export type GetPhoneProviders200ResponseProviderEnum =
 /**
  *
  */
+export interface GetPhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: GetPhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const GetPhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type GetPhoneTemplateResponseContentTypeEnum =
+  (typeof GetPhoneTemplateResponseContentTypeEnum)[keyof typeof GetPhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface GetPnProviders200Response {
   /**
    */
@@ -9526,6 +9631,14 @@ export type JobFormatEnum = (typeof JobFormatEnum)[keyof typeof JobFormatEnum];
 /**
  *
  */
+export interface ListPhoneTemplatesResponseContent {
+  /**
+   */
+  templates?: Array<PhoneTemplate>;
+}
+/**
+ *
+ */
 export interface Log {
   [key: string]: any | any;
   /**
@@ -9674,6 +9787,19 @@ export interface LogLocationInfo {
    *
    */
   continent_code: string;
+}
+/**
+ *
+ */
+export interface PartialPhoneTemplateContent {
+  /**
+   * Default phone number to be used as 'from' when sending a phone notification
+   *
+   */
+  from?: string;
+  /**
+   */
+  body?: PhoneTemplateBody;
 }
 /**
  *
@@ -10662,6 +10788,76 @@ export interface Permission {
    *
    */
   description?: string;
+}
+/**
+ *
+ */
+export interface PhoneTemplate {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: PhoneTemplateTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const PhoneTemplateTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type PhoneTemplateTypeEnum =
+  (typeof PhoneTemplateTypeEnum)[keyof typeof PhoneTemplateTypeEnum];
+
+/**
+ *
+ */
+export interface PhoneTemplateBody {
+  /**
+   * Content of the phone template for text notifications
+   *
+   */
+  text?: string;
+  /**
+   * Content of the phone template for voice notifications
+   *
+   */
+  voice?: string;
+}
+/**
+ *
+ */
+export interface PhoneTemplateContent {
+  /**
+   */
+  syntax?: string;
+  /**
+   * Default phone number to be used as 'from' when sending a phone notification
+   *
+   */
+  from?: string;
+  /**
+   */
+  body?: PhoneTemplateBody;
 }
 /**
  *
@@ -15852,6 +16048,45 @@ export interface PutUniversalLoginRequestOneOf {
 /**
  *
  */
+export interface ResetPhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: ResetPhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const ResetPhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type ResetPhoneTemplateResponseContentTypeEnum =
+  (typeof ResetPhoneTemplateResponseContentTypeEnum)[keyof typeof ResetPhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface ResourceServer {
   /**
    * ID of the API (resource server).
@@ -17765,6 +18000,58 @@ export type UpdatePhoneProviderRequestNameEnum =
 /**
  *
  */
+export interface UpdatePhoneTemplateRequestContent {
+  /**
+   */
+  content?: PartialPhoneTemplateContent;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
+export interface UpdatePhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: UpdatePhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const UpdatePhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type UpdatePhoneTemplateResponseContentTypeEnum =
+  (typeof UpdatePhoneTemplateResponseContentTypeEnum)[keyof typeof UpdatePhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface UpdateTokenQuota {
   /**
    */
@@ -18458,6 +18745,14 @@ export interface DeletePhoneProviderRequest {
 /**
  *
  */
+export interface DeletePhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface GetBrandingPhoneProvidersRequest {
   /**
    * Whether the provider is enabled (false) or disabled (true).
@@ -18486,6 +18781,24 @@ export interface GetPhoneProviderRequest {
 /**
  *
  */
+export interface GetPhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetPhoneTemplatesRequest {
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
 export interface PatchBrandingThemeRequest {
   /**
    * The ID of the theme
@@ -18496,7 +18809,23 @@ export interface PatchBrandingThemeRequest {
 /**
  *
  */
+export interface ResetPhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface UpdatePhoneProviderOperationRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface UpdatePhoneTemplateRequest {
   /**
    */
   id: string;

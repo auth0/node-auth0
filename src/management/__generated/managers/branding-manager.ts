@@ -2,22 +2,34 @@ import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   CreatePhoneProviderRequest,
+  CreatePhoneTemplateRequestContent,
+  CreatePhoneTemplateResponseContent,
   GetBranding200Response,
   GetBrandingPhoneProviders200Response,
   GetBrandingPhoneProviders200ResponseProvidersInner,
+  GetPhoneTemplateResponseContent,
   GetUniversalLogin200Response,
+  ListPhoneTemplatesResponseContent,
   PatchBrandingRequest,
   PostBrandingTheme200Response,
   PostBrandingThemeRequest,
   PutUniversalLoginRequest,
+  ResetPhoneTemplateResponseContent,
   UpdatePhoneProviderRequest,
+  UpdatePhoneTemplateRequestContent,
+  UpdatePhoneTemplateResponseContent,
   DeleteBrandingThemeRequest,
   DeletePhoneProviderRequest,
+  DeletePhoneTemplateRequest,
   GetBrandingPhoneProvidersRequest,
   GetBrandingThemeRequest,
   GetPhoneProviderRequest,
+  GetPhoneTemplateRequest,
+  GetPhoneTemplatesRequest,
   PatchBrandingThemeRequest,
+  ResetPhoneTemplateRequest,
   UpdatePhoneProviderOperationRequest,
+  UpdatePhoneTemplateRequest,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -45,6 +57,32 @@ export class BrandingManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/branding/phone/providers`,
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Create a phone notification template
+   *
+   * @throws {RequiredError}
+   */
+  async createPhoneTemplate(
+    bodyParameters: CreatePhoneTemplateRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<CreatePhoneTemplateResponseContent>> {
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/templates`,
         method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
@@ -97,6 +135,31 @@ export class BrandingManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/branding/phone/providers/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Delete a phone notification template
+   *
+   * @throws {RequiredError}
+   */
+  async deletePhoneTemplate(
+    requestParameters: DeletePhoneTemplateRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/templates/{id}`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
@@ -239,6 +302,59 @@ export class BrandingManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Get a phone notification template
+   *
+   * @throws {RequiredError}
+   */
+  async getPhoneTemplate(
+    requestParameters: GetPhoneTemplateRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetPhoneTemplateResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/templates/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Get a list of phone notification templates
+   *
+   * @throws {RequiredError}
+   */
+  async getAllPhoneTemplates(
+    requestParameters: GetPhoneTemplatesRequest = {},
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<ListPhoneTemplatesResponseContent>> {
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'disabled',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/templates`,
+        method: 'GET',
+        query: queryParameters,
       },
       initOverrides
     );
@@ -405,6 +521,38 @@ export class BrandingManager extends BaseAPI {
   }
 
   /**
+   * Resets a phone notification template values
+   *
+   * @throws {RequiredError}
+   */
+  async resetTemplate(
+    requestParameters: ResetPhoneTemplateRequest,
+    bodyParameters: any | null,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<ResetPhoneTemplateResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/templates/{id}/reset`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters as any,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Update a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
    * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
    *
@@ -426,6 +574,38 @@ export class BrandingManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/branding/phone/providers/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update a phone notification template
+   *
+   * @throws {RequiredError}
+   */
+  async updatePhoneTemplate(
+    requestParameters: UpdatePhoneTemplateRequest,
+    bodyParameters: UpdatePhoneTemplateRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<UpdatePhoneTemplateResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/branding/phone/templates/{id}`.replace(
           '{id}',
           encodeURIComponent(String(requestParameters.id))
         ),
