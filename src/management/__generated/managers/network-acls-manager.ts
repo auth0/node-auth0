@@ -3,11 +3,14 @@ import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   GetNetworkAcls200Response,
   GetNetworkAclsById200Response,
+  PatchNetworkAclsById200Response,
+  PatchNetworkAclsByIdRequest,
   PutNetworkAclsByIdRequest,
   GetNetworkAcls200ResponseOneOf,
   DeleteNetworkAclsByIdRequest,
   GetNetworkAclsRequest,
   GetNetworkAclsByIdRequest,
+  PatchNetworkAclsByIdOperationRequest,
   PutNetworkAclsByIdOperationRequest,
 } from '../models/index.js';
 
@@ -107,6 +110,39 @@ export class NetworkAclsManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update existing access control list for your client.
+   * Partial Update for an Access Control List
+   *
+   * @throws {RequiredError}
+   */
+  async patch(
+    requestParameters: PatchNetworkAclsByIdOperationRequest,
+    bodyParameters: PatchNetworkAclsByIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<PatchNetworkAclsById200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/network-acls/{id}`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
       },
       initOverrides
     );
