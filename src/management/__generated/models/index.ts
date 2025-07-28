@@ -8,6 +8,15 @@ export interface ActionsDraftUpdate {
    */
   update_draft?: boolean;
 }
+
+/**
+ *
+ */
+export const AssessorsTypeEnum = {
+  new_device: 'new-device',
+} as const;
+export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof AssessorsTypeEnum];
+
 /**
  * Certificate information. This object is relevant only for Custom Domains with Auth0-Managed Certificates.
  */
@@ -50,6 +59,21 @@ export const CertificateCertificateAuthorityEnum = {
 export type CertificateCertificateAuthorityEnum =
   (typeof CertificateCertificateAuthorityEnum)[keyof typeof CertificateCertificateAuthorityEnum];
 
+/**
+ *
+ */
+export interface ClearAssessorsRequestContent {
+  /**
+   * The name of the connection containing the user whose assessors should be cleared.
+   *
+   */
+  connection: string;
+  /**
+   * List of assessors to clear.
+   *
+   */
+  assessors: Array<AssessorsTypeEnum>;
+}
 /**
  *
  */
@@ -23058,6 +23082,16 @@ export interface PatchUsersByIdRequest {
 export interface PostAuthenticationMethodsOperationRequest {
   /**
    * The ID of the user to whom the new authentication method will be assigned.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostClearAssessorsRequest {
+  /**
+   * ID of the user to clear assessors for.
    *
    */
   id: string;

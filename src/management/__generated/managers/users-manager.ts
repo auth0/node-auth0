@@ -1,6 +1,7 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  ClearAssessorsRequestContent,
   DeletePermissionsRequest,
   DeleteUserIdentityByUserId200ResponseInner,
   DeleteUserRolesRequest,
@@ -64,6 +65,7 @@ import type {
   PatchAuthenticationMethodsByAuthenticationMethodIdOperationRequest,
   PatchUsersByIdRequest,
   PostAuthenticationMethodsOperationRequest,
+  PostClearAssessorsRequest,
   PostIdentitiesOperationRequest,
   PostInvalidateRememberBrowserRequest,
   PostPermissionsOperationRequest,
@@ -1067,6 +1069,38 @@ export class UsersManager extends BaseAPI {
     );
 
     return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Clear risk assessment assessors for a specific user
+   *
+   * @throws {RequiredError}
+   */
+  async clearRiskAssessors(
+    requestParameters: PostClearAssessorsRequest,
+    bodyParameters: ClearAssessorsRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/users/{id}/risk-assessments/clear`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
   }
 
   /**
