@@ -10,6 +10,7 @@ import {
   DeleteMultifactorByProviderProviderEnum,
   ManagementClient,
   RequiredError,
+  ClearAssessorsRequestContent,
 } from '../../src/index.js';
 
 describe('UsersManager', () => {
@@ -1672,6 +1673,57 @@ describe('UsersManager', () => {
         .reply(200, {});
 
       await usersManager.deleteTokenset({ id: id, tokenset_id: tokenset_id });
+      expect(request.isDone()).toBe(true);
+    });
+  });
+  describe('#clearRiskAssessors', () => {
+    const data = {
+      id: 'USER_ID',
+    };
+
+    const body: ClearAssessorsRequestContent = {
+      connection: 'CONNECTION_ID',
+      assessors: ['new-device'],
+    };
+
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).post(`/users/${data.id}/risk-assessments/clear`).reply(200, {});
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      expect(usersManager.clearRiskAssessors(data, body).then(() => done())).toBeInstanceOf(
+        Promise
+      );
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`/users/${data.id}/risk-assessments/clear`).reply(500, {});
+
+      try {
+        await usersManager.clearRiskAssessors(data, body);
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should perform a POST request to /api/v2/users/:id/risk-assessments/clear', async () => {
+      await usersManager.clearRiskAssessors(data, body);
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should include the token in the Authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/users/${data.id}/risk-assessments/clear`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      await usersManager.clearRiskAssessors(data, body);
       expect(request.isDone()).toBe(true);
     });
   });
