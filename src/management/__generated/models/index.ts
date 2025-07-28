@@ -3766,6 +3766,72 @@ export interface CreatePhoneProviderRequestCredentialsAnyOf {
 /**
  *
  */
+export interface CreatePhoneTemplateRequestContent {
+  /**
+   */
+  type?: CreatePhoneTemplateRequestContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+  /**
+   */
+  content?: PhoneTemplateContent;
+}
+
+export const CreatePhoneTemplateRequestContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type CreatePhoneTemplateRequestContentTypeEnum =
+  (typeof CreatePhoneTemplateRequestContentTypeEnum)[keyof typeof CreatePhoneTemplateRequestContentTypeEnum];
+
+/**
+ *
+ */
+export interface CreatePhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: CreatePhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const CreatePhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type CreatePhoneTemplateResponseContentTypeEnum =
+  (typeof CreatePhoneTemplateResponseContentTypeEnum)[keyof typeof CreatePhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface CreateTokenQuota {
   /**
    */
@@ -8045,6 +8111,45 @@ export type GetPhoneProviders200ResponseProviderEnum =
 /**
  *
  */
+export interface GetPhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: GetPhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const GetPhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type GetPhoneTemplateResponseContentTypeEnum =
+  (typeof GetPhoneTemplateResponseContentTypeEnum)[keyof typeof GetPhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface GetPnProviders200Response {
   /**
    */
@@ -9546,6 +9651,14 @@ export type JobFormatEnum = (typeof JobFormatEnum)[keyof typeof JobFormatEnum];
 /**
  *
  */
+export interface ListPhoneTemplatesResponseContent {
+  /**
+   */
+  templates?: Array<PhoneTemplate>;
+}
+/**
+ *
+ */
 export interface Log {
   [key: string]: any | any;
   /**
@@ -9694,6 +9807,19 @@ export interface LogLocationInfo {
    *
    */
   continent_code: string;
+}
+/**
+ *
+ */
+export interface PartialPhoneTemplateContent {
+  /**
+   * Default phone number to be used as 'from' when sending a phone notification
+   *
+   */
+  from?: string;
+  /**
+   */
+  body?: PhoneTemplateBody;
 }
 /**
  *
@@ -10407,6 +10533,170 @@ export type PatchLogStreamsByIdRequestSinkOneOf3MixpanelRegionEnum =
 /**
  *
  */
+export interface PatchNetworkAclsById200Response {
+  [key: string]: any | any;
+  /**
+   */
+  id?: string;
+  /**
+   */
+  description?: string;
+  /**
+   */
+  active?: boolean;
+  /**
+   */
+  priority?: number;
+  /**
+   */
+  rule?: PatchNetworkAclsByIdRequestRule;
+  /**
+   * The timestamp when the Network ACL Configuration was created
+   *
+   */
+  created_at?: string;
+  /**
+   * The timestamp when the Network ACL Configuration was last updated
+   *
+   */
+  updated_at?: string;
+}
+/**
+ *
+ */
+export interface PatchNetworkAclsByIdRequest {
+  /**
+   */
+  description?: string;
+  /**
+   * Indicates whether or not this access control list is actively being used
+   *
+   */
+  active?: boolean;
+  /**
+   * Indicates the order in which the ACL will be evaluated relative to other ACL rules.
+   *
+   */
+  priority?: number;
+  /**
+   */
+  rule?: PatchNetworkAclsByIdRequestRule;
+}
+/**
+ *
+ */
+export interface PatchNetworkAclsByIdRequestRule {
+  /**
+   */
+  action: PatchNetworkAclsByIdRequestRuleAction;
+  /**
+   */
+  match?: PatchNetworkAclsByIdRequestRuleMatch;
+  /**
+   */
+  not_match?: PatchNetworkAclsByIdRequestRuleMatch;
+  /**
+   * Identifies the origin of the request as the Management API (management), Authentication API (authentication), or either (tenant)
+   *
+   */
+  scope: PatchNetworkAclsByIdRequestRuleScopeEnum;
+}
+
+export const PatchNetworkAclsByIdRequestRuleScopeEnum = {
+  management: 'management',
+  authentication: 'authentication',
+  tenant: 'tenant',
+} as const;
+export type PatchNetworkAclsByIdRequestRuleScopeEnum =
+  (typeof PatchNetworkAclsByIdRequestRuleScopeEnum)[keyof typeof PatchNetworkAclsByIdRequestRuleScopeEnum];
+
+/**
+ *
+ */
+export interface PatchNetworkAclsByIdRequestRuleAction {
+  /**
+   * Indicates the rule will block requests that either match or not_match specific criteria
+   *
+   */
+  block?: PatchNetworkAclsByIdRequestRuleActionBlockEnum;
+  /**
+   * Indicates the rule will allow requests that either match or not_match specific criteria
+   *
+   */
+  allow?: PatchNetworkAclsByIdRequestRuleActionAllowEnum;
+  /**
+   * Indicates the rule will log requests that either match or not_match specific criteria
+   *
+   */
+  log?: PatchNetworkAclsByIdRequestRuleActionLogEnum;
+  /**
+   * Indicates the rule will redirect requests that either match or not_match specific criteria
+   *
+   */
+  redirect?: PatchNetworkAclsByIdRequestRuleActionRedirectEnum;
+  /**
+   * The URI to which the match or not_match requests will be routed
+   *
+   */
+  redirect_uri?: string;
+}
+
+export const PatchNetworkAclsByIdRequestRuleActionBlockEnum = {
+  true: true,
+} as const;
+export type PatchNetworkAclsByIdRequestRuleActionBlockEnum =
+  (typeof PatchNetworkAclsByIdRequestRuleActionBlockEnum)[keyof typeof PatchNetworkAclsByIdRequestRuleActionBlockEnum];
+
+export const PatchNetworkAclsByIdRequestRuleActionAllowEnum = {
+  true: true,
+} as const;
+export type PatchNetworkAclsByIdRequestRuleActionAllowEnum =
+  (typeof PatchNetworkAclsByIdRequestRuleActionAllowEnum)[keyof typeof PatchNetworkAclsByIdRequestRuleActionAllowEnum];
+
+export const PatchNetworkAclsByIdRequestRuleActionLogEnum = {
+  true: true,
+} as const;
+export type PatchNetworkAclsByIdRequestRuleActionLogEnum =
+  (typeof PatchNetworkAclsByIdRequestRuleActionLogEnum)[keyof typeof PatchNetworkAclsByIdRequestRuleActionLogEnum];
+
+export const PatchNetworkAclsByIdRequestRuleActionRedirectEnum = {
+  true: true,
+} as const;
+export type PatchNetworkAclsByIdRequestRuleActionRedirectEnum =
+  (typeof PatchNetworkAclsByIdRequestRuleActionRedirectEnum)[keyof typeof PatchNetworkAclsByIdRequestRuleActionRedirectEnum];
+
+/**
+ *
+ */
+export interface PatchNetworkAclsByIdRequestRuleMatch {
+  /**
+   */
+  asns?: Array<number>;
+  /**
+   */
+  geo_country_codes?: Array<string>;
+  /**
+   */
+  geo_subdivision_codes?: Array<string>;
+  /**
+   */
+  ipv4_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv4CidrsInner>;
+  /**
+   */
+  ipv6_cidrs?: Array<GetNetworkAclsById200ResponseRuleAnyOfMatchIpv6CidrsInner>;
+  /**
+   */
+  ja3_fingerprints?: Array<string>;
+  /**
+   */
+  ja4_fingerprints?: Array<string>;
+  /**
+   */
+  user_agents?: Array<string>;
+}
+/**
+ *
+ */
 export interface PatchOrganizationsByIdRequest {
   /**
    * Friendly name of this organization.
@@ -10682,6 +10972,76 @@ export interface Permission {
    *
    */
   description?: string;
+}
+/**
+ *
+ */
+export interface PhoneTemplate {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: PhoneTemplateTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const PhoneTemplateTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type PhoneTemplateTypeEnum =
+  (typeof PhoneTemplateTypeEnum)[keyof typeof PhoneTemplateTypeEnum];
+
+/**
+ *
+ */
+export interface PhoneTemplateBody {
+  /**
+   * Content of the phone template for text notifications
+   *
+   */
+  text?: string;
+  /**
+   * Content of the phone template for voice notifications
+   *
+   */
+  voice?: string;
+}
+/**
+ *
+ */
+export interface PhoneTemplateContent {
+  /**
+   */
+  syntax?: string;
+  /**
+   * Default phone number to be used as 'from' when sending a phone notification
+   *
+   */
+  from?: string;
+  /**
+   */
+  body?: PhoneTemplateBody;
 }
 /**
  *
@@ -15872,6 +16232,45 @@ export interface PutUniversalLoginRequestOneOf {
 /**
  *
  */
+export interface ResetPhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: ResetPhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const ResetPhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type ResetPhoneTemplateResponseContentTypeEnum =
+  (typeof ResetPhoneTemplateResponseContentTypeEnum)[keyof typeof ResetPhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface ResourceServer {
   /**
    * ID of the API (resource server).
@@ -17785,6 +18184,58 @@ export type UpdatePhoneProviderRequestNameEnum =
 /**
  *
  */
+export interface UpdatePhoneTemplateRequestContent {
+  /**
+   */
+  content?: PartialPhoneTemplateContent;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
+export interface UpdatePhoneTemplateResponseContent {
+  /**
+   */
+  id: string;
+  /**
+   */
+  channel?: string;
+  /**
+   */
+  customizable?: boolean;
+  /**
+   */
+  tenant?: string;
+  /**
+   */
+  content: PhoneTemplateContent;
+  /**
+   */
+  type: UpdatePhoneTemplateResponseContentTypeEnum;
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled: boolean;
+}
+
+export const UpdatePhoneTemplateResponseContentTypeEnum = {
+  otp_verify: 'otp_verify',
+  otp_enroll: 'otp_enroll',
+  change_password: 'change_password',
+  blocked_account: 'blocked_account',
+  password_breach: 'password_breach',
+} as const;
+export type UpdatePhoneTemplateResponseContentTypeEnum =
+  (typeof UpdatePhoneTemplateResponseContentTypeEnum)[keyof typeof UpdatePhoneTemplateResponseContentTypeEnum];
+
+/**
+ *
+ */
 export interface UpdateRiskAssessmentsSettingsNewDeviceRequestContent {
   /**
    * Length of time to remember devices for, in days.
@@ -18518,6 +18969,14 @@ export interface DeletePhoneProviderRequest {
 /**
  *
  */
+export interface DeletePhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface GetBrandingPhoneProvidersRequest {
   /**
    * Whether the provider is enabled (false) or disabled (true).
@@ -18546,6 +19005,24 @@ export interface GetPhoneProviderRequest {
 /**
  *
  */
+export interface GetPhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetPhoneTemplatesRequest {
+  /**
+   * Whether the template is enabled (false) or disabled (true).
+   *
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ */
 export interface PatchBrandingThemeRequest {
   /**
    * The ID of the theme
@@ -18556,7 +19033,23 @@ export interface PatchBrandingThemeRequest {
 /**
  *
  */
+export interface ResetPhoneTemplateRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
 export interface UpdatePhoneProviderOperationRequest {
+  /**
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface UpdatePhoneTemplateRequest {
   /**
    */
   id: string;
@@ -20237,6 +20730,16 @@ export interface GetNetworkAclsRequest {
 export interface GetNetworkAclsByIdRequest {
   /**
    * The id of the access control list to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchNetworkAclsByIdOperationRequest {
+  /**
+   * The id of the ACL to update.
    *
    */
   id: string;

@@ -3,6 +3,7 @@ import {
   NetworkAclsManager,
   ManagementClient,
   PutNetworkAclsByIdRequest,
+  PatchNetworkAclsByIdRequest,
 } from '../../src/index.js';
 
 const API_URL = 'https://tenant.auth0.com/api/v2';
@@ -243,6 +244,62 @@ describe('NetworkAclsManager', () => {
 
     it('should perform a DELETE request to /api/v2/network-acls/:id', (done) => {
       networkAcls.delete(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe('#patch', () => {
+    const data = { id: 'acl_123' };
+
+    const body: PatchNetworkAclsByIdRequest = {
+      description: 'Patch ACL',
+      active: true,
+      rule: {
+        action: {
+          block: true,
+        },
+        scope: 'tenant',
+      },
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL).patch(`/network-acls/${data.id}`).reply(200, body);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      networkAcls
+        .patch(data, body as any)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).patch(`/network-acls/${data.id}`).reply(500, {});
+
+      networkAcls.patch(data, body).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a PATCH request to /api/v2/network-acls/:id', (done) => {
+      networkAcls.patch(data, body as any).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+    it('should pass the data in the body of the request', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/network-acls/${data.id}`, body as any)
+        .reply(200, body);
+
+      networkAcls.patch(data, body).then(() => {
         expect(request.isDone()).toBe(true);
         done();
       });
