@@ -161,6 +161,9 @@ export interface Client {
   allowed_logout_urls: Array<string>;
   /**
    */
+  session_transfer?: ClientSessionTransfer | null;
+  /**
+   */
   oidc_logout: ClientOidcLogout;
   /**
    * List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, and `urn:ietf:params:oauth:grant-type:device_code`.
@@ -1021,6 +1024,9 @@ export interface ClientCreate {
    *
    */
   callbacks?: Array<string>;
+  /**
+   */
+  session_transfer?: ClientSessionTransfer | null;
   /**
    */
   oidc_logout?: ClientCreateOidcLogout;
@@ -2467,6 +2473,57 @@ export interface ClientRefreshTokenPoliciesInner {
   scope: Array<string>;
 }
 /**
+ * Native to Web SSO Configuration
+ */
+export interface ClientSessionTransfer {
+  /**
+   * Indicates whether an app can issue a session_token through Token Exchange. If set to 'false', the app will not be able to issue a session_token.
+   *
+   */
+  can_create_session_transfer_token?: boolean;
+  /**
+   * Indicates whether an app can create a session from a session_token received via indicated methods.
+   *
+   */
+  allowed_authentication_methods?: Array<ClientSessionTransferAllowedAuthenticationMethodsEnum>;
+  /**
+   * Indicates whether device binding security should be enforced for the app. If set to 'ip', the app will enforce device binding by IP, meaning that consumption of session_token must be done from the same IP of the issuer. Likewise, if set to 'asn', device binding is enforced by ASN, meaning consumption of session_token must be done from the same ASN as the issuer. If set to 'null', device binding is not enforced.
+   *
+   */
+  enforce_device_binding?: ClientSessionTransferEnforceDeviceBindingEnum;
+  /**
+   * Indicates whether Refresh Tokens are allowed to be issued when authenticating with a session_transfer_token.
+   *
+   */
+  allow_refresh_token?: boolean;
+  /**
+   * Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are.
+   *
+   */
+  enforce_online_refresh_tokens?: boolean;
+  /**
+   * Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities.
+   *
+   */
+  enforce_cascade_revocation?: boolean;
+}
+
+export const ClientSessionTransferAllowedAuthenticationMethodsEnum = {
+  cookie: 'cookie',
+  query: 'query',
+} as const;
+export type ClientSessionTransferAllowedAuthenticationMethodsEnum =
+  (typeof ClientSessionTransferAllowedAuthenticationMethodsEnum)[keyof typeof ClientSessionTransferAllowedAuthenticationMethodsEnum];
+
+export const ClientSessionTransferEnforceDeviceBindingEnum = {
+  ip: 'ip',
+  asn: 'asn',
+  none: 'none',
+} as const;
+export type ClientSessionTransferEnforceDeviceBindingEnum =
+  (typeof ClientSessionTransferEnforceDeviceBindingEnum)[keyof typeof ClientSessionTransferEnforceDeviceBindingEnum];
+
+/**
  * JWT-secured Authorization Requests (JAR) settings.
  */
 export interface ClientSignedRequestObject {
@@ -2529,6 +2586,9 @@ export interface ClientUpdate {
    *
    */
   callbacks?: Array<string>;
+  /**
+   */
+  session_transfer?: ClientSessionTransfer | null;
   /**
    */
   oidc_logout?: ClientUpdateOidcLogout | null;
