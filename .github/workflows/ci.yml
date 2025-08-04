@@ -1,36 +1,59 @@
-name: ci
+name: CI
 
-on: [push]
+on:
+    push:
+        branches: [master, v5]
+    pull_request:
+        branches: [master, v5]
 
 jobs:
-  compile:
-    runs-on: ubuntu-latest
+    test:
+        name: Test (Node.js ${{ matrix.node-version }})
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [20.x, 22.x]
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
 
-      - name: Set up node
-        uses: actions/setup-node@v3
+            - name: Setup Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "yarn"
 
-      - name: Compile
-        run: yarn && yarn build
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
 
-  test:
-    runs-on: ubuntu-latest
+            - name: Format check
+              run: yarn format --check
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+            - name: Build
+              run: yarn build
 
-      - name: Set up node
-        uses: actions/setup-node@v3
+            - name: Test built artifacts
+              run: |
+                  node dist/esm/index.mjs
+                  node dist/cjs/index.js
 
-      - name: Compile
-        run: yarn && yarn test   
+    type-check:
+        name: Type Check
+        runs-on: ubuntu-latest
 
-      - name: Build and run esm/index.mjs
-        run: |
-          yarn build
-          node dist/esm/index.mjs
-          node dist/cjs/index.js
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Type check
+              run: yarn build
