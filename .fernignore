@@ -41,3 +41,5 @@ codecov.yml
 eslint.config.mjs
 
 .husky/
+
+.prettierignore
