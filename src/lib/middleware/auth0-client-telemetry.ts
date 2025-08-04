@@ -8,7 +8,7 @@ import { base64url } from "jose";
  * @private
  */
 export class Auth0ClientTelemetry implements Middleware {
-    clientInfo: { name: string;[key: string]: unknown };
+    clientInfo: { name: string; [key: string]: unknown };
 
     constructor(options: ClientOptions) {
         this.clientInfo = options.clientInfo || generateClientInfo();

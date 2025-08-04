@@ -16,11 +16,7 @@ jest.mock("jose", () => ({
     base64url: {
         encode: (str: string) => {
             // Use URL-safe base64 encoding (replace + with -, / with _)
-            return Buffer.from(str)
-                .toString("base64")
-                .replace(/\+/g, "-")
-                .replace(/\//g, "_")
-                .replace(/=/g, "");
+            return Buffer.from(str).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
         },
         decode: (str: string) => {
             // Add padding if needed and restore standard base64 chars
@@ -46,7 +42,7 @@ describe("ManagementClient Telemetry Header", () => {
         const headers = (client as any)._options?.headers;
         expect(headers).toBeDefined();
         expect(headers["Auth0-Client"]).toBeDefined();
-        
+
         // Decode the Auth0-Client header manually for testing
         const auth0ClientHeader = headers["Auth0-Client"];
         let paddedStr = auth0ClientHeader.replace(/-/g, "+").replace(/_/g, "/");

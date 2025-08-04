@@ -17,4 +17,4 @@ staleLabel: closed:stale
 
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
-  This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. If you have not received a response for our team (apologies for the delay) and this is still a blocker, please reply with additional information or just a ping. Thank you for your contribution! 🙇‍♂️
+    This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. If you have not received a response for our team (apologies for the delay) and this is still a blocker, please reply with additional information or just a ping. Thank you for your contribution! 🙇‍♂️

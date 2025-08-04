@@ -13,22 +13,22 @@ export { AuthApiError, AuthenticationClientOptions } from "./base-auth-api.js";
 
 /**
  * Auth0 Authentication API Client
- * 
+ *
  * Provides access to Auth0's authentication endpoints for login, signup,
  * passwordless authentication, and token exchange operations.
- * 
+ *
  * @group Authentication API
- * 
+ *
  * @example Basic setup
  * ```typescript
  * import { AuthenticationClient } from 'auth0';
- * 
+ *
  * const auth0 = new AuthenticationClient({
  *   domain: 'your-tenant.auth0.com',
  *   clientId: 'your-client-id'
  * });
  * ```
- * 
+ *
  * @example OAuth login
  * ```typescript
  * // Exchange authorization code for tokens
@@ -37,7 +37,7 @@ export { AuthApiError, AuthenticationClientOptions } from "./base-auth-api.js";
  *   redirect_uri: 'https://app.example.com/callback'
  * });
  * ```
- * 
+ *
  * @example Database operations
  * ```typescript
  * // Create user

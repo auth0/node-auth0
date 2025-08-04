@@ -4,7 +4,7 @@ import {
     withRetries,
     withHeaders,
     withAbortSignal,
-    withCustomDomainHeader
+    withCustomDomainHeader,
 } from "../../request-options.js";
 
 describe("request-options", () => {
@@ -14,8 +14,8 @@ describe("request-options", () => {
 
             expect(options).toEqual({
                 headers: {
-                    "Auth0-Custom-Domain": "auth.example.com"
-                }
+                    "Auth0-Custom-Domain": "auth.example.com",
+                },
             });
         });
 
@@ -24,8 +24,8 @@ describe("request-options", () => {
 
             expect(options).toEqual({
                 headers: {
-                    "Auth0-Custom-Domain": ""
-                }
+                    "Auth0-Custom-Domain": "",
+                },
             });
         });
     });
@@ -35,7 +35,7 @@ describe("request-options", () => {
             const options = withTimeout(30);
 
             expect(options).toEqual({
-                timeoutInSeconds: 30
+                timeoutInSeconds: 30,
             });
         });
 
@@ -43,7 +43,7 @@ describe("request-options", () => {
             const options = withTimeout(0);
 
             expect(options).toEqual({
-                timeoutInSeconds: 0
+                timeoutInSeconds: 0,
             });
         });
     });
@@ -53,7 +53,7 @@ describe("request-options", () => {
             const options = withRetries(5);
 
             expect(options).toEqual({
-                maxRetries: 5
+                maxRetries: 5,
             });
         });
 
@@ -61,7 +61,7 @@ describe("request-options", () => {
             const options = withRetries(0);
 
             expect(options).toEqual({
-                maxRetries: 0
+                maxRetries: 0,
             });
         });
     });
@@ -70,12 +70,12 @@ describe("request-options", () => {
         it("should create request options with custom headers", () => {
             const headers = {
                 "X-Request-ID": "test-123",
-                "X-Custom-Header": "custom-value"
+                "X-Custom-Header": "custom-value",
             };
             const options = withHeaders(headers);
 
             expect(options).toEqual({
-                headers
+                headers,
             });
         });
 
@@ -83,7 +83,7 @@ describe("request-options", () => {
             const options = withHeaders({});
 
             expect(options).toEqual({
-                headers: {}
+                headers: {},
             });
         });
     });
@@ -94,7 +94,7 @@ describe("request-options", () => {
             const options = withAbortSignal(controller.signal);
 
             expect(options).toEqual({
-                abortSignal: controller.signal
+                abortSignal: controller.signal,
             });
         });
     });
@@ -102,7 +102,7 @@ describe("request-options", () => {
     describe("withCustomDomainHeader", () => {
         const mockClientOptions = {
             domain: "test-tenant.auth0.com",
-            token: "test-token"
+            token: "test-token",
         };
 
         describe("input validation", () => {
@@ -157,31 +157,33 @@ describe("request-options", () => {
                 const result = withCustomDomainHeader("auth.example.com", mockClientOptions);
 
                 await expect(result.fetcher({ url: "", method: "GET" })).rejects.toThrow(
-                    "Invalid fetcher arguments: URL is required"
+                    "Invalid fetcher arguments: URL is required",
                 );
             });
 
             it("should handle invalid URLs gracefully", async () => {
                 const result = withCustomDomainHeader("auth.example.com", mockClientOptions);
 
-                await expect(result.fetcher({
-                    url: "invalid-url",
-                    method: "GET"
-                })).rejects.toThrow("Invalid URL provided to custom domain header: invalid-url");
+                await expect(
+                    result.fetcher({
+                        url: "invalid-url",
+                        method: "GET",
+                    }),
+                ).rejects.toThrow("Invalid URL provided to custom domain header: invalid-url");
             });
 
             it("should preserve existing options and add fetcher", () => {
                 const options = {
                     ...mockClientOptions,
                     customProperty: "test-value",
-                    timeout: 30
+                    timeout: 30,
                 };
 
                 const result = withCustomDomainHeader("auth.example.com", options);
 
                 expect(result).toEqual({
                     ...options,
-                    fetcher: expect.any(Function)
+                    fetcher: expect.any(Function),
                 });
             });
         });
@@ -203,7 +205,7 @@ describe("request-options", () => {
                     { path: "/api/v2/connections", shouldMatch: false },
                     { path: "/api/v2/roles", shouldMatch: false },
                     { path: "/api/v1/users", shouldMatch: false },
-                    { path: "/some/other/path", shouldMatch: false }
+                    { path: "/some/other/path", shouldMatch: false },
                 ];
 
                 testCases.forEach(({ path, shouldMatch }) => {
@@ -238,12 +240,12 @@ describe("request-options", () => {
                 const mockCustomFetcher = jest.fn().mockResolvedValue({
                     ok: true,
                     body: { data: "custom-result" },
-                    headers: {}
+                    headers: {},
                 });
 
                 const optionsWithCustomFetcher = {
                     ...mockClientOptions,
-                    fetcher: mockCustomFetcher
+                    fetcher: mockCustomFetcher,
                 };
 
                 const result = withCustomDomainHeader("auth.example.com", optionsWithCustomFetcher);
@@ -252,7 +254,7 @@ describe("request-options", () => {
                 const args = {
                     url: "https://test-tenant.auth0.com/api/v2/users",
                     method: "GET",
-                    headers: { "X-Existing": "header" }
+                    headers: { "X-Existing": "header" },
                 };
 
                 await result.fetcher(args);
@@ -262,8 +264,8 @@ describe("request-options", () => {
                     ...args,
                     headers: {
                         "X-Existing": "header",
-                        "Auth0-Custom-Domain": "auth.example.com"
-                    }
+                        "Auth0-Custom-Domain": "auth.example.com",
+                    },
                 });
             });
 
@@ -271,12 +273,12 @@ describe("request-options", () => {
                 const mockCustomFetcher = jest.fn().mockResolvedValue({
                     ok: true,
                     body: { data: "custom-result" },
-                    headers: {}
+                    headers: {},
                 });
 
                 const optionsWithCustomFetcher = {
                     ...mockClientOptions,
-                    fetcher: mockCustomFetcher
+                    fetcher: mockCustomFetcher,
                 };
 
                 const result = withCustomDomainHeader("auth.example.com", optionsWithCustomFetcher);
@@ -285,7 +287,7 @@ describe("request-options", () => {
                 const args = {
                     url: "https://test-tenant.auth0.com/api/v2/actions",
                     method: "GET",
-                    headers: { "X-Existing": "header" }
+                    headers: { "X-Existing": "header" },
                 };
 
                 await result.fetcher(args);
@@ -294,9 +296,9 @@ describe("request-options", () => {
                 expect(mockCustomFetcher).toHaveBeenCalledWith({
                     ...args,
                     headers: {
-                        "X-Existing": "header"
+                        "X-Existing": "header",
                         // No Auth0-Custom-Domain header should be added
-                    }
+                    },
                 });
 
                 const calledHeaders = mockCustomFetcher.mock.calls[0][0].headers;
@@ -308,7 +310,7 @@ describe("request-options", () => {
                 const mockCoreFetcher = jest.fn().mockResolvedValue({
                     ok: true,
                     body: { data: "core-result" },
-                    headers: {}
+                    headers: {},
                 });
 
                 // We can't directly mock the import, but we can test that the function
@@ -327,16 +329,16 @@ describe("request-options", () => {
                 ...withTimeout(30),
                 ...withRetries(3),
                 ...withHeaders({
-                    "X-Request-ID": "test-123"
-                })
+                    "X-Request-ID": "test-123",
+                }),
             };
 
             expect(combined).toEqual({
                 headers: {
-                    "X-Request-ID": "test-123"
+                    "X-Request-ID": "test-123",
                 },
                 timeoutInSeconds: 30,
-                maxRetries: 3
+                maxRetries: 3,
             });
         });
 
@@ -344,7 +346,7 @@ describe("request-options", () => {
             // When using spread syntax, later objects overwrite earlier ones
             const customDomain = CustomDomainHeader("auth.example.com");
             const customHeaders = withHeaders({
-                "X-Request-ID": "test-123"
+                "X-Request-ID": "test-123",
             });
 
             // Manually merge headers to test the expected behavior
@@ -354,17 +356,17 @@ describe("request-options", () => {
                 ...withRetries(3),
                 headers: {
                     ...customDomain.headers,
-                    ...customHeaders.headers
-                }
+                    ...customHeaders.headers,
+                },
             };
 
             expect(combined).toEqual({
                 headers: {
                     "Auth0-Custom-Domain": "auth.example.com",
-                    "X-Request-ID": "test-123"
+                    "X-Request-ID": "test-123",
                 },
                 timeoutInSeconds: 30,
-                maxRetries: 3
+                maxRetries: 3,
             });
         });
 
@@ -373,15 +375,15 @@ describe("request-options", () => {
                 ...CustomDomainHeader("auth.example.com"),
                 ...withHeaders({
                     "Auth0-Custom-Domain": "different.example.com",
-                    "X-Custom": "value"
-                })
+                    "X-Custom": "value",
+                }),
             };
 
             expect(combined).toEqual({
                 headers: {
                     "Auth0-Custom-Domain": "different.example.com",
-                    "X-Custom": "value"
-                }
+                    "X-Custom": "value",
+                },
             });
         });
     });
