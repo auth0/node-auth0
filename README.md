@@ -19,7 +19,7 @@
 
 This library supports the following tooling versions:
 
-- Node.js: `>=20`
+- Node.js: `^20.19.0 || ^22.12.0 || ^24.0.0`
 
 ### Installation
 
