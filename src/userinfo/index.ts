@@ -64,27 +64,27 @@ export async function parseError(response: Response) {
     try {
         data = JSON.parse(body) as UserInfoErrorResponse;
         return new UserInfoError(data.error, data.error_description, response.status, body, response.headers);
-    } catch (_) {
+    } catch {
         return new ResponseError(response.status, body, response.headers, "Response returned an error code");
     }
 }
 
 /**
  * Auth0 UserInfo API Client
- * 
+ *
  * Provides access to the UserInfo endpoint to retrieve user profile information
  * using an access token obtained during authentication.
- * 
+ *
  * @group UserInfo API
- * 
+ *
  * @example Basic usage
  * ```typescript
  * import { UserInfoClient } from 'auth0';
- * 
+ *
  * const userInfoClient = new UserInfoClient({
  *   domain: 'your-tenant.auth0.com'
  * });
- * 
+ *
  * const userInfo = await userInfoClient.getUserInfo(accessToken);
  * console.log(userInfo.data.sub, userInfo.data.email);
  * ```

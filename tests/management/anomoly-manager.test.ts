@@ -1,43 +1,43 @@
-import nock from 'nock';
-import { AnomalyManager, ManagementClient } from 'auth0-legacy';
-import { afterAll, beforeAll } from '@jest/globals';
+import nock from "nock";
+import { AnomalyManager, ManagementClient } from "auth0-legacy";
+import { afterAll, beforeAll } from "@jest/globals";
 
 const { back: nockBack } = nock;
 
-describe('AnomalyManager', () => {
-  let anomalyManager: AnomalyManager;
+describe("AnomalyManager", () => {
+    let anomalyManager: AnomalyManager;
 
-  let nockDone: () => void;
+    let nockDone: () => void;
 
-  beforeAll(async () => {
-    ({ nockDone } = await nockBack('management/fixtures/anomaly.json'));
+    beforeAll(async () => {
+        ({ nockDone } = await nockBack("management/fixtures/anomaly.json"));
 
-    const client = new ManagementClient({
-      domain: 'test-domain.auth0.com',
-      token: 'TOKEN',
+        const client = new ManagementClient({
+            domain: "test-domain.auth0.com",
+            token: "TOKEN",
+        });
+        anomalyManager = client.anomaly;
     });
-    anomalyManager = client.anomaly;
-  });
 
-  afterAll(() => {
-    nockDone();
-  });
-
-  it('should check for an un-blocked IP', async () => {
-    await expect(anomalyManager.checkIfIpIsBlocked({ id: '127.0.0.1' })).resolves.toMatchObject({
-      status: 200,
+    afterAll(() => {
+        nockDone();
     });
-  });
 
-  it('should check for a blocked IP', async () => {
-    await expect(anomalyManager.checkIfIpIsBlocked({ id: '127.0.0.2' })).rejects.toMatchObject({
-      statusCode: 404,
+    it("should check for an un-blocked IP", async () => {
+        await expect(anomalyManager.checkIfIpIsBlocked({ id: "127.0.0.1" })).resolves.toMatchObject({
+            status: 200,
+        });
     });
-  });
 
-  it('should delete a blocked IP', async () => {
-    await expect(anomalyManager.deleteBlockedIp({ id: '127.0.0.2' })).resolves.toMatchObject({
-      status: 204,
+    it("should check for a blocked IP", async () => {
+        await expect(anomalyManager.checkIfIpIsBlocked({ id: "127.0.0.2" })).rejects.toMatchObject({
+            statusCode: 404,
+        });
     });
-  });
+
+    it("should delete a blocked IP", async () => {
+        await expect(anomalyManager.deleteBlockedIp({ id: "127.0.0.2" })).resolves.toMatchObject({
+            status: 204,
+        });
+    });
 });

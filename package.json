@@ -49,13 +49,19 @@
         "test:unit": "jest --selectProjects unit",
         "test:browser": "jest --selectProjects browser",
         "test:wire": "jest --selectProjects wire",
+        "prepare": "husky",
+        "lint": "eslint . --ext .js,.ts,.tsx",
+        "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
+        "lint:check": "eslint . --ext .js,.ts,.tsx",
         "test:coverage": "jest --config jest.config.mjs --coverage",
         "test:coverage:unit": "jest --selectProjects unit --coverage",
         "test:coverage:browser": "jest --selectProjects browser --coverage",
         "test:coverage:wire": "jest --selectProjects wire --coverage",
         "docs": "typedoc",
         "docs:clean": "rm -rf docs",
-        "docs:build": "npm run docs:clean && npm run docs"
+        "docs:build": "npm run docs:clean && npm run docs",
+        "precommit": "lint-staged",
+        "validate": "yarn lint:check && yarn format --check && yarn test"
     },
     "devDependencies": {
         "webpack": "^5.97.1",
@@ -72,7 +78,15 @@
         "typedoc": "^0.28.7",
         "typedoc-plugin-missing-exports": "^4.0.0",
         "nock": "^14.0.6",
-        "undici": "^7.12.0"
+        "undici": "^7.12.0",
+        "@eslint/js": "^9.32.0",
+        "@typescript-eslint/eslint-plugin": "^8.38.0",
+        "@typescript-eslint/parser": "^8.38.0",
+        "eslint": "^9.32.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.3",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.1.4"
     },
     "browser": {
         "fs": false,
@@ -85,6 +99,15 @@
         "node": ">=18.0.0"
     },
     "sideEffects": false,
+    "lint-staged": {
+        "*.{js,ts,tsx}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{json,md,yml,yaml}": [
+            "prettier --write"
+        ]
+    },
     "dependencies": {
         "uuid": "^11.1.0",
         "jose": "^4.13.2",
