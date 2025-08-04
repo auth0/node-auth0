@@ -226,6 +226,19 @@ const management = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
+// With promises
+management.users
+    .list({
+        searchEngine: "v3",
+    })
+    .then((users) => {
+        console.log(users);
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+
+// Or with async/await
 try {
     const users = await management.users.list({
         searchEngine: "v3",
@@ -236,12 +249,12 @@ try {
 }
 ```
 
-## Request And Response Types
+## Request and Response Types
 
 The SDK exports all request and response types as TypeScript interfaces. You can import them directly:
 
 ```typescript
-import { ManagementClient, ListActionsRequestParameters, CreateActionRequestContent, ManagementError } from "auth0";
+import { ManagementClient, Management, ManagementError } from "auth0";
 
 const client = new ManagementClient({
     domain: "your-tenant.auth0.com",
@@ -249,7 +262,7 @@ const client = new ManagementClient({
 });
 
 // Use the request type
-const listParams: ListActionsRequestParameters = {
+const listParams: Management.ListActionsRequestParameters = {
     triggerId: "post-login",
     actionName: "my-action",
 };
@@ -295,7 +308,7 @@ try {
 
 ## Pagination
 
-List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
+Some list endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
 
 ```typescript
 import { ManagementClient } from "auth0";
