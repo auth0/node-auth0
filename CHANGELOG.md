@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.28.0](https://github.com/auth0/node-auth0/tree/v4.28.0) (2025-08-04)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.27.0...v4.28.0)
+
+**Added**
+
+- Feat: Add Support for Native to Web SSO [\#1141](https://github.com/auth0/node-auth0/pull/1141) ([tanya732](https://github.com/tanya732))
+- Feat: Added support for Customize Device Remembrance [\#1138](https://github.com/auth0/node-auth0/pull/1138) ([tanya732](https://github.com/tanya732))
+- Add Tenant ACL GA Support [\#1140](https://github.com/auth0/node-auth0/pull/1140) ([tanya732](https://github.com/tanya732))
+- Feat/ Add Phone Template Support [\#1139](https://github.com/auth0/node-auth0/pull/1139) ([tanya732](https://github.com/tanya732))
+- Added Support for Post Action Request [\#1135](https://github.com/auth0/node-auth0/pull/1135) ([tanya732](https://github.com/tanya732))
+- Feat: Support for Log Streaming - Masking PII [\#1134](https://github.com/auth0/node-auth0/pull/1134) ([tanya732](https://github.com/tanya732))
+
 ## [v4.27.0](https://github.com/auth0/node-auth0/tree/v4.27.0) (2025-06-30)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.26.0...v4.27.0)
