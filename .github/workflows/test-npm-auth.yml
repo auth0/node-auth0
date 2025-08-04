@@ -1,0 +1,39 @@
+name: Test NPM Authentication
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test-npm-auth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Test npm authentication
+        run: |
+          echo "Testing npm authentication..."
+          npm whoami
+          echo "Registry: $(npm config get registry)"
+          echo "Auth token configured: $(if [ -n "$NODE_AUTH_TOKEN" ]; then echo "Yes"; else echo "No"; fi)"
+          echo "Token length: ${#NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Test package access
+        run: |
+          echo "Checking package information..."
+          npm view auth0 version
+          npm access list packages --json
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
