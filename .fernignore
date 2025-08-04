@@ -1,0 +1,37 @@
+# Specify files that shouldn't be modified by Fern
+
+legacy/
+src/management/index.ts
+src/management/wrapper
+src/management/tests/wire/actions.test.ts
+src/auth
+src/lib
+src/userinfo
+src/.eslintrc.cjs
+src/index.ts
+src/utils.ts
+src/version.ts
+jest.config.mjs
+src/management/tests/unit/client-headers/telemetry.test.ts
+README.md
+src/management/request-options.ts
+src/management/tests/unit/custom-domain-whitelist.test.ts
+src/management/tests/unit/management-client-custom-domain.test.ts
+src/management/tests/unit/request-options.test.ts
+tests/
+
+# @todo auto-delete .mock folder
+
+.mock
+tsconfig.base.json
+tsconfig.cjs.json
+tsconfig.esm.json
+typedoc.json
+jest.config.mjs
+
+.github/
+.gitignore
+
+# Coverage files
+
+codecov.yml

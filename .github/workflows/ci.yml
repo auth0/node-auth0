@@ -1,0 +1,36 @@
+name: ci
+
+on: [push]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up node
+        uses: actions/setup-node@v3
+
+      - name: Compile
+        run: yarn && yarn build
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up node
+        uses: actions/setup-node@v3
+
+      - name: Compile
+        run: yarn && yarn test   
+
+      - name: Build and run esm/index.mjs
+        run: |
+          yarn build
+          node dist/esm/index.mjs
+          node dist/cjs/index.js
