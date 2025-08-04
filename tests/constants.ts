@@ -1,6 +1,6 @@
-export const BASE_API_URL = 'https://login.auth0.com/api/v2/';
-export const EU_BASE_API_URL = 'https://login.eu.auth0.com/api/v2/';
-export const USERS_ENDPOINT = '/users/%s';
+export const BASE_API_URL = "https://login.auth0.com/api/v2/";
+export const EU_BASE_API_URL = "https://login.eu.auth0.com/api/v2/";
+export const USERS_ENDPOINT = "/users/%s";
 
 export const TEST_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8foXPIpkeLKAVfVg/W0X

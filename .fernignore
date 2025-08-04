@@ -35,3 +35,9 @@ jest.config.mjs
 # Coverage files
 
 codecov.yml
+
+# eslint
+
+eslint.config.mjs
+
+.husky/

@@ -103,7 +103,7 @@
     "cleanOutputDir": true,
     "sidebarLinks": {
         "GitHub": "https://github.com/auth0/auth0-node-sdk",
-        "Auth0 Docs": "https://auth0.com/docs",
+        "Auth0 Docs": "https://auth0.com/docs"
     },
     "hideGenerator": true,
     "plugin": ["typedoc-plugin-missing-exports"],

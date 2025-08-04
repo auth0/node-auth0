@@ -13,7 +13,9 @@ export class TokenProvider {
 
     constructor(options: ManagementClient.ManagementClientOptionsWithClientSecret & { audience: string });
     constructor(options: ManagementClient.ManagementClientOptionsWithClientAssertion & { audience: string });
-    constructor(private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string }) {
+    constructor(
+        private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string },
+    ) {
         this.authenticationClient = new AuthenticationClient({ ...options, headers: undefined });
     }
 

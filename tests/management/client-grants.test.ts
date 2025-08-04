@@ -1,15 +1,15 @@
-import nock from 'nock';
+import nock from "nock";
 
-const API_URL = 'https://tenant.auth0.com/api/v2';
+const API_URL = "https://tenant.auth0.com/api/v2";
 
-import { ClientGrant, ClientGrantsManager, ManagementClient } from 'auth0-legacy';
+import { ClientGrant, ClientGrantsManager, ManagementClient } from "auth0-legacy";
 
-describe('ClientGrantsManager', () => {
+describe("ClientGrantsManager", () => {
   let grants: ClientGrantsManager;
-  const token = 'TOKEN';
+  const token = "TOKEN";
   beforeAll(() => {
     const client = new ManagementClient({
-      domain: 'tenant.auth0.com',
+      domain: "tenant.auth0.com",
       token: token,
     });
     grants = client.clientGrants;
@@ -19,8 +19,8 @@ describe('ClientGrantsManager', () => {
     nock.cleanAll();
   });
 
-  describe('instance', () => {
-    const methods = ['getAll', 'create', 'update', 'delete'];
+  describe("instance", () => {
+    const methods = ["getAll", "create", "update", "delete"];
 
     methods.forEach((method) => {
       it(`should have a ${method} method`, () => {
@@ -29,38 +29,38 @@ describe('ClientGrantsManager', () => {
     });
   });
 
-  describe('#constructor', () => {
-    it('should throw an error when no base URL is provided', () => {
+  describe("#constructor", () => {
+    it("should throw an error when no base URL is provided", () => {
       expect(() => {
         new ClientGrantsManager({} as any);
       }).toThrowError(Error);
     });
 
-    it('should throw an error when the base URL is invalid', () => {
+    it("should throw an error when the base URL is invalid", () => {
       expect(() => {
         new ClientGrantsManager({
-          baseUrl: '',
+          baseUrl: "",
         } as any);
       }).toThrowError(Error);
     });
   });
 
-  describe('#getAll', () => {
-    const data = [{ id: '1', client_id: '123', audience: 'abc', scope: ['openid'] }];
+  describe("#getAll", () => {
+    const data = [{ id: "1", client_id: "123", audience: "abc", scope: ["openid"] }];
     let request: nock.Scope;
 
     beforeEach(() => {
-      request = nock(API_URL).get('/client-grants').reply(200, data);
+      request = nock(API_URL).get("/client-grants").reply(200, data);
     });
 
-    it('should return a promise if no callback is given', (done) => {
+    it("should return a promise if no callback is given", (done) => {
       grants.getAll().then(done.bind(null, null)).catch(done.bind(null, null));
     });
 
-    it('should pass any errors to the promise catch handler', (done) => {
+    it("should pass any errors to the promise catch handler", (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get('/client-grants').reply(500, {});
+      nock(API_URL).get("/client-grants").reply(500, {});
 
       grants.getAll().catch((err) => {
         expect(err).toBeDefined();
@@ -71,7 +71,7 @@ describe('ClientGrantsManager', () => {
     it('should pass the body of the response to the "then" handler', (done) => {
       nock.cleanAll();
 
-      nock(API_URL).get('/client-grants').reply(200, data);
+      nock(API_URL).get("/client-grants").reply(200, data);
 
       grants.getAll().then((grants) => {
         expect(Array.isArray(grants.data)).toBe(true);
@@ -86,19 +86,19 @@ describe('ClientGrantsManager', () => {
       });
     });
 
-    it('should perform a GET request to /api/v2/client-grants', (done) => {
+    it("should perform a GET request to /api/v2/client-grants", (done) => {
       grants.getAll().then(() => {
         expect(request.isDone()).toBe(true);
         done();
       });
     });
 
-    it('should include the token in the Authorization header', (done) => {
+    it("should include the token in the Authorization header", (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get('/client-grants')
-        .matchHeader('Authorization', `Bearer ${token}`)
+        .get("/client-grants")
+        .matchHeader("Authorization", `Bearer ${token}`)
         .reply(200, data);
 
       grants.getAll().then(() => {
@@ -107,11 +107,11 @@ describe('ClientGrantsManager', () => {
       });
     });
 
-    it('should pass the parameters in the query-string', (done) => {
+    it("should pass the parameters in the query-string", (done) => {
       nock.cleanAll();
 
       const request = nock(API_URL)
-        .get('/client-grants')
+        .get("/client-grants")
         .query({
           page: 1,
           per_page: 2,
@@ -120,6 +120,116 @@ describe('ClientGrantsManager', () => {
 
       grants.getAll({ page: 1, per_page: 2 }).then(() => {
         expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe("#create", () => {
+    const data = {
+      client_id: "CLIENT_ID",
+      audience: "AUDIENCE",
+      scope: ["user"],
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).post("/client-grants").reply(201, data);
+    });
+
+    it("should return a promise if no callback is given", (done) => {
+      grants.create(data).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it("should perform a POST request to /api/v2/client-grants", (done) => {
+      grants.create(data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it("should include the token in the Authorization header", (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post("/client-grants")
+        .matchHeader("Authorization", `Bearer ${token}`)
+        .reply(201, data);
+
+      grants.create(data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it("should include the new client grant data in the request body", (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL).post("/client-grants", data).reply(201, data);
+
+      grants.create(data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe("#update", () => {
+    const data = {
+      client_id: "CLIENT_ID",
+      audience: "AUDIENCE",
+      scope: ["user"],
+    };
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).patch(`/client-grants/5`).reply(200, data);
+    });
+
+    it("should return a promise if no callback is given", (done) => {
+      grants.update({ id: "5" }, {}).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it("should perform a PATCH request to /api/v2/client-grants/5", (done) => {
+      grants.update({ id: "5" }, {}).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+
+    it("should include the new data in the body of the request", (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL).patch(`/client-grants/5`, data).reply(200, data);
+
+      grants.update({ id: "5" }, data).then(() => {
+        expect(request.isDone()).toBe(true);
+
+        done();
+      });
+    });
+  });
+
+  describe("#delete", () => {
+    const id = "5";
+    let request: nock.Scope;
+
+    beforeEach(() => {
+      request = nock(API_URL).delete(`/client-grants/${id}`).reply(200, {});
+    });
+
+    it("should return a promise when no callback is given", (done) => {
+      grants.delete({ id }).then(done.bind(null, null));
+    });
+
+    it(`should perform a DELETE request to /client-grants/${id}`, (done) => {
+      grants.delete({ id }).then(() => {
+        expect(request.isDone()).toBe(true);
+
         done();
       });
     });

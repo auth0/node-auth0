@@ -63,7 +63,7 @@ async function parseError(response: Response) {
         const data = parseErrorBody(body);
 
         return new AuthApiError(data.error, data.error_description, response.status, body, response.headers);
-    } catch (_) {
+    } catch {
         return new ResponseError(response.status, body, response.headers, "Response returned an error code");
     }
 }

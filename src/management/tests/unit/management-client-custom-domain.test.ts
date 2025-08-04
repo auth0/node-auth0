@@ -10,11 +10,7 @@ jest.mock("jose", () => ({
     base64url: {
         encode: (str: string) => {
             // Use URL-safe base64 encoding (replace + with -, / with _)
-            return Buffer.from(str)
-                .toString("base64")
-                .replace(/\+/g, "-")
-                .replace(/\//g, "_")
-                .replace(/=/g, "");
+            return Buffer.from(str).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
         },
         decode: (str: string) => {
             // Add padding if needed and restore standard base64 chars
@@ -23,12 +19,12 @@ jest.mock("jose", () => ({
                 paddedStr += "=";
             }
             return Buffer.from(paddedStr, "base64").toString();
-        }
-    }
+        },
+    },
 }));
 
 jest.mock("uuid", () => ({
-    v4: jest.fn(() => "test-uuid")
+    v4: jest.fn(() => "test-uuid"),
 }));
 
 // Mock the core fetcher to avoid actual HTTP calls
@@ -43,9 +39,9 @@ jest.mock("../../core/index.js", () => ({
             statusText: "OK",
             url: "",
             redirected: false,
-            type: "basic"
-        }
-    })
+            type: "basic",
+        },
+    }),
 }));
 
 import { ManagementClient } from "../../wrapper/ManagementClient.js";
@@ -53,7 +49,7 @@ import { ManagementClient } from "../../wrapper/ManagementClient.js";
 describe("ManagementClient with custom domain header", () => {
     const mockConfig = {
         domain: "test-tenant.auth0.com",
-        token: "test-token"
+        token: "test-token",
     };
 
     beforeEach(() => {
@@ -69,7 +65,7 @@ describe("ManagementClient with custom domain header", () => {
         it("should create client with custom domain header", () => {
             const clientWithCustomDomain = new ManagementClient({
                 ...mockConfig,
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             });
             expect(clientWithCustomDomain).toBeInstanceOf(ManagementClient);
         });
@@ -79,7 +75,7 @@ describe("ManagementClient with custom domain header", () => {
                 domain: "test-tenant.auth0.com",
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(clientCredentialsConfig);
@@ -91,7 +87,7 @@ describe("ManagementClient with custom domain header", () => {
                 domain: "test-tenant.auth0.com",
                 clientId: "test-client-id",
                 clientAssertionSigningKey: "test-private-key",
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(clientAssertionConfig);
@@ -105,7 +101,7 @@ describe("ManagementClient with custom domain header", () => {
                 ...mockConfig,
                 withCustomDomainHeader: "auth.example.com",
                 telemetry: true,
-                clientInfo: { name: "test-client", version: "1.0.0" }
+                clientInfo: { name: "test-client", version: "1.0.0" },
             });
 
             expect(client).toBeInstanceOf(ManagementClient);
@@ -115,7 +111,7 @@ describe("ManagementClient with custom domain header", () => {
             const client = new ManagementClient({
                 ...mockConfig,
                 withCustomDomainHeader: "auth.example.com",
-                telemetry: false
+                telemetry: false,
             });
 
             expect(client).toBeInstanceOf(ManagementClient);
@@ -127,7 +123,7 @@ describe("ManagementClient with custom domain header", () => {
             expect(() => {
                 new ManagementClient({
                     ...mockConfig,
-                    withCustomDomainHeader: ""
+                    withCustomDomainHeader: "",
                 });
             }).toThrow("Domain parameter is required and must be a non-empty string");
         });
@@ -136,7 +132,7 @@ describe("ManagementClient with custom domain header", () => {
             expect(() => {
                 new ManagementClient({
                     ...mockConfig,
-                    withCustomDomainHeader: "   "
+                    withCustomDomainHeader: "   ",
                 });
             }).toThrow("Domain parameter is required and must be a non-empty string");
         });
@@ -144,7 +140,7 @@ describe("ManagementClient with custom domain header", () => {
         it("should trim and accept valid custom domain header", () => {
             const client = new ManagementClient({
                 ...mockConfig,
-                withCustomDomainHeader: "  auth.example.com  "
+                withCustomDomainHeader: "  auth.example.com  ",
             });
 
             expect(client).toBeInstanceOf(ManagementClient);
@@ -159,8 +155,8 @@ describe("ManagementClient with custom domain header", () => {
                 maxRetries: 5,
                 timeoutInSeconds: 30,
                 headers: {
-                    "X-Custom": "value"
-                }
+                    "X-Custom": "value",
+                },
             };
 
             const client = new ManagementClient(extendedConfig);
@@ -173,7 +169,7 @@ describe("ManagementClient with custom domain header", () => {
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
                 audience: "https://custom-audience.example.com/api/v2/",
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(configWithAudience);
@@ -186,7 +182,7 @@ describe("ManagementClient with custom domain header", () => {
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
                 useMTLS: true,
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(configWithMTLS);
@@ -199,7 +195,7 @@ describe("ManagementClient with custom domain header", () => {
             const tokenConfig: ManagementClient.ManagementClientOptionsWithToken = {
                 domain: "test-tenant.auth0.com",
                 token: "test-token",
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(tokenConfig);
@@ -211,7 +207,7 @@ describe("ManagementClient with custom domain header", () => {
                 domain: "test-tenant.auth0.com",
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(clientSecretConfig);
@@ -223,7 +219,7 @@ describe("ManagementClient with custom domain header", () => {
                 domain: "test-tenant.auth0.com",
                 clientId: "test-client-id",
                 clientAssertionSigningKey: "test-private-key",
-                withCustomDomainHeader: "auth.example.com"
+                withCustomDomainHeader: "auth.example.com",
             };
 
             const client = new ManagementClient(clientAssertionConfig);
@@ -243,14 +239,14 @@ describe("ManagementClient with custom domain header", () => {
                     statusText: "OK",
                     url: "",
                     redirected: false,
-                    type: "basic"
-                }
+                    type: "basic",
+                },
             });
 
             const client = new ManagementClient({
                 ...mockConfig,
                 withCustomDomainHeader: "auth.example.com",
-                fetcher: mockCustomFetcher
+                fetcher: mockCustomFetcher,
             });
 
             expect(client).toBeInstanceOf(ManagementClient);
@@ -267,13 +263,13 @@ describe("ManagementClient with custom domain header", () => {
                     statusText: "OK",
                     url: "",
                     redirected: false,
-                    type: "basic"
-                }
+                    type: "basic",
+                },
             });
 
             const client = new ManagementClient({
                 ...mockConfig,
-                fetcher: mockCustomFetcher
+                fetcher: mockCustomFetcher,
             });
 
             expect(client).toBeInstanceOf(ManagementClient);

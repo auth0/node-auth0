@@ -4,8 +4,8 @@
 // these functions end up being repeated for all the managers, this file aims to reduce repetition
 // it performs basic sanity checks, input output checks and error handling checks
 
-import nock, { RequestBodyMatcher } from 'nock';
-import { ApiResponse } from '../../src/lib/models.js';
+import nock, { RequestBodyMatcher } from "nock";
+import { ApiResponse } from "../../src/lib/models.js";
 
 const DOMAIN = `tenant.auth0.com`;
 const API_URL = `https://${DOMAIN}/api/v2`;
@@ -20,10 +20,10 @@ const API_URL = `https://${DOMAIN}/api/v2`;
  * @returns {void}
  */
 export function checkForPromise<T>(operation: any | Promise<ApiResponse<T>>): void {
-  it('should return a promise if no callback is given', (done) => {
-    expect(operation instanceof Promise).toBeTruthy();
-    operation.then(done.bind(null, null)).catch(done.bind(null, null));
-  });
+    it("should return a promise if no callback is given", (done) => {
+        expect(operation instanceof Promise).toBeTruthy();
+        operation.then(done.bind(null, null)).catch(done.bind(null, null));
+    });
 }
 
 /**
@@ -39,13 +39,13 @@ export function checkForPromise<T>(operation: any | Promise<ApiResponse<T>>): vo
  * ```
  */
 export function checkErrorHandler<T>(operation: Promise<ApiResponse<T>>): void {
-  it('should pass any errors to the promise catch handler', () => {
-    nock.cleanAll();
+    it("should pass any errors to the promise catch handler", () => {
+        nock.cleanAll();
 
-    return operation.catch((err) => {
-      expect(err).toBeDefined();
+        return operation.catch((err) => {
+            expect(err).toBeDefined();
+        });
     });
-  });
 }
 
 /**
@@ -56,10 +56,10 @@ export function checkErrorHandler<T>(operation: Promise<ApiResponse<T>>): void {
  * @param request - The nock scope representing the expected request.
  */
 export function checkRequestInterceptor<T>(operation: Promise<T>, request: nock.Scope): void {
-  it(`should make a request to the endpoint`, async () => {
-    await operation;
-    expect(request.isDone()).toBeTruthy();
-  });
+    it(`should make a request to the endpoint`, async () => {
+        await operation;
+        expect(request.isDone()).toBeTruthy();
+    });
 }
 
 /**
@@ -70,22 +70,22 @@ export function checkRequestInterceptor<T>(operation: Promise<T>, request: nock.
  * @param {T} expectedResponse - The expected response data to compare against the operation's result.
  */
 export function checkOperation<T>(operation: Promise<ApiResponse<T>>, expectedResponse: T): void {
-  it('should test the method', async () => {
-    const result = await operation;
-    expect(result.data).toEqual(
-      // only compare if the expected response is defined (api returns data), in this case
-      // expectedResponse is an empty object
-      result.data ? expectedResponse : undefined
-    );
-  });
+    it("should test the method", async () => {
+        const result = await operation;
+        expect(result.data).toEqual(
+            // only compare if the expected response is defined (api returns data), in this case
+            // expectedResponse is an empty object
+            result.data ? expectedResponse : undefined,
+        );
+    });
 }
 
 export type CheckMethodParams<T> = {
-  operation: Promise<ApiResponse<T>>;
-  expectedResponse?: T;
-  uri: string | RegExp | { (uri: string): boolean };
-  method: string;
-  requestBody?: RequestBodyMatcher | any;
+    operation: Promise<ApiResponse<T>>;
+    expectedResponse?: T;
+    uri: string | RegExp | { (uri: string): boolean };
+    method: string;
+    requestBody?: RequestBodyMatcher | any;
 };
 
 // this function combines the above functions to check an SDK manager method.
@@ -107,26 +107,26 @@ export type CheckMethodParams<T> = {
  * @param {RequestBodyMatcher | any} [params.requestBody] - The optional request body to match.
  */
 export const checkMethod = <T, MethodParams extends CheckMethodParams<T>>({
-  operation,
-  uri,
-  method,
-  requestBody,
-  expectedResponse,
+    operation,
+    uri,
+    method,
+    requestBody,
+    expectedResponse,
 }: MethodParams): void => {
-  // set the expected response to an empty object if it is not provided
-  const finalExpectedResponse: T = expectedResponse ?? <T>{};
+    // set the expected response to an empty object if it is not provided
+    const finalExpectedResponse: T = expectedResponse ?? <T>{};
 
-  // nock the API with success scenario
-  let request: nock.Scope = nock(API_URL)
-    .intercept(uri, method, requestBody)
-    .reply(200, finalExpectedResponse as any);
+    // nock the API with success scenario
+    let request: nock.Scope = nock(API_URL)
+        .intercept(uri, method, requestBody)
+        .reply(200, finalExpectedResponse as any);
 
-  // check for various success checks
-  checkForPromise(operation);
-  checkRequestInterceptor(operation, request);
-  checkOperation(operation, finalExpectedResponse);
+    // check for various success checks
+    checkForPromise(operation);
+    checkRequestInterceptor(operation, request);
+    checkOperation(operation, finalExpectedResponse);
 
-  // nock the API with error scenario
-  request = nock(API_URL).intercept(uri, method, requestBody).reply(500);
-  checkErrorHandler(operation);
+    // nock the API with error scenario
+    request = nock(API_URL).intercept(uri, method, requestBody).reply(500);
+    checkErrorHandler(operation);
 };

@@ -5,7 +5,7 @@
 
 // Mock the core fetcher
 jest.mock("../../core/index.js", () => ({
-    fetcher: jest.fn()
+    fetcher: jest.fn(),
 }));
 
 import { withCustomDomainHeader } from "../../request-options.js";
@@ -17,7 +17,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
     const testDomain = "auth.example.com";
     const mockClientOptions = {
         domain: "test-tenant.auth0.com",
-        token: "test-token"
+        token: "test-token",
     };
 
     beforeEach(() => {
@@ -29,8 +29,8 @@ describe("Custom Domain Header Whitelist Integration", () => {
             rawResponse: {
                 headers: new Headers(),
                 status: 200,
-                statusText: "OK"
-            }
+                statusText: "OK",
+            },
         });
     });
 
@@ -42,7 +42,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
             "/api/v2/organizations/org-123/invitations",
             "/api/v2/users",
             "/api/v2/users/user-123",
-            "/api/v2/guardian/enrollments/ticket"
+            "/api/v2/guardian/enrollments/ticket",
         ];
 
         whitelistedPaths.forEach((path) => {
@@ -54,8 +54,8 @@ describe("Custom Domain Header Whitelist Integration", () => {
                     url: testUrl,
                     method: "GET",
                     headers: {
-                        "Authorization": "Bearer test-token"
-                    }
+                        Authorization: "Bearer test-token",
+                    },
                 };
 
                 await result.fetcher(requestArgs);
@@ -80,7 +80,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
             "/api/v2/resource-servers",
             "/api/v2/logs",
             "/api/v1/users", // Different API version
-            "/some/other/path"
+            "/some/other/path",
         ];
 
         nonWhitelistedPaths.forEach((path) => {
@@ -92,8 +92,8 @@ describe("Custom Domain Header Whitelist Integration", () => {
                     url: testUrl,
                     method: "GET",
                     headers: {
-                        "Authorization": "Bearer test-token"
-                    }
+                        Authorization: "Bearer test-token",
+                    },
                 };
 
                 await result.fetcher(requestArgs);
@@ -116,7 +116,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
             await result.fetcher({
                 url: testUrl,
-                method: "GET"
+                method: "GET",
             });
 
             expect(mockCoreFetcher).toHaveBeenCalledTimes(1);
@@ -131,7 +131,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
             await result.fetcher({
                 url: testUrl,
-                method: "GET"
+                method: "GET",
             });
 
             expect(mockCoreFetcher).toHaveBeenCalledTimes(1);
@@ -151,10 +151,10 @@ describe("Custom Domain Header Whitelist Integration", () => {
                 url: testUrl,
                 method: "POST",
                 headers: {
-                    "Authorization": "Bearer test-token",
+                    Authorization: "Bearer test-token",
                     "Content-Type": "application/json",
-                    "X-Custom-Header": "custom-value"
-                }
+                    "X-Custom-Header": "custom-value",
+                },
             };
 
             await result.fetcher(requestArgs);
@@ -177,7 +177,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
             await result.fetcher({
                 url: testUrl,
-                method: "GET"
+                method: "GET",
             });
 
             expect(mockCoreFetcher).toHaveBeenCalledTimes(1);
@@ -189,12 +189,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
     describe("regex pattern matching", () => {
         it("should match organization invitations with various org IDs", async () => {
             const result = withCustomDomainHeader(testDomain, mockClientOptions);
-            const testCases = [
-                "org_123456789",
-                "org-with-dashes",
-                "org_with_underscores",
-                "abc123xyz"
-            ];
+            const testCases = ["org_123456789", "org-with-dashes", "org_with_underscores", "abc123xyz"];
 
             for (const orgId of testCases) {
                 jest.clearAllMocks();
@@ -202,7 +197,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
                 await result.fetcher({
                     url: testUrl,
-                    method: "GET"
+                    method: "GET",
                 });
 
                 expect(mockCoreFetcher).toHaveBeenCalledTimes(1);
@@ -213,12 +208,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
         it("should match user endpoints with various user IDs", async () => {
             const result = withCustomDomainHeader(testDomain, mockClientOptions);
-            const testCases = [
-                "auth0|123456789",
-                "google-oauth2|123456789",
-                "email|user@example.com",
-                "user123"
-            ];
+            const testCases = ["auth0|123456789", "google-oauth2|123456789", "email|user@example.com", "user123"];
 
             for (const userId of testCases) {
                 jest.clearAllMocks();
@@ -226,7 +216,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
                 await result.fetcher({
                     url: testUrl,
-                    method: "GET"
+                    method: "GET",
                 });
 
                 expect(mockCoreFetcher).toHaveBeenCalledTimes(1);
@@ -250,7 +240,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
                 await result.fetcher({
                     url: testUrl,
-                    method: "GET"
+                    method: "GET",
                 });
 
                 expect(mockCoreFetcher).toHaveBeenCalledTimes(1);
@@ -271,10 +261,12 @@ describe("Custom Domain Header Whitelist Integration", () => {
         it("should handle malformed URLs gracefully", async () => {
             const result = withCustomDomainHeader(testDomain, mockClientOptions);
 
-            await expect(result.fetcher({
-                url: "not-a-valid-url",
-                method: "GET"
-            })).rejects.toThrow("Invalid URL provided to custom domain header");
+            await expect(
+                result.fetcher({
+                    url: "not-a-valid-url",
+                    method: "GET",
+                }),
+            ).rejects.toThrow("Invalid URL provided to custom domain header");
         });
 
         it("should still call core fetcher even for non-whitelisted paths", async () => {
@@ -283,7 +275,7 @@ describe("Custom Domain Header Whitelist Integration", () => {
 
             await result.fetcher({
                 url: testUrl,
-                method: "GET"
+                method: "GET",
             });
 
             // Core fetcher should still be called, just without the custom domain header

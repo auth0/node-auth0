@@ -1,4 +1,4 @@
-import { fetcher as coreFetcher } from './core/index.js';
+import { fetcher as coreFetcher } from "./core/index.js";
 /**
  * Helper functions to create common request options for the Auth0 Management API.
  * These functions provide convenient ways to configure common request patterns.
@@ -6,13 +6,13 @@ import { fetcher as coreFetcher } from './core/index.js';
 
 // Whitelisted path patterns for custom domain support
 const WHITELISTED_PATTERNS = [
-    '^/api/v2/jobs/verification-email$',
-    '^/api/v2/tickets/email-verification$',
-    '^/api/v2/tickets/password-change$',
-    '^/api/v2/organizations/[^/]+/invitations$',
-    '^/api/v2/users$',
-    '^/api/v2/users/[^/]+$',
-    '^/api/v2/guardian/enrollments/ticket$',
+    "^/api/v2/jobs/verification-email$",
+    "^/api/v2/tickets/email-verification$",
+    "^/api/v2/tickets/password-change$",
+    "^/api/v2/organizations/[^/]+/invitations$",
+    "^/api/v2/users$",
+    "^/api/v2/users/[^/]+$",
+    "^/api/v2/guardian/enrollments/ticket$",
 ] as const;
 
 // Function to compile the whitelisted patterns
@@ -33,7 +33,7 @@ const compiledWhitelistedPathRegexes: RegExp[] = compileWhitelistedPathPatterns(
 
 // Function to check if the path matches any whitelisted pattern
 function isCustomDomainPathWhitelisted(path: string): boolean {
-    if (!path || typeof path !== 'string') {
+    if (!path || typeof path !== "string") {
         return false;
     }
 
@@ -80,12 +80,12 @@ export interface RequestOptions {
 /**
  * Configure requests to use a custom domain header.
  * Can be used directly in object literals with spread syntax.
- * Note: This applies the header to all requests. For automatic path-based filtering, 
+ * Note: This applies the header to all requests. For automatic path-based filtering,
  * use withCustomDomainHeader in ManagementClient constructor options.
- * 
+ *
  * @param domain - The custom domain to use (e.g., 'auth.example.com')
  * @returns Partial request options with the custom domain header
- * 
+ *
  * @example
  * ```typescript
  * const reqOptions = {
@@ -98,7 +98,7 @@ export interface RequestOptions {
 export function CustomDomainHeader(domain: string): Partial<RequestOptions> {
     return {
         headers: {
-            'Auth0-Custom-Domain': domain,
+            "Auth0-Custom-Domain": domain,
         },
     };
 }
@@ -106,10 +106,10 @@ export function CustomDomainHeader(domain: string): Partial<RequestOptions> {
 /**
  * Configure requests with custom timeout settings.
  * Can be used directly in object literals with spread syntax.
- * 
+ *
  * @param seconds - Timeout in seconds
  * @returns Partial request options with the specified timeout
- * 
+ *
  * @example
  * ```typescript
  * const reqOptions = {
@@ -128,10 +128,10 @@ export function withTimeout(seconds: number): Partial<RequestOptions> {
 /**
  * Configure requests with custom retry settings.
  * Can be used directly in object literals with spread syntax.
- * 
+ *
  * @param retries - Number of retry attempts (0 to disable retries)
  * @returns Partial request options with the specified retry count
- * 
+ *
  * @example
  * ```typescript
  * const reqOptions = {
@@ -150,10 +150,10 @@ export function withRetries(retries: number): Partial<RequestOptions> {
 /**
  * Configure requests with custom headers.
  * Can be used directly in object literals with spread syntax.
- * 
+ *
  * @param headers - Object containing header key-value pairs
  * @returns Partial request options with the specified headers
- * 
+ *
  * @example
  * ```typescript
  * const reqOptions = {
@@ -175,10 +175,10 @@ export function withHeaders(headers: Record<string, string>): Partial<RequestOpt
 /**
  * Configure requests with an abort signal for cancellation.
  * Can be used directly in object literals with spread syntax.
- * 
+ *
  * @param signal - AbortSignal to control request cancellation
  * @returns Partial request options with the specified abort signal
- * 
+ *
  * @example
  * ```typescript
  * const controller = new AbortController();
@@ -198,12 +198,12 @@ export function withAbortSignal(signal: AbortSignal): Partial<RequestOptions> {
 /**
  * INTERNAL: Configure a client with custom domain header that will be applied to whitelisted requests only.
  * This creates a custom fetcher that intercepts requests and applies the whitelist logic.
- * 
+ *
  * This function is for INTERNAL use only and is automatically used by ManagementClient
  * when the withCustomDomainHeader option is provided in the constructor.
- * 
+ *
  * Users should use the ergonomic API: `new ManagementClient({ ..., withCustomDomainHeader: 'domain' })`
- * 
+ *
  * @internal
  * @param domain - The custom domain to use (e.g., 'auth.example.com')
  * @param options - The ManagementClient or resource client configuration options
@@ -211,10 +211,10 @@ export function withAbortSignal(signal: AbortSignal): Partial<RequestOptions> {
  */
 export function withCustomDomainHeader<T extends ClientOptionsWithFetcher>(
     domain: string,
-    options: T
+    options: T,
 ): T & { fetcher: (args: FetcherArgs) => Promise<any> } {
-    if (!domain || typeof domain !== 'string' || domain.trim().length === 0) {
-        throw new Error('Domain parameter is required and must be a non-empty string');
+    if (!domain || typeof domain !== "string" || domain.trim().length === 0) {
+        throw new Error("Domain parameter is required and must be a non-empty string");
     }
 
     const trimmedDomain = domain.trim();
@@ -223,7 +223,7 @@ export function withCustomDomainHeader<T extends ClientOptionsWithFetcher>(
 
     const customDomainFetcher = async (args: FetcherArgs): Promise<any> => {
         if (!args?.url) {
-            throw new Error('Invalid fetcher arguments: URL is required');
+            throw new Error("Invalid fetcher arguments: URL is required");
         }
 
         // Parse URL and add custom domain header if path is whitelisted
@@ -232,9 +232,7 @@ export function withCustomDomainHeader<T extends ClientOptionsWithFetcher>(
             const path = url.pathname;
 
             // Format path to ensure it starts with /api/v2/
-            const formattedPath = path.startsWith('/api/v2/')
-                ? path
-                : `/api/v2${path}`;
+            const formattedPath = path.startsWith("/api/v2/") ? path : `/api/v2${path}`;
 
             if (isCustomDomainPathWhitelisted(formattedPath)) {
                 // Modify args to include the custom domain header
@@ -242,7 +240,7 @@ export function withCustomDomainHeader<T extends ClientOptionsWithFetcher>(
                     ...args,
                     headers: {
                         ...args.headers,
-                        'Auth0-Custom-Domain': trimmedDomain,
+                        "Auth0-Custom-Domain": trimmedDomain,
                     },
                 };
             }
@@ -259,4 +257,3 @@ export function withCustomDomainHeader<T extends ClientOptionsWithFetcher>(
         fetcher: customDomainFetcher,
     };
 }
-
