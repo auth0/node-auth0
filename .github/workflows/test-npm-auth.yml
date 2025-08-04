@@ -2,6 +2,9 @@ name: Test NPM Authentication
 
 on:
   workflow_dispatch:
+  push:
+    branches-ignore:
+      - master
 
 permissions:
   contents: read
