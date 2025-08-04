@@ -26,17 +26,55 @@ jobs:
       - name: Test npm authentication
         run: |
           echo "Testing npm authentication..."
-          npm whoami
           echo "Registry: $(npm config get registry)"
           echo "Auth token configured: $(if [ -n "$NODE_AUTH_TOKEN" ]; then echo "Yes"; else echo "No"; fi)"
           echo "Token length: ${#NODE_AUTH_TOKEN}"
+          echo "Token prefix: ${NODE_AUTH_TOKEN:0:8}..."
+          echo ""
+          echo "Checking .npmrc file:"
+          cat ~/.npmrc || echo "No .npmrc found in home directory"
+          echo ""
+          echo "Checking working directory .npmrc:"
+          cat .npmrc || echo "No .npmrc found in working directory"
+          echo ""
+          echo "NPM config list:"
+          npm config list
+          echo ""
+          echo "Attempting npm whoami (this may fail):"
+          npm whoami || echo "npm whoami failed - this confirms authentication issue"
+          echo ""
+          echo "Exit code from npm whoami: $?"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Test package access
         run: |
-          echo "Checking package information..."
-          npm view auth0 version
-          npm access list packages --json
+          echo "Checking package information (without auth)..."
+          npm view auth0 version || echo "Could not view auth0 package"
+          echo ""
+          echo "Attempting to list packages (requires auth):"
+          npm access list packages --json || echo "Could not list packages - confirms auth issue"
+          echo ""
+          echo "Attempting to check auth0 package ownership:"
+          npm owner ls auth0 || echo "Could not list owners - may require auth"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Debug token type
+        run: |
+          echo "🔍 DEBUGGING NPM TOKEN ISSUE"
+          echo "================================"
+          echo ""
+          echo "❌ The 401 Unauthorized error indicates:"
+          echo "   1. Token is invalid/expired"
+          echo "   2. Token is read-only (common cause)"
+          echo "   3. Token format is incorrect"
+          echo ""
+          echo "🔧 NEXT STEPS:"
+          echo "   1. Go to https://www.npmjs.com/settings/tokens"
+          echo "   2. Check if your token shows 'Read-only'"
+          echo "   3. If yes, create new 'Automation' token"
+          echo "   4. Update GitHub secret NPM_TOKEN"
+          echo ""
+          echo "💡 Token should be 'Automation' type for CI/CD publishing"
+        continue-on-error: true

@@ -46,7 +46,7 @@ runs:
       run: |
         echo "Verifying npm authentication..."
         echo "npm version: $(npm --version)"
-        echo "node version: $(node --version)" 
+        echo "node version: $(node --version)"
         echo "npm config list:"
         npm config list
         echo "Checking authentication:"
