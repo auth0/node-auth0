@@ -72,8 +72,7 @@
         "typedoc": "^0.28.7",
         "typedoc-plugin-missing-exports": "^4.0.0",
         "nock": "^14.0.6",
-        "undici": "^7.12.0",
-        "codecov": "^3.8.3"
+        "undici": "^7.12.0"
     },
     "browser": {
         "fs": false,
