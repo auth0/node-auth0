@@ -61,64 +61,354 @@ const selectedProvider = await client.guardian.factors.phone.getSelectedProvider
 In the common situation where there are two similar `GET` methods, one that "gets one" and another that "gets all" of a particular resource, the "gets all" method is typically found under the name `list()`, as in the respective method for the endpoint `GET /v2/users`: `client.users.list()`.
 
 <details>
-  <summary>A non-exhaustive list of method name changes:</summary>
+  <summary>A complete list of method name changes:</summary>
 
-Note these methods are typically found in the namespace of a `ManagementClient` instance.
+Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x: have been removed as of v5. Note these methods are typically found in the namespace of a `ManagementClient` instance.
 
-| Before                                      | After                                          |
-| ------------------------------------------- | ---------------------------------------------- |
-| `connections.getAll`                        | `connections.list`                             |
-| `clients.getAll`                            | `clients.list`                                 |
-| `clientGrants.getAll`                       | `clientGrants.list`                            |
-| `grants.getAll`                             | `userGrants.list`                              |
-| `deviceCredentials.getAll`                  | `deviceCredentials.list`                       |
-| `rules.getAll`                              | `rules.list`                                   |
-| `users.getAll`                              | `users.list`                                   |
-| `grants`                                    | `userGrants`                                   |
-| `usersByEmail.getByEmail`                   | `users.listUsersByEmail`                       |
-| `users.deleteMultifactorProvider`           | `users.multifactor.deleteProvider`             |
-| `users.invalidateRememberBrowser`           | `users.multifactor.invalidateRememberBrowser`  |
-| `users.unlink`                              | `users.identities.delete`                      |
-| `users.link`                                | `users.identities.link`                        |
-| `users.getLogs`                             | `users.logs.list`                              |
-| `users.getRoles`                            | `users.roles.list`                             |
-| `users.assignRoles`                         | `users.roles.assign`                           |
-| `roles.assignUsers`                         | `roles.users.assign`                           |
-| `users.removeRoles`                         | `users.roles.delete`                           |
-| `users.getPermissions`                      | `users.permissions.list`                       |
-| `users.assignPermissions`                   | `users.permissions.create`                     |
-| `users.removePermissions`                   | `users.permissions.delete`                     |
-| `userBlocks.get`                            | `userBlocks.list`                              |
-| `userBlocks.getByIdentifier`                | `userBlocks.listByIdentifier`                  |
-| `guardian.getGuardianEnrollment`            | `guardian.enrollments.get`                     |
-| `guardian.deleteGuardianEnrollment`         | `guardian.enrollments.delete`                  |
-| `emails.get`                                | `emails.provider.get`                          |
-| `emails.configure`                          | `emails.provider.create`                       |
-| `tenants.getSettings`                       | `tenants.settings.get`                         |
-| `tenants.updateSettings`                    | `tenants.settings.update`                      |
-| `jobs.importUsers`                          | `jobs.usersImports.create`                     |
-| `jobs.exportUsers`                          | `jobs.usersExports.create`                     |
-| `jobs.errors`                               | `jobs.errors.get`                              |
-| `jobs.verifyEmail`                          | `jobs.verificationEmail.create`                |
-| `guardian.createEnrollmentTicket`           | `guardian.enrollments.createTicket`            |
-| `guardian.getFactors`                       | `guardian.factors.list`                        |
-| `guardian.getFactorProvider`                | `REMOVED`                                      |
-| `guardian.updateFactorProvider`             | `guardian.factors.phone.setProvider`           |
-| `guardian.getFactorTemplates`               | `guardian.factors.phone.getTemplates`          |
-| `roles.getPermissions`                      | `roles.permissions.list`                       |
-| `roles.addPermissions`                      | `roles.permissions.add`                        |
-| `roles.removePermissions`                   | `roles.permissions.delete`                     |
-| `hooks.getSecrets`                          | `hooks.secrets.get`                            |
-| `hooks.addSecrets`                          | `hooks.secrets.create`                         |
-| `hooks.updateSecrets`                       | `hooks.secrets.update`                         |
-| `hooks.removeSecrets`                       | `hooks.secrets.delete`                         |
-| `branding.updateSettings`                   | `branding.update`                              |
-| `branding.getSettings`                      | `branding.get`                                 |
-| `branding.getUniversalLoginTemplate`        | `branding.templates.getUniversalLogin`         |
-| `branding.setUniversalLoginTemplate`        | `branding.templates.updateUniversalLogin`      |
-| `branding.deleteUniversalLoginTemplate`     | `branding.templates.deleteUniversalLogin`      |
-| `prompts.getCustomTextByLanguage`           | `prompts.customText.get`                       |
-| `prompts.updateCustomTextByLanguage`        | `prompts.customText.set`                       |
+| Before | After |
+|--------|-------|
+| `actions.getAll()` | `actions.list()` |
+| `actions.create()` | `actions.create()` |
+| `actions.getVersions()` | `actions.versions.list()` |
+| `actions.getVersion()` | `actions.versions.get()` |
+| `actions.deployVersion()` | `actions.versions.deploy()` |
+| `actions.get()` | `actions.get()` |
+| `actions.delete()` | `actions.delete()` |
+| `actions.update()` | `actions.update()` |
+| `actions.deploy()` | `actions.deploy()` |
+| `actions.test()` | `actions.test()` |
+| `actions.getExecution()` | `actions.executions.get()` |
+| `actions.getAllTriggers()` | `actions.triggers.list()` |
+| `actions.getTriggerBindings()` | `actions.triggers.bindings.list()` |
+| `actions.updateTriggerBindings()` | `actions.triggers.bindings.updateMany()` |
+| `anomaly.checkIfIpIsBlocked()` | `anomaly.blocks.checkIp()` |
+| `anomaly.deleteBlockedIp()` | `anomaly.blocks.unblockIp()` |
+| `attackProtection.getBreachedPasswordDetectionConfig()` | `attackProtection.breachedPasswordDetection.get()` |
+| `attackProtection.updateBreachedPasswordDetectionConfig()` | `attackProtection.breachedPasswordDetection.update()` |
+| `attackProtection.getBruteForceConfig()` | `attackProtection.bruteForceProtection.get()` |
+| `attackProtection.updateBruteForceConfig()` | `attackProtection.bruteForceProtection.update()` |
+| `attackProtection.getSuspiciousIpThrottlingConfig()` | `attackProtection.suspiciousIpThrottling.get()` |
+| `attackProtection.updateSuspiciousIpThrottlingConfig()` | `attackProtection.suspiciousIpThrottling.update()` |
+| `blacklists.getAll()` | :x: Removed in v5 |
+| `blacklists.add()` | :x: Removed in v5 |
+| `branding.getSettings()` | `branding.get()` |
+| `branding.updateSettings()` | `branding.update()` |
+| `branding.getUniversalLoginTemplate()` | `branding.templates.getUniversalLogin()` |
+| `branding.deleteUniversalLoginTemplate()` | `branding.templates.deleteUniversalLogin()` |
+| `branding.setUniversalLoginTemplate()` | `branding.templates.updateUniversalLogin()` |
+| `branding.createTheme()` | `branding.themes.create()` |
+| `branding.getDefaultTheme()` | `branding.themes.getDefault()` |
+| `branding.getTheme()` | `branding.themes.get()` |
+| `branding.deleteTheme()` | `branding.themes.delete()` |
+| `branding.updateTheme()` | `branding.themes.update()` |
+| `clientGrants.getAll()` | `clientGrants.list()` |
+| `clientGrants.create()` | `clientGrants.create()` |
+| `clientGrants.delete()` | `clientGrants.delete()` |
+| `clientGrants.update()` | `clientGrants.update()` |
+| `clients.getAll()` | `clients.list()` |
+| `clients.create()` | `clients.create()` |
+| `clients.getCredentials()` | `clients.credentials.list()` |
+| `clients.createCredential()` | `clients.credentials.create()` |
+| `clients.getCredential()` | `clients.credentials.get()` |
+| `clients.deleteCredential()` | `clients.credentials.delete()` |
+| `clients.updateCredential()` | `clients.credentials.update()` |
+| `clients.get()` | `clients.get()` |
+| `clients.delete()` | `clients.delete()` |
+| `clients.update()` | `clients.update()` |
+| `clients.rotateClientSecret()` | `clients.rotateSecret()` |
+| `connections.getAll()` | `connections.list()` |
+| `connections.create()` | `connections.create()` |
+| `connections.get()` | `connections.get()` |
+| `connections.delete()` | `connections.delete()` |
+| `connections.update()` | `connections.update()` |
+| `connections.checkStatus()` | `connections.checkStatus()` |
+| `connections.deleteUserByEmail()` | `connections.users.deleteByEmail()` |
+| `connections.getScimConfiguration()` | `connections.scimConfiguration.get()` |
+| `connections.updateScimConfiguration()` | `connections.scimConfiguration.update()` |
+| `connections.createScimConfiguration()` | `connections.scimConfiguration.create()` |
+| `connections.deleteScimConfiguration()` | `connections.scimConfiguration.delete()` |
+| `connections.getDefaultScimMapping()` | `connections.scimConfiguration.getDefaultMapping()` |
+| `connections.getScimTokens()` | `connections.scimConfiguration.tokens.get()` |
+| `connections.createScimToken()` | `connections.scimConfiguration.tokens.create()` |
+| `connections.deleteScimToken()` | `connections.scimConfiguration.tokens.delete()` |
+| `customDomains.getAll()` | `customDomains.list()` |
+| `customDomains.create()` | `customDomains.create()` |
+| `customDomains.get()` | `customDomains.get()` |
+| `customDomains.delete()` | `customDomains.delete()` |
+| `customDomains.update()` | `customDomains.update()` |
+| `customDomains.verify()` | `customDomains.verify()` |
+| `deviceCredentials.getAll()` | `deviceCredentials.list()` |
+| `deviceCredentials.createPublicKey()` | `deviceCredentials.createPublicKey()` |
+| `deviceCredentials.delete()` | `deviceCredentials.delete()` |
+| `emailTemplates.create()` | `emailTemplates.create()` |
+| `emailTemplates.get()` | `emailTemplates.get()` |
+| `emailTemplates.update()` | `emailTemplates.update()` |
+| `emailTemplates.put()` | `emailTemplates.set()` |
+| `emails.get()` | `emails.provider.get()` |
+| `emails.update()` | `emails.provider.update()` |
+| `emails.configure()` | `emails.provider.create()` |
+| `flows.getAll()` | `flows.list()` |
+| `flows.create()` | `flows.create()` |
+| `flows.getAllConnections()` | :x: Removed in v5 |
+| `flows.createConnection()` | :x: Removed in v5 |
+| `flows.getConnection()` | :x: Removed in v5 |
+| `flows.deleteConnection()` | :x: Removed in v5 |
+| `flows.updateConnection()` | :x: Removed in v5 |
+| `flows.getAllExecutions()` | `flows.executions.list()` |
+| `flows.getExecution()` | `flows.executions.get()` |
+| `flows.deleteExecution()` | `flows.executions.delete()` |
+| `flows.get()` | `flows.get()` |
+| `flows.update()` | `flows.update()` |
+| `flows.delete()` | `flows.delete()` |
+| `forms.getAll()` | `forms.list()` |
+| `forms.create()` | `forms.create()` |
+| `forms.get()` | `forms.get()` |
+| `forms.update()` | `forms.update()` |
+| `forms.delete()` | `forms.delete()` |
+| `grants.getAll()` | `userGrants.list()` |
+| `grants.deleteByUserId()` | `userGrants.deleteByUserId()` |
+| `grants.delete()` | `userGrants.delete()` |
+| `guardian.createEnrollmentTicket()` | `guardian.enrollments.createTicket()` |
+| `guardian.getGuardianEnrollment()` | `guardian.enrollments.get()` |
+| `guardian.deleteGuardianEnrollment()` | `guardian.enrollments.delete()` |
+| `guardian.getFactors()` | `guardian.factors.list()` |
+| `guardian.getPhoneFactorMessageTypes()` | `guardian.factors.phone.getMessageTypes()` |
+| `guardian.updatePhoneFactorMessageTypes()` | `guardian.factors.phone.setMessageTypes()` |
+| `guardian.getPhoneFactorProviderTwilio()` | `guardian.factors.phone.getTwilioProvider()` |
+| `guardian.updatePhoneFactorProviderTwilio()` | `guardian.factors.phone.setTwilioProvider()` |
+| `guardian.getPhoneFactorSelectedProvider()` | `guardian.factors.phone.getSelectedProvider()` |
+| `guardian.updatePhoneFactorSelectedProvider()` | `guardian.factors.phone.setProvider()` |
+| `guardian.getPhoneFactorTemplates()` | `guardian.factors.phone.getTemplates()` |
+| `guardian.setPhoneFactorTemplates()` | `guardian.factors.phone.setTemplates()` |
+| `guardian.getPushNotificationProviderAPNS()` | `guardian.factors.pushNotification.getApnsProvider()` |
+| `guardian.updatePushNotificationProviderAPNS()` | `guardian.factors.pushNotification.setApnsProvider()` |
+| `guardian.setPushNotificationProviderAPNS()` | `guardian.factors.pushNotification.setApnsProvider()` |
+| `guardian.updatePushNotificationProviderFCM()` | `guardian.factors.pushNotification.setFcmProvider()` |
+| `guardian.setPushNotificationProviderFCM()` | `guardian.factors.pushNotification.setFcmProvider()` |
+| `guardian.getPushNotificationProviderSNS()` | `guardian.factors.pushNotification.getSnsProvider()` |
+| `guardian.updatePushNotificationProviderSNS()` | `guardian.factors.pushNotification.updateSnsProvider()` |
+| `guardian.setPushNotificationProviderSNS()` | `guardian.factors.pushNotification.setSnsProvider()` |
+| `guardian.getPushNotificationSelectedProvider()` | `guardian.factors.pushNotification.getSelectedProvider()` |
+| `guardian.setPushNotificationSelectedProvider()` | `guardian.factors.pushNotification.setProvider()` |
+| `guardian.getSmsFactorProviderTwilio()` | `guardian.factors.sms.getTwilioProvider()` |
+| `guardian.setSmsFactorProviderTwilio()` | `guardian.factors.sms.setTwilioProvider()` |
+| `guardian.getSmsSelectedProvider()` | `guardian.factors.sms.getSelectedProvider()` |
+| `guardian.setSmsSelectedProvider()` | `guardian.factors.sms.setProvider()` |
+| `guardian.getSmsFactorTemplates()` | `guardian.factors.sms.getTemplates()` |
+| `guardian.setSmsFactorTemplates()` | `guardian.factors.sms.setTemplates()` |
+| `guardian.updateFactor()` | `guardian.factors.set()` |
+| `guardian.getPolicies()` | `guardian.policies.list()` |
+| `guardian.updatePolicies()` | `guardian.policies.set()` |
+| `hooks.getAll()` | `hooks.list()` |
+| `hooks.create()` | `hooks.create()` |
+| `hooks.get()` | `hooks.get()` |
+| `hooks.delete()` | `hooks.delete()` |
+| `hooks.update()` | `hooks.update()` |
+| `hooks.getSecrets()` | `hooks.secrets.get()` |
+| `hooks.deleteSecrets()` | `hooks.secrets.delete()` |
+| `hooks.updateSecrets()` | `hooks.secrets.update()` |
+| `hooks.addSecrets()` | `hooks.secrets.create()` |
+| `jobs.exportUsers()` | `jobs.usersExports.create()` |
+| `jobs.importUsers()` | `jobs.usersImports.create()` |
+| `jobs.verifyEmail()` | `jobs.verificationEmail.create()` |
+| `jobs.get()` | `jobs.get()` |
+| `jobs.getErrors()` | `jobs.errors.get()` |
+| `keys.postEncryptionRekey()` | `keys.encryption.rekey()` |
+| `keys.getAll()` | `keys.signing.list()` |
+| `keys.rotate()` | `keys.signing.rotate()` |
+| `keys.get()` | `keys.signing.get()` |
+| `keys.revoke()` | `keys.signing.revoke()` |
+| `logStreams.getAll()` | `logStreams.list()` |
+| `logStreams.create()` | `logStreams.create()` |
+| `logStreams.get()` | `logStreams.get()` |
+| `logStreams.delete()` | `logStreams.delete()` |
+| `logStreams.update()` | `logStreams.update()` |
+| `logs.getAll()` | `logs.list()` |
+| `logs.get()` | `logs.get()` |
+| `organizations.getAll()` | `organizations.list()` |
+| `organizations.create()` | `organizations.create()` |
+| `organizations.getByName()` | `organizations.getByName()` |
+| `organizations.get()` | `organizations.get()` |
+| `organizations.delete()` | `organizations.delete()` |
+| `organizations.update()` | `organizations.update()` |
+| `organizations.getOrganizationClientGrants()` | `organizations.clientGrants.list()` |
+| `organizations.postOrganizationClientGrants()` | `organizations.clientGrants.create()` |
+| `organizations.deleteClientGrantsByGrantId()` | `organizations.clientGrants.delete()` |
+| `organizations.getEnabledConnections()` | `organizations.enabledConnections.list()` |
+| `organizations.addEnabledConnection()` | `organizations.enabledConnections.add()` |
+| `organizations.getEnabledConnection()` | `organizations.enabledConnections.get()` |
+| `organizations.deleteEnabledConnection()` | `organizations.enabledConnections.delete()` |
+| `organizations.updateEnabledConnection()` | `organizations.enabledConnections.update()` |
+| `organizations.getInvitations()` | `organizations.invitations.list()` |
+| `organizations.createInvitation()` | `organizations.invitations.create()` |
+| `organizations.getInvitation()` | `organizations.invitations.get()` |
+| `organizations.deleteInvitation()` | `organizations.invitations.delete()` |
+| `organizations.getMembers()` | `organizations.members.list()` |
+| `organizations.deleteMembers()` | `organizations.members.delete()` |
+| `organizations.addMembers()` | `organizations.members.create()` |
+| `organizations.getMemberRoles()` | `organizations.members.roles.list()` |
+| `organizations.deleteMemberRoles()` | `organizations.members.roles.delete()` |
+| `organizations.addMemberRoles()` | `organizations.members.roles.assign()` |
+| `prompts.get()` | `prompts.getSettings()` |
+| `prompts.update()` | `prompts.updateSettings()` |
+| `prompts.getCustomTextByLanguage()` | `prompts.customText.get()` |
+| `prompts.updateCustomTextByLanguage()` | `prompts.customText.set()` |
+| `prompts.getPartials()` | `prompts.partials.get()` |
+| `prompts.updatePartials()` | `prompts.partials.set()` |
+| `refreshTokens.get()` | `refreshTokens.get()` |
+| `refreshTokens.delete()` | `refreshTokens.delete()` |
+| `resourceServers.getAll()` | `resourceServers.list()` |
+| `resourceServers.create()` | `resourceServers.create()` |
+| `resourceServers.get()` | `resourceServers.get()` |
+| `resourceServers.delete()` | `resourceServers.delete()` |
+| `resourceServers.update()` | `resourceServers.update()` |
+| `roles.getAll()` | `roles.list()` |
+| `roles.create()` | `roles.create()` |
+| `roles.get()` | `roles.get()` |
+| `roles.delete()` | `roles.delete()` |
+| `roles.update()` | `roles.update()` |
+| `roles.getPermissions()` | `roles.permissions.list()` |
+| `roles.deletePermissions()` | `roles.permissions.delete()` |
+| `roles.addPermissions()` | `roles.permissions.add()` |
+| `roles.getUsers()` | `roles.users.list()` |
+| `roles.assignUsers()` | `roles.users.assign()` |
+| `rules.getAll()` | `rules.list()` |
+| `rules.create()` | `rules.create()` |
+| `rulesConfigs.getAll()` | `rulesConfigs.list()` |
+| `rulesConfigs.delete()` | `rulesConfigs.delete()` |
+| `rulesConfigs.set()` | `rulesConfigs.set()` |
+| `rules.get()` | `rules.get()` |
+| `rules.delete()` | `rules.delete()` |
+| `rules.update()` | `rules.update()` |
+| `selfServiceProfiles.getAll()` | `selfServiceProfiles.list()` |
+| `selfServiceProfiles.create()` | `selfServiceProfiles.create()` |
+| `selfServiceProfiles.get()` | `selfServiceProfiles.get()` |
+| `selfServiceProfiles.delete()` | `selfServiceProfiles.delete()` |
+| `selfServiceProfiles.update()` | `selfServiceProfiles.update()` |
+| `selfServiceProfiles.createSsoTicket()` | `selfServiceProfiles.ssoTicket.create()` |
+| `selfServiceProfiles.getCustomText()` | `selfServiceProfiles.customText.list()` |
+| `selfServiceProfiles.updateCustomText()` | `selfServiceProfiles.customText.set()` |
+| `selfServiceProfiles.revokeSsoTicket()` | `selfServiceProfiles.ssoTicket.revoke()` |
+| `stats.getActiveUsersCount()` | `stats.getActiveUsersCount()` |
+| `stats.getDaily()` | `stats.getDaily()` |
+| `sessions.get()` | `sessions.get()` |
+| `sessions.delete()` | `sessions.delete()` |
+| `tenants.getSettings()` | `tenants.settings.get()` |
+| `tenants.updateSettings()` | `tenants.settings.update()` |
+| `tickets.verifyEmail()` | `tickets.verifyEmail()` |
+| `tickets.changePassword()` | `tickets.changePassword()` |
+| `userBlocks.getAll()` | `userBlocks.listByIdentifier()` |
+| `userBlocks.deleteAll()` | `userBlocks.deleteByIdentifier()` |
+| `userBlocks.get()` | `userBlocks.list()` |
+| `userBlocks.delete()` | `userBlocks.delete()` |
+| `users.getAll()` | `users.list()` |
+| `users.create()` | `users.create()` |
+| `usersByEmail.getByEmail()` | `users.listUsersByEmail()` |
+| `users.get()` | `users.get()` |
+| `users.delete()` | `users.delete()` |
+| `users.update()` | `users.update()` |
+| `users.getAuthenticationMethods()` | `users.authenticationMethods.list()` |
+| `users.createAuthenticationMethod()` | `users.authenticationMethods.create()` |
+| `users.updateAuthenticationMethods()` | `users.authenticationMethods.set()` |
+| `users.deleteAuthenticationMethods()` | `users.authenticationMethods.deleteAll()` |
+| `users.getAuthenticationMethod()` | `users.authenticationMethods.get()` |
+| `users.deleteAuthenticationMethod()` | `users.authenticationMethods.delete()` |
+| `users.updateAuthenticationMethod()` | `users.authenticationMethods.update()` |
+| `users.deleteAllAuthenticators()` | `users.authenticators.deleteAll()` |
+| `users.getEnrollments()` | `users.enrollments.get()` |
+| `users.link()` | `users.identities.link()` |
+| `users.unlink()` | `users.identities.delete()` |
+| `users.getLogs()` | `users.logs.list()` |
+| `users.invalidateRememberBrowser()` | `users.multifactor.invalidateRememberBrowser()` |
+| `users.deleteMultifactorProvider()` | `users.multifactor.deleteProvider()` |
+| `users.getUserOrganizations()` | `users.organizations.list()` |
+| `users.getPermissions()` | `users.permissions.list()` |
+| `users.deletePermissions()` | `users.permissions.delete()` |
+| `users.assignPermissions()` | `users.permissions.create()` |
+| `users.regenerateRecoveryCode()` | `users.regenerateRecoveryCode()` |
+| `users.getRoles()` | `users.roles.list()` |
+| `users.deleteRoles()` | `users.roles.delete()` |
+| `users.assignRoles()` | `users.roles.assign()` |
+| `users.getRefreshTokens()` | `users.refreshToken.list()` |
+| `users.deleteRefreshTokens()` | `users.refreshToken.delete()` |
+| `users.getSessions()` | `users.sessions.list()` |
+| `users.deleteSessions()` | `users.sessions.delete()` |
+| `prompts.getRendering()` | `prompts.rendering.get()` |
+| `prompts.updateRendering()` | `prompts.rendering.update()` |
+| `tokenExchangeProfiles.delete()` | `tokenExchangeProfiles.delete()` |
+| `tokenExchangeProfiles.update()` | `tokenExchangeProfiles.update()` |
+| `tokenExchangeProfiles.get()` | `tokenExchangeProfiles.get()` |
+| `tokenExchangeProfiles.create()` | `tokenExchangeProfiles.create()` |
+| `tokenExchangeProfiles.getAll()` | `tokenExchangeProfiles.list()` |
+| `branding.configurePhoneProvider()` | `branding.phone.providers.create()` |
+| `branding.getAllPhoneProviders()` | `branding.phone.providers.list()` |
+| `branding.updatePhoneProvider()` | `branding.phone.providers.update()` |
+| `branding.deletePhoneProvider()` | `branding.phone.providers.delete()` |
+| `branding.getPhoneProvider()` | `branding.phone.providers.get()` |
+| `keys.getAllEncryptionKeys()` | `keys.encryption.list()` |
+| `keys.createEncryptionKey()` | `keys.encryption.create()` |
+| `keys.getEncryptionKey()` | `keys.encryption.get()` |
+| `keys.deleteEncryptionKey()` | `keys.encryption.delete()` |
+| `keys.importEncryptionKey()` | `keys.encryption.import()` |
+| `keys.createPublicWrappingKey()` | `keys.encryption.createPublicWrappingKey()` |
+| `users.getAllTokensets()` | `users.federatedConnectionsTokensets.list()` |
+| `users.deleteTokenset()` | `users.federatedConnectionsTokensets.delete()` |
+| `networkAcls.delete()` | `networkAcls.delete()` |
+| `networkAcls.update()` | `networkAcls.set()` |
+| `networkAcls.get()` | `networkAcls.get()` |
+| `networkAcls.create()` | `networkAcls.create()` |
+| `networkAcls.getAll()` | `networkAcls.list()` |
+| `prompts.getAllRenderingSettings()` | `prompts.rendering.list()` |
+| `connections.getEnabledClients()` | `connections.clients.get()` |
+| `connections.updateEnabledClients()` | `connections.clients.update()` |
+| `clients.getEnabledConnections()` | `clients.connections.get()` |
+| `connections.getKeys()` | `connections.keys.get()` |
+| `connections.rotateKeys()` | `connections.keys.rotate()` |
+| `branding.getAllPhoneTemplates()` | `branding.phone.templates.list()` |
+| `branding.createPhoneTemplate()` | `branding.phone.templates.create()` |
+| `branding.getPhoneTemplate()` | `branding.phone.templates.get()` |
+| `branding.updatePhoneTemplate()` | `branding.phone.templates.update()` |
+| `branding.deletePhoneTemplate()` | `branding.phone.templates.delete()` |
+| `branding.resetTemplate()` | :x: Removed in v5 |
+| `riskAssessments.getSettings()` | :x: Removed in v5 |
+| `riskAssessments.updateSettings()` | :x: Removed in v5 |
+| `riskAssessments.getNewDeviceSettings()` | :x: Removed in v5 |
+| `riskAssessments.updateNewDeviceSettings()` | :x: Removed in v5 |
+| `users.clearRiskAssessors()` | :x: Removed in v5 |
+| :new: No equivalent in v4 | `branding.phone.providers.test()` |
+| :new: No equivalent in v4 | `branding.phone.templates.reset()` |
+| :new: No equivalent in v4 | `branding.phone.templates.test()` |
+| :new: No equivalent in v4 | `clientGrants.organizations.list()` |
+| :new: No equivalent in v4 | `customDomains.test()` |
+| :new: No equivalent in v4 | `emails.provider.delete()` |
+| :new: No equivalent in v4 | `eventStreams.list()` |
+| :new: No equivalent in v4 | `eventStreams.create()` |
+| :new: No equivalent in v4 | `eventStreams.get()` |
+| :new: No equivalent in v4 | `eventStreams.delete()` |
+| :new: No equivalent in v4 | `eventStreams.update()` |
+| :new: No equivalent in v4 | `eventStreams.deliveries.list()` |
+| :new: No equivalent in v4 | `eventStreams.deliveries.getHistory()` |
+| :new: No equivalent in v4 | `eventStreams.redeliveries.create()` |
+| :new: No equivalent in v4 | `eventStreams.redeliveries.createById()` |
+| :new: No equivalent in v4 | `eventStreams.getStats()` |
+| :new: No equivalent in v4 | `eventStreams.test()` |
+| :new: No equivalent in v4 | `guardian.factors.duo.settings.get()` |
+| :new: No equivalent in v4 | `guardian.factors.duo.settings.update()` |
+| :new: No equivalent in v4 | `guardian.factors.duo.settings.set()` |
+| :new: No equivalent in v4 | `guardian.factors.pushNotification.setFcmv1Provider()` |
+| :new: No equivalent in v4 | `guardian.factors.pushNotification.setFcmv1Provider()` |
+| :new: No equivalent in v4 | `keys.customSigning.get()` |
+| :new: No equivalent in v4 | `keys.customSigning.delete()` |
+| :new: No equivalent in v4 | `keys.customSigning.set()` |
+| :new: No equivalent in v4 | `networkAcls.update()` |
+| :new: No equivalent in v4 | `sessions.revoke()` |
+| :new: No equivalent in v4 | `users.revokeAccess()` |
+| :new: No equivalent in v4 | `verifiableCredentials.verification.templates.list()` |
+| :new: No equivalent in v4 | `verifiableCredentials.verification.templates.create()` |
+| :new: No equivalent in v4 | `verifiableCredentials.verification.templates.get()` |
+| :new: No equivalent in v4 | `verifiableCredentials.verification.templates.delete()` |
+| :new: No equivalent in v4 | `verifiableCredentials.verification.templates.update()` |
+
 
 </details>
 
