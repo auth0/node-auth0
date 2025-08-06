@@ -11,6 +11,7 @@ A guide to migrating the Auth0 TS SDK from `4.x` to `5.x`.
   - [Auto-pagination](#auto-pagination)
   - [Management namespace](#management-namespace)
   - [Unified error type](#unified-error-type)
+  - [Import users takes a FileLike](#import-users-takes-a-filelike)
 
 ## Overall changes
 
@@ -504,4 +505,69 @@ try {
         console.log(err.rawResponse);
     }
 }
+```
+
+### Import users takes a FileLike
+
+The method corresponding to the endpoint `POST /jobs/users-imports`, through which one can import users in bulk, is labeled `client.jobs.usersImports.create()` (in v3 and v4, it was `client.jobs.importUsers()`). In v3, this method accepted a readable stream as its `users` parameter:
+
+```ts
+await client.jobs.importUsers({
+  users: fs.createReadStream('./myusers.json'),
+  connection_id: 'con_123',
+});
+```
+
+In v4, this method accepted a `Blob`:
+
+```ts
+// Either all at once...
+await client.jobs.importUsers({
+  users: new Blob([fs.readFileSync('./myusers.json')], { type: 'application/json' }),
+  connection_id: 'con_123',
+});
+
+// or using fetch-blob.
+import { fileFrom } from 'fetch-blob/from.js';
+
+await client.jobs.importUsers({
+  users: await fileFrom('./myusers.json', 'application/json'),
+  connection_id: 'con_123',
+});
+```
+
+In v5, this method accepts a `FileLike`, whose definition is copied below. The upshot of `FileLike` is increased flexibility; either the v3 or the v4 method may be used to import users in bulk.
+
+```ts
+type FileLike =
+    | ArrayBuffer
+    | ArrayBufferLike
+    | ArrayBufferView
+    | Uint8Array
+    | import("buffer").Buffer
+    | import("buffer").Blob
+    | import("buffer").File
+    | import("stream").Readable
+    | import("stream/web").ReadableStream
+    | globalThis.Blob
+    | globalThis.File
+    | ReadableStream;
+
+// So, treat `users` as a readable stream...
+await client.jobs.usersImports.create({
+  users: fs.createReadStream('./myusers.json'),
+  connection_id: 'con_123',
+});
+
+// ...or as a Blob...
+await client.jobs.usersImports.create({
+  users: new Blob([fs.readFileSync('./myusers.json')], { type: 'application/json' }),
+  connection_id: 'con_123',
+});
+
+// ...or as a Blob read using fetch-blob.
+await client.jobs.usersImports.create({
+  users: await fileFrom('./myusers.json', 'application/json'),
+  connection_id: 'con_123',
+});
 ```
