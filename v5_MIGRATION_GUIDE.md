@@ -3,20 +3,20 @@
 A guide to migrating the Auth0 TS SDK from `4.x` to `5.x`.
 
 - [Overall changes](#overall-changes)
-  - [Node 20 or greater is required](#node-20-or-greater-is-required)
+  - [Accepted Node versions](#accepted-node-versions)
   - [Authentication API](#authentication-api)
   - [Management API](#management-api)
 - [Specific changes to the Management API](#specific-changes-to-the-management-api)
   - [Method name changes](#method-name-changes)
   - [Auto-pagination](#auto-pagination)
-  - [Interface imports](#interface-imports)
+  - [Management namespace](#management-namespace)
   - [Unified error type](#unified-error-type)
 
 ## Overall changes
 
-### Node 20 or greater is required
+### Accepted Node versions
 
-Node LTS versions `>= 20` are supported.
+This SDK requires specific version of Node: `"^20.19.0 || ^22.12.0 || ^24.0.0"`. (So any Node version from 20.19.0 up to but not including 21.0.0; any Node version from 22.12.0 up to but not including 23.0.0; and any Node 24 version.
 
 ### Authentication API
 
@@ -150,7 +150,7 @@ while (true) {
 }
 ```
 
-In v5, `client.actions.list()` returns a response of type `Page<Action>`, over which the following code is valid:
+In v5, `client.actions.list()` returns a response of type `Page<Action>`, over which the following pagination code is valid:
 
 ```ts
 import { ManagementClient } from "auth0";
@@ -161,35 +161,29 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-// Either for-loop directly over the response...
-const response = await client.actions.list();
-for await (const action of response) {
-    console.log(action);
-}
-
-// or iterate page-by-page.
 let page = await client.actions.list();
 while (page.hasNextPage()) {
     page = await page.getNextPage();
+    console.log(page);
 }
 ```
 
-### Interface imports
+### Management namespace
 
-All types for requests or responses can be directly imported from the `auth0` package for convenience:
+All types for requests or responses in the Management API belong to the `Management` namespace:
 
 ```ts
-import { ManagementClient, UpdateUserRequestContent } from "auth0";
+import { ManagementClient, Management } from "auth0";
 
-const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
-  clientId: '{YOUR_CLIENT_ID}',
-  clientSecret: '{YOUR_CLIENT_SECRET}',
+const client = new ManagementClient({
+    domain: "your-tenant.auth0.com",
+    clientId: "YOUR_CLIENT_ID",
+    clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-// Using the direct UpdateUserRequestContent import:
+// Using the Management namespace import:
 const user_id: string = "example_id";
-const request: UpdateUserRequestContent = {
+const request: Management.UpdateUserRequestContent = {
     user_metadata: { email: `'this@example.com'` },
 };
 
@@ -201,7 +195,7 @@ await client.users.update(user_id, request);
 All errors (4xx or 5xx response codes) are represented in the SDK as a subclass of the generalized `ManagementError` class, which encompasses all the different kinds of errors (`RequiredError`, `ResponseError`, `TimeoutError`, etc.) from v4:
 
 ```ts
-import { ManagementClient, ManagementError } from "./src";
+import { ManagementClient, ManagementError } from "auth0";
 
 const client = new ManagementClient({
     domain: "your-tenant.auth0.com",
