@@ -16,7 +16,7 @@ A guide to migrating the Auth0 TS SDK from `4.x` to `5.x`.
 
 ### Accepted Node versions
 
-This SDK requires specific version of Node: `"^20.19.0 || ^22.12.0 || ^24.0.0"`. (So any Node version from 20.19.0 up to but not including 21.0.0; any Node version from 22.12.0 up to but not including 23.0.0; and any Node 24 version.
+This SDK is guaranteed to work with the following versions of Node: `"^20.19.0 || ^22.12.0 || ^24.0.0"`. (So any Node 20 version starting from 20.19.0; any Node 22 version starting from 22.12.0; and any Node 24 version.) Other non-production versions of Node may work, but are not directly supported.
 
 ### Authentication API
 
