@@ -3757,3 +3757,1863 @@ while (page.hasNextPage()) {
 </details>
 
 <details><summary><code>client.userGrants.<a href="/src/management/api/resources/userGrants/client/Client.ts">deleteByUserId</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a grant associated with your account.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userGrants.deleteByUserId({
+    user_id: "user_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.DeleteUserGrantByUserIdRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserGrants.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userGrants.<a href="/src/management/api/resources/userGrants/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a grant associated with your account.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userGrants.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the grant to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserGrants.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Hooks
+
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Hook></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all <a href="https://auth0.com/docs/hooks">hooks</a>. Accepts a list of fields to include or exclude in the result.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.hooks.list();
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.hooks.list();
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListHooksRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Hooks.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">create</a>({ ...params }) -> Management.CreateHookResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new hook.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.hooks.create({
+    name: "name",
+    script: "script",
+    triggerId: "credentials-exchange",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateHookRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Hooks.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">get</a>(id, { ...params }) -> Management.GetHookResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve <a href="https://auth0.com/docs/hooks">a hook</a> by its ID. Accepts a list of fields to include in the result.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.hooks.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the hook to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetHookRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Hooks.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a hook.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.hooks.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the hook to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Hooks.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateHookResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an existing hook.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.hooks.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the hook to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateHookRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Hooks.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Jobs
+
+<details><summary><code>client.jobs.<a href="/src/management/api/resources/jobs/client/Client.ts">get</a>(id) -> Management.GetJobResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieves a job. Useful to check its status.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.jobs.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the job.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Jobs.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## LogStreams
+
+<details><summary><code>client.logStreams.<a href="/src/management/api/resources/logStreams/client/Client.ts">list</a>() -> Management.LogStreamResponseSchema[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details on <a href="https://auth0.com/docs/logs/streams">log streams</a>.
+
+<h5>Sample Response</h5><pre><code>[{
+	"id": "string",
+	"name": "string",
+	"type": "eventbridge",
+	"status": "active|paused|suspended",
+	"sink": {
+		"awsAccountId": "string",
+		"awsRegion": "string",
+		"awsPartnerEventSource": "string"
+	}
+}, {
+	"id": "string",
+	"name": "string",
+	"type": "http",
+	"status": "active|paused|suspended",
+	"sink": {
+		"httpContentFormat": "JSONLINES|JSONARRAY",
+		"httpContentType": "string",
+		"httpEndpoint": "string",
+		"httpAuthorization": "string"
+	}
+},
+{
+	"id": "string",
+	"name": "string",
+	"type": "eventgrid",
+	"status": "active|paused|suspended",
+	"sink": {
+		"azureSubscriptionId": "string",
+		"azureResourceGroup": "string",
+		"azureRegion": "string",
+		"azurePartnerTopic": "string"
+	}
+},
+{
+	"id": "string",
+	"name": "string",
+	"type": "splunk",
+	"status": "active|paused|suspended",
+	"sink": {
+		"splunkDomain": "string",
+		"splunkToken": "string",
+		"splunkPort": "string",
+		"splunkSecure": "boolean"
+	}
+},
+{
+	"id": "string",
+	"name": "string",
+	"type": "sumo",
+	"status": "active|paused|suspended",
+	"sink": {
+		"sumoSourceAddress": "string",
+	}
+},
+{
+	"id": "string",
+	"name": "string",
+	"type": "datadog",
+	"status": "active|paused|suspended",
+	"sink": {
+		"datadogRegion": "string",
+		"datadogApiKey": "string"
+	}
+}]</code></pre>
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.logStreams.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `LogStreams.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.logStreams.<a href="/src/management/api/resources/logStreams/client/Client.ts">create</a>({ ...params }) -> Management.CreateLogStreamResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a log stream.
+
+<h5>Log Stream Types</h5> The <code>type</code> of log stream being created determines the properties required in the <code>sink</code> payload.
+<h5>HTTP Stream</h5> For an <code>http</code> Stream, the <code>sink</code> properties are listed in the payload below
+Request: <pre><code>{
+	"name": "string",
+	"type": "http",
+	"sink": {
+		"httpEndpoint": "string",
+		"httpContentType": "string",
+		"httpContentFormat": "JSONLINES|JSONARRAY",
+		"httpAuthorization": "string"
+	}
+}</code></pre>
+Response: <pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "http",
+	"status": "active",
+	"sink": {
+		"httpEndpoint": "string",
+		"httpContentType": "string",
+		"httpContentFormat": "JSONLINES|JSONARRAY",
+		"httpAuthorization": "string"
+	}
+}</code></pre>
+<h5>Amazon EventBridge Stream</h5> For an <code>eventbridge</code> Stream, the <code>sink</code> properties are listed in the payload below
+Request: <pre><code>{
+	"name": "string",
+	"type": "eventbridge",
+	"sink": {
+		"awsRegion": "string",
+		"awsAccountId": "string"
+	}
+}</code></pre>
+The response will include an additional field <code>awsPartnerEventSource</code> in the <code>sink</code>: <pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "eventbridge",
+	"status": "active",
+	"sink": {
+		"awsAccountId": "string",
+		"awsRegion": "string",
+		"awsPartnerEventSource": "string"
+	}
+}</code></pre>
+<h5>Azure Event Grid Stream</h5> For an <code>Azure Event Grid</code> Stream, the <code>sink</code> properties are listed in the payload below
+Request: <pre><code>{
+	"name": "string",
+	"type": "eventgrid",
+	"sink": {
+		"azureSubscriptionId": "string",
+		"azureResourceGroup": "string",
+		"azureRegion": "string"
+	}
+}</code></pre>
+Response: <pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "http",
+	"status": "active",
+	"sink": {
+		"azureSubscriptionId": "string",
+		"azureResourceGroup": "string",
+		"azureRegion": "string",
+		"azurePartnerTopic": "string"
+	}
+}</code></pre>
+<h5>Datadog Stream</h5> For a <code>Datadog</code> Stream, the <code>sink</code> properties are listed in the payload below
+Request: <pre><code>{
+	"name": "string",
+	"type": "datadog",
+	"sink": {
+		"datadogRegion": "string",
+		"datadogApiKey": "string"
+	}
+}</code></pre>
+Response: <pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "datadog",
+	"status": "active",
+	"sink": {
+		"datadogRegion": "string",
+		"datadogApiKey": "string"
+	}
+}</code></pre>
+<h5>Splunk Stream</h5> For a <code>Splunk</code> Stream, the <code>sink</code> properties are listed in the payload below
+Request: <pre><code>{
+	"name": "string",
+	"type": "splunk",
+	"sink": {
+		"splunkDomain": "string",
+		"splunkToken": "string",
+		"splunkPort": "string",
+		"splunkSecure": "boolean"
+	}
+}</code></pre>
+Response: <pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "splunk",
+	"status": "active",
+	"sink": {
+		"splunkDomain": "string",
+		"splunkToken": "string",
+		"splunkPort": "string",
+		"splunkSecure": "boolean"
+	}
+}</code></pre>
+<h5>Sumo Logic Stream</h5> For a <code>Sumo Logic</code> Stream, the <code>sink</code> properties are listed in the payload below
+Request: <pre><code>{
+	"name": "string",
+	"type": "sumo",
+	"sink": {
+		"sumoSourceAddress": "string",
+	}
+}</code></pre>
+Response: <pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "sumo",
+	"status": "active",
+	"sink": {
+		"sumoSourceAddress": "string",
+	}
+}</code></pre>
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.logStreams.create({
+    type: "http",
+    sink: {
+        httpEndpoint: "httpEndpoint",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateLogStreamRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LogStreams.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.logStreams.<a href="/src/management/api/resources/logStreams/client/Client.ts">get</a>(id) -> Management.GetLogStreamResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a log stream configuration and status.
+
+<h5>Sample responses</h5><h5>Amazon EventBridge Log Stream</h5><pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "eventbridge",
+	"status": "active|paused|suspended",
+	"sink": {
+		"awsAccountId": "string",
+		"awsRegion": "string",
+		"awsPartnerEventSource": "string"
+	}
+}</code></pre> <h5>HTTP Log Stream</h5><pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "http",
+	"status": "active|paused|suspended",
+	"sink": {
+		"httpContentFormat": "JSONLINES|JSONARRAY",
+		"httpContentType": "string",
+		"httpEndpoint": "string",
+		"httpAuthorization": "string"
+	}
+}</code></pre> <h5>Datadog Log Stream</h5><pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "datadog",
+	"status": "active|paused|suspended",
+	"sink": {
+		"datadogRegion": "string",
+		"datadogApiKey": "string"
+	}
+
+}</code></pre><h5>Mixpanel</h5>
+Request: <pre><code>{
+"name": "string",
+"type": "mixpanel",
+"sink": {
+"mixpanelRegion": "string", // "us" | "eu",
+"mixpanelProjectId": "string",
+"mixpanelServiceAccountUsername": "string",
+"mixpanelServiceAccountPassword": "string"
+}
+} </code></pre>
+Response: <pre><code>{
+"id": "string",
+"name": "string",
+"type": "mixpanel",
+"status": "active",
+"sink": {
+"mixpanelRegion": "string", // "us" | "eu",
+"mixpanelProjectId": "string",
+"mixpanelServiceAccountUsername": "string",
+"mixpanelServiceAccountPassword": "string" // the following is redacted on return
+}
+} </code></pre>
+
+    <h5>Segment</h5>
+
+    Request: <pre><code> {
+      "name": "string",
+      "type": "segment",
+      "sink": {
+    	"segmentWriteKey": "string"
+      }
+    }</code></pre>
+
+    Response: <pre><code>{
+      "id": "string",
+      "name": "string",
+      "type": "segment",
+      "status": "active",
+      "sink": {
+    	"segmentWriteKey": "string"
+      }
+    } </code></pre>
+
+<h5>Splunk Log Stream</h5><pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "splunk",
+	"status": "active|paused|suspended",
+	"sink": {
+		"splunkDomain": "string",
+		"splunkToken": "string",
+		"splunkPort": "string",
+		"splunkSecure": "boolean"
+	}
+}</code></pre> <h5>Sumo Logic Log Stream</h5><pre><code>{
+	"id": "string",
+	"name": "string",
+	"type": "sumo",
+	"status": "active|paused|suspended",
+	"sink": {
+		"sumoSourceAddress": "string",
+	}
+}</code></pre> <h5>Status</h5> The <code>status</code> of a log stream maybe any of the following:
+1. <code>active</code> - Stream is currently enabled.
+2. <code>paused</code> - Stream is currently user disabled and will not attempt log delivery.
+3. <code>suspended</code> - Stream is currently disabled because of errors and will not attempt log delivery.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.logStreams.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the log stream to get
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LogStreams.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.logStreams.<a href="/src/management/api/resources/logStreams/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a log stream.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.logStreams.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the log stream to delete
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LogStreams.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.logStreams.<a href="/src/management/api/resources/logStreams/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateLogStreamResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a log stream.
+
+<h4>Examples of how to use the PATCH endpoint.</h4> The following fields may be updated in a PATCH operation: <ul><li>name</li><li>status</li><li>sink</li></ul> Note: For log streams of type <code>eventbridge</code> and <code>eventgrid</code>, updating the <code>sink</code> is not permitted.
+<h5>Update the status of a log stream</h5><pre><code>{
+	"status": "active|paused"
+}</code></pre>
+<h5>Update the name of a log stream</h5><pre><code>{
+	"name": "string"
+}</code></pre>
+<h5>Update the sink properties of a stream of type <code>http</code></h5><pre><code>{
+  "sink": {
+    "httpEndpoint": "string",
+    "httpContentType": "string",
+    "httpContentFormat": "JSONARRAY|JSONLINES",
+    "httpAuthorization": "string"
+  }
+}</code></pre>
+<h5>Update the sink properties of a stream of type <code>datadog</code></h5><pre><code>{
+  "sink": {
+		"datadogRegion": "string",
+		"datadogApiKey": "string"
+  }
+}</code></pre>
+<h5>Update the sink properties of a stream of type <code>splunk</code></h5><pre><code>{
+  "sink": {
+    "splunkDomain": "string",
+    "splunkToken": "string",
+    "splunkPort": "string",
+    "splunkSecure": "boolean"
+  }
+}</code></pre>
+<h5>Update the sink properties of a stream of type <code>sumo</code></h5><pre><code>{
+  "sink": {
+    "sumoSourceAddress": "string"
+  }
+}</code></pre> 
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.logStreams.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the log stream to get
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateLogStreamRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LogStreams.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Logs
+
+<details><summary><code>client.logs.<a href="/src/management/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Log></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve log entries that match the specified search criteria (or all log entries if no criteria specified).
+
+Set custom search criteria using the <code>q</code> parameter, or search from a specific log ID (<i>"search from checkpoint"</i>).
+
+For more information on all possible event types, their respective acronyms, and descriptions, see <a href="https://auth0.com/docs/logs/log-event-type-codes">Log Event Type Codes</a>.
+
+<h5>To set custom search criteria, use the following parameters:</h5>
+
+<ul>
+    <li><b>q:</b> Search Criteria using <a href="https://auth0.com/docs/logs/log-search-query-syntax">Query String Syntax</a></li>
+    <li><b>page:</b> Page index of the results to return. First page is 0.</li>
+    <li><b>per_page:</b> Number of results per page.</li>
+    <li><b>sort:</b> Field to use for sorting appended with `:1` for ascending and `:-1` for descending. e.g. `date:-1`</li>
+    <li><b>fields:</b> Comma-separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields.</li>
+    <li><b>include_fields:</b> Whether specified fields are to be included (true) or excluded (false).</li>
+    <li><b>include_totals:</b> Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). <b>Deprecated:</b> this field is deprecated and should be removed from use. See <a href="https://auth0.com/docs/product-lifecycle/deprecations-and-migrations/migrate-to-tenant-log-search-v3#pagination">Search Engine V3 Breaking Changes</a></li>
+</ul>
+
+For more information on the list of fields that can be used in <code>fields</code> and <code>sort</code>, see <a href="https://auth0.com/docs/logs/log-search-query-syntax#searchable-fields">Searchable Fields</a>.
+
+Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations">limits the number of logs</a> you can return by search criteria to 100 logs per request. Furthermore, you may paginate only through 1,000 search results. If you exceed this threshold, please redefine your search or use the <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#retrieve-logs-by-checkpoint">get logs by checkpoint method</a>.
+
+<h5>To search from a checkpoint log ID, use the following parameters:</h5>
+<ul>
+    <li><b>from:</b> Log Event ID from which to start retrieving logs. You can limit the number of logs returned using the <code>take</code> parameter. If you use <code>from</code> at the same time as <code>q</code>, <code>from</code> takes precedence and <code>q</code> is ignored.</li>
+    <li><b>take:</b> Number of entries to retrieve when using the <code>from</code> parameter.</li>
+</ul>
+
+<strong>Important:</strong> When fetching logs from a checkpoint log ID, any parameter other than <code>from</code> and <code>take</code> will be ignored, and date ordering is not guaranteed.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.logs.list();
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.logs.list();
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListLogsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Logs.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.logs.<a href="/src/management/api/resources/logs/client/Client.ts">get</a>(id) -> Management.GetLogResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve an individual log event.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.logs.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — log_id of the log to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Logs.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## NetworkAcls
+
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.NetworkAclsResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get all access control list entries for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.networkAcls.list();
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.networkAcls.list();
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListNetworkAclsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAcls.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">create</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new access control list for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.networkAcls.create({
+    description: "description",
+    active: true,
+    priority: 1.1,
+    rule: {
+        action: {},
+        scope: "management",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateNetworkAclRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAcls.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">get</a>(id) -> Management.GetNetworkAclsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific access control list entry for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.networkAcls.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the access control list to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAcls.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">set</a>(id, { ...params }) -> Management.SetNetworkAclsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update existing access control list for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.networkAcls.set("id", {
+    description: "description",
+    active: true,
+    priority: 1.1,
+    rule: {
+        action: {},
+        scope: "management",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the ACL to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.SetNetworkAclRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAcls.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete existing access control list for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.networkAcls.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the ACL to delete
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAcls.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateNetworkAclResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update existing access control list for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.networkAcls.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the ACL to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateNetworkAclRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAcls.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Organizations
+
+<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Organization></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve detailed list of all Organizations available in your tenant. For more information, see Auth0 Organizations.
+
+This endpoint supports two types of pagination:
+
+<ul>
+<li>Offset pagination</li>
+<li>Checkpoint pagination</li>
+</ul>
+
+Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.
+
+<h2>Checkpoint Pagination</h2>
+
+To search by checkpoint, use the following parameters:
+
+<ul>
+<li><code>from</code>: Optional id from which to start selection.</li>
+<li><code>take</code>: The total number of entries to retrieve when using the <code>from</code> parameter. Defaults to 50.</li>
+</ul>
+
+<b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.organizations.list();
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.list();
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Organizations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
