@@ -10274,6 +10274,11 @@ export interface PatchClientGrantsByIdRequest {
    *
    */
   allow_any_organization?: boolean | null;
+  /**
+   * Types of authorization_details allowed for this client grant.
+   *
+   */
+  authorization_details_types?: Array<string>;
 }
 
 export const PatchClientGrantsByIdRequestOrganizationUsageEnum = {
