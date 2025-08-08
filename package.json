@@ -1,10 +1,10 @@
 {
     "name": "auth0",
-    "version": "5.0.0-beta.1",
+    "version": "5.0.0-beta.0",
     "private": false,
     "repository": {
         "type": "git",
-        "url": "https://github.com/auth0/node-auth0.git"
+        "url": "git+https://github.com/auth0/node-auth0.git"
     },
     "license": "MIT",
     "type": "commonjs",
@@ -54,7 +54,7 @@
         "test:unit": "jest --selectProjects unit",
         "test:browser": "jest --selectProjects browser",
         "test:wire": "jest --selectProjects wire",
-        "prepare": "husky",
+        "prepublishOnly": "yarn validate",
         "lint": "eslint . --ext .js,.ts,.tsx",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "lint:check": "eslint . --ext .js,.ts,.tsx",
@@ -67,7 +67,7 @@
         "docs:clean": "rm -rf docs",
         "docs:build": "npm run docs:clean && npm run docs",
         "precommit": "lint-staged",
-        "validate": "yarn lint:check && yarn format --check && yarn test && yarn lint:package"
+        "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
     },
     "devDependencies": {
         "webpack": "^5.97.1",
@@ -119,7 +119,7 @@
         "management api",
         "json web token"
     ],
-    "description": "Auth0 Node.js SDK for Authentication and Management APIs.",
+    "description": "Auth0 Node.js SDK for the Management API v2.",
     "lint-staged": {
         "*.{js,ts,tsx}": [
             "eslint --fix",
