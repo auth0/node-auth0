@@ -106,20 +106,6 @@
         "node": "^20.19.0 || ^22.12.0 || ^24.0.0"
     },
     "sideEffects": false,
-    "lint-staged": {
-        "*.{js,ts,tsx}": [
-            "eslint --fix",
-            "prettier --write"
-        ],
-        "*.{json,md,yml,yaml}": [
-            "prettier --write"
-        ]
-    },
-    "dependencies": {
-        "uuid": "^11.1.0",
-        "jose": "^4.13.2",
-        "auth0-legacy": "npm:auth0@^4.27.0"
-    },
     "bugs": {
         "url": "https://github.com/auth0/node-auth0/issues"
     },
@@ -133,5 +119,19 @@
         "management api",
         "json web token"
     ],
-    "description": "Auth0 Node.js SDK for Authentication and Management APIs."
+    "description": "Auth0 Node.js SDK for Authentication and Management APIs.",
+    "lint-staged": {
+        "*.{js,ts,tsx}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{json,md,yml,yaml}": [
+            "prettier --write"
+        ]
+    },
+    "dependencies": {
+        "uuid": "^11.1.0",
+        "jose": "^4.13.2",
+        "auth0-legacy": "npm:auth0@^4.27.0"
+    }
 }
