@@ -83,6 +83,10 @@ export class ClientGrantsManager extends BaseAPI {
         key: 'client_id',
         config: {},
       },
+      {
+        key: 'subject_type',
+        config: {},
+      },
     ]);
 
     const response = await this.request(
