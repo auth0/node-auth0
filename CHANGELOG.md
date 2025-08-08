@@ -4,14 +4,14 @@
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.28.0...v5.0.0-beta.0)
 
--   Complete rewrite of the **Management API client** using Fern code generation
--   Significantly improved **TypeScript support** with stronger types and standardized error handling
--   Modular **sub-client architecture** for better API discoverability and consistency
--   Fully compatible **Authentication API client** — no breaking changes
--   Optional **v4.x-compatible legacy client** available at `auth0/legacy`
--   Updated **minimum Node.js version** to `^20.19.0 || ^22.12.0 || ^24.0.0`
--   Introduced **modern package exports** with support for CommonJS and ESM
--   [Migration guide](https://github.com/auth0/node-auth0/blob/v5/v5_MIGRATION_GUIDE.md) available for upgrading from v4.x
+- Complete rewrite of the **Management API client** using Fern code generation
+- Significantly improved **TypeScript support** with stronger types and standardized error handling
+- Modular **sub-client architecture** for better API discoverability and consistency
+- Fully compatible **Authentication API client** — no breaking changes
+- Optional **v4.x-compatible legacy client** available at `auth0/legacy`
+- Updated **minimum Node.js version** to `^20.19.0 || ^22.12.0 || ^24.0.0`
+- Introduced **modern package exports** with support for CommonJS and ESM
+- [Migration guide](https://github.com/auth0/node-auth0/blob/v5/v5_MIGRATION_GUIDE.md) available for upgrading from v4.x
 
 ## [v4.28.0](https://github.com/auth0/node-auth0/tree/v4.28.0) (2025-08-04)
 
@@ -19,12 +19,12 @@
 
 **Added**
 
--   Feat: Add Support for Native to Web SSO [\#1141](https://github.com/auth0/node-auth0/pull/1141) ([tanya732](https://github.com/tanya732))
--   Feat: Added support for Customize Device Remembrance [\#1138](https://github.com/auth0/node-auth0/pull/1138) ([tanya732](https://github.com/tanya732))
--   Add Tenant ACL GA Support [\#1140](https://github.com/auth0/node-auth0/pull/1140) ([tanya732](https://github.com/tanya732))
--   Feat/ Add Phone Template Support [\#1139](https://github.com/auth0/node-auth0/pull/1139) ([tanya732](https://github.com/tanya732))
--   Added Support for Post Action Request [\#1135](https://github.com/auth0/node-auth0/pull/1135) ([tanya732](https://github.com/tanya732))
--   Feat: Support for Log Streaming - Masking PII [\#1134](https://github.com/auth0/node-auth0/pull/1134) ([tanya732](https://github.com/tanya732))
+- Feat: Add Support for Native to Web SSO [\#1141](https://github.com/auth0/node-auth0/pull/1141) ([tanya732](https://github.com/tanya732))
+- Feat: Added support for Customize Device Remembrance [\#1138](https://github.com/auth0/node-auth0/pull/1138) ([tanya732](https://github.com/tanya732))
+- Add Tenant ACL GA Support [\#1140](https://github.com/auth0/node-auth0/pull/1140) ([tanya732](https://github.com/tanya732))
+- Feat/ Add Phone Template Support [\#1139](https://github.com/auth0/node-auth0/pull/1139) ([tanya732](https://github.com/tanya732))
+- Added Support for Post Action Request [\#1135](https://github.com/auth0/node-auth0/pull/1135) ([tanya732](https://github.com/tanya732))
+- Feat: Support for Log Streaming - Masking PII [\#1134](https://github.com/auth0/node-auth0/pull/1134) ([tanya732](https://github.com/tanya732))
 
 ## [v4.27.0](https://github.com/auth0/node-auth0/tree/v4.27.0) (2025-06-30)
 
@@ -32,11 +32,11 @@
 
 **Added**
 
--   Added Support for DPOP in Resource Server [\#1132](https://github.com/auth0/node-auth0/pull/1132) ([tanya732](https://github.com/tanya732))
--   Added Support for ACUL R7 on GetAllRendering Endpoint [\#1130](https://github.com/auth0/node-auth0/pull/1130) ([tanya732](https://github.com/tanya732))
--   Added email_locale field for Create MFA enrollment ticket [\#1129](https://github.com/auth0/node-auth0/pull/1129) ([tanya732](https://github.com/tanya732))
--   Added Support for ACUL R7 [\#1128](https://github.com/auth0/node-auth0/pull/1128) ([tanya732](https://github.com/tanya732))
--   Added Support for Multiple Custom Domain [\#1109](https://github.com/auth0/node-auth0/pull/1109) ([tanya732](https://github.com/tanya732))
+- Added Support for DPOP in Resource Server [\#1132](https://github.com/auth0/node-auth0/pull/1132) ([tanya732](https://github.com/tanya732))
+- Added Support for ACUL R7 on GetAllRendering Endpoint [\#1130](https://github.com/auth0/node-auth0/pull/1130) ([tanya732](https://github.com/tanya732))
+- Added email_locale field for Create MFA enrollment ticket [\#1129](https://github.com/auth0/node-auth0/pull/1129) ([tanya732](https://github.com/tanya732))
+- Added Support for ACUL R7 [\#1128](https://github.com/auth0/node-auth0/pull/1128) ([tanya732](https://github.com/tanya732))
+- Added Support for Multiple Custom Domain [\#1109](https://github.com/auth0/node-auth0/pull/1109) ([tanya732](https://github.com/tanya732))
 
 ## [v4.26.0](https://github.com/auth0/node-auth0/tree/v4.26.0) (2025-06-20)
 
@@ -44,9 +44,9 @@
 
 **Added**
 
--   Updated logger [\#1125](https://github.com/auth0/node-auth0/pull/1125) ([tanya732](https://github.com/tanya732))
--   Added support for Client Assertions JWT [\#1123](https://github.com/auth0/node-auth0/pull/1123) ([tanya732](https://github.com/tanya732))
--   Add `getEnabledConnections` method and related types to `ClientsManager` [\#1122](https://github.com/auth0/node-auth0/pull/1122) ([developerkunal](https://github.com/developerkunal))
+- Updated logger [\#1125](https://github.com/auth0/node-auth0/pull/1125) ([tanya732](https://github.com/tanya732))
+- Added support for Client Assertions JWT [\#1123](https://github.com/auth0/node-auth0/pull/1123) ([tanya732](https://github.com/tanya732))
+- Add `getEnabledConnections` method and related types to `ClientsManager` [\#1122](https://github.com/auth0/node-auth0/pull/1122) ([developerkunal](https://github.com/developerkunal))
 
 ## [v4.25.0](https://github.com/auth0/node-auth0/tree/v4.25.0) (2025-06-06)
 
@@ -54,7 +54,7 @@
 
 **Added**
 
--   Added support for Enabled Client Connections [\#1114](https://github.com/auth0/node-auth0/pull/1114) ([tanya732](https://github.com/tanya732))
+- Added support for Enabled Client Connections [\#1114](https://github.com/auth0/node-auth0/pull/1114) ([tanya732](https://github.com/tanya732))
 
 ## [v4.24.0](https://github.com/auth0/node-auth0/tree/v4.24.0) (2025-06-03)
 
@@ -62,8 +62,8 @@
 
 **Added**
 
--   Added Support for Limit M2M [\#1100](https://github.com/auth0/node-auth0/pull/1100) ([tanya732](https://github.com/tanya732))
--   Added Support for Limit M2M Auth API [\#1107](https://github.com/auth0/node-auth0/pull/1107) ([tanya732](https://github.com/tanya732))
+- Added Support for Limit M2M [\#1100](https://github.com/auth0/node-auth0/pull/1100) ([tanya732](https://github.com/tanya732))
+- Added Support for Limit M2M Auth API [\#1107](https://github.com/auth0/node-auth0/pull/1107) ([tanya732](https://github.com/tanya732))
 
 ## [v4.23.1](https://github.com/auth0/node-auth0/tree/v4.23.1) (2025-05-20)
 
@@ -71,7 +71,7 @@
 
 **Added**
 
--   Added support for ACUL Prompt Rendering Endpoint [\#1110](https://github.com/auth0/node-auth0/pull/1110) ([tanya732](https://github.com/tanya732))
+- Added support for ACUL Prompt Rendering Endpoint [\#1110](https://github.com/auth0/node-auth0/pull/1110) ([tanya732](https://github.com/tanya732))
 
 ## [v4.23.0](https://github.com/auth0/node-auth0/tree/v4.23.0) (2025-05-06)
 
@@ -79,8 +79,8 @@
 
 **Added**
 
--   Add test for setting the external_id parameter [\#1038](https://github.com/auth0/node-auth0/pull/1038) ([matthewcarroll](https://github.com/matthewcarroll))
--   Added policies in clients endpoint (GET/PATCH/POST) [\#1103](https://github.com/auth0/node-auth0/pull/1103) ([tanya732](https://github.com/tanya732))
+- Add test for setting the external_id parameter [\#1038](https://github.com/auth0/node-auth0/pull/1038) ([matthewcarroll](https://github.com/matthewcarroll))
+- Added policies in clients endpoint (GET/PATCH/POST) [\#1103](https://github.com/auth0/node-auth0/pull/1103) ([tanya732](https://github.com/tanya732))
 
 ## [v4.22.0](https://github.com/auth0/node-auth0/tree/v4.22.0) (2025-04-16)
 
@@ -90,7 +90,7 @@
 
 ⚠️ BREAKING CHANGES
 
--   Added Support for SS-SSO-FF for Node Auth0 [\#1093](https://github.com/auth0/node-auth0/pull/1093) ([tanya732](https://github.com/tanya732))
+- Added Support for SS-SSO-FF for Node Auth0 [\#1093](https://github.com/auth0/node-auth0/pull/1093) ([tanya732](https://github.com/tanya732))
 
 > Please look at #1093 PR for changes
 > Updated response from Array<Connection> to Array<ConnectionForList> for /connections : 'GET' endpoint
@@ -101,11 +101,11 @@
 
 **Added**
 
--   Add tokenForConnection method to OAuth [\#1083](https://github.com/auth0/node-auth0/pull/1083) ([tusharpandey13](https://github.com/tusharpandey13))
--   Added pre-change-password field in attackprotection-manager [\#1096](https://github.com/auth0/node-auth0/pull/1096) ([tanya732](https://github.com/tanya732))
--   Added support for Federated Login Connection Tokenset for User [\#1090](https://github.com/auth0/node-auth0/pull/1090) ([tanya732](https://github.com/tanya732))
--   Added tenant ACL EA support [\#1091](https://github.com/auth0/node-auth0/pull/1091) ([kushalshit27](https://github.com/kushalshit27))
--   Add new language and prompt identifiers to custom text enums [\#1095](https://github.com/auth0/node-auth0/pull/1095) ([kushalshit27](https://github.com/kushalshit27))
+- Add tokenForConnection method to OAuth [\#1083](https://github.com/auth0/node-auth0/pull/1083) ([tusharpandey13](https://github.com/tusharpandey13))
+- Added pre-change-password field in attackprotection-manager [\#1096](https://github.com/auth0/node-auth0/pull/1096) ([tanya732](https://github.com/tanya732))
+- Added support for Federated Login Connection Tokenset for User [\#1090](https://github.com/auth0/node-auth0/pull/1090) ([tanya732](https://github.com/tanya732))
+- Added tenant ACL EA support [\#1091](https://github.com/auth0/node-auth0/pull/1091) ([kushalshit27](https://github.com/kushalshit27))
+- Add new language and prompt identifiers to custom text enums [\#1095](https://github.com/auth0/node-auth0/pull/1095) ([kushalshit27](https://github.com/kushalshit27))
 
 ## [v4.20.0](https://github.com/auth0/node-auth0/tree/v4.20.0) (2025-03-19)
 
@@ -113,8 +113,8 @@
 
 **Added**
 
--   Add support for RAR when using CIBA [\#1088](https://github.com/auth0/node-auth0/pull/1088) ([frederikprijck](https://github.com/frederikprijck))
--   Get all custom domains paginate support [\#1089](https://github.com/auth0/node-auth0/pull/1089) ([kushalshit27](https://github.com/kushalshit27))
+- Add support for RAR when using CIBA [\#1088](https://github.com/auth0/node-auth0/pull/1088) ([frederikprijck](https://github.com/frederikprijck))
+- Get all custom domains paginate support [\#1089](https://github.com/auth0/node-auth0/pull/1089) ([kushalshit27](https://github.com/kushalshit27))
 
 ## [v4.19.0](https://github.com/auth0/node-auth0/tree/v4.19.0) (2025-03-12)
 
@@ -122,10 +122,10 @@
 
 **Added**
 
--   Added tenant, channel in Branding Phone Providers [\#1085](https://github.com/auth0/node-auth0/pull/1085) ([tanya732](https://github.com/tanya732))
--   Added byok support for node auth0 [\#1080](https://github.com/auth0/node-auth0/pull/1080) ([tanya732](https://github.com/tanya732))
--   feature/formsCustomText [\#1082](https://github.com/auth0/node-auth0/pull/1082) ([tusharpandey13](https://github.com/tusharpandey13))
--   Add Support For Extensibility as Custom Provider in BrandingManager [\#1079](https://github.com/auth0/node-auth0/pull/1079) ([tanya732](https://github.com/tanya732))
+- Added tenant, channel in Branding Phone Providers [\#1085](https://github.com/auth0/node-auth0/pull/1085) ([tanya732](https://github.com/tanya732))
+- Added byok support for node auth0 [\#1080](https://github.com/auth0/node-auth0/pull/1080) ([tanya732](https://github.com/tanya732))
+- feature/formsCustomText [\#1082](https://github.com/auth0/node-auth0/pull/1082) ([tusharpandey13](https://github.com/tusharpandey13))
+- Add Support For Extensibility as Custom Provider in BrandingManager [\#1079](https://github.com/auth0/node-auth0/pull/1079) ([tanya732](https://github.com/tanya732))
 
 ## [v4.18.0](https://github.com/auth0/node-auth0/tree/v4.18.0) (2025-01-28)
 
@@ -133,12 +133,12 @@
 
 **Added**
 
--   add optional organization parameter in ClientCredentialsGrantRequest of clientCredentialsGrant call of oauth of authenticationClient [\#1075](https://github.com/auth0/node-auth0/pull/1075) ([tusharpandey13](https://github.com/tusharpandey13))
--   feature/customTokenExchange [\#1074](https://github.com/auth0/node-auth0/pull/1074) ([tusharpandey13](https://github.com/tusharpandey13))
+- add optional organization parameter in ClientCredentialsGrantRequest of clientCredentialsGrant call of oauth of authenticationClient [\#1075](https://github.com/auth0/node-auth0/pull/1075) ([tusharpandey13](https://github.com/tusharpandey13))
+- feature/customTokenExchange [\#1074](https://github.com/auth0/node-auth0/pull/1074) ([tusharpandey13](https://github.com/tusharpandey13))
 
 **Removed**
 
--   remove redundant client_ids parameter from getAll() methood of clientsManager [\#1076](https://github.com/auth0/node-auth0/pull/1076) ([tusharpandey13](https://github.com/tusharpandey13))
+- remove redundant client_ids parameter from getAll() methood of clientsManager [\#1076](https://github.com/auth0/node-auth0/pull/1076) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v4.17.0](https://github.com/auth0/node-auth0/tree/v4.17.0) (2025-01-21)
 
@@ -146,12 +146,12 @@
 
 **Changed**
 
--   updated email template manager, added reset_email_by_code to multiple places [\#1071](https://github.com/auth0/node-auth0/pull/1071) ([tusharpandey13](https://github.com/tusharpandey13))
--   feature/customEmailProvider [\#1070](https://github.com/auth0/node-auth0/pull/1070) ([tusharpandey13](https://github.com/tusharpandey13))
+- updated email template manager, added reset_email_by_code to multiple places [\#1071](https://github.com/auth0/node-auth0/pull/1071) ([tusharpandey13](https://github.com/tusharpandey13))
+- feature/customEmailProvider [\#1070](https://github.com/auth0/node-auth0/pull/1070) ([tusharpandey13](https://github.com/tusharpandey13))
 
 **Fixed**
 
--   accept a function as token [\#1069](https://github.com/auth0/node-auth0/pull/1069) ([tusharpandey13](https://github.com/tusharpandey13))
+- accept a function as token [\#1069](https://github.com/auth0/node-auth0/pull/1069) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v4.16.0](https://github.com/auth0/node-auth0/tree/v4.16.0) (2025-01-08)
 
@@ -159,11 +159,11 @@
 
 **Added**
 
--   CIBA implementation [\#1066](https://github.com/auth0/node-auth0/pull/1066) ([tusharpandey13](https://github.com/tusharpandey13))
+- CIBA implementation [\#1066](https://github.com/auth0/node-auth0/pull/1066) ([tusharpandey13](https://github.com/tusharpandey13))
 
 **Changed**
 
--   update README for clarity [\#1067](https://github.com/auth0/node-auth0/pull/1067) ([tusharpandey13](https://github.com/tusharpandey13))
+- update README for clarity [\#1067](https://github.com/auth0/node-auth0/pull/1067) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v4.15.0](https://github.com/auth0/node-auth0/tree/v4.15.0) (2024-12-09)
 
@@ -171,7 +171,7 @@
 
 **Added**
 
--   ACUL implementation [\#1060](https://github.com/auth0/node-auth0/pull/1060) ([tusharpandey13](https://github.com/tusharpandey13))
+- ACUL implementation [\#1060](https://github.com/auth0/node-auth0/pull/1060) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v4.14.0](https://github.com/auth0/node-auth0/tree/v4.14.0) (2024-11-22)
 
@@ -179,15 +179,10 @@
 
 **⚠️ BREAKING CHANGES**
 
--   Self Service SSO GA release changes [\#1057](https://github.com/auth0/node-auth0/pull/1057) ([tusharpandey13](https://github.com/tusharpandey13))
-    <<<<<<< HEAD
-    -   Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
-    -   Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
-    -   # Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
-            - Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
-            - Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
-            - Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
-        > > > > > > > 1b1f8c014 (Release v5.0.0-beta.0 (#1153))
+- Self Service SSO GA release changes [\#1057](https://github.com/auth0/node-auth0/pull/1057) ([tusharpandey13](https://github.com/tusharpandey13))
+    - Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
+    - Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
+    - Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
 
 ## [v4.13.0](https://github.com/auth0/node-auth0/tree/v4.13.0) (2024-11-12)
 
@@ -195,8 +190,8 @@
 
 **Added**
 
--   CYOK implementation [\#1041](https://github.com/auth0/node-auth0/pull/1041) ([tusharpandey13](https://github.com/tusharpandey13))
--   Feature/forms [\#1055](https://github.com/auth0/node-auth0/pull/1055) ([tusharpandey13](https://github.com/tusharpandey13))
+- CYOK implementation [\#1041](https://github.com/auth0/node-auth0/pull/1041) ([tusharpandey13](https://github.com/tusharpandey13))
+- Feature/forms [\#1055](https://github.com/auth0/node-auth0/pull/1055) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v4.12.0](https://github.com/auth0/node-auth0/tree/v4.12.0) (2024-11-07)
 
@@ -204,9 +199,9 @@
 
 **Fixed**
 
--   org cc/patch1 [\#1053](https://github.com/auth0/node-auth0/pull/1053) ([tusharpandey13](https://github.com/tusharpandey13))
--   parameter name change for Organizations for Client Credentials [\#1052](https://github.com/auth0/node-auth0/pull/1052) ([tusharpandey13](https://github.com/tusharpandey13))
--   Remove IGA trigger from e2e test [DXEX-4601] [\#1048](https://github.com/auth0/node-auth0/pull/1048) ([Widcket](https://github.com/Widcket))
+- org cc/patch1 [\#1053](https://github.com/auth0/node-auth0/pull/1053) ([tusharpandey13](https://github.com/tusharpandey13))
+- parameter name change for Organizations for Client Credentials [\#1052](https://github.com/auth0/node-auth0/pull/1052) ([tusharpandey13](https://github.com/tusharpandey13))
+- Remove IGA trigger from e2e test [DXEX-4601] [\#1048](https://github.com/auth0/node-auth0/pull/1048) ([Widcket](https://github.com/Widcket))
 
 ## [v4.11.0](https://github.com/auth0/node-auth0/tree/v4.11.0) (2024-11-05)
 
@@ -214,8 +209,8 @@
 
 **Added**
 
--   Fixed missing endpoints for feature Organizations for Client Credentials changes [\#1046](https://github.com/auth0/node-auth0/pull/1046) ([tusharpandey13](https://github.com/tusharpandey13))
--   Creating RL workflow for node-auth0 repo [\#1044](https://github.com/auth0/node-auth0/pull/1044) ([arpit-jn](https://github.com/arpit-jn))
+- Fixed missing endpoints for feature Organizations for Client Credentials changes [\#1046](https://github.com/auth0/node-auth0/pull/1046) ([tusharpandey13](https://github.com/tusharpandey13))
+- Creating RL workflow for node-auth0 repo [\#1044](https://github.com/auth0/node-auth0/pull/1044) ([arpit-jn](https://github.com/arpit-jn))
 
 ## [v4.10.0](https://github.com/auth0/node-auth0/tree/v4.10.0) (2024-09-10)
 
@@ -223,8 +218,8 @@
 
 **Added**
 
--   Prompt Partial model changes [\#1035](https://github.com/auth0/node-auth0/pull/1035) ([tusharpandey13](https://github.com/tusharpandey13))
--   Add organization support for client credentials to node-auth0 [\#1033](https://github.com/auth0/node-auth0/pull/1033) ([tusharpandey13](https://github.com/tusharpandey13))
+- Prompt Partial model changes [\#1035](https://github.com/auth0/node-auth0/pull/1035) ([tusharpandey13](https://github.com/tusharpandey13))
+- Add organization support for client credentials to node-auth0 [\#1033](https://github.com/auth0/node-auth0/pull/1033) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v4.9.0](https://github.com/auth0/node-auth0/tree/v4.9.0) (2024-08-26)
 
@@ -232,12 +227,12 @@
 
 **Added**
 
--   Node SDK support for SS-SSO [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
--   Update Codecov Action with Token [\#1029](https://github.com/auth0/node-auth0/pull/1029) ([developerkunal](https://github.com/developerkunal))
+- Node SDK support for SS-SSO [\#1028](https://github.com/auth0/node-auth0/pull/1028) ([tusharpandey13](https://github.com/tusharpandey13))
+- Update Codecov Action with Token [\#1029](https://github.com/auth0/node-auth0/pull/1029) ([developerkunal](https://github.com/developerkunal))
 
 **Changed**
 
--   Update codeowner file with new GitHub team name [\#1025](https://github.com/auth0/node-auth0/pull/1025) ([stevenwong-okta](https://github.com/stevenwong-okta))
+- Update codeowner file with new GitHub team name [\#1025](https://github.com/auth0/node-auth0/pull/1025) ([stevenwong-okta](https://github.com/stevenwong-okta))
 
 ## [v4.8.0](https://github.com/auth0/node-auth0/tree/v4.8.0) (2024-08-02)
 
@@ -245,9 +240,9 @@
 
 **Added**
 
--   Added support for client, tenant and resource level properties related to HRI [\#1024](https://github.com/auth0/node-auth0/pull/1024) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
--   Added support for users getSessions & getRefreshTokens endpoint in management api client [\#1021](https://github.com/auth0/node-auth0/pull/1021) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
--   Added support for Session & Refresh token in management api client [\#1019](https://github.com/auth0/node-auth0/pull/1019) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added support for client, tenant and resource level properties related to HRI [\#1024](https://github.com/auth0/node-auth0/pull/1024) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added support for users getSessions & getRefreshTokens endpoint in management api client [\#1021](https://github.com/auth0/node-auth0/pull/1021) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added support for Session & Refresh token in management api client [\#1019](https://github.com/auth0/node-auth0/pull/1019) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
 
 ## [v4.7.0](https://github.com/auth0/node-auth0/tree/v4.7.0) (2024-07-08)
 
@@ -255,7 +250,7 @@
 
 **Added**
 
--   Support SCIM features. [\#1016](https://github.com/auth0/node-auth0/pull/1016) ([nandan-bhat](https://github.com/nandan-bhat))
+- Support SCIM features. [\#1016](https://github.com/auth0/node-auth0/pull/1016) ([nandan-bhat](https://github.com/nandan-bhat))
 
 ## [v4.6.0](https://github.com/auth0/node-auth0/tree/v4.6.0) (2024-06-20)
 
@@ -263,15 +258,15 @@
 
 **Added**
 
--   Added enabled_clients in connection interface [\#1014](https://github.com/auth0/node-auth0/pull/1014) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added enabled_clients in connection interface [\#1014](https://github.com/auth0/node-auth0/pull/1014) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
 
 **Fixed**
 
--   Fixed bugs in the EXAMPLES.md's code snippets [\#994](https://github.com/auth0/node-auth0/pull/994) ([grjan7](https://github.com/grjan7))
+- Fixed bugs in the EXAMPLES.md's code snippets [\#994](https://github.com/auth0/node-auth0/pull/994) ([grjan7](https://github.com/grjan7))
 
 **Security**
 
--   Bump braces from 3.0.2 to 3.0.3 [\#1010](https://github.com/auth0/node-auth0/pull/1010) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump braces from 3.0.2 to 3.0.3 [\#1010](https://github.com/auth0/node-auth0/pull/1010) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v4.5.0](https://github.com/auth0/node-auth0/tree/v4.5.0) (2024-06-14)
 
@@ -279,17 +274,13 @@
 
 **Changed**
 
--   Support signing up with organization membership. [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
+- Support signing up with organization membership. [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
 
 **⚠️ BREAKING CHANGES**
 
--   Changes to `ResourceServer` interfaces (`ResourceServerTokenDialectEnum`, `ResourceServerCreateTokenDialectEnum` and `ResourceServerUpdateTokenDialectEnum`). [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
-    <<<<<<< HEAD
-    -   The key `token` is changed to `access_token`.
-    -   # The key `token_authz` is changed to `access_token_authz`.
-            - The key `token` is changed to `access_token`.
-            - The key `token_authz` is changed to `access_token_authz`.
-        > > > > > > > 1b1f8c014 (Release v5.0.0-beta.0 (#1153))
+- Changes to `ResourceServer` interfaces (`ResourceServerTokenDialectEnum`, `ResourceServerCreateTokenDialectEnum` and `ResourceServerUpdateTokenDialectEnum`). [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
+    - The key `token` is changed to `access_token`.
+    - The key `token_authz` is changed to `access_token_authz`.
 
 ## [v4.4.1](https://github.com/auth0/node-auth0/tree/v4.4.1) (2024-06-11)
 
@@ -297,7 +288,7 @@
 
 **Fixed**
 
--   fix: Fixed undici-types error by updating the dependecy [\#1008](https://github.com/auth0/node-auth0/pull/1008) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- fix: Fixed undici-types error by updating the dependecy [\#1008](https://github.com/auth0/node-auth0/pull/1008) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
 
 ## [v4.4.0](https://github.com/auth0/node-auth0/tree/v4.4.0) (2024-05-07)
 
@@ -305,11 +296,11 @@
 
 **Added**
 
--   Added new values of token_dialect in management api generated section [\#1003](https://github.com/auth0/node-auth0/pull/1003) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
--   Added changes to support mTLS authentication [\#1002](https://github.com/auth0/node-auth0/pull/1002) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
--   Added additional request parameter to support PAR with JAR requests [\#995](https://github.com/auth0/node-auth0/pull/995) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
--   Added new authorization_details parameter to support RAR requests [\#997](https://github.com/auth0/node-auth0/pull/997) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
--   Bump jose from 4.14.4 to 4.15.5 [\#993](https://github.com/auth0/node-auth0/pull/993) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Added new values of token_dialect in management api generated section [\#1003](https://github.com/auth0/node-auth0/pull/1003) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added changes to support mTLS authentication [\#1002](https://github.com/auth0/node-auth0/pull/1002) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added additional request parameter to support PAR with JAR requests [\#995](https://github.com/auth0/node-auth0/pull/995) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Added new authorization_details parameter to support RAR requests [\#997](https://github.com/auth0/node-auth0/pull/997) ([gyaneshgouraw-okta](https://github.com/gyaneshgouraw-okta))
+- Bump jose from 4.14.4 to 4.15.5 [\#993](https://github.com/auth0/node-auth0/pull/993) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v4.3.1](https://github.com/auth0/node-auth0/tree/v4.3.1) (2024-02-09)
 
@@ -317,7 +308,7 @@
 
 **Changed**
 
--   Add support for show_as_button on organization connections [\#988](https://github.com/auth0/node-auth0/pull/988) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for show_as_button on organization connections [\#988](https://github.com/auth0/node-auth0/pull/988) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.3.0](https://github.com/auth0/node-auth0/tree/v4.3.0) (2024-01-31)
 
@@ -325,7 +316,7 @@
 
 **Added**
 
--   Add support for prompt partials [\#985](https://github.com/auth0/node-auth0/pull/985) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for prompt partials [\#985](https://github.com/auth0/node-auth0/pull/985) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.2.0](https://github.com/auth0/node-auth0/tree/v4.2.0) (2023-12-07)
 
@@ -333,7 +324,7 @@
 
 **Added**
 
--   Add support for Pushed Authorization Requests [\#973](https://github.com/auth0/node-auth0/pull/973) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for Pushed Authorization Requests [\#973](https://github.com/auth0/node-auth0/pull/973) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.1.0](https://github.com/auth0/node-auth0/tree/v4.1.0) (2023-10-30)
 
@@ -341,7 +332,7 @@
 
 **Added**
 
--   [SDK-4646] Add MFA tenant setting and handle deprecations [\#960](https://github.com/auth0/node-auth0/pull/960) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- [SDK-4646] Add MFA tenant setting and handle deprecations [\#960](https://github.com/auth0/node-auth0/pull/960) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v4.0.2](https://github.com/auth0/node-auth0/tree/v4.0.2) (2023-10-25)
 
@@ -349,8 +340,8 @@
 
 **Changed**
 
--   Export models that are using in the runtime [\#954](https://github.com/auth0/node-auth0/pull/954) ([frederikprijck](https://github.com/frederikprijck))
--   Type errorCode as possibly undefined [\#953](https://github.com/auth0/node-auth0/pull/953) ([frederikprijck](https://github.com/frederikprijck))
+- Export models that are using in the runtime [\#954](https://github.com/auth0/node-auth0/pull/954) ([frederikprijck](https://github.com/frederikprijck))
+- Type errorCode as possibly undefined [\#953](https://github.com/auth0/node-auth0/pull/953) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.1](https://github.com/auth0/node-auth0/tree/v4.0.1) (2023-09-15)
 
@@ -358,7 +349,7 @@
 
 **Fixed**
 
--   Ensure to pass-trough options to TokenProvider [\#938](https://github.com/auth0/node-auth0/pull/938) ([frederikprijck](https://github.com/frederikprijck))
+- Ensure to pass-trough options to TokenProvider [\#938](https://github.com/auth0/node-auth0/pull/938) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0](https://github.com/auth0/node-auth0/tree/v4.0.0) (2023-09-14)
 
@@ -366,9 +357,9 @@
 
 This release brings a variety of exciting new features and improvements, including:
 
--   Rewritten from the ground up in TypeScript
--   Types for methods, request parameters, bodies, errors and responses
--   Customisable modern networking stack
+- Rewritten from the ground up in TypeScript
+- Types for methods, request parameters, bodies, errors and responses
+- Customisable modern networking stack
 
 This release also drops support for Node <18. See the [Migration Guide](https://github.com/auth0/node-auth0/blob/master/v4_MIGRATION_GUIDE.md) for more information.
 
@@ -378,10 +369,10 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   [SDK-4548] Support optional responses [\#928](https://github.com/auth0/node-auth0/pull/928) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   mark user_id as required for grants.deleteByUserId [\#930](https://github.com/auth0/node-auth0/pull/930) ([frederikprijck](https://github.com/frederikprijck))
--   add fields and include_fields to organization.getMembers [\#929](https://github.com/auth0/node-auth0/pull/929) ([frederikprijck](https://github.com/frederikprijck))
--   add pagination overloads to `client.getAll()` [\#931](https://github.com/auth0/node-auth0/pull/931) ([frederikprijck](https://github.com/frederikprijck))
+- [SDK-4548] Support optional responses [\#928](https://github.com/auth0/node-auth0/pull/928) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- mark user_id as required for grants.deleteByUserId [\#930](https://github.com/auth0/node-auth0/pull/930) ([frederikprijck](https://github.com/frederikprijck))
+- add fields and include_fields to organization.getMembers [\#929](https://github.com/auth0/node-auth0/pull/929) ([frederikprijck](https://github.com/frederikprijck))
+- add pagination overloads to `client.getAll()` [\#931](https://github.com/auth0/node-auth0/pull/931) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v3.7.1](https://github.com/auth0/node-auth0/tree/v3.7.1) (2023-09-11)
 
@@ -389,7 +380,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   fix: ManagementTokenProvider should also respect the keepAlive config option [\#927](https://github.com/auth0/node-auth0/pull/927) ([alaczi](https://github.com/alaczi))
+- fix: ManagementTokenProvider should also respect the keepAlive config option [\#927](https://github.com/auth0/node-auth0/pull/927) ([alaczi](https://github.com/alaczi))
 
 ## [v4.0.0-beta.9](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.9) (2023-09-06)
 
@@ -397,12 +388,12 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **⚠️ BREAKING CHANGES**
 
--   Rename fetch option, add request examples [\#923](https://github.com/auth0/node-auth0/pull/923) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   Change client id params to client_id [\#924](https://github.com/auth0/node-auth0/pull/924) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Rename fetch option, add request examples [\#923](https://github.com/auth0/node-auth0/pull/923) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Change client id params to client_id [\#924](https://github.com/auth0/node-auth0/pull/924) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 **Fixed**
 
--   Avoid optional properties on responses where possible [\#921](https://github.com/auth0/node-auth0/pull/921) ([frederikprijck](https://github.com/frederikprijck))
+- Avoid optional properties on responses where possible [\#921](https://github.com/auth0/node-auth0/pull/921) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v3.7.0](https://github.com/auth0/node-auth0/tree/v3.7.0) (2023-08-29)
 
@@ -410,7 +401,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   feat: add configuration for using persistent connections [\#919](https://github.com/auth0/node-auth0/pull/919) ([alaczi](https://github.com/alaczi))
+- feat: add configuration for using persistent connections [\#919](https://github.com/auth0/node-auth0/pull/919) ([alaczi](https://github.com/alaczi))
 
 ## [v3.6.1](https://github.com/auth0/node-auth0/tree/v3.6.1) (2023-08-22)
 
@@ -418,7 +409,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Changed**
 
--   Support providing Organization when resetting password [\#892](https://github.com/auth0/node-auth0/pull/892) ([frederikprijck](https://github.com/frederikprijck))
+- Support providing Organization when resetting password [\#892](https://github.com/auth0/node-auth0/pull/892) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.8](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.8) (2023-08-22)
 
@@ -426,9 +417,9 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   Update AttackProtection response and general types [\#911](https://github.com/auth0/node-auth0/pull/911) ([frederikprijck](https://github.com/frederikprijck))
--   Fix default condition should be the last one [\#915](https://github.com/auth0/node-auth0/pull/915) ([frederikprijck](https://github.com/frederikprijck))
--   Fix trigger_id types for actions [\#914](https://github.com/auth0/node-auth0/pull/914) ([frederikprijck](https://github.com/frederikprijck))
+- Update AttackProtection response and general types [\#911](https://github.com/auth0/node-auth0/pull/911) ([frederikprijck](https://github.com/frederikprijck))
+- Fix default condition should be the last one [\#915](https://github.com/auth0/node-auth0/pull/915) ([frederikprijck](https://github.com/frederikprijck))
+- Fix trigger_id types for actions [\#914](https://github.com/auth0/node-auth0/pull/914) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.7](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.7) (2023-08-16)
 
@@ -436,17 +427,17 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **⚠️ BREAKING CHANGES**
 
--   [SDK-4485] Use native fetch, drop Node 16 support [\#906](https://github.com/auth0/node-auth0/pull/906) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   Do not expose a grant method [\#904](https://github.com/auth0/node-auth0/pull/904) ([frederikprijck](https://github.com/frederikprijck))
--   Only allow confidential clients [\#905](https://github.com/auth0/node-auth0/pull/905) ([frederikprijck](https://github.com/frederikprijck))
+- [SDK-4485] Use native fetch, drop Node 16 support [\#906](https://github.com/auth0/node-auth0/pull/906) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Do not expose a grant method [\#904](https://github.com/auth0/node-auth0/pull/904) ([frederikprijck](https://github.com/frederikprijck))
+- Only allow confidential clients [\#905](https://github.com/auth0/node-auth0/pull/905) ([frederikprijck](https://github.com/frederikprijck))
 
 **Added**
 
--   Support providing Organization when resetting password [\#893](https://github.com/auth0/node-auth0/pull/893) ([frederikprijck](https://github.com/frederikprijck))
+- Support providing Organization when resetting password [\#893](https://github.com/auth0/node-auth0/pull/893) ([frederikprijck](https://github.com/frederikprijck))
 
 **Fixed**
 
--   Improve ESM and CJS support [\#902](https://github.com/auth0/node-auth0/pull/902) ([frederikprijck](https://github.com/frederikprijck))
+- Improve ESM and CJS support [\#902](https://github.com/auth0/node-auth0/pull/902) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.6](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.6) (2023-07-19)
 
@@ -454,14 +445,14 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Changed**
 
--   Update managers [\#883](https://github.com/auth0/node-auth0/pull/883) ([frederikprijck](https://github.com/frederikprijck))
--   Handle duplicate user sign up [\#886](https://github.com/auth0/node-auth0/pull/886) ([frederikprijck](https://github.com/frederikprijck))
+- Update managers [\#883](https://github.com/auth0/node-auth0/pull/883) ([frederikprijck](https://github.com/frederikprijck))
+- Handle duplicate user sign up [\#886](https://github.com/auth0/node-auth0/pull/886) ([frederikprijck](https://github.com/frederikprijck))
 
 **Added**
 
--   Support Organization Name [\#885](https://github.com/auth0/node-auth0/pull/885) ([frederikprijck](https://github.com/frederikprijck))
--   Add support for userinfo endpoint [\#872](https://github.com/auth0/node-auth0/pull/872) ([frederikprijck](https://github.com/frederikprijck))
--   Support custom parameters with Authorization Code and Refresh Token Grants [\#889](https://github.com/auth0/node-auth0/pull/889) ([frederikprijck](https://github.com/frederikprijck))
+- Support Organization Name [\#885](https://github.com/auth0/node-auth0/pull/885) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for userinfo endpoint [\#872](https://github.com/auth0/node-auth0/pull/872) ([frederikprijck](https://github.com/frederikprijck))
+- Support custom parameters with Authorization Code and Refresh Token Grants [\#889](https://github.com/auth0/node-auth0/pull/889) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v3.6.0](https://github.com/auth0/node-auth0/tree/v3.6.0) (2023-07-18)
 
@@ -469,11 +460,11 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   Support Organization Name [\#884](https://github.com/auth0/node-auth0/pull/884) ([frederikprijck](https://github.com/frederikprijck))
+- Support Organization Name [\#884](https://github.com/auth0/node-auth0/pull/884) ([frederikprijck](https://github.com/frederikprijck))
 
 **Changed**
 
--   Do not lowercase org_name claim [\#887](https://github.com/auth0/node-auth0/pull/887) ([frederikprijck](https://github.com/frederikprijck))
+- Do not lowercase org_name claim [\#887](https://github.com/auth0/node-auth0/pull/887) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.5](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.5) (2023-06-28)
 
@@ -481,7 +472,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   Fix issue with TS rewriting fetch dynamic imports [\#878](https://github.com/auth0/node-auth0/pull/878) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Fix issue with TS rewriting fetch dynamic imports [\#878](https://github.com/auth0/node-auth0/pull/878) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v4.0.0-beta.4](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.4) (2023-06-28)
 
@@ -489,7 +480,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   Upgrade to fetch 3 [\#876](https://github.com/auth0/node-auth0/pull/876) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Upgrade to fetch 3 [\#876](https://github.com/auth0/node-auth0/pull/876) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.5.0](https://github.com/auth0/node-auth0/tree/v3.5.0) (2023-06-26)
 
@@ -497,7 +488,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   Add option to pass x-request-language header for passwordless [\#873](https://github.com/auth0/node-auth0/pull/873) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Add option to pass x-request-language header for passwordless [\#873](https://github.com/auth0/node-auth0/pull/873) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v4.0.0-beta.3](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.3) (2023-05-19)
 
@@ -505,8 +496,8 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   Fix void responses in Beta types [\#864](https://github.com/auth0/node-auth0/pull/864) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   Fix: add missing endpoint and model properties [\#866](https://github.com/auth0/node-auth0/pull/866) ([frederikprijck](https://github.com/frederikprijck))
+- Fix void responses in Beta types [\#864](https://github.com/auth0/node-auth0/pull/864) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Fix: add missing endpoint and model properties [\#866](https://github.com/auth0/node-auth0/pull/866) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v4.0.0-beta.2](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.2) (2023-05-18)
 
@@ -514,15 +505,15 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   Fix types exports [\#860](https://github.com/auth0/node-auth0/pull/860) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Fix types exports [\#860](https://github.com/auth0/node-auth0/pull/860) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v4.0.0-beta.1](https://github.com/auth0/node-auth0/tree/v4.0.0-beta.1) (2023-05-15)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v3.4.0...v4.0.0-beta.1)
 
--   Rewritten from the ground up in TypeScript
--   Full TypeScript coverage of methods, request paramters, bodies, errors and responses
--   Customisable modern networking stack
+- Rewritten from the ground up in TypeScript
+- Full TypeScript coverage of methods, request paramters, bodies, errors and responses
+- Customisable modern networking stack
 
 ## [v3.4.0](https://github.com/auth0/node-auth0/tree/v3.4.0) (2023-05-05)
 
@@ -530,11 +521,11 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   feat: allow to pass a method as token [\#793](https://github.com/auth0/node-auth0/pull/793) ([KillianHmyd](https://github.com/KillianHmyd))
+- feat: allow to pass a method as token [\#793](https://github.com/auth0/node-auth0/pull/793) ([KillianHmyd](https://github.com/KillianHmyd))
 
 **Fixed**
 
--   Fix ESM [\#828](https://github.com/auth0/node-auth0/pull/828) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Fix ESM [\#828](https://github.com/auth0/node-auth0/pull/828) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.3.0](https://github.com/auth0/node-auth0/tree/v3.3.0) (2023-03-14)
 
@@ -542,8 +533,8 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   [SDK-4013] Add API2 Factor Management Endpoints [\#791](https://github.com/auth0/node-auth0/pull/791) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   ESM support [\#784](https://github.com/auth0/node-auth0/pull/784) ([btakita](https://github.com/btakita))
+- [SDK-4013] Add API2 Factor Management Endpoints [\#791](https://github.com/auth0/node-auth0/pull/791) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- ESM support [\#784](https://github.com/auth0/node-auth0/pull/784) ([btakita](https://github.com/btakita))
 
 ## [v3.2.0](https://github.com/auth0/node-auth0/tree/v3.2.0) (2023-02-09)
 
@@ -551,7 +542,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   Add DELETE /api/v2/users/{id}/authenticators [\#785](https://github.com/auth0/node-auth0/pull/785) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Add DELETE /api/v2/users/{id}/authenticators [\#785](https://github.com/auth0/node-auth0/pull/785) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.1.2](https://github.com/auth0/node-auth0/tree/v3.1.2) (2023-01-25)
 
@@ -559,7 +550,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   Add support for proxy in AuthenticationClient [\#779](https://github.com/auth0/node-auth0/pull/779) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for proxy in AuthenticationClient [\#779](https://github.com/auth0/node-auth0/pull/779) ([frederikprijck](https://github.com/frederikprijck))
 
 ## [v3.1.1](https://github.com/auth0/node-auth0/tree/v3.1.1) (2023-01-12)
 
@@ -567,7 +558,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   bump-jwks-rsa [\#776](https://github.com/auth0/node-auth0/pull/776) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- bump-jwks-rsa [\#776](https://github.com/auth0/node-auth0/pull/776) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.1.0](https://github.com/auth0/node-auth0/tree/v3.1.0) (2023-01-12)
 
@@ -575,8 +566,8 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Added**
 
--   [SDK-3868] Add support for managing client credentials [\#774](https://github.com/auth0/node-auth0/pull/774) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   [SDK-3856] Add `client_assertion` to authenticate clients [\#761](https://github.com/auth0/node-auth0/pull/761) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- [SDK-3868] Add support for managing client credentials [\#774](https://github.com/auth0/node-auth0/pull/774) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- [SDK-3856] Add `client_assertion` to authenticate clients [\#761](https://github.com/auth0/node-auth0/pull/761) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.0.1](https://github.com/auth0/node-auth0/tree/v3.0.1) (2022-12-22)
 
@@ -584,7 +575,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **Fixed**
 
--   bump jwks-rsa [\#769](https://github.com/auth0/node-auth0/pull/769) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- bump jwks-rsa [\#769](https://github.com/auth0/node-auth0/pull/769) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v3.0.0](https://github.com/auth0/node-auth0/tree/v3.0.0) (2022-12-22)
 
@@ -592,7 +583,7 @@ This release also drops support for Node <18. See the [Migration Guide](https://
 
 **⚠️ BREAKING CHANGES**
 
--   Update jsonwebtoken [\#766](https://github.com/auth0/node-auth0/pull/766) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Update jsonwebtoken [\#766](https://github.com/auth0/node-auth0/pull/766) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 This release drops support for Node versions <14.
 
@@ -602,7 +593,7 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Prevent calling the callback more than once [\#759](https://github.com/auth0/node-auth0/pull/759) ([snocorp](https://github.com/snocorp))
+- Prevent calling the callback more than once [\#759](https://github.com/auth0/node-auth0/pull/759) ([snocorp](https://github.com/snocorp))
 
 ## [v2.44.0](https://github.com/auth0/node-auth0/tree/v2.44.0) (2022-10-11)
 
@@ -610,7 +601,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   [SDK-3653] Add proxy support to Management Client [\#747](https://github.com/auth0/node-auth0/pull/747) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- [SDK-3653] Add proxy support to Management Client [\#747](https://github.com/auth0/node-auth0/pull/747) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v2.43.0](https://github.com/auth0/node-auth0/tree/v2.43.0) (2022-10-10)
 
@@ -618,7 +609,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add option to include response headers in the result [\#744](https://github.com/auth0/node-auth0/pull/744) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- Add option to include response headers in the result [\#744](https://github.com/auth0/node-auth0/pull/744) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v2.42.0](https://github.com/auth0/node-auth0/tree/v2.42.0) (2022-05-23)
 
@@ -626,7 +617,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   chore: add branding theme routes [\#725](https://github.com/auth0/node-auth0/pull/725) ([alejofernandez](https://github.com/alejofernandez))
+- chore: add branding theme routes [\#725](https://github.com/auth0/node-auth0/pull/725) ([alejofernandez](https://github.com/alejofernandez))
 
 ## [v2.41.0](https://github.com/auth0/node-auth0/tree/v2.41.0) (2022-05-20)
 
@@ -634,7 +625,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Added ClientsManager.rotateClientSecret method [\#721](https://github.com/auth0/node-auth0/pull/721) ([sbmelvin](https://github.com/sbmelvin))
+- Added ClientsManager.rotateClientSecret method [\#721](https://github.com/auth0/node-auth0/pull/721) ([sbmelvin](https://github.com/sbmelvin))
 
 ## [v2.40.0](https://github.com/auth0/node-auth0/tree/v2.40.0) (2022-02-11)
 
@@ -642,7 +633,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   [CAUTH-1270]: feat(attack protection): add three features (bf, sipt, bpd) [\#705](https://github.com/auth0/node-auth0/pull/705) ([sdwvit](https://github.com/sdwvit))
+- [CAUTH-1270]: feat(attack protection): add three features (bf, sipt, bpd) [\#705](https://github.com/auth0/node-auth0/pull/705) ([sdwvit](https://github.com/sdwvit))
 
 ## [v2.39.0](https://github.com/auth0/node-auth0/tree/v2.39.0) (2022-01-31)
 
@@ -650,7 +641,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   feat: update draft deploy [\#702](https://github.com/auth0/node-auth0/pull/702) ([TwelveNights](https://github.com/TwelveNights))
+- feat: update draft deploy [\#702](https://github.com/auth0/node-auth0/pull/702) ([TwelveNights](https://github.com/TwelveNights))
 
 ## [v2.38.1](https://github.com/auth0/node-auth0/tree/v2.38.1) (2022-01-27)
 
@@ -658,8 +649,8 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Fix wrong property in `assignRolestoUser` [\#700](https://github.com/auth0/node-auth0/pull/700) ([adamjmcgrath](https://github.com/adamjmcgrath))
--   signIn method should provide using audience prop in userData [\#699](https://github.com/auth0/node-auth0/pull/699) ([maxism](https://github.com/maxism))
+- Fix wrong property in `assignRolestoUser` [\#700](https://github.com/auth0/node-auth0/pull/700) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- signIn method should provide using audience prop in userData [\#699](https://github.com/auth0/node-auth0/pull/699) ([maxism](https://github.com/maxism))
 
 ## [v2.38.0](https://github.com/auth0/node-auth0/tree/v2.38.0) (2022-01-26)
 
@@ -667,11 +658,11 @@ This release drops support for Node versions <14.
 
 **Changed**
 
--   refactor to es6 syntax with classes [\#665](https://github.com/auth0/node-auth0/pull/665) ([hornta](https://github.com/hornta))
+- refactor to es6 syntax with classes [\#665](https://github.com/auth0/node-auth0/pull/665) ([hornta](https://github.com/hornta))
 
 **Fixed**
 
--   [SDK-3030] Wrong url when doing assign users with a callback [\#686](https://github.com/auth0/node-auth0/pull/686) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- [SDK-3030] Wrong url when doing assign users with a callback [\#686](https://github.com/auth0/node-auth0/pull/686) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 ## [v2.37.0](https://github.com/auth0/node-auth0/tree/v2.37.0) (2021-10-14)
 
@@ -679,11 +670,11 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add support for checking connection status [\#662](https://github.com/auth0/node-auth0/pull/662) ([frederikprijck](https://github.com/frederikprijck))
+- Add support for checking connection status [\#662](https://github.com/auth0/node-auth0/pull/662) ([frederikprijck](https://github.com/frederikprijck))
 
 **Fixed**
 
--   Fix undefined tokenProvider when access token is provided. [\#642](https://github.com/auth0/node-auth0/pull/642) ([Gilighost](https://github.com/Gilighost))
+- Fix undefined tokenProvider when access token is provided. [\#642](https://github.com/auth0/node-auth0/pull/642) ([Gilighost](https://github.com/Gilighost))
 
 ## [v2.36.2](https://github.com/auth0/node-auth0/tree/v2.36.2) (2021-09-20)
 
@@ -691,15 +682,15 @@ This release drops support for Node versions <14.
 
 **Security**
 
--   [Snyk] Security upgrade rest-facade from 1.13.0 to 1.13.1 [\#653](https://github.com/auth0/node-auth0/pull/653) ([snyk-bot](https://github.com/snyk-bot))
--   [Snyk] Security upgrade axios from 0.21.1 to 0.21.3 [\#649](https://github.com/auth0/node-auth0/pull/649) ([snyk-bot](https://github.com/snyk-bot))
+- [Snyk] Security upgrade rest-facade from 1.13.0 to 1.13.1 [\#653](https://github.com/auth0/node-auth0/pull/653) ([snyk-bot](https://github.com/snyk-bot))
+- [Snyk] Security upgrade axios from 0.21.1 to 0.21.3 [\#649](https://github.com/auth0/node-auth0/pull/649) ([snyk-bot](https://github.com/snyk-bot))
 
 ## [v2.36.1](https://github.com/auth0/node-auth0/tree/v2.36.1) (2021-07-28)
 
 **Fixed**
 
--   Fix docs for rate limit default maxRetries [\#640](https://github.com/auth0/node-auth0/pull/640) ([jimmyjames](https://github.com/jimmyjames))
--   Fix updateCustomTextByLanguage [\#638](https://github.com/auth0/node-auth0/pull/638) ([davidpatrick](https://github.com/davidpatrick))
+- Fix docs for rate limit default maxRetries [\#640](https://github.com/auth0/node-auth0/pull/640) ([jimmyjames](https://github.com/jimmyjames))
+- Fix updateCustomTextByLanguage [\#638](https://github.com/auth0/node-auth0/pull/638) ([davidpatrick](https://github.com/davidpatrick))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.36.0...v2.36.1)
 
@@ -707,7 +698,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   [SDK-2666] Update endpoint methods to document allowance of 'from' and 'take' checkpoint pagination parameters [\#634](https://github.com/auth0/node-auth0/pull/634) ([evansims](https://github.com/evansims))
+- [SDK-2666] Update endpoint methods to document allowance of 'from' and 'take' checkpoint pagination parameters [\#634](https://github.com/auth0/node-auth0/pull/634) ([evansims](https://github.com/evansims))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.35.1...v2.36.0)
 
@@ -715,8 +706,8 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Update `setUniversalLoginTemplate` example to correctly reflect documentation [\#624](https://github.com/auth0/node-auth0/pull/624) ([mendhak](https://github.com/mendhak))
--   Use id instead of action_id as per the mgmt api. [\#622](https://github.com/auth0/node-auth0/pull/622) ([stevezau](https://github.com/stevezau))
+- Update `setUniversalLoginTemplate` example to correctly reflect documentation [\#624](https://github.com/auth0/node-auth0/pull/624) ([mendhak](https://github.com/mendhak))
+- Use id instead of action_id as per the mgmt api. [\#622](https://github.com/auth0/node-auth0/pull/622) ([stevezau](https://github.com/stevezau))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.35.0...v2.35.1)
 
@@ -724,8 +715,8 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add method to verify OTP received via email [\#620](https://github.com/auth0/node-auth0/pull/620) ([alexesprit](https://github.com/alexesprit))
--   [actionsManager] Adding new Actions Managment APIs [\#570](https://github.com/auth0/node-auth0/pull/570) ([shushen](https://github.com/shushen))
+- Add method to verify OTP received via email [\#620](https://github.com/auth0/node-auth0/pull/620) ([alexesprit](https://github.com/alexesprit))
+- [actionsManager] Adding new Actions Managment APIs [\#570](https://github.com/auth0/node-auth0/pull/570) ([shushen](https://github.com/shushen))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.2...v2.35.0)
 
@@ -733,7 +724,7 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   [SDK-2484] Encode user ids on patch/update/delete [\#608](https://github.com/auth0/node-auth0/pull/608) ([davidpatrick](https://github.com/davidpatrick))
+- [SDK-2484] Encode user ids on patch/update/delete [\#608](https://github.com/auth0/node-auth0/pull/608) ([davidpatrick](https://github.com/davidpatrick))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.34.1...v2.34.2)
 
@@ -741,30 +732,30 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Small fix to ManagementTokenProvider Cache [\#604](https://github.com/auth0/node-auth0/pull/604) ([davidpatrick](https://github.com/davidpatrick))
+- Small fix to ManagementTokenProvider Cache [\#604](https://github.com/auth0/node-auth0/pull/604) ([davidpatrick](https://github.com/davidpatrick))
 
 **Security**
 
--   Bump y18n from 4.0.0 to 4.0.1 [\#602](https://github.com/auth0/node-auth0/pull/602) ([dependabot-preview](https://github.com/dependabot-preview))
--   Security upgrade jwks-rsa from 1.10.0 to 1.12.1 [\#601](https://github.com/auth0/node-auth0/pull/601) ([snyk-bot](https://github.com/snyk-bot))
+- Bump y18n from 4.0.0 to 4.0.1 [\#602](https://github.com/auth0/node-auth0/pull/602) ([dependabot-preview](https://github.com/dependabot-preview))
+- Security upgrade jwks-rsa from 1.10.0 to 1.12.1 [\#601](https://github.com/auth0/node-auth0/pull/601) ([snyk-bot](https://github.com/snyk-bot))
 
 ## [v2.34.0](https://github.com/auth0/node-auth0/tree/v2.34.0) (2021-03-24)
 
 **Added**
 
--   feat(orgs): Support Organization feature [\#592](https://github.com/auth0/node-auth0/pull/592) ([mcastany](https://github.com/mcastany))
--   Org idtoken validation support [\#597](https://github.com/auth0/node-auth0/pull/597) ([davidpatrick](https://github.com/davidpatrick))
--   Allow passwordless SMS code verification to use token endpoint [\#591](https://github.com/auth0/node-auth0/pull/591) ([jimmyjames](https://github.com/jimmyjames))
+- feat(orgs): Support Organization feature [\#592](https://github.com/auth0/node-auth0/pull/592) ([mcastany](https://github.com/mcastany))
+- Org idtoken validation support [\#597](https://github.com/auth0/node-auth0/pull/597) ([davidpatrick](https://github.com/davidpatrick))
+- Allow passwordless SMS code verification to use token endpoint [\#591](https://github.com/auth0/node-auth0/pull/591) ([jimmyjames](https://github.com/jimmyjames))
 
 **Changed**
 
--   Doc Updates [\#599](https://github.com/auth0/node-auth0/pull/599) ([davidpatrick](https://github.com/davidpatrick))
--   Update get role users docs [\#587](https://github.com/auth0/node-auth0/pull/587) ([jhiner](https://github.com/jhiner))
--   revokeRefreshToken method is missing in docs [\#584](https://github.com/auth0/node-auth0/issues/584)
+- Doc Updates [\#599](https://github.com/auth0/node-auth0/pull/599) ([davidpatrick](https://github.com/davidpatrick))
+- Update get role users docs [\#587](https://github.com/auth0/node-auth0/pull/587) ([jhiner](https://github.com/jhiner))
+- revokeRefreshToken method is missing in docs [\#584](https://github.com/auth0/node-auth0/issues/584)
 
 **Security**
 
--   [Security] Bump elliptic from 6.5.3 to 6.5.4 [\#589](https://github.com/auth0/node-auth0/pull/589) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump elliptic from 6.5.3 to 6.5.4 [\#589](https://github.com/auth0/node-auth0/pull/589) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.33.0...v2.34.0)
 
@@ -772,8 +763,8 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   feat: add revokeRefreshToken [\#579](https://github.com/auth0/node-auth0/pull/579) ([andreafspeziale](https://github.com/andreafspeziale))
--   ULP-2609/ULP-2914: add page templates support to /branding [\#574](https://github.com/auth0/node-auth0/pull/574) ([sebadoom](https://github.com/sebadoom))
+- feat: add revokeRefreshToken [\#579](https://github.com/auth0/node-auth0/pull/579) ([andreafspeziale](https://github.com/andreafspeziale))
+- ULP-2609/ULP-2914: add page templates support to /branding [\#574](https://github.com/auth0/node-auth0/pull/574) ([sebadoom](https://github.com/sebadoom))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.32.0...v2.33.0)
 
@@ -781,9 +772,9 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Additional options on getByEmail [SDK-2268][\#577](https://github.com/auth0/node-auth0/pull/577) ([davidpatrick](https://github.com/davidpatrick))
--   [SDK-2261] Add forwardFor support to passwordless calls [\#576](https://github.com/auth0/node-auth0/pull/576) ([frederikprijck](https://github.com/frederikprijck))
--   Adding Support for Guardian factor settings endpoints [\#569](https://github.com/auth0/node-auth0/pull/569) ([JayHelton](https://github.com/JayHelton))
+- Additional options on getByEmail [SDK-2268][\#577](https://github.com/auth0/node-auth0/pull/577) ([davidpatrick](https://github.com/davidpatrick))
+- [SDK-2261] Add forwardFor support to passwordless calls [\#576](https://github.com/auth0/node-auth0/pull/576) ([frederikprijck](https://github.com/frederikprijck))
+- Adding Support for Guardian factor settings endpoints [\#569](https://github.com/auth0/node-auth0/pull/569) ([JayHelton](https://github.com/JayHelton))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.1...v2.32.0)
 
@@ -791,13 +782,13 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Expose getJobErrors to management client [\#563](https://github.com/auth0/node-auth0/pull/563) ([davidaubin19](https://github.com/davidaubin19))
--   Fix passing a custom User-Agent to Axios. [\#562](https://github.com/auth0/node-auth0/pull/562) ([djanowski](https://github.com/djanowski))
--   Expose assignUsersToRole to ManagementClient [\#561](https://github.com/auth0/node-auth0/pull/561) ([davidaubin19](https://github.com/davidaubin19))
+- Expose getJobErrors to management client [\#563](https://github.com/auth0/node-auth0/pull/563) ([davidaubin19](https://github.com/davidaubin19))
+- Fix passing a custom User-Agent to Axios. [\#562](https://github.com/auth0/node-auth0/pull/562) ([djanowski](https://github.com/djanowski))
+- Expose assignUsersToRole to ManagementClient [\#561](https://github.com/auth0/node-auth0/pull/561) ([davidaubin19](https://github.com/davidaubin19))
 
 **Security**
 
--   [Security] Bump axios from 0.19.2 to 0.21.1 [\#565](https://github.com/auth0/node-auth0/pull/565) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump axios from 0.19.2 to 0.21.1 [\#565](https://github.com/auth0/node-auth0/pull/565) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.31.0...v2.31.1)
 
@@ -805,12 +796,12 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Updated documentation on Link Users [\#558](https://github.com/auth0/node-auth0/pull/558) ([davidpatrick](https://github.com/davidpatrick))
--   Add support for new passwordless endpoint [\#556](https://github.com/auth0/node-auth0/pull/556) ([nbandarchi](https://github.com/nbandarchi))
+- Updated documentation on Link Users [\#558](https://github.com/auth0/node-auth0/pull/558) ([davidpatrick](https://github.com/davidpatrick))
+- Add support for new passwordless endpoint [\#556](https://github.com/auth0/node-auth0/pull/556) ([nbandarchi](https://github.com/nbandarchi))
 
 **Fixed**
 
--   Adds importUsersJob to ManagementClient [\#553](https://github.com/auth0/node-auth0/pull/553) ([mikemeerschaert](https://github.com/mikemeerschaert))
+- Adds importUsersJob to ManagementClient [\#553](https://github.com/auth0/node-auth0/pull/553) ([mikemeerschaert](https://github.com/mikemeerschaert))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.30.0...v2.31.0)
 
@@ -818,16 +809,16 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Provide headers on mgmt token fetch [\#543](https://github.com/auth0/node-auth0/pull/543) ([davidpatrick](https://github.com/davidpatrick))
+- Provide headers on mgmt token fetch [\#543](https://github.com/auth0/node-auth0/pull/543) ([davidpatrick](https://github.com/davidpatrick))
 
 **Changed**
 
--   [SDK-1975] Use exponential backoff rather than rate limit headers [\#538](https://github.com/auth0/node-auth0/pull/538) ([adamjmcgrath](https://github.com/adamjmcgrath))
+- [SDK-1975] Use exponential backoff rather than rate limit headers [\#538](https://github.com/auth0/node-auth0/pull/538) ([adamjmcgrath](https://github.com/adamjmcgrath))
 
 **Fixed**
 
--   Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
--   Fix deprecation warning in importUserJobs [\#537](https://github.com/auth0/node-auth0/pull/537) ([JCQuintas](https://github.com/JCQuintas))
+- Bumps Rest-Facade Dependencies [\#542](https://github.com/auth0/node-auth0/pull/542) ([davidpatrick](https://github.com/davidpatrick))
+- Fix deprecation warning in importUserJobs [\#537](https://github.com/auth0/node-auth0/pull/537) ([JCQuintas](https://github.com/JCQuintas))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.29.0...v2.30.0)
 
@@ -835,18 +826,18 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Adding support for prompts and custom texts [\#533](https://github.com/auth0/node-auth0/pull/533) ([davidpatrick](https://github.com/davidpatrick))
--   Adding call to invalidate all remembered browsers. [\#528](https://github.com/auth0/node-auth0/pull/528) ([tandrup](https://github.com/tandrup))
--   Adding docs for secondary and federated identity email verification [\#519](https://github.com/auth0/node-auth0/pull/519) ([jimmyjames](https://github.com/jimmyjames))
+- Adding support for prompts and custom texts [\#533](https://github.com/auth0/node-auth0/pull/533) ([davidpatrick](https://github.com/davidpatrick))
+- Adding call to invalidate all remembered browsers. [\#528](https://github.com/auth0/node-auth0/pull/528) ([tandrup](https://github.com/tandrup))
+- Adding docs for secondary and federated identity email verification [\#519](https://github.com/auth0/node-auth0/pull/519) ([jimmyjames](https://github.com/jimmyjames))
 
 **Changed**
 
--   Update dependencies [\#535](https://github.com/auth0/node-auth0/pull/535) ([davidpatrick](https://github.com/davidpatrick))
--   Update jwks-rsa dependency to avoid DeprecationWarning Buffer() [\#534](https://github.com/auth0/node-auth0/pull/534) ([jalie](https://github.com/jalie))
+- Update dependencies [\#535](https://github.com/auth0/node-auth0/pull/535) ([davidpatrick](https://github.com/davidpatrick))
+- Update jwks-rsa dependency to avoid DeprecationWarning Buffer() [\#534](https://github.com/auth0/node-auth0/pull/534) ([jalie](https://github.com/jalie))
 
 **Security**
 
--   [Security] Bump node-fetch from 2.6.0 to 2.6.1 [\#532](https://github.com/auth0/node-auth0/pull/532) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump node-fetch from 2.6.0 to 2.6.1 [\#532](https://github.com/auth0/node-auth0/pull/532) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.28.0...v2.29.0)
 
@@ -854,15 +845,15 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Added support for Log Streams [\#518](https://github.com/auth0/node-auth0/pull/518) ([cv711](https://github.com/cv711))
+- Added support for Log Streams [\#518](https://github.com/auth0/node-auth0/pull/518) ([cv711](https://github.com/cv711))
 
 **Removed**
 
--   Remove bluebird [\#520](https://github.com/auth0/node-auth0/pull/520) ([mattiasnixell](https://github.com/mattiasnixell))
+- Remove bluebird [\#520](https://github.com/auth0/node-auth0/pull/520) ([mattiasnixell](https://github.com/mattiasnixell))
 
 **Security**
 
--   [Security] Bump elliptic from 6.5.2 to 6.5.3 [\#521](https://github.com/auth0/node-auth0/pull/521) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump elliptic from 6.5.2 to 6.5.3 [\#521](https://github.com/auth0/node-auth0/pull/521) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.27.1...v2.28.0)
 
@@ -870,12 +861,12 @@ This release drops support for Node versions <14.
 
 **Changed**
 
--   Use [REDACTED] instead of [SANITIZED] when cleaning errors [\#515](https://github.com/auth0/node-auth0/pull/515) ([jimmyjames](https://github.com/jimmyjames))
+- Use [REDACTED] instead of [SANITIZED] when cleaning errors [\#515](https://github.com/auth0/node-auth0/pull/515) ([jimmyjames](https://github.com/jimmyjames))
 
 **Security**
 
--   Sanitize Headers on Errors [\#507](https://github.com/auth0/node-auth0/pull/507) ([jimmyjames](https://github.com/jimmyjames))
--   Bump lodash from 4.17.15 to 4.17.19 [\#506](https://github.com/auth0/node-auth0/pull/506) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Sanitize Headers on Errors [\#507](https://github.com/auth0/node-auth0/pull/507) ([jimmyjames](https://github.com/jimmyjames))
+- Bump lodash from 4.17.15 to 4.17.19 [\#506](https://github.com/auth0/node-auth0/pull/506) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.27.0...v2.27.1)
 
@@ -883,14 +874,14 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   feat(migrations): adds migrations manager [\#503](https://github.com/auth0/node-auth0/pull/503) ([CriGoT](https://github.com/CriGoT))
--   Added deleteUserByEmail to ConnectionsManager [\#502](https://github.com/auth0/node-auth0/pull/502) ([MatthewBacalakis](https://github.com/MatthewBacalakis))
--   feat(guardian): support policies, selected-provider, message-types methods [MFA-310][\#501](https://github.com/auth0/node-auth0/pull/501) ([pmalouin](https://github.com/pmalouin))
+- feat(migrations): adds migrations manager [\#503](https://github.com/auth0/node-auth0/pull/503) ([CriGoT](https://github.com/CriGoT))
+- Added deleteUserByEmail to ConnectionsManager [\#502](https://github.com/auth0/node-auth0/pull/502) ([MatthewBacalakis](https://github.com/MatthewBacalakis))
+- feat(guardian): support policies, selected-provider, message-types methods [MFA-310][\#501](https://github.com/auth0/node-auth0/pull/501) ([pmalouin](https://github.com/pmalouin))
 
 **Fixed**
 
--   fix: management methods throwing error on access [\#500](https://github.com/auth0/node-auth0/pull/500) ([pmalouin](https://github.com/pmalouin))
--   fix: guardian-related code examples [\#499](https://github.com/auth0/node-auth0/pull/499) ([pmalouin](https://github.com/pmalouin))
+- fix: management methods throwing error on access [\#500](https://github.com/auth0/node-auth0/pull/500) ([pmalouin](https://github.com/pmalouin))
+- fix: guardian-related code examples [\#499](https://github.com/auth0/node-auth0/pull/499) ([pmalouin](https://github.com/pmalouin))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.26.0...v2.27.0)
 
@@ -898,19 +889,19 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   JobsManager handling importUsers response payload [\#492](https://github.com/auth0/node-auth0/pull/492) ([davidpatrick](https://github.com/davidpatrick))
+- JobsManager handling importUsers response payload [\#492](https://github.com/auth0/node-auth0/pull/492) ([davidpatrick](https://github.com/davidpatrick))
 
 **Deprecated**
 
--   Deprecate importUsers in favor of importUsersJob [\#494](https://github.com/auth0/node-auth0/pull/494) ([davidpatrick](https://github.com/davidpatrick))
+- Deprecate importUsers in favor of importUsersJob [\#494](https://github.com/auth0/node-auth0/pull/494) ([davidpatrick](https://github.com/davidpatrick))
 
 **Fixed**
 
--   Bump codecov - npm audit fix [\#495](https://github.com/auth0/node-auth0/pull/495) ([davidpatrick](https://github.com/davidpatrick))
+- Bump codecov - npm audit fix [\#495](https://github.com/auth0/node-auth0/pull/495) ([davidpatrick](https://github.com/davidpatrick))
 
 **Security**
 
--   Fixes dependency vulnerabilities from webpack [\#498](https://github.com/auth0/node-auth0/pull/498) ([davidpatrick](https://github.com/davidpatrick))
+- Fixes dependency vulnerabilities from webpack [\#498](https://github.com/auth0/node-auth0/pull/498) ([davidpatrick](https://github.com/davidpatrick))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.25.1...v2.26.0)
 
@@ -918,7 +909,7 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Return response.data where Axios is used [\#484](https://github.com/auth0/node-auth0/pull/484) ([taylorbryant](https://github.com/taylorbryant))
+- Return response.data where Axios is used [\#484](https://github.com/auth0/node-auth0/pull/484) ([taylorbryant](https://github.com/taylorbryant))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.25.0...v2.25.1)
 
@@ -926,17 +917,17 @@ This release drops support for Node versions <14.
 
 **Changed**
 
--   Deprecate Request lib [\#475](https://github.com/auth0/node-auth0/pull/475) ([davidpatrick](https://github.com/davidpatrick))
+- Deprecate Request lib [\#475](https://github.com/auth0/node-auth0/pull/475) ([davidpatrick](https://github.com/davidpatrick))
 
 **Fixed**
 
--   Fix typos [\#480](https://github.com/auth0/node-auth0/pull/480) ([pgrimaud](https://github.com/pgrimaud))
--   Update getRulesConfigs docs to include callback [\#473](https://github.com/auth0/node-auth0/pull/473) ([akvamalin](https://github.com/akvamalin))
+- Fix typos [\#480](https://github.com/auth0/node-auth0/pull/480) ([pgrimaud](https://github.com/pgrimaud))
+- Update getRulesConfigs docs to include callback [\#473](https://github.com/auth0/node-auth0/pull/473) ([akvamalin](https://github.com/akvamalin))
 
 **Security**
 
--   Dependency bump [\#481](https://github.com/auth0/node-auth0/pull/481) ([davidpatrick](https://github.com/davidpatrick))
--   [Security] Bump acorn from 6.2.1 to 6.4.1 [\#471](https://github.com/auth0/node-auth0/pull/471) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Dependency bump [\#481](https://github.com/auth0/node-auth0/pull/481) ([davidpatrick](https://github.com/davidpatrick))
+- [Security] Bump acorn from 6.2.1 to 6.4.1 [\#471](https://github.com/auth0/node-auth0/pull/471) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.24.0...v2.25.0)
 
@@ -944,9 +935,9 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Update and fix JSDocs related to JobsManager [\#469](https://github.com/auth0/node-auth0/pull/469) ([orangain](https://github.com/orangain))
--   Fixes test on supportedAlgorithms [\#466](https://github.com/auth0/node-auth0/pull/466) ([davidpatrick](https://github.com/davidpatrick))
--   Fixes calls on passwordless endpoints [\#465](https://github.com/auth0/node-auth0/pull/465) ([davidpatrick](https://github.com/davidpatrick))
+- Update and fix JSDocs related to JobsManager [\#469](https://github.com/auth0/node-auth0/pull/469) ([orangain](https://github.com/orangain))
+- Fixes test on supportedAlgorithms [\#466](https://github.com/auth0/node-auth0/pull/466) ([davidpatrick](https://github.com/davidpatrick))
+- Fixes calls on passwordless endpoints [\#465](https://github.com/auth0/node-auth0/pull/465) ([davidpatrick](https://github.com/davidpatrick))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.23.0...v2.24.0)
 
@@ -954,20 +945,20 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   [DXEX-455] Allow custom headers to be set in Management/Auth Clients. [\#460](https://github.com/auth0/node-auth0/pull/460) ([seejee](https://github.com/seejee))
+- [DXEX-455] Allow custom headers to be set in Management/Auth Clients. [\#460](https://github.com/auth0/node-auth0/pull/460) ([seejee](https://github.com/seejee))
 
 **Changed**
 
--   Updates node-jwks-rsa [\#461](https://github.com/auth0/node-auth0/pull/461) ([davidpatrick](https://github.com/davidpatrick))
+- Updates node-jwks-rsa [\#461](https://github.com/auth0/node-auth0/pull/461) ([davidpatrick](https://github.com/davidpatrick))
 
 **Fixed**
 
--   Update lru-memoizer dependency to avoid DeprecationWarning Buffer() [\#459](https://github.com/auth0/node-auth0/pull/459) ([jalie](https://github.com/jalie))
--   getUsersInRole Docs [\#457](https://github.com/auth0/node-auth0/pull/457) ([davidpatrick](https://github.com/davidpatrick))
+- Update lru-memoizer dependency to avoid DeprecationWarning Buffer() [\#459](https://github.com/auth0/node-auth0/pull/459) ([jalie](https://github.com/jalie))
+- getUsersInRole Docs [\#457](https://github.com/auth0/node-auth0/pull/457) ([davidpatrick](https://github.com/davidpatrick))
 
 **Security**
 
--   [Security] Bump codecov from 3.5.0 to 3.6.5 [\#462](https://github.com/auth0/node-auth0/pull/462) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- [Security] Bump codecov from 3.5.0 to 3.6.5 [\#462](https://github.com/auth0/node-auth0/pull/462) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.22.0...v2.23.0)
 
@@ -975,7 +966,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Support for Hooks API [\#440](https://github.com/auth0/node-auth0/pull/440) ([astanciu](https://github.com/astanciu))
+- Support for Hooks API [\#440](https://github.com/auth0/node-auth0/pull/440) ([astanciu](https://github.com/astanciu))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.21.0...v2.22.0)
 
@@ -983,16 +974,16 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Improved OIDC compliance [\#446](https://github.com/auth0/node-auth0/pull/446) ([davidpatrick](https://github.com/davidpatrick))
+- Improved OIDC compliance [\#446](https://github.com/auth0/node-auth0/pull/446) ([davidpatrick](https://github.com/davidpatrick))
 
 **Changed**
 
--   Add client secret to refreshToken and remove ID token validation [\#433](https://github.com/auth0/node-auth0/pull/433) ([joshcanhelp](https://github.com/joshcanhelp))
+- Add client secret to refreshToken and remove ID token validation [\#433](https://github.com/auth0/node-auth0/pull/433) ([joshcanhelp](https://github.com/joshcanhelp))
 
 **Security**
 
--   [Security] Bump handlebars from 4.1.2 to 4.5.3 [\#441](https://github.com/auth0/node-auth0/pull/441) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
--   Update rest-facade dependency [\#436](https://github.com/auth0/node-auth0/pull/436) ([joshcanhelp](https://github.com/joshcanhelp))
+- [Security] Bump handlebars from 4.1.2 to 4.5.3 [\#441](https://github.com/auth0/node-auth0/pull/441) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Update rest-facade dependency [\#436](https://github.com/auth0/node-auth0/pull/436) ([joshcanhelp](https://github.com/joshcanhelp))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.20.0...v2.21.0)
 
@@ -1000,12 +991,12 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   expose createEmailTemplate, getEmailTemplate, updateEmailTemplates vi… [\#416](https://github.com/auth0/node-auth0/pull/416) ([rameshanandakrishnan](https://github.com/rameshanandakrishnan))
+- expose createEmailTemplate, getEmailTemplate, updateEmailTemplates vi… [\#416](https://github.com/auth0/node-auth0/pull/416) ([rameshanandakrishnan](https://github.com/rameshanandakrishnan))
 
 **Security**
 
--   Sanitize Error Request Data [\#424](https://github.com/auth0/node-auth0/pull/424) ([davidpatrick](https://github.com/davidpatrick))
--   [Security] Bump mixin-deep from 1.3.1 to 1.3.2 [\#421](https://github.com/auth0/node-auth0/pull/421) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+- Sanitize Error Request Data [\#424](https://github.com/auth0/node-auth0/pull/424) ([davidpatrick](https://github.com/davidpatrick))
+- [Security] Bump mixin-deep from 1.3.1 to 1.3.2 [\#421](https://github.com/auth0/node-auth0/pull/421) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.19.0...v2.20.0)
 
@@ -1013,11 +1004,11 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Implement auth0-forwarded-for header passing in Authentication Client [\#401](https://github.com/auth0/node-auth0/pull/401) ([kjarmicki](https://github.com/kjarmicki))
+- Implement auth0-forwarded-for header passing in Authentication Client [\#401](https://github.com/auth0/node-auth0/pull/401) ([kjarmicki](https://github.com/kjarmicki))
 
 **Changed**
 
--   Improve JobManager (get errors + parse error message when importing users) [\#407](https://github.com/auth0/node-auth0/pull/407) ([jbauth0](https://github.com/jbauth0))
+- Improve JobManager (get errors + parse error message when importing users) [\#407](https://github.com/auth0/node-auth0/pull/407) ([jbauth0](https://github.com/jbauth0))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.18.1...v2.19.0)
 
@@ -1025,7 +1016,7 @@ This release drops support for Node versions <14.
 
 **Changed**
 
--   Encode id param on GET [\#374](https://github.com/auth0/node-auth0/pull/374) ([luisrudge](https://github.com/luisrudge))
+- Encode id param on GET [\#374](https://github.com/auth0/node-auth0/pull/374) ([luisrudge](https://github.com/luisrudge))
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v2.18.0...v2.18.1)
 
@@ -1035,7 +1026,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add Management API support for Branding and Prompts endpoints. [\#370](https://github.com/auth0/node-auth0/pull/370) ([chrisscott](https://github.com/chrisscott))
+- Add Management API support for Branding and Prompts endpoints. [\#370](https://github.com/auth0/node-auth0/pull/370) ([chrisscott](https://github.com/chrisscott))
 
 ## [v2.17.1](https://github.com/auth0/node-auth0/tree/v2.17.1) (2019-05-22)
 
@@ -1043,7 +1034,7 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Fix telemetry header [\#362](https://github.com/auth0/node-auth0/pull/362) ([lbalmaceda](https://github.com/lbalmaceda))
+- Fix telemetry header [\#362](https://github.com/auth0/node-auth0/pull/362) ([lbalmaceda](https://github.com/lbalmaceda))
 
 ## [v2.17.0](https://github.com/auth0/node-auth0/tree/v2.17.0) (2019-04-15)
 
@@ -1051,8 +1042,8 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add method to assign users to a role [\#348](https://github.com/auth0/node-auth0/pull/348) ([pushpabrol](https://github.com/pushpabrol))
--   Add support for roles and permissions [\#344](https://github.com/auth0/node-auth0/pull/344) ([pushpabrol](https://github.com/pushpabrol))
+- Add method to assign users to a role [\#348](https://github.com/auth0/node-auth0/pull/348) ([pushpabrol](https://github.com/pushpabrol))
+- Add support for roles and permissions [\#344](https://github.com/auth0/node-auth0/pull/344) ([pushpabrol](https://github.com/pushpabrol))
 
 ## [v2.16.0](https://github.com/auth0/node-auth0/tree/v2.16.0) (2019-03-18)
 
@@ -1060,7 +1051,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add support for Auth0 Grants [\#343](https://github.com/auth0/node-auth0/pull/343) ([jsmpereira](https://github.com/jsmpereira))
+- Add support for Auth0 Grants [\#343](https://github.com/auth0/node-auth0/pull/343) ([jsmpereira](https://github.com/jsmpereira))
 
 ## [v2.15.0](https://github.com/auth0/node-auth0/tree/v2.15.0) (2019-03-11)
 
@@ -1068,11 +1059,11 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add users-exports endpoint [\#340](https://github.com/auth0/node-auth0/pull/340) ([arjenvanderende](https://github.com/arjenvanderende))
+- Add users-exports endpoint [\#340](https://github.com/auth0/node-auth0/pull/340) ([arjenvanderende](https://github.com/arjenvanderende))
 
 **Fixed**
 
--   Don't validate id_token when alg is HS256 and there is no clientSecret [\#330](https://github.com/auth0/node-auth0/pull/330) ([luisrudge](https://github.com/luisrudge))
+- Don't validate id_token when alg is HS256 and there is no clientSecret [\#330](https://github.com/auth0/node-auth0/pull/330) ([luisrudge](https://github.com/luisrudge))
 
 ## [v2.14.0](https://github.com/auth0/node-auth0/tree/v2.14.0) (2018-11-12)
 
@@ -1080,14 +1071,14 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add method to refresh a token using a refresh_token [\#313](https://github.com/auth0/node-auth0/pull/313) ([modeswitch](https://github.com/modeswitch))
--   Add all Guardian APIs [\#311](https://github.com/auth0/node-auth0/pull/311) ([stevezau](https://github.com/stevezau))
--   Add Custom Domains methods [\#310](https://github.com/auth0/node-auth0/pull/310) ([stevezau](https://github.com/stevezau))
--   Add send_completion_email and upsert params for importUsers [\#270](https://github.com/auth0/node-auth0/pull/270) ([Floppy](https://github.com/Floppy))
+- Add method to refresh a token using a refresh_token [\#313](https://github.com/auth0/node-auth0/pull/313) ([modeswitch](https://github.com/modeswitch))
+- Add all Guardian APIs [\#311](https://github.com/auth0/node-auth0/pull/311) ([stevezau](https://github.com/stevezau))
+- Add Custom Domains methods [\#310](https://github.com/auth0/node-auth0/pull/310) ([stevezau](https://github.com/stevezau))
+- Add send_completion_email and upsert params for importUsers [\#270](https://github.com/auth0/node-auth0/pull/270) ([Floppy](https://github.com/Floppy))
 
 **Deprecated**
 
--   Deprecate UsersManager.deleteAll and deleteAllUsers wrapper methods [\#309](https://github.com/auth0/node-auth0/pull/309) ([M-Zuber](https://github.com/M-Zuber))
+- Deprecate UsersManager.deleteAll and deleteAllUsers wrapper methods [\#309](https://github.com/auth0/node-auth0/pull/309) ([M-Zuber](https://github.com/M-Zuber))
 
 ## [v2.13.0](https://github.com/auth0/node-auth0/tree/v2.13.0) (2018-09-28)
 
@@ -1095,7 +1086,7 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add id_token validation (HS256 and RS256) [\#295](https://github.com/auth0/node-auth0/pull/295) ([luisrudge](https://github.com/luisrudge))
+- Add id_token validation (HS256 and RS256) [\#295](https://github.com/auth0/node-auth0/pull/295) ([luisrudge](https://github.com/luisrudge))
 
 ## [v2.12.0](https://github.com/auth0/node-auth0/tree/v2.12.0) (2018-08-09)
 
@@ -1103,8 +1094,8 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Added authorizationCodeGrant method to OAuthAuthenticator [\#290](https://github.com/auth0/node-auth0/pull/290) ([cwurtz](https://github.com/cwurtz))
--   Add Guardian Enrollments endpoints [\#278](https://github.com/auth0/node-auth0/pull/278) ([fmedinac](https://github.com/fmedinac))
+- Added authorizationCodeGrant method to OAuthAuthenticator [\#290](https://github.com/auth0/node-auth0/pull/290) ([cwurtz](https://github.com/cwurtz))
+- Add Guardian Enrollments endpoints [\#278](https://github.com/auth0/node-auth0/pull/278) ([fmedinac](https://github.com/fmedinac))
 
 ## [v2.11.0](https://github.com/auth0/node-auth0/tree/v2.11.0) (2018-07-25)
 
@@ -1112,12 +1103,12 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Added Pagination Docs for a Client Grants, Resouce Servers and Rules [\#282](https://github.com/auth0/node-auth0/pull/282) ([cocojoe](https://github.com/cocojoe))
--   Added rules config methods [\#227](https://github.com/auth0/node-auth0/pull/227) ([dctoon](https://github.com/dctoon))
+- Added Pagination Docs for a Client Grants, Resouce Servers and Rules [\#282](https://github.com/auth0/node-auth0/pull/282) ([cocojoe](https://github.com/cocojoe))
+- Added rules config methods [\#227](https://github.com/auth0/node-auth0/pull/227) ([dctoon](https://github.com/dctoon))
 
 **Fixed**
 
--   Get access token before importing users [\#267](https://github.com/auth0/node-auth0/pull/267) ([Floppy](https://github.com/Floppy))
+- Get access token before importing users [\#267](https://github.com/auth0/node-auth0/pull/267) ([Floppy](https://github.com/Floppy))
 
 ## [v2.10.0](https://github.com/auth0/node-auth0/tree/v2.10.0) (2018-05-29)
 
@@ -1125,11 +1116,11 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Adding pagination docs for clients/connections [\#268](https://github.com/auth0/node-auth0/pull/268) ([luisrudge](https://github.com/luisrudge))
+- Adding pagination docs for clients/connections [\#268](https://github.com/auth0/node-auth0/pull/268) ([luisrudge](https://github.com/luisrudge))
 
 **Fixed**
 
--   Fix deleteUserMultifactor naming [\#259](https://github.com/auth0/node-auth0/pull/259) ([luisrudge](https://github.com/luisrudge))
+- Fix deleteUserMultifactor naming [\#259](https://github.com/auth0/node-auth0/pull/259) ([luisrudge](https://github.com/luisrudge))
 
 ## [v2.9.3](https://github.com/auth0/node-auth0/tree/v2.9.3) (2018-03-01)
 
@@ -1137,7 +1128,7 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Add client secret to passwordGrant [\#217](https://github.com/auth0/node-auth0/pull/217) ([luisrudge](https://github.com/luisrudge))
+- Add client secret to passwordGrant [\#217](https://github.com/auth0/node-auth0/pull/217) ([luisrudge](https://github.com/luisrudge))
 
 ## [v2.9.2](https://github.com/auth0/node-auth0/tree/v2.9.2) (2018-01-16)
 
@@ -1145,7 +1136,7 @@ This release drops support for Node versions <14.
 
 **Security**
 
--   Update rest facade [\#232](https://github.com/auth0/node-auth0/pull/232) ([luisrudge](https://github.com/luisrudge))
+- Update rest facade [\#232](https://github.com/auth0/node-auth0/pull/232) ([luisrudge](https://github.com/luisrudge))
 
 ## [v2.9.1](https://github.com/auth0/node-auth0/tree/v2.9.1) (2017-12-08)
 
@@ -1153,7 +1144,7 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   fixed missing data object error [\#224](https://github.com/auth0/node-auth0/pull/224) ([dctoon](https://github.com/dctoon))
+- fixed missing data object error [\#224](https://github.com/auth0/node-auth0/pull/224) ([dctoon](https://github.com/dctoon))
 
 ## [v2.9.0](https://github.com/auth0/node-auth0/tree/v2.9.0) (2017-12-07)
 
@@ -1161,8 +1152,8 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Added support for /users-by-email method. [\#218](https://github.com/auth0/node-auth0/pull/218) ([kopertop](https://github.com/kopertop))
--   Add retry functionality for management api requests [\#215](https://github.com/auth0/node-auth0/pull/215) ([dctoon](https://github.com/dctoon))
+- Added support for /users-by-email method. [\#218](https://github.com/auth0/node-auth0/pull/218) ([kopertop](https://github.com/kopertop))
+- Add retry functionality for management api requests [\#215](https://github.com/auth0/node-auth0/pull/215) ([dctoon](https://github.com/dctoon))
 
 ## [v2.8.0](https://github.com/auth0/node-auth0/tree/v2.8.0) (2017-09-30)
 
@@ -1170,11 +1161,11 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Added tokenProvider functionality [\#196](https://github.com/auth0/node-auth0/pull/196) ([dctoon](https://github.com/dctoon))
+- Added tokenProvider functionality [\#196](https://github.com/auth0/node-auth0/pull/196) ([dctoon](https://github.com/dctoon))
 
 **Fixed**
 
--   Fix wrapPropertyMethod mistake for updateClientGrant [\#202](https://github.com/auth0/node-auth0/pull/202) ([danedmunds](https://github.com/danedmunds))
+- Fix wrapPropertyMethod mistake for updateClientGrant [\#202](https://github.com/auth0/node-auth0/pull/202) ([danedmunds](https://github.com/danedmunds))
 
 ## [v2.7.1](https://github.com/auth0/node-auth0/tree/v2.7.1) (2017-09-30)
 
@@ -1182,11 +1173,11 @@ This release drops support for Node versions <14.
 
 **Fixed**
 
--   Fix auth/users.getInfo to return JSON (fixes #158) [\#192](https://github.com/auth0/node-auth0/pull/192) ([pilwon](https://github.com/pilwon))
+- Fix auth/users.getInfo to return JSON (fixes #158) [\#192](https://github.com/auth0/node-auth0/pull/192) ([pilwon](https://github.com/pilwon))
 
 **Security**
 
--   Update request to address ReDoS vulnerability [\#206](https://github.com/auth0/node-auth0/pull/206) ([dancrumb](https://github.com/dancrumb))
+- Update request to address ReDoS vulnerability [\#206](https://github.com/auth0/node-auth0/pull/206) ([dancrumb](https://github.com/dancrumb))
 
 ## [v2.7.0](https://github.com/auth0/node-auth0/tree/v2.7.0) (2017-06-28)
 
@@ -1194,16 +1185,16 @@ This release drops support for Node versions <14.
 
 **Added**
 
--   Add password grant method [\#189](https://github.com/auth0/node-auth0/pull/189) ([hzalaz](https://github.com/hzalaz))
--   Retrieve a user's Guardian enrollments [\#181](https://github.com/auth0/node-auth0/pull/181) ([joshuaali](https://github.com/joshuaali))
--   Add get user logs [\#176](https://github.com/auth0/node-auth0/pull/176) ([amiram](https://github.com/amiram))
+- Add password grant method [\#189](https://github.com/auth0/node-auth0/pull/189) ([hzalaz](https://github.com/hzalaz))
+- Retrieve a user's Guardian enrollments [\#181](https://github.com/auth0/node-auth0/pull/181) ([joshuaali](https://github.com/joshuaali))
+- Add get user logs [\#176](https://github.com/auth0/node-auth0/pull/176) ([amiram](https://github.com/amiram))
 
 **Changed**
 
--   Update packages and utilize error classes from rest-facade correctly (Fixes #154) [\#183](https://github.com/auth0/node-auth0/pull/183) ([charsleysa](https://github.com/charsleysa))
+- Update packages and utilize error classes from rest-facade correctly (Fixes #154) [\#183](https://github.com/auth0/node-auth0/pull/183) ([charsleysa](https://github.com/charsleysa))
 
 **Fixed**
 
--   Fix impersonation to send AT in the params. [\#190](https://github.com/auth0/node-auth0/pull/190) ([hzalaz](https://github.com/hzalaz))
--   Fixed minor typo in DatabaseAuthenticator module [\#184](https://github.com/auth0/node-auth0/pull/184) ([scostello-paanalytics](https://github.com/scostello-paanalytics))
--   fix: avoid possible prototype override protection bypass [\#170](https://github.com/auth0/node-auth0/pull/170) ([AlmaasAre](https://github.com/AlmaasAre))
+- Fix impersonation to send AT in the params. [\#190](https://github.com/auth0/node-auth0/pull/190) ([hzalaz](https://github.com/hzalaz))
+- Fixed minor typo in DatabaseAuthenticator module [\#184](https://github.com/auth0/node-auth0/pull/184) ([scostello-paanalytics](https://github.com/scostello-paanalytics))
+- fix: avoid possible prototype override protection bypass [\#170](https://github.com/auth0/node-auth0/pull/170) ([AlmaasAre](https://github.com/AlmaasAre))
