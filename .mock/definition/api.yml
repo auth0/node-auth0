@@ -1,0 +1,11 @@
+name: api
+error-discrimination:
+  strategy: status-code
+display-name: Auth0 Management API
+environments:
+  Default: https://%7BTENANT%7D.auth0.com/api/v2
+default-environment: Default
+auth-schemes:
+  BearerAuthScheme:
+    scheme: bearer
+auth: BearerAuthScheme

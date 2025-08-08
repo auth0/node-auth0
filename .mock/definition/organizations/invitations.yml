@@ -1,0 +1,274 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /organizations/{id}/invitations
+      method: GET
+      auth: true
+      docs: >
+        Retrieve a detailed list of invitations sent to users for a specific
+        Organization. The list includes details such as inviter and invitee
+        information, invitation URLs, and dates of creation and expiration. To
+        learn more about Organization invitations, review <a
+        href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite
+        Organization Members</a>. 
+      pagination:
+        offset: $request.page
+        results: $response.invitations
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Get invitations to an organization
+      request:
+        name: ListOrganizationInvitationsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              When true, return results inside an object that also contains the
+              start and limit.  When false (default), a direct array of results
+              is returned.  We do not yet support returning the total
+              invitations count.
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false). Defaults to true.
+          sort:
+            type: optional<string>
+            docs: >-
+              Field to sort by. Use field:order where order is 1 for ascending
+              and -1 for descending Defaults to created_at:-1.
+      response:
+        docs: Invitations successfully retrieved.
+        type: root.ListOrganizationInvitationsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              invitations:
+                - id: id
+                  organization_id: organization_id
+                  inviter:
+                    name: name
+                  invitee:
+                    email: email
+                  invitation_url: invitation_url
+                  created_at: '2024-01-15T09:30:00Z'
+                  expires_at: '2024-01-15T09:30:00Z'
+                  client_id: client_id
+                  connection_id: connection_id
+                  app_metadata:
+                    key: value
+                  user_metadata:
+                    key: value
+                  roles:
+                    - roles
+                  ticket_id: ticket_id
+    create:
+      path: /organizations/{id}/invitations
+      method: POST
+      auth: true
+      docs: >
+        Create a user invitation for a specific Organization. Upon creation, the
+        listed user receives an email inviting them to join the Organization. To
+        learn more about Organization invitations, review <a
+        href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite
+        Organization Members</a>. 
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Create invitations to an organization
+      request:
+        name: CreateOrganizationInvitationRequestContent
+        body:
+          properties:
+            inviter: root.OrganizationInvitationInviter
+            invitee: root.OrganizationInvitationInvitee
+            client_id:
+              type: string
+              docs: >-
+                Auth0 client ID. Used to resolve the application's login
+                initiation endpoint.
+              default: AaiyAPdpYdesoKnqjj8HJqRn4T5titww
+            connection_id:
+              type: optional<string>
+              docs: The id of the connection to force invitee to authenticate with.
+              default: con_0000000000000001
+            app_metadata: optional<root.AppMetadata>
+            user_metadata: optional<root.UserMetadata>
+            ttl_sec:
+              type: optional<integer>
+              docs: >-
+                Number of seconds for which the invitation is valid before
+                expiration. If unspecified or set to 0, this value defaults to
+                604800 seconds (7 days). Max value: 2592000 seconds (30 days).
+            roles:
+              type: optional<list<string>>
+              docs: List of roles IDs to associated with the user.
+            send_invitation_email:
+              type: optional<boolean>
+              docs: >-
+                Whether the user will receive an invitation email (true) or no
+                email (false), true by default
+              default: true
+        content-type: application/json
+      response:
+        docs: Invitation successfully created.
+        type: root.CreateOrganizationInvitationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            inviter:
+              name: name
+            invitee:
+              email: email
+            client_id: client_id
+          response:
+            body:
+              id: id
+              organization_id: organization_id
+              inviter:
+                name: name
+              invitee:
+                email: email
+              invitation_url: invitation_url
+              created_at: '2024-01-15T09:30:00Z'
+              expires_at: '2024-01-15T09:30:00Z'
+              client_id: client_id
+              connection_id: connection_id
+              app_metadata:
+                key: value
+              user_metadata:
+                key: value
+              roles:
+                - roles
+              ticket_id: ticket_id
+    get:
+      path: /organizations/{id}/invitations/{invitation_id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+        invitation_id:
+          type: string
+          docs: The id of the user invitation.
+      display-name: Get a specific invitation to an Organization
+      request:
+        name: GetOrganizationInvitationRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false). Defaults to true.
+      response:
+        docs: Invitation successfully retrieved.
+        type: root.GetOrganizationInvitationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            invitation_id: invitation_id
+          response:
+            body:
+              id: id
+              organization_id: organization_id
+              inviter:
+                name: name
+              invitee:
+                email: email
+              invitation_url: invitation_url
+              created_at: '2024-01-15T09:30:00Z'
+              expires_at: '2024-01-15T09:30:00Z'
+              client_id: client_id
+              connection_id: connection_id
+              app_metadata:
+                key: value
+              user_metadata:
+                key: value
+              roles:
+                - roles
+              ticket_id: ticket_id
+    delete:
+      path: /organizations/{id}/invitations/{invitation_id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+        invitation_id:
+          type: string
+          docs: The id of the user invitation.
+      display-name: Delete an invitation to an Organization
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            invitation_id: invitation_id
+  source:
+    openapi: ../api.json

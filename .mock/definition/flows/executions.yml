@@ -1,0 +1,126 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /flows/{flow_id}/executions
+      method: GET
+      auth: true
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.executions
+      source:
+        openapi: ../api.json
+      path-parameters:
+        flow_id:
+          type: string
+          docs: Flow id
+      display-name: Get flow executions
+      request:
+        name: ExecutionsListRequest
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: Flow executions successfully retrieved.
+        type: root.ListFlowExecutionsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            flow_id: flow_id
+          response:
+            body:
+              next: next
+              executions:
+                - id: id
+                  trace_id: trace_id
+                  journey_id: journey_id
+                  status: status
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  started_at: '2024-01-15T09:30:00Z'
+                  ended_at: '2024-01-15T09:30:00Z'
+    get:
+      path: /flows/{flow_id}/executions/{execution_id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        flow_id:
+          type: string
+          docs: Flow id
+        execution_id:
+          type: string
+          docs: Flow execution id
+      display-name: Get a flow execution
+      request:
+        name: ExecutionsGetRequest
+        query-parameters:
+          hydrate:
+            type: optional<literal<"debug">>
+            allow-multiple: true
+            docs: Hydration param
+      response:
+        docs: Flow execution successfully retrieved.
+        type: root.GetFlowExecutionResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            flow_id: flow_id
+            execution_id: execution_id
+          response:
+            body:
+              id: id
+              trace_id: trace_id
+              journey_id: journey_id
+              status: status
+              debug:
+                key: value
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              started_at: '2024-01-15T09:30:00Z'
+              ended_at: '2024-01-15T09:30:00Z'
+    delete:
+      path: /flows/{flow_id}/executions/{execution_id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        flow_id:
+          type: string
+          docs: Flows id
+        execution_id:
+          type: string
+          docs: Flow execution identifier
+      display-name: Delete a flow execution
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            flow_id: flow_id
+            execution_id: execution_id
+  source:
+    openapi: ../api.json

@@ -1,0 +1,47 @@
+imports:
+  root: ../__package__.yml
+types:
+  ErrorsGetResponse:
+    discriminated: false
+    union:
+      - list<root.GetJobErrorResponseContent>
+      - root.GetJobGenericErrorResponseContent
+    source:
+      openapi: ../api.json
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /jobs/{id}/errors
+      method: GET
+      auth: true
+      docs: Retrieve error details of a failed job.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the job.
+      display-name: Get job error details
+      response:
+        docs: Job successfully retrieved.
+        type: ErrorsGetResponse
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              - user:
+                  key: value
+                errors:
+                  - {}
+  source:
+    openapi: ../api.json

@@ -1,0 +1,115 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /attack-protection/brute-force-protection
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of the Brute-force Protection configuration of your
+        tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get Brute-force settings
+      response:
+        docs: Brute force configuration successfully retrieved.
+        type: root.GetBruteForceSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              enabled: true
+              shields:
+                - block
+              allowlist:
+                - allowlist
+              mode: count_per_identifier_and_ip
+              max_attempts: 1
+    update:
+      path: /attack-protection/brute-force-protection
+      method: PATCH
+      auth: true
+      docs: Update the Brute-force Protection configuration of your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update Brute-force settings
+      request:
+        name: UpdateBruteForceSettingsRequestContent
+        body:
+          properties:
+            enabled:
+              type: optional<boolean>
+              docs: Whether or not brute force attack protections are active.
+            shields:
+              type: >-
+                optional<list<UpdateBruteForceSettingsRequestContentShieldsItem>>
+              docs: >-
+                Action to take when a brute force protection threshold is
+                violated.
+                        Possible values: <code>block</code>, <code>user_notification</code>.
+            allowlist:
+              type: optional<list<string>>
+              docs: >-
+                List of trusted IP addresses that will not have attack
+                protection enforced against them.
+            mode:
+              type: optional<UpdateBruteForceSettingsRequestContentMode>
+              docs: >-
+                Account Lockout: Determines whether or not IP address is used
+                when counting failed attempts.
+                          Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
+              default: count_per_identifier_and_ip
+            max_attempts:
+              type: optional<integer>
+              docs: Maximum number of unsuccessful attempts.
+              default: 10
+        content-type: application/json
+      response:
+        docs: Brute force configuration successfully updated.
+        type: root.UpdateBruteForceSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              enabled: true
+              shields:
+                - block
+              allowlist:
+                - allowlist
+              mode: count_per_identifier_and_ip
+              max_attempts: 1
+  source:
+    openapi: ../api.json
+types:
+  UpdateBruteForceSettingsRequestContentShieldsItem:
+    enum:
+      - block
+      - user_notification
+    inline: true
+    source:
+      openapi: ../api.json
+  UpdateBruteForceSettingsRequestContentMode:
+    enum:
+      - count_per_identifier_and_ip
+      - count_per_identifier
+    docs: >-
+      Account Lockout: Determines whether or not IP address is used when
+      counting failed attempts.
+                Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
+    default: count_per_identifier_and_ip
+    inline: true
+    source:
+      openapi: ../api.json

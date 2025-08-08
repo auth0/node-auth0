@@ -1,0 +1,71 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    getActiveUsersCount:
+      path: /stats/active-users
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve the number of active users that logged in during the last 30
+        days.
+      source:
+        openapi: ../api.json
+      display-name: Get active users count
+      response:
+        docs: Number of active users successfully retrieved.
+        type: root.GetActiveUsersCountStatsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body: 1.1
+    getDaily:
+      path: /stats/daily
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve the number of logins, signups and breached-password detections
+        (subscription required) that occurred each day within a specified date
+        range.
+      source:
+        openapi: ../api.json
+      display-name: Get daily stats
+      request:
+        name: GetDailyStatsRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: >-
+              Optional first day of the date range (inclusive) in YYYYMMDD
+              format.
+          to:
+            type: optional<string>
+            docs: >-
+              Optional last day of the date range (inclusive) in YYYYMMDD
+              format.
+      response:
+        docs: Daily stats successfully retrieved.
+        type: list<root.DailyStats>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              - date: date
+                logins: 1
+                signups: 1
+                leaked_passwords: 1
+                updated_at: updated_at
+                created_at: created_at
+  source:
+    openapi: ../api.json

@@ -1,0 +1,316 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /event-streams
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Get event streams
+      request:
+        name: ListEventStreamsRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: Event streams successfully retrieved.
+        type: list<root.EventStreamResponseContent>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              - id: id
+                name: name
+                subscriptions:
+                  - {}
+                destination:
+                  type: webhook
+                  configuration:
+                    webhook_endpoint: webhook_endpoint
+                    webhook_authorization:
+                      method: basic
+                      username: username
+                status: enabled
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+    create:
+      path: /event-streams
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Create an event stream
+      request:
+        body: EventStreamsCreateRequest
+        content-type: application/json
+      response:
+        docs: Event Stream stream created successfully.
+        type: root.CreateEventStreamResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            destination:
+              type: webhook
+              configuration:
+                webhook_endpoint: webhook_endpoint
+                webhook_authorization:
+                  method: basic
+                  username: username
+          response:
+            body:
+              id: id
+              name: name
+              subscriptions:
+                - event_type: event_type
+              destination:
+                type: webhook
+                configuration:
+                  webhook_endpoint: webhook_endpoint
+                  webhook_authorization:
+                    method: basic
+                    username: username
+              status: enabled
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    get:
+      path: /event-streams/{id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Get an event stream by ID
+      response:
+        docs: Event stream successfully retrieved.
+        type: root.GetEventStreamResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              subscriptions:
+                - event_type: event_type
+              destination:
+                type: webhook
+                configuration:
+                  webhook_endpoint: webhook_endpoint
+                  webhook_authorization:
+                    method: basic
+                    username: username
+              status: enabled
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    delete:
+      path: /event-streams/{id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Delete an event stream
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /event-streams/{id}
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Update an event stream
+      request:
+        name: UpdateEventStreamRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: Name of the event stream.
+              validation:
+                minLength: 1
+                maxLength: 128
+            subscriptions:
+              type: optional<list<root.EventStreamSubscription>>
+              docs: List of event types subscribed to in this stream.
+            destination: optional<root.EventStreamWebhookDestination>
+            status: optional<root.EventStreamStatusEnum>
+        content-type: application/json
+      response:
+        docs: Event stream successfully updated.
+        type: root.UpdateEventStreamResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              subscriptions:
+                - event_type: event_type
+              destination:
+                type: webhook
+                configuration:
+                  webhook_endpoint: webhook_endpoint
+                  webhook_authorization:
+                    method: basic
+                    username: username
+              status: enabled
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    getStats:
+      path: /event-streams/{id}/stats
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Get stats for an event stream
+      request:
+        name: EventStreamsGetStatsRequest
+        query-parameters:
+          date_from:
+            type: optional<string>
+            docs: The RFC3339 start date for the stats query.
+          date_to:
+            type: optional<string>
+            docs: The RFC3339 end date for the stats query.
+      response:
+        docs: Event stream stats successfully retrieved.
+        type: root.GetEventStreamStatsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              window:
+                date_from: '2024-01-15T09:30:00Z'
+                date_to: '2024-01-15T09:30:00Z'
+                bucket_interval:
+                  scale_factor: 1
+              buckets:
+                - '2024-01-15T09:30:00Z'
+              metrics:
+                - name: name
+                  window_total: 1.1
+                  type: type
+                  data:
+                    - 1.1
+    test:
+      path: /event-streams/{id}/test
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Send a test event to an event stream
+      request:
+        name: CreateEventStreamTestEventRequestContent
+        body:
+          properties:
+            event_type: root.EventStreamTestEventTypeEnum
+            data: optional<root.TestEventDataContent>
+        content-type: application/json
+      response:
+        docs: Test event successfully submitted.
+        type: root.CreateEventStreamTestEventResponseContent
+        status-code: 202
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            event_type: user.created
+          response:
+            body:
+              id: id
+              event_stream_id: event_stream_id
+              status: failed
+              event_type: user.created
+              attempts:
+                - status: failed
+                  timestamp: '2024-01-15T09:30:00Z'
+                  error_message: error_message
+              event:
+                id: id
+                source: source
+                specversion: specversion
+                type: type
+                time: '2024-01-15T09:30:00Z'
+                data: data
+  source:
+    openapi: ../api.json
+types:
+  EventStreamsCreateRequest:
+    discriminated: false
+    union:
+      - root.CreateEventStreamWebHookRequestContent
+      - root.CreateEventStreamEventBridgeRequestContent
+    source:
+      openapi: ../api.json

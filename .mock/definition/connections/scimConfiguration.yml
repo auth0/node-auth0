@@ -1,0 +1,172 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /connections/{id}/scim-configuration
+      method: GET
+      auth: true
+      docs: |
+        Retrieves a scim configuration by its <code>connectionId</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to retrieve its SCIM configuration
+      display-name: Get a connection's SCIM configuration
+      response:
+        docs: >-
+          The connection's SCIM configuration was retrieved. See
+          <strong>Response Schemas</strong> for schema.
+        type: root.GetScimConfigurationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              connection_id: connection_id
+              connection_name: connection_name
+              strategy: strategy
+              tenant_name: tenant_name
+              user_id_attribute: user_id_attribute
+              mapping:
+                - auth0: auth0
+                  scim: scim
+              created_at: created_at
+              updated_on: updated_on
+    create:
+      path: /connections/{id}/scim-configuration
+      method: POST
+      auth: true
+      docs: |
+        Create a scim configuration for a connection.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to create its SCIM configuration
+      display-name: Create a SCIM configuration
+      request:
+        body: optional<root.CreateScimConfigurationRequestContent>
+        content-type: application/json
+      response:
+        docs: >-
+          The connection's SCIM configuration was created. See <strong>Response
+          Schemas</strong> for schema.
+        type: root.CreateScimConfigurationResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+    delete:
+      path: /connections/{id}/scim-configuration
+      method: DELETE
+      auth: true
+      docs: |
+        Deletes a scim configuration by its <code>connectionId</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to delete its SCIM configuration
+      display-name: Delete a connection's SCIM configuration
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /connections/{id}/scim-configuration
+      method: PATCH
+      auth: true
+      docs: |
+        Update a scim configuration by its <code>connectionId</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to update its SCIM configuration
+      display-name: Patch a connection's SCIM configuration
+      request:
+        name: UpdateScimConfigurationRequestContent
+        body:
+          properties:
+            user_id_attribute:
+              type: string
+              docs: User ID attribute for generating unique user ids
+            mapping:
+              docs: The mapping between auth0 and SCIM
+              type: list<root.ScimMappingItem>
+        content-type: application/json
+      response:
+        docs: >-
+          The connection's SCIM configuration was updated. See <strong>Response
+          Schemas</strong> for schema.
+        type: root.UpdateScimConfigurationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            user_id_attribute: user_id_attribute
+            mapping:
+              - {}
+          response:
+            body:
+              connection_id: connection_id
+              connection_name: connection_name
+              strategy: strategy
+              tenant_name: tenant_name
+              user_id_attribute: user_id_attribute
+              mapping:
+                - auth0: auth0
+                  scim: scim
+              created_at: created_at
+              updated_on: updated_on
+    getDefaultMapping:
+      path: /connections/{id}/scim-configuration/default-mapping
+      method: GET
+      auth: true
+      docs: >
+        Retrieves a scim configuration's default mapping by its
+        <code>connectionId</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to retrieve its default SCIM mapping
+      display-name: Get a connection's default SCIM mapping
+      response:
+        docs: >-
+          The connection's default SCIM mapping was retrieved. See
+          <strong>Response Schemas</strong> for schema.
+        type: root.GetScimConfigurationDefaultMappingResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              mapping:
+                - auth0: auth0
+                  scim: scim
+  source:
+    openapi: ../api.json

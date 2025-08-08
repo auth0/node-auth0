@@ -1,0 +1,241 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /keys/encryption
+      method: GET
+      auth: true
+      docs: Retrieve details of all the encryption keys associated with your tenant.
+      pagination:
+        offset: $request.page
+        results: $response.keys
+      source:
+        openapi: ../api.json
+      display-name: Get all encryption keys
+      request:
+        name: ListEncryptionKeysRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              Number of results per page. Default value is 50, maximum value is
+              100.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: The keys were successfully retrieved.
+        type: root.ListEncryptionKeyOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1
+              limit: 1
+              total: 1
+              keys:
+                - kid: kid
+                  type: customer-provided-root-key
+                  state: pre-activation
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  parent_kid: parent_kid
+                  public_key: public_key
+    create:
+      path: /keys/encryption
+      method: POST
+      auth: true
+      docs: Create the new, pre-activated encryption key, without the key material.
+      source:
+        openapi: ../api.json
+      display-name: Create the new encryption key
+      request:
+        name: CreateEncryptionKeyRequestContent
+        body:
+          properties:
+            type: root.CreateEncryptionKeyType
+        content-type: application/json
+      response:
+        docs: The key was successfully created.
+        type: root.CreateEncryptionKeyResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            type: customer-provided-root-key
+          response:
+            body:
+              kid: kid
+              type: customer-provided-root-key
+              state: pre-activation
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              parent_kid: parent_kid
+              public_key: public_key
+    rekey:
+      path: /keys/encryption/rekey
+      method: POST
+      auth: true
+      docs: Perform rekeying operation on the key hierarchy.
+      source:
+        openapi: ../api.json
+      display-name: Rekey the key hierarchy
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - {}
+    get:
+      path: /keys/encryption/{kid}
+      method: GET
+      auth: true
+      docs: Retrieve details of the encryption key with the given ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        kid:
+          type: string
+          docs: Encryption key ID
+      display-name: Get the encryption key by its key id
+      response:
+        docs: The key was successfully retrieved.
+        type: root.GetEncryptionKeyResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            kid: kid
+          response:
+            body:
+              kid: kid
+              type: customer-provided-root-key
+              state: pre-activation
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              parent_kid: parent_kid
+              public_key: public_key
+    import:
+      path: /keys/encryption/{kid}
+      method: POST
+      auth: true
+      docs: Import wrapped key material and activate encryption key.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        kid:
+          type: string
+          docs: Encryption key ID
+      display-name: Import the encryption key
+      request:
+        name: ImportEncryptionKeyRequestContent
+        body:
+          properties:
+            wrapped_key:
+              type: string
+              docs: >-
+                Base64 encoded ciphertext of key material wrapped by public
+                wrapping key.
+        content-type: application/json
+      response:
+        docs: The key was successfully imported.
+        type: root.ImportEncryptionKeyResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            kid: kid
+          request:
+            wrapped_key: wrapped_key
+          response:
+            body:
+              kid: kid
+              type: customer-provided-root-key
+              state: pre-activation
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              parent_kid: parent_kid
+              public_key: public_key
+    delete:
+      path: /keys/encryption/{kid}
+      method: DELETE
+      auth: true
+      docs: >-
+        Delete the custom provided encryption key with the given ID and move
+        back to using native encryption key.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        kid:
+          type: string
+          docs: Encryption key ID
+      display-name: Delete the encryption key by its key id
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            kid: kid
+    createPublicWrappingKey:
+      path: /keys/encryption/{kid}/wrapping-key
+      method: POST
+      auth: true
+      docs: Create the public wrapping key to wrap your own encryption key material.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        kid:
+          type: string
+          docs: Encryption key ID
+      display-name: Create the public wrapping key
+      response:
+        docs: The public wrapping key was successfully created.
+        type: root.CreateEncryptionKeyPublicWrappingResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            kid: kid
+          response:
+            body:
+              public_key: public_key
+              algorithm: CKM_RSA_AES_KEY_WRAP
+  source:
+    openapi: ../api.json

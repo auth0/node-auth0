@@ -1,0 +1,137 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    createTicket:
+      path: /guardian/enrollments/ticket
+      method: POST
+      auth: true
+      docs: >
+        Create a <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian/create-custom-enrollment-tickets">multi-factor
+        authentication (MFA) enrollment ticket</a>, and optionally send an email
+        with the created ticket, to a given user.
+
+        Create a <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian/create-custom-enrollment-tickets">multi-factor
+        authentication (MFA) enrollment ticket</a>, and optionally send an email
+        with the created ticket to a given user. Enrollment tickets can specify
+        which factor users must enroll with or allow existing MFA users to
+        enroll in additional factors.<br/> 
+
+
+        Note: Users cannot enroll in Email as a factor through custom enrollment
+        tickets. 
+      source:
+        openapi: ../api.json
+      display-name: Create a multi-factor authentication enrollment ticket
+      request:
+        name: CreateGuardianEnrollmentTicketRequestContent
+        body:
+          properties:
+            user_id:
+              type: string
+              docs: user_id for the enrollment ticket
+            email:
+              type: optional<string>
+              docs: >-
+                alternate email to which the enrollment email will be sent.
+                Optional - by default, the email will be sent to the user's
+                default address
+              validation:
+                format: email
+            send_mail:
+              type: optional<boolean>
+              docs: Send an email to the user to start the enrollment
+            email_locale:
+              type: optional<string>
+              docs: >-
+                Optional. Specify the locale of the enrollment email. Used with
+                send_email.
+            factor: optional<root.GuardianEnrollmentFactorEnum>
+            allow_multiple_enrollments:
+              type: optional<boolean>
+              docs: >-
+                Optional. Allows a user who has previously enrolled in MFA to
+                enroll with additional factors.<br />Note: Parameter can only be
+                used with Universal Login; it cannot be used with Classic Login
+                or custom MFA pages.
+        content-type: application/json
+      response:
+        docs: Enrollment ticket successfully created.
+        type: root.CreateGuardianEnrollmentTicketResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+      examples:
+        - request:
+            user_id: user_id
+          response:
+            body:
+              ticket_id: ticket_id
+              ticket_url: ticket_url
+    get:
+      path: /guardian/enrollments/{id}
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details, such as status and type, for a specific multi-factor
+        authentication enrollment registered to a user account.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the enrollment to be retrieve.
+      display-name: Get a multi-factor authentication enrollment
+      response:
+        docs: Enrollment successfully retrieved.
+        type: root.GetGuardianEnrollmentResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              status: pending
+              name: name
+              identifier: identifier
+              phone_number: phone_number
+              enrolled_at: enrolled_at
+              last_auth: last_auth
+    delete:
+      path: /guardian/enrollments/{id}
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove a specific multi-factor authentication (MFA) enrollment from a
+        user's account. This allows the user to re-enroll with MFA. For more
+        information, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">Reset
+        User Multi-Factor Authentication and Recovery Codes</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the enrollment to be deleted.
+      display-name: Delete a multi-factor authentication enrollment
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - path-parameters:
+            id: id
+  source:
+    openapi: ../api.json

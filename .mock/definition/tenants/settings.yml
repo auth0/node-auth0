@@ -1,0 +1,443 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /tenants/settings
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve tenant settings. A list of fields to include or exclude may
+        also be specified.
+      source:
+        openapi: ../api.json
+      display-name: Get tenant settings
+      request:
+        name: GetTenantSettingsRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+      response:
+        docs: Tenant settings successfully retrieved.
+        type: root.GetTenantSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              change_password:
+                enabled: true
+                html: html
+              guardian_mfa_page:
+                enabled: true
+                html: html
+              default_audience: default_audience
+              default_directory: default_directory
+              error_page:
+                html: html
+                show_log_link: true
+                url: url
+              device_flow:
+                charset: base20
+                mask: mask
+              default_token_quota:
+                clients:
+                  client_credentials: {}
+                organizations:
+                  client_credentials: {}
+              flags:
+                change_pwd_flow_v1: true
+                enable_apis_section: true
+                disable_impersonation: true
+                enable_client_connections: true
+                enable_pipeline2: true
+                allow_legacy_delegation_grant_types: true
+                allow_legacy_ro_grant_types: true
+                allow_legacy_tokeninfo_endpoint: true
+                enable_legacy_profile: true
+                enable_idtoken_api2: true
+                enable_public_signup_user_exists_error: true
+                enable_sso: true
+                allow_changing_enable_sso: true
+                disable_clickjack_protection_headers: true
+                no_disclose_enterprise_connections: true
+                enforce_client_authentication_on_passwordless_start: true
+                enable_adfs_waad_email_verification: true
+                revoke_refresh_token_grant: true
+                dashboard_log_streams_next: true
+                dashboard_insights_view: true
+                disable_fields_map_fix: true
+                mfa_show_factor_list_on_enrollment: true
+                remove_alg_from_jwks: true
+                improved_signup_bot_detection_in_classic: true
+                genai_trial: true
+                enable_dynamic_client_registration: true
+                disable_management_api_sms_obfuscation: true
+                trust_azure_adfs_email_verified_connection_property: true
+                custom_domains_provisioning: true
+              friendly_name: friendly_name
+              picture_url: picture_url
+              support_email: support_email
+              support_url: support_url
+              allowed_logout_urls:
+                - allowed_logout_urls
+              session_lifetime: 1.1
+              idle_session_lifetime: 1.1
+              ephemeral_session_lifetime: 1.1
+              idle_ephemeral_session_lifetime: 1.1
+              sandbox_version: sandbox_version
+              legacy_sandbox_version: legacy_sandbox_version
+              sandbox_versions_available:
+                - sandbox_versions_available
+              default_redirection_uri: default_redirection_uri
+              enabled_locales:
+                - am
+              session_cookie:
+                mode: persistent
+              sessions:
+                oidc_logout_prompt_enabled: true
+              oidc_logout:
+                rp_logout_end_session_endpoint_discovery: true
+              allow_organization_name_in_authentication_api: true
+              customize_mfa_in_postlogin_action: true
+              acr_values_supported:
+                - acr_values_supported
+              mtls:
+                enable_endpoint_aliases: true
+              pushed_authorization_requests_supported: true
+              authorization_response_iss_parameter_supported: true
+    update:
+      path: /tenants/settings
+      method: PATCH
+      auth: true
+      docs: Update settings for a tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update tenant settings
+      request:
+        name: UpdateTenantSettingsRequestContent
+        body:
+          properties:
+            change_password: optional<root.TenantSettingsPasswordPage>
+            device_flow: optional<root.TenantSettingsDeviceFlow>
+            guardian_mfa_page: optional<root.TenantSettingsGuardianPage>
+            default_audience:
+              type: optional<string>
+              docs: Default audience for API Authorization.
+              default: ''
+            default_directory:
+              type: optional<string>
+              docs: >-
+                Name of connection used for password grants at the `/token`
+                endpoint. The following connection types are supported: LDAP,
+                AD, Database Connections, Passwordless, Windows Azure Active
+                Directory, ADFS.
+              default: ''
+            error_page: optional<root.TenantSettingsErrorPage>
+            default_token_quota: optional<root.DefaultTokenQuota>
+            flags: optional<root.TenantSettingsFlags>
+            friendly_name:
+              type: optional<string>
+              docs: Friendly name for this tenant.
+              default: My Company
+            picture_url:
+              type: optional<string>
+              docs: >-
+                URL of logo to be shown for this tenant (recommended size:
+                150x150)
+              default: https://mycompany.org/logo.png
+            support_email:
+              type: optional<string>
+              docs: End-user support email.
+              default: support@mycompany.org
+            support_url:
+              type: optional<string>
+              docs: End-user support url.
+              default: https://mycompany.org/support
+            allowed_logout_urls:
+              type: optional<list<string>>
+              docs: URLs that are valid to redirect to after logout from Auth0.
+            session_lifetime:
+              type: optional<integer>
+              docs: Number of hours a session will stay valid.
+              default: 168
+            idle_session_lifetime:
+              type: optional<integer>
+              docs: >-
+                Number of hours for which a session can be inactive before the
+                user must log in again.
+              default: 72
+            ephemeral_session_lifetime:
+              type: optional<integer>
+              docs: >-
+                Number of hours an ephemeral (non-persistent) session will stay
+                valid.
+              default: 72
+            idle_ephemeral_session_lifetime:
+              type: optional<integer>
+              docs: >-
+                Number of hours for which an ephemeral (non-persistent) session
+                can be inactive before the user must log in again.
+              default: 24
+            sandbox_version:
+              type: optional<string>
+              docs: Selected sandbox version for the extensibility environment
+              default: '22'
+              validation:
+                maxLength: 8
+            legacy_sandbox_version:
+              type: optional<string>
+              docs: >-
+                Selected legacy sandbox version for the extensibility
+                environment
+              validation:
+                maxLength: 8
+            default_redirection_uri:
+              type: optional<string>
+              docs: The default absolute redirection uri, must be https
+            enabled_locales:
+              type: >-
+                optional<list<UpdateTenantSettingsRequestContentEnabledLocalesItem>>
+              docs: Supported locales for the user interface
+            session_cookie: optional<root.SessionCookieSchema>
+            sessions: optional<root.TenantSettingsSessions>
+            oidc_logout: optional<root.TenantOidcLogoutSettings>
+            customize_mfa_in_postlogin_action:
+              type: optional<boolean>
+              docs: >-
+                Whether to enable flexible factors for MFA in the PostLogin
+                action
+              default: false
+            allow_organization_name_in_authentication_api:
+              type: optional<boolean>
+              docs: >-
+                Whether to accept an organization name instead of an ID on auth
+                endpoints
+              default: false
+            acr_values_supported:
+              type: optional<list<string>>
+              docs: Supported ACR values
+            mtls: optional<root.TenantSettingsMtls>
+            pushed_authorization_requests_supported:
+              type: optional<boolean>
+              docs: Enables the use of Pushed Authorization Requests
+              default: false
+            authorization_response_iss_parameter_supported:
+              type: optional<boolean>
+              docs: Supports iss parameter in authorization responses
+              default: false
+        content-type: application/json
+      response:
+        docs: Tenant settings successfully updated.
+        type: root.UpdateTenantSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              change_password:
+                enabled: true
+                html: html
+              guardian_mfa_page:
+                enabled: true
+                html: html
+              default_audience: default_audience
+              default_directory: default_directory
+              error_page:
+                html: html
+                show_log_link: true
+                url: url
+              device_flow:
+                charset: base20
+                mask: mask
+              default_token_quota:
+                clients:
+                  client_credentials: {}
+                organizations:
+                  client_credentials: {}
+              flags:
+                change_pwd_flow_v1: true
+                enable_apis_section: true
+                disable_impersonation: true
+                enable_client_connections: true
+                enable_pipeline2: true
+                allow_legacy_delegation_grant_types: true
+                allow_legacy_ro_grant_types: true
+                allow_legacy_tokeninfo_endpoint: true
+                enable_legacy_profile: true
+                enable_idtoken_api2: true
+                enable_public_signup_user_exists_error: true
+                enable_sso: true
+                allow_changing_enable_sso: true
+                disable_clickjack_protection_headers: true
+                no_disclose_enterprise_connections: true
+                enforce_client_authentication_on_passwordless_start: true
+                enable_adfs_waad_email_verification: true
+                revoke_refresh_token_grant: true
+                dashboard_log_streams_next: true
+                dashboard_insights_view: true
+                disable_fields_map_fix: true
+                mfa_show_factor_list_on_enrollment: true
+                remove_alg_from_jwks: true
+                improved_signup_bot_detection_in_classic: true
+                genai_trial: true
+                enable_dynamic_client_registration: true
+                disable_management_api_sms_obfuscation: true
+                trust_azure_adfs_email_verified_connection_property: true
+                custom_domains_provisioning: true
+              friendly_name: friendly_name
+              picture_url: picture_url
+              support_email: support_email
+              support_url: support_url
+              allowed_logout_urls:
+                - allowed_logout_urls
+              session_lifetime: 1.1
+              idle_session_lifetime: 1.1
+              ephemeral_session_lifetime: 1.1
+              idle_ephemeral_session_lifetime: 1.1
+              sandbox_version: sandbox_version
+              legacy_sandbox_version: legacy_sandbox_version
+              sandbox_versions_available:
+                - sandbox_versions_available
+              default_redirection_uri: default_redirection_uri
+              enabled_locales:
+                - am
+              session_cookie:
+                mode: persistent
+              sessions:
+                oidc_logout_prompt_enabled: true
+              oidc_logout:
+                rp_logout_end_session_endpoint_discovery: true
+              allow_organization_name_in_authentication_api: true
+              customize_mfa_in_postlogin_action: true
+              acr_values_supported:
+                - acr_values_supported
+              mtls:
+                enable_endpoint_aliases: true
+              pushed_authorization_requests_supported: true
+              authorization_response_iss_parameter_supported: true
+  source:
+    openapi: ../api.json
+types:
+  UpdateTenantSettingsRequestContentEnabledLocalesItem:
+    enum:
+      - am
+      - ar
+      - value: ar-EG
+        name: ArEg
+      - value: ar-SA
+        name: ArSa
+      - az
+      - bg
+      - bn
+      - bs
+      - value: ca-ES
+        name: CaEs
+      - cnr
+      - cs
+      - cy
+      - da
+      - de
+      - el
+      - en
+      - value: en-CA
+        name: EnCa
+      - es
+      - value: es-419
+        name: Es419
+      - value: es-AR
+        name: EsAr
+      - value: es-MX
+        name: EsMx
+      - et
+      - value: eu-ES
+        name: EuEs
+      - fa
+      - fi
+      - fr
+      - value: fr-CA
+        name: FrCa
+      - value: fr-FR
+        name: FrFr
+      - value: gl-ES
+        name: GlEs
+      - gu
+      - he
+      - hi
+      - hr
+      - hu
+      - hy
+      - id
+      - is
+      - it
+      - ja
+      - ka
+      - kk
+      - kn
+      - ko
+      - lt
+      - lv
+      - mk
+      - ml
+      - mn
+      - mr
+      - ms
+      - my
+      - nb
+      - nl
+      - nn
+      - 'no'
+      - pa
+      - pl
+      - pt
+      - value: pt-BR
+        name: PtBr
+      - value: pt-PT
+        name: PtPt
+      - ro
+      - ru
+      - sk
+      - sl
+      - so
+      - sq
+      - sr
+      - sv
+      - sw
+      - ta
+      - te
+      - th
+      - tl
+      - tr
+      - uk
+      - ur
+      - vi
+      - zgh
+      - value: zh-CN
+        name: ZhCn
+      - value: zh-HK
+        name: ZhHk
+      - value: zh-TW
+        name: ZhTw
+    inline: true
+    source:
+      openapi: ../api.json

@@ -1,0 +1,209 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /roles
+      method: GET
+      auth: true
+      docs: >
+        Retrieve detailed list of user roles created in your tenant.
+
+
+        <b>Note</b>: The returned list does not include standard roles available
+        for tenant members, such as Admin or Support Access.
+      pagination:
+        offset: $request.page
+        results: $response.roles
+      source:
+        openapi: ../api.json
+      display-name: Get roles
+      request:
+        name: ListRolesRequestParameters
+        query-parameters:
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          name_filter:
+            type: optional<string>
+            docs: Optional filter on name (case-insensitive).
+      response:
+        docs: Roles successfully retrieved.
+        type: root.ListRolesOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              roles:
+                - id: id
+                  name: name
+                  description: description
+    create:
+      path: /roles
+      method: POST
+      auth: true
+      docs: >
+        Create a user role for <a
+        href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based
+        Access Control</a>.
+
+
+        <b>Note</b>: New roles are not associated with any permissions by
+        default. To assign existing permissions to your role, review Associate
+        Permissions with a Role. To create new permissions, review Add API
+        Permissions.
+      source:
+        openapi: ../api.json
+      display-name: Create a role
+      request:
+        name: CreateRoleRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              docs: Name of the role.
+            description:
+              type: optional<string>
+              docs: Description of the role.
+        content-type: application/json
+      response:
+        docs: Role successfully created.
+        type: root.CreateRoleResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+          response:
+            body:
+              id: id
+              name: name
+              description: description
+    get:
+      path: /roles/{id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve details about a specific <a
+        href="https://auth0.com/docs/manage-users/access-control/rbac">user
+        role</a> specified by ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the role to retrieve.
+      display-name: Get a role
+      response:
+        docs: Role successfully retrieved.
+        type: root.GetRoleResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              description: description
+    delete:
+      path: /roles/{id}
+      method: DELETE
+      auth: true
+      docs: >
+        Delete a specific <a
+        href="https://auth0.com/docs/manage-users/access-control/rbac">user
+        role</a> from your tenant. Once deleted, it is removed from any user who
+        was previously assigned that role. This action cannot be undone.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the role to delete.
+      display-name: Delete a role
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /roles/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Modify the details of a specific <a
+        href="https://auth0.com/docs/manage-users/access-control/rbac">user
+        role</a> specified by ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the role to update.
+      display-name: Update a role
+      request:
+        name: UpdateRoleRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: Name of this role.
+            description:
+              type: optional<string>
+              docs: Description of this role.
+        content-type: application/json
+      response:
+        docs: Role successfully updated.
+        type: root.UpdateRoleResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              description: description
+  source:
+    openapi: ../api.json

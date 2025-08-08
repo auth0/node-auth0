@@ -1,0 +1,229 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /log-streams
+      method: GET
+      auth: true
+      docs: "Retrieve details on <a href=\"https://auth0.com/docs/logs/streams\">log streams</a>.\n<h5>Sample Response</h5><pre><code>[{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"eventbridge\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"awsAccountId\": \"string\",\n\t\t\"awsRegion\": \"string\",\n\t\t\"awsPartnerEventSource\": \"string\"\n\t}\n}, {\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"http\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"httpContentFormat\": \"JSONLINES|JSONARRAY\",\n\t\t\"httpContentType\": \"string\",\n\t\t\"httpEndpoint\": \"string\",\n\t\t\"httpAuthorization\": \"string\"\n\t}\n},\n{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"eventgrid\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"azureSubscriptionId\": \"string\",\n\t\t\"azureResourceGroup\": \"string\",\n\t\t\"azureRegion\": \"string\",\n\t\t\"azurePartnerTopic\": \"string\"\n\t}\n},\n{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"splunk\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"splunkDomain\": \"string\",\n\t\t\"splunkToken\": \"string\",\n\t\t\"splunkPort\": \"string\",\n\t\t\"splunkSecure\": \"boolean\"\n\t}\n},\n{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"sumo\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"sumoSourceAddress\": \"string\",\n\t}\n},\n{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"datadog\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"datadogRegion\": \"string\",\n\t\t\"datadogApiKey\": \"string\"\n\t}\n}]</code></pre>\n"
+      source:
+        openapi: ../api.json
+      display-name: Get log streams
+      response:
+        docs: Returning log streams
+        type: list<root.LogStreamResponseSchema>
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              - id: id
+                name: name
+                status: active
+                type: http
+                isPriority: true
+                filters:
+                  - {}
+                pii_config:
+                  log_fields:
+                    - first_name
+                  method: mask
+                  algorithm: xxhash
+                sink:
+                  httpAuthorization: httpAuthorization
+                  httpContentFormat: JSONARRAY
+                  httpContentType: httpContentType
+                  httpEndpoint: httpEndpoint
+                  httpCustomHeaders:
+                    - {}
+    create:
+      path: /log-streams
+      method: POST
+      auth: true
+      docs: "Create a log stream.\n<h5>Log Stream Types</h5> The <code>type</code> of log stream being created determines the properties required in the <code>sink</code> payload.\n<h5>HTTP Stream</h5> For an <code>http</code> Stream, the <code>sink</code> properties are listed in the payload below\nRequest: <pre><code>{\n\t\"name\": \"string\",\n\t\"type\": \"http\",\n\t\"sink\": {\n\t\t\"httpEndpoint\": \"string\",\n\t\t\"httpContentType\": \"string\",\n\t\t\"httpContentFormat\": \"JSONLINES|JSONARRAY\",\n\t\t\"httpAuthorization\": \"string\"\n\t}\n}</code></pre>\nResponse: <pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"http\",\n\t\"status\": \"active\",\n\t\"sink\": {\n\t\t\"httpEndpoint\": \"string\",\n\t\t\"httpContentType\": \"string\",\n\t\t\"httpContentFormat\": \"JSONLINES|JSONARRAY\",\n\t\t\"httpAuthorization\": \"string\"\n\t}\n}</code></pre>\n<h5>Amazon EventBridge Stream</h5> For an <code>eventbridge</code> Stream, the <code>sink</code> properties are listed in the payload below\nRequest: <pre><code>{\n\t\"name\": \"string\",\n\t\"type\": \"eventbridge\",\n\t\"sink\": {\n\t\t\"awsRegion\": \"string\",\n\t\t\"awsAccountId\": \"string\"\n\t}\n}</code></pre>\nThe response will include an additional field <code>awsPartnerEventSource</code> in the <code>sink</code>: <pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"eventbridge\",\n\t\"status\": \"active\",\n\t\"sink\": {\n\t\t\"awsAccountId\": \"string\",\n\t\t\"awsRegion\": \"string\",\n\t\t\"awsPartnerEventSource\": \"string\"\n\t}\n}</code></pre>\n<h5>Azure Event Grid Stream</h5> For an <code>Azure Event Grid</code> Stream, the <code>sink</code> properties are listed in the payload below\nRequest: <pre><code>{\n\t\"name\": \"string\",\n\t\"type\": \"eventgrid\",\n\t\"sink\": {\n\t\t\"azureSubscriptionId\": \"string\",\n\t\t\"azureResourceGroup\": \"string\",\n\t\t\"azureRegion\": \"string\"\n\t}\n}</code></pre>\nResponse: <pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"http\",\n\t\"status\": \"active\",\n\t\"sink\": {\n\t\t\"azureSubscriptionId\": \"string\",\n\t\t\"azureResourceGroup\": \"string\",\n\t\t\"azureRegion\": \"string\",\n\t\t\"azurePartnerTopic\": \"string\"\n\t}\n}</code></pre>\n<h5>Datadog Stream</h5> For a <code>Datadog</code> Stream, the <code>sink</code> properties are listed in the payload below\nRequest: <pre><code>{\n\t\"name\": \"string\",\n\t\"type\": \"datadog\",\n\t\"sink\": {\n\t\t\"datadogRegion\": \"string\",\n\t\t\"datadogApiKey\": \"string\"\n\t}\n}</code></pre>\nResponse: <pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"datadog\",\n\t\"status\": \"active\",\n\t\"sink\": {\n\t\t\"datadogRegion\": \"string\",\n\t\t\"datadogApiKey\": \"string\"\n\t}\n}</code></pre>\n<h5>Splunk Stream</h5> For a <code>Splunk</code> Stream, the <code>sink</code> properties are listed in the payload below\nRequest: <pre><code>{\n\t\"name\": \"string\",\n\t\"type\": \"splunk\",\n\t\"sink\": {\n\t\t\"splunkDomain\": \"string\",\n\t\t\"splunkToken\": \"string\",\n\t\t\"splunkPort\": \"string\",\n\t\t\"splunkSecure\": \"boolean\"\n\t}\n}</code></pre>\nResponse: <pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"splunk\",\n\t\"status\": \"active\",\n\t\"sink\": {\n\t\t\"splunkDomain\": \"string\",\n\t\t\"splunkToken\": \"string\",\n\t\t\"splunkPort\": \"string\",\n\t\t\"splunkSecure\": \"boolean\"\n\t}\n}</code></pre>\n<h5>Sumo Logic Stream</h5> For a <code>Sumo Logic</code> Stream, the <code>sink</code> properties are listed in the payload below\nRequest: <pre><code>{\n\t\"name\": \"string\",\n\t\"type\": \"sumo\",\n\t\"sink\": {\n\t\t\"sumoSourceAddress\": \"string\",\n\t}\n}</code></pre>\nResponse: <pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"sumo\",\n\t\"status\": \"active\",\n\t\"sink\": {\n\t\t\"sumoSourceAddress\": \"string\",\n\t}\n}</code></pre>\n"
+      source:
+        openapi: ../api.json
+      display-name: Create a log stream
+      request:
+        body: root.CreateLogStreamRequestContent
+        content-type: application/json
+      response:
+        docs: Log stream created
+        type: root.CreateLogStreamResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            type: http
+            sink:
+              httpEndpoint: httpEndpoint
+          response:
+            body:
+              id: id
+              name: name
+              status: active
+              type: http
+              isPriority: true
+              filters:
+                - type: category
+                  name: auth.login.fail
+              pii_config:
+                log_fields:
+                  - first_name
+                method: mask
+                algorithm: xxhash
+              sink:
+                httpAuthorization: httpAuthorization
+                httpContentFormat: JSONARRAY
+                httpContentType: httpContentType
+                httpEndpoint: httpEndpoint
+                httpCustomHeaders:
+                  - {}
+    get:
+      path: /log-streams/{id}
+      method: GET
+      auth: true
+      docs: "Retrieve a log stream configuration and status.\n<h5>Sample responses</h5><h5>Amazon EventBridge Log Stream</h5><pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"eventbridge\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"awsAccountId\": \"string\",\n\t\t\"awsRegion\": \"string\",\n\t\t\"awsPartnerEventSource\": \"string\"\n\t}\n}</code></pre> <h5>HTTP Log Stream</h5><pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"http\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"httpContentFormat\": \"JSONLINES|JSONARRAY\",\n\t\t\"httpContentType\": \"string\",\n\t\t\"httpEndpoint\": \"string\",\n\t\t\"httpAuthorization\": \"string\"\n\t}\n}</code></pre> <h5>Datadog Log Stream</h5><pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"datadog\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"datadogRegion\": \"string\",\n\t\t\"datadogApiKey\": \"string\"\n\t}\n\n}</code></pre><h5>Mixpanel</h5>\n\t\n\tRequest: <pre><code>{\n\t  \"name\": \"string\",\n\t  \"type\": \"mixpanel\",\n\t  \"sink\": {\n\t\t\"mixpanelRegion\": \"string\", // \"us\" | \"eu\",\n\t\t\"mixpanelProjectId\": \"string\",\n\t\t\"mixpanelServiceAccountUsername\": \"string\",\n\t\t\"mixpanelServiceAccountPassword\": \"string\"\n\t  }\n\t} </code></pre>\n\t\n\t\n\tResponse: <pre><code>{\n\t\t\"id\": \"string\",\n\t\t\"name\": \"string\",\n\t\t\"type\": \"mixpanel\",\n\t\t\"status\": \"active\",\n\t\t\"sink\": {\n\t\t  \"mixpanelRegion\": \"string\", // \"us\" | \"eu\",\n\t\t  \"mixpanelProjectId\": \"string\",\n\t\t  \"mixpanelServiceAccountUsername\": \"string\",\n\t\t  \"mixpanelServiceAccountPassword\": \"string\" // the following is redacted on return\n\t\t}\n\t  } </code></pre>\n\n\t<h5>Segment</h5>\n\n\tRequest: <pre><code> {\n\t  \"name\": \"string\",\n\t  \"type\": \"segment\",\n\t  \"sink\": {\n\t\t\"segmentWriteKey\": \"string\"\n\t  }\n\t}</code></pre>\n\t\n\tResponse: <pre><code>{\n\t  \"id\": \"string\",\n\t  \"name\": \"string\",\n\t  \"type\": \"segment\",\n\t  \"status\": \"active\",\n\t  \"sink\": {\n\t\t\"segmentWriteKey\": \"string\"\n\t  }\n\t} </code></pre>\n\t\n<h5>Splunk Log Stream</h5><pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"splunk\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"splunkDomain\": \"string\",\n\t\t\"splunkToken\": \"string\",\n\t\t\"splunkPort\": \"string\",\n\t\t\"splunkSecure\": \"boolean\"\n\t}\n}</code></pre> <h5>Sumo Logic Log Stream</h5><pre><code>{\n\t\"id\": \"string\",\n\t\"name\": \"string\",\n\t\"type\": \"sumo\",\n\t\"status\": \"active|paused|suspended\",\n\t\"sink\": {\n\t\t\"sumoSourceAddress\": \"string\",\n\t}\n}</code></pre> <h5>Status</h5> The <code>status</code> of a log stream maybe any of the following:\n1. <code>active</code> - Stream is currently enabled.\n2. <code>paused</code> - Stream is currently user disabled and will not attempt log delivery.\n3. <code>suspended</code> - Stream is currently disabled because of errors and will not attempt log delivery.\n"
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the log stream to get
+      display-name: Get log stream by ID
+      response:
+        docs: Returning log stream.
+        type: root.GetLogStreamResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              status: active
+              type: http
+              isPriority: true
+              filters:
+                - type: category
+                  name: auth.login.fail
+              pii_config:
+                log_fields:
+                  - first_name
+                method: mask
+                algorithm: xxhash
+              sink:
+                httpAuthorization: httpAuthorization
+                httpContentFormat: JSONARRAY
+                httpContentType: httpContentType
+                httpEndpoint: httpEndpoint
+                httpCustomHeaders:
+                  - {}
+    delete:
+      path: /log-streams/{id}
+      method: DELETE
+      auth: true
+      docs: |
+        Delete a log stream.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the log stream to delete
+      display-name: Delete log stream
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /log-streams/{id}
+      method: PATCH
+      auth: true
+      docs: "Update a log stream.\n<h4>Examples of how to use the PATCH endpoint.</h4> The following fields may be updated in a PATCH operation: <ul><li>name</li><li>status</li><li>sink</li></ul> Note: For log streams of type <code>eventbridge</code> and <code>eventgrid</code>, updating the <code>sink</code> is not permitted.\n<h5>Update the status of a log stream</h5><pre><code>{\n\t\"status\": \"active|paused\"\n}</code></pre>\n<h5>Update the name of a log stream</h5><pre><code>{\n\t\"name\": \"string\"\n}</code></pre>\n<h5>Update the sink properties of a stream of type <code>http</code></h5><pre><code>{\n  \"sink\": {\n    \"httpEndpoint\": \"string\",\n    \"httpContentType\": \"string\",\n    \"httpContentFormat\": \"JSONARRAY|JSONLINES\",\n    \"httpAuthorization\": \"string\"\n  }\n}</code></pre>\n<h5>Update the sink properties of a stream of type <code>datadog</code></h5><pre><code>{\n  \"sink\": {\n\t\t\"datadogRegion\": \"string\",\n\t\t\"datadogApiKey\": \"string\"\n  }\n}</code></pre>\n<h5>Update the sink properties of a stream of type <code>splunk</code></h5><pre><code>{\n  \"sink\": {\n    \"splunkDomain\": \"string\",\n    \"splunkToken\": \"string\",\n    \"splunkPort\": \"string\",\n    \"splunkSecure\": \"boolean\"\n  }\n}</code></pre>\n<h5>Update the sink properties of a stream of type <code>sumo</code></h5><pre><code>{\n  \"sink\": {\n    \"sumoSourceAddress\": \"string\"\n  }\n}</code></pre> "
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the log stream to get
+      display-name: Update a log stream
+      request:
+        name: UpdateLogStreamRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: log stream name
+            status: optional<root.LogStreamStatusEnum>
+            isPriority:
+              type: optional<boolean>
+              docs: True for priority log streams, false for non-priority
+            filters:
+              type: optional<list<root.LogStreamFilter>>
+              docs: >-
+                Only logs events matching these filters will be delivered by the
+                stream. If omitted or empty, all events will be delivered.
+            pii_config: optional<root.LogStreamPiiConfig>
+            sink: optional<root.LogStreamSinkPatch>
+        content-type: application/json
+      response:
+        docs: Log stream updated
+        type: root.UpdateLogStreamResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              status: active
+              type: http
+              isPriority: true
+              filters:
+                - type: category
+                  name: auth.login.fail
+              pii_config:
+                log_fields:
+                  - first_name
+                method: mask
+                algorithm: xxhash
+              sink:
+                httpAuthorization: httpAuthorization
+                httpContentFormat: JSONARRAY
+                httpContentType: httpContentType
+                httpEndpoint: httpEndpoint
+                httpCustomHeaders:
+                  - {}
+  source:
+    openapi: ../api.json

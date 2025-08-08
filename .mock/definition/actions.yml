@@ -1,0 +1,608 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /actions/actions
+      method: GET
+      auth: true
+      docs: |
+        Retrieve all actions.
+      pagination:
+        offset: $request.page
+        results: $response.actions
+      source:
+        openapi: ../api.json
+      display-name: Get actions
+      request:
+        name: ListActionsRequestParameters
+        query-parameters:
+          triggerId:
+            type: optional<root.ActionTriggerTypeEnum>
+            docs: An actions extensibility point.
+          actionName:
+            type: optional<string>
+            docs: The name of the action to retrieve.
+          deployed:
+            type: optional<boolean>
+            docs: Optional filter to only retrieve actions that are deployed.
+          page:
+            type: optional<integer>
+            docs: Use this field to request a specific page of the list results.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              The maximum number of results to be returned by the server in
+              single response. 20 by default
+          installed:
+            type: optional<boolean>
+            docs: >-
+              Optional. When true, return only installed actions. When false,
+              return only custom actions. Returns all actions by default.
+      response:
+        docs: The actions were retrieved.
+        type: root.ListActionsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              total: 1.1
+              page: 1.1
+              per_page: 1.1
+              actions:
+                - id: id
+                  name: name
+                  supported_triggers:
+                    - id: id
+                  all_changes_deployed: true
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  code: code
+                  dependencies:
+                    - {}
+                  runtime: runtime
+                  secrets:
+                    - {}
+                  installed_integration_id: installed_integration_id
+                  status: pending
+                  built_at: '2024-01-15T09:30:00Z'
+                  deploy: true
+    create:
+      path: /actions/actions
+      method: POST
+      auth: true
+      docs: >
+        Create an action. Once an action is created, it must be deployed, and
+        then bound to a trigger before it will be executed as part of a flow.
+      source:
+        openapi: ../api.json
+      display-name: Create an action
+      request:
+        name: CreateActionRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              docs: The name of an action.
+              default: my-action
+            supported_triggers:
+              docs: >-
+                The list of triggers that this action supports. At this time, an
+                action can only target a single trigger at a time.
+              type: list<root.ActionTrigger>
+            code:
+              type: optional<string>
+              docs: The source code of the action.
+              default: module.exports = () => {}
+            dependencies:
+              type: optional<list<root.ActionVersionDependency>>
+              docs: >-
+                The list of third party npm modules, and their versions, that
+                this action depends on.
+            runtime:
+              type: optional<string>
+              docs: 'The Node runtime. For example: `node12`, defaults to `node12`'
+              default: node12
+            secrets:
+              type: optional<list<root.ActionSecretRequest>>
+              docs: >-
+                The list of secrets that are included in an action or a version
+                of an action.
+            deploy:
+              type: optional<boolean>
+              docs: True if the action should be deployed after creation.
+              default: false
+        content-type: application/json
+      response:
+        docs: Action successfully created.
+        type: root.CreateActionResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+            supported_triggers:
+              - id: id
+          response:
+            body:
+              id: id
+              name: name
+              supported_triggers:
+                - id: id
+                  version: version
+                  status: status
+                  runtimes:
+                    - runtimes
+                  default_runtime: default_runtime
+                  compatible_triggers:
+                    - id: id
+                      version: version
+                  binding_policy: trigger-bound
+              all_changes_deployed: true
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              code: code
+              dependencies:
+                - name: name
+                  version: version
+                  registry_url: registry_url
+              runtime: runtime
+              secrets:
+                - name: name
+                  updated_at: '2024-01-15T09:30:00Z'
+              deployed_version:
+                id: id
+                action_id: action_id
+                code: code
+                dependencies:
+                  - {}
+                deployed: true
+                runtime: runtime
+                secrets:
+                  - {}
+                status: pending
+                number: 1.1
+                errors:
+                  - {}
+                action:
+                  id: id
+                  name: name
+                  supported_triggers:
+                    - id: id
+                  all_changes_deployed: true
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                built_at: '2024-01-15T09:30:00Z'
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+                supported_triggers:
+                  - id: id
+              installed_integration_id: installed_integration_id
+              integration:
+                id: id
+                catalog_id: catalog_id
+                url_slug: url_slug
+                partner_id: partner_id
+                name: name
+                description: description
+                short_description: short_description
+                logo: logo
+                feature_type: unspecified
+                terms_of_use_url: terms_of_use_url
+                privacy_policy_url: privacy_policy_url
+                public_support_link: public_support_link
+                current_release:
+                  id: id
+                  trigger:
+                    id: id
+                  required_secrets:
+                    - {}
+                  required_configuration:
+                    - {}
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+              status: pending
+              built_at: '2024-01-15T09:30:00Z'
+              deploy: true
+    get:
+      path: /actions/actions/{id}
+      method: GET
+      auth: true
+      docs: |
+        Retrieve an action by its ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the action to retrieve.
+      display-name: Get an action
+      response:
+        docs: The action was retrieved.
+        type: root.GetActionResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              supported_triggers:
+                - id: id
+                  version: version
+                  status: status
+                  runtimes:
+                    - runtimes
+                  default_runtime: default_runtime
+                  compatible_triggers:
+                    - id: id
+                      version: version
+                  binding_policy: trigger-bound
+              all_changes_deployed: true
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              code: code
+              dependencies:
+                - name: name
+                  version: version
+                  registry_url: registry_url
+              runtime: runtime
+              secrets:
+                - name: name
+                  updated_at: '2024-01-15T09:30:00Z'
+              deployed_version:
+                id: id
+                action_id: action_id
+                code: code
+                dependencies:
+                  - {}
+                deployed: true
+                runtime: runtime
+                secrets:
+                  - {}
+                status: pending
+                number: 1.1
+                errors:
+                  - {}
+                action:
+                  id: id
+                  name: name
+                  supported_triggers:
+                    - id: id
+                  all_changes_deployed: true
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                built_at: '2024-01-15T09:30:00Z'
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+                supported_triggers:
+                  - id: id
+              installed_integration_id: installed_integration_id
+              integration:
+                id: id
+                catalog_id: catalog_id
+                url_slug: url_slug
+                partner_id: partner_id
+                name: name
+                description: description
+                short_description: short_description
+                logo: logo
+                feature_type: unspecified
+                terms_of_use_url: terms_of_use_url
+                privacy_policy_url: privacy_policy_url
+                public_support_link: public_support_link
+                current_release:
+                  id: id
+                  trigger:
+                    id: id
+                  required_secrets:
+                    - {}
+                  required_configuration:
+                    - {}
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+              status: pending
+              built_at: '2024-01-15T09:30:00Z'
+              deploy: true
+    delete:
+      path: /actions/actions/{id}
+      method: DELETE
+      auth: true
+      docs: >
+        Deletes an action and all of its associated versions. An action must be
+        unbound from all triggers before it can be deleted.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the action to delete.
+      display-name: Delete an action
+      request:
+        name: DeleteActionRequestParameters
+        query-parameters:
+          force:
+            type: optional<boolean>
+            docs: Force action deletion detaching bindings
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /actions/actions/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Update an existing action. If this action is currently bound to a
+        trigger, updating it will <strong>not</strong> affect any user flows
+        until the action is deployed.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the action to update.
+      display-name: Update an action
+      request:
+        name: UpdateActionRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: The name of an action.
+              default: my-action
+            supported_triggers:
+              type: optional<list<root.ActionTrigger>>
+              docs: >-
+                The list of triggers that this action supports. At this time, an
+                action can only target a single trigger at a time.
+            code:
+              type: optional<string>
+              docs: The source code of the action.
+              default: module.exports = () => {}
+            dependencies:
+              type: optional<list<root.ActionVersionDependency>>
+              docs: >-
+                The list of third party npm modules, and their versions, that
+                this action depends on.
+            runtime:
+              type: optional<string>
+              docs: 'The Node runtime. For example: `node12`, defaults to `node12`'
+              default: node12
+            secrets:
+              type: optional<list<root.ActionSecretRequest>>
+              docs: >-
+                The list of secrets that are included in an action or a version
+                of an action.
+        content-type: application/json
+      response:
+        docs: Action successfully updated.
+        type: root.UpdateActionResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              supported_triggers:
+                - id: id
+                  version: version
+                  status: status
+                  runtimes:
+                    - runtimes
+                  default_runtime: default_runtime
+                  compatible_triggers:
+                    - id: id
+                      version: version
+                  binding_policy: trigger-bound
+              all_changes_deployed: true
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              code: code
+              dependencies:
+                - name: name
+                  version: version
+                  registry_url: registry_url
+              runtime: runtime
+              secrets:
+                - name: name
+                  updated_at: '2024-01-15T09:30:00Z'
+              deployed_version:
+                id: id
+                action_id: action_id
+                code: code
+                dependencies:
+                  - {}
+                deployed: true
+                runtime: runtime
+                secrets:
+                  - {}
+                status: pending
+                number: 1.1
+                errors:
+                  - {}
+                action:
+                  id: id
+                  name: name
+                  supported_triggers:
+                    - id: id
+                  all_changes_deployed: true
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                built_at: '2024-01-15T09:30:00Z'
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+                supported_triggers:
+                  - id: id
+              installed_integration_id: installed_integration_id
+              integration:
+                id: id
+                catalog_id: catalog_id
+                url_slug: url_slug
+                partner_id: partner_id
+                name: name
+                description: description
+                short_description: short_description
+                logo: logo
+                feature_type: unspecified
+                terms_of_use_url: terms_of_use_url
+                privacy_policy_url: privacy_policy_url
+                public_support_link: public_support_link
+                current_release:
+                  id: id
+                  trigger:
+                    id: id
+                  required_secrets:
+                    - {}
+                  required_configuration:
+                    - {}
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+              status: pending
+              built_at: '2024-01-15T09:30:00Z'
+              deploy: true
+    deploy:
+      path: /actions/actions/{id}/deploy
+      method: POST
+      auth: true
+      docs: >
+        Deploy an action. Deploying an action will create a new immutable
+        version of the action. If the action is currently bound to a trigger,
+        then the system will begin executing the newly deployed version of the
+        action immediately. Otherwise, the action will only be executed as a
+        part of a flow once it is bound to that flow.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of an action.
+      display-name: Deploy an action
+      response:
+        docs: Request to create action version was accepted.
+        type: root.DeployActionResponseContent
+        status-code: 202
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              action_id: action_id
+              code: code
+              dependencies:
+                - name: name
+                  version: version
+                  registry_url: registry_url
+              deployed: true
+              runtime: runtime
+              secrets:
+                - name: name
+                  updated_at: '2024-01-15T09:30:00Z'
+              status: pending
+              number: 1.1
+              errors:
+                - id: id
+                  msg: msg
+                  url: url
+              action:
+                id: id
+                name: name
+                supported_triggers:
+                  - id: id
+                all_changes_deployed: true
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+              built_at: '2024-01-15T09:30:00Z'
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              supported_triggers:
+                - id: id
+                  version: version
+                  status: status
+                  runtimes:
+                    - runtimes
+                  default_runtime: default_runtime
+                  compatible_triggers:
+                    - id: id
+                      version: version
+                  binding_policy: trigger-bound
+    test:
+      path: /actions/actions/{id}/test
+      method: POST
+      auth: true
+      docs: >
+        Test an action. After updating an action, it can be tested prior to
+        being deployed to ensure it behaves as expected.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the action to test.
+      display-name: Test an Action
+      request:
+        name: TestActionRequestContent
+        body:
+          properties:
+            payload: root.TestActionPayload
+        content-type: application/json
+      response:
+        docs: Test action version successfully created.
+        type: root.TestActionResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            payload:
+              key: value
+          response:
+            body:
+              payload:
+                key: value
+  source:
+    openapi: ../api.json

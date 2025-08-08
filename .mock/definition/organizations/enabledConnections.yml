@@ -1,0 +1,270 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /organizations/{id}/enabled_connections
+      method: GET
+      auth: true
+      docs: >
+        Retrieve details about a specific connection currently enabled for an
+        Organization. Information returned includes details such as connection
+        ID, name, strategy, and whether the connection automatically grants
+        membership upon login.
+      pagination:
+        offset: $request.page
+        results: $response.enabled_connections
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Get connections enabled for an organization
+      request:
+        name: ListOrganizationConnectionsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: Connections successfully retrieved.
+        type: root.ListOrganizationConnectionsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              enabled_connections:
+                - connection_id: connection_id
+                  assign_membership_on_login: true
+                  show_as_button: true
+                  is_signup_enabled: true
+    add:
+      path: /organizations/{id}/enabled_connections
+      method: POST
+      auth: true
+      docs: >
+        Enable a specific connection for a given Organization. To enable a
+        connection, it must already exist within your tenant; connections cannot
+        be created through this action.
+
+
+        <a
+        href="https://auth0.com/docs/authenticate/identity-providers">Connections</a>
+        represent the relationship between Auth0 and a source of users.
+        Available types of connections include database, enterprise, and social.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Add connections to an organization
+      request:
+        name: AddOrganizationConnectionRequestContent
+        body:
+          properties:
+            connection_id:
+              type: string
+              docs: Single connection ID to add to the organization.
+            assign_membership_on_login:
+              type: optional<boolean>
+              docs: >-
+                When true, all users that log in with this connection will be
+                automatically granted membership in the organization. When
+                false, users must be granted membership in the organization
+                before logging in with this connection.
+            is_signup_enabled:
+              type: optional<boolean>
+              docs: >-
+                Determines whether organization signup should be enabled for
+                this organization connection. Only applicable for database
+                connections. Default: false.
+            show_as_button:
+              type: optional<boolean>
+              docs: >-
+                Determines whether a connection should be displayed on this
+                organization’s login prompt. Only applicable for enterprise
+                connections. Default: true.
+        content-type: application/json
+      response:
+        docs: Organization connection successfully added.
+        type: root.AddOrganizationConnectionResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            connection_id: connection_id
+          response:
+            body:
+              connection_id: connection_id
+              assign_membership_on_login: true
+              show_as_button: true
+              is_signup_enabled: true
+              connection:
+                name: name
+                strategy: strategy
+    get:
+      path: /organizations/{id}/enabled_connections/{connectionId}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve details about a specific connection currently enabled for an
+        Organization. Information returned includes details such as connection
+        ID, name, strategy, and whether the connection automatically grants
+        membership upon login.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+        connectionId:
+          type: string
+          docs: Connection identifier.
+      display-name: Get an enabled connection for an organization
+      response:
+        docs: Connection successfully retrieved.
+        type: root.GetOrganizationConnectionResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            connectionId: connectionId
+          response:
+            body:
+              connection_id: connection_id
+              assign_membership_on_login: true
+              show_as_button: true
+              is_signup_enabled: true
+              connection:
+                name: name
+                strategy: strategy
+    delete:
+      path: /organizations/{id}/enabled_connections/{connectionId}
+      method: DELETE
+      auth: true
+      docs: >
+        Disable a specific connection for an Organization. Once disabled,
+        Organization members can no longer use that connection to authenticate. 
+
+
+        <b>Note</b>: This action does not remove the connection from your
+        tenant.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+        connectionId:
+          type: string
+          docs: Connection identifier.
+      display-name: Delete connections from an organization
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            connectionId: connectionId
+    update:
+      path: /organizations/{id}/enabled_connections/{connectionId}
+      method: PATCH
+      auth: true
+      docs: >
+        Modify the details of a specific connection currently enabled for an
+        Organization.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+        connectionId:
+          type: string
+          docs: Connection identifier.
+      display-name: Update the Connection of an Organization
+      request:
+        name: UpdateOrganizationConnectionRequestContent
+        body:
+          properties:
+            assign_membership_on_login:
+              type: optional<boolean>
+              docs: >-
+                When true, all users that log in with this connection will be
+                automatically granted membership in the organization. When
+                false, users must be granted membership in the organization
+                before logging in with this connection.
+            is_signup_enabled:
+              type: optional<boolean>
+              docs: >-
+                Determines whether organization signup should be enabled for
+                this organization connection. Only applicable for database
+                connections. Default: false.
+            show_as_button:
+              type: optional<boolean>
+              docs: >-
+                Determines whether a connection should be displayed on this
+                organization’s login prompt. Only applicable for enterprise
+                connections. Default: true.
+        content-type: application/json
+      response:
+        docs: Organization connection successfully updated.
+        type: root.UpdateOrganizationConnectionResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            connectionId: connectionId
+          request: {}
+          response:
+            body:
+              connection_id: connection_id
+              assign_membership_on_login: true
+              show_as_button: true
+              is_signup_enabled: true
+              connection:
+                name: name
+                strategy: strategy
+  source:
+    openapi: ../api.json

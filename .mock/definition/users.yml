@@ -1,0 +1,836 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users
+      method: GET
+      auth: true
+      docs: >
+        Retrieve details of users. It is possible to:
+
+
+        - Specify a search criteria for users
+
+        - Sort the users to be returned
+
+        - Select the fields to be returned
+
+        - Specify the number of users to retrieve per page and the page index
+         <!-- only v3 is available -->
+        The <code>q</code> query parameter can be used to get users that match
+        the specified criteria <a
+        href="https://auth0.com/docs/users/search/v3/query-syntax">using query
+        string syntax.</a>
+
+
+        <a href="https://auth0.com/docs/users/search/v3">Learn more about
+        searching for users.</a>
+
+
+        Read about <a
+        href="https://auth0.com/docs/users/search/best-practices">best
+        practices</a> when working with the API endpoints for retrieving users.
+
+
+        Auth0 limits the number of users you can return. If you exceed this
+        threshold, please redefine your search, use the <a
+        href="https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports">export
+        job</a>, or the <a
+        href="https://auth0.com/docs/extensions/user-import-export">User Import
+        / Export</a> extension.
+      pagination:
+        offset: $request.page
+        results: $response.users
+      source:
+        openapi: ../api.json
+      display-name: List or Search Users
+      request:
+        name: ListUsersRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          sort:
+            type: optional<string>
+            docs: >-
+              Field to sort by. Use <code>field:order</code> where order is
+              <code>1</code> for ascending and <code>-1</code> for descending.
+              e.g. <code>created_at:1</code>
+          connection:
+            type: optional<string>
+            docs: >-
+              Connection filter. Only applies when using
+              <code>search_engine=v1</code>. To filter by connection with
+              <code>search_engine=v2|v3</code>, use
+              <code>q=identities.connection:"connection_name"</code>
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+          q:
+            type: optional<string>
+            docs: >-
+              Query in <a target='_new' href
+              ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene
+              query string syntax</a>. Some query types cannot be used on
+              metadata fields, for details see <a
+              href='https://auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable
+              Fields</a>.
+          search_engine:
+            type: optional<root.SearchEngineVersionsEnum>
+            docs: The version of the search engine
+          primary_order:
+            type: optional<boolean>
+            docs: >-
+              If true (default), results are returned in a deterministic order.
+              If false, results may be returned in a non-deterministic order,
+              which can enhance performance for complex queries targeting a
+              small number of users. Set to false only when consistent ordering
+              and pagination is not required.
+      response:
+        docs: Users successfully retrieved.
+        type: root.ListUsersOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+        - root.ServiceUnavailableError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              length: 1.1
+              total: 1.1
+              users:
+                - user_id: user_id
+                  email: email
+                  email_verified: true
+                  username: username
+                  phone_number: phone_number
+                  phone_verified: true
+                  created_at: created_at
+                  updated_at: updated_at
+                  identities:
+                    - {}
+                  app_metadata:
+                    key: value
+                  user_metadata:
+                    key: value
+                  picture: picture
+                  name: name
+                  nickname: nickname
+                  multifactor:
+                    - multifactor
+                  last_ip: last_ip
+                  last_login: last_login
+                  logins_count: 1
+                  blocked: true
+                  given_name: given_name
+                  family_name: family_name
+    create:
+      path: /users
+      method: POST
+      auth: true
+      docs: >-
+        Create a new user for a given <a
+        href="https://auth0.com/docs/connections/database">database</a> or <a
+        href="https://auth0.com/docs/connections/passwordless">passwordless</a>
+        connection.
+
+
+        Note: <code>connection</code> is required but other parameters such as
+        <code>email</code> and <code>password</code> are dependent upon the type
+        of connection.
+      source:
+        openapi: ../api.json
+      display-name: Create a User
+      request:
+        name: CreateUserRequestContent
+        body:
+          properties:
+            email:
+              type: optional<string>
+              docs: The user's email.
+              default: john.doe@gmail.com
+              validation:
+                format: email
+            phone_number:
+              type: optional<string>
+              docs: The user's phone number (following the E.164 recommendation).
+              default: '+199999999999999'
+            user_metadata: optional<root.UserMetadata>
+            blocked:
+              type: optional<boolean>
+              docs: >-
+                Whether this user was blocked by an administrator (true) or not
+                (false).
+              default: false
+            email_verified:
+              type: optional<boolean>
+              docs: >-
+                Whether this email address is verified (true) or unverified
+                (false). User will receive a verification email after creation
+                if `email_verified` is false or not specified
+              default: false
+            phone_verified:
+              type: optional<boolean>
+              docs: >-
+                Whether this phone number has been verified (true) or not
+                (false).
+              default: false
+            app_metadata: optional<root.AppMetadata>
+            given_name:
+              type: optional<string>
+              docs: The user's given name(s).
+              default: John
+              validation:
+                minLength: 1
+                maxLength: 150
+            family_name:
+              type: optional<string>
+              docs: The user's family name(s).
+              default: Doe
+              validation:
+                minLength: 1
+                maxLength: 150
+            name:
+              type: optional<string>
+              docs: The user's full name.
+              default: John Doe
+              validation:
+                minLength: 1
+                maxLength: 300
+            nickname:
+              type: optional<string>
+              docs: The user's nickname.
+              default: Johnny
+              validation:
+                minLength: 1
+                maxLength: 300
+            picture:
+              type: optional<string>
+              docs: A URI pointing to the user's picture.
+              default: >-
+                https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png
+            user_id:
+              type: optional<string>
+              docs: The external user's id provided by the identity provider.
+              default: abc
+              validation:
+                minLength: 0
+                maxLength: 255
+            connection:
+              type: string
+              docs: Name of the connection this user should be created in.
+              default: Initial-Connection
+              validation:
+                minLength: 1
+            password:
+              type: optional<string>
+              docs: >-
+                Initial password for this user. Only valid for auth0 connection
+                strategy.
+              default: secret
+              validation:
+                minLength: 1
+            verify_email:
+              type: optional<boolean>
+              docs: >-
+                Whether the user will receive a verification email after
+                creation (true) or no email (false). Overrides behavior of
+                `email_verified` parameter.
+              default: false
+            username:
+              type: optional<string>
+              docs: >-
+                The user's username. Only valid if the connection requires a
+                username.
+              default: johndoe
+              validation:
+                minLength: 1
+                maxLength: 128
+        content-type: application/json
+      response:
+        docs: User successfully created.
+        type: root.CreateUserResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            connection: connection
+          response:
+            body:
+              user_id: user_id
+              email: email
+              email_verified: true
+              username: username
+              phone_number: phone_number
+              phone_verified: true
+              created_at: created_at
+              updated_at: updated_at
+              identities:
+                - connection: connection
+                  user_id: user_id
+                  provider: ad
+                  isSocial: true
+                  access_token: access_token
+                  access_token_secret: access_token_secret
+                  refresh_token: refresh_token
+              app_metadata:
+                key: value
+              user_metadata:
+                key: value
+              picture: picture
+              name: name
+              nickname: nickname
+              multifactor:
+                - multifactor
+              last_ip: last_ip
+              last_login: last_login
+              logins_count: 1
+              blocked: true
+              given_name: given_name
+              family_name: family_name
+    listUsersByEmail:
+      path: /users-by-email
+      method: GET
+      auth: true
+      docs: >
+        Find users by email. If Auth0 is the identity provider (idP), the email
+        address associated with a user is saved in lower case, regardless of how
+        you initially provided it. 
+
+
+        For example, if you register a user as JohnSmith@example.com, Auth0
+        saves the user's email as johnsmith@example.com. 
+
+
+        Therefore, when using this endpoint, make sure that you are searching
+        for users via email addresses using the correct case.
+      source:
+        openapi: ../api.json
+      display-name: Search Users by Email
+      request:
+        name: ListUsersByEmailRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false). Defaults to true.
+          email:
+            type: string
+            docs: Email address to search for (case-sensitive).
+      response:
+        docs: Users successfully searched.
+        type: list<root.UserResponseSchema>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - query-parameters:
+            email: email
+          response:
+            body:
+              - user_id: user_id
+                email: email
+                email_verified: true
+                username: username
+                phone_number: phone_number
+                phone_verified: true
+                created_at: created_at
+                updated_at: updated_at
+                identities:
+                  - {}
+                app_metadata:
+                  key: value
+                user_metadata:
+                  key: value
+                picture: picture
+                name: name
+                nickname: nickname
+                multifactor:
+                  - multifactor
+                last_ip: last_ip
+                last_login: last_login
+                logins_count: 1
+                blocked: true
+                given_name: given_name
+                family_name: family_name
+    get:
+      path: /users/{id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve user details. A list of fields to include or exclude may also
+        be specified. For more information, see <a
+        href="https://auth0.com/docs/manage-users/user-search/retrieve-users-with-get-users-endpoint">Retrieve
+        Users with the Get Users Endpoint</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to retrieve.
+      display-name: Get a User
+      request:
+        name: GetUserRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+      response:
+        docs: User successfully retrieved.
+        type: root.GetUserResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              user_id: user_id
+              email: email
+              email_verified: true
+              username: username
+              phone_number: phone_number
+              phone_verified: true
+              created_at: created_at
+              updated_at: updated_at
+              identities:
+                - connection: connection
+                  user_id: user_id
+                  provider: ad
+                  isSocial: true
+                  access_token: access_token
+                  access_token_secret: access_token_secret
+                  refresh_token: refresh_token
+              app_metadata:
+                key: value
+              user_metadata:
+                key: value
+              picture: picture
+              name: name
+              nickname: nickname
+              multifactor:
+                - multifactor
+              last_ip: last_ip
+              last_login: last_login
+              logins_count: 1
+              blocked: true
+              given_name: given_name
+              family_name: family_name
+    delete:
+      path: /users/{id}
+      method: DELETE
+      auth: true
+      docs: >
+        Delete a user by user ID. This action cannot be undone. For Auth0
+        Dashboard instructions, see <a
+        href="https://auth0.com/docs/manage-users/user-accounts/delete-users">Delete
+        Users</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to delete.
+      display-name: Delete a User
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /users/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Update a user.
+
+
+        These are the attributes that can be updated at the root level:
+
+
+        <ul>
+            <li>app_metadata</li>
+            <li>blocked</li>
+            <li>email</li>
+            <li>email_verified</li>
+            <li>family_name</li>
+            <li>given_name</li>
+            <li>name</li>
+            <li>nickname</li>
+            <li>password</li>
+            <li>phone_number</li>
+            <li>phone_verified</li>
+            <li>picture</li>
+            <li>username</li>
+            <li>user_metadata</li>
+            <li>verify_email</li>
+        </ul>
+
+
+        Some considerations:
+
+        <ul>
+            <li>The properties of the new object will replace the old ones.</li>
+            <li>The metadata fields are an exception to this rule (<code>user_metadata</code> and <code>app_metadata</code>). These properties are merged instead of being replaced but be careful, the merge only occurs on the first level.</li>
+            <li>If you are updating <code>email</code>, <code>email_verified</code>, <code>phone_number</code>, <code>phone_verified</code>, <code>username</code> or <code>password</code> of a secondary identity, you need to specify the <code>connection</code> property too.</li>
+            <li>If you are updating <code>email</code> or <code>phone_number</code> you can specify, optionally, the <code>client_id</code> property.</li>
+            <li>Updating <code>email_verified</code> is not supported for enterprise and passwordless sms connections.</li>
+            <li>Updating the <code>blocked</code> to <code>false</code> does not affect the user's blocked state from an excessive amount of incorrectly provided credentials. Use the "Unblock a user" endpoint from the "User Blocks" API to change the user's state.</li>
+            <li>Supported attributes can be unset by supplying <code>null</code> as the value.</li>
+        </ul>
+
+
+        <h5>Updating a field (non-metadata property)</h5>
+
+        To mark the email address of a user as verified, the body to send should
+        be:
+
+        <pre><code>{ "email_verified": true }</code></pre>
+
+
+        <h5>Updating a user metadata root property</h5>Let's assume that our
+        test user has the following <code>user_metadata</code>:
+
+        <pre><code>{ "user_metadata" : { "profileCode": 1479 } }</code></pre>
+
+
+        To add the field <code>addresses</code> the body to send should be:
+
+        <pre><code>{ "user_metadata" : { "addresses": {"work_address": "100
+        Industrial Way"} }}</code></pre>
+
+
+        The modified object ends up with the following
+        <code>user_metadata</code> property:<pre><code>{
+          "user_metadata": {
+            "profileCode": 1479,
+            "addresses": { "work_address": "100 Industrial Way" }
+          }
+        }</code></pre>
+
+
+        <h5>Updating an inner user metadata property</h5>If there's existing
+        user metadata to which we want to add  <code>"home_address": "742
+        Evergreen Terrace"</code> (using the <code>addresses</code> property) we
+        should send the whole <code>addresses</code> object. Since this is a
+        first-level object, the object will be merged in, but its own properties
+        will not be. The body to send should be:
+
+        <pre><code>{
+          "user_metadata": {
+            "addresses": {
+              "work_address": "100 Industrial Way",
+              "home_address": "742 Evergreen Terrace"
+            }
+          }
+        }</code></pre>
+
+
+        The modified object ends up with the following
+        <code>user_metadata</code> property:
+
+        <pre><code>{
+          "user_metadata": {
+            "profileCode": 1479,
+            "addresses": {
+              "work_address": "100 Industrial Way",
+              "home_address": "742 Evergreen Terrace"
+            }
+          }
+        }</code></pre>
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to update.
+      display-name: Update a User
+      request:
+        name: UpdateUserRequestContent
+        body:
+          properties:
+            blocked:
+              type: optional<boolean>
+              docs: >-
+                Whether this user was blocked by an administrator (true) or not
+                (false).
+              default: false
+            email_verified:
+              type: optional<boolean>
+              docs: >-
+                Whether this email address is verified (true) or unverified
+                (false). If set to false the user will not receive a
+                verification email unless `verify_email` is set to true.
+              default: false
+            email:
+              type: optional<string>
+              docs: Email address of this user.
+              default: john.doe@gmail.com
+              validation:
+                format: email
+            phone_number:
+              type: optional<string>
+              docs: The user's phone number (following the E.164 recommendation).
+              default: '+199999999999999'
+            phone_verified:
+              type: optional<boolean>
+              docs: >-
+                Whether this phone number has been verified (true) or not
+                (false).
+              default: false
+            user_metadata: optional<root.UserMetadata>
+            app_metadata: optional<root.AppMetadata>
+            given_name:
+              type: optional<string>
+              docs: Given name/first name/forename of this user.
+              default: John
+              validation:
+                minLength: 1
+                maxLength: 150
+            family_name:
+              type: optional<string>
+              docs: Family name/last name/surname of this user.
+              default: Doe
+              validation:
+                minLength: 1
+                maxLength: 150
+            name:
+              type: optional<string>
+              docs: Name of this user.
+              default: John Doe
+              validation:
+                minLength: 1
+                maxLength: 300
+            nickname:
+              type: optional<string>
+              docs: Preferred nickname or alias of this user.
+              default: Johnny
+              validation:
+                minLength: 1
+                maxLength: 300
+            picture:
+              type: optional<string>
+              docs: URL to picture, photo, or avatar of this user.
+              default: >-
+                https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png
+            verify_email:
+              type: optional<boolean>
+              docs: >-
+                Whether this user will receive a verification email after
+                creation (true) or no email (false). Overrides behavior of
+                `email_verified` parameter.
+              default: false
+            verify_phone_number:
+              type: optional<boolean>
+              docs: >-
+                Whether this user will receive a text after changing the phone
+                number (true) or no text (false). Only valid when changing phone
+                number for SMS connections.
+              default: false
+            password:
+              type: optional<string>
+              docs: New password for this user. Only valid for database connections.
+              default: secret
+              validation:
+                minLength: 1
+            connection:
+              type: optional<string>
+              docs: Name of the connection to target for this user update.
+              default: Initial-Connection
+              validation:
+                minLength: 1
+            client_id:
+              type: optional<string>
+              docs: Auth0 client ID. Only valid when updating email address.
+              default: DaM8bokEXBWrTUFCiJjWn50jei6ardyX
+              validation:
+                minLength: 1
+            username:
+              type: optional<string>
+              docs: >-
+                The user's username. Only valid if the connection requires a
+                username.
+              default: johndoe
+              validation:
+                minLength: 1
+                maxLength: 128
+        content-type: application/json
+      response:
+        docs: User successfully updated.
+        type: root.UpdateUserResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              user_id: user_id
+              email: email
+              email_verified: true
+              username: username
+              phone_number: phone_number
+              phone_verified: true
+              created_at: created_at
+              updated_at: updated_at
+              identities:
+                - connection: connection
+                  user_id: user_id
+                  provider: ad
+                  isSocial: true
+                  access_token: access_token
+                  access_token_secret: access_token_secret
+                  refresh_token: refresh_token
+              app_metadata:
+                key: value
+              user_metadata:
+                key: value
+              picture: picture
+              name: name
+              nickname: nickname
+              multifactor:
+                - multifactor
+              last_ip: last_ip
+              last_login: last_login
+              logins_count: 1
+              blocked: true
+              given_name: given_name
+              family_name: family_name
+    regenerateRecoveryCode:
+      path: /users/{id}/recovery-code-regeneration
+      method: POST
+      auth: true
+      docs: >-
+        Remove an existing multi-factor authentication (MFA) <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">recovery
+        code</a> and generate a new one. If a user cannot access the original
+        device or account used for MFA enrollment, they can use a recovery code
+        to authenticate. 
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: >-
+            ID of the user to regenerate a multi-factor authentication recovery
+            code for.
+      display-name: Generate New Multi-factor Authentication Recovery Code
+      response:
+        docs: New recovery code successfully generated.
+        type: root.RegenerateUsersRecoveryCodeResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              recovery_code: recovery_code
+    revokeAccess:
+      path: /users/{id}/revoke-access
+      method: POST
+      auth: true
+      docs: >-
+        Revokes selected resources related to a user (sessions, refresh tokens,
+        ...).
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user.
+      display-name: Revokes selected resources from a user
+      request:
+        name: RevokeUserAccessRequestContent
+        body:
+          properties:
+            session_id:
+              type: optional<string>
+              docs: ID of the session to revoke.
+              validation:
+                maxLength: 50
+            preserve_refresh_tokens:
+              type: optional<boolean>
+              docs: >-
+                Whether to preserve the refresh tokens associated with the
+                session.
+              default: false
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+  source:
+    openapi: ../api.json

@@ -1,0 +1,60 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /jobs/users-exports
+      method: POST
+      auth: true
+      docs: Export all users to a file via a long-running job.
+      source:
+        openapi: ../api.json
+      display-name: Create export users job
+      request:
+        name: CreateExportUsersRequestContent
+        body:
+          properties:
+            connection_id:
+              type: optional<string>
+              docs: >-
+                connection_id of the connection from which users will be
+                exported.
+              default: con_0000000000000001
+            format: optional<root.JobFileFormatEnum>
+            limit:
+              type: optional<integer>
+              docs: Limit the number of records.
+              default: 5
+            fields:
+              type: optional<list<root.CreateExportUsersFields>>
+              docs: >-
+                List of fields to be included in the CSV. Defaults to a
+                predefined set of fields.
+        content-type: application/json
+      response:
+        docs: Job created successfully.
+        type: root.CreateExportUsersResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              status: status
+              type: type
+              created_at: created_at
+              id: id
+              connection_id: connection_id
+              format: json
+              limit: 1
+              fields:
+                - name: name
+                  export_as: export_as
+  source:
+    openapi: ../api.json

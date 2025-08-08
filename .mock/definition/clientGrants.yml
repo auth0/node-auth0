@@ -1,0 +1,198 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /client-grants
+      method: GET
+      auth: true
+      docs: >
+        Retrieve a list of <a
+        href="https://auth0.com/docs/api-auth/grant/client-credentials">client
+        grants</a>, including the scopes associated with the application/API
+        pair.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.client_grants
+      source:
+        openapi: ../api.json
+      display-name: Get client grants
+      request:
+        name: ListClientGrantsRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          audience:
+            type: optional<string>
+            docs: Optional filter on audience.
+          client_id:
+            type: optional<string>
+            docs: Optional filter on client_id.
+          allow_any_organization:
+            type: optional<root.ClientGrantAllowAnyOrganizationEnum>
+            docs: Optional filter on allow_any_organization.
+      response:
+        docs: Client grants successfully retrieved.
+        type: root.ListClientGrantPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              next: next
+              client_grants:
+                - id: id
+                  client_id: client_id
+                  audience: audience
+                  scope:
+                    - scope
+                  organization_usage: deny
+                  allow_any_organization: true
+                  is_system: true
+    create:
+      path: /client-grants
+      method: POST
+      auth: true
+      docs: >-
+        Create a client grant for a machine-to-machine login flow. To learn
+        more, read <a
+        href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client
+        Credential Flow</a>.
+      source:
+        openapi: ../api.json
+      display-name: Create client grant
+      request:
+        name: CreateClientGrantRequestContent
+        body:
+          properties:
+            client_id:
+              type: string
+              docs: ID of the client.
+            audience:
+              type: string
+              docs: The audience (API identifier) of this client grant
+              validation:
+                minLength: 1
+            organization_usage: optional<root.ClientGrantOrganizationUsageEnum>
+            allow_any_organization:
+              type: optional<boolean>
+              docs: >-
+                If enabled, any organization can be used with this grant. If
+                disabled (default), the grant must be explicitly assigned to the
+                desired organizations.
+              default: false
+            scope:
+              docs: Scopes allowed for this client grant.
+              type: list<string>
+        content-type: application/json
+      response:
+        docs: Client grant successfully created.
+        type: root.CreateClientGrantResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            client_id: client_id
+            audience: audience
+            scope:
+              - scope
+          response:
+            body:
+              id: id
+              client_id: client_id
+              audience: audience
+              scope:
+                - scope
+              organization_usage: deny
+              allow_any_organization: true
+              is_system: true
+    delete:
+      path: /client-grants/{id}
+      method: DELETE
+      auth: true
+      docs: >
+        Delete the <a
+        href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client
+        Credential Flow</a> from your machine-to-machine application.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client grant to delete.
+      display-name: Delete client grant
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /client-grants/{id}
+      method: PATCH
+      auth: true
+      docs: Update a client grant.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client grant to update.
+      display-name: Update client grant
+      request:
+        name: UpdateClientGrantRequestContent
+        body:
+          properties:
+            scope:
+              type: optional<list<string>>
+              docs: Scopes allowed for this client grant.
+            organization_usage: optional<root.ClientGrantOrganizationNullableUsageEnum>
+            allow_any_organization:
+              type: optional<boolean>
+              docs: Controls allowing any organization to be used with this grant
+        content-type: application/json
+      response:
+        docs: Client grant successfully updated.
+        type: root.UpdateClientGrantResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              client_id: client_id
+              audience: audience
+              scope:
+                - scope
+              organization_usage: deny
+              allow_any_organization: true
+              is_system: true
+  source:
+    openapi: ../api.json

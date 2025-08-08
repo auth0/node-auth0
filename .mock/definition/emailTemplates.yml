@@ -1,0 +1,285 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /email-templates
+      method: POST
+      auth: true
+      docs: Create an email template.
+      source:
+        openapi: ../api.json
+      display-name: Create an email template
+      request:
+        name: CreateEmailTemplateRequestContent
+        body:
+          properties:
+            template: root.EmailTemplateNameEnum
+            body:
+              type: optional<string>
+              docs: Body of the email template.
+            from:
+              type: optional<string>
+              docs: Senders `from` email address.
+              default: sender@auth0.com
+            resultUrl:
+              type: optional<string>
+              docs: URL to redirect the user to after a successful action.
+            subject:
+              type: optional<string>
+              docs: Subject line of the email.
+            syntax:
+              type: optional<string>
+              docs: Syntax of the template body.
+              default: liquid
+            urlLifetimeInSeconds:
+              type: optional<double>
+              docs: >-
+                Lifetime in seconds that the link within the email will be valid
+                for.
+            includeEmailInRedirect:
+              type: optional<boolean>
+              docs: >-
+                Whether the `reset_email` and `verify_email` templates should
+                include the user's email address as the `email` parameter in the
+                returnUrl (true) or whether no email address should be included
+                in the redirect (false). Defaults to true.
+            enabled:
+              type: optional<boolean>
+              docs: Whether the template is enabled (true) or disabled (false).
+        content-type: application/json
+      response:
+        docs: Template successfully created.
+        type: root.CreateEmailTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            template: verify_email
+          response:
+            body:
+              template: verify_email
+              body: body
+              from: from
+              resultUrl: resultUrl
+              subject: subject
+              syntax: syntax
+              urlLifetimeInSeconds: 1.1
+              includeEmailInRedirect: true
+              enabled: true
+    get:
+      path: /email-templates/{templateName}
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve an email template by pre-defined name. These names are
+        `verify_email`, `verify_email_by_code`, `reset_email`,
+        `reset_email_by_code`, `welcome_email`, `blocked_account`,
+        `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, and
+        `user_invitation`. The names `change_password`, and `password_reset` are
+        also supported for legacy scenarios.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        templateName:
+          type: root.EmailTemplateNameEnum
+          docs: >-
+            Template name. Can be `verify_email`, `verify_email_by_code`,
+            `reset_email`, `reset_email_by_code`, `welcome_email`,
+            `blocked_account`, `stolen_credentials`, `enrollment_email`,
+            `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or
+            `password_reset` (legacy).
+      display-name: Get an email template
+      response:
+        docs: Template successfully retrieved.
+        type: root.GetEmailTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            templateName: verify_email
+          response:
+            body:
+              template: verify_email
+              body: body
+              from: from
+              resultUrl: resultUrl
+              subject: subject
+              syntax: syntax
+              urlLifetimeInSeconds: 1.1
+              includeEmailInRedirect: true
+              enabled: true
+    set:
+      path: /email-templates/{templateName}
+      method: PUT
+      auth: true
+      docs: Update an email template.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        templateName:
+          type: root.EmailTemplateNameEnum
+          docs: >-
+            Template name. Can be `verify_email`, `verify_email_by_code`,
+            `reset_email`, `reset_email_by_code`, `welcome_email`,
+            `blocked_account`, `stolen_credentials`, `enrollment_email`,
+            `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or
+            `password_reset` (legacy).
+      display-name: Update an email template
+      request:
+        name: SetEmailTemplateRequestContent
+        body:
+          properties:
+            template: root.EmailTemplateNameEnum
+            body:
+              type: optional<string>
+              docs: Body of the email template.
+            from:
+              type: optional<string>
+              docs: Senders `from` email address.
+              default: sender@auth0.com
+            resultUrl:
+              type: optional<string>
+              docs: URL to redirect the user to after a successful action.
+            subject:
+              type: optional<string>
+              docs: Subject line of the email.
+            syntax:
+              type: optional<string>
+              docs: Syntax of the template body.
+              default: liquid
+            urlLifetimeInSeconds:
+              type: optional<double>
+              docs: >-
+                Lifetime in seconds that the link within the email will be valid
+                for.
+            includeEmailInRedirect:
+              type: optional<boolean>
+              docs: >-
+                Whether the `reset_email` and `verify_email` templates should
+                include the user's email address as the `email` parameter in the
+                returnUrl (true) or whether no email address should be included
+                in the redirect (false). Defaults to true.
+            enabled:
+              type: optional<boolean>
+              docs: Whether the template is enabled (true) or disabled (false).
+        content-type: application/json
+      response:
+        docs: Template successfully updated.
+        type: root.SetEmailTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            templateName: verify_email
+          request:
+            template: verify_email
+          response:
+            body:
+              template: verify_email
+              body: body
+              from: from
+              resultUrl: resultUrl
+              subject: subject
+              syntax: syntax
+              urlLifetimeInSeconds: 1.1
+              includeEmailInRedirect: true
+              enabled: true
+    update:
+      path: /email-templates/{templateName}
+      method: PATCH
+      auth: true
+      docs: Modify an email template.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        templateName:
+          type: root.EmailTemplateNameEnum
+          docs: >-
+            Template name. Can be `verify_email`, `verify_email_by_code`,
+            `reset_email`, `reset_email_by_code`, `welcome_email`,
+            `blocked_account`, `stolen_credentials`, `enrollment_email`,
+            `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or
+            `password_reset` (legacy).
+      display-name: Patch an email template
+      request:
+        name: UpdateEmailTemplateRequestContent
+        body:
+          properties:
+            template: optional<root.EmailTemplateNameEnum>
+            body:
+              type: optional<string>
+              docs: Body of the email template.
+            from:
+              type: optional<string>
+              docs: Senders `from` email address.
+              default: sender@auth0.com
+            resultUrl:
+              type: optional<string>
+              docs: URL to redirect the user to after a successful action.
+            subject:
+              type: optional<string>
+              docs: Subject line of the email.
+            syntax:
+              type: optional<string>
+              docs: Syntax of the template body.
+              default: liquid
+            urlLifetimeInSeconds:
+              type: optional<double>
+              docs: >-
+                Lifetime in seconds that the link within the email will be valid
+                for.
+            includeEmailInRedirect:
+              type: optional<boolean>
+              docs: >-
+                Whether the `reset_email` and `verify_email` templates should
+                include the user's email address as the `email` parameter in the
+                returnUrl (true) or whether no email address should be included
+                in the redirect (false). Defaults to true.
+            enabled:
+              type: optional<boolean>
+              docs: Whether the template is enabled (true) or disabled (false).
+        content-type: application/json
+      response:
+        docs: Template successfully updated.
+        type: root.UpdateEmailTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            templateName: verify_email
+          request: {}
+          response:
+            body:
+              template: verify_email
+              body: body
+              from: from
+              resultUrl: resultUrl
+              subject: subject
+              syntax: syntax
+              urlLifetimeInSeconds: 1.1
+              includeEmailInRedirect: true
+              enabled: true
+  source:
+    openapi: ../api.json

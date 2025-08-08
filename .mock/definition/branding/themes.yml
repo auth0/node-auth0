@@ -1,0 +1,528 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /branding/themes
+      method: POST
+      auth: true
+      docs: Create branding theme.
+      source:
+        openapi: ../api.json
+      display-name: Create branding theme
+      request:
+        name: CreateBrandingThemeRequestContent
+        body:
+          properties:
+            borders: root.BrandingThemeBorders
+            colors: root.BrandingThemeColors
+            displayName:
+              type: optional<string>
+              docs: Display Name
+              validation:
+                maxLength: 2048
+            fonts: root.BrandingThemeFonts
+            page_background: root.BrandingThemePageBackground
+            widget: root.BrandingThemeWidget
+        content-type: application/json
+      response:
+        docs: Branding settings successfully updated.
+        type: root.CreateBrandingThemeResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            borders:
+              button_border_radius: 1.1
+              button_border_weight: 1.1
+              buttons_style: pill
+              input_border_radius: 1.1
+              input_border_weight: 1.1
+              inputs_style: pill
+              show_widget_shadow: true
+              widget_border_weight: 1.1
+              widget_corner_radius: 1.1
+            colors:
+              body_text: body_text
+              error: error
+              header: header
+              icons: icons
+              input_background: input_background
+              input_border: input_border
+              input_filled_text: input_filled_text
+              input_labels_placeholders: input_labels_placeholders
+              links_focused_components: links_focused_components
+              primary_button: primary_button
+              primary_button_label: primary_button_label
+              secondary_button_border: secondary_button_border
+              secondary_button_label: secondary_button_label
+              success: success
+              widget_background: widget_background
+              widget_border: widget_border
+            fonts:
+              body_text:
+                bold: true
+                size: 1.1
+              buttons_text:
+                bold: true
+                size: 1.1
+              font_url: font_url
+              input_labels:
+                bold: true
+                size: 1.1
+              links:
+                bold: true
+                size: 1.1
+              links_style: normal
+              reference_text_size: 1.1
+              subtitle:
+                bold: true
+                size: 1.1
+              title:
+                bold: true
+                size: 1.1
+            page_background:
+              background_color: background_color
+              background_image_url: background_image_url
+              page_layout: center
+            widget:
+              header_text_alignment: center
+              logo_height: 1.1
+              logo_position: center
+              logo_url: logo_url
+              social_buttons_layout: bottom
+          response:
+            body:
+              borders:
+                button_border_radius: 1.1
+                button_border_weight: 1.1
+                buttons_style: pill
+                input_border_radius: 1.1
+                input_border_weight: 1.1
+                inputs_style: pill
+                show_widget_shadow: true
+                widget_border_weight: 1.1
+                widget_corner_radius: 1.1
+              colors:
+                base_focus_color: base_focus_color
+                base_hover_color: base_hover_color
+                body_text: body_text
+                captcha_widget_theme: auto
+                error: error
+                header: header
+                icons: icons
+                input_background: input_background
+                input_border: input_border
+                input_filled_text: input_filled_text
+                input_labels_placeholders: input_labels_placeholders
+                links_focused_components: links_focused_components
+                primary_button: primary_button
+                primary_button_label: primary_button_label
+                secondary_button_border: secondary_button_border
+                secondary_button_label: secondary_button_label
+                success: success
+                widget_background: widget_background
+                widget_border: widget_border
+              displayName: displayName
+              fonts:
+                body_text:
+                  bold: true
+                  size: 1.1
+                buttons_text:
+                  bold: true
+                  size: 1.1
+                font_url: font_url
+                input_labels:
+                  bold: true
+                  size: 1.1
+                links:
+                  bold: true
+                  size: 1.1
+                links_style: normal
+                reference_text_size: 1.1
+                subtitle:
+                  bold: true
+                  size: 1.1
+                title:
+                  bold: true
+                  size: 1.1
+              page_background:
+                background_color: background_color
+                background_image_url: background_image_url
+                page_layout: center
+              themeId: themeId
+              widget:
+                header_text_alignment: center
+                logo_height: 1.1
+                logo_position: center
+                logo_url: logo_url
+                social_buttons_layout: bottom
+    getDefault:
+      path: /branding/themes/default
+      method: GET
+      auth: true
+      docs: Retrieve default branding theme.
+      source:
+        openapi: ../api.json
+      display-name: Get default branding theme
+      response:
+        docs: Branding theme successfully retrieved.
+        type: root.GetBrandingDefaultThemeResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              borders:
+                button_border_radius: 1.1
+                button_border_weight: 1.1
+                buttons_style: pill
+                input_border_radius: 1.1
+                input_border_weight: 1.1
+                inputs_style: pill
+                show_widget_shadow: true
+                widget_border_weight: 1.1
+                widget_corner_radius: 1.1
+              colors:
+                base_focus_color: base_focus_color
+                base_hover_color: base_hover_color
+                body_text: body_text
+                captcha_widget_theme: auto
+                error: error
+                header: header
+                icons: icons
+                input_background: input_background
+                input_border: input_border
+                input_filled_text: input_filled_text
+                input_labels_placeholders: input_labels_placeholders
+                links_focused_components: links_focused_components
+                primary_button: primary_button
+                primary_button_label: primary_button_label
+                secondary_button_border: secondary_button_border
+                secondary_button_label: secondary_button_label
+                success: success
+                widget_background: widget_background
+                widget_border: widget_border
+              displayName: displayName
+              fonts:
+                body_text:
+                  bold: true
+                  size: 1.1
+                buttons_text:
+                  bold: true
+                  size: 1.1
+                font_url: font_url
+                input_labels:
+                  bold: true
+                  size: 1.1
+                links:
+                  bold: true
+                  size: 1.1
+                links_style: normal
+                reference_text_size: 1.1
+                subtitle:
+                  bold: true
+                  size: 1.1
+                title:
+                  bold: true
+                  size: 1.1
+              page_background:
+                background_color: background_color
+                background_image_url: background_image_url
+                page_layout: center
+              themeId: themeId
+              widget:
+                header_text_alignment: center
+                logo_height: 1.1
+                logo_position: center
+                logo_url: logo_url
+                social_buttons_layout: bottom
+    get:
+      path: /branding/themes/{themeId}
+      method: GET
+      auth: true
+      docs: Retrieve branding theme.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        themeId:
+          type: string
+          docs: The ID of the theme
+      display-name: Get branding theme
+      response:
+        docs: Branding theme successfully retrieved.
+        type: root.GetBrandingThemeResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            themeId: themeId
+          response:
+            body:
+              borders:
+                button_border_radius: 1.1
+                button_border_weight: 1.1
+                buttons_style: pill
+                input_border_radius: 1.1
+                input_border_weight: 1.1
+                inputs_style: pill
+                show_widget_shadow: true
+                widget_border_weight: 1.1
+                widget_corner_radius: 1.1
+              colors:
+                base_focus_color: base_focus_color
+                base_hover_color: base_hover_color
+                body_text: body_text
+                captcha_widget_theme: auto
+                error: error
+                header: header
+                icons: icons
+                input_background: input_background
+                input_border: input_border
+                input_filled_text: input_filled_text
+                input_labels_placeholders: input_labels_placeholders
+                links_focused_components: links_focused_components
+                primary_button: primary_button
+                primary_button_label: primary_button_label
+                secondary_button_border: secondary_button_border
+                secondary_button_label: secondary_button_label
+                success: success
+                widget_background: widget_background
+                widget_border: widget_border
+              displayName: displayName
+              fonts:
+                body_text:
+                  bold: true
+                  size: 1.1
+                buttons_text:
+                  bold: true
+                  size: 1.1
+                font_url: font_url
+                input_labels:
+                  bold: true
+                  size: 1.1
+                links:
+                  bold: true
+                  size: 1.1
+                links_style: normal
+                reference_text_size: 1.1
+                subtitle:
+                  bold: true
+                  size: 1.1
+                title:
+                  bold: true
+                  size: 1.1
+              page_background:
+                background_color: background_color
+                background_image_url: background_image_url
+                page_layout: center
+              themeId: themeId
+              widget:
+                header_text_alignment: center
+                logo_height: 1.1
+                logo_position: center
+                logo_url: logo_url
+                social_buttons_layout: bottom
+    delete:
+      path: /branding/themes/{themeId}
+      method: DELETE
+      auth: true
+      docs: Delete branding theme.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        themeId:
+          type: string
+          docs: The ID of the theme
+      display-name: Delete branding theme
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            themeId: themeId
+    update:
+      path: /branding/themes/{themeId}
+      method: PATCH
+      auth: true
+      docs: Update branding theme.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        themeId:
+          type: string
+          docs: The ID of the theme
+      display-name: Update branding theme
+      request:
+        name: UpdateBrandingThemeRequestContent
+        body:
+          properties:
+            borders: root.BrandingThemeBorders
+            colors: root.BrandingThemeColors
+            displayName:
+              type: optional<string>
+              docs: Display Name
+              validation:
+                maxLength: 2048
+            fonts: root.BrandingThemeFonts
+            page_background: root.BrandingThemePageBackground
+            widget: root.BrandingThemeWidget
+        content-type: application/json
+      response:
+        docs: Branding settings successfully updated.
+        type: root.UpdateBrandingThemeResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            themeId: themeId
+          request:
+            borders:
+              button_border_radius: 1.1
+              button_border_weight: 1.1
+              buttons_style: pill
+              input_border_radius: 1.1
+              input_border_weight: 1.1
+              inputs_style: pill
+              show_widget_shadow: true
+              widget_border_weight: 1.1
+              widget_corner_radius: 1.1
+            colors:
+              body_text: body_text
+              error: error
+              header: header
+              icons: icons
+              input_background: input_background
+              input_border: input_border
+              input_filled_text: input_filled_text
+              input_labels_placeholders: input_labels_placeholders
+              links_focused_components: links_focused_components
+              primary_button: primary_button
+              primary_button_label: primary_button_label
+              secondary_button_border: secondary_button_border
+              secondary_button_label: secondary_button_label
+              success: success
+              widget_background: widget_background
+              widget_border: widget_border
+            fonts:
+              body_text:
+                bold: true
+                size: 1.1
+              buttons_text:
+                bold: true
+                size: 1.1
+              font_url: font_url
+              input_labels:
+                bold: true
+                size: 1.1
+              links:
+                bold: true
+                size: 1.1
+              links_style: normal
+              reference_text_size: 1.1
+              subtitle:
+                bold: true
+                size: 1.1
+              title:
+                bold: true
+                size: 1.1
+            page_background:
+              background_color: background_color
+              background_image_url: background_image_url
+              page_layout: center
+            widget:
+              header_text_alignment: center
+              logo_height: 1.1
+              logo_position: center
+              logo_url: logo_url
+              social_buttons_layout: bottom
+          response:
+            body:
+              borders:
+                button_border_radius: 1.1
+                button_border_weight: 1.1
+                buttons_style: pill
+                input_border_radius: 1.1
+                input_border_weight: 1.1
+                inputs_style: pill
+                show_widget_shadow: true
+                widget_border_weight: 1.1
+                widget_corner_radius: 1.1
+              colors:
+                base_focus_color: base_focus_color
+                base_hover_color: base_hover_color
+                body_text: body_text
+                captcha_widget_theme: auto
+                error: error
+                header: header
+                icons: icons
+                input_background: input_background
+                input_border: input_border
+                input_filled_text: input_filled_text
+                input_labels_placeholders: input_labels_placeholders
+                links_focused_components: links_focused_components
+                primary_button: primary_button
+                primary_button_label: primary_button_label
+                secondary_button_border: secondary_button_border
+                secondary_button_label: secondary_button_label
+                success: success
+                widget_background: widget_background
+                widget_border: widget_border
+              displayName: displayName
+              fonts:
+                body_text:
+                  bold: true
+                  size: 1.1
+                buttons_text:
+                  bold: true
+                  size: 1.1
+                font_url: font_url
+                input_labels:
+                  bold: true
+                  size: 1.1
+                links:
+                  bold: true
+                  size: 1.1
+                links_style: normal
+                reference_text_size: 1.1
+                subtitle:
+                  bold: true
+                  size: 1.1
+                title:
+                  bold: true
+                  size: 1.1
+              page_background:
+                background_color: background_color
+                background_image_url: background_image_url
+                page_layout: center
+              themeId: themeId
+              widget:
+                header_text_alignment: center
+                logo_height: 1.1
+                logo_position: center
+                logo_url: logo_url
+                social_buttons_layout: bottom
+  source:
+    openapi: ../api.json

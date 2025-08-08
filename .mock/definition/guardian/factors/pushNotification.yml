@@ -1,0 +1,321 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    getApnsProvider:
+      path: /guardian/factors/push-notification/providers/apns
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve configuration details for the multi-factor authentication APNS
+        provider associated with your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get APNS push notification configuration
+      response:
+        docs: APNS configuration successfully retrieved.
+        type: root.GetGuardianFactorsProviderApnsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              bundle_id: bundle_id
+              sandbox: true
+              enabled: true
+    setApnsProvider:
+      path: /guardian/factors/push-notification/providers/apns
+      method: PATCH
+      auth: true
+      docs: >-
+        Modify configuration details of the multi-factor authentication APNS
+        provider associated with your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update APNs provider configuration
+      request:
+        body: root.SetGuardianFactorsProviderPushNotificationApnsRequestContent
+        content-type: application/json
+      response:
+        docs: APNS configuration successfully updated.
+        type: root.SetGuardianFactorsProviderPushNotificationApnsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              sandbox: true
+              bundle_id: bundle_id
+    setFcmProvider:
+      path: /guardian/factors/push-notification/providers/fcm
+      method: PATCH
+      auth: true
+      docs: >-
+        Modify configuration details of the multi-factor authentication FCM
+        provider associated with your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Updates FCM configuration
+      request:
+        body: root.SetGuardianFactorsProviderPushNotificationFcmRequestContent
+        content-type: application/json
+      response:
+        docs: FCM configuration updated
+        type: root.SetGuardianFactorsProviderPushNotificationFcmResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              key: value
+    setFcmv1Provider:
+      path: /guardian/factors/push-notification/providers/fcmv1
+      method: PATCH
+      auth: true
+      docs: >-
+        Modify configuration details of the multi-factor authentication FCMV1
+        provider associated with your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Updates FCMV1 configuration
+      request:
+        body: root.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent
+        content-type: application/json
+      response:
+        docs: FCMV1 configuration updated
+        type: root.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              key: value
+    getSnsProvider:
+      path: /guardian/factors/push-notification/providers/sns
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve configuration details for an AWS SNS push notification provider
+        that has been enabled for MFA. To learn more, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure
+        Push Notifications for MFA</a>. 
+      source:
+        openapi: ../api.json
+      display-name: Get AWS SNS configuration
+      response:
+        docs: AWS SNS configuration successfully retrieved.
+        type: root.GetGuardianFactorsProviderSnsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              aws_access_key_id: aws_access_key_id
+              aws_secret_access_key: aws_secret_access_key
+              aws_region: aws_region
+              sns_apns_platform_application_arn: sns_apns_platform_application_arn
+              sns_gcm_platform_application_arn: sns_gcm_platform_application_arn
+    setSnsProvider:
+      path: /guardian/factors/push-notification/providers/sns
+      method: PUT
+      auth: true
+      docs: >-
+        Configure the <a
+        href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS
+        SNS push notification provider configuration</a> (subscription
+        required).
+      source:
+        openapi: ../api.json
+      display-name: Update AWS SNS configuration
+      request:
+        name: SetGuardianFactorsProviderPushNotificationSnsRequestContent
+        body:
+          properties:
+            aws_access_key_id:
+              type: optional<string>
+              default: wywA2BH4VqTpfywiDuyDAYZL3xQjoO40
+              validation:
+                minLength: 1
+                maxLength: 1000
+            aws_secret_access_key:
+              type: optional<string>
+              default: B1ER5JHDGJL3C4sVAKK7SBsq806R3IpL
+              validation:
+                minLength: 1
+                maxLength: 1000
+            aws_region:
+              type: optional<string>
+              default: us-west-1
+              validation:
+                minLength: 1
+                maxLength: 1000
+            sns_apns_platform_application_arn:
+              type: optional<string>
+              validation:
+                minLength: 1
+                maxLength: 1000
+            sns_gcm_platform_application_arn:
+              type: optional<string>
+              default: urn://yRMeBxgcCXh8MeTXPBAxhQnm6gP6f5nP
+              validation:
+                minLength: 1
+                maxLength: 1000
+        content-type: application/json
+      response:
+        docs: AWS SNS configuration successfully updated.
+        type: root.SetGuardianFactorsProviderPushNotificationSnsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              aws_access_key_id: aws_access_key_id
+              aws_secret_access_key: aws_secret_access_key
+              aws_region: aws_region
+              sns_apns_platform_application_arn: sns_apns_platform_application_arn
+              sns_gcm_platform_application_arn: sns_gcm_platform_application_arn
+    updateSnsProvider:
+      path: /guardian/factors/push-notification/providers/sns
+      method: PATCH
+      auth: true
+      docs: >-
+        Configure the <a
+        href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS
+        SNS push notification provider configuration</a> (subscription
+        required).
+      source:
+        openapi: ../api.json
+      display-name: Update AWS SNS configuration
+      request:
+        name: UpdateGuardianFactorsProviderPushNotificationSnsRequestContent
+        body:
+          properties:
+            aws_access_key_id:
+              type: optional<string>
+              default: wywA2BH4VqTpfywiDuyDAYZL3xQjoO40
+              validation:
+                minLength: 1
+                maxLength: 1000
+            aws_secret_access_key:
+              type: optional<string>
+              default: B1ER5JHDGJL3C4sVAKK7SBsq806R3IpL
+              validation:
+                minLength: 1
+                maxLength: 1000
+            aws_region:
+              type: optional<string>
+              default: us-west-1
+              validation:
+                minLength: 1
+                maxLength: 1000
+            sns_apns_platform_application_arn:
+              type: optional<string>
+              validation:
+                minLength: 1
+                maxLength: 1000
+            sns_gcm_platform_application_arn:
+              type: optional<string>
+              default: urn://yRMeBxgcCXh8MeTXPBAxhQnm6gP6f5nP
+              validation:
+                minLength: 1
+                maxLength: 1000
+        content-type: application/json
+      response:
+        docs: AWS SNS configuration successfully updated.
+        type: root.UpdateGuardianFactorsProviderPushNotificationSnsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              aws_access_key_id: aws_access_key_id
+              aws_secret_access_key: aws_secret_access_key
+              aws_region: aws_region
+              sns_apns_platform_application_arn: sns_apns_platform_application_arn
+              sns_gcm_platform_application_arn: sns_gcm_platform_application_arn
+    getSelectedProvider:
+      path: /guardian/factors/push-notification/selected-provider
+      method: GET
+      auth: true
+      docs: >-
+        Modify the push notification provider configured for your tenant. For
+        more information, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure
+        Push Notifications for MFA</a>. 
+      source:
+        openapi: ../api.json
+      display-name: Get push notification provider
+      response:
+        docs: Returns selected push notification provider
+        type: root.GetGuardianFactorsProviderPushNotificationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              provider: guardian
+    setProvider:
+      path: /guardian/factors/push-notification/selected-provider
+      method: PUT
+      auth: true
+      docs: >-
+        Modify the push notification provider configured for your tenant. For
+        more information, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure
+        Push Notifications for MFA</a>. 
+      source:
+        openapi: ../api.json
+      display-name: Update Push Notification configuration
+      request:
+        name: SetGuardianFactorsProviderPushNotificationRequestContent
+        body:
+          properties:
+            provider: root.GuardianFactorsProviderPushNotificationProviderDataEnum
+        content-type: application/json
+      response:
+        docs: Returns selected push notification provider configuration
+        type: root.SetGuardianFactorsProviderPushNotificationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request:
+            provider: guardian
+          response:
+            body:
+              provider: guardian
+  source:
+    openapi: ../api.json

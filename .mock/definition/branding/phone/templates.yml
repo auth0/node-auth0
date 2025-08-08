@@ -1,0 +1,246 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /branding/phone/templates
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Get a list of phone notification templates
+      request:
+        name: ListPhoneTemplatesRequestParameters
+        query-parameters:
+          disabled:
+            type: optional<boolean>
+            docs: Whether the template is enabled (false) or disabled (true).
+      response:
+        docs: The phone notification templates were retrieved.
+        type: root.ListPhoneTemplatesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              templates:
+                - id: id
+                  channel: channel
+                  customizable: true
+                  tenant: tenant
+                  content: {}
+                  type: otp_verify
+                  disabled: true
+    create:
+      path: /branding/phone/templates
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Create a phone notification template
+      request:
+        name: CreatePhoneTemplateRequestContent
+        body:
+          properties:
+            type: optional<root.PhoneTemplateNotificationTypeEnum>
+            disabled:
+              type: optional<boolean>
+              docs: Whether the template is enabled (false) or disabled (true).
+              default: false
+            content: optional<root.PhoneTemplateContent>
+        content-type: application/json
+      response:
+        docs: The phone notification template was created.
+        type: root.CreatePhoneTemplateResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              id: id
+              channel: channel
+              customizable: true
+              tenant: tenant
+              content:
+                syntax: syntax
+                from: from
+                body:
+                  text: text
+                  voice: voice
+              type: otp_verify
+              disabled: true
+    get:
+      path: /branding/phone/templates/{id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Get a phone notification template
+      response:
+        docs: The phone notification template were retrieved.
+        type: root.GetPhoneTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              channel: channel
+              customizable: true
+              tenant: tenant
+              content:
+                syntax: syntax
+                from: from
+                body:
+                  text: text
+                  voice: voice
+              type: otp_verify
+              disabled: true
+    delete:
+      path: /branding/phone/templates/{id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Delete a phone notification template
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /branding/phone/templates/{id}
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Update a phone notification template
+      request:
+        name: UpdatePhoneTemplateRequestContent
+        body:
+          properties:
+            content: optional<root.PartialPhoneTemplateContent>
+            disabled:
+              type: optional<boolean>
+              docs: Whether the template is enabled (false) or disabled (true).
+              default: false
+        content-type: application/json
+      response:
+        docs: The phone notification template was updated.
+        type: root.UpdatePhoneTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              channel: channel
+              customizable: true
+              tenant: tenant
+              content:
+                syntax: syntax
+                from: from
+                body:
+                  text: text
+                  voice: voice
+              type: otp_verify
+              disabled: true
+    reset:
+      path: /branding/phone/templates/{id}/reset
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Resets a phone notification template values
+      request:
+        body: root.ResetPhoneTemplateRequestContent
+        content-type: application/json
+      response:
+        docs: The phone notification template was reset.
+        type: root.ResetPhoneTemplateResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+    test:
+      path: /branding/phone/templates/{id}/try
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Send a test phone notification for the configured template
+      request:
+        name: CreatePhoneTemplateTestNotificationRequestContent
+        body:
+          properties:
+            to:
+              type: string
+              docs: Destination of the testing phone notification
+              validation:
+                minLength: 1
+                maxLength: 16
+            delivery_method: optional<root.PhoneProviderDeliveryMethodEnum>
+        content-type: application/json
+      response:
+        docs: The phone testing notification for the template was sent
+        type: root.CreatePhoneTemplateTestNotificationResponseContent
+        status-code: 202
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            to: to
+          response:
+            body:
+              message: message
+  source:
+    openapi: ../api.json

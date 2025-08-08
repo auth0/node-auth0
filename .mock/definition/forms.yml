@@ -1,0 +1,337 @@
+types:
+  FormsListRequestHydrateItem:
+    enum:
+      - flow_count
+      - links
+    source:
+      openapi: ../api.json
+  FormsGetRequestHydrateItem:
+    enum:
+      - flow_count
+      - links
+    source:
+      openapi: ../api.json
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /forms
+      method: GET
+      auth: true
+      pagination:
+        offset: $request.page
+        results: $response.forms
+      source:
+        openapi: ../api.json
+      display-name: Get forms
+      request:
+        name: ListFormsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          hydrate:
+            type: optional<FormsListRequestHydrateItem>
+            allow-multiple: true
+            docs: hydration param
+      response:
+        docs: Forms successfully retrieved.
+        type: root.ListFormsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              forms:
+                - id: id
+                  name: name
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  embedded_at: embedded_at
+                  submitted_at: submitted_at
+    create:
+      path: /forms
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Create a form
+      request:
+        name: CreateFormRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              validation:
+                minLength: 1
+                maxLength: 150
+            messages: optional<root.FormMessages>
+            languages: optional<root.FormLanguages>
+            translations: optional<root.FormTranslations>
+            nodes: optional<root.FormNodeList>
+            start: optional<root.FormStartNode>
+            ending: optional<root.FormEndingNode>
+            style: optional<root.FormStyle>
+        content-type: application/json
+      response:
+        docs: Form successfully created.
+        type: root.CreateFormResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+          response:
+            body:
+              id: id
+              name: name
+              messages:
+                errors:
+                  key: value
+                custom:
+                  key: value
+              languages:
+                primary: primary
+                default: default
+              translations:
+                key: value
+              nodes:
+                - id: id
+                  type: FLOW
+                  coordinates:
+                    x: 1
+                    'y': 1
+                  alias: alias
+                  config:
+                    flow_id: flow_id
+              start:
+                hidden_fields:
+                  - key: key
+                next_node: next_node
+                coordinates:
+                  x: 1
+                  'y': 1
+              ending:
+                redirection:
+                  delay: 1
+                  target: target
+                after_submit:
+                  flow_id: flow_id
+                coordinates:
+                  x: 1
+                  'y': 1
+                resume_flow: true
+              style:
+                css: css
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              embedded_at: embedded_at
+              submitted_at: submitted_at
+    get:
+      path: /forms/{id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the form to retrieve.
+      display-name: Get a form
+      request:
+        name: GetFormRequestParameters
+        query-parameters:
+          hydrate:
+            type: optional<FormsGetRequestHydrateItem>
+            allow-multiple: true
+            docs: hydration param
+      response:
+        docs: Form successfully retrieved.
+        type: root.GetFormResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              messages:
+                errors:
+                  key: value
+                custom:
+                  key: value
+              languages:
+                primary: primary
+                default: default
+              translations:
+                key: value
+              nodes:
+                - id: id
+                  type: FLOW
+                  coordinates:
+                    x: 1
+                    'y': 1
+                  alias: alias
+                  config:
+                    flow_id: flow_id
+              start:
+                hidden_fields:
+                  - key: key
+                next_node: next_node
+                coordinates:
+                  x: 1
+                  'y': 1
+              ending:
+                redirection:
+                  delay: 1
+                  target: target
+                after_submit:
+                  flow_id: flow_id
+                coordinates:
+                  x: 1
+                  'y': 1
+                resume_flow: true
+              style:
+                css: css
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              embedded_at: embedded_at
+              submitted_at: submitted_at
+    delete:
+      path: /forms/{id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the form to delete.
+      display-name: Delete a form
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /forms/{id}
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the form to update.
+      display-name: Update a form
+      request:
+        name: UpdateFormRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              validation:
+                minLength: 1
+                maxLength: 150
+            messages: optional<root.FormMessagesNullable>
+            languages: optional<root.FormLanguagesNullable>
+            translations: optional<root.FormTranslationsNullable>
+            nodes: optional<root.FormNodeListNullable>
+            start: optional<root.FormStartNodeNullable>
+            ending: optional<root.FormEndingNodeNullable>
+            style: optional<root.FormStyleNullable>
+        content-type: application/json
+      response:
+        docs: Form successfully updated.
+        type: root.UpdateFormResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              messages:
+                errors:
+                  key: value
+                custom:
+                  key: value
+              languages:
+                primary: primary
+                default: default
+              translations:
+                key: value
+              nodes:
+                - id: id
+                  type: FLOW
+                  coordinates:
+                    x: 1
+                    'y': 1
+                  alias: alias
+                  config:
+                    flow_id: flow_id
+              start:
+                hidden_fields:
+                  - key: key
+                next_node: next_node
+                coordinates:
+                  x: 1
+                  'y': 1
+              ending:
+                redirection:
+                  delay: 1
+                  target: target
+                after_submit:
+                  flow_id: flow_id
+                coordinates:
+                  x: 1
+                  'y': 1
+                resume_flow: true
+              style:
+                css: css
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              embedded_at: embedded_at
+              submitted_at: submitted_at
+  source:
+    openapi: ../api.json

@@ -1,0 +1,396 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /network-acls
+      method: GET
+      auth: true
+      docs: Get all access control list entries for your client.
+      pagination:
+        offset: $request.page
+        results: $response.network_acls
+      source:
+        openapi: ../api.json
+      display-name: Get all access control list entries for a tenant
+      request:
+        name: ListNetworkAclsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Use this field to request a specific page of the list results.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: The amount of results per page.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: Network access control list successfully retrieved.
+        type: root.ListNetworkAclsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              network_acls:
+                - id: id
+                  description: description
+                  active: true
+                  priority: 1.1
+                  rule:
+                    action: {}
+                    scope: management
+                  created_at: created_at
+                  updated_at: updated_at
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+    create:
+      path: /network-acls
+      method: POST
+      auth: true
+      docs: Create a new access control list for your client.
+      source:
+        openapi: ../api.json
+      display-name: Create Access Control List
+      request:
+        name: CreateNetworkAclRequestContent
+        body:
+          properties:
+            description:
+              type: string
+              validation:
+                maxLength: 255
+            active:
+              type: boolean
+              docs: >-
+                Indicates whether or not this access control list is actively
+                being used
+            priority:
+              type: double
+              docs: >-
+                Indicates the order in which the ACL will be evaluated relative
+                to other ACL rules.
+            rule: root.NetworkAclRule
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - request:
+            description: description
+            active: true
+            priority: 1.1
+            rule:
+              action: {}
+              scope: management
+    get:
+      path: /network-acls/{id}
+      method: GET
+      auth: true
+      docs: Get a specific access control list entry for your client.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the access control list to retrieve.
+      display-name: Get a specific access control list entry for a tenant
+      response:
+        docs: Suspicious IP throttling configuration successfully retrieved.
+        type: root.GetNetworkAclsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              description: description
+              active: true
+              priority: 1.1
+              rule:
+                action:
+                  block: true
+                  allow: true
+                  log: true
+                  redirect: true
+                  redirect_uri: redirect_uri
+                match:
+                  asns:
+                    - 1
+                  geo_country_codes:
+                    - geo_country_codes
+                  geo_subdivision_codes:
+                    - geo_subdivision_codes
+                  ipv4_cidrs:
+                    - ipv4_cidrs
+                  ipv6_cidrs:
+                    - ipv6_cidrs
+                  ja3_fingerprints:
+                    - ja3_fingerprints
+                  ja4_fingerprints:
+                    - ja4_fingerprints
+                  user_agents:
+                    - user_agents
+                not_match:
+                  asns:
+                    - 1
+                  geo_country_codes:
+                    - geo_country_codes
+                  geo_subdivision_codes:
+                    - geo_subdivision_codes
+                  ipv4_cidrs:
+                    - ipv4_cidrs
+                  ipv6_cidrs:
+                    - ipv6_cidrs
+                  ja3_fingerprints:
+                    - ja3_fingerprints
+                  ja4_fingerprints:
+                    - ja4_fingerprints
+                  user_agents:
+                    - user_agents
+                scope: management
+              created_at: created_at
+              updated_at: updated_at
+    set:
+      path: /network-acls/{id}
+      method: PUT
+      auth: true
+      docs: Update existing access control list for your client.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the ACL to update.
+      display-name: Update Access Control List
+      request:
+        name: SetNetworkAclRequestContent
+        body:
+          properties:
+            description:
+              type: string
+              validation:
+                maxLength: 255
+            active:
+              type: boolean
+              docs: >-
+                Indicates whether or not this access control list is actively
+                being used
+            priority:
+              type: double
+              docs: >-
+                Indicates the order in which the ACL will be evaluated relative
+                to other ACL rules.
+            rule: root.NetworkAclRule
+        content-type: application/json
+      response:
+        docs: Network ACL properties successfully updated
+        type: root.SetNetworkAclsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            description: description
+            active: true
+            priority: 1.1
+            rule:
+              action: {}
+              scope: management
+          response:
+            body:
+              id: id
+              description: description
+              active: true
+              priority: 1.1
+              rule:
+                action:
+                  block: true
+                  allow: true
+                  log: true
+                  redirect: true
+                  redirect_uri: redirect_uri
+                match:
+                  asns:
+                    - 1
+                  geo_country_codes:
+                    - geo_country_codes
+                  geo_subdivision_codes:
+                    - geo_subdivision_codes
+                  ipv4_cidrs:
+                    - ipv4_cidrs
+                  ipv6_cidrs:
+                    - ipv6_cidrs
+                  ja3_fingerprints:
+                    - ja3_fingerprints
+                  ja4_fingerprints:
+                    - ja4_fingerprints
+                  user_agents:
+                    - user_agents
+                not_match:
+                  asns:
+                    - 1
+                  geo_country_codes:
+                    - geo_country_codes
+                  geo_subdivision_codes:
+                    - geo_subdivision_codes
+                  ipv4_cidrs:
+                    - ipv4_cidrs
+                  ipv6_cidrs:
+                    - ipv6_cidrs
+                  ja3_fingerprints:
+                    - ja3_fingerprints
+                  ja4_fingerprints:
+                    - ja4_fingerprints
+                  user_agents:
+                    - user_agents
+                scope: management
+              created_at: created_at
+              updated_at: updated_at
+    delete:
+      path: /network-acls/{id}
+      method: DELETE
+      auth: true
+      docs: Delete existing access control list for your client.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the ACL to delete
+      display-name: Delete Access Control List
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /network-acls/{id}
+      method: PATCH
+      auth: true
+      docs: Update existing access control list for your client.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the ACL to update.
+      display-name: Partial Update for an Access Control List
+      request:
+        name: UpdateNetworkAclRequestContent
+        body:
+          properties:
+            description:
+              type: optional<string>
+              validation:
+                maxLength: 255
+            active:
+              type: optional<boolean>
+              docs: >-
+                Indicates whether or not this access control list is actively
+                being used
+            priority:
+              type: optional<double>
+              docs: >-
+                Indicates the order in which the ACL will be evaluated relative
+                to other ACL rules.
+            rule: optional<root.NetworkAclRule>
+        content-type: application/json
+      response:
+        docs: Network ACL properties successfully updated
+        type: root.UpdateNetworkAclResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              description: description
+              active: true
+              priority: 1.1
+              rule:
+                action:
+                  block: true
+                  allow: true
+                  log: true
+                  redirect: true
+                  redirect_uri: redirect_uri
+                match:
+                  asns:
+                    - 1
+                  geo_country_codes:
+                    - geo_country_codes
+                  geo_subdivision_codes:
+                    - geo_subdivision_codes
+                  ipv4_cidrs:
+                    - ipv4_cidrs
+                  ipv6_cidrs:
+                    - ipv6_cidrs
+                  ja3_fingerprints:
+                    - ja3_fingerprints
+                  ja4_fingerprints:
+                    - ja4_fingerprints
+                  user_agents:
+                    - user_agents
+                not_match:
+                  asns:
+                    - 1
+                  geo_country_codes:
+                    - geo_country_codes
+                  geo_subdivision_codes:
+                    - geo_subdivision_codes
+                  ipv4_cidrs:
+                    - ipv4_cidrs
+                  ipv6_cidrs:
+                    - ipv6_cidrs
+                  ja3_fingerprints:
+                    - ja3_fingerprints
+                  ja4_fingerprints:
+                    - ja4_fingerprints
+                  user_agents:
+                    - user_agents
+                scope: management
+              created_at: created_at
+              updated_at: updated_at
+  source:
+    openapi: ../api.json

@@ -1,0 +1,262 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /self-service-profiles
+      method: GET
+      auth: true
+      docs: |
+        Retrieves self-service profiles.
+      pagination:
+        offset: $request.page
+        results: $response.self_service_profiles
+      source:
+        openapi: ../api.json
+      display-name: Get self-service profiles
+      request:
+        name: ListSelfServiceProfilesRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: List of existing profiles.
+        type: root.ListSelfServiceProfilesPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              self_service_profiles:
+                - id: id
+                  name: name
+                  description: description
+                  user_attributes:
+                    - name: name
+                      description: description
+                      is_optional: true
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  allowed_strategies:
+                    - oidc
+    create:
+      path: /self-service-profiles
+      method: POST
+      auth: true
+      docs: |
+        Creates a self-service profile.
+      source:
+        openapi: ../api.json
+      display-name: Create a self-service profile
+      request:
+        name: CreateSelfServiceProfileRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              docs: The name of the self-service Profile.
+              validation:
+                minLength: 1
+                maxLength: 100
+            description:
+              type: optional<string>
+              docs: The description of the self-service Profile.
+              validation:
+                minLength: 1
+                maxLength: 140
+            branding: optional<root.SelfServiceProfileBrandingProperties>
+            allowed_strategies:
+              type: optional<list<root.SelfServiceProfileAllowedStrategyEnum>>
+              docs: >-
+                List of IdP strategies that will be shown to users during the
+                Self-Service SSO flow. Possible values: [`oidc`, `samlp`,
+                `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`,
+                `pingfederate`]
+            user_attributes:
+              type: optional<list<root.SelfServiceProfileUserAttribute>>
+              docs: >-
+                List of attributes to be mapped that will be shown to the user
+                during the SS-SSO flow.
+        content-type: application/json
+      response:
+        docs: Self-service profile successfully created.
+        type: root.CreateSelfServiceProfileResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - request:
+            name: name
+          response:
+            body:
+              id: id
+              name: name
+              description: description
+              user_attributes:
+                - name: name
+                  description: description
+                  is_optional: true
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+              allowed_strategies:
+                - oidc
+    get:
+      path: /self-service-profiles/{id}
+      method: GET
+      auth: true
+      docs: Retrieves a self-service profile by Id.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the self-service profile to retrieve
+      display-name: Get a self-service profile by Id
+      response:
+        docs: Record for existing self-service profile.
+        type: root.GetSelfServiceProfileResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              description: description
+              user_attributes:
+                - name: name
+                  description: description
+                  is_optional: true
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+              allowed_strategies:
+                - oidc
+    delete:
+      path: /self-service-profiles/{id}
+      method: DELETE
+      auth: true
+      docs: Deletes a self-service profile by Id.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the self-service profile to delete
+      display-name: Delete a self-service profile by Id
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /self-service-profiles/{id}
+      method: PATCH
+      auth: true
+      docs: Updates a self-service profile.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the self-service profile to update
+      display-name: Update a self-service profile
+      request:
+        name: UpdateSelfServiceProfileRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: The name of the self-service Profile.
+              validation:
+                minLength: 1
+                maxLength: 100
+            description: optional<root.SelfServiceProfileDescription>
+            branding: optional<root.SelfServiceProfileBranding>
+            allowed_strategies:
+              type: optional<list<root.SelfServiceProfileAllowedStrategyEnum>>
+              docs: >-
+                List of IdP strategies that will be shown to users during the
+                Self-Service SSO flow. Possible values: [`oidc`, `samlp`,
+                `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`,
+                `pingfederate`]
+            user_attributes: optional<root.SelfServiceProfileUserAttributes>
+        content-type: application/json
+      response:
+        docs: Self-service profile successfully updated.
+        type: root.UpdateSelfServiceProfileResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              description: description
+              user_attributes:
+                - name: name
+                  description: description
+                  is_optional: true
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+              allowed_strategies:
+                - oidc
+  source:
+    openapi: ../api.json

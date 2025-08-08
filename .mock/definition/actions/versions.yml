@@ -1,0 +1,180 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /actions/actions/{actionId}/versions
+      method: GET
+      auth: true
+      docs: >
+        Retrieve all of an action's versions. An action version is created
+        whenever an action is deployed. An action version is immutable, once
+        created.
+      pagination:
+        offset: $request.page
+        results: $response.versions
+      source:
+        openapi: ../api.json
+      path-parameters:
+        actionId:
+          type: string
+          docs: The ID of the action.
+      display-name: Get an action's versions
+      request:
+        name: ListActionVersionsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Use this field to request a specific page of the list results.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              This field specify the maximum number of results to be returned by
+              the server. 20 by default
+      response:
+        docs: The action versions were retrieved.
+        type: root.ListActionVersionsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            actionId: actionId
+          response:
+            body:
+              total: 1.1
+              page: 1.1
+              per_page: 1.1
+              versions:
+                - id: id
+                  action_id: action_id
+                  code: code
+                  dependencies:
+                    - {}
+                  deployed: true
+                  runtime: runtime
+                  secrets:
+                    - {}
+                  status: pending
+                  number: 1.1
+                  errors:
+                    - {}
+                  built_at: '2024-01-15T09:30:00Z'
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  supported_triggers:
+                    - id: id
+    get:
+      path: /actions/actions/{actionId}/versions/{id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve a specific version of an action. An action version is created
+        whenever an action is deployed. An action version is immutable, once
+        created.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        actionId:
+          type: string
+          docs: The ID of the action.
+        id:
+          type: string
+          docs: The ID of the action version.
+      display-name: Get a specific version of an action
+      response:
+        docs: The action version was retrieved.
+        type: root.GetActionVersionResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            actionId: actionId
+            id: id
+          response:
+            body:
+              id: id
+              action_id: action_id
+              code: code
+              dependencies:
+                - name: name
+                  version: version
+                  registry_url: registry_url
+              deployed: true
+              runtime: runtime
+              secrets:
+                - name: name
+                  updated_at: '2024-01-15T09:30:00Z'
+              status: pending
+              number: 1.1
+              errors:
+                - id: id
+                  msg: msg
+                  url: url
+              action:
+                id: id
+                name: name
+                supported_triggers:
+                  - id: id
+                all_changes_deployed: true
+                created_at: '2024-01-15T09:30:00Z'
+                updated_at: '2024-01-15T09:30:00Z'
+              built_at: '2024-01-15T09:30:00Z'
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              supported_triggers:
+                - id: id
+                  version: version
+                  status: status
+                  runtimes:
+                    - runtimes
+                  default_runtime: default_runtime
+                  compatible_triggers:
+                    - id: id
+                      version: version
+                  binding_policy: trigger-bound
+    deploy:
+      path: /actions/actions/{actionId}/versions/{id}/deploy
+      method: POST
+      auth: true
+      docs: >
+        Performs the equivalent of a roll-back of an action to an earlier,
+        specified version. Creates a new, deployed action version that is
+        identical to the specified version. If this action is currently bound to
+        a trigger, the system will begin executing the newly-created version
+        immediately.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of an action version.
+        actionId:
+          type: string
+          docs: The ID of an action.
+      display-name: Roll back to a previous action version
+      request:
+        body: optional<root.DeployActionVersionRequestContent>
+        content-type: application/json
+      response:
+        docs: Request to create action version was accepted.
+        type: root.DeployActionVersionResponseContent
+        status-code: 202
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+  source:
+    openapi: ../api.json

@@ -1,0 +1,80 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    getSettings:
+      path: /prompts
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of the Universal Login configuration of your tenant.
+        This includes the <a
+        href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier
+        First Authentication</a> and <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn
+        with Device Biometrics for MFA</a> features.
+      source:
+        openapi: ../api.json
+      display-name: Get prompt settings
+      response:
+        docs: Prompt settings successfully retrieved.
+        type: root.GetSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              universal_login_experience: new
+              identifier_first: true
+              webauthn_platform_first_factor: true
+    updateSettings:
+      path: /prompts
+      method: PATCH
+      auth: true
+      docs: >-
+        Update the Universal Login configuration of your tenant. This includes
+        the <a
+        href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier
+        First Authentication</a> and <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn
+        with Device Biometrics for MFA</a> features.
+      source:
+        openapi: ../api.json
+      display-name: Update prompt settings
+      request:
+        name: UpdateSettingsRequestContent
+        body:
+          properties:
+            universal_login_experience: optional<root.UniversalLoginExperienceEnum>
+            identifier_first:
+              type: optional<boolean>
+              docs: Whether identifier first is enabled or not
+            webauthn_platform_first_factor:
+              type: optional<boolean>
+              docs: >-
+                Use WebAuthn with Device Biometrics as the first authentication
+                factor
+        content-type: application/json
+      response:
+        docs: Prompts settings successfully updated.
+        type: root.UpdateSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              universal_login_experience: new
+              identifier_first: true
+              webauthn_platform_first_factor: true
+  source:
+    openapi: ../api.json

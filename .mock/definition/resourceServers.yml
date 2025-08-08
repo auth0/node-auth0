@@ -1,0 +1,395 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /resource-servers
+      method: GET
+      auth: true
+      docs: Retrieve details of all APIs associated with your tenant.
+      pagination:
+        offset: $request.page
+        results: $response.resource_servers
+      source:
+        openapi: ../api.json
+      display-name: Get resource servers
+      request:
+        name: ListResourceServerRequestParameters
+        query-parameters:
+          identifiers:
+            type: optional<string>
+            allow-multiple: true
+            docs: >-
+              An optional filter on the resource server identifier. Must be URL
+              encoded and may be specified multiple times (max 10).<br
+              /><b>e.g.</b>
+              <i>../resource-servers?identifiers=id1&identifiers=id2</i>
+            validation:
+              minLength: 1
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+      response:
+        docs: Resource servers successfully retrieved.
+        type: root.ListResourceServerOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              resource_servers:
+                - id: id
+                  name: name
+                  is_system: true
+                  identifier: identifier
+                  scopes:
+                    - value: value
+                  signing_alg: HS256
+                  signing_secret: signing_secret
+                  allow_offline_access: true
+                  skip_consent_for_verifiable_first_party_clients: true
+                  token_lifetime: 1
+                  token_lifetime_for_web: 1
+                  enforce_policies: true
+                  token_dialect: access_token
+                  token_encryption:
+                    format: compact-nested-jwe
+                    encryption_key:
+                      alg: RSA-OAEP-256
+                      pem: pem
+                  consent_policy: consent_policy
+                  proof_of_possession:
+                    mechanism: mtls
+                    required: true
+    create:
+      path: /resource-servers
+      method: POST
+      auth: true
+      docs: >-
+        Create a new API associated with your tenant. Note that all new APIs
+        must be registered with Auth0. For more information, read <a
+        href="https://www.auth0.com/docs/get-started/apis"> APIs</a>.
+      source:
+        openapi: ../api.json
+      display-name: Create a resource server
+      request:
+        name: CreateResourceServerRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: >-
+                Friendly name for this resource server. Can not contain `<` or
+                `>` characters.
+              validation:
+                maxLength: 200
+            identifier:
+              type: string
+              docs: >-
+                Unique identifier for the API used as the audience parameter on
+                authorization calls. Can not be changed once set.
+              validation:
+                minLength: 1
+                maxLength: 600
+            scopes:
+              type: optional<list<root.ResourceServerScope>>
+              docs: List of permissions (scopes) that this API uses.
+            signing_alg: optional<root.SigningAlgorithmEnum>
+            signing_secret:
+              type: optional<string>
+              docs: >-
+                Secret used to sign tokens when using symmetric algorithms
+                (HS256).
+              validation:
+                minLength: 16
+            allow_offline_access:
+              type: optional<boolean>
+              docs: >-
+                Whether refresh tokens can be issued for this API (true) or not
+                (false).
+            token_lifetime:
+              type: optional<integer>
+              docs: >-
+                Expiration value (in seconds) for access tokens issued for this
+                API from the token endpoint.
+            token_dialect: optional<root.ResourceServerTokenDialectSchemaEnum>
+            skip_consent_for_verifiable_first_party_clients:
+              type: optional<boolean>
+              docs: >-
+                Whether to skip user consent for applications flagged as first
+                party (true) or not (false).
+            enforce_policies:
+              type: optional<boolean>
+              docs: >-
+                Whether to enforce authorization policies (true) or to ignore
+                them (false).
+            token_encryption: optional<root.ResourceServerTokenEncryption>
+            consent_policy: optional<root.ResourceServerConsentPolicyEnum>
+            authorization_details: optional<list<unknown>>
+            proof_of_possession: optional<root.ResourceServerProofOfPossession>
+        content-type: application/json
+      response:
+        docs: Resource server successfully created.
+        type: root.CreateResourceServerResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            identifier: identifier
+          response:
+            body:
+              id: id
+              name: name
+              is_system: true
+              identifier: identifier
+              scopes:
+                - value: value
+                  description: description
+              signing_alg: HS256
+              signing_secret: signing_secret
+              allow_offline_access: true
+              skip_consent_for_verifiable_first_party_clients: true
+              token_lifetime: 1
+              token_lifetime_for_web: 1
+              enforce_policies: true
+              token_dialect: access_token
+              token_encryption:
+                format: compact-nested-jwe
+                encryption_key:
+                  name: name
+                  alg: RSA-OAEP-256
+                  kid: kid
+                  pem: pem
+              consent_policy: consent_policy
+              authorization_details:
+                - key: value
+              proof_of_possession:
+                mechanism: mtls
+                required: true
+    get:
+      path: /resource-servers/{id}
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve <a href="https://auth0.com/docs/apis">API</a> details with the
+        given ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID or audience of the resource server to retrieve.
+      display-name: Get a resource server
+      request:
+        name: GetResourceServerRequestParameters
+        query-parameters:
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+      response:
+        docs: Resource server successfully retrieved.
+        type: root.GetResourceServerResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              is_system: true
+              identifier: identifier
+              scopes:
+                - value: value
+                  description: description
+              signing_alg: HS256
+              signing_secret: signing_secret
+              allow_offline_access: true
+              skip_consent_for_verifiable_first_party_clients: true
+              token_lifetime: 1
+              token_lifetime_for_web: 1
+              enforce_policies: true
+              token_dialect: access_token
+              token_encryption:
+                format: compact-nested-jwe
+                encryption_key:
+                  name: name
+                  alg: RSA-OAEP-256
+                  kid: kid
+                  pem: pem
+              consent_policy: consent_policy
+              authorization_details:
+                - key: value
+              proof_of_possession:
+                mechanism: mtls
+                required: true
+    delete:
+      path: /resource-servers/{id}
+      method: DELETE
+      auth: true
+      docs: >-
+        Delete an existing API by ID. For more information, read <a
+        href="https://www.auth0.com/docs/get-started/apis/api-settings">API
+        Settings</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID or the audience of the resource server to delete.
+      display-name: Delete a resource server
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /resource-servers/{id}
+      method: PATCH
+      auth: true
+      docs: >-
+        Change an existing API setting by resource server ID. For more
+        information, read <a
+        href="https://www.auth0.com/docs/get-started/apis/api-settings">API
+        Settings</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID or audience of the resource server to update.
+      display-name: Update a resource server
+      request:
+        name: UpdateResourceServerRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: >-
+                Friendly name for this resource server. Can not contain `<` or
+                `>` characters.
+              validation:
+                maxLength: 200
+            scopes:
+              type: optional<list<root.ResourceServerScope>>
+              docs: List of permissions (scopes) that this API uses.
+            signing_alg: optional<root.SigningAlgorithmEnum>
+            signing_secret:
+              type: optional<string>
+              docs: >-
+                Secret used to sign tokens when using symmetric algorithms
+                (HS256).
+              validation:
+                minLength: 16
+            skip_consent_for_verifiable_first_party_clients:
+              type: optional<boolean>
+              docs: >-
+                Whether to skip user consent for applications flagged as first
+                party (true) or not (false).
+            allow_offline_access:
+              type: optional<boolean>
+              docs: >-
+                Whether refresh tokens can be issued for this API (true) or not
+                (false).
+            token_lifetime:
+              type: optional<integer>
+              docs: >-
+                Expiration value (in seconds) for access tokens issued for this
+                API from the token endpoint.
+            token_dialect: optional<root.ResourceServerTokenDialectSchemaEnum>
+            enforce_policies:
+              type: optional<boolean>
+              docs: >-
+                Whether authorization policies are enforced (true) or not
+                enforced (false).
+            token_encryption: optional<root.ResourceServerTokenEncryption>
+            consent_policy: optional<root.ResourceServerConsentPolicyEnum>
+            authorization_details: optional<list<unknown>>
+            proof_of_possession: optional<root.ResourceServerProofOfPossession>
+        content-type: application/json
+      response:
+        docs: Resource server successfully updated.
+        type: root.UpdateResourceServerResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              is_system: true
+              identifier: identifier
+              scopes:
+                - value: value
+                  description: description
+              signing_alg: HS256
+              signing_secret: signing_secret
+              allow_offline_access: true
+              skip_consent_for_verifiable_first_party_clients: true
+              token_lifetime: 1
+              token_lifetime_for_web: 1
+              enforce_policies: true
+              token_dialect: access_token
+              token_encryption:
+                format: compact-nested-jwe
+                encryption_key:
+                  name: name
+                  alg: RSA-OAEP-256
+                  kid: kid
+                  pem: pem
+              consent_policy: consent_policy
+              authorization_details:
+                - key: value
+              proof_of_possession:
+                mechanism: mtls
+                required: true
+  source:
+    openapi: ../api.json

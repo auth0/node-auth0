@@ -1,0 +1,379 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users/{id}/authentication-methods
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve detailed list of authentication methods associated with a
+        specified user.
+      pagination:
+        offset: $request.page
+        results: $response.authenticators
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the user in question.
+      display-name: Get a list of authentication methods
+      request:
+        name: ListUserAuthenticationMethodsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: >-
+              Page index of the results to return. First page is 0. Default is
+              0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Default is 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: The authentication methods for the user were retrieved.
+        type: root.ListUserAuthenticationMethodsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              authenticators:
+                - id: id
+                  type: recovery-code
+                  confirmed: true
+                  name: name
+                  authentication_methods:
+                    - {}
+                  preferred_authentication_method: voice
+                  link_id: link_id
+                  phone_number: phone_number
+                  email: email
+                  key_id: key_id
+                  public_key: public_key
+                  created_at: '2024-01-15T09:30:00Z'
+                  enrolled_at: '2024-01-15T09:30:00Z'
+                  last_auth_at: '2024-01-15T09:30:00Z'
+                  credential_device_type: credential_device_type
+                  credential_backed_up: true
+                  identity_user_id: identity_user_id
+                  user_agent: user_agent
+    create:
+      path: /users/{id}/authentication-methods
+      method: POST
+      auth: true
+      docs: >-
+        Create an authentication method. Authentication methods created via this
+        endpoint will be auto confirmed and should already have verification
+        completed.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: >-
+            The ID of the user to whom the new authentication method will be
+            assigned.
+      display-name: Creates an authentication method for a given user
+      request:
+        name: CreateUserAuthenticationMethodRequestContent
+        body:
+          properties:
+            type: root.CreatedUserAuthenticationMethodTypeEnum
+            name:
+              type: optional<string>
+              docs: A human-readable label to identify the authentication method.
+            totp_secret:
+              type: optional<string>
+              docs: Base32 encoded secret for TOTP generation.
+            phone_number:
+              type: optional<string>
+              docs: >-
+                Applies to phone authentication methods only. The destination
+                phone number used to send verification codes via text and voice.
+              validation:
+                minLength: 2
+                maxLength: 30
+            email:
+              type: optional<string>
+              docs: >-
+                Applies to email authentication methods only. The email address
+                used to send verification messages.
+            preferred_authentication_method: optional<root.PreferredAuthenticationMethodEnum>
+            key_id:
+              type: optional<string>
+              docs: >-
+                Applies to webauthn authentication methods only. The id of the
+                credential.
+            public_key:
+              type: optional<string>
+              docs: Applies to webauthn authentication methods only. The public key.
+            relying_party_identifier:
+              type: optional<string>
+              docs: >-
+                Applies to webauthn authentication methods only. The relying
+                party identifier.
+        content-type: application/json
+      response:
+        docs: Authentication method created.
+        type: root.CreateUserAuthenticationMethodResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            type: phone
+          response:
+            body:
+              id: id
+              type: phone
+              name: name
+              totp_secret: totp_secret
+              phone_number: phone_number
+              email: email
+              authentication_methods:
+                - type: totp
+                  id: id
+              preferred_authentication_method: voice
+              key_id: key_id
+              public_key: public_key
+              relying_party_identifier: relying_party_identifier
+              created_at: '2024-01-15T09:30:00Z'
+    set:
+      path: /users/{id}/authentication-methods
+      method: PUT
+      auth: true
+      docs: >-
+        Replace the specified user <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">
+        authentication methods</a> with supplied values.
+
+            <b>Note</b>: Authentication methods supplied through this action do not iterate on existing methods. Instead, any methods passed will overwrite the user&#8217s existing settings.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the user in question.
+      display-name: Update all authentication methods by replacing them with the given ones
+      request:
+        body: root.SetUserAuthenticationMethodsRequestContent
+        content-type: application/json
+      response:
+        docs: All authentication methods successfully updated.
+        type: list<root.SetUserAuthenticationMethodResponseContent>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            - type: phone
+          response:
+            body:
+              - id: id
+                type: phone
+                name: name
+                totp_secret: totp_secret
+                phone_number: phone_number
+                email: email
+                authentication_methods:
+                  - {}
+                preferred_authentication_method: voice
+                key_id: key_id
+                public_key: public_key
+                relying_party_identifier: relying_party_identifier
+                created_at: '2024-01-15T09:30:00Z'
+    deleteAll:
+      path: /users/{id}/authentication-methods
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove all authentication methods (i.e., enrolled MFA factors) from the
+        specified user account. This action cannot be undone. 
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the user in question.
+      display-name: Delete all authentication methods for the given user
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    get:
+      path: /users/{id}/authentication-methods/{authentication_method_id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the user in question.
+        authentication_method_id:
+          type: string
+          docs: The ID of the authentication methods in question.
+      display-name: Get an authentication method by ID
+      response:
+        docs: Authentication method retrieved.
+        type: root.GetUserAuthenticationMethodResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            authentication_method_id: authentication_method_id
+          response:
+            body:
+              id: id
+              type: recovery-code
+              confirmed: true
+              name: name
+              authentication_methods:
+                - type: totp
+                  id: id
+              preferred_authentication_method: voice
+              link_id: link_id
+              phone_number: phone_number
+              email: email
+              key_id: key_id
+              public_key: public_key
+              created_at: '2024-01-15T09:30:00Z'
+              enrolled_at: '2024-01-15T09:30:00Z'
+              last_auth_at: '2024-01-15T09:30:00Z'
+              credential_device_type: credential_device_type
+              credential_backed_up: true
+              identity_user_id: identity_user_id
+              user_agent: user_agent
+    delete:
+      path: /users/{id}/authentication-methods/{authentication_method_id}
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove the authentication method with the given ID from the specified
+        user. For more information, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage
+        Authentication Methods with Management API</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the user in question.
+        authentication_method_id:
+          type: string
+          docs: The ID of the authentication method to delete.
+      display-name: Delete an authentication method by ID
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            authentication_method_id: authentication_method_id
+    update:
+      path: /users/{id}/authentication-methods/{authentication_method_id}
+      method: PATCH
+      auth: true
+      docs: >-
+        Modify the authentication method with the given ID from the specified
+        user. For more information, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage
+        Authentication Methods with Management API</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The ID of the user in question.
+        authentication_method_id:
+          type: string
+          docs: The ID of the authentication method to update.
+      display-name: Update an authentication method
+      request:
+        name: UpdateUserAuthenticationMethodRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: A human-readable label to identify the authentication method.
+            preferred_authentication_method: optional<root.PreferredAuthenticationMethodEnum>
+        content-type: application/json
+      response:
+        docs: Authentication method updated.
+        type: root.UpdateUserAuthenticationMethodResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            authentication_method_id: authentication_method_id
+          request: {}
+          response:
+            body:
+              id: id
+              type: phone
+              name: name
+              totp_secret: totp_secret
+              phone_number: phone_number
+              email: email
+              authentication_methods:
+                - type: totp
+                  id: id
+              preferred_authentication_method: voice
+              key_id: key_id
+              public_key: public_key
+              relying_party_identifier: relying_party_identifier
+              created_at: '2024-01-15T09:30:00Z'
+  source:
+    openapi: ../api.json

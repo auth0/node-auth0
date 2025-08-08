@@ -1,0 +1,86 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /event-streams/{id}/redeliver
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Redeliver failed events
+      request:
+        name: CreateEventStreamRedeliveryRequestContent
+        body:
+          properties:
+            date_from:
+              type: optional<datetime>
+              docs: >-
+                An RFC-3339 date-time for redelivery start, inclusive. Does not
+                allow sub-second precision.
+            date_to:
+              type: optional<datetime>
+              docs: >-
+                An RFC-3339 date-time for redelivery end, exclusive. Does not
+                allow sub-second precision.
+            statuses:
+              type: optional<list<root.EventStreamDeliveryStatusEnum>>
+              docs: Filter by status
+            event_types:
+              type: optional<list<root.EventStreamEventTypeEnum>>
+              docs: Filter by event type
+        content-type: application/json
+      response:
+        docs: Redelivery request accepted.
+        type: root.CreateEventStreamRedeliveryResponseContent
+        status-code: 202
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              date_from: '2024-01-15T09:30:00Z'
+              date_to: '2024-01-15T09:30:00Z'
+              statuses:
+                - failed
+              event_types:
+                - user.created
+    createById:
+      path: /event-streams/{id}/redeliver/{event_id}
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+        event_id:
+          type: string
+          docs: Unique identifier for the event
+      display-name: Redeliver a single failed event by ID
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            event_id: event_id
+  source:
+    openapi: ../api.json

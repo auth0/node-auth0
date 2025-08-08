@@ -1,0 +1,235 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /prompts/rendering
+      method: GET
+      auth: true
+      docs: Get render setting configurations for all screens.
+      pagination:
+        offset: $request.page
+        results: $response.configs
+      source:
+        openapi: ../api.json
+      display-name: Get render setting configurations for all screens
+      request:
+        name: ListAculsRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (default: true) or
+              excluded (false).
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              Number of results per page. Maximum value is 100, default value is
+              50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total
+              configuration count (true) or as a direct array of results (false,
+              default).
+          prompt:
+            type: optional<string>
+            docs: Name of the prompt to filter by
+          screen:
+            type: optional<string>
+            docs: Name of the screen to filter by
+          rendering_mode:
+            type: optional<root.AculRenderingModeEnum>
+            docs: Rendering mode to filter by
+      response:
+        docs: ACUL settings successfully retrieved.
+        type: root.ListAculsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.PaymentRequiredError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              configs:
+                - rendering_mode: advanced
+                  context_configuration:
+                    - context_configuration
+                  default_head_tags_disabled: true
+                  head_tags:
+                    - {}
+                  use_page_template: true
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+    get:
+      path: /prompts/{prompt}/screen/{screen}/rendering
+      method: GET
+      auth: true
+      docs: Get render settings for a screen.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        prompt:
+          type: root.PromptGroupNameEnum
+          docs: Name of the prompt
+        screen:
+          type: root.ScreenGroupNameEnum
+          docs: Name of the screen
+      display-name: Get render settings for a screen
+      response:
+        docs: ACUL settings successfully retrieved.
+        type: root.GetAculResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.PaymentRequiredError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            prompt: login
+            screen: login
+          response:
+            body:
+              tenant: tenant
+              prompt: prompt
+              screen: screen
+              rendering_mode: advanced
+              context_configuration:
+                - context_configuration
+              default_head_tags_disabled: true
+              head_tags:
+                - tag: tag
+                  content: content
+              filters:
+                match_type: includes_any
+                clients:
+                  - {}
+                organizations:
+                  - {}
+                domains:
+                  - {}
+              use_page_template: true
+    update:
+      path: /prompts/{prompt}/screen/{screen}/rendering
+      method: PATCH
+      auth: true
+      docs: >
+        Learn more about <a
+        href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring
+        render settings</a> for advanced customization.
+
+
+        <p>
+          Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>documentation</a> on using Liquid variables within head tags.
+        </p>
+
+        <pre>{
+          "head_tags": [
+            {
+              "tag": "script",
+              "attributes": {
+                "defer": true,
+                "src": "URL_TO_ASSET",
+                "async": true,
+                "integrity": [
+                  "ASSET_SHA"
+                ]
+              }
+            },
+            {
+              "tag": "link",
+              "attributes": {
+                "href": "URL_TO_ASSET",
+                "rel": "stylesheet"
+              }
+            }
+          ]
+        }
+
+        </pre>
+      source:
+        openapi: ../api.json
+      path-parameters:
+        prompt:
+          type: root.PromptGroupNameEnum
+          docs: Name of the prompt
+        screen:
+          type: root.ScreenGroupNameEnum
+          docs: Name of the screen
+      display-name: Update render settings for a screen
+      request:
+        name: UpdateAculRequestContent
+        body:
+          properties:
+            rendering_mode: optional<root.AculRenderingModeEnum>
+            context_configuration:
+              type: optional<list<string>>
+              docs: Context values to make available
+            default_head_tags_disabled:
+              type: optional<boolean>
+              docs: Override Universal Login default head tags
+              default: false
+            head_tags:
+              type: optional<list<root.AculHeadTag>>
+              docs: An array of head tags
+            filters: optional<root.AculFilters>
+            use_page_template:
+              type: optional<boolean>
+              docs: Use page template with ACUL
+              default: false
+        content-type: application/json
+      response:
+        docs: ACUL settings successfully updated.
+        type: root.UpdateAculResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.PaymentRequiredError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            prompt: login
+            screen: login
+          request: {}
+          response:
+            body:
+              rendering_mode: advanced
+              context_configuration:
+                - context_configuration
+              default_head_tags_disabled: true
+              head_tags:
+                - tag: tag
+                  content: content
+              filters:
+                match_type: includes_any
+                clients:
+                  - {}
+                organizations:
+                  - {}
+                domains:
+                  - {}
+              use_page_template: true
+  source:
+    openapi: ../api.json

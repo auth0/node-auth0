@@ -1,0 +1,148 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users/{id}/roles
+      method: GET
+      auth: true
+      docs: >
+        Retrieve detailed list of all user roles currently assigned to a user.
+
+
+        <b>Note</b>: This action retrieves all roles assigned to a user in the
+        context of your whole tenant. To retrieve Organization-specific roles,
+        use the following endpoint: <a
+        href="https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles">Get
+        user roles assigned to an Organization member</a>.
+      pagination:
+        offset: $request.page
+        results: $response.roles
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to list roles for.
+      display-name: Get a user's roles
+      request:
+        name: ListUserRolesRequestParameters
+        query-parameters:
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page.
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: Roles successfully retrieved.
+        type: root.ListUserRolesOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              roles:
+                - id: id
+                  name: name
+                  description: description
+    assign:
+      path: /users/{id}/roles
+      method: POST
+      auth: true
+      docs: >
+        Assign one or more existing user roles to a user. For more information,
+        review <a
+        href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based
+        Access Control</a>.
+
+
+        <b>Note</b>: New roles cannot be created through this action.
+        Additionally, this action is used to assign roles to a user in the
+        context of your whole tenant. To assign roles in the context of a
+        specific Organization, use the following endpoint: <a
+        href="https://auth0.com/docs/api/management/v2/organizations/post-organization-member-roles">Assign
+        user roles to an Organization member</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to associate roles with.
+      display-name: Assign roles to a user
+      request:
+        name: AssignUserRolesRequestContent
+        body:
+          properties:
+            roles:
+              docs: List of roles IDs to associated with the user.
+              type: list<string>
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            roles:
+              - roles
+    delete:
+      path: /users/{id}/roles
+      method: DELETE
+      auth: true
+      docs: >
+        Remove one or more specified user roles assigned to a user.
+
+
+        <b>Note</b>: This action removes a role from a user in the context of
+        your whole tenant. If you want to unassign a role from a user in the
+        context of a specific Organization, use the following endpoint: <a
+        href="https://auth0.com/docs/api/management/v2/organizations/delete-organization-member-roles">Delete
+        user roles from an Organization member</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to remove roles from.
+      display-name: Removes roles from a user
+      request:
+        name: DeleteUserRolesRequestContent
+        body:
+          properties:
+            roles:
+              docs: List of roles IDs to remove from the user.
+              type: list<string>
+        content-type: application/json
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            roles:
+              - roles
+  source:
+    openapi: ../api.json

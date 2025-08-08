@@ -1,0 +1,63 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users/{id}/federated-connections-tokensets
+      method: GET
+      auth: true
+      docs: List active federated connections tokensets for a provided user
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: User identifier
+      display-name: Get tokensets for a user
+      response:
+        docs: Flows successfully retrieved.
+        type: list<root.FederatedConnectionTokenSet>
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              - id: id
+                connection: connection
+                scope: scope
+                expires_at: '2024-01-15T09:30:00Z'
+                issued_at: '2024-01-15T09:30:00Z'
+                last_used_at: '2024-01-15T09:30:00Z'
+    delete:
+      path: /users/{id}/federated-connections-tokensets/{tokenset_id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Id of the user that owns the tokenset
+        tokenset_id:
+          type: string
+          docs: The tokenset id
+      display-name: Deletes a tokenset for federated connections by id.
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            tokenset_id: tokenset_id
+  source:
+    openapi: ../api.json

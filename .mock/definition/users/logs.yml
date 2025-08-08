@@ -1,0 +1,105 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users/{id}/logs
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve log events for a specific user.
+
+
+        Note: For more information on all possible event types, their respective
+        acronyms and descriptions, see <a
+        href="https://auth0.com/docs/logs/log-event-type-codes">Log Event Type
+        Codes</a>.
+
+
+        For more information on the list of fields that can be used in `sort`,
+        see <a
+        href="https://auth0.com/docs/logs/log-search-query-syntax#searchable-fields">Searchable
+        Fields</a>.
+
+
+        Auth0 <a
+        href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations">limits
+        the number of logs</a> you can return by search criteria to 100 logs per
+        request. Furthermore, you may only paginate through up to 1,000 search
+        results. If you exceed this threshold, please redefine your search.
+      pagination:
+        offset: $request.page
+        results: $response.logs
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user of the logs to retrieve
+      display-name: Get user's log events
+      request:
+        name: ListUserLogsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              Number of results per page. Paging is disabled if parameter not
+              sent.
+          sort:
+            type: optional<string>
+            docs: >-
+              Field to sort by. Use `fieldname:1` for ascending order and
+              `fieldname:-1` for descending.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: Logs successfully retrieved.
+        type: root.UserListLogOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              length: 1.1
+              total: 1.1
+              logs:
+                - date: date
+                  type: type
+                  description: description
+                  connection: connection
+                  connection_id: connection_id
+                  client_id: client_id
+                  client_name: client_name
+                  ip: ip
+                  hostname: hostname
+                  user_id: user_id
+                  user_name: user_name
+                  audience: audience
+                  scope: scope
+                  strategy: strategy
+                  strategy_type: strategy_type
+                  log_id: log_id
+                  isMobile: true
+                  details:
+                    key: value
+                  user_agent: user_agent
+  source:
+    openapi: ../api.json

@@ -1,0 +1,118 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /event-streams/{id}/deliveries
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+      display-name: Get this event stream's delivery history
+      request:
+        name: ListEventStreamDeliveriesRequestParameters
+        query-parameters:
+          statuses:
+            type: optional<string>
+            docs: Comma-separated list of statuses by which to filter
+          event_types:
+            type: optional<string>
+            docs: Comma-separated list of event types by which to filter
+          date_from:
+            type: optional<string>
+            docs: >-
+              An RFC-3339 date-time for redelivery start, inclusive. Does not
+              allow sub-second precision.
+          date_to:
+            type: optional<string>
+            docs: >-
+              An RFC-3339 date-time for redelivery end, exclusive. Does not
+              allow sub-second precision.
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: Event stream deliveries successfully retrieved.
+        type: list<root.EventStreamDelivery>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              - id: id
+                event_stream_id: event_stream_id
+                status: failed
+                event_type: user.created
+                attempts:
+                  - status: failed
+                    timestamp: '2024-01-15T09:30:00Z'
+                event:
+                  id: id
+                  source: source
+                  specversion: specversion
+                  type: type
+                  time: '2024-01-15T09:30:00Z'
+                  data: data
+    getHistory:
+      path: /event-streams/{id}/deliveries/{event_id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Unique identifier for the event stream.
+        event_id:
+          type: string
+          docs: Unique identifier for the event
+      display-name: Get a specific event's delivery history
+      response:
+        docs: Delivery history for event successfully retrieved.
+        type: root.GetEventStreamDeliveryHistoryResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            event_id: event_id
+          response:
+            body:
+              id: id
+              event_stream_id: event_stream_id
+              status: failed
+              event_type: user.created
+              attempts:
+                - status: failed
+                  timestamp: '2024-01-15T09:30:00Z'
+                  error_message: error_message
+              event:
+                id: id
+                source: source
+                specversion: specversion
+                type: type
+                time: '2024-01-15T09:30:00Z'
+                data: data
+  source:
+    openapi: ../api.json

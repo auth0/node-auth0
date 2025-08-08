@@ -1,0 +1,61 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /prompts/{prompt}/partials
+      method: GET
+      auth: true
+      docs: Get template partials for a prompt
+      source:
+        openapi: ../api.json
+      path-parameters:
+        prompt:
+          type: root.PartialGroupsEnum
+          docs: Name of the prompt.
+      display-name: Get partials for a prompt
+      response:
+        docs: Prompt partials successfully retrieved.
+        type: root.GetPartialsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            prompt: login
+          response:
+            body:
+              key: value
+    set:
+      path: /prompts/{prompt}/partials
+      method: PUT
+      auth: true
+      docs: Set template partials for a prompt
+      source:
+        openapi: ../api.json
+      path-parameters:
+        prompt:
+          type: root.PartialGroupsEnum
+          docs: Name of the prompt.
+      display-name: Set partials for a prompt
+      request:
+        body: root.SetPartialsRequestContent
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            prompt: login
+          request:
+            key: value
+  source:
+    openapi: ../api.json

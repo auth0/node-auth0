@@ -1,0 +1,94 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /attack-protection/suspicious-ip-throttling
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of the Suspicious IP Throttling configuration of your
+        tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get Suspicious IP Throttling settings
+      response:
+        docs: Suspicious IP throttling configuration successfully retrieved.
+        type: root.GetSuspiciousIpThrottlingSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              enabled: true
+              shields:
+                - block
+              allowlist:
+                - allowlist
+              stage:
+                pre-login:
+                  max_attempts: 1
+                  rate: 1
+                pre-user-registration:
+                  max_attempts: 1
+                  rate: 1
+    update:
+      path: /attack-protection/suspicious-ip-throttling
+      method: PATCH
+      auth: true
+      docs: >-
+        Update the details of the Suspicious IP Throttling configuration of your
+        tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update Suspicious IP Throttling settings
+      request:
+        name: UpdateSuspiciousIpThrottlingSettingsRequestContent
+        body:
+          properties:
+            enabled:
+              type: optional<boolean>
+              docs: >-
+                Whether or not suspicious IP throttling attack protections are
+                active.
+            shields:
+              type: optional<list<root.SuspiciousIpThrottlingShieldsEnum>>
+              docs: >-
+                Action to take when a suspicious IP throttling threshold is
+                violated.
+                          Possible values: <code>block</code>, <code>admin_notification</code>.
+            allowlist: optional<root.SuspiciousIpThrottlingAllowlist>
+            stage: optional<root.SuspiciousIpThrottlingStage>
+        content-type: application/json
+      response:
+        docs: Suspicious IP throttling configuration successfully updated.
+        type: root.UpdateSuspiciousIpThrottlingSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              enabled: true
+              shields:
+                - block
+              allowlist:
+                - allowlist
+              stage:
+                pre-login:
+                  max_attempts: 1
+                  rate: 1
+                pre-user-registration:
+                  max_attempts: 1
+                  rate: 1
+  source:
+    openapi: ../api.json

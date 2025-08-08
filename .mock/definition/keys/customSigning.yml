@@ -1,0 +1,107 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /keys/custom-signing
+      method: GET
+      auth: true
+      docs: Get entire jwks representation of custom signing keys.
+      source:
+        openapi: ../api.json
+      display-name: Get custom signing keys
+      response:
+        docs: Custom signing keys were successfully retrieved.
+        type: root.GetCustomSigningKeysResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              keys:
+                - kty: EC
+                  kid: kid
+                  use: sig
+                  key_ops:
+                    - verify
+                  alg: RS256
+                  'n': 'n'
+                  e: e
+                  crv: P-256
+                  x: x
+                  'y': 'y'
+                  x5u: x5u
+                  x5c:
+                    - x5c
+                  x5t: x5t
+                  x5t#S256: x5t#S256
+    set:
+      path: /keys/custom-signing
+      method: PUT
+      auth: true
+      docs: Create or replace entire jwks representation of custom signing keys.
+      source:
+        openapi: ../api.json
+      display-name: Create or replace custom signing keys
+      request:
+        name: SetCustomSigningKeysRequestContent
+        body:
+          properties:
+            keys:
+              docs: An array of custom public signing keys.
+              type: list<root.CustomSigningKeyJwk>
+        content-type: application/json
+      response:
+        docs: Custom signing keys were successfully created or replaced.
+        type: root.SetCustomSigningKeysResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            keys:
+              - kty: EC
+          response:
+            body:
+              keys:
+                - kty: EC
+                  kid: kid
+                  use: sig
+                  key_ops:
+                    - verify
+                  alg: RS256
+                  'n': 'n'
+                  e: e
+                  crv: P-256
+                  x: x
+                  'y': 'y'
+                  x5u: x5u
+                  x5c:
+                    - x5c
+                  x5t: x5t
+                  x5t#S256: x5t#S256
+    delete:
+      path: /keys/custom-signing
+      method: DELETE
+      auth: true
+      docs: Delete entire jwks representation of custom signing keys.
+      source:
+        openapi: ../api.json
+      display-name: Delete custom signing keys
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - {}
+  source:
+    openapi: ../api.json

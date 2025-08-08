@@ -1,0 +1,45 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /jobs/{id}
+      method: GET
+      auth: true
+      docs: Retrieves a job. Useful to check its status.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the job.
+      display-name: Get a job
+      response:
+        docs: Job retrieved successfully.
+        type: root.GetJobResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              status: status
+              type: type
+              created_at: created_at
+              id: id
+              connection_id: connection_id
+              location: location
+              percentage_done: 1
+              time_left_seconds: 1
+              format: json
+              status_details: status_details
+  source:
+    openapi: ../api.json

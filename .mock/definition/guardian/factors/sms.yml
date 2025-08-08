@@ -1,0 +1,230 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    getTwilioProvider:
+      path: /guardian/factors/sms/providers/twilio
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve the <a
+        href="https://auth0.com/docs/multifactor-authentication/twilio-configuration">Twilio
+        SMS provider configuration</a> (subscription required).
+
+            A new endpoint is available to retrieve the Twilio configuration related to phone factors (<a href='https://auth0.com/docs/api/management/v2/#!/Guardian/get_twilio'>phone Twilio configuration</a>). It has the same payload as this one. Please use it instead.
+      source:
+        openapi: ../api.json
+      display-name: Get Twilio SMS configuration
+      response:
+        docs: Twilio SMS configuration successfully retrieved.
+        type: root.GetGuardianFactorsProviderSmsTwilioResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              from: from
+              messaging_service_sid: messaging_service_sid
+              auth_token: auth_token
+              sid: sid
+    setTwilioProvider:
+      path: /guardian/factors/sms/providers/twilio
+      method: PUT
+      auth: true
+      docs: >-
+        This endpoint has been deprecated. To complete this action, use the <a
+        href="https://auth0.com/docs/api/management/v2/guardian/put-twilio">Update
+        Twilio phone configuration</a> endpoint.
+
+            <b>Previous functionality</b>: Update the Twilio SMS provider configuration.
+      source:
+        openapi: ../api.json
+      display-name: Update Twilio SMS configuration
+      request:
+        name: SetGuardianFactorsProviderSmsTwilioRequestContent
+        body:
+          properties:
+            from:
+              type: optional<string>
+              docs: From number
+              default: '+1223323'
+              validation:
+                minLength: 0
+                maxLength: 64
+            messaging_service_sid:
+              type: optional<string>
+              docs: Copilot SID
+              default: 5dEkAiHLPCuQ1uJj4qNXcAnERFAL6cpq
+              validation:
+                minLength: 1
+                maxLength: 1000
+            auth_token:
+              type: optional<string>
+              docs: Twilio Authentication token
+              default: zw5Ku6z2sxhd0ZVXto5SDHX6KPDByJPU
+              validation:
+                minLength: 1
+                maxLength: 1000
+            sid:
+              type: optional<string>
+              docs: Twilio SID
+              default: wywA2BH4VqTpfywiDuyDAYZL3xQjoO40
+              validation:
+                minLength: 1
+                maxLength: 1000
+        content-type: application/json
+      response:
+        docs: Twilio SMS configuration successfully updated.
+        type: root.SetGuardianFactorsProviderSmsTwilioResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              from: from
+              messaging_service_sid: messaging_service_sid
+              auth_token: auth_token
+              sid: sid
+    getSelectedProvider:
+      path: /guardian/factors/sms/selected-provider
+      method: GET
+      auth: true
+      docs: >-
+        This endpoint has been deprecated. To complete this action, use the <a
+        href="https://auth0.com/docs/api/management/v2/guardian/get-phone-providers">Retrieve
+        phone configuration</a> endpoint instead.
+
+            <b>Previous functionality</b>: Retrieve details for the multi-factor authentication SMS provider configured for your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get SMS configuration
+      response:
+        docs: Returns selected SMS provider configuration
+        type: root.GetGuardianFactorsProviderSmsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              provider: auth0
+    setProvider:
+      path: /guardian/factors/sms/selected-provider
+      method: PUT
+      auth: true
+      docs: >-
+        This endpoint has been deprecated. To complete this action, use the <a
+        href="https://auth0.com/docs/api/management/v2/guardian/put-phone-providers">Update
+        phone configuration</a> endpoint instead.
+
+            <b>Previous functionality</b>: Update the multi-factor authentication SMS provider configuration in your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update SMS configuration
+      request:
+        name: SetGuardianFactorsProviderSmsRequestContent
+        body:
+          properties:
+            provider: root.GuardianFactorsProviderSmsProviderEnum
+        content-type: application/json
+      response:
+        docs: Returns selected SMS provider configuration
+        type: root.SetGuardianFactorsProviderSmsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request:
+            provider: auth0
+          response:
+            body:
+              provider: auth0
+    getTemplates:
+      path: /guardian/factors/sms/templates
+      method: GET
+      auth: true
+      docs: >-
+        This endpoint has been deprecated. To complete this action, use the <a
+        href="https://auth0.com/docs/api/management/v2/guardian/get-factor-phone-templates">Retrieve
+        enrollment and verification phone templates</a> endpoint instead.
+
+            <b>Previous function</b>: Retrieve details of SMS enrollment and verification templates configured for your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get SMS enrollment and verification templates
+      response:
+        docs: SMS enrollment and verification templates successfully retrieved.
+        type: root.GetGuardianFactorSmsTemplatesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              enrollment_message: enrollment_message
+              verification_message: verification_message
+    setTemplates:
+      path: /guardian/factors/sms/templates
+      method: PUT
+      auth: true
+      docs: >-
+        This endpoint has been deprecated. To complete this action, use the <a
+        href="https://auth0.com/docs/api/management/v2/guardian/put-factor-phone-templates">Update
+        enrollment and verification phone templates</a> endpoint instead.
+
+            <b>Previous functionality</b>: Customize the messages sent to complete SMS enrollment and verification.
+      source:
+        openapi: ../api.json
+      display-name: Update SMS enrollment and verification templates
+      request:
+        name: SetGuardianFactorSmsTemplatesRequestContent
+        body:
+          properties:
+            enrollment_message:
+              type: string
+              docs: >-
+                Message sent to the user when they are invited to enroll with a
+                phone number.
+              default: >-
+                {{code}} is your verification code for {{tenant.friendly_name}}.
+                Please enter this code to verify your enrollment.
+            verification_message:
+              type: string
+              docs: >-
+                Message sent to the user when they are prompted to verify their
+                account.
+              default: '{{code}} is your verification code for {{tenant.friendly_name}}'
+        content-type: application/json
+      response:
+        docs: SMS enrollment and verification templates successfully updated.
+        type: root.SetGuardianFactorSmsTemplatesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request:
+            enrollment_message: enrollment_message
+            verification_message: verification_message
+          response:
+            body:
+              enrollment_message: enrollment_message
+              verification_message: verification_message
+  source:
+    openapi: ../api.json

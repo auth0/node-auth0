@@ -1,0 +1,112 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /actions/triggers/{triggerId}/bindings
+      method: GET
+      auth: true
+      docs: >
+        Retrieve the actions that are bound to a trigger. Once an action is
+        created and deployed, it must be attached (i.e. bound) to a trigger so
+        that it will be executed as part of a flow. The list of actions returned
+        reflects the order in which they will be executed during the appropriate
+        flow.
+      pagination:
+        offset: $request.page
+        results: $response.bindings
+      source:
+        openapi: ../api.json
+      path-parameters:
+        triggerId:
+          type: root.ActionTriggerTypeEnum
+          docs: An actions extensibility point.
+      display-name: Get trigger bindings
+      request:
+        name: ListActionTriggerBindingsRequestParameters
+        query-parameters:
+          page:
+            type: optional<integer>
+            docs: Use this field to request a specific page of the list results.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              The maximum number of results to be returned in a single request.
+              20 by default
+      response:
+        docs: The bindings were retrieved.
+        type: root.ListActionBindingsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            triggerId: triggerId
+          response:
+            body:
+              total: 1.1
+              page: 1.1
+              per_page: 1.1
+              bindings:
+                - id: id
+                  trigger_id: trigger_id
+                  display_name: display_name
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+    updateMany:
+      path: /actions/triggers/{triggerId}/bindings
+      method: PATCH
+      auth: true
+      docs: >-
+        Update the actions that are bound (i.e. attached) to a trigger. Once an
+        action is created and deployed, it must be attached (i.e. bound) to a
+        trigger so that it will be executed as part of a flow. The order in
+        which the actions are provided will determine the order in which they
+        are executed.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        triggerId:
+          type: root.ActionTriggerTypeEnum
+          docs: An actions extensibility point.
+      display-name: Update trigger bindings
+      request:
+        name: UpdateActionBindingsRequestContent
+        body:
+          properties:
+            bindings:
+              type: optional<list<root.ActionBindingWithRef>>
+              docs: >-
+                The actions that will be bound to this trigger. The order in
+                which they are included will be the order in which they are
+                executed.
+        content-type: application/json
+      response:
+        docs: The bindings were updated.
+        type: root.UpdateActionBindingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            triggerId: triggerId
+          request: {}
+          response:
+            body:
+              bindings:
+                - id: id
+                  trigger_id: trigger_id
+                  display_name: display_name
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+  source:
+    openapi: ../api.json

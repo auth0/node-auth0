@@ -1,0 +1,127 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users/{id}/permissions
+      method: GET
+      auth: true
+      docs: Retrieve all permissions associated with the user.
+      pagination:
+        offset: $request.page
+        results: $response.permissions
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to retrieve the permissions for.
+      display-name: Get a User's Permissions
+      request:
+        name: ListUserPermissionsRequestParameters
+        query-parameters:
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page.
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: Permissions successfully retrieved.
+        type: root.ListUserPermissionsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              permissions:
+                - resource_server_identifier: resource_server_identifier
+                  permission_name: permission_name
+                  resource_server_name: resource_server_name
+                  description: description
+    create:
+      path: /users/{id}/permissions
+      method: POST
+      auth: true
+      docs: Assign permissions to a user.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to assign permissions to.
+      display-name: Assign Permissions to a User
+      request:
+        name: CreateUserPermissionsRequestContent
+        body:
+          properties:
+            permissions:
+              docs: List of permissions to add to this user.
+              type: list<root.PermissionRequestPayload>
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            permissions:
+              - resource_server_identifier: resource_server_identifier
+                permission_name: permission_name
+    delete:
+      path: /users/{id}/permissions
+      method: DELETE
+      auth: true
+      docs: |
+        Remove permissions from a user.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to remove permissions from.
+      display-name: Remove Permissions from a User
+      request:
+        name: DeleteUserPermissionsRequestContent
+        body:
+          properties:
+            permissions:
+              docs: List of permissions to remove from this user.
+              type: list<root.PermissionRequestPayload>
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            permissions:
+              - resource_server_identifier: resource_server_identifier
+                permission_name: permission_name
+  source:
+    openapi: ../api.json

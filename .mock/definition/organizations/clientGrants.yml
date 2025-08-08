@@ -1,0 +1,144 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /organizations/{id}/client-grants
+      method: GET
+      auth: true
+      pagination:
+        offset: $request.page
+        results: $response.client_grants
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Get client grants associated to an organization
+      request:
+        name: ListOrganizationClientGrantsRequestParameters
+        query-parameters:
+          audience:
+            type: optional<string>
+            docs: Optional filter on audience of the client grant.
+          client_id:
+            type: optional<string>
+            docs: Optional filter on client_id of the client grant.
+          grant_ids:
+            type: optional<string>
+            allow-multiple: true
+            docs: >-
+              Optional filter on the ID of the client grant. Must be URL encoded
+              and may be specified multiple times (max 10).<br /><b>e.g.</b>
+              <i>../client-grants?grant_ids=id1&grant_ids=id2</i>
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+      response:
+        docs: Client grants successfully retrieved.
+        type: root.ListOrganizationClientGrantsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              client_grants:
+                - id: id
+                  client_id: client_id
+                  audience: audience
+                  scope:
+                    - scope
+                  organization_usage: deny
+                  allow_any_organization: true
+    create:
+      path: /organizations/{id}/client-grants
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Associate a client grant with an organization
+      request:
+        name: AssociateOrganizationClientGrantRequestContent
+        body:
+          properties:
+            grant_id:
+              type: string
+              docs: A Client Grant ID to add to the organization.
+        content-type: application/json
+      response:
+        docs: Client Grant successfully associated with Organization.
+        type: root.AssociateOrganizationClientGrantResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            grant_id: grant_id
+          response:
+            body:
+              id: id
+              client_id: client_id
+              audience: audience
+              scope:
+                - scope
+              organization_usage: deny
+              allow_any_organization: true
+    delete:
+      path: /organizations/{id}/client-grants/{grant_id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+        grant_id:
+          type: string
+          docs: The Client Grant ID to remove from the organization
+      display-name: Remove a client grant from an organization
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            grant_id: grant_id
+  source:
+    openapi: ../api.json

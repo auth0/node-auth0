@@ -1,0 +1,73 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /refresh-tokens/{id}
+      method: GET
+      auth: true
+      docs: Retrieve refresh token information.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID refresh token to retrieve
+      display-name: Get a refresh token
+      response:
+        docs: The refresh token was retrieved
+        type: root.GetRefreshTokenResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              user_id: user_id
+              created_at: '2024-01-15T09:30:00Z'
+              idle_expires_at: '2024-01-15T09:30:00Z'
+              expires_at: '2024-01-15T09:30:00Z'
+              device:
+                initial_ip: initial_ip
+                initial_asn: initial_asn
+                initial_user_agent: initial_user_agent
+                last_ip: last_ip
+                last_asn: last_asn
+                last_user_agent: last_user_agent
+              client_id: client_id
+              session_id: session_id
+              rotating: true
+              resource_servers:
+                - audience: audience
+                  scopes: scopes
+              last_exchanged_at: '2024-01-15T09:30:00Z'
+    delete:
+      path: /refresh-tokens/{id}
+      method: DELETE
+      auth: true
+      docs: Delete a refresh token by its ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the refresh token to delete.
+      display-name: Delete a refresh tokens
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+  source:
+    openapi: ../api.json

@@ -1,0 +1,108 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /grants
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve the <a
+        href="https://auth0.com/docs/api-auth/which-oauth-flow-to-use">grants</a>
+        associated with your account. 
+      pagination:
+        offset: $request.page
+        results: $response.grants
+      source:
+        openapi: ../api.json
+      display-name: Get grants
+      request:
+        name: ListUserGrantsRequestParameters
+        query-parameters:
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page.
+          page:
+            type: optional<integer>
+            docs: Page index of the results to return. First page is 0.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          user_id:
+            type: optional<string>
+            docs: user_id of the grants to retrieve.
+          client_id:
+            type: optional<string>
+            docs: client_id of the grants to retrieve.
+          audience:
+            type: optional<string>
+            docs: audience of the grants to retrieve.
+      response:
+        docs: Grants successfully retrieved.
+        type: root.ListUserGrantsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              grants:
+                - id: id
+                  clientID: clientID
+                  user_id: user_id
+                  audience: audience
+                  scope:
+                    - scope
+    deleteByUserId:
+      path: /grants
+      method: DELETE
+      auth: true
+      docs: 'Delete a grant associated with your account. '
+      source:
+        openapi: ../api.json
+      display-name: Delete a grant by user_id
+      request:
+        name: DeleteUserGrantByUserIdRequestParameters
+        query-parameters:
+          user_id:
+            type: string
+            docs: user_id of the grant to delete.
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - query-parameters:
+            user_id: user_id
+    delete:
+      path: /grants/{id}
+      method: DELETE
+      auth: true
+      docs: 'Delete a grant associated with your account. '
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the grant to delete.
+      display-name: Delete a grant by id
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+  source:
+    openapi: ../api.json

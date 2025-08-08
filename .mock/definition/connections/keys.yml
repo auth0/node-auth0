@@ -1,0 +1,74 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /connections/{id}/keys
+      method: GET
+      auth: true
+      docs: |
+        Gets the connection keys for the Okta or OIDC connection strategy.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the connection
+      display-name: Get connection keys
+      response:
+        docs: Connection keys successfully retrieved.
+        type: list<root.ConnectionKey>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              - kid: kid
+                cert: cert
+                pkcs: pkcs
+                current: true
+                next: true
+                previous: true
+                current_since: current_since
+                fingerprint: fingerprint
+                thumbprint: thumbprint
+                algorithm: algorithm
+                key_use: encryption
+                subject_dn: subject_dn
+    rotate:
+      path: /connections/{id}/keys/rotate
+      method: POST
+      auth: true
+      docs: |
+        Rotates the connection keys for the Okta or OIDC connection strategies.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the connection
+      display-name: Rotate connection keys
+      request:
+        body: optional<root.RotateConnectionKeysRequestContent>
+        content-type: application/json
+      response:
+        docs: Connection keys successfully rotated.
+        type: root.RotateConnectionsKeysResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+  source:
+    openapi: ../api.json
