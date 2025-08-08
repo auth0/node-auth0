@@ -1,17 +1,17 @@
 ![Node.js client library for Auth0](https://cdn.auth0.com/website/sdks/banner/node-auth0-banner.png)
 
 ![Release](https://img.shields.io/npm/v/auth0)
-[![Codecov](https://img.shields.io/codecov/c/github/fern-demo/auth0-node-sdk)](https://codecov.io/gh/fern-demo/auth0-node-sdk)
+[![Codecov](https://img.shields.io/codecov/c/github/auth0/node-auth0)](https://codecov.io/gh/auth0/node-auth0)
 ![Downloads](https://img.shields.io/npm/dw/auth0)
 [![License](https://img.shields.io/:license-mit-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Ffern-demo%2Fauth0-node-sdk)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fauth0%2Fnode-auth0)
 
 📚 [Documentation](#documentation) - 🚀 [Getting Started](#getting-started) - 💻 [API Reference](#api-reference) - 💬 [Feedback](#feedback)
 
 ## Documentation
 
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
-- [API Reference](https://github.com/fern-demo/auth0-node-sdk/blob/HEAD/./reference.md) - full reference for this library
+- [API Reference](https://github.com/auth0/node-auth0/blob/v5/reference.md) - full reference for this library
 
 ## Getting Started
 
@@ -717,7 +717,7 @@ On the other hand, contributions to the README are always very welcome!
 
 ### Raise an issue
 
-To provide feedback or report a bug, please [raise an issue on our issue tracker](https://github.com/fern-demo/auth0-node-sdk/issues).
+To provide feedback or report a bug, please [raise an issue on our issue tracker](https://github.com/auth0/node-auth0/issues).
 
 ### Vulnerability Reporting
 
