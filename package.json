@@ -54,7 +54,6 @@
         "test:unit": "jest --selectProjects unit",
         "test:browser": "jest --selectProjects browser",
         "test:wire": "jest --selectProjects wire",
-        "prepublishOnly": "yarn validate",
         "lint": "eslint . --ext .js,.ts,.tsx",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "lint:check": "eslint . --ext .js,.ts,.tsx",
@@ -65,7 +64,7 @@
         "test:coverage:wire": "jest --selectProjects wire --coverage",
         "docs": "typedoc",
         "docs:clean": "rm -rf docs",
-        "docs:build": "npm run docs:clean && npm run docs",
+        "docs:build": "yarn docs:clean && yarn docs",
         "precommit": "lint-staged",
         "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
     },
