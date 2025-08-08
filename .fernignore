@@ -20,6 +20,8 @@ src/management/tests/unit/management-client-custom-domain.test.ts
 src/management/tests/unit/request-options.test.ts
 tests/
 v5_MIGRATION_GUIDE.md
+CHANGELOG.md
+.version
 
 # @todo auto-delete .mock folder
 
