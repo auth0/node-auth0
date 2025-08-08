@@ -26,6 +26,8 @@ export declare namespace Versions {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -83,7 +85,7 @@ export class Versions {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -197,6 +199,7 @@ export class Versions {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -253,7 +256,7 @@ export class Versions {
      *
      * @param {string} id - The ID of an action version.
      * @param {string} actionId - The ID of an action.
-     * @param {Management.DeployActionVersionRequestContent} request
+     * @param {Management.DeployActionVersionRequestContent | undefined} request
      * @param {Versions.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -262,12 +265,12 @@ export class Versions {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.actions.versions.deploy("id", "actionId", {})
+     *     await client.actions.versions.deploy("id", "actionId", undefined)
      */
     public deploy(
         id: string,
         actionId: string,
-        request: Management.DeployActionVersionRequestContent,
+        request?: Management.DeployActionVersionRequestContent | undefined,
         requestOptions?: Versions.RequestOptions,
     ): core.HttpResponsePromise<Management.DeployActionVersionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__deploy(id, actionId, request, requestOptions));
@@ -276,7 +279,7 @@ export class Versions {
     private async __deploy(
         id: string,
         actionId: string,
-        request: Management.DeployActionVersionRequestContent,
+        request?: Management.DeployActionVersionRequestContent | undefined,
         requestOptions?: Versions.RequestOptions,
     ): Promise<core.WithRawResponse<Management.DeployActionVersionResponseContent>> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -293,8 +296,9 @@ export class Versions {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: request,
+            body: request != null ? request : undefined,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

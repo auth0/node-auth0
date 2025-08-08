@@ -29,6 +29,7 @@ describe("Sessions", () => {
             },
             clients: [{ client_id: "client_id" }],
             authentication: { methods: [{}] },
+            cookie: { mode: "non-persistent" },
         };
         server.mockEndpoint().get("/sessions/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -57,6 +58,9 @@ describe("Sessions", () => {
             ],
             authentication: {
                 methods: [{}],
+            },
+            cookie: {
+                mode: "non-persistent",
             },
         });
     });

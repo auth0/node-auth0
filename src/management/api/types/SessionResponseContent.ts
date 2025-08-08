@@ -19,6 +19,7 @@ export interface SessionResponseContent {
     /** List of client details for the session */
     clients?: Management.SessionClientMetadata[];
     authentication?: Management.SessionAuthenticationSignals;
+    cookie?: Management.SessionCookieMetadata;
     /** Accepts any additional properties */
     [key: string]: any;
 }

@@ -8,6 +8,14 @@
  */
 export interface ListLogsRequestParameters {
     /**
+     * Page index of the results to return. First page is 0.
+     */
+    page?: number;
+    /**
+     *  Number of results per page. Paging is disabled if parameter not sent. Default: <code>50</code>. Max value: <code>100</code>
+     */
+    per_page?: number;
+    /**
      * Field to use for sorting appended with <code>:1</code>  for ascending and <code>:-1</code> for descending. e.g. <code>date:-1</code>
      */
     sort?: string;
@@ -20,13 +28,9 @@ export interface ListLogsRequestParameters {
      */
     include_fields?: boolean;
     /**
-     * Log Event Id from which to start selection from.
+     * Return results as an array when false (default). Return results inside an object that also contains a total result count when true.
      */
-    from?: string;
-    /**
-     * Number of entries to retrieve when using the <code>from</code> parameter. Default <code>50</code>, max <code>100</code>
-     */
-    take?: number;
+    include_totals?: boolean;
     /**
      * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>.
      */

@@ -78,4 +78,6 @@ export interface CreateClientRequestContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number;
     token_quota?: Management.CreateTokenQuota;
+    /** The identifier of the resource server that this client is linked to. */
+    resource_server_identifier?: string;
 }

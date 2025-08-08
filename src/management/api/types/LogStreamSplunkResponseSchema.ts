@@ -10,10 +10,12 @@ export interface LogStreamSplunkResponseSchema {
     /** log stream name */
     name?: string;
     status?: Management.LogStreamStatusEnum;
+    type?: Management.LogStreamSplunkEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
     filters?: Management.LogStreamFilter[];
+    pii_config?: Management.LogStreamPiiConfig;
     sink?: Management.LogStreamSplunkSink;
     /** Accepts any additional properties */
     [key: string]: any;

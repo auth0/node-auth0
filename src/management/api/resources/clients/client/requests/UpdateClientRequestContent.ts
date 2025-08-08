@@ -66,10 +66,8 @@ export interface UpdateClientRequestContent {
     native_social_login?: Management.NativeSocialLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration;
     default_organization?: Management.ClientDefaultOrganization;
-    /** Defines how to proceed during an authentication transaction with regards an organization. Can be `deny` (default), `allow` or `require`. */
-    organization_usage?: string;
-    /** Defines how to proceed during an authentication transaction when `client.organization_usage: 'require'`. Can be `no_prompt` (default), `pre_login_prompt` or `post_login_prompt`. `post_login_prompt` requires `oidc_conformant: true`. */
-    organization_require_behavior?: string;
+    organization_usage?: Management.ClientOrganizationUsagePatchEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorPatchEnum | undefined;
     client_authentication_methods?: Management.ClientAuthenticationMethod;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
     require_pushed_authorization_requests?: boolean;

@@ -16,5 +16,6 @@ export interface UpdateLogStreamRequestContent {
     isPriority?: boolean;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
     filters?: Management.LogStreamFilter[];
+    pii_config?: Management.LogStreamPiiConfig;
     sink?: Management.LogStreamSinkPatch;
 }

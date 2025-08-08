@@ -29,6 +29,10 @@ export interface GetTenantSettingsResponseContent {
     session_lifetime?: number;
     /** Number of hours for which a session can be inactive before the user must log in again. */
     idle_session_lifetime?: number;
+    /** Number of hours an ephemeral (non-persistent) session will stay valid. */
+    ephemeral_session_lifetime?: number;
+    /** Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again. */
+    idle_ephemeral_session_lifetime?: number;
     /** Selected sandbox version for the extensibility environment. */
     sandbox_version?: string;
     /** Selected sandbox version for rules and hooks extensibility. */

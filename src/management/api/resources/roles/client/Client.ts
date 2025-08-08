@@ -7,6 +7,8 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { Permissions } from "../resources/permissions/client/Client.js";
+import { Users } from "../resources/users/client/Client.js";
 
 export declare namespace Roles {
     export interface Options {
@@ -26,6 +28,8 @@ export declare namespace Roles {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,9 +37,19 @@ export declare namespace Roles {
 
 export class Roles {
     protected readonly _options: Roles.Options;
+    protected _permissions: Permissions | undefined;
+    protected _users: Users | undefined;
 
     constructor(_options: Roles.Options) {
         this._options = _options;
+    }
+
+    public get permissions(): Permissions {
+        return (this._permissions ??= new Permissions(this._options));
+    }
+
+    public get users(): Users {
+        return (this._users ??= new Users(this._options));
     }
 
     /**
@@ -94,7 +108,7 @@ export class Roles {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -207,6 +221,7 @@ export class Roles {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -292,6 +307,7 @@ export class Roles {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -371,6 +387,7 @@ export class Roles {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -459,6 +476,7 @@ export class Roles {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -497,550 +515,6 @@ export class Roles {
                 });
             case "timeout":
                 throw new errors.ManagementTimeoutError("Timeout exceeded when calling PATCH /roles/{id}.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieve detailed list (name, description, resource server) of permissions granted by a specified user role.
-     *
-     * @param {string} id - ID of the role to list granted permissions.
-     * @param {Management.ListRolePermissionsRequestParameters} request
-     * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.roles.listPermissions("id")
-     */
-    public async listPermissions(
-        id: string,
-        request: Management.ListRolePermissionsRequestParameters = {},
-        requestOptions?: Roles.RequestOptions,
-    ): Promise<core.Page<Management.PermissionsResponsePayload>> {
-        const list = core.HttpResponsePromise.interceptFunction(
-            async (
-                request: Management.ListRolePermissionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRolePermissionsOffsetPaginatedResponseContent>> => {
-                const { per_page: perPage = 50, page, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (perPage != null) {
-                    _queryParams["per_page"] = perPage.toString();
-                }
-                if (page != null) {
-                    _queryParams["page"] = page.toString();
-                }
-                if (includeTotals != null) {
-                    _queryParams["include_totals"] = includeTotals.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: core.url.join(
-                        (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.ManagementEnvironment.Default,
-                        `roles/${encodeURIComponent(id)}/permissions`,
-                    ),
-                    method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
-                    queryParameters: _queryParams,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        data: _response.body as Management.ListRolePermissionsOffsetPaginatedResponseContent,
-                        rawResponse: _response.rawResponse,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                        case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                        case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        default:
-                            throw new errors.ManagementError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                                rawResponse: _response.rawResponse,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.ManagementError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                            rawResponse: _response.rawResponse,
-                        });
-                    case "timeout":
-                        throw new errors.ManagementTimeoutError(
-                            "Timeout exceeded when calling GET /roles/{id}/permissions.",
-                        );
-                    case "unknown":
-                        throw new errors.ManagementError({
-                            message: _response.error.errorMessage,
-                            rawResponse: _response.rawResponse,
-                        });
-                }
-            },
-        );
-        let _offset = request?.page != null ? request?.page : 1;
-        const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListRolePermissionsOffsetPaginatedResponseContent,
-            Management.PermissionsResponsePayload
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.permissions ?? []).length > 0,
-            getItems: (response) => response?.permissions ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
-            },
-        });
-    }
-
-    /**
-     * Add one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> to a specified user role.
-     *
-     * @param {string} id - ID of the role to add permissions to.
-     * @param {Management.AddRolePermissionsRequestContent} request
-     * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.roles.addPermissions("id", {
-     *         permissions: [{
-     *                 resource_server_identifier: "resource_server_identifier",
-     *                 permission_name: "permission_name"
-     *             }]
-     *     })
-     */
-    public addPermissions(
-        id: string,
-        request: Management.AddRolePermissionsRequestContent,
-        requestOptions?: Roles.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__addPermissions(id, request, requestOptions));
-    }
-
-    private async __addPermissions(
-        id: string,
-        request: Management.AddRolePermissionsRequestContent,
-        requestOptions?: Roles.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `roles/${encodeURIComponent(id)}/permissions`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /roles/{id}/permissions.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Remove one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> from a specified user role.
-     *
-     * @param {string} id - ID of the role to remove permissions from.
-     * @param {Management.DeleteRolePermissionsRequestContent} request
-     * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.roles.deletePermissions("id", {
-     *         permissions: [{
-     *                 resource_server_identifier: "resource_server_identifier",
-     *                 permission_name: "permission_name"
-     *             }]
-     *     })
-     */
-    public deletePermissions(
-        id: string,
-        request: Management.DeleteRolePermissionsRequestContent,
-        requestOptions?: Roles.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deletePermissions(id, request, requestOptions));
-    }
-
-    private async __deletePermissions(
-        id: string,
-        request: Management.DeleteRolePermissionsRequestContent,
-        requestOptions?: Roles.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `roles/${encodeURIComponent(id)}/permissions`,
-            ),
-            method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling DELETE /roles/{id}/permissions.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieve list of users associated with a specific role. For Dashboard instructions, review <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles">View Users Assigned to Roles</a>.
-     *
-     * This endpoint supports two types of pagination:
-     * <ul>
-     * <li>Offset pagination</li>
-     * <li>Checkpoint pagination</li>
-     * </ul>
-     *
-     * Checkpoint pagination must be used if you need to retrieve more than 1000 organization members.
-     *
-     * <h2>Checkpoint Pagination</h2>
-     *
-     * To search by checkpoint, use the following parameters:
-     * <ul>
-     * <li><code>from</code>: Optional id from which to start selection.</li>
-     * <li><code>take</code>: The total amount of entries to retrieve when using the from parameter. Defaults to 50.</li>
-     * </ul>
-     *
-     * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
-     *
-     * @param {string} id - ID of the role to retrieve a list of users associated with.
-     * @param {Management.ListRoleUsersRequestParameters} request
-     * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.roles.listUsers("id")
-     */
-    public async listUsers(
-        id: string,
-        request: Management.ListRoleUsersRequestParameters = {},
-        requestOptions?: Roles.RequestOptions,
-    ): Promise<core.Page<Management.RoleUser>> {
-        const list = core.HttpResponsePromise.interceptFunction(
-            async (
-                request: Management.ListRoleUsersRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRoleUsersPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ != null) {
-                    _queryParams["from"] = from_;
-                }
-                if (take != null) {
-                    _queryParams["take"] = take.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: core.url.join(
-                        (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.ManagementEnvironment.Default,
-                        `roles/${encodeURIComponent(id)}/users`,
-                    ),
-                    method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
-                    queryParameters: _queryParams,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        data: _response.body as Management.ListRoleUsersPaginatedResponseContent,
-                        rawResponse: _response.rawResponse,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                        case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                        case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        default:
-                            throw new errors.ManagementError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                                rawResponse: _response.rawResponse,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.ManagementError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                            rawResponse: _response.rawResponse,
-                        });
-                    case "timeout":
-                        throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /roles/{id}/users.");
-                    case "unknown":
-                        throw new errors.ManagementError({
-                            message: _response.error.errorMessage,
-                            rawResponse: _response.rawResponse,
-                        });
-                }
-            },
-        );
-        const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListRoleUsersPaginatedResponseContent, Management.RoleUser>({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.users ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
-            },
-        });
-    }
-
-    /**
-     * Assign one or more users to an existing user role. To learn more, review <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
-     *
-     * <b>Note</b>: New roles cannot be created through this action.
-     *
-     * @param {string} id - ID of the role to assign users to.
-     * @param {Management.AssignRoleUsersRequestContent} request
-     * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.roles.assignUsers("id", {
-     *         users: ["users"]
-     *     })
-     */
-    public assignUsers(
-        id: string,
-        request: Management.AssignRoleUsersRequestContent,
-        requestOptions?: Roles.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__assignUsers(id, request, requestOptions));
-    }
-
-    private async __assignUsers(
-        id: string,
-        request: Management.AssignRoleUsersRequestContent,
-        requestOptions?: Roles.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `roles/${encodeURIComponent(id)}/users`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /roles/{id}/users.");
             case "unknown":
                 throw new errors.ManagementError({
                     message: _response.error.errorMessage,

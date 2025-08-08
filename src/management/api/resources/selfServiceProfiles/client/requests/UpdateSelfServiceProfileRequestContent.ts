@@ -12,34 +12,8 @@ export interface UpdateSelfServiceProfileRequestContent {
     /** The name of the self-service Profile. */
     name?: string;
     description?: Management.SelfServiceProfileDescription | undefined;
-    branding?: Management.SelfServiceProfileBranding;
+    branding?: Management.SelfServiceProfileBranding | undefined;
     /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
-    allowed_strategies?: UpdateSelfServiceProfileRequestContent.AllowedStrategies.Item[];
+    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
     user_attributes?: Management.SelfServiceProfileUserAttributes | undefined;
-}
-
-export namespace UpdateSelfServiceProfileRequestContent {
-    export type AllowedStrategies = AllowedStrategies.Item[];
-
-    export namespace AllowedStrategies {
-        export type Item =
-            | "oidc"
-            | "samlp"
-            | "waad"
-            | "google-apps"
-            | "adfs"
-            | "okta"
-            | "keycloak-samlp"
-            | "pingfederate";
-        export const Item = {
-            Oidc: "oidc",
-            Samlp: "samlp",
-            Waad: "waad",
-            GoogleApps: "google-apps",
-            Adfs: "adfs",
-            Okta: "okta",
-            KeycloakSamlp: "keycloak-samlp",
-            Pingfederate: "pingfederate",
-        } as const;
-    }
 }

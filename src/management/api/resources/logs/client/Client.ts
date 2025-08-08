@@ -26,6 +26,8 @@ export declare namespace Logs {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -80,49 +82,160 @@ export class Logs {
      * @example
      *     await client.logs.list()
      */
-    public list(
+    public async list(
         request: Management.ListLogsRequestParameters = {},
         requestOptions?: Logs.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListLogResponseContent | undefined> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
+    ): Promise<core.Page<Management.Log>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListLogsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListLogOffsetPaginatedResponseContent>> => {
+                const {
+                    page,
+                    per_page: perPage = 50,
+                    sort,
+                    fields,
+                    include_fields: includeFields,
+                    include_totals: includeTotals = true,
+                    q,
+                } = request;
+                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+                if (page != null) {
+                    _queryParams["page"] = page.toString();
+                }
+                if (perPage != null) {
+                    _queryParams["per_page"] = perPage.toString();
+                }
+                if (sort != null) {
+                    _queryParams["sort"] = sort;
+                }
+                if (fields != null) {
+                    _queryParams["fields"] = fields;
+                }
+                if (includeFields != null) {
+                    _queryParams["include_fields"] = includeFields.toString();
+                }
+                if (includeTotals != null) {
+                    _queryParams["include_totals"] = includeTotals.toString();
+                }
+                if (q != null) {
+                    _queryParams["q"] = q;
+                }
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "logs",
+                    ),
+                    method: "GET",
+                    headers: mergeHeaders(
+                        this._options?.headers,
+                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                        requestOptions?.headers,
+                    ),
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    timeoutMs:
+                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                    maxRetries: requestOptions?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListLogOffsetPaginatedResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                switch (_response.error.reason) {
+                    case "non-json":
+                        throw new errors.ManagementError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.rawBody,
+                            rawResponse: _response.rawResponse,
+                        });
+                    case "timeout":
+                        throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /logs.");
+                    case "unknown":
+                        throw new errors.ManagementError({
+                            message: _response.error.errorMessage,
+                            rawResponse: _response.rawResponse,
+                        });
+                }
+            },
+        );
+        let _offset = request?.page != null ? request?.page : 1;
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Pageable<Management.ListLogOffsetPaginatedResponseContent, Management.Log>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) => (response?.logs ?? []).length > 0,
+            getItems: (response) => response?.logs ?? [],
+            loadPage: (_response) => {
+                _offset += 1;
+                return list(core.setObjectProperty(request, "page", _offset));
+            },
+        });
     }
 
-    private async __list(
-        request: Management.ListLogsRequestParameters = {},
+    /**
+     * Retrieve an individual log event.
+     *
+     * @param {string} id - log_id of the log to retrieve.
+     * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.logs.get("id")
+     */
+    public get(
+        id: string,
         requestOptions?: Logs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListLogResponseContent | undefined>> {
-        const { sort, fields, include_fields: includeFields, from: from_, take = 50, q } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (sort != null) {
-            _queryParams["sort"] = sort;
-        }
+    ): core.HttpResponsePromise<Management.GetLogResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
+    }
 
-        if (fields != null) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields != null) {
-            _queryParams["include_fields"] = includeFields.toString();
-        }
-
-        if (from_ != null) {
-            _queryParams["from"] = from_;
-        }
-
-        if (take != null) {
-            _queryParams["take"] = take.toString();
-        }
-
-        if (q != null) {
-            _queryParams["q"] = q;
-        }
-
+    private async __get(
+        id: string,
+        requestOptions?: Logs.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetLogResponseContent>> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                "logs",
+                `logs/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: mergeHeaders(
@@ -130,16 +243,13 @@ export class Logs {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return {
-                data: _response.body as Management.ListLogResponseContent | undefined,
-                rawResponse: _response.rawResponse,
-            };
+            return { data: _response.body as Management.GetLogResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -150,6 +260,8 @@ export class Logs {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -169,7 +281,7 @@ export class Logs {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /logs.");
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /logs/{id}.");
             case "unknown":
                 throw new errors.ManagementError({
                     message: _response.error.errorMessage,

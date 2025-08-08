@@ -10,25 +10,5 @@ import * as Management from "../../../../index.js";
  */
 export interface UpdateCustomDomainRequestContent {
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
-    /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: UpdateCustomDomainRequestContent.CustomClientIpHeader;
-}
-
-export namespace UpdateCustomDomainRequestContent {
-    /**
-     * The HTTP header to fetch the client's IP address
-     */
-    export type CustomClientIpHeader =
-        | "true-client-ip"
-        | "cf-connecting-ip"
-        | "x-forwarded-for"
-        | "x-azure-clientip"
-        | "";
-    export const CustomClientIpHeader = {
-        TrueClientIp: "true-client-ip",
-        CfConnectingIp: "cf-connecting-ip",
-        XForwardedFor: "x-forwarded-for",
-        XAzureClientip: "x-azure-clientip",
-        Empty: "",
-    } as const;
+    custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
 }

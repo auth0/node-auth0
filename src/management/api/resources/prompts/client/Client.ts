@@ -7,6 +7,9 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { Rendering } from "../resources/rendering/client/Client.js";
+import { CustomText } from "../resources/customText/client/Client.js";
+import { Partials } from "../resources/partials/client/Client.js";
 
 export declare namespace Prompts {
     export interface Options {
@@ -26,6 +29,8 @@ export declare namespace Prompts {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,9 +38,24 @@ export declare namespace Prompts {
 
 export class Prompts {
     protected readonly _options: Prompts.Options;
+    protected _rendering: Rendering | undefined;
+    protected _customText: CustomText | undefined;
+    protected _partials: Partials | undefined;
 
     constructor(_options: Prompts.Options) {
         this._options = _options;
+    }
+
+    public get rendering(): Rendering {
+        return (this._rendering ??= new Rendering(this._options));
+    }
+
+    public get customText(): CustomText {
+        return (this._customText ??= new CustomText(this._options));
+    }
+
+    public get partials(): Partials {
+        return (this._partials ??= new Partials(this._options));
     }
 
     /**
@@ -72,6 +92,7 @@ export class Prompts {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -156,6 +177,7 @@ export class Prompts {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -197,594 +219,6 @@ export class Prompts {
                 });
             case "timeout":
                 throw new errors.ManagementTimeoutError("Timeout exceeded when calling PATCH /prompts.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieve custom text for a specific prompt and language.
-     *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt.
-     * @param {Management.PromptLanguageEnum} language - Language to update.
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.prompts.getCustomTextByLanguage("login", "am")
-     */
-    public getCustomTextByLanguage(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetCustomTextsByLanguageResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__getCustomTextByLanguage(prompt, language, requestOptions));
-    }
-
-    private async __getCustomTextByLanguage(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetCustomTextsByLanguageResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `prompts/${encodeURIComponent(prompt)}/custom-text/${encodeURIComponent(language)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.GetCustomTextsByLanguageResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling GET /prompts/{prompt}/custom-text/{language}.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Set custom text for a specific prompt. Existing texts will be overwritten.
-     *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt.
-     * @param {Management.PromptLanguageEnum} language - Language to update.
-     * @param {Management.SetsCustomTextsByLanguageRequestContent} request
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.prompts.setCustomTextByLanguage("login", "am", {
-     *         "key": "value"
-     *     })
-     */
-    public setCustomTextByLanguage(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
-        request: Management.SetsCustomTextsByLanguageRequestContent,
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__setCustomTextByLanguage(prompt, language, request, requestOptions),
-        );
-    }
-
-    private async __setCustomTextByLanguage(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
-        request: Management.SetsCustomTextsByLanguageRequestContent,
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `prompts/${encodeURIComponent(prompt)}/custom-text/${encodeURIComponent(language)}`,
-            ),
-            method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling PUT /prompts/{prompt}/custom-text/{language}.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Get template partials for a prompt
-     *
-     * @param {Management.PartialGroupsEnum} prompt - Name of the prompt.
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.prompts.getPartials("login")
-     */
-    public getPartials(
-        prompt: Management.PartialGroupsEnum,
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetPartialsResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__getPartials(prompt, requestOptions));
-    }
-
-    private async __getPartials(
-        prompt: Management.PartialGroupsEnum,
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetPartialsResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `prompts/${encodeURIComponent(prompt)}/partials`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.GetPartialsResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling GET /prompts/{prompt}/partials.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Set template partials for a prompt
-     *
-     * @param {Management.PartialGroupsEnum} prompt - Name of the prompt.
-     * @param {Management.SetPartialsRequestContent} request
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.prompts.setPartials("login", {
-     *         "key": "value"
-     *     })
-     */
-    public setPartials(
-        prompt: Management.PartialGroupsEnum,
-        request: Management.SetPartialsRequestContent,
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__setPartials(prompt, request, requestOptions));
-    }
-
-    private async __setPartials(
-        prompt: Management.PartialGroupsEnum,
-        request: Management.SetPartialsRequestContent,
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `prompts/${encodeURIComponent(prompt)}/partials`,
-            ),
-            method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling PUT /prompts/{prompt}/partials.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Get render settings for a screen.
-     *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt
-     * @param {Management.ScreenGroupNameEnum} screen - Name of the screen
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.prompts.getAcul("login", "login")
-     */
-    public getAcul(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetAculResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__getAcul(prompt, screen, requestOptions));
-    }
-
-    private async __getAcul(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetAculResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `prompts/${encodeURIComponent(prompt)}/screen/${encodeURIComponent(screen)}/rendering`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Management.GetAculResponseContent, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling GET /prompts/{prompt}/screen/{screen}/rendering.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
-     *
-     * <p>
-     *   Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>documentation</a> on using Liquid variables within head tags.
-     * </p>
-     * <pre>{
-     *   "head_tags": [
-     *     {
-     *       "tag": "script",
-     *       "attributes": {
-     *         "defer": true,
-     *         "src": "URL_TO_ASSET",
-     *         "async": true,
-     *         "integrity": [
-     *           "ASSET_SHA"
-     *         ]
-     *       }
-     *     },
-     *     {
-     *       "tag": "link",
-     *       "attributes": {
-     *         "href": "URL_TO_ASSET",
-     *         "rel": "stylesheet"
-     *       }
-     *     }
-     *   ]
-     * }
-     * </pre>
-     *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt
-     * @param {Management.ScreenGroupNameEnum} screen - Name of the screen
-     * @param {Management.UpdateAculRequestContent} request
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.prompts.updateAcul("login", "login")
-     */
-    public updateAcul(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
-        request: Management.UpdateAculRequestContent = {},
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateAculResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__updateAcul(prompt, screen, request, requestOptions));
-    }
-
-    private async __updateAcul(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
-        request: Management.UpdateAculRequestContent = {},
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateAculResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `prompts/${encodeURIComponent(prompt)}/screen/${encodeURIComponent(screen)}/rendering`,
-            ),
-            method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Management.UpdateAculResponseContent, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling PATCH /prompts/{prompt}/screen/{screen}/rendering.",
-                );
             case "unknown":
                 throw new errors.ManagementError({
                     message: _response.error.errorMessage,

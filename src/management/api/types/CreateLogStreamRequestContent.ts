@@ -5,45 +5,11 @@
 import * as Management from "../index.js";
 
 export type CreateLogStreamRequestContent =
-    | Management.CreateLogStreamRequestContent.Http
-    | Management.CreateLogStreamRequestContent.Eventbridge
-    | Management.CreateLogStreamRequestContent.Eventgrid
-    | Management.CreateLogStreamRequestContent.Datadog
-    | Management.CreateLogStreamRequestContent.Splunk
-    | Management.CreateLogStreamRequestContent.Sumo
-    | Management.CreateLogStreamRequestContent.Segment
-    | Management.CreateLogStreamRequestContent.Mixpanel;
-
-export namespace CreateLogStreamRequestContent {
-    export interface Http extends Management.CreateLogStreamHttpRequestBody {
-        type: "http";
-    }
-
-    export interface Eventbridge extends Management.CreateLogStreamEventBridgeRequestBody {
-        type: "eventbridge";
-    }
-
-    export interface Eventgrid extends Management.CreateLogStreamEventGridRequestBody {
-        type: "eventgrid";
-    }
-
-    export interface Datadog extends Management.CreateLogStreamDatadogRequestBody {
-        type: "datadog";
-    }
-
-    export interface Splunk extends Management.CreateLogStreamSplunkRequestBody {
-        type: "splunk";
-    }
-
-    export interface Sumo extends Management.CreateLogStreamSumoRequestBody {
-        type: "sumo";
-    }
-
-    export interface Segment extends Management.CreateLogStreamSegmentRequestBody {
-        type: "segment";
-    }
-
-    export interface Mixpanel extends Management.CreateLogStreamMixpanelRequestBody {
-        type: "mixpanel";
-    }
-}
+    | Management.CreateLogStreamHttpRequestBody
+    | Management.CreateLogStreamEventBridgeRequestBody
+    | Management.CreateLogStreamEventGridRequestBody
+    | Management.CreateLogStreamDatadogRequestBody
+    | Management.CreateLogStreamSplunkRequestBody
+    | Management.CreateLogStreamSumoRequestBody
+    | Management.CreateLogStreamSegmentRequestBody
+    | Management.CreateLogStreamMixpanelRequestBody;

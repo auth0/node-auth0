@@ -6,72 +6,6 @@ import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
 
 describe("Jobs", () => {
-    test("createExportUsers", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = {
-            status: "status",
-            type: "type",
-            created_at: "created_at",
-            id: "id",
-            connection_id: "connection_id",
-            format: "json",
-            limit: 1,
-            fields: [{ name: "name", export_as: "export_as" }],
-        };
-        server
-            .mockEndpoint()
-            .post("/jobs/users-exports")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.jobs.createExportUsers();
-        expect(response).toEqual({
-            status: "status",
-            type: "type",
-            created_at: "created_at",
-            id: "id",
-            connection_id: "connection_id",
-            format: "json",
-            limit: 1,
-            fields: [
-                {
-                    name: "name",
-                    export_as: "export_as",
-                },
-            ],
-        });
-    });
-
-    test("createVerificationEmail", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
-        const rawRequestBody = { user_id: "user_id" };
-        const rawResponseBody = { status: "status", type: "type", created_at: "created_at", id: "id" };
-        server
-            .mockEndpoint()
-            .post("/jobs/verification-email")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.jobs.createVerificationEmail({
-            user_id: "user_id",
-        });
-        expect(response).toEqual({
-            status: "status",
-            type: "type",
-            created_at: "created_at",
-            id: "id",
-        });
-    });
-
     test("get", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
@@ -103,23 +37,5 @@ describe("Jobs", () => {
             format: "json",
             status_details: "status_details",
         });
-    });
-
-    test("getJobErrors", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = [{ user: { key: "value" }, errors: [{}] }];
-        server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
-
-        const response = await client.jobs.getJobErrors("id");
-        expect(response).toEqual([
-            {
-                user: {
-                    key: "value",
-                },
-                errors: [{}],
-            },
-        ]);
     });
 });

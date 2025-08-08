@@ -121,6 +121,18 @@ export type OauthScope =
      * Read Connections */
     | "read:connections"
     /**
+     * Read Connection Profiles */
+    | "read:connection_profiles"
+    /**
+     * Create Connection Profiles */
+    | "create:connection_profiles"
+    /**
+     * Update Connection Profiles */
+    | "update:connection_profiles"
+    /**
+     * Delete Connection Profiles */
+    | "delete:connection_profiles"
+    /**
      * Create Connections */
     | "create:connections"
     /**
@@ -219,15 +231,6 @@ export type OauthScope =
     /**
      * Delete Email Provider */
     | "delete:email_provider"
-    /**
-     * Delete Email Templates */
-    | "delete:email_templates"
-    /**
-     * Read Email Triggers */
-    | "read:email_triggers"
-    /**
-     * Update Email Triggers */
-    | "update:email_triggers"
     /**
      * Read Entitlements */
     | "read:entitlements"
@@ -751,6 +754,10 @@ export const OauthScope = {
     UpdateClientKeys: "update:client_keys",
     DeleteClients: "delete:clients",
     ReadConnections: "read:connections",
+    ReadConnectionProfiles: "read:connection_profiles",
+    CreateConnectionProfiles: "create:connection_profiles",
+    UpdateConnectionProfiles: "update:connection_profiles",
+    DeleteConnectionProfiles: "delete:connection_profiles",
     CreateConnections: "create:connections",
     UpdateConnections: "update:connections",
     DeleteConnections: "delete:connections",
@@ -784,9 +791,6 @@ export const OauthScope = {
     CreateEmailProvider: "create:email_provider",
     UpdateEmailProvider: "update:email_provider",
     DeleteEmailProvider: "delete:email_provider",
-    DeleteEmailTemplates: "delete:email_templates",
-    ReadEmailTriggers: "read:email_triggers",
-    UpdateEmailTriggers: "update:email_triggers",
     ReadEntitlements: "read:entitlements",
     ReadEventStreams: "read:event_streams",
     CreateEventStreams: "create:event_streams",

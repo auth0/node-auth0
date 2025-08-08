@@ -158,7 +158,6 @@ describe("Clients", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: { key: "value" },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -418,9 +417,6 @@ describe("Clients", () => {
                 },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: {
-                key: "value",
-            },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -633,7 +629,6 @@ describe("Clients", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: { key: "value" },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -884,9 +879,6 @@ describe("Clients", () => {
                 },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: {
-                key: "value",
-            },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -1109,7 +1101,6 @@ describe("Clients", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: { key: "value" },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -1367,9 +1358,6 @@ describe("Clients", () => {
                 },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: {
-                key: "value",
-            },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -1582,7 +1570,6 @@ describe("Clients", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: { key: "value" },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -1839,9 +1826,6 @@ describe("Clients", () => {
                 },
             },
             initiate_login_uri: "initiate_login_uri",
-            native_social_login: {
-                key: "value",
-            },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",

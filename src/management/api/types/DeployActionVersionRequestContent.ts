@@ -4,4 +4,4 @@
 
 import * as Management from "../index.js";
 
-export type DeployActionVersionRequestContent = Management.DeployActionVersionRequestBodyParams;
+export type DeployActionVersionRequestContent = Management.DeployActionVersionRequestBodyParams | undefined;

@@ -7,7 +7,10 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
-import * as fs from "fs";
+import { UsersExports } from "../resources/usersExports/client/Client.js";
+import { UsersImports } from "../resources/usersImports/client/Client.js";
+import { VerificationEmail } from "../resources/verificationEmail/client/Client.js";
+import { Errors } from "../resources/errors/client/Client.js";
 
 export declare namespace Jobs {
     export interface Options {
@@ -27,6 +30,8 @@ export declare namespace Jobs {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -34,305 +39,29 @@ export declare namespace Jobs {
 
 export class Jobs {
     protected readonly _options: Jobs.Options;
+    protected _usersExports: UsersExports | undefined;
+    protected _usersImports: UsersImports | undefined;
+    protected _verificationEmail: VerificationEmail | undefined;
+    protected _errors: Errors | undefined;
 
     constructor(_options: Jobs.Options) {
         this._options = _options;
     }
 
-    /**
-     * Export all users to a file via a long-running job.
-     *
-     * @param {Management.CreateExportUsersRequestContent} request
-     * @param {Jobs.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.jobs.createExportUsers()
-     */
-    public createExportUsers(
-        request: Management.CreateExportUsersRequestContent = {},
-        requestOptions?: Jobs.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateExportUsersResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__createExportUsers(request, requestOptions));
+    public get usersExports(): UsersExports {
+        return (this._usersExports ??= new UsersExports(this._options));
     }
 
-    private async __createExportUsers(
-        request: Management.CreateExportUsersRequestContent = {},
-        requestOptions?: Jobs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateExportUsersResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "jobs/users-exports",
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.CreateExportUsersResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /jobs/users-exports.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
+    public get usersImports(): UsersImports {
+        return (this._usersImports ??= new UsersImports(this._options));
     }
 
-    /**
-     * Import users from a <a href="https://auth0.com/docs/users/references/bulk-import-database-schema-examples">formatted file</a> into a connection via a long-running job. When importing users, with or without upsert, the `email_verified` is set to `false` when the email address is added or updated. Users must verify their email address. To avoid this behavior, set `email_verified` to `true` in the imported data.
-     *
-     * @param {Management.CreateImportUsersRequestContent} request
-     * @param {Jobs.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ContentTooLargeError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
-     *
-     * @example
-     *     await client.jobs.createImportUsers({
-     *         users: fs.createReadStream("/path/to/your/file"),
-     *         connection_id: "connection_id"
-     *     })
-     */
-    public createImportUsers(
-        request: Management.CreateImportUsersRequestContent,
-        requestOptions?: Jobs.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateImportUsersResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__createImportUsers(request, requestOptions));
+    public get verificationEmail(): VerificationEmail {
+        return (this._verificationEmail ??= new VerificationEmail(this._options));
     }
 
-    private async __createImportUsers(
-        request: Management.CreateImportUsersRequestContent,
-        requestOptions?: Jobs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateImportUsersResponseContent>> {
-        const _request = await core.newFormData();
-        await _request.appendFile("users", request.users);
-        _request.append("connection_id", request.connection_id);
-        if (request.upsert != null) {
-            _request.append("upsert", request.upsert.toString());
-        }
-
-        if (request.external_id != null) {
-            _request.append("external_id", request.external_id);
-        }
-
-        if (request.send_completion_email != null) {
-            _request.append("send_completion_email", request.send_completion_email.toString());
-        }
-
-        const _maybeEncodedRequest = await _request.getRequest();
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "jobs/users-imports",
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    Authorization: await this._getAuthorizationHeader(),
-                    ..._maybeEncodedRequest.headers,
-                }),
-                requestOptions?.headers,
-            ),
-            requestType: "file",
-            duplex: _maybeEncodedRequest.duplex,
-            body: _maybeEncodedRequest.body,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.CreateImportUsersResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 413:
-                    throw new Management.ContentTooLargeError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /jobs/users-imports.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Send an email to the specified user that asks them to click a link to <a href="https://auth0.com/docs/email/custom#verification-email">verify their email address</a>.
-     *
-     * Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
-     *
-     * @param {Management.CreateVerificationEmailRequestContent} request
-     * @param {Jobs.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.jobs.createVerificationEmail({
-     *         user_id: "user_id"
-     *     })
-     */
-    public createVerificationEmail(
-        request: Management.CreateVerificationEmailRequestContent,
-        requestOptions?: Jobs.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateVerificationEmailResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__createVerificationEmail(request, requestOptions));
-    }
-
-    private async __createVerificationEmail(
-        request: Management.CreateVerificationEmailRequestContent,
-        requestOptions?: Jobs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateVerificationEmailResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "jobs/verification-email",
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.CreateVerificationEmailResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /jobs/verification-email.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
+    public get errors(): Errors {
+        return (this._errors ??= new Errors(this._options));
     }
 
     /**
@@ -374,6 +103,7 @@ export class Jobs {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -412,91 +142,6 @@ export class Jobs {
                 });
             case "timeout":
                 throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /jobs/{id}.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieve error details of a failed job.
-     *
-     * @param {string} id - ID of the job.
-     * @param {Jobs.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.jobs.getJobErrors("id")
-     */
-    public getJobErrors(
-        id: string,
-        requestOptions?: Jobs.RequestOptions,
-    ): core.HttpResponsePromise<Management.JobsGetJobErrorsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getJobErrors(id, requestOptions));
-    }
-
-    private async __getJobErrors(
-        id: string,
-        requestOptions?: Jobs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.JobsGetJobErrorsResponse>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `jobs/${encodeURIComponent(id)}/errors`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Management.JobsGetJobErrorsResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /jobs/{id}/errors.");
             case "unknown":
                 throw new errors.ManagementError({
                     message: _response.error.errorMessage,

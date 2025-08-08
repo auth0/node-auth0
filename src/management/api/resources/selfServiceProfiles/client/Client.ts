@@ -7,6 +7,8 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { CustomText } from "../resources/customText/client/Client.js";
+import { SsoTicket } from "../resources/ssoTicket/client/Client.js";
 
 export declare namespace SelfServiceProfiles {
     export interface Options {
@@ -26,6 +28,8 @@ export declare namespace SelfServiceProfiles {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,9 +37,19 @@ export declare namespace SelfServiceProfiles {
 
 export class SelfServiceProfiles {
     protected readonly _options: SelfServiceProfiles.Options;
+    protected _customText: CustomText | undefined;
+    protected _ssoTicket: SsoTicket | undefined;
 
     constructor(_options: SelfServiceProfiles.Options) {
         this._options = _options;
+    }
+
+    public get customText(): CustomText {
+        return (this._customText ??= new CustomText(this._options));
+    }
+
+    public get ssoTicket(): SsoTicket {
+        return (this._ssoTicket ??= new SsoTicket(this._options));
     }
 
     /**
@@ -84,7 +98,7 @@ export class SelfServiceProfiles {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -202,6 +216,7 @@ export class SelfServiceProfiles {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -295,6 +310,7 @@ export class SelfServiceProfiles {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -384,6 +400,7 @@ export class SelfServiceProfiles {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -476,6 +493,7 @@ export class SelfServiceProfiles {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -522,378 +540,6 @@ export class SelfServiceProfiles {
             case "timeout":
                 throw new errors.ManagementTimeoutError(
                     "Timeout exceeded when calling PATCH /self-service-profiles/{id}.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieves text customizations for a given self-service profile, language and Self Service SSO Flow page.
-     *
-     * @param {string} id - The id of the self-service profile.
-     * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
-     * @param {Management.SelfServiceProfileCustomTextPageEnum} page - The page where the custom text is shown.
-     * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.selfServiceProfiles.listCustomText("id", "en", "get-started")
-     */
-    public listCustomText(
-        id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListSelfServiceProfileCustomTextResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__listCustomText(id, language, page, requestOptions));
-    }
-
-    private async __listCustomText(
-        id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListSelfServiceProfileCustomTextResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `self-service-profiles/${encodeURIComponent(id)}/custom-text/${encodeURIComponent(language)}/${encodeURIComponent(page)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.ListSelfServiceProfileCustomTextResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling GET /self-service-profiles/{id}/custom-text/{language}/{page}.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Updates text customizations for a given self-service profile, language and Self Service SSO Flow page.
-     *
-     * @param {string} id - The id of the self-service profile.
-     * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
-     * @param {Management.SelfServiceProfileCustomTextPageEnum} page - The page where the custom text is shown.
-     * @param {Management.SetSelfServiceProfileCustomTextRequestContent} request
-     * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.selfServiceProfiles.setCustomText("id", "en", "get-started", {
-     *         "key": "value"
-     *     })
-     */
-    public setCustomText(
-        id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
-        request: Management.SetSelfServiceProfileCustomTextRequestContent,
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetSelfServiceProfileCustomTextResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__setCustomText(id, language, page, request, requestOptions));
-    }
-
-    private async __setCustomText(
-        id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
-        request: Management.SetSelfServiceProfileCustomTextRequestContent,
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetSelfServiceProfileCustomTextResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `self-service-profiles/${encodeURIComponent(id)}/custom-text/${encodeURIComponent(language)}/${encodeURIComponent(page)}`,
-            ),
-            method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.SetSelfServiceProfileCustomTextResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling PUT /self-service-profiles/{id}/custom-text/{language}/{page}.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Creates an SSO access ticket to initiate the Self Service SSO Flow using a self-service profile.
-     *
-     * @param {string} id - The id of the self-service profile to retrieve
-     * @param {Management.CreateSelfServiceProfileSsoTicketRequestContent} request
-     * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.selfServiceProfiles.createSsoTicket("id")
-     */
-    public createSsoTicket(
-        id: string,
-        request: Management.CreateSelfServiceProfileSsoTicketRequestContent = {},
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateSelfServiceProfileSsoTicketResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__createSsoTicket(id, request, requestOptions));
-    }
-
-    private async __createSsoTicket(
-        id: string,
-        request: Management.CreateSelfServiceProfileSsoTicketRequestContent = {},
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateSelfServiceProfileSsoTicketResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `self-service-profiles/${encodeURIComponent(id)}/sso-ticket`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.CreateSelfServiceProfileSsoTicketResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling POST /self-service-profiles/{id}/sso-ticket.",
-                );
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Revokes an SSO access ticket and invalidates associated sessions. The ticket will no longer be accepted to initiate a Self-Service SSO session. If any users have already started a session through this ticket, their session will be terminated. Clients should expect a `202 Accepted` response upon successful processing, indicating that the request has been acknowledged and that the revocation is underway but may not be fully completed at the time of response. If the specified ticket does not exist, a `202 Accepted` response is also returned, signaling that no further action is required.
-     * Clients should treat these `202` responses as an acknowledgment that the request has been accepted and is in progress, even if the ticket was not found.
-     *
-     * @param {string} profileId - The id of the self-service profile
-     * @param {string} id - The id of the ticket to revoke
-     * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.selfServiceProfiles.revokeSsoTicket("profileId", "id")
-     */
-    public revokeSsoTicket(
-        profileId: string,
-        id: string,
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__revokeSsoTicket(profileId, id, requestOptions));
-    }
-
-    private async __revokeSsoTicket(
-        profileId: string,
-        id: string,
-        requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `self-service-profiles/${encodeURIComponent(profileId)}/sso-ticket/${encodeURIComponent(id)}/revoke`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling POST /self-service-profiles/{profileId}/sso-ticket/{id}/revoke.",
                 );
             case "unknown":
                 throw new errors.ManagementError({

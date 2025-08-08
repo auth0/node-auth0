@@ -18,6 +18,9 @@ export interface GetAculResponseContent {
     default_head_tags_disabled?: boolean;
     /** An array of head tags */
     head_tags?: Management.AculHeadTag[];
+    filters?: Management.AculFilters;
+    /** Use page template with ACUL */
+    use_page_template?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }

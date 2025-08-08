@@ -4,7 +4,6 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
-import * as Management from "../../../api/index.js";
 
 describe("Versions", () => {
     test("get", async () => {
@@ -119,85 +118,54 @@ describe("Versions", () => {
     test("deploy", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = {
-            id: "id",
-            action_id: "action_id",
-            code: "code",
-            dependencies: [{ name: "name", version: "version", registry_url: "registry_url" }],
-            deployed: true,
-            runtime: "runtime",
-            secrets: [{ name: "name", updated_at: "2024-01-15T09:30:00Z" }],
-            status: "pending",
-            number: 1.1,
-            errors: [{ id: "id", msg: "msg", url: "url" }],
-            action: {
-                id: "id",
-                name: "name",
-                supported_triggers: [{ id: "id" }],
-                all_changes_deployed: true,
-                created_at: "2024-01-15T09:30:00Z",
-                updated_at: "2024-01-15T09:30:00Z",
-            },
-            built_at: "2024-01-15T09:30:00Z",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            supported_triggers: [
-                {
-                    id: "id",
-                    version: "version",
-                    status: "status",
-                    runtimes: ["runtimes"],
-                    default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
-                    binding_policy: "trigger-bound",
-                },
-            ],
-        };
-        server
-            .mockEndpoint()
-            .post("/actions/actions/actionId/versions/id/deploy")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
 
-        const response = await client.actions.versions.deploy("id", "actionId", {});
-        expect(response).toEqual({
-            id: "id",
-            action_id: "action_id",
-            code: "code",
+        const rawResponseBody = {
+            id: "12a3b9e6-06e6-4a29-96bf-90c82fe79a0d",
+            action_id: "910b1053-577f-4d81-a8c8-020e7319a38a",
+            code: "module.exports = () => {}",
             dependencies: [
-                {
-                    name: "name",
-                    version: "version",
-                    registry_url: "registry_url",
-                },
+                { name: "name", version: "version", registry_url: "registry_url" },
+                { name: "name", version: "version", registry_url: "registry_url" },
             ],
             deployed: true,
-            runtime: "runtime",
+            runtime: "node12",
             secrets: [
-                {
-                    name: "name",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
+                { name: "mySecret", updated_at: "2024-01-15T09:30:00Z" },
+                { name: "mySecret", updated_at: "2024-01-15T09:30:00Z" },
             ],
             status: "pending",
             number: 1.1,
             errors: [
-                {
-                    id: "id",
-                    msg: "msg",
-                    url: "url",
-                },
+                { id: "id", msg: "msg", url: "url" },
+                { id: "id", msg: "msg", url: "url" },
             ],
             action: {
-                id: "id",
-                name: "name",
+                id: "910b1053-577f-4d81-a8c8-020e7319a38a",
+                name: "my-action",
                 supported_triggers: [
                     {
                         id: "id",
+                        version: "version",
+                        status: "status",
+                        runtimes: ["runtimes", "runtimes"],
+                        default_runtime: "default_runtime",
+                        compatible_triggers: [
+                            { id: "id", version: "version" },
+                            { id: "id", version: "version" },
+                        ],
+                        binding_policy: "trigger-bound",
+                    },
+                    {
+                        id: "id",
+                        version: "version",
+                        status: "status",
+                        runtimes: ["runtimes", "runtimes"],
+                        default_runtime: "default_runtime",
+                        compatible_triggers: [
+                            { id: "id", version: "version" },
+                            { id: "id", version: "version" },
+                        ],
+                        binding_policy: "trigger-bound",
                     },
                 ],
                 all_changes_deployed: true,
@@ -212,9 +180,157 @@ describe("Versions", () => {
                     id: "id",
                     version: "version",
                     status: "status",
-                    runtimes: ["runtimes"],
+                    runtimes: ["runtimes", "runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
+                        { id: "id", version: "version" },
+                        { id: "id", version: "version" },
+                    ],
+                    binding_policy: "trigger-bound",
+                },
+                {
+                    id: "id",
+                    version: "version",
+                    status: "status",
+                    runtimes: ["runtimes", "runtimes"],
+                    default_runtime: "default_runtime",
+                    compatible_triggers: [
+                        { id: "id", version: "version" },
+                        { id: "id", version: "version" },
+                    ],
+                    binding_policy: "trigger-bound",
+                },
+            ],
+        };
+        server
+            .mockEndpoint()
+            .post("/actions/actions/actionId/versions/id/deploy")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.actions.versions.deploy("id", "actionId", undefined);
+        expect(response).toEqual({
+            id: "12a3b9e6-06e6-4a29-96bf-90c82fe79a0d",
+            action_id: "910b1053-577f-4d81-a8c8-020e7319a38a",
+            code: "module.exports = () => {}",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                    registry_url: "registry_url",
+                },
+                {
+                    name: "name",
+                    version: "version",
+                    registry_url: "registry_url",
+                },
+            ],
+            deployed: true,
+            runtime: "node12",
+            secrets: [
+                {
+                    name: "mySecret",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+                {
+                    name: "mySecret",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            status: "pending",
+            number: 1.1,
+            errors: [
+                {
+                    id: "id",
+                    msg: "msg",
+                    url: "url",
+                },
+                {
+                    id: "id",
+                    msg: "msg",
+                    url: "url",
+                },
+            ],
+            action: {
+                id: "910b1053-577f-4d81-a8c8-020e7319a38a",
+                name: "my-action",
+                supported_triggers: [
+                    {
+                        id: "id",
+                        version: "version",
+                        status: "status",
+                        runtimes: ["runtimes", "runtimes"],
+                        default_runtime: "default_runtime",
+                        compatible_triggers: [
+                            {
+                                id: "id",
+                                version: "version",
+                            },
+                            {
+                                id: "id",
+                                version: "version",
+                            },
+                        ],
+                        binding_policy: "trigger-bound",
+                    },
+                    {
+                        id: "id",
+                        version: "version",
+                        status: "status",
+                        runtimes: ["runtimes", "runtimes"],
+                        default_runtime: "default_runtime",
+                        compatible_triggers: [
+                            {
+                                id: "id",
+                                version: "version",
+                            },
+                            {
+                                id: "id",
+                                version: "version",
+                            },
+                        ],
+                        binding_policy: "trigger-bound",
+                    },
+                ],
+                all_changes_deployed: true,
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
+            },
+            built_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            supported_triggers: [
+                {
+                    id: "id",
+                    version: "version",
+                    status: "status",
+                    runtimes: ["runtimes", "runtimes"],
+                    default_runtime: "default_runtime",
+                    compatible_triggers: [
+                        {
+                            id: "id",
+                            version: "version",
+                        },
+                        {
+                            id: "id",
+                            version: "version",
+                        },
+                    ],
+                    binding_policy: "trigger-bound",
+                },
+                {
+                    id: "id",
+                    version: "version",
+                    status: "status",
+                    runtimes: ["runtimes", "runtimes"],
+                    default_runtime: "default_runtime",
+                    compatible_triggers: [
+                        {
+                            id: "id",
+                            version: "version",
+                        },
                         {
                             id: "id",
                             version: "version",

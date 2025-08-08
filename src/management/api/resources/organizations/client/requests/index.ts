@@ -1,17 +1,3 @@
 export { type ListOrganizationsRequestParameters } from "./ListOrganizationsRequestParameters.js";
 export { type CreateOrganizationRequestContent } from "./CreateOrganizationRequestContent.js";
 export { type UpdateOrganizationRequestContent } from "./UpdateOrganizationRequestContent.js";
-export { type ListOrganizationClientGrantsRequestParameters } from "./ListOrganizationClientGrantsRequestParameters.js";
-export { type AssociateOrganizationClientGrantRequestContent } from "./AssociateOrganizationClientGrantRequestContent.js";
-export { type ListOrganizationConnectionsRequestParameters } from "./ListOrganizationConnectionsRequestParameters.js";
-export { type AddOrganizationConnectionRequestContent } from "./AddOrganizationConnectionRequestContent.js";
-export { type UpdateOrganizationConnectionRequestContent } from "./UpdateOrganizationConnectionRequestContent.js";
-export { type ListOrganizationInvitationsRequestParameters } from "./ListOrganizationInvitationsRequestParameters.js";
-export { type CreateOrganizationInvitationRequestContent } from "./CreateOrganizationInvitationRequestContent.js";
-export { type GetOrganizationInvitationRequestParameters } from "./GetOrganizationInvitationRequestParameters.js";
-export { type ListOrganizationMembersRequestParameters } from "./ListOrganizationMembersRequestParameters.js";
-export { type CreateOrganizationMemberRequestContent } from "./CreateOrganizationMemberRequestContent.js";
-export { type DeleteOrganizationMembersRequestContent } from "./DeleteOrganizationMembersRequestContent.js";
-export { type ListOrganizationMemberRolesRequestParameters } from "./ListOrganizationMemberRolesRequestParameters.js";
-export { type AssignOrganizationMemberRolesRequestContent } from "./AssignOrganizationMemberRolesRequestContent.js";
-export { type DeleteOrganizationMemberRolesRequestContent } from "./DeleteOrganizationMemberRolesRequestContent.js";

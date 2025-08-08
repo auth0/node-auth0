@@ -5,15 +5,5 @@
 import * as Management from "../index.js";
 
 export type EventStreamWebhookAuthorizationResponse =
-    | Management.EventStreamWebhookAuthorizationResponse.Basic
-    | Management.EventStreamWebhookAuthorizationResponse.Bearer;
-
-export namespace EventStreamWebhookAuthorizationResponse {
-    export interface Basic extends Management.EventStreamWebhookBasicAuth {
-        method: "basic";
-    }
-
-    export interface Bearer extends Management.EventStreamWebhookBearerAuth {
-        method: "bearer";
-    }
-}
+    | Management.EventStreamWebhookBasicAuth
+    | Management.EventStreamWebhookBearerAuth;

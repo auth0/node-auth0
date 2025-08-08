@@ -4,7 +4,9 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
+import { CustomSigning } from "../resources/customSigning/client/Client.js";
 import { Encryption } from "../resources/encryption/client/Client.js";
+import { Signing } from "../resources/signing/client/Client.js";
 
 export declare namespace Keys {
     export interface Options {
@@ -20,13 +22,23 @@ export declare namespace Keys {
 
 export class Keys {
     protected readonly _options: Keys.Options;
+    protected _customSigning: CustomSigning | undefined;
     protected _encryption: Encryption | undefined;
+    protected _signing: Signing | undefined;
 
     constructor(_options: Keys.Options) {
         this._options = _options;
     }
 
+    public get customSigning(): CustomSigning {
+        return (this._customSigning ??= new CustomSigning(this._options));
+    }
+
     public get encryption(): Encryption {
         return (this._encryption ??= new Encryption(this._options));
+    }
+
+    public get signing(): Signing {
+        return (this._signing ??= new Signing(this._options));
     }
 }

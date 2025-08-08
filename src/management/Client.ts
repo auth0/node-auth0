@@ -5,35 +5,43 @@
 import * as environments from "./environments.js";
 import * as core from "./core/index.js";
 import { Actions } from "./api/resources/actions/client/Client.js";
-import { Anomaly } from "./api/resources/anomaly/client/Client.js";
+import { Branding } from "./api/resources/branding/client/Client.js";
 import { ClientGrants } from "./api/resources/clientGrants/client/Client.js";
 import { Clients } from "./api/resources/clients/client/Client.js";
+import { Connections } from "./api/resources/connections/client/Client.js";
 import { CustomDomains } from "./api/resources/customDomains/client/Client.js";
 import { DeviceCredentials } from "./api/resources/deviceCredentials/client/Client.js";
 import { EmailTemplates } from "./api/resources/emailTemplates/client/Client.js";
-import { Emails } from "./api/resources/emails/client/Client.js";
 import { EventStreams } from "./api/resources/eventStreams/client/Client.js";
+import { Flows } from "./api/resources/flows/client/Client.js";
+import { Forms } from "./api/resources/forms/client/Client.js";
 import { UserGrants } from "./api/resources/userGrants/client/Client.js";
 import { Hooks } from "./api/resources/hooks/client/Client.js";
 import { Jobs } from "./api/resources/jobs/client/Client.js";
-import { CustomSigningKeys } from "./api/resources/customSigningKeys/client/Client.js";
-import { SigningKeys } from "./api/resources/signingKeys/client/Client.js";
 import { LogStreams } from "./api/resources/logStreams/client/Client.js";
 import { Logs } from "./api/resources/logs/client/Client.js";
-import { Users } from "./api/resources/users/client/Client.js";
 import { NetworkAcls } from "./api/resources/networkAcls/client/Client.js";
 import { Organizations } from "./api/resources/organizations/client/Client.js";
 import { Prompts } from "./api/resources/prompts/client/Client.js";
 import { RefreshTokens } from "./api/resources/refreshTokens/client/Client.js";
 import { ResourceServers } from "./api/resources/resourceServers/client/Client.js";
 import { Roles } from "./api/resources/roles/client/Client.js";
+import { Rules } from "./api/resources/rules/client/Client.js";
+import { RulesConfigs } from "./api/resources/rulesConfigs/client/Client.js";
 import { SelfServiceProfiles } from "./api/resources/selfServiceProfiles/client/Client.js";
 import { Sessions } from "./api/resources/sessions/client/Client.js";
 import { Stats } from "./api/resources/stats/client/Client.js";
-import { Tenants } from "./api/resources/tenants/client/Client.js";
 import { Tickets } from "./api/resources/tickets/client/Client.js";
-import { VerifiableCredentials } from "./api/resources/verifiableCredentials/client/Client.js";
+import { TokenExchangeProfiles } from "./api/resources/tokenExchangeProfiles/client/Client.js";
+import { UserBlocks } from "./api/resources/userBlocks/client/Client.js";
+import { Users } from "./api/resources/users/client/Client.js";
+import { Anomaly } from "./api/resources/anomaly/client/Client.js";
+import { AttackProtection } from "./api/resources/attackProtection/client/Client.js";
+import { Emails } from "./api/resources/emails/client/Client.js";
+import { Guardian } from "./api/resources/guardian/client/Client.js";
 import { Keys } from "./api/resources/keys/client/Client.js";
+import { Tenants } from "./api/resources/tenants/client/Client.js";
+import { VerifiableCredentials } from "./api/resources/verifiableCredentials/client/Client.js";
 
 export declare namespace ManagementClient {
     export interface Options {
@@ -53,6 +61,8 @@ export declare namespace ManagementClient {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -61,35 +71,43 @@ export declare namespace ManagementClient {
 export class ManagementClient {
     protected readonly _options: ManagementClient.Options;
     protected _actions: Actions | undefined;
-    protected _anomaly: Anomaly | undefined;
+    protected _branding: Branding | undefined;
     protected _clientGrants: ClientGrants | undefined;
     protected _clients: Clients | undefined;
+    protected _connections: Connections | undefined;
     protected _customDomains: CustomDomains | undefined;
     protected _deviceCredentials: DeviceCredentials | undefined;
     protected _emailTemplates: EmailTemplates | undefined;
-    protected _emails: Emails | undefined;
     protected _eventStreams: EventStreams | undefined;
+    protected _flows: Flows | undefined;
+    protected _forms: Forms | undefined;
     protected _userGrants: UserGrants | undefined;
     protected _hooks: Hooks | undefined;
     protected _jobs: Jobs | undefined;
-    protected _customSigningKeys: CustomSigningKeys | undefined;
-    protected _signingKeys: SigningKeys | undefined;
     protected _logStreams: LogStreams | undefined;
     protected _logs: Logs | undefined;
-    protected _users: Users | undefined;
     protected _networkAcls: NetworkAcls | undefined;
     protected _organizations: Organizations | undefined;
     protected _prompts: Prompts | undefined;
     protected _refreshTokens: RefreshTokens | undefined;
     protected _resourceServers: ResourceServers | undefined;
     protected _roles: Roles | undefined;
+    protected _rules: Rules | undefined;
+    protected _rulesConfigs: RulesConfigs | undefined;
     protected _selfServiceProfiles: SelfServiceProfiles | undefined;
     protected _sessions: Sessions | undefined;
     protected _stats: Stats | undefined;
-    protected _tenants: Tenants | undefined;
     protected _tickets: Tickets | undefined;
-    protected _verifiableCredentials: VerifiableCredentials | undefined;
+    protected _tokenExchangeProfiles: TokenExchangeProfiles | undefined;
+    protected _userBlocks: UserBlocks | undefined;
+    protected _users: Users | undefined;
+    protected _anomaly: Anomaly | undefined;
+    protected _attackProtection: AttackProtection | undefined;
+    protected _emails: Emails | undefined;
+    protected _guardian: Guardian | undefined;
     protected _keys: Keys | undefined;
+    protected _tenants: Tenants | undefined;
+    protected _verifiableCredentials: VerifiableCredentials | undefined;
 
     constructor(_options: ManagementClient.Options) {
         this._options = _options;
@@ -99,8 +117,8 @@ export class ManagementClient {
         return (this._actions ??= new Actions(this._options));
     }
 
-    public get anomaly(): Anomaly {
-        return (this._anomaly ??= new Anomaly(this._options));
+    public get branding(): Branding {
+        return (this._branding ??= new Branding(this._options));
     }
 
     public get clientGrants(): ClientGrants {
@@ -109,6 +127,10 @@ export class ManagementClient {
 
     public get clients(): Clients {
         return (this._clients ??= new Clients(this._options));
+    }
+
+    public get connections(): Connections {
+        return (this._connections ??= new Connections(this._options));
     }
 
     public get customDomains(): CustomDomains {
@@ -123,12 +145,16 @@ export class ManagementClient {
         return (this._emailTemplates ??= new EmailTemplates(this._options));
     }
 
-    public get emails(): Emails {
-        return (this._emails ??= new Emails(this._options));
-    }
-
     public get eventStreams(): EventStreams {
         return (this._eventStreams ??= new EventStreams(this._options));
+    }
+
+    public get flows(): Flows {
+        return (this._flows ??= new Flows(this._options));
+    }
+
+    public get forms(): Forms {
+        return (this._forms ??= new Forms(this._options));
     }
 
     public get userGrants(): UserGrants {
@@ -143,24 +169,12 @@ export class ManagementClient {
         return (this._jobs ??= new Jobs(this._options));
     }
 
-    public get customSigningKeys(): CustomSigningKeys {
-        return (this._customSigningKeys ??= new CustomSigningKeys(this._options));
-    }
-
-    public get signingKeys(): SigningKeys {
-        return (this._signingKeys ??= new SigningKeys(this._options));
-    }
-
     public get logStreams(): LogStreams {
         return (this._logStreams ??= new LogStreams(this._options));
     }
 
     public get logs(): Logs {
         return (this._logs ??= new Logs(this._options));
-    }
-
-    public get users(): Users {
-        return (this._users ??= new Users(this._options));
     }
 
     public get networkAcls(): NetworkAcls {
@@ -187,6 +201,14 @@ export class ManagementClient {
         return (this._roles ??= new Roles(this._options));
     }
 
+    public get rules(): Rules {
+        return (this._rules ??= new Rules(this._options));
+    }
+
+    public get rulesConfigs(): RulesConfigs {
+        return (this._rulesConfigs ??= new RulesConfigs(this._options));
+    }
+
     public get selfServiceProfiles(): SelfServiceProfiles {
         return (this._selfServiceProfiles ??= new SelfServiceProfiles(this._options));
     }
@@ -199,19 +221,47 @@ export class ManagementClient {
         return (this._stats ??= new Stats(this._options));
     }
 
-    public get tenants(): Tenants {
-        return (this._tenants ??= new Tenants(this._options));
-    }
-
     public get tickets(): Tickets {
         return (this._tickets ??= new Tickets(this._options));
     }
 
-    public get verifiableCredentials(): VerifiableCredentials {
-        return (this._verifiableCredentials ??= new VerifiableCredentials(this._options));
+    public get tokenExchangeProfiles(): TokenExchangeProfiles {
+        return (this._tokenExchangeProfiles ??= new TokenExchangeProfiles(this._options));
+    }
+
+    public get userBlocks(): UserBlocks {
+        return (this._userBlocks ??= new UserBlocks(this._options));
+    }
+
+    public get users(): Users {
+        return (this._users ??= new Users(this._options));
+    }
+
+    public get anomaly(): Anomaly {
+        return (this._anomaly ??= new Anomaly(this._options));
+    }
+
+    public get attackProtection(): AttackProtection {
+        return (this._attackProtection ??= new AttackProtection(this._options));
+    }
+
+    public get emails(): Emails {
+        return (this._emails ??= new Emails(this._options));
+    }
+
+    public get guardian(): Guardian {
+        return (this._guardian ??= new Guardian(this._options));
     }
 
     public get keys(): Keys {
         return (this._keys ??= new Keys(this._options));
+    }
+
+    public get tenants(): Tenants {
+        return (this._tenants ??= new Tenants(this._options));
+    }
+
+    public get verifiableCredentials(): VerifiableCredentials {
+        return (this._verifiableCredentials ??= new VerifiableCredentials(this._options));
     }
 }

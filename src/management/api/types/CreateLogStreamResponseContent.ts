@@ -5,45 +5,11 @@
 import * as Management from "../index.js";
 
 export type CreateLogStreamResponseContent =
-    | Management.CreateLogStreamResponseContent.Http
-    | Management.CreateLogStreamResponseContent.Eventbridge
-    | Management.CreateLogStreamResponseContent.Eventgrid
-    | Management.CreateLogStreamResponseContent.Datadog
-    | Management.CreateLogStreamResponseContent.Splunk
-    | Management.CreateLogStreamResponseContent.Sumo
-    | Management.CreateLogStreamResponseContent.Segment
-    | Management.CreateLogStreamResponseContent.Mixpanel;
-
-export namespace CreateLogStreamResponseContent {
-    export interface Http extends Management.LogStreamHttpResponseSchema {
-        type: "http";
-    }
-
-    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
-        type: "eventbridge";
-    }
-
-    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
-        type: "eventgrid";
-    }
-
-    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
-        type: "datadog";
-    }
-
-    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
-        type: "splunk";
-    }
-
-    export interface Sumo extends Management.LogStreamSumoResponseSchema {
-        type: "sumo";
-    }
-
-    export interface Segment extends Management.LogStreamSegmentResponseSchema {
-        type: "segment";
-    }
-
-    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
-        type: "mixpanel";
-    }
-}
+    | Management.LogStreamHttpResponseSchema
+    | Management.LogStreamEventBridgeResponseSchema
+    | Management.LogStreamEventGridResponseSchema
+    | Management.LogStreamDatadogResponseSchema
+    | Management.LogStreamSplunkResponseSchema
+    | Management.LogStreamSumoResponseSchema
+    | Management.LogStreamSegmentResponseSchema
+    | Management.LogStreamMixpanelResponseSchema;

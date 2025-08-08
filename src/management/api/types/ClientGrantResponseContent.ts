@@ -16,4 +16,6 @@ export interface ClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean;
+    /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
+    is_system?: boolean;
 }
