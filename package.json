@@ -2,7 +2,10 @@
     "name": "auth0",
     "version": "5.0.0-beta.1",
     "private": false,
-    "repository": "github:auth0/node-auth0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/auth0/node-auth0.git"
+    },
     "license": "MIT",
     "type": "commonjs",
     "main": "./dist/cjs/index.js",
@@ -35,6 +38,8 @@
         }
     },
     "files": [
+        "legacy",
+        "package.json",
         "dist",
         "reference.md",
         "README.md",
@@ -53,6 +58,7 @@
         "lint": "eslint . --ext .js,.ts,.tsx",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "lint:check": "eslint . --ext .js,.ts,.tsx",
+        "lint:package": "publint --pack npm",
         "test:coverage": "jest --config jest.config.mjs --coverage",
         "test:coverage:unit": "jest --selectProjects unit --coverage",
         "test:coverage:browser": "jest --selectProjects browser --coverage",
@@ -61,7 +67,7 @@
         "docs:clean": "rm -rf docs",
         "docs:build": "npm run docs:clean && npm run docs",
         "precommit": "lint-staged",
-        "validate": "yarn lint:check && yarn format --check && yarn test"
+        "validate": "yarn lint:check && yarn format --check && yarn test && yarn lint:package"
     },
     "devDependencies": {
         "webpack": "^5.97.1",
@@ -86,7 +92,8 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.3",
         "husky": "^9.1.7",
-        "lint-staged": "^16.1.4"
+        "lint-staged": "^16.1.4",
+        "publint": "^0.3.12"
     },
     "browser": {
         "fs": false,
@@ -112,5 +119,18 @@
         "uuid": "^11.1.0",
         "jose": "^4.13.2",
         "auth0-legacy": "npm:auth0@^4.27.0"
-    }
+    },
+    "bugs": {
+        "url": "https://github.com/auth0/node-auth0/issues"
+    },
+    "homepage": "https://github.com/auth0/node-auth0",
+    "keywords": [
+        "auth0",
+        "authentication",
+        "login",
+        "auth",
+        "jwt",
+        "management api",
+        "json web token"
+    ]
 }
