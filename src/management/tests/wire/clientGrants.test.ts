@@ -17,6 +17,7 @@ describe("ClientGrants", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            is_system: true,
         };
         server
             .mockEndpoint()
@@ -39,6 +40,7 @@ describe("ClientGrants", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            is_system: true,
         });
     });
 
@@ -63,6 +65,7 @@ describe("ClientGrants", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            is_system: true,
         };
         server
             .mockEndpoint()
@@ -81,6 +84,7 @@ describe("ClientGrants", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            is_system: true,
         });
     });
 });

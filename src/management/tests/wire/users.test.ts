@@ -6,96 +6,367 @@ import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
 
 describe("Users", () => {
+    test("create", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { connection: "connection" };
+        const rawResponseBody = {
+            user_id: "user_id",
+            email: "email",
+            email_verified: true,
+            username: "username",
+            phone_number: "phone_number",
+            phone_verified: true,
+            created_at: "created_at",
+            updated_at: "updated_at",
+            identities: [
+                {
+                    connection: "connection",
+                    user_id: "user_id",
+                    provider: "ad",
+                    isSocial: true,
+                    access_token: "access_token",
+                    access_token_secret: "access_token_secret",
+                    refresh_token: "refresh_token",
+                },
+            ],
+            app_metadata: { key: "value" },
+            user_metadata: { key: "value" },
+            picture: "picture",
+            name: "name",
+            nickname: "nickname",
+            multifactor: ["multifactor"],
+            last_ip: "last_ip",
+            last_login: "last_login",
+            logins_count: 1,
+            blocked: true,
+            given_name: "given_name",
+            family_name: "family_name",
+        };
+        server
+            .mockEndpoint()
+            .post("/users")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.users.create({
+            connection: "connection",
+        });
+        expect(response).toEqual({
+            user_id: "user_id",
+            email: "email",
+            email_verified: true,
+            username: "username",
+            phone_number: "phone_number",
+            phone_verified: true,
+            created_at: "created_at",
+            updated_at: "updated_at",
+            identities: [
+                {
+                    connection: "connection",
+                    user_id: "user_id",
+                    provider: "ad",
+                    isSocial: true,
+                    access_token: "access_token",
+                    access_token_secret: "access_token_secret",
+                    refresh_token: "refresh_token",
+                },
+            ],
+            app_metadata: {
+                key: "value",
+            },
+            user_metadata: {
+                key: "value",
+            },
+            picture: "picture",
+            name: "name",
+            nickname: "nickname",
+            multifactor: ["multifactor"],
+            last_ip: "last_ip",
+            last_login: "last_login",
+            logins_count: 1,
+            blocked: true,
+            given_name: "given_name",
+            family_name: "family_name",
+        });
+    });
+
+    test("listUsersByEmail", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = [
+            {
+                user_id: "user_id",
+                email: "email",
+                email_verified: true,
+                username: "username",
+                phone_number: "phone_number",
+                phone_verified: true,
+                created_at: "created_at",
+                updated_at: "updated_at",
+                identities: [{}],
+                app_metadata: { key: "value" },
+                user_metadata: { key: "value" },
+                picture: "picture",
+                name: "name",
+                nickname: "nickname",
+                multifactor: ["multifactor"],
+                last_ip: "last_ip",
+                last_login: "last_login",
+                logins_count: 1,
+                blocked: true,
+                given_name: "given_name",
+                family_name: "family_name",
+            },
+        ];
+        server.mockEndpoint().get("/users-by-email").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const response = await client.users.listUsersByEmail({
+            email: "email",
+        });
+        expect(response).toEqual([
+            {
+                user_id: "user_id",
+                email: "email",
+                email_verified: true,
+                username: "username",
+                phone_number: "phone_number",
+                phone_verified: true,
+                created_at: "created_at",
+                updated_at: "updated_at",
+                identities: [{}],
+                app_metadata: {
+                    key: "value",
+                },
+                user_metadata: {
+                    key: "value",
+                },
+                picture: "picture",
+                name: "name",
+                nickname: "nickname",
+                multifactor: ["multifactor"],
+                last_ip: "last_ip",
+                last_login: "last_login",
+                logins_count: 1,
+                blocked: true,
+                given_name: "given_name",
+                family_name: "family_name",
+            },
+        ]);
+    });
+
     test("get", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            date: "date",
-            type: "type",
-            description: "description",
-            connection: "connection",
-            connection_id: "connection_id",
-            client_id: "client_id",
-            client_name: "client_name",
-            ip: "ip",
-            hostname: "hostname",
             user_id: "user_id",
-            user_name: "user_name",
-            audience: "audience",
-            scope: "scope",
-            strategy: "strategy",
-            strategy_type: "strategy_type",
-            log_id: "log_id",
-            isMobile: true,
-            details: { key: "value" },
-            user_agent: "user_agent",
-            location_info: {
-                country_code: "country_code",
-                country_code3: "country_code3",
-                country_name: "country_name",
-                city_name: "city_name",
-                latitude: "latitude",
-                longitude: "longitude",
-                time_zone: "time_zone",
-                continent_code: "continent_code",
-            },
+            email: "email",
+            email_verified: true,
+            username: "username",
+            phone_number: "phone_number",
+            phone_verified: true,
+            created_at: "created_at",
+            updated_at: "updated_at",
+            identities: [
+                {
+                    connection: "connection",
+                    user_id: "user_id",
+                    provider: "ad",
+                    isSocial: true,
+                    access_token: "access_token",
+                    access_token_secret: "access_token_secret",
+                    refresh_token: "refresh_token",
+                },
+            ],
+            app_metadata: { key: "value" },
+            user_metadata: { key: "value" },
+            picture: "picture",
+            name: "name",
+            nickname: "nickname",
+            multifactor: ["multifactor"],
+            last_ip: "last_ip",
+            last_login: "last_login",
+            logins_count: 1,
+            blocked: true,
+            given_name: "given_name",
+            family_name: "family_name",
         };
-        server.mockEndpoint().get("/logs/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/users/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.users.get("id");
         expect(response).toEqual({
-            date: "date",
-            type: "type",
-            description: "description",
-            connection: "connection",
-            connection_id: "connection_id",
-            client_id: "client_id",
-            client_name: "client_name",
-            ip: "ip",
-            hostname: "hostname",
             user_id: "user_id",
-            user_name: "user_name",
-            audience: "audience",
-            scope: "scope",
-            strategy: "strategy",
-            strategy_type: "strategy_type",
-            log_id: "log_id",
-            isMobile: true,
-            details: {
+            email: "email",
+            email_verified: true,
+            username: "username",
+            phone_number: "phone_number",
+            phone_verified: true,
+            created_at: "created_at",
+            updated_at: "updated_at",
+            identities: [
+                {
+                    connection: "connection",
+                    user_id: "user_id",
+                    provider: "ad",
+                    isSocial: true,
+                    access_token: "access_token",
+                    access_token_secret: "access_token_secret",
+                    refresh_token: "refresh_token",
+                },
+            ],
+            app_metadata: {
                 key: "value",
             },
-            user_agent: "user_agent",
-            location_info: {
-                country_code: "country_code",
-                country_code3: "country_code3",
-                country_name: "country_name",
-                city_name: "city_name",
-                latitude: "latitude",
-                longitude: "longitude",
-                time_zone: "time_zone",
-                continent_code: "continent_code",
+            user_metadata: {
+                key: "value",
             },
+            picture: "picture",
+            name: "name",
+            nickname: "nickname",
+            multifactor: ["multifactor"],
+            last_ip: "last_ip",
+            last_login: "last_login",
+            logins_count: 1,
+            blocked: true,
+            given_name: "given_name",
+            family_name: "family_name",
         });
     });
 
-    test("deleteRefreshTokens", async () => {
+    test("delete", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
-        server.mockEndpoint().delete("/users/user_id/refresh-tokens").respondWith().statusCode(200).build();
+        server.mockEndpoint().delete("/users/id").respondWith().statusCode(200).build();
 
-        const response = await client.users.deleteRefreshTokens("user_id");
+        const response = await client.users.delete("id");
         expect(response).toEqual(undefined);
     });
 
-    test("deleteSessions", async () => {
+    test("update", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = {
+            user_id: "user_id",
+            email: "email",
+            email_verified: true,
+            username: "username",
+            phone_number: "phone_number",
+            phone_verified: true,
+            created_at: "created_at",
+            updated_at: "updated_at",
+            identities: [
+                {
+                    connection: "connection",
+                    user_id: "user_id",
+                    provider: "ad",
+                    isSocial: true,
+                    access_token: "access_token",
+                    access_token_secret: "access_token_secret",
+                    refresh_token: "refresh_token",
+                },
+            ],
+            app_metadata: { key: "value" },
+            user_metadata: { key: "value" },
+            picture: "picture",
+            name: "name",
+            nickname: "nickname",
+            multifactor: ["multifactor"],
+            last_ip: "last_ip",
+            last_login: "last_login",
+            logins_count: 1,
+            blocked: true,
+            given_name: "given_name",
+            family_name: "family_name",
+        };
+        server
+            .mockEndpoint()
+            .patch("/users/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.users.update("id");
+        expect(response).toEqual({
+            user_id: "user_id",
+            email: "email",
+            email_verified: true,
+            username: "username",
+            phone_number: "phone_number",
+            phone_verified: true,
+            created_at: "created_at",
+            updated_at: "updated_at",
+            identities: [
+                {
+                    connection: "connection",
+                    user_id: "user_id",
+                    provider: "ad",
+                    isSocial: true,
+                    access_token: "access_token",
+                    access_token_secret: "access_token_secret",
+                    refresh_token: "refresh_token",
+                },
+            ],
+            app_metadata: {
+                key: "value",
+            },
+            user_metadata: {
+                key: "value",
+            },
+            picture: "picture",
+            name: "name",
+            nickname: "nickname",
+            multifactor: ["multifactor"],
+            last_ip: "last_ip",
+            last_login: "last_login",
+            logins_count: 1,
+            blocked: true,
+            given_name: "given_name",
+            family_name: "family_name",
+        });
+    });
+
+    test("regenerateRecoveryCode", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
-        server.mockEndpoint().delete("/users/user_id/sessions").respondWith().statusCode(200).build();
+        const rawResponseBody = { recovery_code: "recovery_code" };
+        server
+            .mockEndpoint()
+            .post("/users/id/recovery-code-regeneration")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
 
-        const response = await client.users.deleteSessions("user_id");
+        const response = await client.users.regenerateRecoveryCode("id");
+        expect(response).toEqual({
+            recovery_code: "recovery_code",
+        });
+    });
+
+    test("revokeAccess", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+
+        server
+            .mockEndpoint()
+            .post("/users/id/revoke-access")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .build();
+
+        const response = await client.users.revokeAccess("id");
         expect(response).toEqual(undefined);
     });
 });

@@ -7,6 +7,8 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { Credentials } from "../resources/credentials/client/Client.js";
+import { Connections } from "../resources/connections/client/Client.js";
 
 export declare namespace Clients {
     export interface Options {
@@ -26,6 +28,8 @@ export declare namespace Clients {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,9 +37,19 @@ export declare namespace Clients {
 
 export class Clients {
     protected readonly _options: Clients.Options;
+    protected _credentials: Credentials | undefined;
+    protected _connections: Connections | undefined;
 
     constructor(_options: Clients.Options) {
         this._options = _options;
+    }
+
+    public get credentials(): Credentials {
+        return (this._credentials ??= new Credentials(this._options));
+    }
+
+    public get connections(): Connections {
+        return (this._connections ??= new Connections(this._options));
     }
 
     /**
@@ -144,7 +158,7 @@ export class Clients {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -269,6 +283,7 @@ export class Clients {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -402,7 +417,7 @@ export class Clients {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -481,6 +496,7 @@ export class Clients {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -576,6 +592,7 @@ export class Clients {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -670,6 +687,7 @@ export class Clients {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

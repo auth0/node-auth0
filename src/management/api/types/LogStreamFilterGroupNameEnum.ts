@@ -6,8 +6,6 @@
  * Category group name
  */
 export type LogStreamFilterGroupNameEnum =
-    | "auth.ancillary.fail"
-    | "auth.ancillary.success"
     | "auth.login.fail"
     | "auth.login.notification"
     | "auth.login.success"
@@ -29,8 +27,6 @@ export type LogStreamFilterGroupNameEnum =
     | "actions"
     | "other";
 export const LogStreamFilterGroupNameEnum = {
-    AuthAncillaryFail: "auth.ancillary.fail",
-    AuthAncillarySuccess: "auth.ancillary.success",
     AuthLoginFail: "auth.login.fail",
     AuthLoginNotification: "auth.login.notification",
     AuthLoginSuccess: "auth.login.success",

@@ -28,6 +28,8 @@ export declare namespace EventStreams {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -96,7 +98,7 @@ export class EventStreams {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -193,6 +195,7 @@ export class EventStreams {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -280,6 +283,7 @@ export class EventStreams {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -360,6 +364,7 @@ export class EventStreams {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -444,6 +449,7 @@ export class EventStreams {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -495,6 +501,106 @@ export class EventStreams {
 
     /**
      * @param {string} id - Unique identifier for the event stream.
+     * @param {Management.EventStreamsGetStatsRequest} request
+     * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.eventStreams.getStats("id")
+     */
+    public getStats(
+        id: string,
+        request: Management.EventStreamsGetStatsRequest = {},
+        requestOptions?: EventStreams.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetEventStreamStatsResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__getStats(id, request, requestOptions));
+    }
+
+    private async __getStats(
+        id: string,
+        request: Management.EventStreamsGetStatsRequest = {},
+        requestOptions?: EventStreams.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetEventStreamStatsResponseContent>> {
+        const { date_from: dateFrom, date_to: dateTo } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (dateFrom != null) {
+            _queryParams["date_from"] = dateFrom;
+        }
+
+        if (dateTo != null) {
+            _queryParams["date_to"] = dateTo;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `event-streams/${encodeURIComponent(id)}/stats`,
+            ),
+            method: "GET",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                requestOptions?.headers,
+            ),
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.GetEventStreamStatsResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.ManagementError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /event-streams/{id}/stats.");
+            case "unknown":
+                throw new errors.ManagementError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * @param {string} id - Unique identifier for the event stream.
      * @param {Management.CreateEventStreamTestEventRequestContent} request
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -503,19 +609,19 @@ export class EventStreams {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.eventStreams.createTestEvent("id", {
+     *     await client.eventStreams.test("id", {
      *         event_type: "user.created"
      *     })
      */
-    public createTestEvent(
+    public test(
         id: string,
         request: Management.CreateEventStreamTestEventRequestContent,
         requestOptions?: EventStreams.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateEventStreamTestEventResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__createTestEvent(id, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__test(id, request, requestOptions));
     }
 
-    private async __createTestEvent(
+    private async __test(
         id: string,
         request: Management.CreateEventStreamTestEventRequestContent,
         requestOptions?: EventStreams.RequestOptions,
@@ -534,6 +640,7 @@ export class EventStreams {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,

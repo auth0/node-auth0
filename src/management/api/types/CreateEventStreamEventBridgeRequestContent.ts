@@ -10,4 +10,5 @@ export interface CreateEventStreamEventBridgeRequestContent {
     /** List of event types subscribed to in this stream. */
     subscriptions?: Management.EventStreamSubscription[];
     destination: Management.EventStreamEventBridgeDestination;
+    status?: Management.EventStreamStatusEnum;
 }

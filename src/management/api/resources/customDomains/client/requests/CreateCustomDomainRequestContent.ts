@@ -17,25 +17,5 @@ export interface CreateCustomDomainRequestContent {
     type: Management.CustomDomainProvisioningTypeEnum;
     verification_method?: Management.CustomDomainVerificationMethodEnum;
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
-    /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: CreateCustomDomainRequestContent.CustomClientIpHeader;
-}
-
-export namespace CreateCustomDomainRequestContent {
-    /**
-     * The HTTP header to fetch the client's IP address
-     */
-    export type CustomClientIpHeader =
-        | "true-client-ip"
-        | "cf-connecting-ip"
-        | "x-forwarded-for"
-        | "x-azure-clientip"
-        | "";
-    export const CustomClientIpHeader = {
-        TrueClientIp: "true-client-ip",
-        CfConnectingIp: "cf-connecting-ip",
-        XForwardedFor: "x-forwarded-for",
-        XAzureClientip: "x-azure-clientip",
-        Empty: "",
-    } as const;
+    custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
 }

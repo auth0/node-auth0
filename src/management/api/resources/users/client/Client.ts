@@ -7,6 +7,18 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { AuthenticationMethods } from "../resources/authenticationMethods/client/Client.js";
+import { Authenticators } from "../resources/authenticators/client/Client.js";
+import { Enrollments } from "../resources/enrollments/client/Client.js";
+import { FederatedConnectionsTokensets } from "../resources/federatedConnectionsTokensets/client/Client.js";
+import { Identities } from "../resources/identities/client/Client.js";
+import { Logs } from "../resources/logs/client/Client.js";
+import { Multifactor } from "../resources/multifactor/client/Client.js";
+import { Organizations } from "../resources/organizations/client/Client.js";
+import { Permissions } from "../resources/permissions/client/Client.js";
+import { Roles } from "../resources/roles/client/Client.js";
+import { RefreshToken } from "../resources/refreshToken/client/Client.js";
+import { Sessions } from "../resources/sessions/client/Client.js";
 
 export declare namespace Users {
     export interface Options {
@@ -26,6 +38,8 @@ export declare namespace Users {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,127 +47,119 @@ export declare namespace Users {
 
 export class Users {
     protected readonly _options: Users.Options;
+    protected _authenticationMethods: AuthenticationMethods | undefined;
+    protected _authenticators: Authenticators | undefined;
+    protected _enrollments: Enrollments | undefined;
+    protected _federatedConnectionsTokensets: FederatedConnectionsTokensets | undefined;
+    protected _identities: Identities | undefined;
+    protected _logs: Logs | undefined;
+    protected _multifactor: Multifactor | undefined;
+    protected _organizations: Organizations | undefined;
+    protected _permissions: Permissions | undefined;
+    protected _roles: Roles | undefined;
+    protected _refreshToken: RefreshToken | undefined;
+    protected _sessions: Sessions | undefined;
 
     constructor(_options: Users.Options) {
         this._options = _options;
     }
 
-    /**
-     * Retrieve an individual log event.
-     *
-     * @param {string} id - log_id of the log to retrieve.
-     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.users.get("id")
-     */
-    public get(
-        id: string,
-        requestOptions?: Users.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetUserLogResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
+    public get authenticationMethods(): AuthenticationMethods {
+        return (this._authenticationMethods ??= new AuthenticationMethods(this._options));
     }
 
-    private async __get(
-        id: string,
-        requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetUserLogResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `logs/${encodeURIComponent(id)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Management.GetUserLogResponseContent, rawResponse: _response.rawResponse };
-        }
+    public get authenticators(): Authenticators {
+        return (this._authenticators ??= new Authenticators(this._options));
+    }
 
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
+    public get enrollments(): Enrollments {
+        return (this._enrollments ??= new Enrollments(this._options));
+    }
 
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /logs/{id}.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
+    public get federatedConnectionsTokensets(): FederatedConnectionsTokensets {
+        return (this._federatedConnectionsTokensets ??= new FederatedConnectionsTokensets(this._options));
+    }
+
+    public get identities(): Identities {
+        return (this._identities ??= new Identities(this._options));
+    }
+
+    public get logs(): Logs {
+        return (this._logs ??= new Logs(this._options));
+    }
+
+    public get multifactor(): Multifactor {
+        return (this._multifactor ??= new Multifactor(this._options));
+    }
+
+    public get organizations(): Organizations {
+        return (this._organizations ??= new Organizations(this._options));
+    }
+
+    public get permissions(): Permissions {
+        return (this._permissions ??= new Permissions(this._options));
+    }
+
+    public get roles(): Roles {
+        return (this._roles ??= new Roles(this._options));
+    }
+
+    public get refreshToken(): RefreshToken {
+        return (this._refreshToken ??= new RefreshToken(this._options));
+    }
+
+    public get sessions(): Sessions {
+        return (this._sessions ??= new Sessions(this._options));
     }
 
     /**
-     * Retrieve log events for a specific user.
+     * Retrieve details of users. It is possible to:
      *
-     * Note: For more information on all possible event types, their respective acronyms and descriptions, see <a href="https://auth0.com/docs/logs/log-event-type-codes">Log Event Type Codes</a>.
+     * - Specify a search criteria for users
+     * - Sort the users to be returned
+     * - Select the fields to be returned
+     * - Specify the number of users to retrieve per page and the page index
+     *  <!-- only v3 is available -->
+     * The <code>q</code> query parameter can be used to get users that match the specified criteria <a href="https://auth0.com/docs/users/search/v3/query-syntax">using query string syntax.</a>
      *
-     * For more information on the list of fields that can be used in `sort`, see <a href="https://auth0.com/docs/logs/log-search-query-syntax#searchable-fields">Searchable Fields</a>.
+     * <a href="https://auth0.com/docs/users/search/v3">Learn more about searching for users.</a>
      *
-     * Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations">limits the number of logs</a> you can return by search criteria to 100 logs per request. Furthermore, you may only paginate through up to 1,000 search results. If you exceed this threshold, please redefine your search.
+     * Read about <a href="https://auth0.com/docs/users/search/best-practices">best practices</a> when working with the API endpoints for retrieving users.
      *
-     * @param {string} id - ID of the user of the logs to retrieve
-     * @param {Management.ListUserLogsRequestParameters} request
+     * Auth0 limits the number of users you can return. If you exceed this threshold, please redefine your search, use the <a href="https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports">export job</a>, or the <a href="https://auth0.com/docs/extensions/user-import-export">User Import / Export</a> extension.
+     *
+     * @param {Management.ListUsersRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link Management.ServiceUnavailableError}
      *
      * @example
-     *     await client.users.listLogs("id")
+     *     await client.users.list()
      */
-    public async listLogs(
-        id: string,
-        request: Management.ListUserLogsRequestParameters = {},
+    public async list(
+        request: Management.ListUsersRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.Page<Management.Log>> {
+    ): Promise<core.Page<Management.UserResponseSchema>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListUserLogsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.UserListLogOffsetPaginatedResponseContent>> => {
-                const { page, per_page: perPage = 50, sort, include_totals: includeTotals = true } = request;
+                request: Management.ListUsersRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListUsersOffsetPaginatedResponseContent>> => {
+                const {
+                    page,
+                    per_page: perPage = 50,
+                    include_totals: includeTotals = true,
+                    sort,
+                    connection,
+                    fields,
+                    include_fields: includeFields,
+                    q,
+                    search_engine: searchEngine,
+                    primary_order: primaryOrder,
+                } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -161,18 +167,36 @@ export class Users {
                 if (perPage != null) {
                     _queryParams["per_page"] = perPage.toString();
                 }
+                if (includeTotals != null) {
+                    _queryParams["include_totals"] = includeTotals.toString();
+                }
                 if (sort != null) {
                     _queryParams["sort"] = sort;
                 }
-                if (includeTotals != null) {
-                    _queryParams["include_totals"] = includeTotals.toString();
+                if (connection != null) {
+                    _queryParams["connection"] = connection;
+                }
+                if (fields != null) {
+                    _queryParams["fields"] = fields;
+                }
+                if (includeFields != null) {
+                    _queryParams["include_fields"] = includeFields.toString();
+                }
+                if (q != null) {
+                    _queryParams["q"] = q;
+                }
+                if (searchEngine != null) {
+                    _queryParams["search_engine"] = searchEngine;
+                }
+                if (primaryOrder != null) {
+                    _queryParams["primary_order"] = primaryOrder.toString();
                 }
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${encodeURIComponent(id)}/logs`,
+                        "users",
                     ),
                     method: "GET",
                     headers: mergeHeaders(
@@ -180,7 +204,7 @@ export class Users {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -188,7 +212,7 @@ export class Users {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.UserListLogOffsetPaginatedResponseContent,
+                        data: _response.body as Management.ListUsersOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
@@ -211,6 +235,11 @@ export class Users {
                                 _response.error.body as unknown,
                                 _response.rawResponse,
                             );
+                        case 503:
+                            throw new Management.ServiceUnavailableError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -227,7 +256,7 @@ export class Users {
                             rawResponse: _response.rawResponse,
                         });
                     case "timeout":
-                        throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /users/{id}/logs.");
+                        throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /users.");
                     case "unknown":
                         throw new errors.ManagementError({
                             message: _response.error.errorMessage,
@@ -238,11 +267,11 @@ export class Users {
         );
         let _offset = request?.page != null ? request?.page : 1;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.UserListLogOffsetPaginatedResponseContent, Management.Log>({
+        return new core.Pageable<Management.ListUsersOffsetPaginatedResponseContent, Management.UserResponseSchema>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.logs ?? []).length > 0,
-            getItems: (response) => response?.logs ?? [],
+            hasNextPage: (response) => (response?.users ?? []).length > 0,
+            getItems: (response) => response?.users ?? [],
             loadPage: (_response) => {
                 _offset += 1;
                 return list(core.setObjectProperty(request, "page", _offset));
@@ -251,125 +280,203 @@ export class Users {
     }
 
     /**
-     * Retrieve details for a user's refresh tokens.
+     * Create a new user for a given <a href="https://auth0.com/docs/connections/database">database</a> or <a href="https://auth0.com/docs/connections/passwordless">passwordless</a> connection.
      *
-     * @param {string} userId - ID of the user to get refresh tokens for
-     * @param {Management.ListRefreshTokensRequestParameters} request
+     * Note: <code>connection</code> is required but other parameters such as <code>email</code> and <code>password</code> are dependent upon the type of connection.
+     *
+     * @param {Management.CreateUserRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.users.listRefreshTokens("user_id")
+     *     await client.users.create({
+     *         connection: "connection"
+     *     })
      */
-    public async listRefreshTokens(
-        userId: string,
-        request: Management.ListRefreshTokensRequestParameters = {},
+    public create(
+        request: Management.CreateUserRequestContent,
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.Page<Management.RefreshTokenResponseContent>> {
-        const list = core.HttpResponsePromise.interceptFunction(
-            async (
-                request: Management.ListRefreshTokensRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRefreshTokensPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ != null) {
-                    _queryParams["from"] = from_;
-                }
-                if (take != null) {
-                    _queryParams["take"] = take.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: core.url.join(
-                        (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.ManagementEnvironment.Default,
-                        `users/${encodeURIComponent(userId)}/refresh-tokens`,
-                    ),
-                    method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
-                    queryParameters: _queryParams,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        data: _response.body as Management.ListRefreshTokensPaginatedResponseContent,
-                        rawResponse: _response.rawResponse,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                        case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                        case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        default:
-                            throw new errors.ManagementError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                                rawResponse: _response.rawResponse,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.ManagementError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                            rawResponse: _response.rawResponse,
-                        });
-                    case "timeout":
-                        throw new errors.ManagementTimeoutError(
-                            "Timeout exceeded when calling GET /users/{user_id}/refresh-tokens.",
-                        );
-                    case "unknown":
-                        throw new errors.ManagementError({
-                            message: _response.error.errorMessage,
-                            rawResponse: _response.rawResponse,
-                        });
-                }
-            },
-        );
-        const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListRefreshTokensPaginatedResponseContent,
-            Management.RefreshTokenResponseContent
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.tokens ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
-            },
+    ): core.HttpResponsePromise<Management.CreateUserResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
+    }
+
+    private async __create(
+        request: Management.CreateUserRequestContent,
+        requestOptions?: Users.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.CreateUserResponseContent>> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "users",
+            ),
+            method: "POST",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
         });
+        if (_response.ok) {
+            return { data: _response.body as Management.CreateUserResponseContent, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.ManagementError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /users.");
+            case "unknown":
+                throw new errors.ManagementError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
     }
 
     /**
-     * Delete all refresh tokens for a user.
+     * Find users by email. If Auth0 is the identity provider (idP), the email address associated with a user is saved in lower case, regardless of how you initially provided it.
      *
-     * @param {string} userId - ID of the user to get remove refresh tokens for
+     * For example, if you register a user as JohnSmith@example.com, Auth0 saves the user's email as johnsmith@example.com.
+     *
+     * Therefore, when using this endpoint, make sure that you are searching for users via email addresses using the correct case.
+     *
+     * @param {Management.ListUsersByEmailRequestParameters} request
+     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.users.listUsersByEmail({
+     *         email: "email"
+     *     })
+     */
+    public listUsersByEmail(
+        request: Management.ListUsersByEmailRequestParameters,
+        requestOptions?: Users.RequestOptions,
+    ): core.HttpResponsePromise<Management.UserResponseSchema[]> {
+        return core.HttpResponsePromise.fromPromise(this.__listUsersByEmail(request, requestOptions));
+    }
+
+    private async __listUsersByEmail(
+        request: Management.ListUsersByEmailRequestParameters,
+        requestOptions?: Users.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UserResponseSchema[]>> {
+        const { fields, include_fields: includeFields, email } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (fields != null) {
+            _queryParams["fields"] = fields;
+        }
+
+        if (includeFields != null) {
+            _queryParams["include_fields"] = includeFields.toString();
+        }
+
+        _queryParams["email"] = email;
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "users-by-email",
+            ),
+            method: "GET",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                requestOptions?.headers,
+            ),
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Management.UserResponseSchema[], rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.ManagementError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /users-by-email.");
+            case "unknown":
+                throw new errors.ManagementError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Retrieve user details. A list of fields to include or exclude may also be specified. For more information, see <a href="https://auth0.com/docs/manage-users/user-search/retrieve-users-with-get-users-endpoint">Retrieve Users with the Get Users Endpoint</a>.
+     *
+     * @param {string} id - ID of the user to retrieve.
+     * @param {Management.GetUserRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -379,35 +486,51 @@ export class Users {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.users.deleteRefreshTokens("user_id")
+     *     await client.users.get("id")
      */
-    public deleteRefreshTokens(userId: string, requestOptions?: Users.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteRefreshTokens(userId, requestOptions));
+    public get(
+        id: string,
+        request: Management.GetUserRequestParameters = {},
+        requestOptions?: Users.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetUserResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
-    private async __deleteRefreshTokens(
-        userId: string,
+    private async __get(
+        id: string,
+        request: Management.GetUserRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
+    ): Promise<core.WithRawResponse<Management.GetUserResponseContent>> {
+        const { fields, include_fields: includeFields } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (fields != null) {
+            _queryParams["fields"] = fields;
+        }
+
+        if (includeFields != null) {
+            _queryParams["include_fields"] = includeFields.toString();
+        }
+
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${encodeURIComponent(userId)}/refresh-tokens`,
+                `users/${encodeURIComponent(id)}`,
             ),
-            method: "DELETE",
+            method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
+            return { data: _response.body as Management.GetUserResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -439,8 +562,332 @@ export class Users {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /users/{id}.");
+            case "unknown":
+                throw new errors.ManagementError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Delete a user by user ID. This action cannot be undone. For Auth0 Dashboard instructions, see <a href="https://auth0.com/docs/manage-users/user-accounts/delete-users">Delete Users</a>.
+     *
+     * @param {string} id - ID of the user to delete.
+     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.users.delete("id")
+     */
+    public delete(id: string, requestOptions?: Users.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(id, requestOptions));
+    }
+
+    private async __delete(id: string, requestOptions?: Users.RequestOptions): Promise<core.WithRawResponse<void>> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `users/${encodeURIComponent(id)}`,
+            ),
+            method: "DELETE",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                requestOptions?.headers,
+            ),
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.ManagementError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling DELETE /users/{id}.");
+            case "unknown":
+                throw new errors.ManagementError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Update a user.
+     *
+     * These are the attributes that can be updated at the root level:
+     *
+     * <ul>
+     *     <li>app_metadata</li>
+     *     <li>blocked</li>
+     *     <li>email</li>
+     *     <li>email_verified</li>
+     *     <li>family_name</li>
+     *     <li>given_name</li>
+     *     <li>name</li>
+     *     <li>nickname</li>
+     *     <li>password</li>
+     *     <li>phone_number</li>
+     *     <li>phone_verified</li>
+     *     <li>picture</li>
+     *     <li>username</li>
+     *     <li>user_metadata</li>
+     *     <li>verify_email</li>
+     * </ul>
+     *
+     * Some considerations:
+     * <ul>
+     *     <li>The properties of the new object will replace the old ones.</li>
+     *     <li>The metadata fields are an exception to this rule (<code>user_metadata</code> and <code>app_metadata</code>). These properties are merged instead of being replaced but be careful, the merge only occurs on the first level.</li>
+     *     <li>If you are updating <code>email</code>, <code>email_verified</code>, <code>phone_number</code>, <code>phone_verified</code>, <code>username</code> or <code>password</code> of a secondary identity, you need to specify the <code>connection</code> property too.</li>
+     *     <li>If you are updating <code>email</code> or <code>phone_number</code> you can specify, optionally, the <code>client_id</code> property.</li>
+     *     <li>Updating <code>email_verified</code> is not supported for enterprise and passwordless sms connections.</li>
+     *     <li>Updating the <code>blocked</code> to <code>false</code> does not affect the user's blocked state from an excessive amount of incorrectly provided credentials. Use the "Unblock a user" endpoint from the "User Blocks" API to change the user's state.</li>
+     *     <li>Supported attributes can be unset by supplying <code>null</code> as the value.</li>
+     * </ul>
+     *
+     * <h5>Updating a field (non-metadata property)</h5>
+     * To mark the email address of a user as verified, the body to send should be:
+     * <pre><code>{ "email_verified": true }</code></pre>
+     *
+     * <h5>Updating a user metadata root property</h5>Let's assume that our test user has the following <code>user_metadata</code>:
+     * <pre><code>{ "user_metadata" : { "profileCode": 1479 } }</code></pre>
+     *
+     * To add the field <code>addresses</code> the body to send should be:
+     * <pre><code>{ "user_metadata" : { "addresses": {"work_address": "100 Industrial Way"} }}</code></pre>
+     *
+     * The modified object ends up with the following <code>user_metadata</code> property:<pre><code>{
+     *   "user_metadata": {
+     *     "profileCode": 1479,
+     *     "addresses": { "work_address": "100 Industrial Way" }
+     *   }
+     * }</code></pre>
+     *
+     * <h5>Updating an inner user metadata property</h5>If there's existing user metadata to which we want to add  <code>"home_address": "742 Evergreen Terrace"</code> (using the <code>addresses</code> property) we should send the whole <code>addresses</code> object. Since this is a first-level object, the object will be merged in, but its own properties will not be. The body to send should be:
+     * <pre><code>{
+     *   "user_metadata": {
+     *     "addresses": {
+     *       "work_address": "100 Industrial Way",
+     *       "home_address": "742 Evergreen Terrace"
+     *     }
+     *   }
+     * }</code></pre>
+     *
+     * The modified object ends up with the following <code>user_metadata</code> property:
+     * <pre><code>{
+     *   "user_metadata": {
+     *     "profileCode": 1479,
+     *     "addresses": {
+     *       "work_address": "100 Industrial Way",
+     *       "home_address": "742 Evergreen Terrace"
+     *     }
+     *   }
+     * }</code></pre>
+     *
+     * @param {string} id - ID of the user to update.
+     * @param {Management.UpdateUserRequestContent} request
+     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.users.update("id")
+     */
+    public update(
+        id: string,
+        request: Management.UpdateUserRequestContent = {},
+        requestOptions?: Users.RequestOptions,
+    ): core.HttpResponsePromise<Management.UpdateUserResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
+    }
+
+    private async __update(
+        id: string,
+        request: Management.UpdateUserRequestContent = {},
+        requestOptions?: Users.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UpdateUserResponseContent>> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `users/${encodeURIComponent(id)}`,
+            ),
+            method: "PATCH",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Management.UpdateUserResponseContent, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.ManagementError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.ManagementTimeoutError("Timeout exceeded when calling PATCH /users/{id}.");
+            case "unknown":
+                throw new errors.ManagementError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Remove an existing multi-factor authentication (MFA) <a href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">recovery code</a> and generate a new one. If a user cannot access the original device or account used for MFA enrollment, they can use a recovery code to authenticate.
+     *
+     * @param {string} id - ID of the user to regenerate a multi-factor authentication recovery code for.
+     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     *
+     * @example
+     *     await client.users.regenerateRecoveryCode("id")
+     */
+    public regenerateRecoveryCode(
+        id: string,
+        requestOptions?: Users.RequestOptions,
+    ): core.HttpResponsePromise<Management.RegenerateUsersRecoveryCodeResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__regenerateRecoveryCode(id, requestOptions));
+    }
+
+    private async __regenerateRecoveryCode(
+        id: string,
+        requestOptions?: Users.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.RegenerateUsersRecoveryCodeResponseContent>> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `users/${encodeURIComponent(id)}/recovery-code-regeneration`,
+            ),
+            method: "POST",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                requestOptions?.headers,
+            ),
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.RegenerateUsersRecoveryCodeResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.ManagementError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
                 throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling DELETE /users/{user_id}/refresh-tokens.",
+                    "Timeout exceeded when calling POST /users/{id}/recovery-code-regeneration.",
                 );
             case "unknown":
                 throw new errors.ManagementError({
@@ -451,142 +898,31 @@ export class Users {
     }
 
     /**
-     * Retrieve details for a user's sessions.
+     * Revokes selected resources related to a user (sessions, refresh tokens, ...).
      *
-     * @param {string} userId - ID of the user to get sessions for
-     * @param {Management.ListUserSessionsRequestParameters} request
-     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.users.listSessions("user_id")
-     */
-    public async listSessions(
-        userId: string,
-        request: Management.ListUserSessionsRequestParameters = {},
-        requestOptions?: Users.RequestOptions,
-    ): Promise<core.Page<Management.SessionResponseContent>> {
-        const list = core.HttpResponsePromise.interceptFunction(
-            async (
-                request: Management.ListUserSessionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUserSessionsPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ != null) {
-                    _queryParams["from"] = from_;
-                }
-                if (take != null) {
-                    _queryParams["take"] = take.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: core.url.join(
-                        (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.ManagementEnvironment.Default,
-                        `users/${encodeURIComponent(userId)}/sessions`,
-                    ),
-                    method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
-                    queryParameters: _queryParams,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        data: _response.body as Management.ListUserSessionsPaginatedResponseContent,
-                        rawResponse: _response.rawResponse,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                        case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                        case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        default:
-                            throw new errors.ManagementError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                                rawResponse: _response.rawResponse,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.ManagementError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                            rawResponse: _response.rawResponse,
-                        });
-                    case "timeout":
-                        throw new errors.ManagementTimeoutError(
-                            "Timeout exceeded when calling GET /users/{user_id}/sessions.",
-                        );
-                    case "unknown":
-                        throw new errors.ManagementError({
-                            message: _response.error.errorMessage,
-                            rawResponse: _response.rawResponse,
-                        });
-                }
-            },
-        );
-        const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserSessionsPaginatedResponseContent,
-            Management.SessionResponseContent
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.sessions ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
-            },
-        });
-    }
-
-    /**
-     * Delete all sessions for a user.
-     *
-     * @param {string} userId - ID of the user to get sessions for
+     * @param {string} id - ID of the user.
+     * @param {Management.RevokeUserAccessRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.users.deleteSessions("user_id")
+     *     await client.users.revokeAccess("id")
      */
-    public deleteSessions(userId: string, requestOptions?: Users.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteSessions(userId, requestOptions));
+    public revokeAccess(
+        id: string,
+        request: Management.RevokeUserAccessRequestContent = {},
+        requestOptions?: Users.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__revokeAccess(id, request, requestOptions));
     }
 
-    private async __deleteSessions(
-        userId: string,
+    private async __revokeAccess(
+        id: string,
+        request: Management.RevokeUserAccessRequestContent = {},
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -594,14 +930,18 @@ export class Users {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${encodeURIComponent(userId)}/sessions`,
+                `users/${encodeURIComponent(id)}/revoke-access`,
             ),
-            method: "DELETE",
+            method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -618,8 +958,6 @@ export class Users {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -640,7 +978,7 @@ export class Users {
                 });
             case "timeout":
                 throw new errors.ManagementTimeoutError(
-                    "Timeout exceeded when calling DELETE /users/{user_id}/sessions.",
+                    "Timeout exceeded when calling POST /users/{id}/revoke-access.",
                 );
             case "unknown":
                 throw new errors.ManagementError({

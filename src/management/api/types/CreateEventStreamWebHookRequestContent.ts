@@ -10,4 +10,5 @@ export interface CreateEventStreamWebHookRequestContent {
     /** List of event types subscribed to in this stream. */
     subscriptions?: Management.EventStreamSubscription[];
     destination: Management.EventStreamWebhookDestination;
+    status?: Management.EventStreamStatusEnum;
 }

@@ -15,8 +15,10 @@ describe("LogStreams", () => {
                 id: "id",
                 name: "name",
                 status: "active",
+                type: "http",
                 isPriority: true,
                 filters: [{}],
+                pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
                 sink: {
                     httpAuthorization: "httpAuthorization",
                     httpContentFormat: "JSONARRAY",
@@ -24,7 +26,6 @@ describe("LogStreams", () => {
                     httpEndpoint: "httpEndpoint",
                     httpCustomHeaders: [{}],
                 },
-                type: "http",
             },
         ];
         server.mockEndpoint().get("/log-streams").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -32,12 +33,17 @@ describe("LogStreams", () => {
         const response = await client.logStreams.list();
         expect(response).toEqual([
             {
-                type: "http",
                 id: "id",
                 name: "name",
                 status: "active",
+                type: "http",
                 isPriority: true,
                 filters: [{}],
+                pii_config: {
+                    log_fields: ["first_name"],
+                    method: "mask",
+                    algorithm: "xxhash",
+                },
                 sink: {
                     httpAuthorization: "httpAuthorization",
                     httpContentFormat: "JSONARRAY",
@@ -52,13 +58,15 @@ describe("LogStreams", () => {
     test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
-        const rawRequestBody = { sink: { httpEndpoint: "httpEndpoint" }, type: "http" };
+        const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = {
             id: "id",
             name: "name",
             status: "active",
+            type: "http",
             isPriority: true,
-            filters: [{ type: "category", name: "auth.ancillary.fail" }],
+            filters: [{ type: "category", name: "auth.login.fail" }],
+            pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
             sink: {
                 httpAuthorization: "httpAuthorization",
                 httpContentFormat: "JSONARRAY",
@@ -66,7 +74,6 @@ describe("LogStreams", () => {
                 httpEndpoint: "httpEndpoint",
                 httpCustomHeaders: [{}],
             },
-            type: "http",
         };
         server
             .mockEndpoint()
@@ -84,17 +91,22 @@ describe("LogStreams", () => {
             },
         });
         expect(response).toEqual({
-            type: "http",
             id: "id",
             name: "name",
             status: "active",
+            type: "http",
             isPriority: true,
             filters: [
                 {
                     type: "category",
-                    name: "auth.ancillary.fail",
+                    name: "auth.login.fail",
                 },
             ],
+            pii_config: {
+                log_fields: ["first_name"],
+                method: "mask",
+                algorithm: "xxhash",
+            },
             sink: {
                 httpAuthorization: "httpAuthorization",
                 httpContentFormat: "JSONARRAY",
@@ -113,8 +125,10 @@ describe("LogStreams", () => {
             id: "id",
             name: "name",
             status: "active",
+            type: "http",
             isPriority: true,
-            filters: [{ type: "category", name: "auth.ancillary.fail" }],
+            filters: [{ type: "category", name: "auth.login.fail" }],
+            pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
             sink: {
                 httpAuthorization: "httpAuthorization",
                 httpContentFormat: "JSONARRAY",
@@ -122,23 +136,27 @@ describe("LogStreams", () => {
                 httpEndpoint: "httpEndpoint",
                 httpCustomHeaders: [{}],
             },
-            type: "http",
         };
         server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.logStreams.get("id");
         expect(response).toEqual({
-            type: "http",
             id: "id",
             name: "name",
             status: "active",
+            type: "http",
             isPriority: true,
             filters: [
                 {
                     type: "category",
-                    name: "auth.ancillary.fail",
+                    name: "auth.login.fail",
                 },
             ],
+            pii_config: {
+                log_fields: ["first_name"],
+                method: "mask",
+                algorithm: "xxhash",
+            },
             sink: {
                 httpAuthorization: "httpAuthorization",
                 httpContentFormat: "JSONARRAY",
@@ -167,8 +185,10 @@ describe("LogStreams", () => {
             id: "id",
             name: "name",
             status: "active",
+            type: "http",
             isPriority: true,
-            filters: [{ type: "category", name: "auth.ancillary.fail" }],
+            filters: [{ type: "category", name: "auth.login.fail" }],
+            pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
             sink: {
                 httpAuthorization: "httpAuthorization",
                 httpContentFormat: "JSONARRAY",
@@ -176,7 +196,6 @@ describe("LogStreams", () => {
                 httpEndpoint: "httpEndpoint",
                 httpCustomHeaders: [{}],
             },
-            type: "http",
         };
         server
             .mockEndpoint()
@@ -189,17 +208,22 @@ describe("LogStreams", () => {
 
         const response = await client.logStreams.update("id");
         expect(response).toEqual({
-            type: "http",
             id: "id",
             name: "name",
             status: "active",
+            type: "http",
             isPriority: true,
             filters: [
                 {
                     type: "category",
-                    name: "auth.ancillary.fail",
+                    name: "auth.login.fail",
                 },
             ],
+            pii_config: {
+                log_fields: ["first_name"],
+                method: "mask",
+                algorithm: "xxhash",
+            },
             sink: {
                 httpAuthorization: "httpAuthorization",
                 httpContentFormat: "JSONARRAY",

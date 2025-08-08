@@ -66,7 +66,6 @@ export interface CreateClientResponseContent {
     mobile?: Management.ClientMobile;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
-    native_social_login?: unknown;
     refresh_token?: Management.ClientRefreshTokenConfiguration;
     default_organization?: Management.ClientDefaultOrganization;
     organization_usage?: Management.ClientOrganizationUsageEnum;

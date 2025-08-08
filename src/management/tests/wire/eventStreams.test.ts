@@ -19,7 +19,7 @@ describe("EventStreams", () => {
                     type: "webhook",
                     configuration: {
                         webhook_endpoint: "webhook_endpoint",
-                        webhook_authorization: { username: "username", method: "basic" },
+                        webhook_authorization: { method: "basic", username: "username" },
                     },
                 },
                 status: "enabled",
@@ -60,7 +60,7 @@ describe("EventStreams", () => {
                 type: "webhook",
                 configuration: {
                     webhook_endpoint: "webhook_endpoint",
-                    webhook_authorization: { username: "username", method: "basic" },
+                    webhook_authorization: { method: "basic", username: "username" },
                 },
             },
         };
@@ -72,7 +72,7 @@ describe("EventStreams", () => {
                 type: "webhook",
                 configuration: {
                     webhook_endpoint: "webhook_endpoint",
-                    webhook_authorization: { username: "username", method: "basic" },
+                    webhook_authorization: { method: "basic", username: "username" },
                 },
             },
             status: "enabled",
@@ -136,7 +136,7 @@ describe("EventStreams", () => {
                 type: "webhook",
                 configuration: {
                     webhook_endpoint: "webhook_endpoint",
-                    webhook_authorization: { username: "username", method: "basic" },
+                    webhook_authorization: { method: "basic", username: "username" },
                 },
             },
             status: "enabled",
@@ -192,7 +192,7 @@ describe("EventStreams", () => {
                 type: "webhook",
                 configuration: {
                     webhook_endpoint: "webhook_endpoint",
-                    webhook_authorization: { username: "username", method: "basic" },
+                    webhook_authorization: { method: "basic", username: "username" },
                 },
             },
             status: "enabled",
@@ -233,7 +233,53 @@ describe("EventStreams", () => {
         });
     });
 
-    test("createTestEvent", async () => {
+    test("getStats", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            window: {
+                date_from: "2024-01-15T09:30:00Z",
+                date_to: "2024-01-15T09:30:00Z",
+                bucket_interval: { scale_factor: 1 },
+            },
+            buckets: ["2024-01-15T09:30:00Z"],
+            metrics: [{ name: "name", window_total: 1.1, type: "type", data: [1.1] }],
+        };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/stats")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.eventStreams.getStats("id");
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            window: {
+                date_from: "2024-01-15T09:30:00Z",
+                date_to: "2024-01-15T09:30:00Z",
+                bucket_interval: {
+                    scale_factor: 1,
+                },
+            },
+            buckets: ["2024-01-15T09:30:00Z"],
+            metrics: [
+                {
+                    name: "name",
+                    window_total: 1.1,
+                    type: "type",
+                    data: [1.1],
+                },
+            ],
+        });
+    });
+
+    test("test", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { event_type: "user.created" };
@@ -261,7 +307,7 @@ describe("EventStreams", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.eventStreams.createTestEvent("id", {
+        const response = await client.eventStreams.test("id", {
             event_type: "user.created",
         });
         expect(response).toEqual({

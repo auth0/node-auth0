@@ -7,6 +7,7 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { Secrets } from "../resources/secrets/client/Client.js";
 
 export declare namespace Hooks {
     export interface Options {
@@ -26,6 +27,8 @@ export declare namespace Hooks {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,9 +36,14 @@ export declare namespace Hooks {
 
 export class Hooks {
     protected readonly _options: Hooks.Options;
+    protected _secrets: Secrets | undefined;
 
     constructor(_options: Hooks.Options) {
         this._options = _options;
+    }
+
+    public get secrets(): Secrets {
+        return (this._secrets ??= new Secrets(this._options));
     }
 
     /**
@@ -101,7 +109,7 @@ export class Hooks {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -217,6 +225,7 @@ export class Hooks {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -313,7 +322,7 @@ export class Hooks {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -392,6 +401,7 @@ export class Hooks {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -480,6 +490,7 @@ export class Hooks {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -522,371 +533,6 @@ export class Hooks {
                 });
             case "timeout":
                 throw new errors.ManagementTimeoutError("Timeout exceeded when calling PATCH /hooks/{id}.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieve a hook's secrets by the ID of the hook.
-     *
-     * @param {string} id - ID of the hook to retrieve secrets from.
-     * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.hooks.getSecrets("id")
-     */
-    public getSecrets(
-        id: string,
-        requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetHookSecretResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__getSecrets(id, requestOptions));
-    }
-
-    private async __getSecrets(
-        id: string,
-        requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetHookSecretResponseContent>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `hooks/${encodeURIComponent(id)}/secrets`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.GetHookSecretResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling GET /hooks/{id}/secrets.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Add one or more secrets to an existing hook. Accepts an object of key-value pairs, where the key is the name of the secret. A hook can have a maximum of 20 secrets.
-     *
-     * @param {string} id - The id of the hook to retrieve
-     * @param {Management.CreateHookSecretRequestContent} request
-     * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.hooks.createSecrets("id", {
-     *         "key": "value"
-     *     })
-     */
-    public createSecrets(
-        id: string,
-        request: Management.CreateHookSecretRequestContent,
-        requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__createSecrets(id, request, requestOptions));
-    }
-
-    private async __createSecrets(
-        id: string,
-        request: Management.CreateHookSecretRequestContent,
-        requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `hooks/${encodeURIComponent(id)}/secrets`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling POST /hooks/{id}/secrets.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Delete one or more existing secrets for a given hook. Accepts an array of secret names to delete.
-     *
-     * @param {string} id - ID of the hook whose secrets to delete.
-     * @param {Management.DeleteHookSecretRequestContent} request
-     * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.hooks.deleteSecrets("id", ["string"])
-     */
-    public deleteSecrets(
-        id: string,
-        request: Management.DeleteHookSecretRequestContent,
-        requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteSecrets(id, request, requestOptions));
-    }
-
-    private async __deleteSecrets(
-        id: string,
-        request: Management.DeleteHookSecretRequestContent,
-        requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `hooks/${encodeURIComponent(id)}/secrets`,
-            ),
-            method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling DELETE /hooks/{id}/secrets.");
-            case "unknown":
-                throw new errors.ManagementError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Update one or more existing secrets for an existing hook. Accepts an object of key-value pairs, where the key is the name of the existing secret.
-     *
-     * @param {string} id - ID of the hook whose secrets to update.
-     * @param {Management.UpdateHookSecretRequestContent} request
-     * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.hooks.updateSecrets("id", {
-     *         "key": "value"
-     *     })
-     */
-    public updateSecrets(
-        id: string,
-        request: Management.UpdateHookSecretRequestContent,
-        requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__updateSecrets(id, request, requestOptions));
-    }
-
-    private async __updateSecrets(
-        id: string,
-        request: Management.UpdateHookSecretRequestContent,
-        requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `hooks/${encodeURIComponent(id)}/secrets`,
-            ),
-            method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.ManagementError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.ManagementTimeoutError("Timeout exceeded when calling PATCH /hooks/{id}/secrets.");
             case "unknown":
                 throw new errors.ManagementError({
                     message: _response.error.errorMessage,

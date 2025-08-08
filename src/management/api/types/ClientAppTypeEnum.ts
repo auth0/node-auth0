@@ -3,13 +3,15 @@
  */
 
 /**
- * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`.
+ * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, `regular_web` or `resource_server`.
  */
 export type ClientAppTypeEnum =
     | "native"
     | "spa"
     | "regular_web"
     | "non_interactive"
+    | "resource_server"
+    | "express_configuration"
     | "rms"
     | "box"
     | "cloudbees"
@@ -34,6 +36,8 @@ export const ClientAppTypeEnum = {
     Spa: "spa",
     RegularWeb: "regular_web",
     NonInteractive: "non_interactive",
+    ResourceServer: "resource_server",
+    ExpressConfiguration: "express_configuration",
     Rms: "rms",
     Box: "box",
     Cloudbees: "cloudbees",

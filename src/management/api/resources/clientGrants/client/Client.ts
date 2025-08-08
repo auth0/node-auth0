@@ -7,6 +7,7 @@ import * as core from "../../../../core/index.js";
 import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
+import { Organizations } from "../resources/organizations/client/Client.js";
 
 export declare namespace ClientGrants {
     export interface Options {
@@ -26,6 +27,8 @@ export declare namespace ClientGrants {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -33,9 +36,14 @@ export declare namespace ClientGrants {
 
 export class ClientGrants {
     protected readonly _options: ClientGrants.Options;
+    protected _organizations: Organizations | undefined;
 
     constructor(_options: ClientGrants.Options) {
         this._options = _options;
+    }
+
+    public get organizations(): Organizations {
+        return (this._organizations ??= new Organizations(this._options));
     }
 
     /**
@@ -95,7 +103,7 @@ export class ClientGrants {
                         mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                         requestOptions?.headers,
                     ),
-                    queryParameters: _queryParams,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -207,6 +215,7 @@ export class ClientGrants {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -295,6 +304,7 @@ export class ClientGrants {
                 mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
                 requestOptions?.headers,
             ),
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -382,6 +392,7 @@ export class ClientGrants {
                 requestOptions?.headers,
             ),
             contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
             requestType: "json",
             body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -431,123 +442,6 @@ export class ClientGrants {
                     rawResponse: _response.rawResponse,
                 });
         }
-    }
-
-    /**
-     * @param {string} id - ID of the client grant
-     * @param {Management.ListClientGrantOrganizationsRequestParameters} request
-     * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.clientGrants.listOrganizations("id")
-     */
-    public async listOrganizations(
-        id: string,
-        request: Management.ListClientGrantOrganizationsRequestParameters = {},
-        requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.Page<Management.Organization>> {
-        const list = core.HttpResponsePromise.interceptFunction(
-            async (
-                request: Management.ListClientGrantOrganizationsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListClientGrantOrganizationsPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ != null) {
-                    _queryParams["from"] = from_;
-                }
-                if (take != null) {
-                    _queryParams["take"] = take.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: core.url.join(
-                        (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.ManagementEnvironment.Default,
-                        `client-grants/${encodeURIComponent(id)}/organizations`,
-                    ),
-                    method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
-                    queryParameters: _queryParams,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        data: _response.body as Management.ListClientGrantOrganizationsPaginatedResponseContent,
-                        rawResponse: _response.rawResponse,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                        case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        default:
-                            throw new errors.ManagementError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                                rawResponse: _response.rawResponse,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.ManagementError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                            rawResponse: _response.rawResponse,
-                        });
-                    case "timeout":
-                        throw new errors.ManagementTimeoutError(
-                            "Timeout exceeded when calling GET /client-grants/{id}/organizations.",
-                        );
-                    case "unknown":
-                        throw new errors.ManagementError({
-                            message: _response.error.errorMessage,
-                            rawResponse: _response.rawResponse,
-                        });
-                }
-            },
-        );
-        const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListClientGrantOrganizationsPaginatedResponseContent,
-            Management.Organization
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.organizations ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
-            },
-        });
     }
 
     protected async _getAuthorizationHeader(): Promise<string> {
