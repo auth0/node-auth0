@@ -19,6 +19,7 @@ src/management/tests/unit/custom-domain-whitelist.test.ts
 src/management/tests/unit/management-client-custom-domain.test.ts
 src/management/tests/unit/request-options.test.ts
 tests/
+v5_MIGRATION_GUIDE.md
 
 # @todo auto-delete .mock folder
 
