@@ -23,17 +23,17 @@ runs:
           uses: actions/setup-node@v4
           with:
               node-version: ${{ inputs.node-version }}
-              cache: "npm"
+              cache: "yarn"
               registry-url: "https://registry.npmjs.org"
 
         - name: Install dependencies
           shell: bash
-          run: npm ci --include=dev
+          run: yarn install --frozen-lockfile
 
         - name: Build package
           if: inputs.require-build == 'true'
           shell: bash
-          run: npm run build
+          run: yarn build
 
         - name: Publish release to NPM
           shell: bash

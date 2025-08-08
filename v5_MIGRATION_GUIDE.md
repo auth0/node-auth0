@@ -8,8 +8,13 @@ A guide to migrating the Auth0 TS SDK from `4.x` to `5.x`.
     - [Management API](#management-api)
 - [Specific changes to the Management API](#specific-changes-to-the-management-api)
     - [Method name changes](#method-name-changes)
-    - [Auto-pagination](#auto-pagination)
+    - [Pagination and Response Changes](#pagination-and-response-changes)
+        - [Accessing Response Data](#accessing-response-data)
+        - [Migrating from V4 to V5 Pagination](#migrating-from-v4-to-v5-pagination)
+        - [Non-Paginated Responses (Create, Update, etc.)](#non-paginated-responses-create-update-etc)
+        - [Advanced Pagination](#advanced-pagination)
     - [Management namespace](#management-namespace)
+        - [Type Name Changes](#type-name-changes)
     - [Unified error type](#unified-error-type)
     - [Import users takes a FileLike](#import-users-takes-a-filelike)
 
@@ -25,13 +30,15 @@ This major version change does not affect the Authentication API. Any code writt
 
 ### Management API
 
-Instead, v5 introduces a version of the Management API SDK created with [Fern](https://github.com/fern-api/fern). Fern generates its SDKs, including this one, directly from Auth0's OpenAPI specification; this procedural approach introduces a number of benefits and a number of changes to the SDK, which we'll outline below.
+V5 introduces significant improvements to the Management API SDK by migrating to [Fern](https://github.com/fern-api/fern) as our code generation tool. While the SDK was previously generated, v5 benefits from Fern's enhanced capabilities including better resource grouping, sub-client organization, and customization options. Additionally, v5 leverages a substantially improved and optimized OpenAPI specification that provides more accurate type definitions and better API structure representation. This combination introduces a number of benefits and changes to the SDK, which we'll outline below.
 
 ## Specific changes to the Management API
 
 ### Method name changes
 
-Most method names are now in tighter lock-step with their respective endpoints (see the [Management API documentation](https://auth0.com/docs/api/management/v2) for information on all available endpoints). For instance, the method to delete a session, invoked through the endpoint `DELETE /v2/sessions/{id}`, can be called as `client.sessions.delete(id)`:
+V5 introduces a more consistent and intuitive API structure. We moved subresources into sub-clients and use consistent method naming: `list`, `create`, `update`, `delete`, `set`, `get`, and various actions like `test`, `deploy`, `reset`, etc.
+
+Most method names are now in tighter lock-step with their respective endpoints (see the [Management API documentation](https://auth0.com/docs/api/management/v2) for information on all available endpoints). For instance, to get action versions, the v4 method `actions.getVersions()` becomes `actions.versions.list()` in v5:
 
 ```ts
 import { ManagementClient } from "auth0";
@@ -42,42 +49,138 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-await client.sessions.delete("id");
+// v5: Subresources moved to sub-clients with consistent naming
+const versions = await client.actions.versions.list("action_id");
+
+// v4: Direct method on main resource
+// const versions = await client.actions.getVersions("action_id");
 ```
 
-and the method to get details about a guardian's multi-factor-authentication phone provider, invoked through the endpoint `GET  /v2/guardian/factors/phone/selected-provider`, can be called as `client.guardian.factors.phone.getSelectedProvider()`:
-
-```ts
-import { ManagementClient } from "auth0";
-
-const client = new ManagementClient({
-    domain: "your-tenant.auth0.com",
-    clientId: "YOUR_CLIENT_ID",
-    clientSecret: "YOUR_CLIENT_SECRET",
-});
-
-const selectedProvider = await client.guardian.factors.phone.getSelectedProvider();
-```
-
-In the common situation where there are two similar `GET` methods, one that "gets one" and another that "gets all" of a particular resource, the "gets all" method is typically found under the name `list()`, as in the respective method for the endpoint `GET /v2/users`: `client.users.list()`.
+In the common situation where there are two similar `GET` methods, one that "gets one" and another that "gets all" of a particular resource, the "gets all" method is consistently named `list()`, as in `client.users.list()` for the endpoint `GET /v2/users`.
 
 <details>
   <summary>A complete list of method name changes:</summary>
 
-Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x: have been removed as of v5. Note these methods are typically found in the namespace of a `ManagementClient` instance.
+The tables below show all method changes organized by category. Note these methods are typically found in the namespace of a `ManagementClient` instance.
+
+## Unchanged Methods
+
+| Before                                | After                                 |
+| ------------------------------------- | ------------------------------------- |
+| `actions.create()`                    | `actions.create()`                    |
+| `actions.get()`                       | `actions.get()`                       |
+| `actions.delete()`                    | `actions.delete()`                    |
+| `actions.update()`                    | `actions.update()`                    |
+| `actions.deploy()`                    | `actions.deploy()`                    |
+| `actions.test()`                      | `actions.test()`                      |
+| `clientGrants.create()`               | `clientGrants.create()`               |
+| `clientGrants.delete()`               | `clientGrants.delete()`               |
+| `clientGrants.update()`               | `clientGrants.update()`               |
+| `clients.create()`                    | `clients.create()`                    |
+| `clients.get()`                       | `clients.get()`                       |
+| `clients.delete()`                    | `clients.delete()`                    |
+| `clients.update()`                    | `clients.update()`                    |
+| `connections.create()`                | `connections.create()`                |
+| `connections.get()`                   | `connections.get()`                   |
+| `connections.delete()`                | `connections.delete()`                |
+| `connections.update()`                | `connections.update()`                |
+| `connections.checkStatus()`           | `connections.checkStatus()`           |
+| `customDomains.create()`              | `customDomains.create()`              |
+| `customDomains.get()`                 | `customDomains.get()`                 |
+| `customDomains.delete()`              | `customDomains.delete()`              |
+| `customDomains.update()`              | `customDomains.update()`              |
+| `customDomains.verify()`              | `customDomains.verify()`              |
+| `deviceCredentials.createPublicKey()` | `deviceCredentials.createPublicKey()` |
+| `deviceCredentials.delete()`          | `deviceCredentials.delete()`          |
+| `emailTemplates.create()`             | `emailTemplates.create()`             |
+| `emailTemplates.get()`                | `emailTemplates.get()`                |
+| `emailTemplates.update()`             | `emailTemplates.update()`             |
+| `flows.create()`                      | `flows.create()`                      |
+| `flows.get()`                         | `flows.get()`                         |
+| `flows.update()`                      | `flows.update()`                      |
+| `flows.delete()`                      | `flows.delete()`                      |
+| `forms.create()`                      | `forms.create()`                      |
+| `forms.get()`                         | `forms.get()`                         |
+| `forms.update()`                      | `forms.update()`                      |
+| `forms.delete()`                      | `forms.delete()`                      |
+| `hooks.create()`                      | `hooks.create()`                      |
+| `hooks.get()`                         | `hooks.get()`                         |
+| `hooks.delete()`                      | `hooks.delete()`                      |
+| `hooks.update()`                      | `hooks.update()`                      |
+| `jobs.get()`                          | `jobs.get()`                          |
+| `logStreams.create()`                 | `logStreams.create()`                 |
+| `logStreams.get()`                    | `logStreams.get()`                    |
+| `logStreams.delete()`                 | `logStreams.delete()`                 |
+| `logStreams.update()`                 | `logStreams.update()`                 |
+| `logs.get()`                          | `logs.get()`                          |
+| `organizations.create()`              | `organizations.create()`              |
+| `organizations.getByName()`           | `organizations.getByName()`           |
+| `organizations.get()`                 | `organizations.get()`                 |
+| `organizations.delete()`              | `organizations.delete()`              |
+| `organizations.update()`              | `organizations.update()`              |
+| `refreshTokens.get()`                 | `refreshTokens.get()`                 |
+| `refreshTokens.delete()`              | `refreshTokens.delete()`              |
+| `resourceServers.create()`            | `resourceServers.create()`            |
+| `resourceServers.get()`               | `resourceServers.get()`               |
+| `resourceServers.delete()`            | `resourceServers.delete()`            |
+| `resourceServers.update()`            | `resourceServers.update()`            |
+| `roles.create()`                      | `roles.create()`                      |
+| `roles.get()`                         | `roles.get()`                         |
+| `roles.delete()`                      | `roles.delete()`                      |
+| `roles.update()`                      | `roles.update()`                      |
+| `rules.create()`                      | `rules.create()`                      |
+| `rulesConfigs.delete()`               | `rulesConfigs.delete()`               |
+| `rulesConfigs.set()`                  | `rulesConfigs.set()`                  |
+| `rules.get()`                         | `rules.get()`                         |
+| `rules.delete()`                      | `rules.delete()`                      |
+| `rules.update()`                      | `rules.update()`                      |
+| `selfServiceProfiles.create()`        | `selfServiceProfiles.create()`        |
+| `selfServiceProfiles.get()`           | `selfServiceProfiles.get()`           |
+| `selfServiceProfiles.delete()`        | `selfServiceProfiles.delete()`        |
+| `selfServiceProfiles.update()`        | `selfServiceProfiles.update()`        |
+| `stats.getActiveUsersCount()`         | `stats.getActiveUsersCount()`         |
+| `stats.getDaily()`                    | `stats.getDaily()`                    |
+| `sessions.get()`                      | `sessions.get()`                      |
+| `sessions.delete()`                   | `sessions.delete()`                   |
+| `tickets.verifyEmail()`               | `tickets.verifyEmail()`               |
+| `tickets.changePassword()`            | `tickets.changePassword()`            |
+| `userBlocks.delete()`                 | `userBlocks.delete()`                 |
+| `users.create()`                      | `users.create()`                      |
+| `users.get()`                         | `users.get()`                         |
+| `users.delete()`                      | `users.delete()`                      |
+| `users.update()`                      | `users.update()`                      |
+| `users.regenerateRecoveryCode()`      | `users.regenerateRecoveryCode()`      |
+| `tokenExchangeProfiles.delete()`      | `tokenExchangeProfiles.delete()`      |
+| `tokenExchangeProfiles.update()`      | `tokenExchangeProfiles.update()`      |
+| `tokenExchangeProfiles.get()`         | `tokenExchangeProfiles.get()`         |
+| `tokenExchangeProfiles.create()`      | `tokenExchangeProfiles.create()`      |
+| `networkAcls.delete()`                | `networkAcls.delete()`                |
+| `networkAcls.get()`                   | `networkAcls.get()`                   |
+| `networkAcls.create()`                | `networkAcls.create()`                |
+
+## Changed - Sub-resource Moves
+
+| Before                              | After                                           |
+| ----------------------------------- | ----------------------------------------------- |
+| `emails.get()`                      | `emails.provider.get()`                         |
+| `emails.update()`                   | `emails.provider.update()`                      |
+| `grants.deleteByUserId()`           | `userGrants.deleteByUserId()`                   |
+| `grants.delete()`                   | `userGrants.delete()`                           |
+| `keys.rotate()`                     | `keys.signing.rotate()`                         |
+| `keys.get()`                        | `keys.signing.get()`                            |
+| `keys.revoke()`                     | `keys.signing.revoke()`                         |
+| `users.link()`                      | `users.identities.link()`                       |
+| `users.invalidateRememberBrowser()` | `users.multifactor.invalidateRememberBrowser()` |
+| `keys.createPublicWrappingKey()`    | `keys.encryption.createPublicWrappingKey()`     |
+
+## Drastic Changes - Method Name Changes
 
 | Before                                                     | After                                                     |
 | ---------------------------------------------------------- | --------------------------------------------------------- |
 | `actions.getAll()`                                         | `actions.list()`                                          |
-| `actions.create()`                                         | `actions.create()`                                        |
 | `actions.getVersions()`                                    | `actions.versions.list()`                                 |
 | `actions.getVersion()`                                     | `actions.versions.get()`                                  |
 | `actions.deployVersion()`                                  | `actions.versions.deploy()`                               |
-| `actions.get()`                                            | `actions.get()`                                           |
-| `actions.delete()`                                         | `actions.delete()`                                        |
-| `actions.update()`                                         | `actions.update()`                                        |
-| `actions.deploy()`                                         | `actions.deploy()`                                        |
-| `actions.test()`                                           | `actions.test()`                                          |
 | `actions.getExecution()`                                   | `actions.executions.get()`                                |
 | `actions.getAllTriggers()`                                 | `actions.triggers.list()`                                 |
 | `actions.getTriggerBindings()`                             | `actions.triggers.bindings.list()`                        |
@@ -90,8 +193,6 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `attackProtection.updateBruteForceConfig()`                | `attackProtection.bruteForceProtection.update()`          |
 | `attackProtection.getSuspiciousIpThrottlingConfig()`       | `attackProtection.suspiciousIpThrottling.get()`           |
 | `attackProtection.updateSuspiciousIpThrottlingConfig()`    | `attackProtection.suspiciousIpThrottling.update()`        |
-| `blacklists.getAll()`                                      | :x: Removed in v5                                         |
-| `blacklists.add()`                                         | :x: Removed in v5                                         |
 | `branding.getSettings()`                                   | `branding.get()`                                          |
 | `branding.updateSettings()`                                | `branding.update()`                                       |
 | `branding.getUniversalLoginTemplate()`                     | `branding.templates.getUniversalLogin()`                  |
@@ -103,26 +204,14 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `branding.deleteTheme()`                                   | `branding.themes.delete()`                                |
 | `branding.updateTheme()`                                   | `branding.themes.update()`                                |
 | `clientGrants.getAll()`                                    | `clientGrants.list()`                                     |
-| `clientGrants.create()`                                    | `clientGrants.create()`                                   |
-| `clientGrants.delete()`                                    | `clientGrants.delete()`                                   |
-| `clientGrants.update()`                                    | `clientGrants.update()`                                   |
 | `clients.getAll()`                                         | `clients.list()`                                          |
-| `clients.create()`                                         | `clients.create()`                                        |
 | `clients.getCredentials()`                                 | `clients.credentials.list()`                              |
 | `clients.createCredential()`                               | `clients.credentials.create()`                            |
 | `clients.getCredential()`                                  | `clients.credentials.get()`                               |
 | `clients.deleteCredential()`                               | `clients.credentials.delete()`                            |
 | `clients.updateCredential()`                               | `clients.credentials.update()`                            |
-| `clients.get()`                                            | `clients.get()`                                           |
-| `clients.delete()`                                         | `clients.delete()`                                        |
-| `clients.update()`                                         | `clients.update()`                                        |
 | `clients.rotateClientSecret()`                             | `clients.rotateSecret()`                                  |
 | `connections.getAll()`                                     | `connections.list()`                                      |
-| `connections.create()`                                     | `connections.create()`                                    |
-| `connections.get()`                                        | `connections.get()`                                       |
-| `connections.delete()`                                     | `connections.delete()`                                    |
-| `connections.update()`                                     | `connections.update()`                                    |
-| `connections.checkStatus()`                                | `connections.checkStatus()`                               |
 | `connections.deleteUserByEmail()`                          | `connections.users.deleteByEmail()`                       |
 | `connections.getScimConfiguration()`                       | `connections.scimConfiguration.get()`                     |
 | `connections.updateScimConfiguration()`                    | `connections.scimConfiguration.update()`                  |
@@ -133,42 +222,15 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `connections.createScimToken()`                            | `connections.scimConfiguration.tokens.create()`           |
 | `connections.deleteScimToken()`                            | `connections.scimConfiguration.tokens.delete()`           |
 | `customDomains.getAll()`                                   | `customDomains.list()`                                    |
-| `customDomains.create()`                                   | `customDomains.create()`                                  |
-| `customDomains.get()`                                      | `customDomains.get()`                                     |
-| `customDomains.delete()`                                   | `customDomains.delete()`                                  |
-| `customDomains.update()`                                   | `customDomains.update()`                                  |
-| `customDomains.verify()`                                   | `customDomains.verify()`                                  |
 | `deviceCredentials.getAll()`                               | `deviceCredentials.list()`                                |
-| `deviceCredentials.createPublicKey()`                      | `deviceCredentials.createPublicKey()`                     |
-| `deviceCredentials.delete()`                               | `deviceCredentials.delete()`                              |
-| `emailTemplates.create()`                                  | `emailTemplates.create()`                                 |
-| `emailTemplates.get()`                                     | `emailTemplates.get()`                                    |
-| `emailTemplates.update()`                                  | `emailTemplates.update()`                                 |
 | `emailTemplates.put()`                                     | `emailTemplates.set()`                                    |
-| `emails.get()`                                             | `emails.provider.get()`                                   |
-| `emails.update()`                                          | `emails.provider.update()`                                |
 | `emails.configure()`                                       | `emails.provider.create()`                                |
 | `flows.getAll()`                                           | `flows.list()`                                            |
-| `flows.create()`                                           | `flows.create()`                                          |
-| `flows.getAllConnections()`                                | :x: Removed in v5                                         |
-| `flows.createConnection()`                                 | :x: Removed in v5                                         |
-| `flows.getConnection()`                                    | :x: Removed in v5                                         |
-| `flows.deleteConnection()`                                 | :x: Removed in v5                                         |
-| `flows.updateConnection()`                                 | :x: Removed in v5                                         |
 | `flows.getAllExecutions()`                                 | `flows.executions.list()`                                 |
 | `flows.getExecution()`                                     | `flows.executions.get()`                                  |
 | `flows.deleteExecution()`                                  | `flows.executions.delete()`                               |
-| `flows.get()`                                              | `flows.get()`                                             |
-| `flows.update()`                                           | `flows.update()`                                          |
-| `flows.delete()`                                           | `flows.delete()`                                          |
 | `forms.getAll()`                                           | `forms.list()`                                            |
-| `forms.create()`                                           | `forms.create()`                                          |
-| `forms.get()`                                              | `forms.get()`                                             |
-| `forms.update()`                                           | `forms.update()`                                          |
-| `forms.delete()`                                           | `forms.delete()`                                          |
 | `grants.getAll()`                                          | `userGrants.list()`                                       |
-| `grants.deleteByUserId()`                                  | `userGrants.deleteByUserId()`                             |
-| `grants.delete()`                                          | `userGrants.delete()`                                     |
 | `guardian.createEnrollmentTicket()`                        | `guardian.enrollments.createTicket()`                     |
 | `guardian.getGuardianEnrollment()`                         | `guardian.enrollments.get()`                              |
 | `guardian.deleteGuardianEnrollment()`                      | `guardian.enrollments.delete()`                           |
@@ -201,10 +263,6 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `guardian.getPolicies()`                                   | `guardian.policies.list()`                                |
 | `guardian.updatePolicies()`                                | `guardian.policies.set()`                                 |
 | `hooks.getAll()`                                           | `hooks.list()`                                            |
-| `hooks.create()`                                           | `hooks.create()`                                          |
-| `hooks.get()`                                              | `hooks.get()`                                             |
-| `hooks.delete()`                                           | `hooks.delete()`                                          |
-| `hooks.update()`                                           | `hooks.update()`                                          |
 | `hooks.getSecrets()`                                       | `hooks.secrets.get()`                                     |
 | `hooks.deleteSecrets()`                                    | `hooks.secrets.delete()`                                  |
 | `hooks.updateSecrets()`                                    | `hooks.secrets.update()`                                  |
@@ -212,26 +270,12 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `jobs.exportUsers()`                                       | `jobs.usersExports.create()`                              |
 | `jobs.importUsers()`                                       | `jobs.usersImports.create()`                              |
 | `jobs.verifyEmail()`                                       | `jobs.verificationEmail.create()`                         |
-| `jobs.get()`                                               | `jobs.get()`                                              |
 | `jobs.getErrors()`                                         | `jobs.errors.get()`                                       |
 | `keys.postEncryptionRekey()`                               | `keys.encryption.rekey()`                                 |
 | `keys.getAll()`                                            | `keys.signing.list()`                                     |
-| `keys.rotate()`                                            | `keys.signing.rotate()`                                   |
-| `keys.get()`                                               | `keys.signing.get()`                                      |
-| `keys.revoke()`                                            | `keys.signing.revoke()`                                   |
 | `logStreams.getAll()`                                      | `logStreams.list()`                                       |
-| `logStreams.create()`                                      | `logStreams.create()`                                     |
-| `logStreams.get()`                                         | `logStreams.get()`                                        |
-| `logStreams.delete()`                                      | `logStreams.delete()`                                     |
-| `logStreams.update()`                                      | `logStreams.update()`                                     |
 | `logs.getAll()`                                            | `logs.list()`                                             |
-| `logs.get()`                                               | `logs.get()`                                              |
 | `organizations.getAll()`                                   | `organizations.list()`                                    |
-| `organizations.create()`                                   | `organizations.create()`                                  |
-| `organizations.getByName()`                                | `organizations.getByName()`                               |
-| `organizations.get()`                                      | `organizations.get()`                                     |
-| `organizations.delete()`                                   | `organizations.delete()`                                  |
-| `organizations.update()`                                   | `organizations.update()`                                  |
 | `organizations.getOrganizationClientGrants()`              | `organizations.clientGrants.list()`                       |
 | `organizations.postOrganizationClientGrants()`             | `organizations.clientGrants.create()`                     |
 | `organizations.deleteClientGrantsByGrantId()`              | `organizations.clientGrants.delete()`                     |
@@ -256,58 +300,27 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `prompts.updateCustomTextByLanguage()`                     | `prompts.customText.set()`                                |
 | `prompts.getPartials()`                                    | `prompts.partials.get()`                                  |
 | `prompts.updatePartials()`                                 | `prompts.partials.set()`                                  |
-| `refreshTokens.get()`                                      | `refreshTokens.get()`                                     |
-| `refreshTokens.delete()`                                   | `refreshTokens.delete()`                                  |
 | `resourceServers.getAll()`                                 | `resourceServers.list()`                                  |
-| `resourceServers.create()`                                 | `resourceServers.create()`                                |
-| `resourceServers.get()`                                    | `resourceServers.get()`                                   |
-| `resourceServers.delete()`                                 | `resourceServers.delete()`                                |
-| `resourceServers.update()`                                 | `resourceServers.update()`                                |
 | `roles.getAll()`                                           | `roles.list()`                                            |
-| `roles.create()`                                           | `roles.create()`                                          |
-| `roles.get()`                                              | `roles.get()`                                             |
-| `roles.delete()`                                           | `roles.delete()`                                          |
-| `roles.update()`                                           | `roles.update()`                                          |
 | `roles.getPermissions()`                                   | `roles.permissions.list()`                                |
 | `roles.deletePermissions()`                                | `roles.permissions.delete()`                              |
 | `roles.addPermissions()`                                   | `roles.permissions.add()`                                 |
 | `roles.getUsers()`                                         | `roles.users.list()`                                      |
 | `roles.assignUsers()`                                      | `roles.users.assign()`                                    |
 | `rules.getAll()`                                           | `rules.list()`                                            |
-| `rules.create()`                                           | `rules.create()`                                          |
 | `rulesConfigs.getAll()`                                    | `rulesConfigs.list()`                                     |
-| `rulesConfigs.delete()`                                    | `rulesConfigs.delete()`                                   |
-| `rulesConfigs.set()`                                       | `rulesConfigs.set()`                                      |
-| `rules.get()`                                              | `rules.get()`                                             |
-| `rules.delete()`                                           | `rules.delete()`                                          |
-| `rules.update()`                                           | `rules.update()`                                          |
 | `selfServiceProfiles.getAll()`                             | `selfServiceProfiles.list()`                              |
-| `selfServiceProfiles.create()`                             | `selfServiceProfiles.create()`                            |
-| `selfServiceProfiles.get()`                                | `selfServiceProfiles.get()`                               |
-| `selfServiceProfiles.delete()`                             | `selfServiceProfiles.delete()`                            |
-| `selfServiceProfiles.update()`                             | `selfServiceProfiles.update()`                            |
 | `selfServiceProfiles.createSsoTicket()`                    | `selfServiceProfiles.ssoTicket.create()`                  |
 | `selfServiceProfiles.getCustomText()`                      | `selfServiceProfiles.customText.list()`                   |
 | `selfServiceProfiles.updateCustomText()`                   | `selfServiceProfiles.customText.set()`                    |
 | `selfServiceProfiles.revokeSsoTicket()`                    | `selfServiceProfiles.ssoTicket.revoke()`                  |
-| `stats.getActiveUsersCount()`                              | `stats.getActiveUsersCount()`                             |
-| `stats.getDaily()`                                         | `stats.getDaily()`                                        |
-| `sessions.get()`                                           | `sessions.get()`                                          |
-| `sessions.delete()`                                        | `sessions.delete()`                                       |
 | `tenants.getSettings()`                                    | `tenants.settings.get()`                                  |
 | `tenants.updateSettings()`                                 | `tenants.settings.update()`                               |
-| `tickets.verifyEmail()`                                    | `tickets.verifyEmail()`                                   |
-| `tickets.changePassword()`                                 | `tickets.changePassword()`                                |
 | `userBlocks.getAll()`                                      | `userBlocks.listByIdentifier()`                           |
 | `userBlocks.deleteAll()`                                   | `userBlocks.deleteByIdentifier()`                         |
 | `userBlocks.get()`                                         | `userBlocks.list()`                                       |
-| `userBlocks.delete()`                                      | `userBlocks.delete()`                                     |
 | `users.getAll()`                                           | `users.list()`                                            |
-| `users.create()`                                           | `users.create()`                                          |
 | `usersByEmail.getByEmail()`                                | `users.listUsersByEmail()`                                |
-| `users.get()`                                              | `users.get()`                                             |
-| `users.delete()`                                           | `users.delete()`                                          |
-| `users.update()`                                           | `users.update()`                                          |
 | `users.getAuthenticationMethods()`                         | `users.authenticationMethods.list()`                      |
 | `users.createAuthenticationMethod()`                       | `users.authenticationMethods.create()`                    |
 | `users.updateAuthenticationMethods()`                      | `users.authenticationMethods.set()`                       |
@@ -317,16 +330,13 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `users.updateAuthenticationMethod()`                       | `users.authenticationMethods.update()`                    |
 | `users.deleteAllAuthenticators()`                          | `users.authenticators.deleteAll()`                        |
 | `users.getEnrollments()`                                   | `users.enrollments.get()`                                 |
-| `users.link()`                                             | `users.identities.link()`                                 |
 | `users.unlink()`                                           | `users.identities.delete()`                               |
 | `users.getLogs()`                                          | `users.logs.list()`                                       |
-| `users.invalidateRememberBrowser()`                        | `users.multifactor.invalidateRememberBrowser()`           |
 | `users.deleteMultifactorProvider()`                        | `users.multifactor.deleteProvider()`                      |
 | `users.getUserOrganizations()`                             | `users.organizations.list()`                              |
 | `users.getPermissions()`                                   | `users.permissions.list()`                                |
 | `users.deletePermissions()`                                | `users.permissions.delete()`                              |
 | `users.assignPermissions()`                                | `users.permissions.create()`                              |
-| `users.regenerateRecoveryCode()`                           | `users.regenerateRecoveryCode()`                          |
 | `users.getRoles()`                                         | `users.roles.list()`                                      |
 | `users.deleteRoles()`                                      | `users.roles.delete()`                                    |
 | `users.assignRoles()`                                      | `users.roles.assign()`                                    |
@@ -336,10 +346,6 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `users.deleteSessions()`                                   | `users.sessions.delete()`                                 |
 | `prompts.getRendering()`                                   | `prompts.rendering.get()`                                 |
 | `prompts.updateRendering()`                                | `prompts.rendering.update()`                              |
-| `tokenExchangeProfiles.delete()`                           | `tokenExchangeProfiles.delete()`                          |
-| `tokenExchangeProfiles.update()`                           | `tokenExchangeProfiles.update()`                          |
-| `tokenExchangeProfiles.get()`                              | `tokenExchangeProfiles.get()`                             |
-| `tokenExchangeProfiles.create()`                           | `tokenExchangeProfiles.create()`                          |
 | `tokenExchangeProfiles.getAll()`                           | `tokenExchangeProfiles.list()`                            |
 | `branding.configurePhoneProvider()`                        | `branding.phone.providers.create()`                       |
 | `branding.getAllPhoneProviders()`                          | `branding.phone.providers.list()`                         |
@@ -351,13 +357,9 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `keys.getEncryptionKey()`                                  | `keys.encryption.get()`                                   |
 | `keys.deleteEncryptionKey()`                               | `keys.encryption.delete()`                                |
 | `keys.importEncryptionKey()`                               | `keys.encryption.import()`                                |
-| `keys.createPublicWrappingKey()`                           | `keys.encryption.createPublicWrappingKey()`               |
 | `users.getAllTokensets()`                                  | `users.federatedConnectionsTokensets.list()`              |
 | `users.deleteTokenset()`                                   | `users.federatedConnectionsTokensets.delete()`            |
-| `networkAcls.delete()`                                     | `networkAcls.delete()`                                    |
 | `networkAcls.update()`                                     | `networkAcls.set()`                                       |
-| `networkAcls.get()`                                        | `networkAcls.get()`                                       |
-| `networkAcls.create()`                                     | `networkAcls.create()`                                    |
 | `networkAcls.getAll()`                                     | `networkAcls.list()`                                      |
 | `prompts.getAllRenderingSettings()`                        | `prompts.rendering.list()`                                |
 | `connections.getEnabledClients()`                          | `connections.clients.get()`                               |
@@ -370,51 +372,76 @@ Methods marked :new: are new to v5; they did not exist in v4. Methods marked :x:
 | `branding.getPhoneTemplate()`                              | `branding.phone.templates.get()`                          |
 | `branding.updatePhoneTemplate()`                           | `branding.phone.templates.update()`                       |
 | `branding.deletePhoneTemplate()`                           | `branding.phone.templates.delete()`                       |
-| `branding.resetTemplate()`                                 | :x: Removed in v5                                         |
-| `riskAssessments.getSettings()`                            | :x: Removed in v5                                         |
-| `riskAssessments.updateSettings()`                         | :x: Removed in v5                                         |
-| `riskAssessments.getNewDeviceSettings()`                   | :x: Removed in v5                                         |
-| `riskAssessments.updateNewDeviceSettings()`                | :x: Removed in v5                                         |
-| `users.clearRiskAssessors()`                               | :x: Removed in v5                                         |
-| :new: No equivalent in v4                                  | `branding.phone.providers.test()`                         |
-| :new: No equivalent in v4                                  | `branding.phone.templates.reset()`                        |
-| :new: No equivalent in v4                                  | `branding.phone.templates.test()`                         |
-| :new: No equivalent in v4                                  | `clientGrants.organizations.list()`                       |
-| :new: No equivalent in v4                                  | `customDomains.test()`                                    |
-| :new: No equivalent in v4                                  | `emails.provider.delete()`                                |
-| :new: No equivalent in v4                                  | `eventStreams.list()`                                     |
-| :new: No equivalent in v4                                  | `eventStreams.create()`                                   |
-| :new: No equivalent in v4                                  | `eventStreams.get()`                                      |
-| :new: No equivalent in v4                                  | `eventStreams.delete()`                                   |
-| :new: No equivalent in v4                                  | `eventStreams.update()`                                   |
-| :new: No equivalent in v4                                  | `eventStreams.deliveries.list()`                          |
-| :new: No equivalent in v4                                  | `eventStreams.deliveries.getHistory()`                    |
-| :new: No equivalent in v4                                  | `eventStreams.redeliveries.create()`                      |
-| :new: No equivalent in v4                                  | `eventStreams.redeliveries.createById()`                  |
-| :new: No equivalent in v4                                  | `eventStreams.getStats()`                                 |
-| :new: No equivalent in v4                                  | `eventStreams.test()`                                     |
-| :new: No equivalent in v4                                  | `guardian.factors.duo.settings.get()`                     |
-| :new: No equivalent in v4                                  | `guardian.factors.duo.settings.update()`                  |
-| :new: No equivalent in v4                                  | `guardian.factors.duo.settings.set()`                     |
-| :new: No equivalent in v4                                  | `guardian.factors.pushNotification.setFcmv1Provider()`    |
-| :new: No equivalent in v4                                  | `guardian.factors.pushNotification.setFcmv1Provider()`    |
-| :new: No equivalent in v4                                  | `keys.customSigning.get()`                                |
-| :new: No equivalent in v4                                  | `keys.customSigning.delete()`                             |
-| :new: No equivalent in v4                                  | `keys.customSigning.set()`                                |
-| :new: No equivalent in v4                                  | `networkAcls.update()`                                    |
-| :new: No equivalent in v4                                  | `sessions.revoke()`                                       |
-| :new: No equivalent in v4                                  | `users.revokeAccess()`                                    |
-| :new: No equivalent in v4                                  | `verifiableCredentials.verification.templates.list()`     |
-| :new: No equivalent in v4                                  | `verifiableCredentials.verification.templates.create()`   |
-| :new: No equivalent in v4                                  | `verifiableCredentials.verification.templates.get()`      |
-| :new: No equivalent in v4                                  | `verifiableCredentials.verification.templates.delete()`   |
-| :new: No equivalent in v4                                  | `verifiableCredentials.verification.templates.update()`   |
+
+## New Methods in v5
+
+| Before                    | After                                                   |
+| ------------------------- | ------------------------------------------------------- |
+| `No method existed in v4` | `branding.phone.providers.test()`                       |
+| `No method existed in v4` | `branding.phone.templates.reset()`                      |
+| `No method existed in v4` | `branding.phone.templates.test()`                       |
+| `No method existed in v4` | `clientGrants.organizations.list()`                     |
+| `No method existed in v4` | `customDomains.test()`                                  |
+| `No method existed in v4` | `emails.provider.delete()`                              |
+| `No method existed in v4` | `eventStreams.list()`                                   |
+| `No method existed in v4` | `eventStreams.create()`                                 |
+| `No method existed in v4` | `eventStreams.get()`                                    |
+| `No method existed in v4` | `eventStreams.delete()`                                 |
+| `No method existed in v4` | `eventStreams.update()`                                 |
+| `No method existed in v4` | `eventStreams.deliveries.list()`                        |
+| `No method existed in v4` | `eventStreams.deliveries.getHistory()`                  |
+| `No method existed in v4` | `eventStreams.redeliveries.create()`                    |
+| `No method existed in v4` | `eventStreams.redeliveries.createById()`                |
+| `No method existed in v4` | `eventStreams.getStats()`                               |
+| `No method existed in v4` | `eventStreams.test()`                                   |
+| `No method existed in v4` | `guardian.factors.duo.settings.get()`                   |
+| `No method existed in v4` | `guardian.factors.duo.settings.update()`                |
+| `No method existed in v4` | `guardian.factors.duo.settings.set()`                   |
+| `No method existed in v4` | `guardian.factors.pushNotification.setFcmv1Provider()`  |
+| `No method existed in v4` | `guardian.factors.pushNotification.setFcmv1Provider()`  |
+| `No method existed in v4` | `keys.customSigning.get()`                              |
+| `No method existed in v4` | `keys.customSigning.delete()`                           |
+| `No method existed in v4` | `keys.customSigning.set()`                              |
+| `No method existed in v4` | `networkAcls.update()`                                  |
+| `No method existed in v4` | `sessions.revoke()`                                     |
+| `No method existed in v4` | `users.revokeAccess()`                                  |
+| `No method existed in v4` | `verifiableCredentials.verification.templates.list()`   |
+| `No method existed in v4` | `verifiableCredentials.verification.templates.create()` |
+| `No method existed in v4` | `verifiableCredentials.verification.templates.get()`    |
+| `No method existed in v4` | `verifiableCredentials.verification.templates.delete()` |
+| `No method existed in v4` | `verifiableCredentials.verification.templates.update()` |
+
+## Removed Methods from v4
+
+| Before                                      | After                  |
+| ------------------------------------------- | ---------------------- |
+| `blacklists.getAll()`                       | `Missing method in v5` |
+| `blacklists.add()`                          | `Missing method in v5` |
+| `flows.getAllConnections()`                 | `Missing method in v5` |
+| `flows.createConnection()`                  | `Missing method in v5` |
+| `flows.getConnection()`                     | `Missing method in v5` |
+| `flows.deleteConnection()`                  | `Missing method in v5` |
+| `flows.updateConnection()`                  | `Missing method in v5` |
+| `branding.resetTemplate()`                  | `Missing method in v5` |
+| `riskAssessments.getSettings()`             | `Missing method in v5` |
+| `riskAssessments.updateSettings()`          | `Missing method in v5` |
+| `riskAssessments.getNewDeviceSettings()`    | `Missing method in v5` |
+| `riskAssessments.updateNewDeviceSettings()` | `Missing method in v5` |
+| `users.clearRiskAssessors()`                | `Missing method in v5` |
 
 </details>
 
-### Auto-pagination
+### Pagination and Response Changes
 
-All iterable responses, such as those returned by `*.list()` methods, are auto-paginated. This means that code can directly iterate over them without the need for manual pagination logic. For instance, in v4, `client.actions.getAll()` would return a response of type `ApiResponse<GetActions200Response>` which would have to be manually paginated through:
+All iterable responses, such as those returned by `*.list()` methods, are auto-paginated. This means that code can directly iterate over them without the need for manual pagination logic.
+
+#### Accessing Response Data
+
+**Important:** V5 no longer returns a `data` property by default for endpoints that do not return a paginated response (e.g., `create`, `update`). To retrieve the same `data` property and be able to access headers, you can use `.withRawResponse()`.
+
+#### Migrating from V4 to V5 Pagination
+
+Here's how to migrate your pagination code from v4 to v5:
 
 ```ts
 import { ManagementClient } from "auth0";
@@ -425,6 +452,58 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
+// V5: Simple pagination with .data property
+const clients = await client.clients.list({ per_page: 5, page: 1 });
+for (const client of clients.data) {
+    console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
+}
+
+// V4: Similar structure but different method name
+// const clients2 = await legacyClient.clients.getAll({ per_page: 5, page: 1 });
+// for (const client of clients2.data) {
+//     console.log(`Legacy Client ID: ${client.client_id}, Name: ${client.name}`);
+// }
+```
+
+#### Non-Paginated Responses (Create, Update, etc.)
+
+For non-paginated responses, v5 returns the data directly, but you can use `.withRawResponse()` to access headers and the full response:
+
+```ts
+// V5: Direct data access (no .data wrapper)
+const newClient = await client.clients.create({
+    name: "New Client",
+    app_type: "regular_web",
+    // other client properties
+});
+console.log(`Client ID: ${newClient.client_id}, Name: ${newClient.name}`);
+
+// V5: Using withRawResponse() to access headers and response metadata
+const clientWithResponse = await client.clients
+    .create({
+        name: "New Client with Raw Response",
+        app_type: "regular_web",
+        // other client properties
+    })
+    .withRawResponse();
+console.log(`Client ID: ${clientWithResponse.data.client_id}, Name: ${clientWithResponse.data.name}`);
+// Access headers: clientWithResponse.headers
+// Access status: clientWithResponse.status
+
+// V4: Always had .data wrapper
+// const client2 = await legacyClient.clients.create({
+//     name: "New Legacy Client",
+//     app_type: "regular_web",
+// });
+// console.log(`Legacy Client ID: ${client2.data.client_id}, Name: ${client2.data.name}`);
+```
+
+#### Advanced Pagination
+
+For more complex pagination scenarios, v5 provides enhanced pagination support:
+
+```ts
+// V4: Manual pagination
 const allUsers = [];
 let page = 0;
 while (true) {
@@ -478,6 +557,31 @@ const request: Management.UpdateUserRequestContent = {
 };
 
 await client.users.update(user_id, request);
+```
+
+#### Type Name Changes
+
+**Important:** Type names have changed drastically in v5, but the structure should remain unchanged for the most part. In v4, type names were auto-generated and often didn't have proper naming according to their actual purpose. V5 introduces properly named types that are more intuitive and follow consistent naming conventions.
+
+If you're using TypeScript types in your code, you'll need to update the type names when migrating from v4 to v5. The new type names are more descriptive and follow a consistent pattern that aligns with the API structure.
+
+```ts
+// V5: Properly named types
+import { Management } from "auth0";
+
+// Clear, descriptive type names
+const createRequest: Management.CreateClientRequestContent = {
+    name: "My Application",
+    app_type: "regular_web",
+};
+
+const updateRequest: Management.UpdateUserRequestContent = {
+    user_metadata: { role: "admin" },
+};
+
+// V4: Auto-generated type names (examples)
+// const createRequest: CreateClient = { ... }
+// const updateRequest: UserUpdate = { ... }
 ```
 
 ### Unified error type
