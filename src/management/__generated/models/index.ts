@@ -19246,6 +19246,15 @@ export interface DeleteClientGrantsByIdRequest {
 /**
  *
  */
+export const GetClientGrantsAllowAnyOrganizationEnum = {
+  true: true,
+} as const;
+export type GetClientGrantsAllowAnyOrganizationEnum =
+  (typeof GetClientGrantsAllowAnyOrganizationEnum)[keyof typeof GetClientGrantsAllowAnyOrganizationEnum];
+
+/**
+ *
+ */
 export const GetClientGrantsSubjectTypeEnum = {
   client: 'client',
   user: 'user',
@@ -19273,6 +19282,16 @@ export interface GetClientGrantsRequest {
    */
   include_totals?: boolean;
   /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
    * Optional filter on audience.
    *
    */
@@ -19282,6 +19301,11 @@ export interface GetClientGrantsRequest {
    *
    */
   client_id?: string;
+  /**
+   * Optional filter on allow_any_organization.
+   *
+   */
+  allow_any_organization?: GetClientGrantsAllowAnyOrganizationEnum;
   /**
    * The subject type for this grant.
    *

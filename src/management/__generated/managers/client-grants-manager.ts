@@ -76,11 +76,23 @@ export class ClientGrantsManager extends BaseAPI {
         config: {},
       },
       {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+      {
         key: 'audience',
         config: {},
       },
       {
         key: 'client_id',
+        config: {},
+      },
+      {
+        key: 'allow_any_organization',
         config: {},
       },
       {
