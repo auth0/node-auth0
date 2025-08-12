@@ -461,6 +461,15 @@ for (const client of clients.data) {
 // }
 ```
 
+Note that the multiple overridden functions for most `getAll` endpoints in v4 have been streamlined into one offset-based pagination function for each endpoint. For instance, v4's `clients.getAll()` has been replaced with `clients.list()` in v5, which is never overridden and only ever has the following signature:
+
+```ts
+public async list(
+    request: ListClientsRequestParameters = {},
+    requestOptions?: RequestOptions,
+): Promise<Page<Client>>
+```
+
 #### Non-Paginated Responses (Create, Update, etc.)
 
 For non-paginated responses, v5 returns the data directly, but you can use `.withRawResponse()` to access headers and the full response:
