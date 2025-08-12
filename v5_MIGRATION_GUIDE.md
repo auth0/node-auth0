@@ -9,10 +9,10 @@ A guide to migrating the Auth0 TS SDK from `4.x` to `5.x`.
 - [Specific changes to the Management API](#specific-changes-to-the-management-api)
     - [Method name changes](#method-name-changes)
     - [Pagination and Response Changes](#pagination-and-response-changes)
-        - [Accessing Response Data](#accessing-response-data)
         - [Migrating from V4 to V5 Pagination](#migrating-from-v4-to-v5-pagination)
         - [Non-Paginated Responses (Create, Update, etc.)](#non-paginated-responses-create-update-etc)
         - [Advanced Pagination](#advanced-pagination)
+        - [Accessing headers, data, rawResponse](#accessing-headers-data-rawresponse)
     - [Management namespace](#management-namespace)
         - [Type Name Changes](#type-name-changes)
     - [Unified error type](#unified-error-type)
@@ -435,10 +435,6 @@ The tables below show all method changes organized by category. Note these metho
 
 All iterable responses, such as those returned by `*.list()` methods, are auto-paginated. This means that code can directly iterate over them without the need for manual pagination logic.
 
-#### Accessing Response Data
-
-**Important:** V5 no longer returns a `data` property by default for endpoints that do not return a paginated response (e.g., `create`, `update`). To retrieve the same `data` property and be able to access headers, you can use `.withRawResponse()`.
-
 #### Migrating from V4 to V5 Pagination
 
 Here's how to migrate your pagination code from v4 to v5:
@@ -535,6 +531,27 @@ while (page.hasNextPage()) {
     page = await page.getNextPage();
     console.log(page);
 }
+```
+
+#### Accessing headers, data, rawResponse
+
+In v5, the process of accessing the raw response from an endpoint differs depending on whether the method in question is paginated. If it is paginated, the `.data` and `.rawResponse` fields are automatically provided:
+
+```ts
+// Paginated methods automatically return .rawResponse and .data:
+let users = await client.users.list({ per_page: 5, page: 1 });
+while (users.hasNextPage()) {
+    users = await users.getNextPage();
+}
+console.log(`Headers for users.list(): ${users.rawResponse.headers}`);
+console.log(`Length for users.list().data: ${users.data.length}`);
+```
+
+If it is non-paginated, unlike in v4, you must explicitly opt in to receiving them by calling `.withRawResponse()` on the method:
+
+```ts
+const user = await client.clients.get("user_xyz").withRawResponse();
+console.log(`Headers for users.get(): ${user.rawResponse.headers}`);
 ```
 
 ### Management namespace
