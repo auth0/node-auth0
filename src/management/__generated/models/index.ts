@@ -2219,6 +2219,14 @@ export interface ClientGrant {
    *
    */
   allow_any_organization: boolean;
+  /**
+   */
+  subject_type?: ClientGrantSubjectTypeEnum;
+  /**
+   * Types of authorization_details allowed for this client grant.
+   *
+   */
+  authorization_details_types?: Array<string>;
 }
 
 export const ClientGrantOrganizationUsageEnum = {
@@ -2228,6 +2236,13 @@ export const ClientGrantOrganizationUsageEnum = {
 } as const;
 export type ClientGrantOrganizationUsageEnum =
   (typeof ClientGrantOrganizationUsageEnum)[keyof typeof ClientGrantOrganizationUsageEnum];
+
+export const ClientGrantSubjectTypeEnum = {
+  client: 'client',
+  user: 'user',
+} as const;
+export type ClientGrantSubjectTypeEnum =
+  (typeof ClientGrantSubjectTypeEnum)[keyof typeof ClientGrantSubjectTypeEnum];
 
 /**
  *
@@ -2258,6 +2273,14 @@ export interface ClientGrantCreate {
    *
    */
   scope: Array<string>;
+  /**
+   */
+  subject_type?: ClientGrantCreateSubjectTypeEnum;
+  /**
+   * Types of authorization_details allowed for this client grant.
+   *
+   */
+  authorization_details_types?: Array<string>;
 }
 
 export const ClientGrantCreateOrganizationUsageEnum = {
@@ -2267,6 +2290,13 @@ export const ClientGrantCreateOrganizationUsageEnum = {
 } as const;
 export type ClientGrantCreateOrganizationUsageEnum =
   (typeof ClientGrantCreateOrganizationUsageEnum)[keyof typeof ClientGrantCreateOrganizationUsageEnum];
+
+export const ClientGrantCreateSubjectTypeEnum = {
+  client: 'client',
+  user: 'user',
+} as const;
+export type ClientGrantCreateSubjectTypeEnum =
+  (typeof ClientGrantCreateSubjectTypeEnum)[keyof typeof ClientGrantCreateSubjectTypeEnum];
 
 /**
  * Configuration related to JWTs for the client.
@@ -10244,6 +10274,11 @@ export interface PatchClientGrantsByIdRequest {
    *
    */
   allow_any_organization?: boolean | null;
+  /**
+   * Types of authorization_details allowed for this client grant.
+   *
+   */
+  authorization_details_types?: Array<string>;
 }
 
 export const PatchClientGrantsByIdRequestOrganizationUsageEnum = {
@@ -16436,6 +16471,9 @@ export interface ResourceServer {
   /**
    */
   proof_of_possession: ResourceServerProofOfPossession | null;
+  /**
+   */
+  subject_type_authorization?: ResourceServerSubjectTypeAuthorization;
 }
 
 export const ResourceServerSigningAlgEnum = {
@@ -16531,6 +16569,9 @@ export interface ResourceServerCreate {
   /**
    */
   proof_of_possession?: ResourceServerProofOfPossession | null;
+  /**
+   */
+  subject_type_authorization?: ResourceServerSubjectTypeAuthorization;
 }
 
 export const ResourceServerCreateSigningAlgEnum = {
@@ -16579,6 +16620,56 @@ export const ResourceServerProofOfPossessionMechanismEnum = {
 } as const;
 export type ResourceServerProofOfPossessionMechanismEnum =
   (typeof ResourceServerProofOfPossessionMechanismEnum)[keyof typeof ResourceServerProofOfPossessionMechanismEnum];
+
+/**
+ * Defines application permission access for a resource server
+ */
+export interface ResourceServerSubjectTypeAuthorization {
+  /**
+   */
+  user?: ResourceServerSubjectTypeAuthorizationUser;
+  /**
+   */
+  client?: ResourceServerSubjectTypeAuthorizationClient;
+}
+/**
+ * Access Permissions for client-initiated flows
+ */
+export interface ResourceServerSubjectTypeAuthorizationClient {
+  [key: string]: any | any;
+  /**
+   * Defines the client flows policy for the resource server
+   *
+   */
+  policy?: ResourceServerSubjectTypeAuthorizationClientPolicyEnum;
+}
+
+export const ResourceServerSubjectTypeAuthorizationClientPolicyEnum = {
+  deny_all: 'deny_all',
+  require_client_grant: 'require_client_grant',
+} as const;
+export type ResourceServerSubjectTypeAuthorizationClientPolicyEnum =
+  (typeof ResourceServerSubjectTypeAuthorizationClientPolicyEnum)[keyof typeof ResourceServerSubjectTypeAuthorizationClientPolicyEnum];
+
+/**
+ * Access Permissions for user-initiated flows
+ */
+export interface ResourceServerSubjectTypeAuthorizationUser {
+  [key: string]: any | any;
+  /**
+   * Defines the user flows policy for the resource server
+   *
+   */
+  policy?: ResourceServerSubjectTypeAuthorizationUserPolicyEnum;
+}
+
+export const ResourceServerSubjectTypeAuthorizationUserPolicyEnum = {
+  allow_all: 'allow_all',
+  deny_all: 'deny_all',
+  require_client_grant: 'require_client_grant',
+} as const;
+export type ResourceServerSubjectTypeAuthorizationUserPolicyEnum =
+  (typeof ResourceServerSubjectTypeAuthorizationUserPolicyEnum)[keyof typeof ResourceServerSubjectTypeAuthorizationUserPolicyEnum];
 
 /**
  *
@@ -16698,6 +16789,9 @@ export interface ResourceServerUpdate {
   /**
    */
   proof_of_possession?: ResourceServerProofOfPossession | null;
+  /**
+   */
+  subject_type_authorization?: ResourceServerSubjectTypeAuthorization;
 }
 
 export const ResourceServerUpdateSigningAlgEnum = {
@@ -19148,6 +19242,26 @@ export interface DeleteClientGrantsByIdRequest {
    */
   id: string;
 }
+
+/**
+ *
+ */
+export const GetClientGrantsAllowAnyOrganizationEnum = {
+  true: true,
+} as const;
+export type GetClientGrantsAllowAnyOrganizationEnum =
+  (typeof GetClientGrantsAllowAnyOrganizationEnum)[keyof typeof GetClientGrantsAllowAnyOrganizationEnum];
+
+/**
+ *
+ */
+export const GetClientGrantsSubjectTypeEnum = {
+  client: 'client',
+  user: 'user',
+} as const;
+export type GetClientGrantsSubjectTypeEnum =
+  (typeof GetClientGrantsSubjectTypeEnum)[keyof typeof GetClientGrantsSubjectTypeEnum];
+
 /**
  *
  */
@@ -19168,6 +19282,16 @@ export interface GetClientGrantsRequest {
    */
   include_totals?: boolean;
   /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+  /**
    * Optional filter on audience.
    *
    */
@@ -19177,6 +19301,16 @@ export interface GetClientGrantsRequest {
    *
    */
   client_id?: string;
+  /**
+   * Optional filter on allow_any_organization.
+   *
+   */
+  allow_any_organization?: GetClientGrantsAllowAnyOrganizationEnum;
+  /**
+   * The subject type for this grant.
+   *
+   */
+  subject_type?: GetClientGrantsSubjectTypeEnum;
 }
 /**
  *
