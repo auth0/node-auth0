@@ -4353,7 +4353,7 @@ export type EmailProviderUpdateCredentials = any;
  */
 export interface EmailTemplateUpdate {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: EmailTemplateUpdateTemplateEnum;
@@ -4403,6 +4403,7 @@ export const EmailTemplateUpdateTemplateEnum = {
   verify_email: 'verify_email',
   verify_email_by_code: 'verify_email_by_code',
   reset_email: 'reset_email',
+  reset_email_by_code: 'reset_email_by_code',
   welcome_email: 'welcome_email',
   blocked_account: 'blocked_account',
   stolen_credentials: 'stolen_credentials',
@@ -4411,6 +4412,7 @@ export const EmailTemplateUpdateTemplateEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type EmailTemplateUpdateTemplateEnum =
   (typeof EmailTemplateUpdateTemplateEnum)[keyof typeof EmailTemplateUpdateTemplateEnum];
@@ -6042,7 +6044,7 @@ export interface GetDeviceCredentials200ResponseOneOf {
  */
 export interface GetEmailTemplatesByTemplateName200Response {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: GetEmailTemplatesByTemplateName200ResponseTemplateEnum;
@@ -6101,6 +6103,7 @@ export const GetEmailTemplatesByTemplateName200ResponseTemplateEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type GetEmailTemplatesByTemplateName200ResponseTemplateEnum =
   (typeof GetEmailTemplatesByTemplateName200ResponseTemplateEnum)[keyof typeof GetEmailTemplatesByTemplateName200ResponseTemplateEnum];
@@ -10357,7 +10360,7 @@ export type PatchCustomDomainsByIdRequestCustomClientIpHeaderEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template?: PatchEmailTemplatesByTemplateNameRequestTemplateEnum;
@@ -10416,6 +10419,7 @@ export const PatchEmailTemplatesByTemplateNameRequestTemplateEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type PatchEmailTemplatesByTemplateNameRequestTemplateEnum =
   (typeof PatchEmailTemplatesByTemplateNameRequestTemplateEnum)[keyof typeof PatchEmailTemplatesByTemplateNameRequestTemplateEnum];
@@ -12115,7 +12119,7 @@ export interface PostDeviceCredentials201Response {
  */
 export interface PostEmailTemplatesRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   template: PostEmailTemplatesRequestTemplateEnum;
@@ -12174,6 +12178,7 @@ export const PostEmailTemplatesRequestTemplateEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type PostEmailTemplatesRequestTemplateEnum =
   (typeof PostEmailTemplatesRequestTemplateEnum)[keyof typeof PostEmailTemplatesRequestTemplateEnum];
@@ -20082,6 +20087,7 @@ export const GetEmailTemplatesByTemplateNameTemplateNameEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
   (typeof GetEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof GetEmailTemplatesByTemplateNameTemplateNameEnum];
@@ -20091,7 +20097,7 @@ export type GetEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface GetEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: GetEmailTemplatesByTemplateNameTemplateNameEnum;
@@ -20113,6 +20119,7 @@ export const PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum =
   (typeof PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum)[keyof typeof PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum];
@@ -20122,7 +20129,7 @@ export type PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum =
  */
 export interface PatchEmailTemplatesByTemplateNameOperationRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PatchEmailTemplatesByTemplateNameOperationTemplateNameEnum;
@@ -20144,6 +20151,7 @@ export const PutEmailTemplatesByTemplateNameTemplateNameEnum = {
   user_invitation: 'user_invitation',
   change_password: 'change_password',
   password_reset: 'password_reset',
+  async_approval: 'async_approval',
 } as const;
 export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
   (typeof PutEmailTemplatesByTemplateNameTemplateNameEnum)[keyof typeof PutEmailTemplatesByTemplateNameTemplateNameEnum];
@@ -20153,7 +20161,7 @@ export type PutEmailTemplatesByTemplateNameTemplateNameEnum =
  */
 export interface PutEmailTemplatesByTemplateNameRequest {
   /**
-   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+   * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
    *
    */
   templateName: PutEmailTemplatesByTemplateNameTemplateNameEnum;
