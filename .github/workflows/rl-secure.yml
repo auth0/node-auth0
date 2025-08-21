@@ -39,7 +39,7 @@ jobs:
 
       - name: Install dependencies
         shell: bash
-        run: npm ci --include=dev
+        run: npm ci --include=dev --ignore-scripts
 
       - name: Build
         shell: bash
@@ -56,8 +56,8 @@ jobs:
         id: rl-scan-conclusion
         uses: ./.github/actions/rl-scanner
         with:
-          artifact-path: "$(pwd)/${{ inputs.artifact-name }}"
-          version: "${{ steps.get_version.outputs.version }}"
+          artifact-path: '$(pwd)/${{ inputs.artifact-name }}'
+          version: '${{ steps.get_version.outputs.version }}'
         env:
           RLSECURE_LICENSE: ${{ secrets.RLSECURE_LICENSE }}
           RLSECURE_SITE_KEY: ${{ secrets.RLSECURE_SITE_KEY }}
