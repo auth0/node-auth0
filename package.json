@@ -22,6 +22,7 @@
     "dist"
   ],
   "scripts": {
+    "prepare": "npm run build",
     "prebuild": "rm -rf dist",
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json && echo '{\"type\": \"commonjs\"}'> dist/cjs/package.json",
     "docs": "typedoc --options typedoc.cjs",
