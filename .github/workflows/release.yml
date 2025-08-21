@@ -33,7 +33,7 @@ jobs:
     needs: rl-scanner
     with:
       node-version: 18
-      require-build: true
+      require-build: false
     secrets:
       npm-token: ${{ secrets.NPM_TOKEN }}
       github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -30,6 +30,7 @@
     "precommit": "pretty-quick --staged",
     "lint": "eslint ./src ./test --ext ts",
     "lint:package": "publint",
+    "prepare": "npm run build",
     "start:playground": "node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm playground/index.ts"
   },
   "repository": {
