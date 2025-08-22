@@ -1066,7 +1066,7 @@ export interface ClientCreate {
    */
   token_endpoint_auth_method?: ClientCreateTokenEndpointAuthMethodEnum;
   /**
-   * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`.
+   * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, `regular_web` or `resource_server`.
    *
    */
   app_type?: ClientCreateAppTypeEnum;
@@ -1190,6 +1190,11 @@ export interface ClientCreate {
   /**
    */
   token_quota?: CreateTokenQuota;
+  /**
+   * The identifier of the resource server that this client is linked to.
+   *
+   */
+  resource_server_identifier?: string;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -1205,6 +1210,7 @@ export const ClientCreateAppTypeEnum = {
   spa: 'spa',
   regular_web: 'regular_web',
   non_interactive: 'non_interactive',
+  resource_server: 'resource_server',
   rms: 'rms',
   box: 'box',
   cloudbees: 'cloudbees',
@@ -3439,6 +3445,9 @@ export interface ConnectionCreateOptions {
   /**
    */
   gateway_authentication?: ConnectionCreateOptionsGatewayAuthentication | null;
+  /**
+   */
+  federated_connections_access_tokens?: ConnectionCreateOptionsFederatedConnectionsAccessTokens | null;
 }
 
 export const ConnectionCreateOptionsPasswordPolicyEnum = {
@@ -3513,6 +3522,16 @@ export interface ConnectionCreateOptionsCustomScripts {
   /**
    */
   create?: string;
+}
+/**
+ * Federated Connections Access Tokens
+ */
+export interface ConnectionCreateOptionsFederatedConnectionsAccessTokens {
+  /**
+   * Enables refresh tokens and access tokens collection for federated connections
+   *
+   */
+  active?: boolean;
 }
 /**
  * Token-based authentication settings to be applied when connection is using an sms strategy.
@@ -3813,6 +3832,9 @@ export interface ConnectionUpdateOptions {
   /**
    */
   gateway_authentication?: ConnectionCreateOptionsGatewayAuthentication | null;
+  /**
+   */
+  federated_connections_access_tokens?: ConnectionCreateOptionsFederatedConnectionsAccessTokens | null;
 }
 
 export const ConnectionUpdateOptionsPasswordPolicyEnum = {
@@ -16479,6 +16501,11 @@ export interface ResourceServer {
   /**
    */
   subject_type_authorization?: ResourceServerSubjectTypeAuthorization;
+  /**
+   * The client ID of the client that this resource server is linked to
+   *
+   */
+  client_id?: string;
 }
 
 export const ResourceServerSigningAlgEnum = {
