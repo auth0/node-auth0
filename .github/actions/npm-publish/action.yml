@@ -1,15 +1,21 @@
 name: Publish release to npm
+description: Publishes a package to npm registry with authentication and verification
 
 inputs:
   node-version:
+    description: Node.js version to use
     required: true
   npm-token:
+    description: NPM authentication token
     required: true
   version:
+    description: Version to publish
     required: true
   require-build:
-    default: true
+    description: Whether to run build step
+    default: 'true'
   release-directory:
+    description: Directory containing package to publish
     default: './'
 
 runs:
@@ -35,10 +41,33 @@ runs:
       shell: bash
       run: npm run build
 
+    - name: Verify npm authentication
+      shell: bash
+      run: |
+        echo "Verifying npm authentication..."
+        echo "npm version: $(npm --version)"
+        echo "node version: $(node --version)"
+        echo "npm config list:"
+        npm config list
+        echo "Checking authentication:"
+        npm whoami
+        echo "npm registry: $(npm config get registry)"
+        echo "Checking user permissions for auth0 package..."
+        npm access list packages --json || echo "Could not list packages"
+        echo "Checking package collaborators..."
+        npm owner ls auth0 || echo "Could not list owners"
+        echo "Checking npm token..."
+        npm token list || echo "Could not list tokens"
+        echo "Testing npm publish dry run..."
+        npm publish --dry-run || echo "Dry run failed"
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+
     - name: Publish release to NPM
       shell: bash
       working-directory: ${{ inputs.release-directory }}
       run: |
+        # Determine the appropriate tag
         if [[ "${VERSION}" == *"beta"* ]]; then
           TAG="beta"
         elif [[ "${VERSION}" == *"alpha"* ]]; then
@@ -46,7 +75,22 @@ runs:
         else
           TAG="latest"
         fi
-        npm publish --provenance --tag $TAG
+
+        echo "Publishing package auth0@${VERSION} with tag ${TAG}..."
+        echo "Package details:"
+        echo "Name: $(grep '"name"' package.json | cut -d'"' -f4)"
+        echo "Version: $(grep '"version"' package.json | cut -d'"' -f4)"
+        echo "Repository: $(grep -A2 '"repository"' package.json | grep '"url"' | cut -d'"' -f4)"
+
+        echo "Final authentication check before publish:"
+        npm whoami
+
+        echo "Running npm publish..."
+        set -e  # Exit on any error
+        npm publish --provenance --tag $TAG --verbose
+
+        echo "✅ Package published successfully!"
+        echo "Package URL: https://www.npmjs.com/package/auth0/v/${VERSION}"
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
         VERSION: ${{ inputs.version }}
