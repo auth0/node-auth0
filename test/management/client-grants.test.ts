@@ -234,4 +234,49 @@ describe('ClientGrantsManager', () => {
       });
     });
   });
+
+  describe('#getAllOrganizations', () => {
+    const data = {
+      id: 'client_grant_id',
+    };
+
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).get(`/client-grants/${data.id}/organizations`).reply(200, []);
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      expect(grants.getAllOrganizations(data).then(() => done())).toBeInstanceOf(Promise);
+    });
+
+    it('should perform a GET request to /api/v2/client-grants/client_grant_id/organizations', async () => {
+      await grants.getAllOrganizations(data);
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/client-grants/${data.id}/organizations`).reply(500, {});
+
+      try {
+        await grants.getAllOrganizations(data);
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/client-grants/${data.id}/organizations`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, []);
+
+      await grants.getAllOrganizations(data);
+      expect(request.isDone()).toBe(true);
+    });
+  });
 });

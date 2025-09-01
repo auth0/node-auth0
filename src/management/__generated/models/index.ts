@@ -5744,6 +5744,73 @@ export interface GetClientConnections200Response {
 /**
  *
  */
+export type GetClientGrantOrganizations200Response =
+  | Array<GetClientGrantOrganizations200ResponseOneOfInner>
+  | GetClientGrantOrganizations200ResponseOneOf
+  | GetClientGrantOrganizations200ResponseOneOf1;
+/**
+ *
+ */
+export interface GetClientGrantOrganizations200ResponseOneOf {
+  /**
+   */
+  start?: number;
+  /**
+   */
+  limit?: number;
+  /**
+   */
+  total?: number;
+  /**
+   */
+  organizations?: Array<GetClientGrantOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetClientGrantOrganizations200ResponseOneOf1 {
+  /**
+   * Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours.
+   *
+   */
+  next?: string;
+  /**
+   */
+  organizations?: Array<GetClientGrantOrganizations200ResponseOneOfInner>;
+}
+/**
+ *
+ */
+export interface GetClientGrantOrganizations200ResponseOneOfInner {
+  [key: string]: any | any;
+  /**
+   * Organization identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of this organization.
+   *
+   */
+  name?: string;
+  /**
+   * Friendly name of this organization.
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  branding?: OrganizationBranding;
+  /**
+   */
+  metadata?: OrganizationMetadata;
+  /**
+   */
+  token_quota?: TokenQuota;
+}
+/**
+ *
+ */
 export type GetClientGrants200Response = Array<ClientGrant> | GetClientGrants200ResponseOneOf;
 /**
  *
@@ -9924,6 +9991,40 @@ export interface LogLocationInfo {
    *
    */
   continent_code: string;
+}
+/**
+ * Theme defines how to style the login pages.
+ */
+export interface OrganizationBranding {
+  /**
+   * URL of logo to display on login page.
+   *
+   */
+  logo_url?: string;
+  /**
+   */
+  colors?: OrganizationBrandingColors;
+}
+/**
+ * Color scheme used to customize the login pages.
+ */
+export interface OrganizationBrandingColors {
+  /**
+   * HEX Color for primary elements.
+   *
+   */
+  primary: string;
+  /**
+   * HEX Color for background.
+   *
+   */
+  page_background: string;
+}
+/**
+ * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
+ */
+export interface OrganizationMetadata {
+  [key: string]: any;
 }
 /**
  *
@@ -19246,6 +19347,41 @@ export interface DeleteClientGrantsByIdRequest {
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface GetClientGrantOrganizationsRequest {
+  /**
+   * ID of the client grant
+   *
+   */
+  id: string;
+  /**
+   * Page index of the results to return. First page is 0.
+   *
+   */
+  page?: number;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  per_page?: number;
+  /**
+   * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
+   *
+   */
+  include_totals?: boolean;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
 }
 
 /**
