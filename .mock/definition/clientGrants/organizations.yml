@@ -1,0 +1,56 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /client-grants/{id}/organizations
+      method: GET
+      auth: true
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.organizations
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client grant
+      display-name: Get the organizations associated to a client grant
+      request:
+        name: ListClientGrantOrganizationsRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: Organizations successfully retrieved.
+        type: root.ListClientGrantOrganizationsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              next: next
+              organizations:
+                - id: id
+                  name: name
+                  display_name: display_name
+                  metadata:
+                    key: value
+                  token_quota:
+                    client_credentials: {}
+  source:
+    openapi: ../api.json

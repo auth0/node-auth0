@@ -1,0 +1,87 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /self-service-profiles/{id}/custom-text/{language}/{page}
+      method: GET
+      auth: true
+      docs: >
+        Retrieves text customizations for a given self-service profile, language
+        and Self Service SSO Flow page.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the self-service profile.
+        language:
+          type: root.SelfServiceProfileCustomTextLanguageEnum
+          docs: The language of the custom text.
+        page:
+          type: root.SelfServiceProfileCustomTextPageEnum
+          docs: The page where the custom text is shown.
+      display-name: Get custom text for a self-service profile
+      response:
+        docs: Retrieved custom text.
+        type: root.ListSelfServiceProfileCustomTextResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            language: en
+            page: get-started
+          response:
+            body:
+              key: value
+    set:
+      path: /self-service-profiles/{id}/custom-text/{language}/{page}
+      method: PUT
+      auth: true
+      docs: >
+        Updates text customizations for a given self-service profile, language
+        and Self Service SSO Flow page.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the self-service profile.
+        language:
+          type: root.SelfServiceProfileCustomTextLanguageEnum
+          docs: The language of the custom text.
+        page:
+          type: root.SelfServiceProfileCustomTextPageEnum
+          docs: The page where the custom text is shown.
+      display-name: Set custom text for a self-service profile
+      request:
+        body: root.SetSelfServiceProfileCustomTextRequestContent
+        content-type: application/json
+      response:
+        docs: Updated custom text.
+        type: root.SetSelfServiceProfileCustomTextResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            language: en
+            page: get-started
+          request:
+            key: value
+          response:
+            body:
+              key: value
+  source:
+    openapi: ../api.json

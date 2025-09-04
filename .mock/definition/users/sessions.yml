@@ -1,0 +1,81 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /users/{user_id}/sessions
+      method: GET
+      auth: true
+      docs: Retrieve details for a user's sessions.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.sessions
+      source:
+        openapi: ../api.json
+      path-parameters:
+        user_id:
+          type: string
+          docs: ID of the user to get sessions for
+      display-name: Get sessions for user
+      request:
+        name: ListUserSessionsRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: An optional cursor from which to start the selection (exclusive).
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: The sessions were retrieved
+        type: root.ListUserSessionsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            user_id: user_id
+          response:
+            body:
+              sessions:
+                - id: id
+                  user_id: user_id
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  authenticated_at: '2024-01-15T09:30:00Z'
+                  idle_expires_at: '2024-01-15T09:30:00Z'
+                  expires_at: '2024-01-15T09:30:00Z'
+                  last_interacted_at: '2024-01-15T09:30:00Z'
+                  clients:
+                    - {}
+              next: next
+    delete:
+      path: /users/{user_id}/sessions
+      method: DELETE
+      auth: true
+      docs: Delete all sessions for a user.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        user_id:
+          type: string
+          docs: ID of the user to get sessions for
+      display-name: Delete sessions for user
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            user_id: user_id
+  source:
+    openapi: ../api.json

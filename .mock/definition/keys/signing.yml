@@ -1,0 +1,129 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /keys/signing
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of all the application signing keys associated with
+        your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get all Application Signing Keys
+      response:
+        docs: The signing keys were retrieved.
+        type: list<root.SigningKeys>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              - kid: kid
+                cert: cert
+                pkcs7: pkcs7
+                current: true
+                next: true
+                previous: true
+                current_since: current_since
+                current_until: current_until
+                fingerprint: fingerprint
+                thumbprint: thumbprint
+                revoked: true
+                revoked_at: revoked_at
+    rotate:
+      path: /keys/signing/rotate
+      method: POST
+      auth: true
+      docs: Rotate the application signing key of your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Rotate the Application Signing Key
+      response:
+        docs: Signing key rotated successfully.
+        type: root.RotateSigningKeysResponseContent
+        status-code: 201
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              cert: cert
+              kid: kid
+    get:
+      path: /keys/signing/{kid}
+      method: GET
+      auth: true
+      docs: Retrieve details of the application signing key with the given ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        kid:
+          type: string
+          docs: Key id of the key to retrieve
+      display-name: Get an Application Signing Key by its key id
+      response:
+        docs: The signing keys were retrieved.
+        type: root.GetSigningKeysResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            kid: kid
+          response:
+            body:
+              kid: kid
+              cert: cert
+              pkcs7: pkcs7
+              current: true
+              next: true
+              previous: true
+              current_since: current_since
+              current_until: current_until
+              fingerprint: fingerprint
+              thumbprint: thumbprint
+              revoked: true
+              revoked_at: revoked_at
+    revoke:
+      path: /keys/signing/{kid}/revoke
+      method: PUT
+      auth: true
+      docs: Revoke the application signing key with the given ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        kid:
+          type: string
+          docs: Key id of the key to revoke
+      display-name: Revoke an Application Signing Key by its key id
+      response:
+        docs: Signing key revoked successfully.
+        type: root.RevokedSigningKeysResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            kid: kid
+          response:
+            body:
+              cert: cert
+              kid: kid
+  source:
+    openapi: ../api.json

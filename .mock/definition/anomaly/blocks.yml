@@ -1,0 +1,55 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    checkIp:
+      path: /anomaly/blocks/ips/{id}
+      method: GET
+      auth: true
+      docs: >-
+        Check if the given IP address is blocked via the <a
+        href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious
+        IP Throttling</a> due to multiple suspicious attempts.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: root.AnomalyIpFormat
+          docs: IP address to check.
+      display-name: Check if an IP address is blocked
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    unblockIp:
+      path: /anomaly/blocks/ips/{id}
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove a block imposed by <a
+        href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious
+        IP Throttling</a> for the given IP address.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: root.AnomalyIpFormat
+          docs: IP address to unblock.
+      display-name: Remove the blocked IP address
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+  source:
+    openapi: ../api.json

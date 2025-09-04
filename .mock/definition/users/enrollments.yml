@@ -1,0 +1,47 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /users/{id}/enrollments
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve the first <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor
+        authentication</a> enrollment that a specific user has confirmed.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to list enrollments for.
+      display-name: Get the First Confirmed Multi-factor Authentication Enrollment
+      response:
+        docs: Enrollments successfully retrieved.
+        type: list<root.UsersEnrollment>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              - id: id
+                status: pending
+                type: type
+                name: name
+                identifier: identifier
+                phone_number: phone_number
+                auth_method: authenticator
+                enrolled_at: '2024-01-15T09:30:00Z'
+                last_auth: '2024-01-15T09:30:00Z'
+  source:
+    openapi: ../api.json

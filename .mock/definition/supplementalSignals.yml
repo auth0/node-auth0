@@ -1,0 +1,60 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /supplemental-signals
+      method: GET
+      auth: true
+      docs: Get the supplemental signals configuration for a tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get the supplemental signals configuration for a tenant
+      response:
+        docs: Supplemental Signals configuration successfully retrieved.
+        type: root.GetSupplementalSignalsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              akamai_enabled: true
+    patch:
+      path: /supplemental-signals
+      method: PATCH
+      auth: true
+      docs: Update the supplemental signals configuration for a tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update the supplemental signals configuration for a tenant
+      request:
+        name: UpdateSupplementalSignalsRequestContent
+        body:
+          properties:
+            akamai_enabled:
+              type: boolean
+              docs: Indicates if incoming Akamai Headers should be processed
+        content-type: application/json
+      response:
+        docs: Supplemental Signals configuration successfully updated.
+        type: root.PatchSupplementalSignalsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            akamai_enabled: true
+          response:
+            body:
+              akamai_enabled: true
+  source:
+    openapi: ../api.json

@@ -1,0 +1,71 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /prompts/{prompt}/custom-text/{language}
+      method: GET
+      auth: true
+      docs: Retrieve custom text for a specific prompt and language.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        prompt:
+          type: root.PromptGroupNameEnum
+          docs: Name of the prompt.
+        language:
+          type: root.PromptLanguageEnum
+          docs: Language to update.
+      display-name: Get custom text for a prompt
+      response:
+        docs: Prompt dictionaries successfully retrieved.
+        type: root.GetCustomTextsByLanguageResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            prompt: login
+            language: am
+          response:
+            body:
+              key: value
+    set:
+      path: /prompts/{prompt}/custom-text/{language}
+      method: PUT
+      auth: true
+      docs: >-
+        Set custom text for a specific prompt. Existing texts will be
+        overwritten.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        prompt:
+          type: root.PromptGroupNameEnum
+          docs: Name of the prompt.
+        language:
+          type: root.PromptLanguageEnum
+          docs: Language to update.
+      display-name: Set custom text for a specific prompt
+      request:
+        body: root.SetsCustomTextsByLanguageRequestContent
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            prompt: login
+            language: am
+          request:
+            key: value
+  source:
+    openapi: ../api.json

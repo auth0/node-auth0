@@ -1,15 +1,3 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "target": "ES2019",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "declaration": true,
-    "moduleResolution": "node16",
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "strict": true
-  },
-  "include": ["./src"]
+    "extends": "./tsconfig.cjs.json"
 }

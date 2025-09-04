@@ -1,0 +1,266 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /branding/phone/providers
+      method: GET
+      auth: true
+      docs: >
+        Retrieve a list of <a
+        href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone
+        providers</a> details set for a Tenant. A list of fields to include or
+        exclude may also be specified.
+      source:
+        openapi: ../api.json
+      display-name: Get a list of phone providers
+      request:
+        name: ListBrandingPhoneProvidersRequestParameters
+        query-parameters:
+          disabled:
+            type: optional<boolean>
+            docs: Whether the provider is enabled (false) or disabled (true).
+      response:
+        docs: Phone providers have been successfully retrieved.
+        type: root.ListBrandingPhoneProvidersResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              providers:
+                - id: id
+                  tenant: tenant
+                  name: twilio
+                  channel: phone
+                  disabled: true
+                  configuration:
+                    sid: sid
+                    delivery_methods:
+                      - text
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+    create:
+      path: /branding/phone/providers
+      method: POST
+      auth: true
+      docs: >
+        Create a <a
+        href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone
+        provider</a>.
+
+        The <code>credentials</code> object requires different properties
+        depending on the phone provider (which is specified using the
+        <code>name</code> property).
+      source:
+        openapi: ../api.json
+      display-name: Configure the phone provider
+      request:
+        name: CreateBrandingPhoneProviderRequestContent
+        body:
+          properties:
+            name: root.PhoneProviderNameEnum
+            disabled:
+              type: optional<boolean>
+              docs: Whether the provider is enabled (false) or disabled (true).
+            configuration: optional<root.PhoneProviderConfiguration>
+            credentials: root.PhoneProviderCredentials
+        content-type: application/json
+      response:
+        docs: Phone notification provider successfully created.
+        type: root.CreateBrandingPhoneProviderResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: twilio
+            credentials:
+              auth_token: auth_token
+          response:
+            body:
+              id: id
+              tenant: tenant
+              name: twilio
+              channel: phone
+              disabled: true
+              configuration:
+                default_from: default_from
+                mssid: mssid
+                sid: sid
+                delivery_methods:
+                  - text
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    get:
+      path: /branding/phone/providers/{id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve <a
+        href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone
+        provider</a> details. A list of fields to include or exclude may also be
+        specified.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Get a phone provider
+      response:
+        docs: Phone provider successfully retrieved.
+        type: root.GetBrandingPhoneProviderResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              tenant: tenant
+              name: twilio
+              channel: phone
+              disabled: true
+              configuration:
+                default_from: default_from
+                mssid: mssid
+                sid: sid
+                delivery_methods:
+                  - text
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    delete:
+      path: /branding/phone/providers/{id}
+      method: DELETE
+      auth: true
+      docs: |
+        Delete the configured phone provider.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Deletes a Phone Provider
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /branding/phone/providers/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Update a <a
+        href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone
+        provider</a>.
+
+        The <code>credentials</code> object requires different properties
+        depending on the phone provider (which is specified using the
+        <code>name</code> property).
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Update the phone provider
+      request:
+        name: UpdateBrandingPhoneProviderRequestContent
+        body:
+          properties:
+            name: optional<root.PhoneProviderNameEnum>
+            disabled:
+              type: optional<boolean>
+              docs: Whether the provider is enabled (false) or disabled (true).
+            credentials: optional<root.PhoneProviderCredentials>
+            configuration: optional<root.PhoneProviderConfiguration>
+        content-type: application/json
+      response:
+        docs: Phone provider successfully updated.
+        type: root.UpdateBrandingPhoneProviderResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              tenant: tenant
+              name: twilio
+              channel: phone
+              disabled: true
+              configuration:
+                default_from: default_from
+                mssid: mssid
+                sid: sid
+                delivery_methods:
+                  - text
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    test:
+      path: /branding/phone/providers/{id}/try
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id: string
+      display-name: Send a test phone notification for the configured provider
+      request:
+        name: CreatePhoneProviderSendTestRequestContent
+        body:
+          properties:
+            to:
+              type: string
+              docs: The recipient phone number to receive a given notification.
+              validation:
+                minLength: 1
+                maxLength: 16
+            delivery_method: optional<root.PhoneProviderDeliveryMethodEnum>
+        content-type: application/json
+      response:
+        docs: Phone notification sent.
+        type: root.CreatePhoneProviderSendTestResponseContent
+        status-code: 202
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            to: to
+          response:
+            body:
+              code: 1.1
+              message: message
+  source:
+    openapi: ../api.json

@@ -1,0 +1,167 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /organizations/{id}/discovery-domains/{discovery_domain_id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve details about a single organization discovery domain specified
+        by ID. 
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the organization.
+        discovery_domain_id:
+          type: string
+          docs: ID of the discovery domain.
+      display-name: Retrieve an organization discovery domain by ID
+      response:
+        docs: Organization discovery domain successfully retrieved.
+        type: root.GetOrganizationDiscoveryDomainResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            discovery_domain_id: discovery_domain_id
+          response:
+            body:
+              id: id
+              domain: domain
+              status: pending
+              verification_txt: verification_txt
+              verification_host: verification_host
+    create:
+      path: /organizations/{id}/discovery-domains
+      method: POST
+      auth: true
+      docs: >-
+        Update the verification status for an organization discovery domain. The
+        <code>status</code> field must be either <code>pending</code> or
+        <code>verified</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the organization.
+      display-name: Create an organization discovery domain
+      request:
+        name: CreateOrganizationDiscoveryDomainRequestContent
+        body:
+          properties:
+            domain:
+              type: string
+              docs: >-
+                The domain name to associate with the organization e.g.
+                acme.com.
+              validation:
+                minLength: 3
+                maxLength: 255
+            status: optional<root.OrganizationDiscoveryDomainStatus>
+        content-type: application/json
+      response:
+        docs: Organization discovery domain successfully created.
+        type: root.CreateOrganizationDiscoveryDomainResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            domain: domain
+          response:
+            body:
+              id: id
+              domain: domain
+              status: pending
+              verification_txt: verification_txt
+              verification_host: verification_host
+    delete:
+      path: /organizations/{id}/discovery-domains/{discovery_domain_id}
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove a discovery domain from an organization. This action cannot be
+        undone. 
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the organization.
+        discovery_domain_id:
+          type: string
+          docs: ID of the discovery domain.
+      display-name: Delete an organization discovery domain
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            discovery_domain_id: discovery_domain_id
+    update:
+      path: /organizations/{id}/discovery-domains/{discovery_domain_id}
+      method: PATCH
+      auth: true
+      docs: >-
+        Update the verification status for an organization discovery domain. The
+        <code>status</code> field must be either <code>pending</code> or
+        <code>verified</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the organization.
+        discovery_domain_id:
+          type: string
+          docs: ID of the discovery domain to update.
+      display-name: Update an organization discovery domain
+      request:
+        name: UpdateOrganizationDiscoveryDomainRequestContent
+        body:
+          properties:
+            status: optional<root.OrganizationDiscoveryDomainStatus>
+        content-type: application/json
+      response:
+        docs: Organization discovery domain successfully updated.
+        type: root.UpdateOrganizationDiscoveryDomainResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+            discovery_domain_id: discovery_domain_id
+          request: {}
+          response:
+            body:
+              id: id
+              domain: domain
+              status: pending
+              verification_txt: verification_txt
+              verification_host: verification_host
+  source:
+    openapi: ../api.json

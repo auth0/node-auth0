@@ -1,0 +1,33 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    deleteAll:
+      path: /users/{id}/authenticators
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove all authenticators registered to a given user ID, such as OTP,
+        email, phone, and push-notification. This action cannot be undone. For
+        more information, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/manage-mfa-auth0-apis/manage-authentication-methods-with-management-api">Manage
+        Authentication Methods with Management API</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to delete.
+      display-name: Delete All Authenticators
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+  source:
+    openapi: ../api.json

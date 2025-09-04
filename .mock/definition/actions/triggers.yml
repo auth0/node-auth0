@@ -1,0 +1,41 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /actions/triggers
+      method: GET
+      auth: true
+      docs: >
+        Retrieve the set of triggers currently available within actions. A
+        trigger is an extensibility point to which actions can be bound.
+      source:
+        openapi: ../api.json
+      display-name: Get triggers
+      response:
+        docs: The triggers were retrieved.
+        type: root.ListActionTriggersResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              triggers:
+                - id: id
+                  version: version
+                  status: status
+                  runtimes:
+                    - runtimes
+                  default_runtime: default_runtime
+                  compatible_triggers:
+                    - id: id
+                      version: version
+                  binding_policy: trigger-bound
+  source:
+    openapi: ../api.json

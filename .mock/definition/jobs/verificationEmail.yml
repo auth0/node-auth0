@@ -1,0 +1,66 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /jobs/verification-email
+      method: POST
+      auth: true
+      docs: >-
+        Send an email to the specified user that asks them to click a link to <a
+        href="https://auth0.com/docs/email/custom#verification-email">verify
+        their email address</a>.
+
+
+        Note: You must have the `Status` toggle enabled for the verification
+        email template for the email to be sent.
+      source:
+        openapi: ../api.json
+      display-name: Send an email address verification email
+      request:
+        name: CreateVerificationEmailRequestContent
+        body:
+          properties:
+            user_id:
+              type: string
+              docs: user_id of the user to send the verification email to.
+              default: google-oauth2|1234
+            client_id:
+              type: optional<string>
+              docs: >-
+                client_id of the client (application). If no value provided, the
+                global Client ID will be used.
+            identity: optional<root.Identity>
+            organization_id:
+              type: optional<string>
+              docs: >-
+                (Optional) Organization ID – the ID of the Organization. If
+                provided, organization parameters will be made available to the
+                email template and organization branding will be applied to the
+                prompt. In addition, the redirect link in the prompt will
+                include organization_id and organization_name query string
+                parameters.
+              default: org_2eondWoxcMIpaLQc
+        content-type: application/json
+      response:
+        docs: Job successfully created.
+        type: root.CreateVerificationEmailResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            user_id: user_id
+          response:
+            body:
+              status: status
+              type: type
+              created_at: created_at
+              id: id
+  source:
+    openapi: ../api.json

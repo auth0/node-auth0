@@ -1,0 +1,230 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /flows
+      method: GET
+      auth: true
+      pagination:
+        offset: $request.page
+        results: $response.flows
+      source:
+        openapi: ../api.json
+      display-name: Get flows
+      request:
+        name: FlowsListRequest
+        query-parameters:
+          page:
+            type: optional<integer>
+            default: 0
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          hydrate:
+            type: optional<literal<"form_count">>
+            allow-multiple: true
+            docs: hydration param
+          synchronous:
+            type: optional<boolean>
+            docs: flag to filter by sync/async flows
+      response:
+        docs: Flows successfully retrieved.
+        type: root.ListFlowsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              flows:
+                - id: id
+                  name: name
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+                  executed_at: executed_at
+    create:
+      path: /flows
+      method: POST
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Create a flow
+      request:
+        name: CreateFlowRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              validation:
+                minLength: 1
+                maxLength: 150
+            actions: optional<list<root.FlowAction>>
+        content-type: application/json
+      response:
+        docs: Flow successfully created.
+        type: root.CreateFlowResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+          response:
+            body:
+              id: id
+              name: name
+              actions:
+                - id: id
+                  alias: alias
+                  type: ACTIVECAMPAIGN
+                  action: LIST_CONTACTS
+                  allow_failure: true
+                  mask_output: true
+                  params:
+                    connection_id: connection_id
+                    email: email
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              executed_at: executed_at
+    get:
+      path: /flows/{id}
+      method: GET
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Flow identifier
+      display-name: Get a flow
+      request:
+        name: GetFlowRequestParameters
+        query-parameters:
+          hydrate:
+            type: optional<root.GetFlowRequestParametersHydrateEnum>
+            allow-multiple: true
+            docs: hydration param
+      response:
+        docs: Flow successfully retrieved.
+        type: root.GetFlowResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              actions:
+                - id: id
+                  alias: alias
+                  type: ACTIVECAMPAIGN
+                  action: LIST_CONTACTS
+                  allow_failure: true
+                  mask_output: true
+                  params:
+                    connection_id: connection_id
+                    email: email
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              executed_at: executed_at
+    delete:
+      path: /flows/{id}
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Flow id
+      display-name: Delete a flow
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /flows/{id}
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Flow identifier
+      display-name: Update a flow
+      request:
+        name: UpdateFlowRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              validation:
+                minLength: 1
+                maxLength: 150
+            actions: optional<list<root.FlowAction>>
+        content-type: application/json
+      response:
+        docs: Flow successfully updated.
+        type: root.UpdateFlowResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              actions:
+                - id: id
+                  alias: alias
+                  type: ACTIVECAMPAIGN
+                  action: LIST_CONTACTS
+                  allow_failure: true
+                  mask_output: true
+                  params:
+                    connection_id: connection_id
+                    email: email
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+              executed_at: executed_at
+  source:
+    openapi: ../api.json

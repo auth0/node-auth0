@@ -1,0 +1,63 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    invalidateRememberBrowser:
+      path: /users/{id}/multifactor/actions/invalidate-remember-browser
+      method: POST
+      auth: true
+      docs: >-
+        Invalidate all remembered browsers across all <a
+        href="https://auth0.com/docs/multifactor-authentication">authentication
+        factors</a> for a user.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: >-
+            ID of the user to invalidate all remembered browsers and
+            authentication factors for.
+      display-name: Invalidate All Remembered Browsers for Multi-factor Authentication
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - path-parameters:
+            id: id
+    deleteProvider:
+      path: /users/{id}/multifactor/{provider}
+      method: DELETE
+      auth: true
+      docs: >-
+        Remove a <a
+        href="https://auth0.com/docs/multifactor-authentication">multifactor</a>
+        authentication configuration from a user's account. This forces the user
+        to manually reconfigure the multi-factor provider.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the user to remove a multifactor configuration from.
+        provider:
+          type: root.UserMultifactorProviderEnum
+          docs: >-
+            The multi-factor provider. Supported values 'duo' or
+            'google-authenticator'
+      display-name: Delete a User's Multi-factor Provider
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+            provider: duo
+  source:
+    openapi: ../api.json

@@ -1,0 +1,1690 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /clients
+      method: GET
+      auth: true
+      docs: >
+        Retrieve clients (applications and SSO integrations) matching provided
+        filters. A list of fields to include or exclude may also be specified.
+
+        For more information, read <a
+        href="https://www.auth0.com/docs/get-started/applications"> Applications
+        in Auth0</a> and <a
+        href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single
+        Sign-On</a>.
+
+
+        <ul>
+          <li>
+            The following can be retrieved with any scope:
+            <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code>.
+          </li>
+          <li>
+            The following properties can only be retrieved with the <code>read:clients</code> or
+            <code>read:client_keys</code> scope:
+            <code>callbacks</code>, <code>oidc_logout</code>, <code>allowed_origins</code>,
+            <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
+            <code>callback_url_template</code>, <code>jwt_configuration</code>,
+            <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
+            <code>jwt_configuration.scopes</code>, <code>jwt_configuration.alg</code>, <code>api_type</code>,
+            <code>logo_uri</code>, <code>allowed_clients</code>, <code>owners</code>, <code>custom_login_page</code>,
+            <code>custom_login_page_off</code>, <code>sso</code>, <code>addons</code>, <code>form_template</code>,
+            <code>custom_login_page_codeview</code>, <code>resource_servers</code>, <code>client_metadata</code>,
+            <code>mobile</code>, <code>mobile.android</code>, <code>mobile.ios</code>, <code>allowed_logout_urls</code>,
+            <code>token_endpoint_auth_method</code>, <code>is_first_party</code>, <code>oidc_conformant</code>,
+            <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,
+            <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,
+            <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>refresh_token.policies</code>, <code>organization_usage</code>,
+            <code>organization_require_behavior</code>.
+          </li>
+          <li>
+            The following properties can only be retrieved with the
+            <code>read:client_keys</code> or <code>read:client_credentials</code> scope:
+            <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
+            <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code>.
+          </li>
+        </ul>
+      pagination:
+        offset: $request.page
+        results: $response.clients
+      source:
+        openapi: ../api.json
+      display-name: Get clients
+      request:
+        name: ListClientsRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+          page:
+            type: optional<integer>
+            default: 0
+            docs: Page index of the results to return. First page is 0.
+          per_page:
+            type: optional<integer>
+            default: 50
+            docs: >-
+              Number of results per page. Default value is 50, maximum value is
+              100
+          include_totals:
+            type: optional<boolean>
+            default: true
+            docs: >-
+              Return results inside an object that contains the total result
+              count (true) or as a direct array of results (false, default).
+          is_global:
+            type: optional<boolean>
+            docs: Optional filter on the global client parameter.
+          is_first_party:
+            type: optional<boolean>
+            docs: >-
+              Optional filter on whether or not a client is a first-party
+              client.
+          app_type:
+            type: optional<string>
+            docs: Optional filter by a comma-separated list of application types.
+          q:
+            type: optional<string>
+            docs: >-
+              Advanced Query in <a
+              href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a>
+              syntax.<br /><b>Permitted Queries</b>:<br
+              /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional
+              Restrictions</b>:<br /><ul><li>Cannot be used in combination with
+              other filters</li><li>Requires use of the <i>from</i> and
+              <i>take</i> paging parameters (checkpoint
+              paginatinon)</li><li>Reduced rate limits apply. See <a
+              href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate
+              Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates
+              may not be immediately reflected in query results</i>
+      response:
+        docs: Clients successfully retrieved.
+        type: root.ListClientsOffsetPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              start: 1.1
+              limit: 1.1
+              total: 1.1
+              clients:
+                - client_id: client_id
+                  tenant: tenant
+                  name: name
+                  description: description
+                  global: true
+                  client_secret: client_secret
+                  app_type: native
+                  logo_uri: logo_uri
+                  is_first_party: true
+                  oidc_conformant: true
+                  callbacks:
+                    - callbacks
+                  allowed_origins:
+                    - allowed_origins
+                  web_origins:
+                    - web_origins
+                  client_aliases:
+                    - client_aliases
+                  allowed_clients:
+                    - allowed_clients
+                  allowed_logout_urls:
+                    - allowed_logout_urls
+                  grant_types:
+                    - grant_types
+                  signing_keys:
+                    - {}
+                  sso: true
+                  sso_disabled: true
+                  cross_origin_authentication: true
+                  cross_origin_loc: cross_origin_loc
+                  custom_login_page_on: true
+                  custom_login_page: custom_login_page
+                  custom_login_page_preview: custom_login_page_preview
+                  form_template: form_template
+                  token_endpoint_auth_method: none
+                  client_metadata:
+                    key: value
+                  initiate_login_uri: initiate_login_uri
+                  refresh_token:
+                    rotation_type: rotating
+                    expiration_type: expiring
+                  default_organization:
+                    organization_id: organization_id
+                    flows:
+                      - client_credentials
+                  organization_usage: deny
+                  organization_require_behavior: no_prompt
+                  require_pushed_authorization_requests: true
+                  require_proof_of_possession: true
+                  compliance_level: compliance_level
+                  par_request_expiry: 1
+                  token_quota:
+                    client_credentials: {}
+    create:
+      path: /clients
+      method: POST
+      auth: true
+      docs: >
+        Create a new client (application or SSO integration). For more
+        information, read <a
+        href="https://www.auth0.com/docs/get-started/auth0-overview/create-applications">Create
+        Applications</a>
+
+        <a
+        href="https://www.auth0.com/docs/authenticate/single-sign-on/api-endpoints-for-single-sign-on>">API
+        Endpoints for Single Sign-On</a>. 
+
+
+        Notes: 
+
+        - We recommend leaving the `client_secret` parameter unspecified to
+        allow the generation of a safe secret.
+
+        - The <code>client_authentication_methods</code> and
+        <code>token_endpoint_auth_method</code> properties are mutually
+        exclusive. Use 
+
+        <code>client_authentication_methods</code> to configure the client with
+        Private Key JWT authentication method. Otherwise, use
+        <code>token_endpoint_auth_method</code>
+
+        to configure the client with client secret (basic or post) or with no
+        authentication method (none).
+
+        - When using <code>client_authentication_methods</code> to configure the
+        client with Private Key JWT authentication method, specify fully defined
+        credentials. 
+
+        These credentials will be automatically enabled for Private Key JWT
+        authentication on the client. 
+
+        - To configure <code>client_authentication_methods</code>, the
+        <code>create:client_credentials</code> scope is required.
+
+        - To configure <code>client_authentication_methods</code>, the property
+        <code>jwt_configuration.alg</code> must be set to RS256.
+
+
+        <div class="alert alert-warning">SSO Integrations created via this
+        endpoint will accept login requests and share user profile
+        information.</div>
+      source:
+        openapi: ../api.json
+      display-name: Create a client
+      request:
+        name: CreateClientRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              docs: >-
+                Name of this client (min length: 1 character, does not allow `<`
+                or `>`).
+            description:
+              type: optional<string>
+              docs: >-
+                Free text description of this client (max length: 140
+                characters).
+              validation:
+                maxLength: 140
+            logo_uri:
+              type: optional<string>
+              docs: >-
+                URL of the logo to display for this client. Recommended size is
+                150x150 pixels.
+            callbacks:
+              type: optional<list<string>>
+              docs: >-
+                Comma-separated list of URLs whitelisted for Auth0 to use as a
+                callback to the client after authentication.
+            oidc_logout: optional<root.ClientOidcBackchannelLogoutSettings>
+            oidc_backchannel_logout: optional<root.ClientOidcBackchannelLogoutSettings>
+            session_transfer: optional<root.ClientSessionTransferConfiguration>
+            allowed_origins:
+              type: optional<list<string>>
+              docs: >-
+                Comma-separated list of URLs allowed to make requests from
+                JavaScript to Auth0 API (typically used with CORS). By default,
+                all your callback URLs will be allowed. This field allows you to
+                enter other origins if necessary. You can also use wildcards at
+                the subdomain level (e.g., https://*.contoso.com). Query strings
+                and hash information are not taken into account when validating
+                these URLs.
+            web_origins:
+              type: optional<list<string>>
+              docs: >-
+                Comma-separated list of allowed origins for use with <a
+                href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin
+                Authentication</a>, <a
+                href='https://auth0.com/docs/flows/concepts/device-auth'>Device
+                Flow</a>, and <a
+                href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web
+                message response mode</a>.
+            client_aliases:
+              type: optional<list<string>>
+              docs: >-
+                List of audiences/realms for SAML protocol. Used by the wsfed
+                addon.
+            allowed_clients:
+              type: optional<list<string>>
+              docs: >-
+                List of allow clients and API ids that are allowed to make
+                delegation requests. Empty means all all your clients are
+                allowed.
+            allowed_logout_urls:
+              type: optional<list<string>>
+              docs: >-
+                Comma-separated list of URLs that are valid to redirect to after
+                logout from Auth0. Wildcards are allowed for subdomains.
+            grant_types:
+              type: optional<list<string>>
+              docs: >-
+                List of grant types supported for this application. Can include
+                `authorization_code`, `implicit`, `refresh_token`,
+                `client_credentials`, `password`,
+                `http://auth0.com/oauth/grant-type/password-realm`,
+                `http://auth0.com/oauth/grant-type/mfa-oob`,
+                `http://auth0.com/oauth/grant-type/mfa-otp`,
+                `http://auth0.com/oauth/grant-type/mfa-recovery-code`,
+                `urn:openid:params:grant-type:ciba`, and
+                `urn:ietf:params:oauth:grant-type:device_code`.
+            token_endpoint_auth_method: optional<root.ClientTokenEndpointAuthMethodEnum>
+            app_type: optional<root.ClientAppTypeEnum>
+            is_first_party:
+              type: optional<boolean>
+              docs: Whether this client a first party client or not
+              default: true
+            oidc_conformant:
+              type: optional<boolean>
+              docs: >-
+                Whether this client conforms to <a
+                href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict
+                OIDC specifications</a> (true) or uses legacy features (false).
+              default: false
+            jwt_configuration: optional<root.ClientJwtConfiguration>
+            encryption_key: optional<root.ClientEncryptionKey>
+            sso:
+              type: optional<boolean>
+              docs: >-
+                Applies only to SSO clients and determines whether Auth0 will
+                handle Single Sign On (true) or whether the Identity Provider
+                will (false).
+            cross_origin_authentication:
+              type: optional<boolean>
+              docs: >-
+                Whether this client can be used to make cross-origin
+                authentication requests (true) or it is not allowed to make such
+                requests (false).
+              default: false
+            cross_origin_loc:
+              type: optional<string>
+              docs: >-
+                URL of the location in your site where the cross origin
+                verification takes place for the cross-origin auth flow when
+                performing Auth in your own domain instead of Auth0 hosted login
+                page.
+            sso_disabled:
+              type: optional<boolean>
+              docs: >-
+                <code>true</code> to disable Single Sign On, <code>false</code>
+                otherwise (default: <code>false</code>)
+            custom_login_page_on:
+              type: optional<boolean>
+              docs: >-
+                <code>true</code> if the custom login page is to be used,
+                <code>false</code> otherwise. Defaults to <code>true</code>
+            custom_login_page:
+              type: optional<string>
+              docs: The content (HTML, CSS, JS) of the custom login page.
+              validation:
+                minLength: 1
+            custom_login_page_preview:
+              type: optional<string>
+              docs: >-
+                The content (HTML, CSS, JS) of the custom login page. (Used on
+                Previews)
+              validation:
+                minLength: 1
+            form_template:
+              type: optional<string>
+              docs: HTML form template to be used for WS-Federation.
+              validation:
+                minLength: 1
+            addons: optional<root.ClientAddons>
+            client_metadata: optional<root.ClientMetadata>
+            mobile: optional<root.ClientMobile>
+            initiate_login_uri:
+              type: optional<string>
+              docs: Initiate login uri, must be https
+            native_social_login: optional<root.NativeSocialLogin>
+            refresh_token: optional<root.ClientRefreshTokenConfiguration>
+            default_organization: optional<root.ClientDefaultOrganization>
+            organization_usage: optional<root.ClientOrganizationUsageEnum>
+            organization_require_behavior: optional<root.ClientOrganizationRequireBehaviorEnum>
+            client_authentication_methods: optional<root.ClientCreateAuthenticationMethod>
+            require_pushed_authorization_requests:
+              type: optional<boolean>
+              docs: >-
+                Makes the use of Pushed Authorization Requests mandatory for
+                this client
+              default: false
+            require_proof_of_possession:
+              type: optional<boolean>
+              docs: Makes the use of Proof-of-Possession mandatory for this client
+              default: false
+            signed_request_object: optional<root.ClientSignedRequestObjectWithPublicKey>
+            compliance_level: optional<root.ClientComplianceLevelEnum>
+            par_request_expiry:
+              type: optional<integer>
+              docs: >-
+                Specifies how long, in seconds, a Pushed Authorization Request
+                URI remains valid
+            token_quota: optional<root.CreateTokenQuota>
+            resource_server_identifier:
+              type: optional<string>
+              docs: >-
+                The identifier of the resource server that this client is linked
+                to.
+              validation:
+                minLength: 1
+                maxLength: 600
+        content-type: application/json
+      response:
+        docs: Client successfully created.
+        type: root.CreateClientResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+          response:
+            body:
+              client_id: client_id
+              tenant: tenant
+              name: name
+              description: description
+              global: true
+              client_secret: client_secret
+              app_type: native
+              logo_uri: logo_uri
+              is_first_party: true
+              oidc_conformant: true
+              callbacks:
+                - callbacks
+              allowed_origins:
+                - allowed_origins
+              web_origins:
+                - web_origins
+              client_aliases:
+                - client_aliases
+              allowed_clients:
+                - allowed_clients
+              allowed_logout_urls:
+                - allowed_logout_urls
+              session_transfer:
+                can_create_session_transfer_token: true
+                allowed_authentication_methods:
+                  - cookie
+                enforce_device_binding: ip
+                allow_refresh_token: true
+                enforce_online_refresh_tokens: true
+                enforce_cascade_revocation: true
+              oidc_logout:
+                backchannel_logout_urls:
+                  - backchannel_logout_urls
+                backchannel_logout_initiators:
+                  mode: custom
+                  selected_initiators:
+                    - rp-logout
+                backchannel_logout_session_metadata:
+                  include: true
+              grant_types:
+                - grant_types
+              jwt_configuration:
+                lifetime_in_seconds: 1
+                secret_encoded: true
+                scopes:
+                  key: value
+                alg: HS256
+              signing_keys:
+                - pkcs7: pkcs7
+                  cert: cert
+                  subject: subject
+              encryption_key:
+                pub: pub
+                cert: cert
+                subject: subject
+              sso: true
+              sso_disabled: true
+              cross_origin_authentication: true
+              cross_origin_loc: cross_origin_loc
+              custom_login_page_on: true
+              custom_login_page: custom_login_page
+              custom_login_page_preview: custom_login_page_preview
+              form_template: form_template
+              addons:
+                aws:
+                  principal: principal
+                  role: role
+                  lifetime_in_seconds: 1
+                azure_blob:
+                  accountName: accountName
+                  storageAccessKey: storageAccessKey
+                  containerName: containerName
+                  blobName: blobName
+                  expiration: 1
+                  signedIdentifier: signedIdentifier
+                  blob_read: true
+                  blob_write: true
+                  blob_delete: true
+                  container_read: true
+                  container_write: true
+                  container_delete: true
+                  container_list: true
+                azure_sb:
+                  namespace: namespace
+                  sasKeyName: sasKeyName
+                  sasKey: sasKey
+                  entityPath: entityPath
+                  expiration: 1
+                rms:
+                  url: url
+                mscrm:
+                  url: url
+                slack:
+                  team: team
+                sentry:
+                  org_slug: org_slug
+                  base_url: base_url
+                box:
+                  key: value
+                cloudbees:
+                  key: value
+                concur:
+                  key: value
+                dropbox:
+                  key: value
+                echosign:
+                  domain: domain
+                egnyte:
+                  domain: domain
+                firebase:
+                  secret: secret
+                  private_key_id: private_key_id
+                  private_key: private_key
+                  client_email: client_email
+                  lifetime_in_seconds: 1
+                newrelic:
+                  account: account
+                office365:
+                  domain: domain
+                  connection: connection
+                salesforce:
+                  entity_id: entity_id
+                salesforce_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                salesforce_sandbox_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                samlp:
+                  mappings:
+                    key: value
+                  audience: audience
+                  recipient: recipient
+                  createUpnClaim: true
+                  mapUnknownClaimsAsIs: true
+                  passthroughClaimsWithNoMapping: true
+                  mapIdentities: true
+                  signatureAlgorithm: signatureAlgorithm
+                  digestAlgorithm: digestAlgorithm
+                  issuer: issuer
+                  destination: destination
+                  lifetimeInSeconds: 1
+                  signResponse: true
+                  nameIdentifierFormat: nameIdentifierFormat
+                  nameIdentifierProbes:
+                    - nameIdentifierProbes
+                  authnContextClassRef: authnContextClassRef
+                layer:
+                  providerId: providerId
+                  keyId: keyId
+                  privateKey: privateKey
+                  principal: principal
+                  expiration: 1
+                sap_api:
+                  clientid: clientid
+                  usernameAttribute: usernameAttribute
+                  tokenEndpointUrl: tokenEndpointUrl
+                  scope: scope
+                  servicePassword: servicePassword
+                  nameIdentifierFormat: nameIdentifierFormat
+                sharepoint:
+                  url: url
+                  external_url:
+                    - external_url
+                springcm:
+                  acsurl: acsurl
+                wams:
+                  masterkey: masterkey
+                wsfed:
+                  key: value
+                zendesk:
+                  accountName: accountName
+                zoom:
+                  account: account
+                sso_integration:
+                  name: name
+                  version: version
+              token_endpoint_auth_method: none
+              client_metadata:
+                key: value
+              mobile:
+                android:
+                  app_package_name: app_package_name
+                  sha256_cert_fingerprints:
+                    - sha256_cert_fingerprints
+                ios:
+                  team_id: team_id
+                  app_bundle_identifier: app_bundle_identifier
+              initiate_login_uri: initiate_login_uri
+              refresh_token:
+                rotation_type: rotating
+                expiration_type: expiring
+                leeway: 1
+                token_lifetime: 1
+                infinite_token_lifetime: true
+                idle_token_lifetime: 1
+                infinite_idle_token_lifetime: true
+              default_organization:
+                organization_id: organization_id
+                flows:
+                  - client_credentials
+              organization_usage: deny
+              organization_require_behavior: no_prompt
+              client_authentication_methods:
+                private_key_jwt:
+                  credentials:
+                    - id: id
+                tls_client_auth:
+                  credentials:
+                    - id: id
+                self_signed_tls_client_auth:
+                  credentials:
+                    - id: id
+              require_pushed_authorization_requests: true
+              require_proof_of_possession: true
+              signed_request_object:
+                required: true
+                credentials:
+                  - id: id
+              compliance_level: compliance_level
+              par_request_expiry: 1
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+    get:
+      path: /clients/{id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve client details by ID. Clients are SSO connections or
+        Applications linked with your Auth0 tenant. A list of fields to include
+        or exclude may also be specified. 
+
+        For more information, read <a
+        href="https://www.auth0.com/docs/get-started/applications"> Applications
+        in Auth0</a> and <a
+        href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single
+        Sign-On</a>.
+
+        <ul>
+          <li>
+            The following properties can be retrieved with any of the scopes:
+            <code>client_id</code>, <code>app_type</code>, <code>name</code>, and <code>description</code>.
+          </li>
+          <li>
+            The following properties can only be retrieved with the <code>read:clients</code> or
+            <code>read:client_keys</code> scopes:
+            <code>callbacks</code>, <code>oidc_logout</code>, <code>allowed_origins</code>,
+            <code>web_origins</code>, <code>tenant</code>, <code>global</code>, <code>config_route</code>,
+            <code>callback_url_template</code>, <code>jwt_configuration</code>,
+            <code>jwt_configuration.lifetime_in_seconds</code>, <code>jwt_configuration.secret_encoded</code>,
+            <code>jwt_configuration.scopes</code>, <code>jwt_configuration.alg</code>, <code>api_type</code>,
+            <code>logo_uri</code>, <code>allowed_clients</code>, <code>owners</code>, <code>custom_login_page</code>,
+            <code>custom_login_page_off</code>, <code>sso</code>, <code>addons</code>, <code>form_template</code>,
+            <code>custom_login_page_codeview</code>, <code>resource_servers</code>, <code>client_metadata</code>,
+            <code>mobile</code>, <code>mobile.android</code>, <code>mobile.ios</code>, <code>allowed_logout_urls</code>,
+            <code>token_endpoint_auth_method</code>, <code>is_first_party</code>, <code>oidc_conformant</code>,
+            <code>is_token_endpoint_ip_header_trusted</code>, <code>initiate_login_uri</code>, <code>grant_types</code>,
+            <code>refresh_token</code>, <code>refresh_token.rotation_type</code>, <code>refresh_token.expiration_type</code>,
+            <code>refresh_token.leeway</code>, <code>refresh_token.token_lifetime</code>, <code>refresh_token.policies</code>, <code>organization_usage</code>,
+            <code>organization_require_behavior</code>.
+          </li>
+          <li>
+            The following properties can only be retrieved with the <code>read:client_keys</code> or <code>read:client_credentials</code> scopes:
+            <code>encryption_key</code>, <code>encryption_key.pub</code>, <code>encryption_key.cert</code>,
+            <code>client_secret</code>, <code>client_authentication_methods</code> and <code>signing_key</code>.
+          </li>
+        </ul>
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client to retrieve.
+      display-name: Get client by ID
+      request:
+        name: GetClientRequestParameters
+        query-parameters:
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+      response:
+        docs: Client successfully retrieved.
+        type: root.GetClientResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              client_id: client_id
+              tenant: tenant
+              name: name
+              description: description
+              global: true
+              client_secret: client_secret
+              app_type: native
+              logo_uri: logo_uri
+              is_first_party: true
+              oidc_conformant: true
+              callbacks:
+                - callbacks
+              allowed_origins:
+                - allowed_origins
+              web_origins:
+                - web_origins
+              client_aliases:
+                - client_aliases
+              allowed_clients:
+                - allowed_clients
+              allowed_logout_urls:
+                - allowed_logout_urls
+              session_transfer:
+                can_create_session_transfer_token: true
+                allowed_authentication_methods:
+                  - cookie
+                enforce_device_binding: ip
+                allow_refresh_token: true
+                enforce_online_refresh_tokens: true
+                enforce_cascade_revocation: true
+              oidc_logout:
+                backchannel_logout_urls:
+                  - backchannel_logout_urls
+                backchannel_logout_initiators:
+                  mode: custom
+                  selected_initiators:
+                    - rp-logout
+                backchannel_logout_session_metadata:
+                  include: true
+              grant_types:
+                - grant_types
+              jwt_configuration:
+                lifetime_in_seconds: 1
+                secret_encoded: true
+                scopes:
+                  key: value
+                alg: HS256
+              signing_keys:
+                - pkcs7: pkcs7
+                  cert: cert
+                  subject: subject
+              encryption_key:
+                pub: pub
+                cert: cert
+                subject: subject
+              sso: true
+              sso_disabled: true
+              cross_origin_authentication: true
+              cross_origin_loc: cross_origin_loc
+              custom_login_page_on: true
+              custom_login_page: custom_login_page
+              custom_login_page_preview: custom_login_page_preview
+              form_template: form_template
+              addons:
+                aws:
+                  principal: principal
+                  role: role
+                  lifetime_in_seconds: 1
+                azure_blob:
+                  accountName: accountName
+                  storageAccessKey: storageAccessKey
+                  containerName: containerName
+                  blobName: blobName
+                  expiration: 1
+                  signedIdentifier: signedIdentifier
+                  blob_read: true
+                  blob_write: true
+                  blob_delete: true
+                  container_read: true
+                  container_write: true
+                  container_delete: true
+                  container_list: true
+                azure_sb:
+                  namespace: namespace
+                  sasKeyName: sasKeyName
+                  sasKey: sasKey
+                  entityPath: entityPath
+                  expiration: 1
+                rms:
+                  url: url
+                mscrm:
+                  url: url
+                slack:
+                  team: team
+                sentry:
+                  org_slug: org_slug
+                  base_url: base_url
+                box:
+                  key: value
+                cloudbees:
+                  key: value
+                concur:
+                  key: value
+                dropbox:
+                  key: value
+                echosign:
+                  domain: domain
+                egnyte:
+                  domain: domain
+                firebase:
+                  secret: secret
+                  private_key_id: private_key_id
+                  private_key: private_key
+                  client_email: client_email
+                  lifetime_in_seconds: 1
+                newrelic:
+                  account: account
+                office365:
+                  domain: domain
+                  connection: connection
+                salesforce:
+                  entity_id: entity_id
+                salesforce_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                salesforce_sandbox_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                samlp:
+                  mappings:
+                    key: value
+                  audience: audience
+                  recipient: recipient
+                  createUpnClaim: true
+                  mapUnknownClaimsAsIs: true
+                  passthroughClaimsWithNoMapping: true
+                  mapIdentities: true
+                  signatureAlgorithm: signatureAlgorithm
+                  digestAlgorithm: digestAlgorithm
+                  issuer: issuer
+                  destination: destination
+                  lifetimeInSeconds: 1
+                  signResponse: true
+                  nameIdentifierFormat: nameIdentifierFormat
+                  nameIdentifierProbes:
+                    - nameIdentifierProbes
+                  authnContextClassRef: authnContextClassRef
+                layer:
+                  providerId: providerId
+                  keyId: keyId
+                  privateKey: privateKey
+                  principal: principal
+                  expiration: 1
+                sap_api:
+                  clientid: clientid
+                  usernameAttribute: usernameAttribute
+                  tokenEndpointUrl: tokenEndpointUrl
+                  scope: scope
+                  servicePassword: servicePassword
+                  nameIdentifierFormat: nameIdentifierFormat
+                sharepoint:
+                  url: url
+                  external_url:
+                    - external_url
+                springcm:
+                  acsurl: acsurl
+                wams:
+                  masterkey: masterkey
+                wsfed:
+                  key: value
+                zendesk:
+                  accountName: accountName
+                zoom:
+                  account: account
+                sso_integration:
+                  name: name
+                  version: version
+              token_endpoint_auth_method: none
+              client_metadata:
+                key: value
+              mobile:
+                android:
+                  app_package_name: app_package_name
+                  sha256_cert_fingerprints:
+                    - sha256_cert_fingerprints
+                ios:
+                  team_id: team_id
+                  app_bundle_identifier: app_bundle_identifier
+              initiate_login_uri: initiate_login_uri
+              refresh_token:
+                rotation_type: rotating
+                expiration_type: expiring
+                leeway: 1
+                token_lifetime: 1
+                infinite_token_lifetime: true
+                idle_token_lifetime: 1
+                infinite_idle_token_lifetime: true
+              default_organization:
+                organization_id: organization_id
+                flows:
+                  - client_credentials
+              organization_usage: deny
+              organization_require_behavior: no_prompt
+              client_authentication_methods:
+                private_key_jwt:
+                  credentials:
+                    - id: id
+                tls_client_auth:
+                  credentials:
+                    - id: id
+                self_signed_tls_client_auth:
+                  credentials:
+                    - id: id
+              require_pushed_authorization_requests: true
+              require_proof_of_possession: true
+              signed_request_object:
+                required: true
+                credentials:
+                  - id: id
+              compliance_level: compliance_level
+              par_request_expiry: 1
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+    delete:
+      path: /clients/{id}
+      method: DELETE
+      auth: true
+      docs: Delete a client and related configuration (rules, connections, etc).
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client to delete.
+      display-name: Delete a client
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /clients/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Updates a client's settings. For more information, read <a
+        href="https://www.auth0.com/docs/get-started/applications"> Applications
+        in Auth0</a> and <a
+        href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single
+        Sign-On</a>.
+
+
+        Notes:
+
+        - The `client_secret` and `signing_key` attributes can only be updated
+        with the `update:client_keys` scope.
+
+        - The <code>client_authentication_methods</code> and
+        <code>token_endpoint_auth_method</code> properties are mutually
+        exclusive. Use <code>client_authentication_methods</code> to configure
+        the client with Private Key JWT authentication method. Otherwise, use
+        <code>token_endpoint_auth_method</code> to configure the client with
+        client secret (basic or post) or with no authentication method (none).
+
+        - When using <code>client_authentication_methods</code> to configure the
+        client with Private Key JWT authentication method, only specify the
+        credential IDs that were generated when creating the credentials on the
+        client.
+
+        - To configure <code>client_authentication_methods</code>, the
+        <code>update:client_credentials</code> scope is required.
+
+        - To configure <code>client_authentication_methods</code>, the property
+        <code>jwt_configuration.alg</code> must be set to RS256.
+
+        - To change a client's <code>is_first_party</code> property to
+        <code>false</code>, the <code>organization_usage</code> and
+        <code>organization_require_behavior</code> properties must be unset.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client to update.
+      display-name: Update a client
+      request:
+        name: UpdateClientRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: >-
+                The name of the client. Must contain at least one character.
+                Does not allow '<' or '>'.
+            description:
+              type: optional<string>
+              docs: >-
+                Free text description of the purpose of the Client. (Max
+                character length: <code>140</code>)
+              validation:
+                maxLength: 140
+            client_secret:
+              type: optional<string>
+              docs: The secret used to sign tokens for the client
+              validation:
+                minLength: 1
+            logo_uri:
+              type: optional<string>
+              docs: 'The URL of the client logo (recommended size: 150x150)'
+            callbacks:
+              type: optional<list<string>>
+              docs: >-
+                A set of URLs that are valid to call back from Auth0 when
+                authenticating users
+            oidc_logout: optional<root.ClientOidcBackchannelLogoutSettings>
+            oidc_backchannel_logout: optional<root.ClientOidcBackchannelLogoutSettings>
+            session_transfer: optional<root.ClientSessionTransferConfiguration>
+            allowed_origins:
+              type: optional<list<string>>
+              docs: A set of URLs that represents valid origins for CORS
+            web_origins:
+              type: optional<list<string>>
+              docs: >-
+                A set of URLs that represents valid web origins for use with web
+                message response mode
+            grant_types:
+              type: optional<list<string>>
+              docs: >-
+                A set of grant types that the client is authorized to use. Can
+                include `authorization_code`, `implicit`, `refresh_token`,
+                `client_credentials`, `password`,
+                `http://auth0.com/oauth/grant-type/password-realm`,
+                `http://auth0.com/oauth/grant-type/mfa-oob`,
+                `http://auth0.com/oauth/grant-type/mfa-otp`,
+                `http://auth0.com/oauth/grant-type/mfa-recovery-code`,
+                `urn:openid:params:grant-type:ciba`, and
+                `urn:ietf:params:oauth:grant-type:device_code`.
+            client_aliases:
+              type: optional<list<string>>
+              docs: List of audiences for SAML protocol
+            allowed_clients:
+              type: optional<list<string>>
+              docs: >-
+                Ids of clients that will be allowed to perform delegation
+                requests. Clients that will be allowed to make delegation
+                request. By default, all your clients will be allowed. This
+                field allows you to specify specific clients
+            allowed_logout_urls:
+              type: optional<list<string>>
+              docs: URLs that are valid to redirect to after logout from Auth0.
+            jwt_configuration: optional<root.ClientJwtConfiguration>
+            encryption_key: optional<root.ClientEncryptionKey>
+            sso:
+              type: optional<boolean>
+              docs: >-
+                <code>true</code> to use Auth0 instead of the IdP to do Single
+                Sign On, <code>false</code> otherwise (default:
+                <code>false</code>)
+            cross_origin_authentication:
+              type: optional<boolean>
+              docs: >-
+                <code>true</code> if this client can be used to make
+                cross-origin authentication requests, <code>false</code>
+                otherwise if cross origin is disabled
+            cross_origin_loc:
+              type: optional<string>
+              docs: >-
+                URL for the location in your site where the cross origin
+                verification takes place for the cross-origin auth flow when
+                performing Auth in your own domain instead of Auth0 hosted login
+                page.
+            sso_disabled:
+              type: optional<boolean>
+              docs: >-
+                <code>true</code> to disable Single Sign On, <code>false</code>
+                otherwise (default: <code>false</code>)
+            custom_login_page_on:
+              type: optional<boolean>
+              docs: >-
+                <code>true</code> if the custom login page is to be used,
+                <code>false</code> otherwise.
+            token_endpoint_auth_method: optional<root.ClientTokenEndpointAuthMethodOrNullEnum>
+            app_type: optional<root.ClientAppTypeEnum>
+            is_first_party:
+              type: optional<boolean>
+              docs: Whether this client a first party client or not
+              default: true
+            oidc_conformant:
+              type: optional<boolean>
+              docs: Whether this client will conform to strict OIDC specifications
+              default: false
+            custom_login_page:
+              type: optional<string>
+              docs: The content (HTML, CSS, JS) of the custom login page
+            custom_login_page_preview: optional<string>
+            token_quota: optional<root.UpdateTokenQuota>
+            form_template:
+              type: optional<string>
+              docs: Form template for WS-Federation protocol
+            addons: optional<root.ClientAddons>
+            client_metadata: optional<root.ClientMetadata>
+            mobile: optional<root.ClientMobile>
+            initiate_login_uri:
+              type: optional<string>
+              docs: Initiate login uri, must be https
+            native_social_login: optional<root.NativeSocialLogin>
+            refresh_token: optional<root.ClientRefreshTokenConfiguration>
+            default_organization: optional<root.ClientDefaultOrganization>
+            organization_usage: optional<root.ClientOrganizationUsagePatchEnum>
+            organization_require_behavior: optional<root.ClientOrganizationRequireBehaviorPatchEnum>
+            client_authentication_methods: optional<root.ClientAuthenticationMethod>
+            require_pushed_authorization_requests:
+              type: optional<boolean>
+              docs: >-
+                Makes the use of Pushed Authorization Requests mandatory for
+                this client
+              default: false
+            require_proof_of_possession:
+              type: optional<boolean>
+              docs: Makes the use of Proof-of-Possession mandatory for this client
+              default: false
+            signed_request_object: optional<root.ClientSignedRequestObjectWithCredentialId>
+            compliance_level: optional<root.ClientComplianceLevelEnum>
+            par_request_expiry:
+              type: optional<integer>
+              docs: >-
+                Specifies how long, in seconds, a Pushed Authorization Request
+                URI remains valid
+        content-type: application/json
+      response:
+        docs: Client successfully updated.
+        type: root.UpdateClientResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              client_id: client_id
+              tenant: tenant
+              name: name
+              description: description
+              global: true
+              client_secret: client_secret
+              app_type: native
+              logo_uri: logo_uri
+              is_first_party: true
+              oidc_conformant: true
+              callbacks:
+                - callbacks
+              allowed_origins:
+                - allowed_origins
+              web_origins:
+                - web_origins
+              client_aliases:
+                - client_aliases
+              allowed_clients:
+                - allowed_clients
+              allowed_logout_urls:
+                - allowed_logout_urls
+              session_transfer:
+                can_create_session_transfer_token: true
+                allowed_authentication_methods:
+                  - cookie
+                enforce_device_binding: ip
+                allow_refresh_token: true
+                enforce_online_refresh_tokens: true
+                enforce_cascade_revocation: true
+              oidc_logout:
+                backchannel_logout_urls:
+                  - backchannel_logout_urls
+                backchannel_logout_initiators:
+                  mode: custom
+                  selected_initiators:
+                    - rp-logout
+                backchannel_logout_session_metadata:
+                  include: true
+              grant_types:
+                - grant_types
+              jwt_configuration:
+                lifetime_in_seconds: 1
+                secret_encoded: true
+                scopes:
+                  key: value
+                alg: HS256
+              signing_keys:
+                - pkcs7: pkcs7
+                  cert: cert
+                  subject: subject
+              encryption_key:
+                pub: pub
+                cert: cert
+                subject: subject
+              sso: true
+              sso_disabled: true
+              cross_origin_authentication: true
+              cross_origin_loc: cross_origin_loc
+              custom_login_page_on: true
+              custom_login_page: custom_login_page
+              custom_login_page_preview: custom_login_page_preview
+              form_template: form_template
+              addons:
+                aws:
+                  principal: principal
+                  role: role
+                  lifetime_in_seconds: 1
+                azure_blob:
+                  accountName: accountName
+                  storageAccessKey: storageAccessKey
+                  containerName: containerName
+                  blobName: blobName
+                  expiration: 1
+                  signedIdentifier: signedIdentifier
+                  blob_read: true
+                  blob_write: true
+                  blob_delete: true
+                  container_read: true
+                  container_write: true
+                  container_delete: true
+                  container_list: true
+                azure_sb:
+                  namespace: namespace
+                  sasKeyName: sasKeyName
+                  sasKey: sasKey
+                  entityPath: entityPath
+                  expiration: 1
+                rms:
+                  url: url
+                mscrm:
+                  url: url
+                slack:
+                  team: team
+                sentry:
+                  org_slug: org_slug
+                  base_url: base_url
+                box:
+                  key: value
+                cloudbees:
+                  key: value
+                concur:
+                  key: value
+                dropbox:
+                  key: value
+                echosign:
+                  domain: domain
+                egnyte:
+                  domain: domain
+                firebase:
+                  secret: secret
+                  private_key_id: private_key_id
+                  private_key: private_key
+                  client_email: client_email
+                  lifetime_in_seconds: 1
+                newrelic:
+                  account: account
+                office365:
+                  domain: domain
+                  connection: connection
+                salesforce:
+                  entity_id: entity_id
+                salesforce_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                salesforce_sandbox_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                samlp:
+                  mappings:
+                    key: value
+                  audience: audience
+                  recipient: recipient
+                  createUpnClaim: true
+                  mapUnknownClaimsAsIs: true
+                  passthroughClaimsWithNoMapping: true
+                  mapIdentities: true
+                  signatureAlgorithm: signatureAlgorithm
+                  digestAlgorithm: digestAlgorithm
+                  issuer: issuer
+                  destination: destination
+                  lifetimeInSeconds: 1
+                  signResponse: true
+                  nameIdentifierFormat: nameIdentifierFormat
+                  nameIdentifierProbes:
+                    - nameIdentifierProbes
+                  authnContextClassRef: authnContextClassRef
+                layer:
+                  providerId: providerId
+                  keyId: keyId
+                  privateKey: privateKey
+                  principal: principal
+                  expiration: 1
+                sap_api:
+                  clientid: clientid
+                  usernameAttribute: usernameAttribute
+                  tokenEndpointUrl: tokenEndpointUrl
+                  scope: scope
+                  servicePassword: servicePassword
+                  nameIdentifierFormat: nameIdentifierFormat
+                sharepoint:
+                  url: url
+                  external_url:
+                    - external_url
+                springcm:
+                  acsurl: acsurl
+                wams:
+                  masterkey: masterkey
+                wsfed:
+                  key: value
+                zendesk:
+                  accountName: accountName
+                zoom:
+                  account: account
+                sso_integration:
+                  name: name
+                  version: version
+              token_endpoint_auth_method: none
+              client_metadata:
+                key: value
+              mobile:
+                android:
+                  app_package_name: app_package_name
+                  sha256_cert_fingerprints:
+                    - sha256_cert_fingerprints
+                ios:
+                  team_id: team_id
+                  app_bundle_identifier: app_bundle_identifier
+              initiate_login_uri: initiate_login_uri
+              refresh_token:
+                rotation_type: rotating
+                expiration_type: expiring
+                leeway: 1
+                token_lifetime: 1
+                infinite_token_lifetime: true
+                idle_token_lifetime: 1
+                infinite_idle_token_lifetime: true
+              default_organization:
+                organization_id: organization_id
+                flows:
+                  - client_credentials
+              organization_usage: deny
+              organization_require_behavior: no_prompt
+              client_authentication_methods:
+                private_key_jwt:
+                  credentials:
+                    - id: id
+                tls_client_auth:
+                  credentials:
+                    - id: id
+                self_signed_tls_client_auth:
+                  credentials:
+                    - id: id
+              require_pushed_authorization_requests: true
+              require_proof_of_possession: true
+              signed_request_object:
+                required: true
+                credentials:
+                  - id: id
+              compliance_level: compliance_level
+              par_request_expiry: 1
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+    rotateSecret:
+      path: /clients/{id}/rotate-secret
+      method: POST
+      auth: true
+      docs: >-
+        Rotate a client secret.
+
+
+        This endpoint cannot be used with clients configured with Private Key
+        JWT authentication method (client_authentication_methods configured with
+        private_key_jwt). The generated secret is NOT base64 encoded.
+
+
+        For more information, read <a
+        href="https://www.auth0.com/docs/get-started/applications/rotate-client-secret">Rotate
+        Client Secrets</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client that will rotate secrets.
+      display-name: Rotate a client secret
+      response:
+        docs: Secret successfully rotated.
+        type: root.RotateClientSecretResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              client_id: client_id
+              tenant: tenant
+              name: name
+              description: description
+              global: true
+              client_secret: client_secret
+              app_type: native
+              logo_uri: logo_uri
+              is_first_party: true
+              oidc_conformant: true
+              callbacks:
+                - callbacks
+              allowed_origins:
+                - allowed_origins
+              web_origins:
+                - web_origins
+              client_aliases:
+                - client_aliases
+              allowed_clients:
+                - allowed_clients
+              allowed_logout_urls:
+                - allowed_logout_urls
+              session_transfer:
+                can_create_session_transfer_token: true
+                allowed_authentication_methods:
+                  - cookie
+                enforce_device_binding: ip
+                allow_refresh_token: true
+                enforce_online_refresh_tokens: true
+                enforce_cascade_revocation: true
+              oidc_logout:
+                backchannel_logout_urls:
+                  - backchannel_logout_urls
+                backchannel_logout_initiators:
+                  mode: custom
+                  selected_initiators:
+                    - rp-logout
+                backchannel_logout_session_metadata:
+                  include: true
+              grant_types:
+                - grant_types
+              jwt_configuration:
+                lifetime_in_seconds: 1
+                secret_encoded: true
+                scopes:
+                  key: value
+                alg: HS256
+              signing_keys:
+                - pkcs7: pkcs7
+                  cert: cert
+                  subject: subject
+              encryption_key:
+                pub: pub
+                cert: cert
+                subject: subject
+              sso: true
+              sso_disabled: true
+              cross_origin_authentication: true
+              cross_origin_loc: cross_origin_loc
+              custom_login_page_on: true
+              custom_login_page: custom_login_page
+              custom_login_page_preview: custom_login_page_preview
+              form_template: form_template
+              addons:
+                aws:
+                  principal: principal
+                  role: role
+                  lifetime_in_seconds: 1
+                azure_blob:
+                  accountName: accountName
+                  storageAccessKey: storageAccessKey
+                  containerName: containerName
+                  blobName: blobName
+                  expiration: 1
+                  signedIdentifier: signedIdentifier
+                  blob_read: true
+                  blob_write: true
+                  blob_delete: true
+                  container_read: true
+                  container_write: true
+                  container_delete: true
+                  container_list: true
+                azure_sb:
+                  namespace: namespace
+                  sasKeyName: sasKeyName
+                  sasKey: sasKey
+                  entityPath: entityPath
+                  expiration: 1
+                rms:
+                  url: url
+                mscrm:
+                  url: url
+                slack:
+                  team: team
+                sentry:
+                  org_slug: org_slug
+                  base_url: base_url
+                box:
+                  key: value
+                cloudbees:
+                  key: value
+                concur:
+                  key: value
+                dropbox:
+                  key: value
+                echosign:
+                  domain: domain
+                egnyte:
+                  domain: domain
+                firebase:
+                  secret: secret
+                  private_key_id: private_key_id
+                  private_key: private_key
+                  client_email: client_email
+                  lifetime_in_seconds: 1
+                newrelic:
+                  account: account
+                office365:
+                  domain: domain
+                  connection: connection
+                salesforce:
+                  entity_id: entity_id
+                salesforce_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                salesforce_sandbox_api:
+                  clientid: clientid
+                  principal: principal
+                  communityName: communityName
+                  community_url_section: community_url_section
+                samlp:
+                  mappings:
+                    key: value
+                  audience: audience
+                  recipient: recipient
+                  createUpnClaim: true
+                  mapUnknownClaimsAsIs: true
+                  passthroughClaimsWithNoMapping: true
+                  mapIdentities: true
+                  signatureAlgorithm: signatureAlgorithm
+                  digestAlgorithm: digestAlgorithm
+                  issuer: issuer
+                  destination: destination
+                  lifetimeInSeconds: 1
+                  signResponse: true
+                  nameIdentifierFormat: nameIdentifierFormat
+                  nameIdentifierProbes:
+                    - nameIdentifierProbes
+                  authnContextClassRef: authnContextClassRef
+                layer:
+                  providerId: providerId
+                  keyId: keyId
+                  privateKey: privateKey
+                  principal: principal
+                  expiration: 1
+                sap_api:
+                  clientid: clientid
+                  usernameAttribute: usernameAttribute
+                  tokenEndpointUrl: tokenEndpointUrl
+                  scope: scope
+                  servicePassword: servicePassword
+                  nameIdentifierFormat: nameIdentifierFormat
+                sharepoint:
+                  url: url
+                  external_url:
+                    - external_url
+                springcm:
+                  acsurl: acsurl
+                wams:
+                  masterkey: masterkey
+                wsfed:
+                  key: value
+                zendesk:
+                  accountName: accountName
+                zoom:
+                  account: account
+                sso_integration:
+                  name: name
+                  version: version
+              token_endpoint_auth_method: none
+              client_metadata:
+                key: value
+              mobile:
+                android:
+                  app_package_name: app_package_name
+                  sha256_cert_fingerprints:
+                    - sha256_cert_fingerprints
+                ios:
+                  team_id: team_id
+                  app_bundle_identifier: app_bundle_identifier
+              initiate_login_uri: initiate_login_uri
+              refresh_token:
+                rotation_type: rotating
+                expiration_type: expiring
+                leeway: 1
+                token_lifetime: 1
+                infinite_token_lifetime: true
+                idle_token_lifetime: 1
+                infinite_idle_token_lifetime: true
+              default_organization:
+                organization_id: organization_id
+                flows:
+                  - client_credentials
+              organization_usage: deny
+              organization_require_behavior: no_prompt
+              client_authentication_methods:
+                private_key_jwt:
+                  credentials:
+                    - id: id
+                tls_client_auth:
+                  credentials:
+                    - id: id
+                self_signed_tls_client_auth:
+                  credentials:
+                    - id: id
+              require_pushed_authorization_requests: true
+              require_proof_of_possession: true
+              signed_request_object:
+                required: true
+                credentials:
+                  - id: id
+              compliance_level: compliance_level
+              par_request_expiry: 1
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+  source:
+    openapi: ../api.json

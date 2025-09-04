@@ -1,0 +1,100 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /self-service-profiles/{id}/sso-ticket
+      method: POST
+      auth: true
+      docs: >
+        Creates an SSO access ticket to initiate the Self Service SSO Flow using
+        a self-service profile.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the self-service profile to retrieve
+      display-name: Create an SSO access ticket to initiate the Self Service SSO Flow
+      request:
+        name: CreateSelfServiceProfileSsoTicketRequestContent
+        body:
+          properties:
+            connection_id:
+              type: optional<string>
+              docs: >-
+                If provided, this will allow editing of the provided connection
+                during the SSO Flow
+            connection_config: optional<root.SelfServiceProfileSsoTicketConnectionConfig>
+            enabled_clients:
+              type: optional<list<string>>
+              docs: List of client_ids that the connection will be enabled for.
+            enabled_organizations:
+              type: >-
+                optional<list<root.SelfServiceProfileSsoTicketEnabledOrganization>>
+              docs: List of organizations that the connection will be enabled for.
+            ttl_sec:
+              type: optional<integer>
+              docs: >-
+                Number of seconds for which the ticket is valid before
+                expiration. If unspecified or set to 0, this value defaults to
+                432000 seconds (5 days).
+            domain_aliases_config: optional<root.SelfServiceProfileSsoTicketDomainAliasesConfig>
+            provisioning_config: optional<root.SelfServiceProfileSsoTicketProvisioningConfig>
+        content-type: application/json
+      response:
+        docs: SSO Access Ticket successfully created.
+        type: root.CreateSelfServiceProfileSsoTicketResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              ticket: ticket
+    revoke:
+      path: /self-service-profiles/{profileId}/sso-ticket/{id}/revoke
+      method: POST
+      auth: true
+      docs: >
+        Revokes an SSO access ticket and invalidates associated sessions. The
+        ticket will no longer be accepted to initiate a Self-Service SSO
+        session. If any users have already started a session through this
+        ticket, their session will be terminated. Clients should expect a `202
+        Accepted` response upon successful processing, indicating that the
+        request has been acknowledged and that the revocation is underway but
+        may not be fully completed at the time of response. If the specified
+        ticket does not exist, a `202 Accepted` response is also returned,
+        signaling that no further action is required.
+
+        Clients should treat these `202` responses as an acknowledgment that the
+        request has been accepted and is in progress, even if the ticket was not
+        found.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        profileId:
+          type: string
+          docs: The id of the self-service profile
+        id:
+          type: string
+          docs: The id of the ticket to revoke
+      display-name: Revoke an SSO access ticket
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            profileId: profileId
+            id: id
+  source:
+    openapi: ../api.json

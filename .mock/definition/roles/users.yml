@@ -1,0 +1,135 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /roles/{id}/users
+      method: GET
+      auth: true
+      docs: >
+        Retrieve list of users associated with a specific role. For Dashboard
+        instructions, review <a
+        href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles">View
+        Users Assigned to Roles</a>.
+
+
+        This endpoint supports two types of pagination:
+
+        <ul>
+
+        <li>Offset pagination</li>
+
+        <li>Checkpoint pagination</li>
+
+        </ul>
+
+
+        Checkpoint pagination must be used if you need to retrieve more than
+        1000 organization members.
+
+
+        <h2>Checkpoint Pagination</h2>
+
+
+        To search by checkpoint, use the following parameters:
+
+        <ul>
+
+        <li><code>from</code>: Optional id from which to start selection.</li>
+
+        <li><code>take</code>: The total amount of entries to retrieve when
+        using the from parameter. Defaults to 50.</li>
+
+        </ul>
+
+
+        <b>Note</b>: The first time you call this endpoint using checkpoint
+        pagination, omit the <code>from</code> parameter. If there are more
+        results, a <code>next</code> value is included in the response. You can
+        use this for subsequent API calls. When <code>next</code> is no longer
+        included in the response, no pages are remaining.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.users
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the role to retrieve a list of users associated with.
+      display-name: Get a role's users
+      request:
+        name: ListRoleUsersRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: Role users successfully retrieved.
+        type: root.ListRoleUsersPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              next: next
+              users:
+                - user_id: user_id
+                  picture: picture
+                  name: name
+                  email: email
+    assign:
+      path: /roles/{id}/users
+      method: POST
+      auth: true
+      docs: >
+        Assign one or more users to an existing user role. To learn more, review
+        <a
+        href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based
+        Access Control</a>.
+
+
+        <b>Note</b>: New roles cannot be created through this action.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the role to assign users to.
+      display-name: Assign users to a role
+      request:
+        name: AssignRoleUsersRequestContent
+        body:
+          properties:
+            users:
+              docs: user_id's of the users to assign the role to.
+              type: list<string>
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            users:
+              - users
+  source:
+    openapi: ../api.json

@@ -1,0 +1,111 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /connections/{id}/scim-configuration/tokens
+      method: GET
+      auth: true
+      docs: |
+        Retrieves all scim tokens by its connection <code>id</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to retrieve its SCIM configuration
+      display-name: Get a connection's SCIM tokens
+      response:
+        docs: >-
+          The connection's SCIM tokens were retrieved. See <strong>Response
+          Schemas</strong> for schema.
+        type: root.GetScimTokensResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              - token_id: token_id
+                scopes:
+                  - scopes
+                created_at: created_at
+                valid_until: valid_until
+                last_used_at: last_used_at
+    create:
+      path: /connections/{id}/scim-configuration/tokens
+      method: POST
+      auth: true
+      docs: |
+        Create a scim token for a scim client.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to create its SCIM token
+      display-name: Create a SCIM Token
+      request:
+        name: CreateScimTokenRequestContent
+        body:
+          properties:
+            scopes:
+              type: optional<list<string>>
+              docs: The scopes of the scim token
+            token_lifetime:
+              type: optional<integer>
+              docs: Lifetime of the token in seconds. Must be greater than 900
+        content-type: application/json
+      response:
+        docs: >-
+          The connection's SCIM token was created. See <strong>Response
+          Schemas</strong> for schema.
+        type: root.CreateScimTokenResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+        - root.ConflictError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              token_id: token_id
+              token: token
+              scopes:
+                - scopes
+              created_at: created_at
+              valid_until: valid_until
+    delete:
+      path: /connections/{id}/scim-configuration/tokens/{tokenId}
+      method: DELETE
+      auth: true
+      docs: >
+        Deletes a scim token by its connection <code>id</code> and
+        <code>tokenId</code>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The connection id that owns the SCIM token to delete
+        tokenId:
+          type: string
+          docs: The id of the scim token to delete
+      display-name: Delete a connection's SCIM token
+      errors:
+        - root.BadRequestError
+        - root.NotFoundError
+      examples:
+        - path-parameters:
+            id: id
+            tokenId: tokenId
+  source:
+    openapi: ../api.json

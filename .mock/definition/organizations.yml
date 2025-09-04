@@ -1,0 +1,351 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /organizations
+      method: GET
+      auth: true
+      docs: >
+        Retrieve detailed list of all Organizations available in your tenant.
+        For more information, see Auth0 Organizations.
+
+
+        This endpoint supports two types of pagination:
+
+        <ul>
+
+        <li>Offset pagination</li>
+
+        <li>Checkpoint pagination</li>
+
+        </ul>
+
+
+        Checkpoint pagination must be used if you need to retrieve more than
+        1000 organizations.
+
+
+        <h2>Checkpoint Pagination</h2>
+
+
+        To search by checkpoint, use the following parameters:
+
+        <ul>
+
+        <li><code>from</code>: Optional id from which to start selection.</li>
+
+        <li><code>take</code>: The total number of entries to retrieve when
+        using the <code>from</code> parameter. Defaults to 50.</li>
+
+        </ul>
+
+
+        <b>Note</b>: The first time you call this endpoint using checkpoint
+        pagination, omit the <code>from</code> parameter. If there are more
+        results, a <code>next</code> value is included in the response. You can
+        use this for subsequent API calls. When <code>next</code> is no longer
+        included in the response, no pages are remaining.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.organizations
+      source:
+        openapi: ../api.json
+      display-name: Get organizations
+      request:
+        name: ListOrganizationsRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          sort:
+            type: optional<string>
+            docs: >-
+              Field to sort by. Use <code>field:order</code> where order is
+              <code>1</code> for ascending and <code>-1</code> for descending.
+              e.g. <code>created_at:1</code>. We currently support sorting by
+              the following fields: <code>name</code>, <code>display_name</code>
+              and <code>created_at</code>.
+      response:
+        docs: Organizations successfully retrieved.
+        type: root.ListOrganizationsPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              next: next
+              organizations:
+                - id: id
+                  name: name
+                  display_name: display_name
+                  metadata:
+                    key: value
+                  token_quota:
+                    client_credentials: {}
+    create:
+      path: /organizations
+      method: POST
+      auth: true
+      docs: >
+        Create a new Organization within your tenant.  To learn more about
+        Organization settings, behavior, and configuration options, review <a
+        href="https://auth0.com/docs/manage-users/organizations/create-first-organization">Create
+        Your First Organization</a>.
+      source:
+        openapi: ../api.json
+      display-name: Create an Organization
+      request:
+        name: CreateOrganizationRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              docs: The name of this organization.
+              default: organization-1
+              validation:
+                minLength: 1
+                maxLength: 50
+            display_name:
+              type: optional<string>
+              docs: Friendly name of this organization.
+              default: Acme Users
+              validation:
+                minLength: 1
+                maxLength: 255
+            branding: optional<root.OrganizationBranding>
+            metadata: optional<root.OrganizationMetadata>
+            enabled_connections:
+              type: optional<list<root.ConnectionForOrganization>>
+              docs: >-
+                Connections that will be enabled for this organization. See POST
+                enabled_connections endpoint for the object format. (Max of 10
+                connections allowed)
+            token_quota: optional<root.CreateTokenQuota>
+        content-type: application/json
+      response:
+        docs: Organization successfully created.
+        type: root.CreateOrganizationResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+          response:
+            body:
+              id: id
+              name: name
+              display_name: display_name
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+                  page_background: page_background
+              metadata:
+                key: value
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+              enabled_connections:
+                - connection_id: connection_id
+                  assign_membership_on_login: true
+                  show_as_button: true
+                  is_signup_enabled: true
+    getByName:
+      path: /organizations/name/{name}
+      method: GET
+      auth: true
+      docs: |
+        Retrieve details about a single Organization specified by name.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        name:
+          type: string
+          docs: name of the organization to retrieve.
+      display-name: Get organization by name
+      response:
+        docs: Organization successfully retrieved.
+        type: root.GetOrganizationByNameResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            name: name
+          response:
+            body:
+              id: id
+              name: name
+              display_name: display_name
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+                  page_background: page_background
+              metadata:
+                key: value
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+    get:
+      path: /organizations/{id}
+      method: GET
+      auth: true
+      docs: |
+        Retrieve details about a single Organization specified by ID. 
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the organization to retrieve.
+      display-name: Get organization
+      response:
+        docs: Organization successfully retrieved.
+        type: root.GetOrganizationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              display_name: display_name
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+                  page_background: page_background
+              metadata:
+                key: value
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+    delete:
+      path: /organizations/{id}
+      method: DELETE
+      auth: true
+      docs: >
+        Remove an Organization from your tenant.  This action cannot be undone. 
+
+
+        <b>Note</b>: Members are automatically disassociated from an
+        Organization when it is deleted. However, this action does <b>not</b>
+        delete these users from your tenant.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Delete organization
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /organizations/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Update the details of a specific <a
+        href="https://auth0.com/docs/manage-users/organizations/configure-organizations/create-organizations">Organization</a>,
+        such as name and display name, branding options, and metadata.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the organization to update.
+      display-name: Modify an Organization
+      request:
+        name: UpdateOrganizationRequestContent
+        body:
+          properties:
+            display_name:
+              type: optional<string>
+              docs: Friendly name of this organization.
+              default: Acme Users
+              validation:
+                minLength: 1
+                maxLength: 255
+            name:
+              type: optional<string>
+              docs: The name of this organization.
+              default: organization-1
+              validation:
+                minLength: 1
+                maxLength: 50
+            branding: optional<root.OrganizationBranding>
+            metadata: optional<root.OrganizationMetadata>
+            token_quota: optional<root.UpdateTokenQuota>
+        content-type: application/json
+      response:
+        docs: Organization successfully updated.
+        type: root.UpdateOrganizationResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              id: id
+              name: name
+              display_name: display_name
+              branding:
+                logo_url: logo_url
+                colors:
+                  primary: primary
+                  page_background: page_background
+              metadata:
+                key: value
+              token_quota:
+                client_credentials:
+                  enforce: true
+                  per_day: 1
+                  per_hour: 1
+  source:
+    openapi: ../api.json

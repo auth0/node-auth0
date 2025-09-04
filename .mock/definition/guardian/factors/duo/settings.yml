@@ -1,0 +1,111 @@
+imports:
+  root: ../../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /guardian/factors/duo/settings
+      method: GET
+      auth: true
+      docs: Retrieves the DUO account and factor configuration.
+      source:
+        openapi: ../api.json
+      display-name: Get DUO Configuration
+      response:
+        docs: DUO settings successfully retrieved.
+        type: root.GetGuardianFactorDuoSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              ikey: ikey
+              skey: skey
+              host: host
+    set:
+      path: /guardian/factors/duo/settings
+      method: PUT
+      auth: true
+      docs: >-
+        Set the DUO account configuration and other properties specific to this
+        factor.
+      source:
+        openapi: ../api.json
+      display-name: Update the DUO Configuration
+      request:
+        name: SetGuardianFactorDuoSettingsRequestContent
+        body:
+          properties:
+            ikey:
+              type: optional<string>
+              validation:
+                maxLength: 10000
+            skey:
+              type: optional<string>
+              validation:
+                maxLength: 10000
+            host:
+              type: optional<string>
+              validation:
+                maxLength: 10000
+        content-type: application/json
+      response:
+        docs: DUO settings successfully updated.
+        type: root.SetGuardianFactorDuoSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              ikey: ikey
+              skey: skey
+              host: host
+    update:
+      path: /guardian/factors/duo/settings
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Update the DUO Configuration
+      request:
+        name: UpdateGuardianFactorDuoSettingsRequestContent
+        body:
+          properties:
+            ikey:
+              type: optional<string>
+              validation:
+                maxLength: 10000
+            skey:
+              type: optional<string>
+              validation:
+                maxLength: 10000
+            host:
+              type: optional<string>
+              validation:
+                maxLength: 10000
+        content-type: application/json
+      response:
+        docs: DUO settings successfully updated.
+        type: root.UpdateGuardianFactorDuoSettingsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              ikey: ikey
+              skey: skey
+              host: host
+  source:
+    openapi: ../api.json

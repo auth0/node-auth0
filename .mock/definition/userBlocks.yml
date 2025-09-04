@@ -1,0 +1,155 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    listByIdentifier:
+      path: /user-blocks
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of all <a
+        href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force
+        Protection</a> blocks for a user with the given identifier (username,
+        phone number, or email).
+      source:
+        openapi: ../api.json
+      display-name: Get blocks by identifier
+      request:
+        name: ListUserBlocksByIdentifierRequestParameters
+        query-parameters:
+          identifier:
+            type: string
+            docs: Should be any of a username, phone number, or email.
+          consider_brute_force_enablement:
+            type: optional<boolean>
+            docs: |2-
+
+                        If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
+                        If true and Brute Force Protection is disabled, will return an empty list.
+                      
+      response:
+        docs: User successfully retrieved.
+        type: root.ListUserBlocksByIdentifierResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - query-parameters:
+            identifier: identifier
+          response:
+            body:
+              blocked_for:
+                - identifier: identifier
+                  ip: ip
+                  connection: connection
+    deleteByIdentifier:
+      path: /user-blocks
+      method: DELETE
+      auth: true
+      docs: >
+        Remove all <a
+        href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force
+        Protection</a> blocks for the user with the given identifier (username,
+        phone number, or email).
+
+
+        Note: This endpoint does not unblock users that were <a
+        href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked
+        by a tenant administrator</a>.
+      source:
+        openapi: ../api.json
+      display-name: Unblock by identifier
+      request:
+        name: DeleteUserBlocksByIdentifierRequestParameters
+        query-parameters:
+          identifier:
+            type: string
+            docs: Should be any of a username, phone number, or email.
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - query-parameters:
+            identifier: identifier
+    list:
+      path: /user-blocks/{id}
+      method: GET
+      auth: true
+      docs: >
+        Retrieve details of all <a
+        href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force
+        Protection</a> blocks for the user with the given ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: user_id of the user blocks to retrieve.
+      display-name: Get a user's blocks
+      request:
+        name: ListUserBlocksRequestParameters
+        query-parameters:
+          consider_brute_force_enablement:
+            type: optional<boolean>
+            docs: |2-
+
+                        If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
+                        If true and Brute Force Protection is disabled, will return an empty list.
+                      
+      response:
+        docs: User block successfully retrieved.
+        type: root.ListUserBlocksResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              blocked_for:
+                - identifier: identifier
+                  ip: ip
+                  connection: connection
+    delete:
+      path: /user-blocks/{id}
+      method: DELETE
+      auth: true
+      docs: >
+        Remove all <a
+        href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force
+        Protection</a> blocks for the user with the given ID.
+
+
+        Note: This endpoint does not unblock users that were <a
+        href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked
+        by a tenant administrator</a>.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The user_id of the user to update.
+      display-name: Unblock a user
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+  source:
+    openapi: ../api.json

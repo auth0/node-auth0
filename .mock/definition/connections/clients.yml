@@ -1,0 +1,90 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /connections/{id}/clients
+      method: GET
+      auth: true
+      docs: >
+        Retrieve all clients that have the specified <a
+        href="https://auth0.com/docs/authenticate/identity-providers">connection</a>
+        enabled.
+
+
+        <b>Note</b>: The first time you call this endpoint, omit the
+        <code>from</code> parameter. If there are more results, a
+        <code>next</code> value is included in the response. You can use this
+        for subsequent API calls. When <code>next</code> is no longer included
+        in the response, no further results are remaining.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.clients
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: >-
+            The id of the connection for which enabled clients are to be
+            retrieved
+      display-name: Get enabled clients for a connection
+      request:
+        name: GetConnectionEnabledClientsRequestParameters
+        query-parameters:
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+      response:
+        docs: Success
+        type: root.GetConnectionEnabledClientsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              clients:
+                - client_id: client_id
+              next: next
+    update:
+      path: /connections/{id}/clients
+      method: PATCH
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the connection to modify
+      display-name: Update enabled clients for a connection
+      request:
+        body: root.UpdateEnabledClientConnectionsRequestContent
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            - client_id: client_id
+              status: true
+  source:
+    openapi: ../api.json

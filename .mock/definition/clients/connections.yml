@@ -1,0 +1,93 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /clients/{id}/connections
+      method: GET
+      auth: true
+      docs: >
+        Retrieve all connections that are enabled for the specified <a
+        href="https://www.auth0.com/docs/get-started/applications">
+        Application</a>, using checkpoint pagination. A list of fields to
+        include or exclude for each connection may also be specified.
+
+        <ul>
+          <li>
+            This endpoint requires the <code>read:connections</code> scope and any one of <code>read:clients</code> or <code>read:client_summary</code>.
+          </li>
+          <li>
+            <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+          </li>
+        </ul>
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.connections
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the client for which to retrieve enabled connections.
+      display-name: Get enabled connections for a client
+      request:
+        name: ConnectionsGetRequest
+        query-parameters:
+          strategy:
+            type: optional<root.ConnectionStrategyEnum>
+            allow-multiple: true
+            docs: >-
+              Provide strategies to only retrieve connections with such
+              strategies
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          fields:
+            type: optional<string>
+            docs: >-
+              A comma separated list of fields to include or exclude (depending
+              on include_fields) from the result, empty to retrieve all fields
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              <code>true</code> if the fields specified are to be included in
+              the result, <code>false</code> otherwise (defaults to
+              <code>true</code>)
+      response:
+        docs: Success
+        type: root.ListClientConnectionsResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              connections:
+                - name: name
+                  display_name: display_name
+                  options:
+                    key: value
+                  id: id
+                  strategy: strategy
+                  realms:
+                    - realms
+                  is_domain_connection: true
+                  show_as_button: true
+                  metadata:
+                    key: value
+              next: next
+  source:
+    openapi: ../api.json

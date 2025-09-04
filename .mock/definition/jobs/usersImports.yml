@@ -1,0 +1,70 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    create:
+      path: /jobs/users-imports
+      method: POST
+      auth: true
+      docs: >-
+        Import users from a <a
+        href="https://auth0.com/docs/users/references/bulk-import-database-schema-examples">formatted
+        file</a> into a connection via a long-running job. When importing users,
+        with or without upsert, the `email_verified` is set to `false` when the
+        email address is added or updated. Users must verify their email
+        address. To avoid this behavior, set `email_verified` to `true` in the
+        imported data.
+      source:
+        openapi: ../api.json
+      display-name: Create import users job
+      request:
+        name: CreateImportUsersRequestContent
+        body:
+          properties:
+            users: file
+            connection_id:
+              type: string
+              docs: connection_id of the connection to which users will be imported.
+              default: con_0000000000000001
+            upsert:
+              type: optional<boolean>
+              docs: >-
+                Whether to update users if they already exist (true) or to
+                ignore them (false).
+              default: false
+            external_id:
+              type: optional<string>
+              docs: Customer-defined ID.
+            send_completion_email:
+              type: optional<boolean>
+              docs: >-
+                Whether to send a completion email to all tenant owners when the
+                job is finished (true) or not (false).
+              default: true
+        content-type: multipart/form-data
+      response:
+        docs: Job successfully created.
+        type: root.CreateImportUsersResponseContent
+        status-code: 202
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ContentTooLargeError
+        - root.TooManyRequestsError
+        - root.InternalServerError
+      examples:
+        - request:
+            connection_id: connection_id
+          response:
+            body:
+              status: status
+              type: type
+              created_at: created_at
+              id: id
+              connection_id: connection_id
+              external_id: external_id
+  source:
+    openapi: ../api.json

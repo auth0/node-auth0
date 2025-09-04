@@ -1,0 +1,73 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /guardian/factors
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of all <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor
+        authentication factors</a> associated with your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get Factors and multi-factor authentication details
+      response:
+        docs: Factors successfully retrieved.
+        type: list<root.GuardianFactor>
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              - enabled: true
+                trial_expired: true
+                name: push-notification
+    set:
+      path: /guardian/factors/{name}
+      method: PUT
+      auth: true
+      docs: >-
+        Update the status (i.e., enabled or disabled) of a specific multi-factor
+        authentication factor.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        name:
+          type: root.GuardianFactorNameEnum
+          docs: >-
+            Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp`
+            `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
+      display-name: Update multi-factor authentication type
+      request:
+        name: SetGuardianFactorRequestContent
+        body:
+          properties:
+            enabled:
+              type: boolean
+              docs: Whether this factor is enabled (true) or disabled (false).
+        content-type: application/json
+      response:
+        docs: Factor updated successfully.
+        type: root.SetGuardianFactorResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - path-parameters:
+            name: push-notification
+          request:
+            enabled: true
+          response:
+            body:
+              enabled: true
+  source:
+    openapi: ../api.json

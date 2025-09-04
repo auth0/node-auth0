@@ -1,0 +1,335 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /custom-domains
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details on <a
+        href="https://auth0.com/docs/custom-domains">custom domains</a>.
+      source:
+        openapi: ../api.json
+      display-name: Get custom domains configurations
+      response:
+        docs: Custom domains successfully retrieved.
+        type: root.ListCustomDomainsResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              - custom_domain_id: custom_domain_id
+                domain: domain
+                primary: true
+                type: auth0_managed_certs
+                origin_domain_name: origin_domain_name
+                verification:
+                  methods:
+                    - name: cname
+                      record: record
+                custom_client_ip_header: custom_client_ip_header
+                tls_policy: tls_policy
+    create:
+      path: /custom-domains
+      method: POST
+      auth: true
+      docs: |
+        Create a new custom domain.
+
+        Note: The custom domain will need to be verified before it will accept
+        requests.
+
+        Optional attributes that can be updated:
+
+        - custom_client_ip_header
+        - tls_policy
+
+
+        TLS Policies:
+
+        - recommended - for modern usage this includes TLS 1.2 only
+      source:
+        openapi: ../api.json
+      display-name: Configure a new custom domain
+      request:
+        name: CreateCustomDomainRequestContent
+        body:
+          properties:
+            domain:
+              type: string
+              docs: Domain name.
+            type: root.CustomDomainProvisioningTypeEnum
+            verification_method: optional<root.CustomDomainVerificationMethodEnum>
+            tls_policy: optional<root.CustomDomainTlsPolicyEnum>
+            custom_client_ip_header: optional<root.CustomDomainCustomClientIpHeader>
+        content-type: application/json
+      response:
+        docs: Custom domain successfully created (verification is pending).
+        type: root.CreateCustomDomainResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            domain: domain
+            type: auth0_managed_certs
+          response:
+            body:
+              custom_domain_id: custom_domain_id
+              domain: domain
+              primary: true
+              type: auth0_managed_certs
+              verification:
+                methods:
+                  - name: cname
+                    record: record
+              custom_client_ip_header: custom_client_ip_header
+              tls_policy: tls_policy
+    get:
+      path: /custom-domains/{id}
+      method: GET
+      auth: true
+      docs: Retrieve a custom domain configuration and status.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the custom domain to retrieve.
+      display-name: Get custom domain configuration
+      response:
+        docs: Custom domain successfully retrieved.
+        type: root.GetCustomDomainResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              custom_domain_id: custom_domain_id
+              domain: domain
+              primary: true
+              type: auth0_managed_certs
+              origin_domain_name: origin_domain_name
+              verification:
+                methods:
+                  - name: cname
+                    record: record
+              custom_client_ip_header: custom_client_ip_header
+              tls_policy: tls_policy
+    delete:
+      path: /custom-domains/{id}
+      method: DELETE
+      auth: true
+      docs: Delete a custom domain and stop serving requests for it.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the custom domain to delete.
+      display-name: Delete custom domain configuration
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /custom-domains/{id}
+      method: PATCH
+      auth: true
+      docs: >
+        Update a custom domain.
+
+
+        These are the attributes that can be updated:
+
+
+        - custom_client_ip_header
+
+        - tls_policy
+
+
+        <h5>Updating CUSTOM_CLIENT_IP_HEADER for a custom domain</h5>To update
+        the <code>custom_client_ip_header</code> for a domain, the body to
+
+        send should be:
+
+        <pre><code>{ "custom_client_ip_header": "cf-connecting-ip"
+        }</code></pre>
+
+
+        <h5>Updating TLS_POLICY for a custom domain</h5>To update the
+        <code>tls_policy</code> for a domain, the body to send should be:
+
+        <pre><code>{ "tls_policy": "recommended" }</code></pre>
+
+
+
+        TLS Policies:
+
+
+        - recommended - for modern usage this includes TLS 1.2 only
+
+
+
+        Some considerations:
+
+
+        - The TLS ciphers and protocols available in each TLS policy follow
+        industry recommendations, and may be updated occasionally.
+
+        - The <code>compatible</code> TLS policy is no longer supported.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: The id of the custom domain to update
+      display-name: Update custom domain configuration
+      request:
+        name: UpdateCustomDomainRequestContent
+        body:
+          properties:
+            tls_policy: optional<root.CustomDomainTlsPolicyEnum>
+            custom_client_ip_header: optional<root.CustomDomainCustomClientIpHeader>
+        content-type: application/json
+      response:
+        docs: Custom domain updated.
+        type: root.UpdateCustomDomainResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+          response:
+            body:
+              custom_domain_id: custom_domain_id
+              domain: domain
+              primary: true
+              type: auth0_managed_certs
+              verification:
+                methods:
+                  - name: cname
+                    record: record
+              custom_client_ip_header: custom_client_ip_header
+              tls_policy: tls_policy
+    test:
+      path: /custom-domains/{id}/test
+      method: POST
+      auth: true
+      docs: Run the test process on a custom domain.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the custom domain to test.
+      display-name: Test a custom domain
+      response:
+        docs: Custom domain test successfully completed.
+        type: root.TestCustomDomainResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.ConflictError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              success: true
+              message: message
+    verify:
+      path: /custom-domains/{id}/verify
+      method: POST
+      auth: true
+      docs: >
+        Run the verification process on a custom domain.
+
+
+        Note: Check the <code>status</code> field to see its verification
+        status. Once verification is complete, it may take up to 10 minutes
+        before the custom domain can start accepting requests.
+
+
+        For <code>self_managed_certs</code>, when the custom domain is verified
+        for the first time, the response will also include the
+        <code>cname_api_key</code> which you will need to configure your proxy.
+        This key must be kept secret, and is used to validate the proxy
+        requests.
+
+
+        <a
+        href="https://auth0.com/docs/custom-domains#step-2-verify-ownership">Learn
+        more</a> about verifying custom domains that use Auth0 Managed
+        certificates.
+
+        <a
+        href="https://auth0.com/docs/custom-domains/self-managed-certificates#step-2-verify-ownership">Learn
+        more</a> about verifying custom domains that use Self Managed
+        certificates.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the custom domain to verify.
+      display-name: Verify a custom domain
+      response:
+        docs: Custom domain successfully verified.
+        type: root.VerifyCustomDomainResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              custom_domain_id: custom_domain_id
+              domain: domain
+              primary: true
+              type: auth0_managed_certs
+              cname_api_key: cname_api_key
+              origin_domain_name: origin_domain_name
+              verification:
+                methods:
+                  - name: cname
+                    record: record
+              custom_client_ip_header: custom_client_ip_header
+              tls_policy: tls_policy
+  source:
+    openapi: ../api.json

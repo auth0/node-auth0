@@ -1,0 +1,237 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /token-exchange-profiles
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve a list of all Token Exchange Profiles available in your tenant.
+
+
+        This endpoint supports Checkpoint pagination. To search by checkpoint,
+        use the following parameters:
+
+        <ul>
+
+        <li><code>from</code>: Optional id from which to start selection.</li>
+
+        <li><code>take</code>: The total amount of entries to retrieve when
+        using the from parameter. Defaults to 50.</li>
+
+        </ul>
+
+
+        <b>Note</b>: The first time you call this endpoint using checkpoint
+        pagination, omit the <code>from</code> parameter. If there are more
+        results, a <code>next</code> value is included in the response. You can
+        use this for subsequent API calls. When <code>next</code> is no longer
+        included in the response, no pages are remaining.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.token_exchange_profiles
+      source:
+        openapi: ../api.json
+      display-name: Get token exchange profiles
+      request:
+        name: TokenExchangeProfilesListRequest
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+      response:
+        docs: Token Exchange Profile successfully retrieved.
+        type: root.ListTokenExchangeProfileResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              next: next
+              token_exchange_profiles:
+                - id: id
+                  name: name
+                  subject_token_type: subject_token_type
+                  action_id: action_id
+                  type: custom_authentication
+                  created_at: '2024-01-15T09:30:00Z'
+                  updated_at: '2024-01-15T09:30:00Z'
+    create:
+      path: /token-exchange-profiles
+      method: POST
+      auth: true
+      docs: |
+        Create a new Token Exchange Profile within your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Create a token exchange profile
+      request:
+        name: CreateTokenExchangeProfileRequestContent
+        body:
+          properties:
+            name:
+              type: string
+              docs: Friendly name of this profile.
+              default: Token Exchange Profile 1
+              validation:
+                minLength: 3
+                maxLength: 50
+            subject_token_type:
+              type: string
+              docs: >-
+                Subject token type for this profile. When receiving a token
+                exchange request on the Authentication API, the corresponding
+                token exchange profile with a matching subject_token_type will
+                be executed. This must be a URI.
+              validation:
+                minLength: 8
+                maxLength: 100
+            action_id:
+              type: string
+              docs: >-
+                The ID of the Custom Token Exchange action to execute for this
+                profile, in order to validate the subject_token. The action must
+                use the custom-token-exchange trigger.
+              validation:
+                minLength: 1
+                maxLength: 36
+            type: root.TokenExchangeProfileTypeEnum
+        content-type: application/json
+      response:
+        docs: Token exchange profile successfully created.
+        type: root.CreateTokenExchangeProfileResponseContent
+        status-code: 201
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.ConflictError
+        - root.TooManyRequestsError
+      examples:
+        - request:
+            name: name
+            subject_token_type: subject_token_type
+            action_id: action_id
+            type: custom_authentication
+          response:
+            body:
+              id: id
+              name: name
+              subject_token_type: subject_token_type
+              action_id: action_id
+              type: custom_authentication
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    get:
+      path: /token-exchange-profiles/{id}
+      method: GET
+      auth: true
+      docs: |
+        Retrieve details about a single Token Exchange Profile specified by ID.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the Token Exchange Profile to retrieve.
+      display-name: Get a token exchange profile
+      response:
+        docs: Token Exchange Profile successfully retrieved.
+        type: root.GetTokenExchangeProfileResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              id: id
+              name: name
+              subject_token_type: subject_token_type
+              action_id: action_id
+              type: custom_authentication
+              created_at: '2024-01-15T09:30:00Z'
+              updated_at: '2024-01-15T09:30:00Z'
+    delete:
+      path: /token-exchange-profiles/{id}
+      method: DELETE
+      auth: true
+      docs: Delete a Token Exchange Profile within your tenant.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the Token Exchange Profile to delete.
+      display-name: Delete a token exchange profile
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+    update:
+      path: /token-exchange-profiles/{id}
+      method: PATCH
+      auth: true
+      docs: |
+        Update a Token Exchange Profile within your tenant.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: ID of the Token Exchange Profile to update.
+      display-name: Update an existing token exchange profile
+      request:
+        name: UpdateTokenExchangeProfileRequestContent
+        body:
+          properties:
+            name:
+              type: optional<string>
+              docs: Friendly name of this profile.
+              default: Token Exchange Profile 1
+              validation:
+                minLength: 3
+                maxLength: 50
+            subject_token_type:
+              type: optional<string>
+              docs: >-
+                Subject token type for this profile. When receiving a token
+                exchange request on the Authentication API, the corresponding
+                token exchange profile with a matching subject_token_type will
+                be executed. This must be a URI.
+              validation:
+                minLength: 8
+                maxLength: 100
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request: {}
+  source:
+    openapi: ../api.json

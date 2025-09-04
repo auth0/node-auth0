@@ -1,0 +1,275 @@
+imports:
+  root: ../../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    getMessageTypes:
+      path: /guardian/factors/phone/message-types
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve list of <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">phone-type
+        MFA factors</a> (i.e., sms and voice) that are enabled for your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get Enabled Phone Factors
+      response:
+        docs: Returns the enabled phone factors
+        type: root.GetGuardianFactorPhoneMessageTypesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              message_types:
+                - sms
+    setMessageTypes:
+      path: /guardian/factors/phone/message-types
+      method: PUT
+      auth: true
+      docs: >-
+        Replace the list of <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">phone-type
+        MFA factors</a> (i.e., sms and voice) that are enabled for your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Update the Enabled Phone Factors
+      request:
+        name: SetGuardianFactorPhoneMessageTypesRequestContent
+        body:
+          properties:
+            message_types:
+              docs: >-
+                The list of phone factors to enable on the tenant. Can include
+                `sms` and `voice`.
+              type: list<root.GuardianFactorPhoneFactorMessageTypeEnum>
+        content-type: application/json
+      response:
+        docs: Returns selected SMS provider configuration
+        type: root.SetGuardianFactorPhoneMessageTypesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.NotFoundError
+      examples:
+        - request:
+            message_types:
+              - sms
+          response:
+            body:
+              message_types:
+                - sms
+    getTwilioProvider:
+      path: /guardian/factors/phone/providers/twilio
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve configuration details for a Twilio phone provider that has been
+        set up in your tenant. To learn more, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">Configure
+        SMS and Voice Notifications for MFA</a>. 
+      source:
+        openapi: ../api.json
+      display-name: Get Twilio configuration
+      response:
+        docs: Twilio Phone configuration successfully retrieved.
+        type: root.GetGuardianFactorsProviderPhoneTwilioResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              from: from
+              messaging_service_sid: messaging_service_sid
+              auth_token: auth_token
+              sid: sid
+    setTwilioProvider:
+      path: /guardian/factors/phone/providers/twilio
+      method: PUT
+      auth: true
+      docs: >-
+        Update the configuration of a Twilio phone provider that has been set up
+        in your tenant. To learn more, review <a
+        href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">Configure
+        SMS and Voice Notifications for MFA</a>. 
+      source:
+        openapi: ../api.json
+      display-name: Update Twilio configuration
+      request:
+        name: SetGuardianFactorsProviderPhoneTwilioRequestContent
+        body:
+          properties:
+            from:
+              type: optional<string>
+              docs: From number
+              default: '+1223323'
+              validation:
+                minLength: 0
+                maxLength: 64
+            messaging_service_sid:
+              type: optional<string>
+              docs: Copilot SID
+              default: 5dEkAiHLPCuQ1uJj4qNXcAnERFAL6cpq
+              validation:
+                minLength: 1
+                maxLength: 1000
+            auth_token:
+              type: optional<string>
+              docs: Twilio Authentication token
+              default: zw5Ku6z2sxhd0ZVXto5SDHX6KPDByJPU
+              validation:
+                minLength: 1
+                maxLength: 1000
+            sid:
+              type: optional<string>
+              docs: Twilio SID
+              default: wywA2BH4VqTpfywiDuyDAYZL3xQjoO40
+              validation:
+                minLength: 1
+                maxLength: 1000
+        content-type: application/json
+      response:
+        docs: Twilio Phone configuration successfully updated.
+        type: root.SetGuardianFactorsProviderPhoneTwilioResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request: {}
+          response:
+            body:
+              from: from
+              messaging_service_sid: messaging_service_sid
+              auth_token: auth_token
+              sid: sid
+    getSelectedProvider:
+      path: /guardian/factors/phone/selected-provider
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of the multi-factor authentication phone provider
+        configured for your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get phone provider configuration
+      response:
+        docs: Returns selected Phone provider configuration
+        type: root.GetGuardianFactorsProviderPhoneResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              provider: auth0
+    setProvider:
+      path: /guardian/factors/phone/selected-provider
+      method: PUT
+      auth: true
+      source:
+        openapi: ../api.json
+      display-name: Update phone provider configuration
+      request:
+        name: SetGuardianFactorsProviderPhoneRequestContent
+        body:
+          properties:
+            provider: root.GuardianFactorsProviderSmsProviderEnum
+        content-type: application/json
+      response:
+        docs: Returns selected Phone provider configuration
+        type: root.SetGuardianFactorsProviderPhoneResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request:
+            provider: auth0
+          response:
+            body:
+              provider: auth0
+    getTemplates:
+      path: /guardian/factors/phone/templates
+      method: GET
+      auth: true
+      docs: >-
+        Retrieve details of the multi-factor authentication enrollment and
+        verification templates for phone-type factors available in your tenant.
+      source:
+        openapi: ../api.json
+      display-name: Get Enrollment and Verification Phone Templates
+      response:
+        docs: Phone enrollment and verification templates successfully retrieved.
+        type: root.GetGuardianFactorPhoneTemplatesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - response:
+            body:
+              enrollment_message: enrollment_message
+              verification_message: verification_message
+    setTemplates:
+      path: /guardian/factors/phone/templates
+      method: PUT
+      auth: true
+      docs: >-
+        Customize the messages sent to complete phone enrollment and
+        verification (subscription required).
+      source:
+        openapi: ../api.json
+      display-name: Update Enrollment and Verification Phone Templates
+      request:
+        name: SetGuardianFactorPhoneTemplatesRequestContent
+        body:
+          properties:
+            enrollment_message:
+              type: string
+              docs: >-
+                Message sent to the user when they are invited to enroll with a
+                phone number.
+              default: >-
+                {{code}} is your verification code for {{tenant.friendly_name}}.
+                Please enter this code to verify your enrollment.
+            verification_message:
+              type: string
+              docs: >-
+                Message sent to the user when they are prompted to verify their
+                account.
+              default: '{{code}} is your verification code for {{tenant.friendly_name}}'
+        content-type: application/json
+      response:
+        docs: Phone enrollment and verification templates successfully updated.
+        type: root.SetGuardianFactorPhoneTemplatesResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+      examples:
+        - request:
+            enrollment_message: enrollment_message
+            verification_message: verification_message
+          response:
+            body:
+              enrollment_message: enrollment_message
+              verification_message: verification_message
+  source:
+    openapi: ../api.json

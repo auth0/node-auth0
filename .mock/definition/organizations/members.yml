@@ -1,0 +1,178 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /organizations/{id}/members
+      method: GET
+      auth: true
+      docs: >
+        List organization members.
+
+        This endpoint is subject to eventual consistency. New users may not be
+        immediately included in the response and deleted users may not be
+        immediately removed from it.
+
+
+        <ul>
+          <li>
+            Use the <code>fields</code> parameter to optionally define the specific member details retrieved. If <code>fields</code> is left blank, all fields (except roles) are returned.
+          </li>
+          <li>
+            Member roles are not sent by default. Use <code>fields=roles</code> to retrieve the roles assigned to each listed member. To use this parameter, you must include the <code>read:organization_member_roles</code> scope in the token.
+          </li>
+        </ul>
+
+
+        This endpoint supports two types of pagination:
+
+
+        - Offset pagination
+
+        - Checkpoint pagination
+
+
+        Checkpoint pagination must be used if you need to retrieve more than
+        1000 organization members.
+
+
+        <h2>Checkpoint Pagination</h2>
+
+
+        To search by checkpoint, use the following parameters: - from: Optional
+        id from which to start selection. - take: The total amount of entries to
+        retrieve when using the from parameter. Defaults to 50. Note: The first
+        time you call this endpoint using Checkpoint Pagination, you should omit
+        the <code>from</code> parameter. If there are more results, a
+        <code>next</code> value will be included in the response. You can use
+        this for subsequent API calls. When <code>next</code> is no longer
+        included in the response, this indicates there are no more pages
+        remaining.
+      pagination:
+        cursor: $request.from
+        next_cursor: $response.next
+        results: $response.members
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Get members who belong to an organization
+      request:
+        name: ListOrganizationMembersRequestParameters
+        query-parameters:
+          from:
+            type: optional<string>
+            docs: Optional Id from which to start selection.
+          take:
+            type: optional<integer>
+            default: 50
+            docs: Number of results per page. Defaults to 50.
+          fields:
+            type: optional<string>
+            docs: >-
+              Comma-separated list of fields to include or exclude (based on
+              value provided for include_fields) in the result. Leave empty to
+              retrieve all fields.
+          include_fields:
+            type: optional<boolean>
+            docs: >-
+              Whether specified fields are to be included (true) or excluded
+              (false).
+      response:
+        docs: Members successfully retrieved.
+        type: root.ListOrganizationMembersPaginatedResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          response:
+            body:
+              next: next
+              members:
+                - user_id: user_id
+                  picture: picture
+                  name: name
+                  email: email
+                  roles:
+                    - {}
+    create:
+      path: /organizations/{id}/members
+      method: POST
+      auth: true
+      docs: >
+        Set one or more existing users as members of a specific <a
+        href="https://auth0.com/docs/manage-users/organizations">Organization</a>.
+
+
+        To add a user to an Organization through this action, the user must
+        already exist in your tenant. If a user does not yet exist, you can <a
+        href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">invite
+        them to create an account</a>, manually create them through the Auth0
+        Dashboard, or use the Management API.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Add members to an organization
+      request:
+        name: CreateOrganizationMemberRequestContent
+        body:
+          properties:
+            members:
+              docs: List of user IDs to add to the organization as members.
+              type: list<string>
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            members:
+              - members
+    delete:
+      path: /organizations/{id}/members
+      method: DELETE
+      auth: true
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: Organization identifier.
+      display-name: Delete members from an organization
+      request:
+        name: DeleteOrganizationMembersRequestContent
+        body:
+          properties:
+            members:
+              docs: List of user IDs to remove from the organization.
+              type: list<string>
+        content-type: application/json
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          request:
+            members:
+              - members
+  source:
+    openapi: ../api.json

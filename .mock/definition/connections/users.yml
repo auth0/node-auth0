@@ -1,0 +1,41 @@
+imports:
+  root: ../__package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    deleteByEmail:
+      path: /connections/{id}/users
+      method: DELETE
+      auth: true
+      docs: >
+        Deletes a specified connection user by its email (you cannot delete all
+        users from specific connection). Currently, only Database Connections
+        are supported.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        id:
+          type: string
+          docs: >-
+            The id of the connection (currently only database connections are
+            supported)
+      display-name: Delete a connection user
+      request:
+        name: DeleteConnectionUsersByEmailQueryParameters
+        query-parameters:
+          email:
+            type: string
+            docs: The email of the user to delete
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            id: id
+          query-parameters:
+            email: email
+  source:
+    openapi: ../api.json

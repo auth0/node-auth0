@@ -1,0 +1,75 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    get:
+      path: /branding
+      method: GET
+      auth: true
+      docs: Retrieve branding settings.
+      source:
+        openapi: ../api.json
+      display-name: Get branding settings
+      response:
+        docs: Branding settings successfully retrieved.
+        type: root.GetBrandingResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              colors:
+                primary: primary
+                page_background: page_background
+              favicon_url: favicon_url
+              logo_url: logo_url
+              font:
+                url: url
+    update:
+      path: /branding
+      method: PATCH
+      auth: true
+      docs: Update branding settings.
+      source:
+        openapi: ../api.json
+      display-name: Update branding settings
+      request:
+        name: UpdateBrandingRequestContent
+        body:
+          properties:
+            colors: optional<root.UpdateBrandingColors>
+            favicon_url:
+              type: optional<string>
+              docs: URL for the favicon. Must use HTTPS.
+            logo_url:
+              type: optional<string>
+              docs: URL for the logo. Must use HTTPS.
+            font: optional<root.UpdateBrandingFont>
+        content-type: application/json
+      response:
+        docs: Branding settings successfully updated.
+        type: root.UpdateBrandingResponseContent
+        status-code: 200
+      errors:
+        - root.BadRequestError
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - request: {}
+          response:
+            body:
+              colors:
+                primary: primary
+                page_background: page_background
+              favicon_url: favicon_url
+              logo_url: logo_url
+              font:
+                url: url
+  source:
+    openapi: ../api.json

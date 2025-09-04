@@ -1,0 +1,90 @@
+imports:
+  root: __package__.yml
+service:
+  auth: false
+  base-path: ''
+  endpoints:
+    list:
+      path: /rules-configs
+      method: GET
+      auth: true
+      docs: |-
+        Retrieve rules config variable keys.
+
+            Note: For security, config variable values cannot be retrieved outside rule execution.
+      source:
+        openapi: ../api.json
+      display-name: Retrieve config variable keys for rules (get_rules-configs)
+      response:
+        docs: Rules config keys successfully retrieved.
+        type: list<root.RulesConfig>
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - response:
+            body:
+              - key: key
+    set:
+      path: /rules-configs/{key}
+      method: PUT
+      auth: true
+      docs: Sets a rules config variable.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        key:
+          type: string
+          docs: >-
+            Key of the rules config variable to set (max length: 127
+            characters).
+      display-name: Set rules config for a given key
+      request:
+        name: SetRulesConfigRequestContent
+        body:
+          properties:
+            value:
+              type: string
+              docs: Value for a rules config variable.
+              default: MY_RULES_CONFIG_VALUE
+        content-type: application/json
+      response:
+        docs: Rules config variable successfully set.
+        type: root.SetRulesConfigResponseContent
+        status-code: 200
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            key: key
+          request:
+            value: value
+          response:
+            body:
+              key: key
+              value: value
+    delete:
+      path: /rules-configs/{key}
+      method: DELETE
+      auth: true
+      docs: Delete a rules config variable identified by its key.
+      source:
+        openapi: ../api.json
+      path-parameters:
+        key:
+          type: string
+          docs: Key of the rules config variable to delete.
+      display-name: Delete rules config for a given key
+      errors:
+        - root.UnauthorizedError
+        - root.ForbiddenError
+        - root.TooManyRequestsError
+      examples:
+        - path-parameters:
+            key: key
+  source:
+    openapi: ../api.json
