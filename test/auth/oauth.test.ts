@@ -426,7 +426,7 @@ describe('OAuth', () => {
         oauth.tokenForConnection({
           connection: 'google-oauth2',
           subject_token: 'test-id-token',
-          subject_token_type: SUBJECT_TOKEN_TYPES.SUBJECT_TYPE_ACCESS_TOKEN,
+          subject_token_type: SUBJECT_TOKEN_TYPES.ACCESS_TOKEN,
         })
       ).resolves.toMatchObject({
         data: {

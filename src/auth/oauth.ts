@@ -310,7 +310,7 @@ export enum SUBJECT_TOKEN_TYPES {
    *
    * @see {@link https://tools.ietf.org/html/rfc8693#section-3.1 RFC 8693 Section 3.1}
    */
-  SUBJECT_TYPE_REFRESH_TOKEN = 'urn:ietf:params:oauth:token-type:refresh_token',
+  REFRESH_TOKEN = 'urn:ietf:params:oauth:token-type:refresh_token',
 
   /**
    * Constant representing the subject type for a access token.
@@ -318,14 +318,14 @@ export enum SUBJECT_TOKEN_TYPES {
    *
    * @see {@link https://tools.ietf.org/html/rfc8693#section-3.1 RFC 8693 Section 3.1}
    */
-  SUBJECT_TYPE_ACCESS_TOKEN = 'urn:ietf:params:oauth:token-type:access_token',
+  ACCESS_TOKEN = 'urn:ietf:params:oauth:token-type:access_token',
 }
 
 export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
   'urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token';
 
 /**
- * @deprecated Use {@link SUBJECT_TOKEN_TYPES.SUBJECT_TYPE_REFRESH_TOKEN} instead.
+ * @deprecated Use {@link SUBJECT_TOKEN_TYPES.REFRESH_TOKEN} instead.
  */
 export const TOKEN_FOR_CONNECTION_TOKEN_TYPE = 'urn:ietf:params:oauth:token-type:refresh_token';
 export const TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE =
@@ -636,16 +636,10 @@ export class OAuth extends BaseAuthAPI {
   ): Promise<JSONApiResponse<TokenSet>> {
     validateRequiredRequestParams(bodyParameters, ['connection', 'subject_token']);
 
-    let subjectTokenType = SUBJECT_TOKEN_TYPES.SUBJECT_TYPE_REFRESH_TOKEN;
-
-    if (bodyParameters.subject_token_type) {
-      subjectTokenType = bodyParameters.subject_token_type;
-    }
-
     const body: Record<string, string> = {
+      subject_token_type: SUBJECT_TOKEN_TYPES.REFRESH_TOKEN,
       ...bodyParameters,
       grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,
-      subject_token_type: subjectTokenType,
       requested_token_type: TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE,
     };
 
