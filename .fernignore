@@ -3,7 +3,6 @@
 legacy/
 src/management/index.ts
 src/management/wrapper
-src/management/tests/wire/actions.test.ts
 src/auth
 src/lib
 src/userinfo
