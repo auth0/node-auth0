@@ -194,7 +194,7 @@
     "scope": "https://test-domain.auth0.com",
     "method": "POST",
     "path": "/oauth/token",
-    "body": "connection=google-oauth2&subject_token=test-refresh-token&grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&client_secret=test-client-secret",
+    "body": "subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&connection=google-oauth2&subject_token=test-refresh-token&grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&client_secret=test-client-secret",
     "status": 200,
     "response": {
       "access_token": "connection-access-token",
@@ -206,7 +206,19 @@
     "scope": "https://test-domain.auth0.com",
     "method": "POST",
     "path": "/oauth/token",
-    "body": "connection=google-oauth2&subject_token=test-refresh-token&login_hint=user%40example.com&grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&client_secret=test-client-secret",
+    "body": "subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Arefresh_token&connection=google-oauth2&subject_token=test-refresh-token&login_hint=user%40example.com&grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&client_secret=test-client-secret",
+    "status": 200,
+    "response": {
+      "access_token": "connection-access-token",
+      "expires_in": 86400,
+      "token_type": "Bearer"
+    }
+  },
+  {
+    "scope": "https://test-domain.auth0.com",
+    "method": "POST",
+    "path": "/oauth/token",
+    "body": "subject_token_type=urn%3Aietf%3Aparams%3Aoauth%3Atoken-type%3Aaccess_token&connection=google-oauth2&subject_token=test-id-token&grant_type=urn%3Aauth0%3Aparams%3Aoauth%3Agrant-type%3Atoken-exchange%3Afederated-connection-access-token&requested_token_type=http%3A%2F%2Fauth0.com%2Foauth%2Ftoken-type%2Ffederated-connection-access-token&client_secret=test-client-secret",
     "status": 200,
     "response": {
       "access_token": "connection-access-token",
