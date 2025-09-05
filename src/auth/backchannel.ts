@@ -88,8 +88,13 @@ export type AuthorizeOptions = {
   audience?: string;
   /**
    * Custom expiry time in seconds for this request.
+   * @deprecated Use {@link AuthorizeOptions.requested_expiry} instead.
    */
   request_expiry?: string;
+  /**
+   * Custom expiry time in seconds for this request.
+   */
+  requested_expiry?: string;
   /**
    * The user ID.
    */
@@ -190,6 +195,12 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
       login_hint: getLoginHint(userId, this.domain),
       client_id: this.clientId,
     };
+
+    // The correct parameter is `requested_expiry`, but we also accept the deprecated `request_expiry` for backwards compatibility
+    const requestedExpiry = options.requested_expiry || options.request_expiry;
+    if (requestedExpiry) {
+      body.requested_expiry = requestedExpiry;
+    }
 
     await this.addClientAuthentication(body);
 
