@@ -66,7 +66,8 @@
         "docs:clean": "rm -rf docs",
         "docs:build": "yarn docs:clean && yarn docs",
         "precommit": "lint-staged",
-        "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
+        "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package",
+        "prepare": "husky"
     },
     "devDependencies": {
         "webpack": "^5.97.1",
