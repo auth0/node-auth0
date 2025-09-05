@@ -110,10 +110,10 @@ export interface Client {
    */
   client_secret: string;
   /**
-   * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`.
+   * The type of application this client represents
    *
    */
-  app_type: string;
+  app_type: ClientAppTypeEnum;
   /**
    * URL of the logo to display for this client. Recommended size is 150x150 pixels.
    *
@@ -291,6 +291,35 @@ export interface Client {
    */
   token_quota: TokenQuota;
 }
+
+export const ClientAppTypeEnum = {
+  native: 'native',
+  spa: 'spa',
+  regular_web: 'regular_web',
+  non_interactive: 'non_interactive',
+  resource_server: 'resource_server',
+  express_configuration: 'express_configuration',
+  rms: 'rms',
+  box: 'box',
+  cloudbees: 'cloudbees',
+  concur: 'concur',
+  dropbox: 'dropbox',
+  mscrm: 'mscrm',
+  echosign: 'echosign',
+  egnyte: 'egnyte',
+  newrelic: 'newrelic',
+  office365: 'office365',
+  salesforce: 'salesforce',
+  sentry: 'sentry',
+  sharepoint: 'sharepoint',
+  slack: 'slack',
+  springcm: 'springcm',
+  zendesk: 'zendesk',
+  zoom: 'zoom',
+  sso_integration: 'sso_integration',
+  oag: 'oag',
+} as const;
+export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAppTypeEnum];
 
 export const ClientTokenEndpointAuthMethodEnum = {
   none: 'none',
@@ -1066,7 +1095,7 @@ export interface ClientCreate {
    */
   token_endpoint_auth_method?: ClientCreateTokenEndpointAuthMethodEnum;
   /**
-   * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`.
+   * The type of application this client represents
    *
    */
   app_type?: ClientCreateAppTypeEnum;
@@ -1190,6 +1219,11 @@ export interface ClientCreate {
   /**
    */
   token_quota?: CreateTokenQuota;
+  /**
+   * The identifier of the resource server that this client is linked to.
+   *
+   */
+  resource_server_identifier?: string;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -1205,6 +1239,7 @@ export const ClientCreateAppTypeEnum = {
   spa: 'spa',
   regular_web: 'regular_web',
   non_interactive: 'non_interactive',
+  resource_server: 'resource_server',
   rms: 'rms',
   box: 'box',
   cloudbees: 'cloudbees',
@@ -2791,6 +2826,7 @@ export const ClientUpdateAppTypeEnum = {
   spa: 'spa',
   regular_web: 'regular_web',
   non_interactive: 'non_interactive',
+  resource_server: 'resource_server',
   rms: 'rms',
   box: 'box',
   cloudbees: 'cloudbees',
@@ -16580,6 +16616,11 @@ export interface ResourceServer {
   /**
    */
   subject_type_authorization?: ResourceServerSubjectTypeAuthorization;
+  /**
+   * The client ID of the client that this resource server is linked to
+   *
+   */
+  client_id?: string;
 }
 
 export const ResourceServerSigningAlgEnum = {
