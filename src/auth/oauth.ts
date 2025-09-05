@@ -273,13 +273,17 @@ export interface TokenExchangeGrantRequest {
  */
 export interface TokenForConnectionRequest {
     /**
-     * The subject token(refresh token in this case) to exchange for an access token for a connection.
+     * The subject token to exchange for an access token for a connection.
      */
     subject_token: string;
     /**
      * The target social provider connection (e.g., "google-oauth2").
      */
     connection: string;
+    /**
+     * An optional subject token type parameter to pass to the authorization server. If not provided, it defaults to `urn:ietf:params:oauth:token-type:refresh_token`.
+     */
+    subject_token_type?: SUBJECT_TOKEN_TYPES;
     /**
      * Optional login hint
      */
@@ -294,9 +298,30 @@ export interface TokenForConnectionResponse {
     [key: string]: unknown;
 }
 
+export enum SUBJECT_TOKEN_TYPES {
+    /**
+     * Constant representing the subject type for a refresh token.
+     * This is used in OAuth 2.0 token exchange to specify that the token being exchanged is a refresh token.
+     *
+     * @see {@link https://tools.ietf.org/html/rfc8693#section-3.1 RFC 8693 Section 3.1}
+     */
+    REFRESH_TOKEN = "urn:ietf:params:oauth:token-type:refresh_token",
+
+    /**
+     * Constant representing the subject type for a access token.
+     * This is used in OAuth 2.0 token exchange to specify that the token being exchanged is an access token.
+     *
+     * @see {@link https://tools.ietf.org/html/rfc8693#section-3.1 RFC 8693 Section 3.1}
+     */
+    ACCESS_TOKEN = "urn:ietf:params:oauth:token-type:access_token",
+}
+
 export const TOKEN_FOR_CONNECTION_GRANT_TYPE =
     "urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token";
 
+/**
+ * @deprecated Use {@link SUBJECT_TOKEN_TYPES.REFRESH_TOKEN} instead.
+ */
 export const TOKEN_FOR_CONNECTION_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:refresh_token";
 export const TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE =
     "http://auth0.com/oauth/token-type/federated-connection-access-token";
@@ -584,12 +609,13 @@ export class OAuth extends BaseAuthAPI {
     }
 
     /**
-     * Exchanges a subject token (refresh token in this case) for an access token for the connection.
+     * Exchanges a subject token for an access token for the connection.
      *
      * The request body includes:
      * - client_id (and client_secret/client_assertion via addClientAuthentication)
      * - grant_type set to `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`
-     * - subject_token (refresh token) and fixed subject_token_type for refresh tokens (`urn:ietf:params:oauth:token-type:refresh_token`)
+     * - subject_token: the token to exchange
+     * - subject_token_type: the type of token being exchanged. Defaults to refresh tokens (`urn:ietf:params:oauth:token-type:refresh_token`).
      * - requested_token_type (`http://auth0.com/oauth/token-type/federated-connection-access-token`) indicating that a federated connection access token is desired
      * - connection name and an optional `login_hint` if provided
      *
@@ -604,9 +630,9 @@ export class OAuth extends BaseAuthAPI {
         validateRequiredRequestParams(bodyParameters, ["connection", "subject_token"]);
 
         const body: Record<string, string> = {
+            subject_token_type: SUBJECT_TOKEN_TYPES.REFRESH_TOKEN,
             ...bodyParameters,
             grant_type: TOKEN_FOR_CONNECTION_GRANT_TYPE,
-            subject_token_type: TOKEN_FOR_CONNECTION_TOKEN_TYPE,
             requested_token_type: TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE,
         };
 

@@ -1,5 +1,15 @@
 # Change Log
 
+## [v4.29.0](https://github.com/auth0/node-auth0/tree/v4.29.0) (2025-09-01)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.28.0...v4.29.0)
+
+**Added**
+
+- Feat: Added Support for M2M Token Quota FF [\#1164](https://github.com/auth0/node-auth0/pull/1164) ([tanya732](https://github.com/tanya732))
+- Feat: Added support for CIBA with RAR for Email [\#1159](https://github.com/auth0/node-auth0/pull/1159) ([tanya732](https://github.com/tanya732))
+- Feat: Added Support for Application Access Permission [\#1152](https://github.com/auth0/node-auth0/pull/1152) ([tanya732](https://github.com/tanya732))
+
 ## [v5.0.0-beta.0](https://github.com/auth0/node-auth0/tree/v5.0.0-beta.0) (2025-08-08)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.28.0...v5.0.0-beta.0)
