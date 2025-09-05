@@ -24,7 +24,7 @@
 import { AuthenticationClient } from 'auth0';
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -45,7 +45,7 @@ const clientAssertionSigningKey = `-----BEGIN PRIVATE KEY-----
 -----END PRIVATE KEY-----`;
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientAssertionSigningKey,
 });
@@ -61,7 +61,7 @@ const { data: tokens } = await auth.oauth.clientCredentialsGrant({
 import { AuthenticationClient } from 'auth0';
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -85,7 +85,7 @@ await auth.oauth.revokeRefreshToken({
 import { AuthenticationClient } from 'auth0';
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -113,7 +113,7 @@ const { data: tokens } = await auth.oauth.authorizationCodeGrantWithPKCE(
 import { AuthenticationClient } from 'auth0';
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -139,7 +139,7 @@ import { AuthenticationClient } from 'auth0';
 const { Agent } = require('undici');
 
 const auth = new AuthenticationClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   agent: new Agent({
     connect: { cert: 'your_cert', key: 'your_key' },
@@ -184,7 +184,7 @@ console.log(token.expires_in);
 import { ManagementClient } from 'auth0';
 
 const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -213,7 +213,7 @@ while (true) {
 import { ManagementClient } from 'auth0';
 
 const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -237,7 +237,7 @@ import { ManagementClient } from 'auth0';
 import { fileFrom } from 'fetch-blob/from.js';
 
 const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -273,7 +273,7 @@ while (!done) {
 import { ManagementClient } from 'auth0';
 
 const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
 });
@@ -290,7 +290,7 @@ import https from 'https';
 import { ManagementClient } from 'auth0';
 
 const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
   headers: { 'foo': 'applied to all requests' },
@@ -308,7 +308,7 @@ import { ManagementClient } from 'auth0';
 import { myFetch } from './fetch';
 
 const management = new ManagementClient({
-  domain: '{YOUR_TENANT_AND REGION}.auth0.com',
+  domain: '{YOUR_TENANT}.{YOUR_REGION}.auth0.com',
   clientId: '{YOUR_CLIENT_ID}',
   clientSecret: '{YOUR_CLIENT_SECRET}',
   async fetch(url, init) {
