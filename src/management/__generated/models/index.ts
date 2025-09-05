@@ -110,10 +110,10 @@ export interface Client {
    */
   client_secret: string;
   /**
-   * Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`.
+   * The type of application this client represents
    *
    */
-  app_type: string;
+  app_type: ClientAppTypeEnum;
   /**
    * URL of the logo to display for this client. Recommended size is 150x150 pixels.
    *
@@ -291,6 +291,35 @@ export interface Client {
    */
   token_quota: TokenQuota;
 }
+
+export const ClientAppTypeEnum = {
+  native: 'native',
+  spa: 'spa',
+  regular_web: 'regular_web',
+  non_interactive: 'non_interactive',
+  resource_server: 'resource_server',
+  express_configuration: 'express_configuration',
+  rms: 'rms',
+  box: 'box',
+  cloudbees: 'cloudbees',
+  concur: 'concur',
+  dropbox: 'dropbox',
+  mscrm: 'mscrm',
+  echosign: 'echosign',
+  egnyte: 'egnyte',
+  newrelic: 'newrelic',
+  office365: 'office365',
+  salesforce: 'salesforce',
+  sentry: 'sentry',
+  sharepoint: 'sharepoint',
+  slack: 'slack',
+  springcm: 'springcm',
+  zendesk: 'zendesk',
+  zoom: 'zoom',
+  sso_integration: 'sso_integration',
+  oag: 'oag',
+} as const;
+export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAppTypeEnum];
 
 export const ClientTokenEndpointAuthMethodEnum = {
   none: 'none',
@@ -2797,6 +2826,7 @@ export const ClientUpdateAppTypeEnum = {
   spa: 'spa',
   regular_web: 'regular_web',
   non_interactive: 'non_interactive',
+  resource_server: 'resource_server',
   rms: 'rms',
   box: 'box',
   cloudbees: 'cloudbees',
@@ -3445,9 +3475,6 @@ export interface ConnectionCreateOptions {
   /**
    */
   gateway_authentication?: ConnectionCreateOptionsGatewayAuthentication | null;
-  /**
-   */
-  federated_connections_access_tokens?: ConnectionCreateOptionsFederatedConnectionsAccessTokens | null;
 }
 
 export const ConnectionCreateOptionsPasswordPolicyEnum = {
@@ -3522,16 +3549,6 @@ export interface ConnectionCreateOptionsCustomScripts {
   /**
    */
   create?: string;
-}
-/**
- * Federated Connections Access Tokens
- */
-export interface ConnectionCreateOptionsFederatedConnectionsAccessTokens {
-  /**
-   * Enables refresh tokens and access tokens collection for federated connections
-   *
-   */
-  active?: boolean;
 }
 /**
  * Token-based authentication settings to be applied when connection is using an sms strategy.
@@ -3832,9 +3849,6 @@ export interface ConnectionUpdateOptions {
   /**
    */
   gateway_authentication?: ConnectionCreateOptionsGatewayAuthentication | null;
-  /**
-   */
-  federated_connections_access_tokens?: ConnectionCreateOptionsFederatedConnectionsAccessTokens | null;
 }
 
 export const ConnectionUpdateOptionsPasswordPolicyEnum = {
