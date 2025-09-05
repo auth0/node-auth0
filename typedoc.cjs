@@ -6,6 +6,7 @@ module.exports = {
   excludePrivate: true,
   hideGenerator: true,
   readme: './README.md',
+  plugin: ['@shipgirl/typedoc-plugin-versions'],
   visibilityFilters: {
     protected: false,
     inherited: true,

@@ -24,7 +24,7 @@
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json && echo '{\"type\": \"commonjs\"}'> dist/cjs/package.json",
-    "docs": "typedoc --options typedoc.cjs",
+    "docs": "typedoc --options typedoc.cjs && node scripts/fix-versions.cjs",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:ci": "c8 npm run test -- --maxWorkers=1",
     "precommit": "pretty-quick --staged",
@@ -55,6 +55,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@shipgirl/typedoc-plugin-versions": "^0.3.2",
     "@types/jest": "^29.5.0",
     "@types/node": "^16.18.37",
     "@types/node-fetch": "^2.6.3",
@@ -77,9 +78,10 @@
     "prettier": "^2.8.7",
     "pretty-quick": "^1.11.1",
     "publint": "^0.2.2",
+    "semver": "^7.7.2",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typedoc": "^0.24.6",
+    "typedoc": "^0.26.0",
     "typescript": "4.9.5",
     "undici": "^6.15.0"
   }
