@@ -238,7 +238,7 @@ describe('Backchannel', () => {
     });
 
     it('should return token response, including authorization_details when available', async () => {
-      const authorization_details = JSON.stringify([{ type: 'test-type' }]);
+      const authorization_details = [{ type: 'test-type' }];
       nock(`https://${opts.domain}`).post('/oauth/token').reply(200, {
         access_token: 'test-access-token',
         id_token: 'test-id-token',
