@@ -10,8 +10,8 @@ import {
     PushedAuthorizationRequest,
     TokenForConnectionRequest,
     SUBJECT_TOKEN_TYPES,
-} from '../../src/index.js';
-import { withIdToken } from '../utils/index.js';
+} from "../../src/index.js";
+import { withIdToken } from "../utils/index.js";
 
 const { back: nockBack } = nock;
 
@@ -396,6 +396,23 @@ describe("OAuth", () => {
                     connection: "google-oauth2",
                     subject_token: "test-refresh-token",
                     login_hint: "user@example.com",
+                }),
+            ).resolves.toMatchObject({
+                data: {
+                    access_token: "connection-access-token",
+                    expires_in: 86400,
+                    token_type: "Bearer",
+                },
+            });
+        });
+
+        it("should use subject_token_type when provided", async () => {
+            const oauth = new OAuth(opts);
+            await expect(
+                oauth.tokenForConnection({
+                    connection: "google-oauth2",
+                    subject_token: "test-id-token",
+                    subject_token_type: SUBJECT_TOKEN_TYPES.ACCESS_TOKEN,
                 }),
             ).resolves.toMatchObject({
                 data: {
