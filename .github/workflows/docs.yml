@@ -1,0 +1,143 @@
+name: PUBLISH DOCS
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: write # allows the 'Commit' step without tokens
+
+jobs:
+  get_history: # create an artifact from the existing documentation builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: get the gh-pages repo
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+        continue-on-error: true # In case gh-pages branch doesn't exist yet
+
+      - name: tar the existing docs
+        run: |
+          # On gh-pages branch, docs are in root directory, not in ./docs folder
+          if [ "$(ls -A . | grep -v '\.git' | wc -l)" -gt 0 ]; then
+            # Exclude .git directory and create tar of all documentation files
+            tar -cvf documentation.tar --exclude='.git' .
+          else
+            # Create empty tar if no existing docs
+            tar -cvf documentation.tar --files-from /dev/null
+          fi
+
+      - name: create a document artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: documentation.tar
+          retention-days: 1
+
+  build: # builds the distribution and then the documentation
+    needs: get_history
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout src
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for proper version management
+
+      - name: Clean docs directory
+        run: |
+          rm -rf ./docs
+          mkdir -p ./docs
+
+      - name: Download the existing documents artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+
+      - name: Extract existing docs
+        run: |
+          if [ -f documentation.tar ]; then
+            # Extract existing docs to the docs directory
+            tar -xf documentation.tar -C ./docs || echo "No existing documentation to extract"
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Build documents
+        run: npm run docs
+
+      - name: tar the new docs
+        run: tar -cvf newdocumentation.tar -C ./docs .
+
+      - name: create a new document artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: newdocumentation
+          path: newdocumentation.tar
+          retention-days: 1
+
+  commit: # commit the old and new merged documents to gh-pages/docs
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the gh-pages repo
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Create gh-pages branch if it doesn't exist
+        run: |
+          if ! git show-ref --verify --quiet refs/heads/gh-pages; then
+            echo "Creating gh-pages branch..."
+            git checkout --orphan gh-pages
+            git rm -rf .
+            echo "# Documentation" > README.md
+            git add README.md
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions[bot]"
+            git commit -m "Initial gh-pages commit"
+            git push -u origin gh-pages
+          fi
+
+      - name: Download the new documents artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: newdocumentation
+
+      - name: Extract and commit new docs
+        run: |
+          # Clear existing content but keep .git
+          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} + 2>/dev/null || true
+
+          # Extract new documentation directly to root
+          # The tar now contains the docs contents without the docs/ wrapper
+          tar -xf newdocumentation.tar
+
+          # Configure git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          # Add and commit changes
+          git add .
+
+          # Only commit if there are changes
+          if ! git diff --staged --quiet; then
+            git commit -m "CI updated the documentation - ${{ github.sha }}"
+            git push
+          else
+            echo "No changes to commit"
+          fi
