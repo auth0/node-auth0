@@ -3,10 +3,14 @@ import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
   ClientGrant,
   ClientGrantCreate,
+  GetClientGrantOrganizations200Response,
   GetClientGrants200Response,
   PatchClientGrantsByIdRequest,
+  GetClientGrantOrganizations200ResponseOneOf,
+  GetClientGrantOrganizations200ResponseOneOfInner,
   GetClientGrants200ResponseOneOf,
   DeleteClientGrantsByIdRequest,
+  GetClientGrantOrganizationsRequest,
   GetClientGrantsRequest,
   PatchClientGrantsByIdOperationRequest,
 } from '../models/index.js';
@@ -41,6 +45,63 @@ export class ClientGrantsManager extends BaseAPI {
     );
 
     return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Get the organizations associated to a client grant
+   *
+   * @throws {RequiredError}
+   */
+  async getAllOrganizations(
+    requestParameters: GetClientGrantOrganizationsRequest & { include_totals: true },
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrantOrganizations200ResponseOneOf>>;
+  async getAllOrganizations(
+    requestParameters?: GetClientGrantOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<Array<GetClientGrantOrganizations200ResponseOneOfInner>>>;
+  async getAllOrganizations(
+    requestParameters: GetClientGrantOrganizationsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetClientGrantOrganizations200Response>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'page',
+        config: {},
+      },
+      {
+        key: 'per_page',
+        config: {},
+      },
+      {
+        key: 'include_totals',
+        config: {},
+      },
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/client-grants/{id}/organizations`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
