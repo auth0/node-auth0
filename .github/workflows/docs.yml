@@ -2,7 +2,7 @@ name: PUBLISH DOCS
 
 on:
   release:
-    types: [ published ]
+    types: [published]
   workflow_dispatch:
   workflow_call:
 
@@ -21,9 +21,10 @@ jobs:
 
       - name: tar the existing docs
         run: |
-          mkdir -p ./docs
-          if [ -d "./docs" ] && [ "$(ls -A ./docs)" ]; then
-            tar -cvf documentation.tar ./docs
+          # On gh-pages branch, docs are in root directory, not in ./docs folder
+          if [ "$(ls -A . | grep -v '\.git' | wc -l)" -gt 0 ]; then
+            # Exclude .git directory and create tar of all documentation files
+            tar -cvf documentation.tar --exclude='.git' .
           else
             # Create empty tar if no existing docs
             tar -cvf documentation.tar --files-from /dev/null
@@ -45,7 +46,10 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for proper version management
 
-      - run: mkdir -p ./docs
+      - name: Clean docs directory
+        run: |
+          rm -rf ./docs
+          mkdir -p ./docs
 
       - name: Download the existing documents artifact
         uses: actions/download-artifact@v4
@@ -55,7 +59,8 @@ jobs:
       - name: Extract existing docs
         run: |
           if [ -f documentation.tar ]; then
-            tar -xf documentation.tar || echo "No existing documentation to extract"
+            # Extract existing docs to the docs directory
+            tar -xf documentation.tar -C ./docs || echo "No existing documentation to extract"
           fi
 
       - name: Setup Node.js
@@ -74,14 +79,13 @@ jobs:
         run: npm run docs
 
       - name: tar the new docs
-        run: tar -cvf newdocumentation.tar ./docs
+        run: tar -cvf newdocumentation.tar -C ./docs .
 
       - name: create a new document artifact
         uses: actions/upload-artifact@v4
         with:
           name: newdocumentation
           path: newdocumentation.tar
-          retention-days: 1
           retention-days: 1
 
   commit: # commit the old and new merged documents to gh-pages/docs
@@ -118,17 +122,18 @@ jobs:
         run: |
           # Clear existing content but keep .git
           find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} + 2>/dev/null || true
-          
-          # Extract new documentation
+
+          # Extract new documentation directly to root
+          # The tar now contains the docs contents without the docs/ wrapper
           tar -xf newdocumentation.tar
-          
+
           # Configure git
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          
+
           # Add and commit changes
           git add .
-          
+
           # Only commit if there are changes
           if ! git diff --staged --quiet; then
             git commit -m "CI updated the documentation - ${{ github.sha }}"
