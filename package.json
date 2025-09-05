@@ -24,7 +24,7 @@
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json && echo '{\"type\": \"commonjs\"}'> dist/cjs/package.json",
-    "docs": "typedoc --options typedoc.cjs && node scripts/fix-versions.cjs",
+    "docs": "node scripts/fix-versions.js --pre-build && typedoc --options typedoc.cjs && node scripts/fix-versions.js",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:ci": "c8 npm run test -- --maxWorkers=1",
     "precommit": "pretty-quick --staged",
