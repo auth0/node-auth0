@@ -152,10 +152,10 @@ const { data: tokens } = await auth.oauth.clientCredentialsGrant({
 });
 ```
 
-### Exchange a Refresh Token for an Access Token for a Connection
+### Exchange a Refresh or Access Token for an Access Token for a Connection
 
 ```js
-import { AuthenticationClient } from 'auth0';
+import { AuthenticationClient, SUBJECT_TOKEN_TYPES } from 'auth0';
 
 const auth = new AuthenticationClient({
   domain: '{YOUR_TENANT_AND REGION}.auth0.com',
@@ -165,6 +165,7 @@ const auth = new AuthenticationClient({
 
 const { data: token } = await auth.oauth.tokenForConnection({
   subject_token: '{refresh_token}',
+  subject_token_type: SUBJECT_TOKEN_TYPES.REFRESH_TOKEN, // Optional: defaults to refresh token type
   connection: 'google-oauth2', // The target social provider connection
   login_hint: 'user@example.com', // Optional: to target a specific account
 });
