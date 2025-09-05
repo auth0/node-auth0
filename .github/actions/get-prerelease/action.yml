@@ -7,24 +7,24 @@ name: Return a boolean indicating if the version contains prerelease identifiers
 #
 
 inputs:
-  version:
-    required: true
+    version:
+        required: true
 
 outputs:
-  prerelease:
-    value: ${{ steps.get_prerelease.outputs.PRERELEASE }}
+    prerelease:
+        value: ${{ steps.get_prerelease.outputs.PRERELEASE }}
 
 runs:
-  using: composite
+    using: composite
 
-  steps:
-    - id: get_prerelease
-      shell: bash
-      run: |
-        if [[ "${VERSION}" == *"beta"* || "${VERSION}" == *"alpha"* ]]; then
-          echo "PRERELEASE=true" >> $GITHUB_OUTPUT
-        else
-          echo "PRERELEASE=false" >> $GITHUB_OUTPUT
-        fi
-      env:
-        VERSION: ${{ inputs.version }}
+    steps:
+        - id: get_prerelease
+          shell: bash
+          run: |
+              if [[ "${VERSION}" == *"beta"* || "${VERSION}" == *"alpha"* ]]; then
+                echo "PRERELEASE=true" >> $GITHUB_OUTPUT
+              else
+                echo "PRERELEASE=false" >> $GITHUB_OUTPUT
+              fi
+          env:
+              VERSION: ${{ inputs.version }}

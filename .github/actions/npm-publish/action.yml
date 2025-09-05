@@ -1,52 +1,56 @@
 name: Publish release to npm
 
 inputs:
-  node-version:
-    required: true
-  npm-token:
-    required: true
-  version:
-    required: true
-  require-build:
-    default: true
-  release-directory:
-    default: './'
+    node-version:
+        required: true
+    npm-token:
+        required: true
+    version:
+        required: true
+    require-build:
+        default: true
+    release-directory:
+        default: "./"
 
 runs:
-  using: composite
+    using: composite
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ inputs.node-version }}
-        cache: 'npm'
-        registry-url: 'https://registry.npmjs.org'
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with:
+              node-version: ${{ inputs.node-version }}
+              cache: "yarn"
+              registry-url: "https://registry.npmjs.org"
 
-    - name: Install dependencies
-      shell: bash
-      run: npm ci --include=dev
+        - name: Install dependencies
+          shell: bash
+          run: yarn install --frozen-lockfile
 
-    - name: Build package
-      if: inputs.require-build == 'true'
-      shell: bash
-      run: npm run build
+        - name: Build package
+          if: inputs.require-build == 'true'
+          shell: bash
+          run: yarn build
 
-    - name: Publish release to NPM
-      shell: bash
-      working-directory: ${{ inputs.release-directory }}
-      run: |
-        if [[ "${VERSION}" == *"beta"* ]]; then
-          TAG="beta"
-        elif [[ "${VERSION}" == *"alpha"* ]]; then
-          TAG="alpha"
-        else
-          TAG="latest"
-        fi
-        npm publish --provenance --tag $TAG
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
-        VERSION: ${{ inputs.version }}
+        - name: Validate package
+          shell: bash
+          run: yarn lint:package
+
+        - name: Publish release to NPM
+          shell: bash
+          working-directory: ${{ inputs.release-directory }}
+          run: |
+              if [[ "${VERSION}" == *"beta"* ]]; then
+                TAG="beta"
+              elif [[ "${VERSION}" == *"alpha"* ]]; then
+                TAG="alpha"
+              else
+                TAG="latest"
+              fi
+              npm publish --provenance --tag $TAG
+          env:
+              NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+              VERSION: ${{ inputs.version }}

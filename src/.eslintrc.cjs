@@ -1,5 +1,5 @@
 module.exports = {
-  rules: {
-    'import/extensions': ['error', 'always'],
-  },
+    rules: {
+        "import/extensions": ["error", "always"],
+    },
 };

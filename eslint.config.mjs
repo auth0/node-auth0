@@ -1,0 +1,178 @@
+import js from "@eslint/js";
+import typescript from "@typescript-eslint/eslint-plugin";
+import typescriptParser from "@typescript-eslint/parser";
+import prettier from "eslint-plugin-prettier";
+import prettierConfig from "eslint-config-prettier";
+
+export default [
+    js.configs.recommended,
+    {
+        files: ["**/*.{js,ts,tsx}"],
+        languageOptions: {
+            parser: typescriptParser,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            },
+            globals: {
+                // Node.js globals
+                process: "readonly",
+                Buffer: "readonly",
+                console: "readonly",
+                setTimeout: "readonly",
+                clearTimeout: "readonly",
+                setInterval: "readonly",
+                clearInterval: "readonly",
+                __dirname: "readonly",
+                // Web globals (for Node.js runtime)
+                URL: "readonly",
+                URLSearchParams: "readonly",
+                Headers: "readonly",
+                Request: "readonly",
+                Response: "readonly",
+                RequestInit: "readonly",
+                RequestInfo: "readonly",
+                RequestCredentials: "readonly",
+                FormData: "readonly",
+                Blob: "readonly",
+                AbortController: "readonly",
+                AbortSignal: "readonly",
+                TextEncoder: "readonly",
+                TextDecoder: "readonly",
+                BodyInit: "readonly",
+                HeadersInit: "readonly",
+                HeadersIterator: "readonly",
+                ReadableStream: "readonly",
+                File: "readonly",
+                // Browser globals (for isomorphic code)
+                fetch: "readonly",
+                window: "readonly",
+                navigator: "readonly",
+                atob: "readonly",
+                btoa: "readonly",
+                // Node.js specific
+                NodeJS: "readonly",
+            },
+        },
+        plugins: {
+            "@typescript-eslint": typescript,
+            prettier,
+        },
+        rules: {
+            ...typescript.configs.recommended.rules,
+            ...prettierConfig.rules,
+            "prettier/prettier": "error",
+            "@typescript-eslint/no-unused-vars": "error",
+            "@typescript-eslint/no-explicit-any": "warn",
+            "@typescript-eslint/explicit-function-return-type": "off",
+            "@typescript-eslint/explicit-module-boundary-types": "off",
+            "@typescript-eslint/no-inferrable-types": "off",
+            "@typescript-eslint/no-empty-function": "warn",
+            "@typescript-eslint/no-namespace": "off",
+            "no-console": "warn",
+            "prefer-const": "error",
+            "no-var": "error",
+            "no-redeclare": "off", // TypeScript handles this better
+            "@typescript-eslint/no-redeclare": "error",
+        },
+    },
+    {
+        files: ["**/*.test.{js,ts,tsx}", "tests/**/*.{js,ts,tsx}"],
+        languageOptions: {
+            parser: typescriptParser,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            },
+            globals: {
+                // Node.js globals
+                process: "readonly",
+                Buffer: "readonly",
+                console: "readonly",
+                setTimeout: "readonly",
+                clearTimeout: "readonly",
+                __dirname: "readonly",
+                __filename: "readonly",
+                global: "readonly",
+                // Jest globals
+                describe: "readonly",
+                it: "readonly",
+                test: "readonly",
+                expect: "readonly",
+                beforeAll: "readonly",
+                beforeEach: "readonly",
+                afterAll: "readonly",
+                afterEach: "readonly",
+                jest: "readonly",
+                // Web globals (for Node.js runtime)
+                URL: "readonly",
+                URLSearchParams: "readonly",
+                Headers: "readonly",
+                Request: "readonly",
+                Response: "readonly",
+                RequestInit: "readonly",
+                RequestInfo: "readonly",
+                RequestCredentials: "readonly",
+                FormData: "readonly",
+                Blob: "readonly",
+                AbortController: "readonly",
+                AbortSignal: "readonly",
+                TextEncoder: "readonly",
+                TextDecoder: "readonly",
+                BodyInit: "readonly",
+                HeadersInit: "readonly",
+                HeadersIterator: "readonly",
+                ReadableStream: "readonly",
+                File: "readonly",
+                ResponseType: "readonly",
+                // Browser globals (for isomorphic code)
+                fetch: "readonly",
+                window: "readonly",
+                navigator: "readonly",
+                atob: "readonly",
+                btoa: "readonly",
+                // Node.js specific
+                NodeJS: "readonly",
+            },
+        },
+        plugins: {
+            "@typescript-eslint": typescript,
+            prettier,
+        },
+        rules: {
+            ...typescript.configs.recommended.rules,
+            ...prettierConfig.rules,
+            "prettier/prettier": "error",
+            "@typescript-eslint/no-unused-vars": "error",
+            "@typescript-eslint/no-explicit-any": "warn",
+            "@typescript-eslint/explicit-function-return-type": "off",
+            "@typescript-eslint/explicit-module-boundary-types": "off",
+            "@typescript-eslint/no-inferrable-types": "off",
+            "@typescript-eslint/no-empty-function": "warn",
+            "@typescript-eslint/no-namespace": "off",
+            "no-console": "off", // Allow console in tests
+            "prefer-const": "error",
+            "no-var": "error",
+            "no-redeclare": "off",
+            "@typescript-eslint/no-redeclare": "error",
+        },
+    },
+    {
+        ignores: [
+            "dist/",
+            "coverage/",
+            "docs/",
+            "legacy/",
+            "node_modules/",
+            "*.config.js",
+            "*.config.mjs",
+            "scripts/",
+            "tests/data/",
+            "tests/auth/fixtures/",
+            "**/*.d.ts",
+            "**/*.d.mts",
+            // Generated API files - these are auto-generated and should not be linted
+            "src/management/",
+        ],
+    },
+];

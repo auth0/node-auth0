@@ -7,15 +7,15 @@ name: Return the version extracted from the branch name
 #
 
 outputs:
-  version:
-    value: ${{ steps.get_version.outputs.VERSION }}
+    version:
+        value: ${{ steps.get_version.outputs.VERSION }}
 
 runs:
-  using: composite
+    using: composite
 
-  steps:
-    - id: get_version
-      shell: bash
-      run: |
-        VERSION=$(head -1 .version)
-        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+    steps:
+        - id: get_version
+          shell: bash
+          run: |
+              VERSION=$(head -1 .version)
+              echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT

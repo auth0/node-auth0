@@ -10,6 +10,19 @@
 - Feat: Added support for CIBA with RAR for Email [\#1159](https://github.com/auth0/node-auth0/pull/1159) ([tanya732](https://github.com/tanya732))
 - Feat: Added Support for Application Access Permission [\#1152](https://github.com/auth0/node-auth0/pull/1152) ([tanya732](https://github.com/tanya732))
 
+## [v5.0.0-beta.0](https://github.com/auth0/node-auth0/tree/v5.0.0-beta.0) (2025-08-08)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.28.0...v5.0.0-beta.0)
+
+- Complete rewrite of the **Management API client** using Fern code generation
+- Significantly improved **TypeScript support** with stronger types and standardized error handling
+- Modular **sub-client architecture** for better API discoverability and consistency
+- Fully compatible **Authentication API client** — no breaking changes
+- Optional **v4.x-compatible legacy client** available at `auth0/legacy`
+- Updated **minimum Node.js version** to `^20.19.0 || ^22.12.0 || ^24.0.0`
+- Introduced **modern package exports** with support for CommonJS and ESM
+- [Migration guide](https://github.com/auth0/node-auth0/blob/v5/v5_MIGRATION_GUIDE.md) available for upgrading from v4.x
+
 ## [v4.28.0](https://github.com/auth0/node-auth0/tree/v4.28.0) (2025-08-04)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.27.0...v4.28.0)
@@ -177,9 +190,9 @@
 **⚠️ BREAKING CHANGES**
 
 - Self Service SSO GA release changes [\#1057](https://github.com/auth0/node-auth0/pull/1057) ([tusharpandey13](https://github.com/tusharpandey13))
-  - Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
-  - Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
-  - Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
+    - Please look at [\#1057](https://github.com/auth0/node-auth0/pull/1057) for detailed changes.
+    - Method names for various methods in SelfServiceProfilesManager have been changed. The method names now follow standard REST names like create, get, getAll, update, delete.
+    - Pagination has been added to response of `getAll` method of SelfServiceProfilesManager.
 
 ## [v4.13.0](https://github.com/auth0/node-auth0/tree/v4.13.0) (2024-11-12)
 
@@ -276,8 +289,8 @@
 **⚠️ BREAKING CHANGES**
 
 - Changes to `ResourceServer` interfaces (`ResourceServerTokenDialectEnum`, `ResourceServerCreateTokenDialectEnum` and `ResourceServerUpdateTokenDialectEnum`). [\#1012](https://github.com/auth0/node-auth0/pull/1012) ([nandan-bhat](https://github.com/nandan-bhat))
-  - The key `token` is changed to `access_token`.
-  - The key `token_authz` is changed to `access_token_authz`.
+    - The key `token` is changed to `access_token`.
+    - The key `token_authz` is changed to `access_token_authz`.
 
 ## [v4.4.1](https://github.com/auth0/node-auth0/tree/v4.4.1) (2024-06-11)
 

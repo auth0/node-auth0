@@ -1,7 +1,0 @@
-{
-  "reporter": ["text-summary", "lcov"],
-  "sourceMap": false,
-  "instrument": true,
-  "all": true,
-  "src": ["./src"]
-}
