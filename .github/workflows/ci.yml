@@ -1,0 +1,135 @@
+name: CI
+
+on:
+    push:
+        branches: [master, v5]
+    pull_request:
+        branches: [master, v5]
+
+jobs:
+    lint:
+        name: Lint & Format
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Format check
+              run: yarn format --check
+
+            - name: Lint
+              run: yarn lint:check
+
+    build:
+        name: Build & Package Lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Build
+              run: yarn build
+
+            - name: Lint package
+              run: yarn lint:package
+
+            - name: Test built artifacts
+              run: |
+                  node dist/esm/index.mjs
+                  node dist/cjs/index.js
+
+    test:
+        name: Test (Node.js ${{ matrix.node-version }})
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [20.x, 22.x, 24.x]
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Test
+              run: yarn test
+
+    type-check:
+        name: Type Check
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Lint
+              run: yarn lint:check
+
+            - name: Type check
+              run: yarn build
+
+            - name: Lint package
+              run: yarn lint:package
+
+    coverage:
+        name: Code Coverage
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20.x"
+                  cache: "yarn"
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Run tests with coverage
+              run: yarn test:coverage
+
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v4
+              with:
+                  file: ./coverage/lcov.info
+                  flags: alltests
+                  name: node-auth0-v5
+                  fail_ci_if_error: true
+                  verbose: true
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
