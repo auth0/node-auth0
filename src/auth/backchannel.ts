@@ -211,7 +211,7 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams(body),
             },
-            {}
+            {},
         );
 
         const r: JSONApiResponse<AuthorizeResponse> = await JSONApiResponse.fromResponse(response);
@@ -266,7 +266,7 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams(body),
             },
-            {}
+            {},
         );
 
         const r: JSONApiResponse<TokenResponse> = await JSONApiResponse.fromResponse(response);
