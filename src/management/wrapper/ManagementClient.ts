@@ -22,7 +22,7 @@ export declare namespace ManagementClient {
      * @group Management API
      * @public
      */
-    export interface ManagementClientOptions extends Omit<FernClient.Options, "token" | "environment"> {
+    export interface ManagementClientOptions extends Omit<FernClient.Options, "token" | "environment" | "fetcher"> {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
         /**
