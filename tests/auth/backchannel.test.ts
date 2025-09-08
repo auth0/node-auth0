@@ -40,7 +40,7 @@ describe("Backchannel", () => {
             });
 
             await expect(backchannel.authorize({} as AuthorizeOptions)).rejects.toThrow(
-                'login_hint parameter validation failed: "sub" contains unsupported format',
+                'login_hint parameter validation failed: "sub" contains unsupported format'
             );
         });
 
@@ -51,7 +51,7 @@ describe("Backchannel", () => {
             });
 
             await expect(backchannel.authorize({ userId: "auth0|test-user-id" } as AuthorizeOptions)).rejects.toThrow(
-                "binding_message is required",
+                "binding_message is required"
             );
         });
 
@@ -66,7 +66,7 @@ describe("Backchannel", () => {
                     userId: "auth0|test-user-id",
                     binding_message: "Test binding message",
                     scope: "invalid_scope",
-                } as AuthorizeOptions),
+                } as AuthorizeOptions)
             ).rejects.toThrow("openid scope must be requested");
         });
 
@@ -82,12 +82,67 @@ describe("Backchannel", () => {
                     userId: "auth0|test-user-id",
                     binding_message: "Test binding message",
                     scope: "openid",
-                }),
+                })
             ).resolves.toMatchObject({
                 auth_req_id: "test-auth-req-id",
                 expires_in: 300,
                 interval: 5,
             });
+        });
+
+        it("should pass requested_expiry to /bc-authorize", async () => {
+            let receivedRequestedExpiry = 0;
+            nock(`https://${opts.domain}`)
+                .post("/bc-authorize")
+                .reply(201, (uri, requestBody, cb) => {
+                    receivedRequestedExpiry = JSON.parse(
+                        querystring.parse(requestBody as any)["requested_expiry"] as string
+                    );
+                    cb(null, {
+                        auth_req_id: "test-auth-req-id",
+                        expires_in: 300,
+                        interval: 5,
+                    });
+                });
+
+            await backchannel.authorize({
+                userId: "auth0|test-user-id",
+                binding_message: "Test binding message",
+                scope: "openid",
+                requested_expiry: "999",
+            });
+
+            expect(receivedRequestedExpiry).toBe(999);
+        });
+
+        it("should pass request_expiry as requested_expiry and retain the request_expiry param for backwards compatibility", async () => {
+            let receivedRequestedExpiry = 0;
+            let receivedRequestExpiry = 0;
+            nock(`https://${opts.domain}`)
+                .post("/bc-authorize")
+                .reply(201, (uri, requestBody, cb) => {
+                    receivedRequestedExpiry = JSON.parse(
+                        querystring.parse(requestBody as any)["requested_expiry"] as string
+                    );
+                    receivedRequestExpiry = JSON.parse(
+                        querystring.parse(requestBody as any)["request_expiry"] as string
+                    );
+                    cb(null, {
+                        auth_req_id: "test-auth-req-id",
+                        expires_in: 300,
+                        interval: 5,
+                    });
+                });
+
+            await backchannel.authorize({
+                userId: "auth0|test-user-id",
+                binding_message: "Test binding message",
+                scope: "openid",
+                request_expiry: "999",
+            });
+
+            expect(receivedRequestedExpiry).toBe(999);
+            expect(receivedRequestExpiry).toBe(999);
         });
 
         it("should pass authorization_details to /bc-authorize", async () => {
@@ -96,7 +151,7 @@ describe("Backchannel", () => {
                 .post("/bc-authorize")
                 .reply(201, (uri, requestBody, cb) => {
                     receivedAuthorizationDetails = JSON.parse(
-                        querystring.parse(requestBody as any)["authorization_details"] as string,
+                        querystring.parse(requestBody as any)["authorization_details"] as string
                     );
                     cb(null, {
                         auth_req_id: "test-auth-req-id",
@@ -149,11 +204,11 @@ describe("Backchannel", () => {
                     userId: "auth0|test-user-id",
                     binding_message: "Test binding message",
                     scope: "openid",
-                }),
+                })
             ).rejects.toThrowError(
                 expect.objectContaining({
                     body: expect.anything(),
-                }),
+                })
             );
         });
 
@@ -171,7 +226,7 @@ describe("Backchannel", () => {
                     userId: "auth0|test-user-id",
                     binding_message: "Test binding message",
                     scope: "openid",
-                }),
+                })
             ).resolves.toMatchObject({
                 auth_req_id: "test-auth-req-id",
                 expires_in: 300,
@@ -193,7 +248,7 @@ describe("Backchannel", () => {
                     userId: "auth0|test-user-id",
                     binding_message: "Test binding message",
                     scope: "openid",
-                }),
+                })
             ).resolves.toMatchObject({
                 auth_req_id: "test-auth-req-id",
                 expires_in: 300,
@@ -212,7 +267,7 @@ describe("Backchannel", () => {
             await expect(
                 backchannel.backchannelGrant({
                     auth_req_id: "invalid-auth-req-id",
-                }),
+                })
             ).rejects.toThrow("Invalid or expired auth_req_id");
         });
 
@@ -227,7 +282,7 @@ describe("Backchannel", () => {
             await expect(
                 backchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).resolves.toMatchObject({
                 access_token: "test-access-token",
                 id_token: "test-id-token",
@@ -249,7 +304,7 @@ describe("Backchannel", () => {
             await expect(
                 backchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).resolves.toMatchObject({
                 access_token: "test-access-token",
                 id_token: "test-id-token",
@@ -268,11 +323,11 @@ describe("Backchannel", () => {
             await expect(
                 backchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).rejects.toThrowError(
                 expect.objectContaining({
                     body: expect.anything(),
-                }),
+                })
             );
         });
 
@@ -285,11 +340,11 @@ describe("Backchannel", () => {
             await expect(
                 backchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).rejects.toThrowError(
                 expect.objectContaining({
                     body: expect.anything(),
-                }),
+                })
             );
         });
 
@@ -302,11 +357,11 @@ describe("Backchannel", () => {
             await expect(
                 backchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).rejects.toThrowError(
                 expect.objectContaining({
                     body: expect.anything(),
-                }),
+                })
             );
         });
 
@@ -323,7 +378,7 @@ describe("Backchannel", () => {
             await expect(
                 jwtBackchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).resolves.toMatchObject({
                 access_token: "test-access-token",
                 id_token: "test-id-token",
@@ -345,7 +400,7 @@ describe("Backchannel", () => {
             await expect(
                 mtlsBackchannel.backchannelGrant({
                     auth_req_id: "test-auth-req-id",
-                }),
+                })
             ).resolves.toMatchObject({
                 access_token: "test-access-token",
                 id_token: "test-id-token",
