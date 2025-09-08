@@ -90,6 +90,61 @@ describe("Backchannel", () => {
             });
         });
 
+        it("should pass requested_expiry to /bc-authorize", async () => {
+            let receivedRequestedExpiry = 0;
+            nock(`https://${opts.domain}`)
+                .post("/bc-authorize")
+                .reply(201, (uri, requestBody, cb) => {
+                    receivedRequestedExpiry = JSON.parse(
+                        querystring.parse(requestBody as any)["requested_expiry"] as string,
+                    );
+                    cb(null, {
+                        auth_req_id: "test-auth-req-id",
+                        expires_in: 300,
+                        interval: 5,
+                    });
+                });
+
+            await backchannel.authorize({
+                userId: "auth0|test-user-id",
+                binding_message: "Test binding message",
+                scope: "openid",
+                requested_expiry: "999",
+            });
+
+            expect(receivedRequestedExpiry).toBe(999);
+        });
+
+        it("should pass request_expiry as requested_expiry and retain the request_expiry param for backwards compatibility", async () => {
+            let receivedRequestedExpiry = 0;
+            let receivedRequestExpiry = 0;
+            nock(`https://${opts.domain}`)
+                .post("/bc-authorize")
+                .reply(201, (uri, requestBody, cb) => {
+                    receivedRequestedExpiry = JSON.parse(
+                        querystring.parse(requestBody as any)["requested_expiry"] as string,
+                    );
+                    receivedRequestExpiry = JSON.parse(
+                        querystring.parse(requestBody as any)["request_expiry"] as string,
+                    );
+                    cb(null, {
+                        auth_req_id: "test-auth-req-id",
+                        expires_in: 300,
+                        interval: 5,
+                    });
+                });
+
+            await backchannel.authorize({
+                userId: "auth0|test-user-id",
+                binding_message: "Test binding message",
+                scope: "openid",
+                request_expiry: "999",
+            });
+
+            expect(receivedRequestedExpiry).toBe(999);
+            expect(receivedRequestExpiry).toBe(999);
+        });
+
         it("should pass authorization_details to /bc-authorize", async () => {
             let receivedAuthorizationDetails: { type: string }[] = [];
             nock(`https://${opts.domain}`)
