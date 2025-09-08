@@ -127,10 +127,12 @@ describe("TokenProvider", () => {
             .fn<FetchAPI>()
             .mockImplementation((url: URL | RequestInfo, init?: RequestInit) => fetch(url, init));
 
+        // TODO: Casting to any to bypass type checks for testing purposes.
+        // This is done only because the fetcher type is being hidden for now.
         const tp = new TokenProvider({
             ...opts,
             fetcher: customFetch as any,
-        });
+        } as any);
         expect(await tp.getAccessToken()).toBe("my-access-token");
         expect(customFetch).toHaveBeenCalled();
     });
