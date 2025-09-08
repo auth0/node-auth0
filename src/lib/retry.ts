@@ -12,9 +12,9 @@ const BASE_DELAY = 500;
  * @returns {number} The random generated value
  */
 function getRandomInt(min: number, max: number) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
 
 /**
@@ -24,7 +24,7 @@ function getRandomInt(min: number, max: number) {
  * @returns {Promise} A delayed promise
  */
 async function pause(delay: number) {
-  return new Promise((resolve) => setTimeout(resolve, delay));
+    return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
 /**
@@ -32,53 +32,50 @@ async function pause(delay: number) {
  * By default, this retries any request that returns a 429 3 times.
  */
 export interface RetryConfiguration {
-  /**
-   * Configure the usage of retries.
-   * Defaults to true on the Management Client and false on the Authentication Client.
-   */
-  enabled?: boolean;
-  /**
-   * Configure the max amount of retries the SDK should do.
-   * Defaults to 5.
-   */
-  maxRetries?: number;
-  /**
-   * Status Codes on which the SDK should trigger retries.
-   * Defaults to [429].
-   */
-  retryWhen?: number[];
+    /**
+     * Configure the usage of retries.
+     * Defaults to true on the Management Client and false on the Authentication Client.
+     */
+    enabled?: boolean;
+    /**
+     * Configure the max amount of retries the SDK should do.
+     * Defaults to 5.
+     */
+    maxRetries?: number;
+    /**
+     * Status Codes on which the SDK should trigger retries.
+     * Defaults to [429].
+     */
+    retryWhen?: number[];
 }
 
 /**
  * @private
  * Function that retries the provided action callback for a configurable amount of time, defaults to 3.
  */
-export function retry(
-  action: () => Promise<Response>,
-  { maxRetries, retryWhen }: RetryConfiguration
-) {
-  const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
-  let nrOfTries = 0;
+export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }: RetryConfiguration) {
+    const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
+    let nrOfTries = 0;
 
-  const retryAndWait = async () => {
-    let result: Response;
+    const retryAndWait = async () => {
+        let result: Response;
 
-    result = await action();
+        result = await action();
 
-    if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
-      nrOfTries++;
+        if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
+            nrOfTries++;
 
-      let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
-      wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
-      wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
+            let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
+            wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
+            wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
 
-      await pause(wait);
+            await pause(wait);
 
-      result = await retryAndWait();
-    }
+            result = await retryAndWait();
+        }
 
-    return result;
-  };
+        return result;
+    };
 
-  return retryAndWait();
+    return retryAndWait();
 }
