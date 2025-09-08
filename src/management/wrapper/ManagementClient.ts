@@ -205,6 +205,9 @@ export class ManagementClient extends FernClient {
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
 
+        // Temporarily remove fetcher from options to avoid people passing it for now
+        delete (_options as any).fetcher;
+
         // Prepare the base client options
         let clientOptions: any = {
             ..._options,
