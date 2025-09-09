@@ -110,6 +110,11 @@ type AuthorizeRequest = Omit<AuthorizeOptions, 'userId'> &
     login_hint: string;
   };
 
+export interface AuthorizationDetails {
+  readonly type: string;
+  readonly [parameter: string]: unknown;
+}
+
 /**
  * The response from the token endpoint.
  */
@@ -142,7 +147,7 @@ export type TokenResponse = {
    * Optional authorization details when using Rich Authorization Requests (RAR).
    * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
    */
-  authorization_details?: string;
+  authorization_details?: AuthorizationDetails[];
 };
 
 /**
