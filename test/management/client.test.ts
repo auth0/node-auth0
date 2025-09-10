@@ -189,7 +189,7 @@ describe('ClientsManager', () => {
     const data: ClientCreate = {
       name: 'test_name',
       description: 'test_description',
-      app_type: 'spa',
+      app_type: 'resource_server',
       logo_uri: 'test_logo_uri',
       token_quota: {
         client_credentials: {
@@ -198,6 +198,7 @@ describe('ClientsManager', () => {
           enforce: true,
         },
       },
+      resource_server_identifier: 'https://test-token-vault-1.example.com',
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
