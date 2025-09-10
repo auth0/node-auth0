@@ -27,6 +27,7 @@ export declare namespace Fetcher {
         requestType?: "json" | "file" | "bytes";
         responseType?: "json" | "blob" | "sse" | "streaming" | "text" | "arrayBuffer" | "binary-response";
         duplex?: "half";
+        scope?: string[];
     }
 
     export type Error = FailedStatusCodeError | NonJsonError | TimeoutError | UnknownError;
