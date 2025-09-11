@@ -60,6 +60,9 @@ export class Versions {
         request: Management.actions.ListActionVersionsRequestParameters = {},
         requestOptions?: Versions.RequestOptions,
     ): Promise<core.Page<Management.ActionVersion>> {
+        // This variable is populated from the Open API specification file.
+        const endpointScopes = ["read:actions_versions"];
+
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.actions.ListActionVersionsRequestParameters,
@@ -82,7 +85,8 @@ export class Versions {
                     method: "GET",
                     headers: mergeHeaders(
                         this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                        // Here we pass the scope for the endpoint to the Supplier to ensure the scope is used when calling the token supplier.
+                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader(endpointScopes) }),
                         requestOptions?.headers,
                     ),
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
@@ -90,6 +94,9 @@ export class Versions {
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    // Here we pass the scope for the endpoint to the fetcher, this enables the fetcher to take full control over the authorization aspect.
+                    // Doing so enables advanced use-cases like DPoP as well as token renewal when the token is expired.
+                    scope: endpointScopes,
                 });
                 if (_response.ok) {
                     return {
@@ -348,7 +355,12 @@ export class Versions {
         }
     }
 
-    protected async _getAuthorizationHeader(): Promise<string> {
-        return `Bearer ${await core.Supplier.get(this._options.token)}`;
+    // Marked scope as optional to avoid having to update every snippet for demonstrating the changes.
+    protected async _getAuthorizationHeader(scope?: string[] | undefined): Promise<string> {
+        const token = await core.Supplier.get(this._options.token, { scope });
+
+        // Ensure to not add an empty Bearer token.
+        // Doing this ensures the header is filtered out by `mergeOnlyDefinedHeaders`.
+        return token && `Bearer ${token}`;
     }
 }
