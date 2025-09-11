@@ -11,7 +11,7 @@
 ## Documentation
 
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
-- [API Reference](https://github.com/auth0/node-auth0/blob/v5/reference.md) - full reference for this library
+- [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
 
 ## Getting Started
 
