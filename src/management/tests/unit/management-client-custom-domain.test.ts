@@ -243,11 +243,13 @@ describe("ManagementClient with custom domain header", () => {
                 },
             });
 
+            // TODO: Casting to any to bypass type checks for testing purposes.
+            // This is done only because the fetcher type is being hidden for now.
             const client = new ManagementClient({
                 ...mockConfig,
                 withCustomDomainHeader: "auth.example.com",
                 fetcher: mockCustomFetcher,
-            });
+            } as any);
 
             expect(client).toBeInstanceOf(ManagementClient);
         });
@@ -267,10 +269,12 @@ describe("ManagementClient with custom domain header", () => {
                 },
             });
 
+            // TODO: Casting to any to bypass type checks for testing purposes.
+            // This is done only because the fetcher type is being hidden for now.
             const client = new ManagementClient({
                 ...mockConfig,
                 fetcher: mockCustomFetcher,
-            });
+            } as any);
 
             expect(client).toBeInstanceOf(ManagementClient);
         });

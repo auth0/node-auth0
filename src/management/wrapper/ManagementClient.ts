@@ -22,7 +22,7 @@ export declare namespace ManagementClient {
      * @group Management API
      * @public
      */
-    export interface ManagementClientOptions extends Omit<FernClient.Options, "token" | "environment"> {
+    export interface ManagementClientOptions extends Omit<FernClient.Options, "token" | "environment" | "fetcher"> {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
         /**
@@ -204,6 +204,9 @@ export class ManagementClient extends FernClient {
         const baseUrl = `https://${_options.domain}/api/v2`;
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
+
+        // Temporarily remove fetcher from options to avoid people passing it for now
+        delete (_options as any).fetcher;
 
         // Prepare the base client options
         let clientOptions: any = {
