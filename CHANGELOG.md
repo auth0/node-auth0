@@ -7,9 +7,12 @@
 **Added**
 
 - feat(auth): add support for access token subject type to Token Vault [\#1169](https://github.com/auth0/node-auth0/pull/1169) ([guabu](https://github.com/guabu))
+- Feat: Support for Token Vault [\#1162](https://github.com/auth0/node-auth0/pull/1162) ([tanya732](https://github.com/tanya732))
+
+**Fixed**
+
 - fix(auth): fix the requested_expiry param (v4) [\#1174](https://github.com/auth0/node-auth0/pull/1174) ([guabu](https://github.com/guabu))
 - fix(auth): authorization_details type in TokenResponse (v4) [\#1177](https://github.com/auth0/node-auth0/pull/1177) ([guabu](https://github.com/guabu))
-- Feat: Support for Token Vault [\#1162](https://github.com/auth0/node-auth0/pull/1162) ([tanya732](https://github.com/tanya732))
 
 ## [v4.29.0](https://github.com/auth0/node-auth0/tree/v4.29.0) (2025-09-01)
 
