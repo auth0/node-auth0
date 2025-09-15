@@ -43,7 +43,7 @@ export class Templates {
     /**
      * List a verifiable credential templates.
      *
-     * @param {Management.verifiableCredentials.verification.ListVerifiableCredentialTemplatesRequestParameters} request
+     * @param {Management.ListVerifiableCredentialTemplatesRequestParameters} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -55,7 +55,7 @@ export class Templates {
      *     await client.verifiableCredentials.verification.templates.list()
      */
     public async list(
-        request: Management.verifiableCredentials.verification.ListVerifiableCredentialTemplatesRequestParameters = {},
+        request: Management.ListVerifiableCredentialTemplatesRequestParameters = {},
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.Page<Management.VerifiableCredentialTemplateResponse>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -70,6 +70,11 @@ export class Templates {
                 if (take != null) {
                     _queryParams["take"] = take.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -78,11 +83,7 @@ export class Templates {
                         "verifiable-credentials/verification/templates",
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -160,7 +161,7 @@ export class Templates {
     /**
      * Create a verifiable credential template.
      *
-     * @param {Management.verifiableCredentials.verification.CreateVerifiableCredentialTemplateRequestContent} request
+     * @param {Management.CreateVerifiableCredentialTemplateRequestContent} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -183,16 +184,21 @@ export class Templates {
      *     })
      */
     public create(
-        request: Management.verifiableCredentials.verification.CreateVerifiableCredentialTemplateRequestContent,
+        request: Management.CreateVerifiableCredentialTemplateRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateVerifiableCredentialTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.verifiableCredentials.verification.CreateVerifiableCredentialTemplateRequestContent,
+        request: Management.CreateVerifiableCredentialTemplateRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateVerifiableCredentialTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -201,11 +207,7 @@ export class Templates {
                 "verifiable-credentials/verification/templates",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -287,6 +289,11 @@ export class Templates {
         id: string,
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetVerifiableCredentialTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -295,11 +302,7 @@ export class Templates {
                 `verifiable-credentials/verification/templates/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -371,6 +374,11 @@ export class Templates {
     }
 
     private async __delete(id: string, requestOptions?: Templates.RequestOptions): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -379,11 +387,7 @@ export class Templates {
                 `verifiable-credentials/verification/templates/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -435,7 +439,7 @@ export class Templates {
      * Update a verifiable credential template.
      *
      * @param {string} id - ID of the template to retrieve.
-     * @param {Management.verifiableCredentials.verification.UpdateVerifiableCredentialTemplateRequestContent} request
+     * @param {Management.UpdateVerifiableCredentialTemplateRequestContent} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -449,7 +453,7 @@ export class Templates {
      */
     public update(
         id: string,
-        request: Management.verifiableCredentials.verification.UpdateVerifiableCredentialTemplateRequestContent = {},
+        request: Management.UpdateVerifiableCredentialTemplateRequestContent = {},
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateVerifiableCredentialTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -457,9 +461,14 @@ export class Templates {
 
     private async __update(
         id: string,
-        request: Management.verifiableCredentials.verification.UpdateVerifiableCredentialTemplateRequestContent = {},
+        request: Management.UpdateVerifiableCredentialTemplateRequestContent = {},
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateVerifiableCredentialTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -468,11 +477,7 @@ export class Templates {
                 `verifiable-credentials/verification/templates/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

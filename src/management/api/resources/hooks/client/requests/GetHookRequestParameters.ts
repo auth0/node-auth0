@@ -7,8 +7,6 @@
  *     {}
  */
 export interface GetHookRequestParameters {
-    /**
-     * Comma-separated list of fields to include in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include in the result. Leave empty to retrieve all fields. */
     fields?: string;
 }

@@ -64,7 +64,7 @@ export class Rules {
                 request: Management.ListRulesRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListRulesOffsetPaginatedResponseContent>> => {
                 const {
-                    page,
+                    page = 0,
                     per_page: perPage = 50,
                     include_totals: includeTotals = true,
                     enabled,
@@ -90,6 +90,11 @@ export class Rules {
                 if (includeFields != null) {
                     _queryParams["include_fields"] = includeFields.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -98,11 +103,7 @@ export class Rules {
                         "rules",
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -161,7 +162,7 @@ export class Rules {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.ListRulesOffsetPaginatedResponseContent, Management.Rule>({
             response: dataWithRawResponse.data,
@@ -206,6 +207,11 @@ export class Rules {
         request: Management.CreateRuleRequestContent,
         requestOptions?: Rules.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateRuleResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -214,11 +220,7 @@ export class Rules {
                 "rules",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -308,6 +310,11 @@ export class Rules {
             _queryParams["include_fields"] = includeFields.toString();
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -316,11 +323,7 @@ export class Rules {
                 `rules/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -387,6 +390,11 @@ export class Rules {
     }
 
     private async __delete(id: string, requestOptions?: Rules.RequestOptions): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -395,11 +403,7 @@ export class Rules {
                 `rules/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -475,6 +479,11 @@ export class Rules {
         request: Management.UpdateRuleRequestContent = {},
         requestOptions?: Rules.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateRuleResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -483,11 +492,7 @@ export class Rules {
                 `rules/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

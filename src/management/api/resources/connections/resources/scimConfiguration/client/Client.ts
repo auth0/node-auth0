@@ -69,6 +69,11 @@ export class ScimConfiguration {
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetScimConfigurationResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -77,11 +82,7 @@ export class ScimConfiguration {
                 `connections/${encodeURIComponent(id)}/scim-configuration`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -154,6 +155,11 @@ export class ScimConfiguration {
         request?: Management.CreateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateScimConfigurationResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -162,11 +168,7 @@ export class ScimConfiguration {
                 `connections/${encodeURIComponent(id)}/scim-configuration`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -236,6 +238,11 @@ export class ScimConfiguration {
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -244,11 +251,7 @@ export class ScimConfiguration {
                 `connections/${encodeURIComponent(id)}/scim-configuration`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -296,7 +299,7 @@ export class ScimConfiguration {
      * Update a scim configuration by its <code>connectionId</code>.
      *
      * @param {string} id - The id of the connection to update its SCIM configuration
-     * @param {Management.connections.UpdateScimConfigurationRequestContent} request
+     * @param {Management.UpdateScimConfigurationRequestContent} request
      * @param {ScimConfiguration.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -310,7 +313,7 @@ export class ScimConfiguration {
      */
     public update(
         id: string,
-        request: Management.connections.UpdateScimConfigurationRequestContent,
+        request: Management.UpdateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateScimConfigurationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -318,9 +321,14 @@ export class ScimConfiguration {
 
     private async __update(
         id: string,
-        request: Management.connections.UpdateScimConfigurationRequestContent,
+        request: Management.UpdateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateScimConfigurationResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -329,11 +337,7 @@ export class ScimConfiguration {
                 `connections/${encodeURIComponent(id)}/scim-configuration`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -406,6 +410,11 @@ export class ScimConfiguration {
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetScimConfigurationDefaultMappingResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -414,11 +423,7 @@ export class ScimConfiguration {
                 `connections/${encodeURIComponent(id)}/scim-configuration/default-mapping`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

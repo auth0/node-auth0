@@ -9,28 +9,16 @@ import * as Management from "../../../../index.js";
  *     {}
  */
 export interface ListActionsRequestParameters {
-    /**
-     * An actions extensibility point.
-     */
+    /** An actions extensibility point. */
     triggerId?: Management.ActionTriggerTypeEnum;
-    /**
-     * The name of the action to retrieve.
-     */
+    /** The name of the action to retrieve. */
     actionName?: string;
-    /**
-     * Optional filter to only retrieve actions that are deployed.
-     */
+    /** Optional filter to only retrieve actions that are deployed. */
     deployed?: boolean;
-    /**
-     * Use this field to request a specific page of the list results.
-     */
+    /** Use this field to request a specific page of the list results. */
     page?: number;
-    /**
-     * The maximum number of results to be returned by the server in single response. 20 by default
-     */
+    /** The maximum number of results to be returned by the server in single response. 20 by default */
     per_page?: number;
-    /**
-     * Optional. When true, return only installed actions. When false, return only custom actions. Returns all actions by default.
-     */
+    /** Optional. When true, return only installed actions. When false, return only custom actions. Returns all actions by default. */
     installed?: boolean;
 }

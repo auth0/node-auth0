@@ -7,16 +7,10 @@
  *     {}
  */
 export interface ListUserPermissionsRequestParameters {
-    /**
-     * Number of results per page.
-     */
+    /** Number of results per page. */
     per_page?: number;
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
 }

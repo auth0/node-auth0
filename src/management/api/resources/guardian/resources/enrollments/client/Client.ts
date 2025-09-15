@@ -46,7 +46,7 @@ export class Enrollments {
      *
      * Note: Users cannot enroll in Email as a factor through custom enrollment tickets.
      *
-     * @param {Management.guardian.CreateGuardianEnrollmentTicketRequestContent} request
+     * @param {Management.CreateGuardianEnrollmentTicketRequestContent} request
      * @param {Enrollments.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -60,16 +60,21 @@ export class Enrollments {
      *     })
      */
     public createTicket(
-        request: Management.guardian.CreateGuardianEnrollmentTicketRequestContent,
+        request: Management.CreateGuardianEnrollmentTicketRequestContent,
         requestOptions?: Enrollments.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateGuardianEnrollmentTicketResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__createTicket(request, requestOptions));
     }
 
     private async __createTicket(
-        request: Management.guardian.CreateGuardianEnrollmentTicketRequestContent,
+        request: Management.CreateGuardianEnrollmentTicketRequestContent,
         requestOptions?: Enrollments.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateGuardianEnrollmentTicketResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -78,11 +83,7 @@ export class Enrollments {
                 "guardian/enrollments/ticket",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -160,6 +161,11 @@ export class Enrollments {
         id: string,
         requestOptions?: Enrollments.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianEnrollmentResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -168,11 +174,7 @@ export class Enrollments {
                 `guardian/enrollments/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -242,6 +244,11 @@ export class Enrollments {
         id: string,
         requestOptions?: Enrollments.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -250,11 +257,7 @@ export class Enrollments {
                 `guardian/enrollments/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

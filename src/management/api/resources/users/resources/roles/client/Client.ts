@@ -46,7 +46,7 @@ export class Roles {
      * <b>Note</b>: This action retrieves all roles assigned to a user in the context of your whole tenant. To retrieve Organization-specific roles, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles">Get user roles assigned to an Organization member</a>.
      *
      * @param {string} id - ID of the user to list roles for.
-     * @param {Management.users.ListUserRolesRequestParameters} request
+     * @param {Management.ListUserRolesRequestParameters} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
@@ -58,14 +58,14 @@ export class Roles {
      */
     public async list(
         id: string,
-        request: Management.users.ListUserRolesRequestParameters = {},
+        request: Management.ListUserRolesRequestParameters = {},
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.Page<Management.Role>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.users.ListUserRolesRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListUserRolesOffsetPaginatedResponseContent>> => {
-                const { per_page: perPage = 50, page, include_totals: includeTotals = true } = request;
+                const { per_page: perPage = 50, page = 0, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (perPage != null) {
                     _queryParams["per_page"] = perPage.toString();
@@ -76,6 +76,11 @@ export class Roles {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -84,11 +89,7 @@ export class Roles {
                         `users/${encodeURIComponent(id)}/roles`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -140,7 +141,7 @@ export class Roles {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.ListUserRolesOffsetPaginatedResponseContent, Management.Role>({
             response: dataWithRawResponse.data,
@@ -160,7 +161,7 @@ export class Roles {
      * <b>Note</b>: New roles cannot be created through this action. Additionally, this action is used to assign roles to a user in the context of your whole tenant. To assign roles in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/post-organization-member-roles">Assign user roles to an Organization member</a>.
      *
      * @param {string} id - ID of the user to associate roles with.
-     * @param {Management.users.AssignUserRolesRequestContent} request
+     * @param {Management.AssignUserRolesRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -175,7 +176,7 @@ export class Roles {
      */
     public assign(
         id: string,
-        request: Management.users.AssignUserRolesRequestContent,
+        request: Management.AssignUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__assign(id, request, requestOptions));
@@ -183,9 +184,14 @@ export class Roles {
 
     private async __assign(
         id: string,
-        request: Management.users.AssignUserRolesRequestContent,
+        request: Management.AssignUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -194,11 +200,7 @@ export class Roles {
                 `users/${encodeURIComponent(id)}/roles`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -253,7 +255,7 @@ export class Roles {
      * <b>Note</b>: This action removes a role from a user in the context of your whole tenant. If you want to unassign a role from a user in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/delete-organization-member-roles">Delete user roles from an Organization member</a>.
      *
      * @param {string} id - ID of the user to remove roles from.
-     * @param {Management.users.DeleteUserRolesRequestContent} request
+     * @param {Management.DeleteUserRolesRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
@@ -267,7 +269,7 @@ export class Roles {
      */
     public delete(
         id: string,
-        request: Management.users.DeleteUserRolesRequestContent,
+        request: Management.DeleteUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -275,9 +277,14 @@ export class Roles {
 
     private async __delete(
         id: string,
-        request: Management.users.DeleteUserRolesRequestContent,
+        request: Management.DeleteUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -286,11 +293,7 @@ export class Roles {
                 `users/${encodeURIComponent(id)}/roles`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

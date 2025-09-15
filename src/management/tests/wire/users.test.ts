@@ -4,9 +4,170 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("Users", () => {
-    test("create", async () => {
+    test("list (b0e097d6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            length: 1.1,
+            total: 1.1,
+            users: [
+                {
+                    user_id: "user_id",
+                    email: "email",
+                    email_verified: true,
+                    username: "username",
+                    phone_number: "phone_number",
+                    phone_verified: true,
+                    created_at: "created_at",
+                    updated_at: "updated_at",
+                    identities: [{}],
+                    app_metadata: { key: "value" },
+                    user_metadata: { key: "value" },
+                    picture: "picture",
+                    name: "name",
+                    nickname: "nickname",
+                    multifactor: ["multifactor"],
+                    last_ip: "last_ip",
+                    last_login: "last_login",
+                    logins_count: 1,
+                    blocked: true,
+                    given_name: "given_name",
+                    family_name: "family_name",
+                },
+            ],
+        };
+        server.mockEndpoint().get("/users").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            length: 1.1,
+            total: 1.1,
+            users: [
+                {
+                    user_id: "user_id",
+                    email: "email",
+                    email_verified: true,
+                    username: "username",
+                    phone_number: "phone_number",
+                    phone_verified: true,
+                    created_at: "created_at",
+                    updated_at: "updated_at",
+                    identities: [{}],
+                    app_metadata: {
+                        key: "value",
+                    },
+                    user_metadata: {
+                        key: "value",
+                    },
+                    picture: "picture",
+                    name: "name",
+                    nickname: "nickname",
+                    multifactor: ["multifactor"],
+                    last_ip: "last_ip",
+                    last_login: "last_login",
+                    logins_count: 1,
+                    blocked: true,
+                    given_name: "given_name",
+                    family_name: "family_name",
+                },
+            ],
+        };
+        const page = await client.users.list();
+        expect(expected.users).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.users).toEqual(nextPage.data);
+    });
+
+    test("list (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.list();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ea690e77)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users").respondWith().statusCode(503).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.list();
+        }).rejects.toThrow(
+            new Management.ServiceUnavailableError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (3f57f229)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "connection" };
@@ -94,7 +255,302 @@ describe("Users", () => {
         });
     });
 
-    test("listUsersByEmail", async () => {
+    test("create (bbe91a5e)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            email: undefined,
+            phone_number: undefined,
+            user_metadata: undefined,
+            blocked: undefined,
+            email_verified: undefined,
+            phone_verified: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            user_id: undefined,
+            connection: "Initial-Connection",
+            password: undefined,
+            verify_email: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.create({
+                email: undefined,
+                phone_number: undefined,
+                user_metadata: undefined,
+                blocked: undefined,
+                email_verified: undefined,
+                phone_verified: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                user_id: undefined,
+                connection: "Initial-Connection",
+                password: undefined,
+                verify_email: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (db95a866)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            email: undefined,
+            phone_number: undefined,
+            user_metadata: undefined,
+            blocked: undefined,
+            email_verified: undefined,
+            phone_verified: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            user_id: undefined,
+            connection: "Initial-Connection",
+            password: undefined,
+            verify_email: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.create({
+                email: undefined,
+                phone_number: undefined,
+                user_metadata: undefined,
+                blocked: undefined,
+                email_verified: undefined,
+                phone_verified: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                user_id: undefined,
+                connection: "Initial-Connection",
+                password: undefined,
+                verify_email: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (6963d22a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            email: undefined,
+            phone_number: undefined,
+            user_metadata: undefined,
+            blocked: undefined,
+            email_verified: undefined,
+            phone_verified: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            user_id: undefined,
+            connection: "Initial-Connection",
+            password: undefined,
+            verify_email: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.create({
+                email: undefined,
+                phone_number: undefined,
+                user_metadata: undefined,
+                blocked: undefined,
+                email_verified: undefined,
+                phone_verified: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                user_id: undefined,
+                connection: "Initial-Connection",
+                password: undefined,
+                verify_email: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (a9bd6a42)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            email: undefined,
+            phone_number: undefined,
+            user_metadata: undefined,
+            blocked: undefined,
+            email_verified: undefined,
+            phone_verified: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            user_id: undefined,
+            connection: "Initial-Connection",
+            password: undefined,
+            verify_email: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.create({
+                email: undefined,
+                phone_number: undefined,
+                user_metadata: undefined,
+                blocked: undefined,
+                email_verified: undefined,
+                phone_verified: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                user_id: undefined,
+                connection: "Initial-Connection",
+                password: undefined,
+                verify_email: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (d8f10e46)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            email: undefined,
+            phone_number: undefined,
+            user_metadata: undefined,
+            blocked: undefined,
+            email_verified: undefined,
+            phone_verified: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            user_id: undefined,
+            connection: "Initial-Connection",
+            password: undefined,
+            verify_email: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.create({
+                email: undefined,
+                phone_number: undefined,
+                user_metadata: undefined,
+                blocked: undefined,
+                email_verified: undefined,
+                phone_verified: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                user_id: undefined,
+                connection: "Initial-Connection",
+                password: undefined,
+                verify_email: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("listUsersByEmail (8748f898)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -159,7 +615,79 @@ describe("Users", () => {
         ]);
     });
 
-    test("get", async () => {
+    test("listUsersByEmail (e6be3cf3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users-by-email").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.listUsersByEmail({
+                email: "email",
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("listUsersByEmail (2c08d543)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users-by-email").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.listUsersByEmail({
+                email: "email",
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("listUsersByEmail (653daa6f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users-by-email").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.listUsersByEmail({
+                email: "email",
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("listUsersByEmail (c8264e37)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users-by-email").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.listUsersByEmail({
+                email: "email",
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (a23655ca)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -238,7 +766,87 @@ describe("Users", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.get("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/users/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -248,7 +856,71 @@ describe("Users", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/users/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.delete("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/users/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/users/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/users/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.users.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (7f1fb89d)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -334,7 +1006,312 @@ describe("Users", () => {
         });
     });
 
-    test("regenerateRecoveryCode", async () => {
+    test("update (3ec2e463)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            blocked: undefined,
+            email_verified: undefined,
+            email: undefined,
+            phone_number: undefined,
+            phone_verified: undefined,
+            user_metadata: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            verify_email: undefined,
+            verify_phone_number: undefined,
+            password: undefined,
+            connection: undefined,
+            client_id: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.update("id", {
+                blocked: undefined,
+                email_verified: undefined,
+                email: undefined,
+                phone_number: undefined,
+                phone_verified: undefined,
+                user_metadata: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                verify_email: undefined,
+                verify_phone_number: undefined,
+                password: undefined,
+                connection: undefined,
+                client_id: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (3033d373)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            blocked: undefined,
+            email_verified: undefined,
+            email: undefined,
+            phone_number: undefined,
+            phone_verified: undefined,
+            user_metadata: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            verify_email: undefined,
+            verify_phone_number: undefined,
+            password: undefined,
+            connection: undefined,
+            client_id: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.update("id", {
+                blocked: undefined,
+                email_verified: undefined,
+                email: undefined,
+                phone_number: undefined,
+                phone_verified: undefined,
+                user_metadata: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                verify_email: undefined,
+                verify_phone_number: undefined,
+                password: undefined,
+                connection: undefined,
+                client_id: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (41bbe75f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            blocked: undefined,
+            email_verified: undefined,
+            email: undefined,
+            phone_number: undefined,
+            phone_verified: undefined,
+            user_metadata: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            verify_email: undefined,
+            verify_phone_number: undefined,
+            password: undefined,
+            connection: undefined,
+            client_id: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.update("id", {
+                blocked: undefined,
+                email_verified: undefined,
+                email: undefined,
+                phone_number: undefined,
+                phone_verified: undefined,
+                user_metadata: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                verify_email: undefined,
+                verify_phone_number: undefined,
+                password: undefined,
+                connection: undefined,
+                client_id: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (d4cf930f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            blocked: undefined,
+            email_verified: undefined,
+            email: undefined,
+            phone_number: undefined,
+            phone_verified: undefined,
+            user_metadata: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            verify_email: undefined,
+            verify_phone_number: undefined,
+            password: undefined,
+            connection: undefined,
+            client_id: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.update("id", {
+                blocked: undefined,
+                email_verified: undefined,
+                email: undefined,
+                phone_number: undefined,
+                phone_verified: undefined,
+                user_metadata: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                verify_email: undefined,
+                verify_phone_number: undefined,
+                password: undefined,
+                connection: undefined,
+                client_id: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (db2da1a7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            blocked: undefined,
+            email_verified: undefined,
+            email: undefined,
+            phone_number: undefined,
+            phone_verified: undefined,
+            user_metadata: undefined,
+            app_metadata: undefined,
+            given_name: undefined,
+            family_name: undefined,
+            name: undefined,
+            nickname: undefined,
+            picture: undefined,
+            verify_email: undefined,
+            verify_phone_number: undefined,
+            password: undefined,
+            connection: undefined,
+            client_id: undefined,
+            username: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.update("id", {
+                blocked: undefined,
+                email_verified: undefined,
+                email: undefined,
+                phone_number: undefined,
+                phone_verified: undefined,
+                user_metadata: undefined,
+                app_metadata: undefined,
+                given_name: undefined,
+                family_name: undefined,
+                name: undefined,
+                nickname: undefined,
+                picture: undefined,
+                verify_email: undefined,
+                verify_phone_number: undefined,
+                password: undefined,
+                connection: undefined,
+                client_id: undefined,
+                username: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("regenerateRecoveryCode (3a393578)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -353,7 +1330,95 @@ describe("Users", () => {
         });
     });
 
-    test("revokeAccess", async () => {
+    test("regenerateRecoveryCode (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/recovery-code-regeneration")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.regenerateRecoveryCode("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("regenerateRecoveryCode (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/recovery-code-regeneration")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.regenerateRecoveryCode("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("regenerateRecoveryCode (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/recovery-code-regeneration")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.regenerateRecoveryCode("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("regenerateRecoveryCode (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/recovery-code-regeneration")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.regenerateRecoveryCode("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revokeAccess (6c0883f0)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -368,5 +1433,109 @@ describe("Users", () => {
 
         const response = await client.users.revokeAccess("id");
         expect(response).toEqual(undefined);
+    });
+
+    test("revokeAccess (3fb3e5a0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { session_id: undefined, preserve_refresh_tokens: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/revoke-access")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.revokeAccess("id", {
+                session_id: undefined,
+                preserve_refresh_tokens: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revokeAccess (88c52b88)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { session_id: undefined, preserve_refresh_tokens: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/revoke-access")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.revokeAccess("id", {
+                session_id: undefined,
+                preserve_refresh_tokens: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revokeAccess (2e30ac0c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { session_id: undefined, preserve_refresh_tokens: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/revoke-access")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.revokeAccess("id", {
+                session_id: undefined,
+                preserve_refresh_tokens: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revokeAccess (ac6e4b58)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { session_id: undefined, preserve_refresh_tokens: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/revoke-access")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.revokeAccess("id", {
+                session_id: undefined,
+                preserve_refresh_tokens: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

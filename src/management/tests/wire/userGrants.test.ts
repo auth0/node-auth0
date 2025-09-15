@@ -4,9 +4,92 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("UserGrants", () => {
-    test("deleteByUserId", async () => {
+    test("list (4d23fb60)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            grants: [{ id: "id", clientID: "clientID", user_id: "user_id", audience: "audience", scope: ["scope"] }],
+        };
+        server.mockEndpoint().get("/grants").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            grants: [
+                {
+                    id: "id",
+                    clientID: "clientID",
+                    user_id: "user_id",
+                    audience: "audience",
+                    scope: ["scope"],
+                },
+            ],
+        };
+        const page = await client.userGrants.list();
+        expect(expected.grants).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.grants).toEqual(nextPage.data);
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/grants").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/grants").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/grants").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteByUserId (2e32e0de)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -18,7 +101,61 @@ describe("UserGrants", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("delete", async () => {
+    test("deleteByUserId (7b2d7d97)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/grants").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.deleteByUserId({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteByUserId (4be330e3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/grants").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.deleteByUserId({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteByUserId (3dccc8db)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/grants").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.deleteByUserId({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -26,5 +163,53 @@ describe("UserGrants", () => {
 
         const response = await client.userGrants.delete("id");
         expect(response).toEqual(undefined);
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/grants/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/grants/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/grants/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.userGrants.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

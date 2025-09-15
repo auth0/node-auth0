@@ -5,4 +5,4 @@
 /**
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
-export type ConnectionsMetadata = Record<string, unknown>;
+export type ConnectionsMetadata = Record<string, string | undefined>;

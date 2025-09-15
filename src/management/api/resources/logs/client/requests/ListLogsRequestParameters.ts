@@ -7,32 +7,18 @@
  *     {}
  */
 export interface ListLogsRequestParameters {
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     *  Number of results per page. Paging is disabled if parameter not sent. Default: <code>50</code>. Max value: <code>100</code>
-     */
+    /**  Number of results per page. Paging is disabled if parameter not sent. Default: <code>50</code>. Max value: <code>100</code> */
     per_page?: number;
-    /**
-     * Field to use for sorting appended with <code>:1</code>  for ascending and <code>:-1</code> for descending. e.g. <code>date:-1</code>
-     */
+    /** Field to use for sorting appended with <code>:1</code>  for ascending and <code>:-1</code> for descending. e.g. <code>date:-1</code> */
     sort?: string;
-    /**
-     * Comma-separated list of fields to include or exclude (based on value provided for <code>include_fields</code>) in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include or exclude (based on value provided for <code>include_fields</code>) in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Whether specified fields are to be included (<code>true</code>) or excluded (<code>false</code>)
-     */
+    /** Whether specified fields are to be included (<code>true</code>) or excluded (<code>false</code>) */
     include_fields?: boolean;
-    /**
-     * Return results as an array when false (default). Return results inside an object that also contains a total result count when true.
-     */
+    /** Return results as an array when false (default). Return results inside an object that also contains a total result count when true. */
     include_totals?: boolean;
-    /**
-     * Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>.
-     */
+    /** Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>. */
     q?: string;
 }

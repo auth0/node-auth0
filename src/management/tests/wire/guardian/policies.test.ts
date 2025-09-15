@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Policies", () => {
-    test("list", async () => {
+    test("list (418a9191)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -17,7 +18,55 @@ describe("Policies", () => {
         expect(response).toEqual(["all-applications"]);
     });
 
-    test("set", async () => {
+    test("list (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.guardian.policies.list();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.guardian.policies.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.guardian.policies.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (20f441fb)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = ["all-applications"];
@@ -33,5 +82,74 @@ describe("Policies", () => {
 
         const response = await client.guardian.policies.set(["all-applications"]);
         expect(response).toEqual(["all-applications"]);
+    });
+
+    test("set (95e56043)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = ["all-applications", "all-applications"];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/policies")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.policies.set(["all-applications", "all-applications"]);
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (41e4cb53)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = ["all-applications", "all-applications"];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/policies")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.policies.set(["all-applications", "all-applications"]);
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (736ce4bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = ["all-applications", "all-applications"];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/policies")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.policies.set(["all-applications", "all-applications"]);
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
     });
 });

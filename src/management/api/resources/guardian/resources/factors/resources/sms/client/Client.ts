@@ -63,6 +63,11 @@ export class Sms {
     private async __getTwilioProvider(
         requestOptions?: Sms.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderSmsTwilioResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -71,11 +76,7 @@ export class Sms {
                 "guardian/factors/sms/providers/twilio",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -129,7 +130,7 @@ export class Sms {
      *
      *     <b>Previous functionality</b>: Update the Twilio SMS provider configuration.
      *
-     * @param {Management.guardian.factors.SetGuardianFactorsProviderSmsTwilioRequestContent} request
+     * @param {Management.SetGuardianFactorsProviderSmsTwilioRequestContent} request
      * @param {Sms.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -140,16 +141,21 @@ export class Sms {
      *     await client.guardian.factors.sms.setTwilioProvider()
      */
     public setTwilioProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderSmsTwilioRequestContent = {},
+        request: Management.SetGuardianFactorsProviderSmsTwilioRequestContent = {},
         requestOptions?: Sms.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderSmsTwilioResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setTwilioProvider(request, requestOptions));
     }
 
     private async __setTwilioProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderSmsTwilioRequestContent = {},
+        request: Management.SetGuardianFactorsProviderSmsTwilioRequestContent = {},
         requestOptions?: Sms.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderSmsTwilioResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -158,11 +164,7 @@ export class Sms {
                 "guardian/factors/sms/providers/twilio",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -237,6 +239,11 @@ export class Sms {
     private async __getSelectedProvider(
         requestOptions?: Sms.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderSmsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -245,11 +252,7 @@ export class Sms {
                 "guardian/factors/sms/selected-provider",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -303,7 +306,7 @@ export class Sms {
      *
      *     <b>Previous functionality</b>: Update the multi-factor authentication SMS provider configuration in your tenant.
      *
-     * @param {Management.guardian.factors.SetGuardianFactorsProviderSmsRequestContent} request
+     * @param {Management.SetGuardianFactorsProviderSmsRequestContent} request
      * @param {Sms.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -316,16 +319,21 @@ export class Sms {
      *     })
      */
     public setProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderSmsRequestContent,
+        request: Management.SetGuardianFactorsProviderSmsRequestContent,
         requestOptions?: Sms.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderSmsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setProvider(request, requestOptions));
     }
 
     private async __setProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderSmsRequestContent,
+        request: Management.SetGuardianFactorsProviderSmsRequestContent,
         requestOptions?: Sms.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderSmsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -334,11 +342,7 @@ export class Sms {
                 "guardian/factors/sms/selected-provider",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -413,6 +417,11 @@ export class Sms {
     private async __getTemplates(
         requestOptions?: Sms.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorSmsTemplatesResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -421,11 +430,7 @@ export class Sms {
                 "guardian/factors/sms/templates",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -479,7 +484,7 @@ export class Sms {
      *
      *     <b>Previous functionality</b>: Customize the messages sent to complete SMS enrollment and verification.
      *
-     * @param {Management.guardian.factors.SetGuardianFactorSmsTemplatesRequestContent} request
+     * @param {Management.SetGuardianFactorSmsTemplatesRequestContent} request
      * @param {Sms.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -493,16 +498,21 @@ export class Sms {
      *     })
      */
     public setTemplates(
-        request: Management.guardian.factors.SetGuardianFactorSmsTemplatesRequestContent,
+        request: Management.SetGuardianFactorSmsTemplatesRequestContent,
         requestOptions?: Sms.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorSmsTemplatesResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setTemplates(request, requestOptions));
     }
 
     private async __setTemplates(
-        request: Management.guardian.factors.SetGuardianFactorSmsTemplatesRequestContent,
+        request: Management.SetGuardianFactorSmsTemplatesRequestContent,
         requestOptions?: Sms.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorSmsTemplatesResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -511,11 +521,7 @@ export class Sms {
                 "guardian/factors/sms/templates",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

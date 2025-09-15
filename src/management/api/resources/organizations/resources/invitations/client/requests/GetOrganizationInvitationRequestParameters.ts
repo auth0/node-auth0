@@ -7,12 +7,8 @@
  *     {}
  */
 export interface GetOrganizationInvitationRequestParameters {
-    /**
-     * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Whether specified fields are to be included (true) or excluded (false). Defaults to true.
-     */
+    /** Whether specified fields are to be included (true) or excluded (false). Defaults to true. */
     include_fields?: boolean;
 }

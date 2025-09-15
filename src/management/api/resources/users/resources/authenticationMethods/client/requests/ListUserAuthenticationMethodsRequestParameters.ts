@@ -7,16 +7,10 @@
  *     {}
  */
 export interface ListUserAuthenticationMethodsRequestParameters {
-    /**
-     * Page index of the results to return. First page is 0. Default is 0.
-     */
+    /** Page index of the results to return. First page is 0. Default is 0. */
     page?: number;
-    /**
-     * Number of results per page. Default is 50.
-     */
+    /** Number of results per page. Default is 50. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
 }

@@ -7,8 +7,4 @@ import * as Management from "../index.js";
 /**
  * Domains array filter items
  */
-export interface AculDomainFilter {
-    /** Domain ID */
-    id?: string;
-    metadata?: Management.AculDomainMetadata;
-}
+export type AculDomainFilter = Management.AculDomainFilterById | Management.AculDomainFilterByMetadata;

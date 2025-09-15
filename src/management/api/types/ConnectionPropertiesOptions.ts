@@ -39,6 +39,7 @@ export interface ConnectionPropertiesOptions {
     upstream_params?: Management.ConnectionUpstreamParams | undefined;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
     gateway_authentication?: Management.ConnectionGatewayAuthentication;
+    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens;
     /** Accepts any additional properties */
     [key: string]: any;
 }

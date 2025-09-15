@@ -7,12 +7,8 @@
  *     {}
  */
 export interface GetConnectionRequestParameters {
-    /**
-     * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
-     */
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
     fields?: string;
-    /**
-     * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
-     */
+    /** <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>) */
     include_fields?: boolean;
 }

@@ -61,6 +61,11 @@ export class BreachedPasswordDetection {
     private async __get(
         requestOptions?: BreachedPasswordDetection.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetBreachedPasswordDetectionSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -69,11 +74,7 @@ export class BreachedPasswordDetection {
                 "attack-protection/breached-password-detection",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -125,7 +126,7 @@ export class BreachedPasswordDetection {
     /**
      * Update details of the Breached Password Detection configuration of your tenant.
      *
-     * @param {Management.attackProtection.UpdateBreachedPasswordDetectionSettingsRequestContent} request
+     * @param {Management.UpdateBreachedPasswordDetectionSettingsRequestContent} request
      * @param {BreachedPasswordDetection.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -137,16 +138,21 @@ export class BreachedPasswordDetection {
      *     await client.attackProtection.breachedPasswordDetection.update()
      */
     public update(
-        request: Management.attackProtection.UpdateBreachedPasswordDetectionSettingsRequestContent = {},
+        request: Management.UpdateBreachedPasswordDetectionSettingsRequestContent = {},
         requestOptions?: BreachedPasswordDetection.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateBreachedPasswordDetectionSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.attackProtection.UpdateBreachedPasswordDetectionSettingsRequestContent = {},
+        request: Management.UpdateBreachedPasswordDetectionSettingsRequestContent = {},
         requestOptions?: BreachedPasswordDetection.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateBreachedPasswordDetectionSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -155,11 +161,7 @@ export class BreachedPasswordDetection {
                 "attack-protection/breached-password-detection",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

@@ -5,4 +5,4 @@
 /**
  * Hashmap of key-value pairs where the value must be a string.
  */
-export type GetHookSecretResponseContent = Record<string, unknown>;
+export type GetHookSecretResponseContent = Record<string, string>;

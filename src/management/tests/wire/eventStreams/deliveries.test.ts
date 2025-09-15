@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Deliveries", () => {
-    test("list", async () => {
+    test("list (d5485639)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -60,7 +61,117 @@ describe("Deliveries", () => {
         ]);
     });
 
-    test("getHistory", async () => {
+    test("list (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.list("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.list("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.list("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.list("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.list("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getHistory (6ad5f31)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -109,5 +220,93 @@ describe("Deliveries", () => {
                 data: "data",
             },
         });
+    });
+
+    test("getHistory (5f4af0c0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries/event_id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.getHistory("id", "event_id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getHistory (656e16e4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries/event_id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.getHistory("id", "event_id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getHistory (c5167f8c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries/event_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.getHistory("id", "event_id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getHistory (248b4f70)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/event-streams/id/deliveries/event_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.eventStreams.deliveries.getHistory("id", "event_id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

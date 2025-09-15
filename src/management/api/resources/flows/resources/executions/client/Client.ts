@@ -42,7 +42,7 @@ export class Executions {
 
     /**
      * @param {string} flowId - Flow id
-     * @param {Management.flows.ExecutionsListRequest} request
+     * @param {Management.ExecutionsListRequest} request
      * @param {Executions.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -55,7 +55,7 @@ export class Executions {
      */
     public async list(
         flowId: string,
-        request: Management.flows.ExecutionsListRequest = {},
+        request: Management.ExecutionsListRequest = {},
         requestOptions?: Executions.RequestOptions,
     ): Promise<core.Page<Management.FlowExecutionSummary>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -70,6 +70,11 @@ export class Executions {
                 if (take != null) {
                     _queryParams["take"] = take.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -78,11 +83,7 @@ export class Executions {
                         `flows/${encodeURIComponent(flowId)}/executions`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -160,7 +161,7 @@ export class Executions {
     /**
      * @param {string} flowId - Flow id
      * @param {string} executionId - Flow execution id
-     * @param {Management.flows.ExecutionsGetRequest} request
+     * @param {Management.ExecutionsGetRequest} request
      * @param {Executions.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -174,7 +175,7 @@ export class Executions {
     public get(
         flowId: string,
         executionId: string,
-        request: Management.flows.ExecutionsGetRequest = {},
+        request: Management.ExecutionsGetRequest = {},
         requestOptions?: Executions.RequestOptions,
     ): core.HttpResponsePromise<Management.GetFlowExecutionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(flowId, executionId, request, requestOptions));
@@ -183,7 +184,7 @@ export class Executions {
     private async __get(
         flowId: string,
         executionId: string,
-        request: Management.flows.ExecutionsGetRequest = {},
+        request: Management.ExecutionsGetRequest = {},
         requestOptions?: Executions.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetFlowExecutionResponseContent>> {
         const { hydrate } = request;
@@ -196,6 +197,11 @@ export class Executions {
             }
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -204,11 +210,7 @@ export class Executions {
                 `flows/${encodeURIComponent(flowId)}/executions/${encodeURIComponent(executionId)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -285,6 +287,11 @@ export class Executions {
         executionId: string,
         requestOptions?: Executions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -293,11 +300,7 @@ export class Executions {
                 `flows/${encodeURIComponent(flowId)}/executions/${encodeURIComponent(executionId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

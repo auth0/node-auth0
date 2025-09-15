@@ -7,28 +7,16 @@
  *     {}
  */
 export interface ListRulesRequestParameters {
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Number of results per page.
-     */
+    /** Number of results per page. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * Optional filter on whether a rule is enabled (true) or disabled (false).
-     */
+    /** Optional filter on whether a rule is enabled (true) or disabled (false). */
     enabled?: boolean;
-    /**
-     * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Whether specified fields are to be included (true) or excluded (false).
-     */
+    /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean;
 }

@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Identities", () => {
-    test("link", async () => {
+    test("link (e5a12ebf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -64,7 +65,172 @@ describe("Identities", () => {
         ]);
     });
 
-    test("delete", async () => {
+    test("link (e4f14932)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            provider: undefined,
+            connection_id: undefined,
+            user_id: undefined,
+            link_with: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/identities")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.link("id", {
+                provider: undefined,
+                connection_id: undefined,
+                user_id: undefined,
+                link_with: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("link (a6f6708a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            provider: undefined,
+            connection_id: undefined,
+            user_id: undefined,
+            link_with: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/identities")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.link("id", {
+                provider: undefined,
+                connection_id: undefined,
+                user_id: undefined,
+                link_with: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("link (ea0bba4e)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            provider: undefined,
+            connection_id: undefined,
+            user_id: undefined,
+            link_with: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/identities")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.link("id", {
+                provider: undefined,
+                connection_id: undefined,
+                user_id: undefined,
+                link_with: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("link (5a1f3346)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            provider: undefined,
+            connection_id: undefined,
+            user_id: undefined,
+            link_with: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/identities")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.link("id", {
+                provider: undefined,
+                connection_id: undefined,
+                user_id: undefined,
+                link_with: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("link (871206da)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            provider: undefined,
+            connection_id: undefined,
+            user_id: undefined,
+            link_with: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/identities")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.link("id", {
+                provider: undefined,
+                connection_id: undefined,
+                user_id: undefined,
+                link_with: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (b7f67dbe)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -119,5 +285,93 @@ describe("Identities", () => {
                 },
             },
         ]);
+    });
+
+    test("delete (7a3438de)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/identities/ad/user_id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.delete("id", "ad", "user_id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (29a566e6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/identities/ad/user_id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.delete("id", "ad", "user_id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (e7eb4aa)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/identities/ad/user_id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.delete("id", "ad", "user_id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (f04618c6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/identities/ad/user_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.identities.delete("id", "ad", "user_id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

@@ -43,7 +43,7 @@ export class Providers {
     /**
      * Retrieve a list of <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone providers</a> details set for a Tenant. A list of fields to include or exclude may also be specified.
      *
-     * @param {Management.branding.phone.ListBrandingPhoneProvidersRequestParameters} request
+     * @param {Management.ListBrandingPhoneProvidersRequestParameters} request
      * @param {Providers.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -55,14 +55,14 @@ export class Providers {
      *     await client.branding.phone.providers.list()
      */
     public list(
-        request: Management.branding.phone.ListBrandingPhoneProvidersRequestParameters = {},
+        request: Management.ListBrandingPhoneProvidersRequestParameters = {},
         requestOptions?: Providers.RequestOptions,
     ): core.HttpResponsePromise<Management.ListBrandingPhoneProvidersResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
-        request: Management.branding.phone.ListBrandingPhoneProvidersRequestParameters = {},
+        request: Management.ListBrandingPhoneProvidersRequestParameters = {},
         requestOptions?: Providers.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListBrandingPhoneProvidersResponseContent>> {
         const { disabled } = request;
@@ -71,6 +71,11 @@ export class Providers {
             _queryParams["disabled"] = disabled.toString();
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -79,11 +84,7 @@ export class Providers {
                 "branding/phone/providers",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -136,7 +137,7 @@ export class Providers {
      * Create a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
      * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
      *
-     * @param {Management.branding.phone.CreateBrandingPhoneProviderRequestContent} request
+     * @param {Management.CreateBrandingPhoneProviderRequestContent} request
      * @param {Providers.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -154,16 +155,21 @@ export class Providers {
      *     })
      */
     public create(
-        request: Management.branding.phone.CreateBrandingPhoneProviderRequestContent,
+        request: Management.CreateBrandingPhoneProviderRequestContent,
         requestOptions?: Providers.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateBrandingPhoneProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.branding.phone.CreateBrandingPhoneProviderRequestContent,
+        request: Management.CreateBrandingPhoneProviderRequestContent,
         requestOptions?: Providers.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateBrandingPhoneProviderResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -172,11 +178,7 @@ export class Providers {
                 "branding/phone/providers",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -258,6 +260,11 @@ export class Providers {
         id: string,
         requestOptions?: Providers.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetBrandingPhoneProviderResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -266,11 +273,7 @@ export class Providers {
                 `branding/phone/providers/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -342,6 +345,11 @@ export class Providers {
     }
 
     private async __delete(id: string, requestOptions?: Providers.RequestOptions): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -350,11 +358,7 @@ export class Providers {
                 `branding/phone/providers/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -407,7 +411,7 @@ export class Providers {
      * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
      *
      * @param {string} id
-     * @param {Management.branding.phone.UpdateBrandingPhoneProviderRequestContent} request
+     * @param {Management.UpdateBrandingPhoneProviderRequestContent} request
      * @param {Providers.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -422,7 +426,7 @@ export class Providers {
      */
     public update(
         id: string,
-        request: Management.branding.phone.UpdateBrandingPhoneProviderRequestContent = {},
+        request: Management.UpdateBrandingPhoneProviderRequestContent = {},
         requestOptions?: Providers.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateBrandingPhoneProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -430,9 +434,14 @@ export class Providers {
 
     private async __update(
         id: string,
-        request: Management.branding.phone.UpdateBrandingPhoneProviderRequestContent = {},
+        request: Management.UpdateBrandingPhoneProviderRequestContent = {},
         requestOptions?: Providers.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateBrandingPhoneProviderResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -441,11 +450,7 @@ export class Providers {
                 `branding/phone/providers/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -505,7 +510,7 @@ export class Providers {
 
     /**
      * @param {string} id
-     * @param {Management.branding.phone.CreatePhoneProviderSendTestRequestContent} request
+     * @param {Management.CreatePhoneProviderSendTestRequestContent} request
      * @param {Providers.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -522,7 +527,7 @@ export class Providers {
      */
     public test(
         id: string,
-        request: Management.branding.phone.CreatePhoneProviderSendTestRequestContent,
+        request: Management.CreatePhoneProviderSendTestRequestContent,
         requestOptions?: Providers.RequestOptions,
     ): core.HttpResponsePromise<Management.CreatePhoneProviderSendTestResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__test(id, request, requestOptions));
@@ -530,9 +535,14 @@ export class Providers {
 
     private async __test(
         id: string,
-        request: Management.branding.phone.CreatePhoneProviderSendTestRequestContent,
+        request: Management.CreatePhoneProviderSendTestRequestContent,
         requestOptions?: Providers.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreatePhoneProviderSendTestResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -541,11 +551,7 @@ export class Providers {
                 `branding/phone/providers/${encodeURIComponent(id)}/try`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

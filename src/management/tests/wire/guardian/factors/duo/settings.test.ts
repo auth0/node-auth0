@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../../../Client.js";
+import * as Management from "../../../../../api/index.js";
 
 describe("Settings", () => {
-    test("get", async () => {
+    test("get (d54b9112)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -27,7 +28,73 @@ describe("Settings", () => {
         });
     });
 
-    test("set", async () => {
+    test("get (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/duo/settings")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.get();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/duo/settings")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.get();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/duo/settings")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.get();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (5e0d4d99)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -49,7 +116,88 @@ describe("Settings", () => {
         });
     });
 
-    test("update", async () => {
+    test("set (687175a9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { ikey: undefined, skey: undefined, host: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/duo/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.set({
+                ikey: undefined,
+                skey: undefined,
+                host: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (88b98f89)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { ikey: undefined, skey: undefined, host: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/duo/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.set({
+                ikey: undefined,
+                skey: undefined,
+                host: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (1d8c3e5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { ikey: undefined, skey: undefined, host: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/duo/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.set({
+                ikey: undefined,
+                skey: undefined,
+                host: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (5e0d4d99)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -69,5 +217,86 @@ describe("Settings", () => {
             skey: "skey",
             host: "host",
         });
+    });
+
+    test("update (687175a9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { ikey: undefined, skey: undefined, host: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/duo/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.update({
+                ikey: undefined,
+                skey: undefined,
+                host: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (88b98f89)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { ikey: undefined, skey: undefined, host: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/duo/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.update({
+                ikey: undefined,
+                skey: undefined,
+                host: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (1d8c3e5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { ikey: undefined, skey: undefined, host: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/duo/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.duo.settings.update({
+                ikey: undefined,
+                skey: undefined,
+                host: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
     });
 });

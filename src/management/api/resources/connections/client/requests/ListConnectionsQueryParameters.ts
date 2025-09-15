@@ -9,28 +9,16 @@ import * as Management from "../../../../index.js";
  *     {}
  */
 export interface ListConnectionsQueryParameters {
-    /**
-     * Optional Id from which to start selection.
-     */
+    /** Optional Id from which to start selection. */
     from?: string;
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     take?: number;
-    /**
-     * Provide strategies to only retrieve connections with such strategies
-     */
+    /** Provide strategies to only retrieve connections with such strategies */
     strategy?: Management.ConnectionStrategyEnum | Management.ConnectionStrategyEnum[];
-    /**
-     * Provide the name of the connection to retrieve
-     */
+    /** Provide the name of the connection to retrieve */
     name?: string;
-    /**
-     * A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields
-     */
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
     fields?: string;
-    /**
-     * <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>)
-     */
+    /** <code>true</code> if the fields specified are to be included in the result, <code>false</code> otherwise (defaults to <code>true</code>) */
     include_fields?: boolean;
 }

@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("LogStreams", () => {
-    test("list", async () => {
+    test("list (45fcfa8b)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -55,7 +56,71 @@ describe("LogStreams", () => {
         ]);
     });
 
-    test("create", async () => {
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (c29c5807)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.list();
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (bbc0ceb5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
@@ -117,7 +182,262 @@ describe("LogStreams", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (dac8f575)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: "http",
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: {
+                httpAuthorization: undefined,
+                httpContentFormat: undefined,
+                httpContentType: undefined,
+                httpEndpoint: "httpEndpoint",
+                httpCustomHeaders: undefined,
+            },
+            startFrom: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/log-streams")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.create({
+                name: undefined,
+                type: "http",
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: {
+                    httpAuthorization: undefined,
+                    httpContentFormat: undefined,
+                    httpContentType: undefined,
+                    httpEndpoint: "httpEndpoint",
+                    httpCustomHeaders: undefined,
+                },
+                startFrom: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (14865)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: "http",
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: {
+                httpAuthorization: undefined,
+                httpContentFormat: undefined,
+                httpContentType: undefined,
+                httpEndpoint: "httpEndpoint",
+                httpCustomHeaders: undefined,
+            },
+            startFrom: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/log-streams")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.create({
+                name: undefined,
+                type: "http",
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: {
+                    httpAuthorization: undefined,
+                    httpContentFormat: undefined,
+                    httpContentType: undefined,
+                    httpEndpoint: "httpEndpoint",
+                    httpCustomHeaders: undefined,
+                },
+                startFrom: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (608d6031)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: "http",
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: {
+                httpAuthorization: undefined,
+                httpContentFormat: undefined,
+                httpContentType: undefined,
+                httpEndpoint: "httpEndpoint",
+                httpCustomHeaders: undefined,
+            },
+            startFrom: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/log-streams")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.create({
+                name: undefined,
+                type: "http",
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: {
+                    httpAuthorization: undefined,
+                    httpContentFormat: undefined,
+                    httpContentType: undefined,
+                    httpEndpoint: "httpEndpoint",
+                    httpCustomHeaders: undefined,
+                },
+                startFrom: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (5750f049)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: "http",
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: {
+                httpAuthorization: undefined,
+                httpContentFormat: undefined,
+                httpContentType: undefined,
+                httpEndpoint: "httpEndpoint",
+                httpCustomHeaders: undefined,
+            },
+            startFrom: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/log-streams")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.create({
+                name: undefined,
+                type: "http",
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: {
+                    httpAuthorization: undefined,
+                    httpContentFormat: undefined,
+                    httpContentType: undefined,
+                    httpEndpoint: "httpEndpoint",
+                    httpCustomHeaders: undefined,
+                },
+                startFrom: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (6f8e3989)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: "http",
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: {
+                httpAuthorization: undefined,
+                httpContentFormat: undefined,
+                httpContentType: undefined,
+                httpEndpoint: "httpEndpoint",
+                httpCustomHeaders: undefined,
+            },
+            startFrom: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/log-streams")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.create({
+                name: undefined,
+                type: "http",
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: {
+                    httpAuthorization: undefined,
+                    httpContentFormat: undefined,
+                    httpContentType: undefined,
+                    httpEndpoint: "httpEndpoint",
+                    httpCustomHeaders: undefined,
+                },
+                startFrom: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e9ced4ed)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -167,7 +487,71 @@ describe("LogStreams", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -177,7 +561,87 @@ describe("LogStreams", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.delete("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.delete("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.logStreams.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (3653938)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -232,5 +696,153 @@ describe("LogStreams", () => {
                 httpCustomHeaders: [{}],
             },
         });
+    });
+
+    test("update (36a78731)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            status: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/log-streams/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.update("id", {
+                name: undefined,
+                status: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (20103571)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            status: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/log-streams/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.update("id", {
+                name: undefined,
+                status: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (bc05b36d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            status: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/log-streams/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.update("id", {
+                name: undefined,
+                status: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (78a35815)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            status: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            sink: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/log-streams/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.logStreams.update("id", {
+                name: undefined,
+                status: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                sink: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

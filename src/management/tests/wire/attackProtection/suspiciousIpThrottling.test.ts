@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("SuspiciousIpThrottling", () => {
-    test("get", async () => {
+    test("get (7bb00b70)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -42,7 +43,73 @@ describe("SuspiciousIpThrottling", () => {
         });
     });
 
-    test("update", async () => {
+    test("get (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/attack-protection/suspicious-ip-throttling")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.get();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/attack-protection/suspicious-ip-throttling")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.get();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/attack-protection/suspicious-ip-throttling")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.get();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (97c82195)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -77,5 +144,117 @@ describe("SuspiciousIpThrottling", () => {
                 },
             },
         });
+    });
+
+    test("update (9350b555)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { enabled: undefined, shields: undefined, allowlist: undefined, stage: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/attack-protection/suspicious-ip-throttling")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.update({
+                enabled: undefined,
+                shields: undefined,
+                allowlist: undefined,
+                stage: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (4cd64c45)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { enabled: undefined, shields: undefined, allowlist: undefined, stage: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/attack-protection/suspicious-ip-throttling")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.update({
+                enabled: undefined,
+                shields: undefined,
+                allowlist: undefined,
+                stage: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (793a1411)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { enabled: undefined, shields: undefined, allowlist: undefined, stage: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/attack-protection/suspicious-ip-throttling")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.update({
+                enabled: undefined,
+                shields: undefined,
+                allowlist: undefined,
+                stage: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (8f63ece9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { enabled: undefined, shields: undefined, allowlist: undefined, stage: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/attack-protection/suspicious-ip-throttling")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.attackProtection.suspiciousIpThrottling.update({
+                enabled: undefined,
+                shields: undefined,
+                allowlist: undefined,
+                stage: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

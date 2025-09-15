@@ -7,20 +7,12 @@
  *     {}
  */
 export interface ListOrganizationMembersRequestParameters {
-    /**
-     * Optional Id from which to start selection.
-     */
+    /** Optional Id from which to start selection. */
     from?: string;
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     take?: number;
-    /**
-     * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Whether specified fields are to be included (true) or excluded (false).
-     */
+    /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean;
 }

@@ -43,7 +43,7 @@ export class Rendering {
     /**
      * Get render setting configurations for all screens.
      *
-     * @param {Management.prompts.ListAculsRequestParameters} request
+     * @param {Management.ListAculsRequestParameters} request
      * @param {Rendering.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -56,7 +56,7 @@ export class Rendering {
      *     await client.prompts.rendering.list()
      */
     public async list(
-        request: Management.prompts.ListAculsRequestParameters = {},
+        request: Management.ListAculsRequestParameters = {},
         requestOptions?: Rendering.RequestOptions,
     ): Promise<core.Page<Management.AculResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -66,7 +66,7 @@ export class Rendering {
                 const {
                     fields,
                     include_fields: includeFields,
-                    page,
+                    page = 0,
                     per_page: perPage = 50,
                     include_totals: includeTotals = true,
                     prompt,
@@ -98,6 +98,11 @@ export class Rendering {
                 if (renderingMode != null) {
                     _queryParams["rendering_mode"] = renderingMode;
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -106,11 +111,7 @@ export class Rendering {
                         "prompts/rendering",
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -174,7 +175,7 @@ export class Rendering {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.ListAculsOffsetPaginatedResponseContent, Management.AculResponseContent>({
             response: dataWithRawResponse.data,
@@ -218,6 +219,11 @@ export class Rendering {
         screen: Management.ScreenGroupNameEnum,
         requestOptions?: Rendering.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetAculResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -226,11 +232,7 @@ export class Rendering {
                 `prompts/${encodeURIComponent(prompt)}/screen/${encodeURIComponent(screen)}/rendering`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -314,7 +316,7 @@ export class Rendering {
      *
      * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt
      * @param {Management.ScreenGroupNameEnum} screen - Name of the screen
-     * @param {Management.prompts.UpdateAculRequestContent} request
+     * @param {Management.UpdateAculRequestContent} request
      * @param {Rendering.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -329,7 +331,7 @@ export class Rendering {
     public update(
         prompt: Management.PromptGroupNameEnum,
         screen: Management.ScreenGroupNameEnum,
-        request: Management.prompts.UpdateAculRequestContent = {},
+        request: Management.UpdateAculRequestContent = {},
         requestOptions?: Rendering.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateAculResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(prompt, screen, request, requestOptions));
@@ -338,9 +340,14 @@ export class Rendering {
     private async __update(
         prompt: Management.PromptGroupNameEnum,
         screen: Management.ScreenGroupNameEnum,
-        request: Management.prompts.UpdateAculRequestContent = {},
+        request: Management.UpdateAculRequestContent = {},
         requestOptions?: Rendering.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateAculResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -349,11 +356,7 @@ export class Rendering {
                 `prompts/${encodeURIComponent(prompt)}/screen/${encodeURIComponent(screen)}/rendering`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

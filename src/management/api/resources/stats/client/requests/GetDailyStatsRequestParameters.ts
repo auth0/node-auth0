@@ -7,12 +7,8 @@
  *     {}
  */
 export interface GetDailyStatsRequestParameters {
-    /**
-     * Optional first day of the date range (inclusive) in YYYYMMDD format.
-     */
+    /** Optional first day of the date range (inclusive) in YYYYMMDD format. */
     from?: string;
-    /**
-     * Optional last day of the date range (inclusive) in YYYYMMDD format.
-     */
+    /** Optional last day of the date range (inclusive) in YYYYMMDD format. */
     to?: string;
 }

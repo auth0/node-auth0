@@ -9,8 +9,6 @@
  *     }
  */
 export interface DeleteConnectionUsersByEmailQueryParameters {
-    /**
-     * The email of the user to delete
-     */
+    /** The email of the user to delete */
     email: string;
 }

@@ -32,7 +32,7 @@ export interface CreateClientRequestContent {
     allowed_clients?: string[];
     /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
     allowed_logout_urls?: string[];
-    /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, and `urn:ietf:params:oauth:grant-type:device_code`. */
+    /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[];
     token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum;
     app_type?: Management.ClientAppTypeEnum;
@@ -68,6 +68,8 @@ export interface CreateClientRequestContent {
     default_organization?: Management.ClientDefaultOrganization;
     organization_usage?: Management.ClientOrganizationUsageEnum;
     organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
     client_authentication_methods?: Management.ClientCreateAuthenticationMethod;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
     require_pushed_authorization_requests?: boolean;
@@ -80,4 +82,5 @@ export interface CreateClientRequestContent {
     token_quota?: Management.CreateTokenQuota;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
+    my_organization_configuration?: Management.ClientMyOrganizationConfiguration;
 }

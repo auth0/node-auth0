@@ -44,7 +44,7 @@ export class Organizations {
      * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review <a href="https://auth0.com/docs/manage-users/organizations">Auth0 Organizations</a>.
      *
      * @param {string} id - ID of the user to retrieve the organizations for.
-     * @param {Management.users.ListUserOrganizationsRequestParameters} request
+     * @param {Management.ListUserOrganizationsRequestParameters} request
      * @param {Organizations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
@@ -56,14 +56,14 @@ export class Organizations {
      */
     public async list(
         id: string,
-        request: Management.users.ListUserOrganizationsRequestParameters = {},
+        request: Management.ListUserOrganizationsRequestParameters = {},
         requestOptions?: Organizations.RequestOptions,
     ): Promise<core.Page<Management.Organization>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.users.ListUserOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListUserOrganizationsOffsetPaginatedResponseContent>> => {
-                const { page, per_page: perPage = 50, include_totals: includeTotals = true } = request;
+                const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -74,6 +74,11 @@ export class Organizations {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -82,11 +87,7 @@ export class Organizations {
                         `users/${encodeURIComponent(id)}/organizations`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -140,7 +141,7 @@ export class Organizations {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<
             Management.ListUserOrganizationsOffsetPaginatedResponseContent,

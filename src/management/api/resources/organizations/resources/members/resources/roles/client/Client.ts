@@ -47,7 +47,7 @@ export class Roles {
      *
      * @param {string} id - Organization identifier.
      * @param {string} userId - ID of the user to associate roles with.
-     * @param {Management.organizations.members.ListOrganizationMemberRolesRequestParameters} request
+     * @param {Management.ListOrganizationMemberRolesRequestParameters} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -61,14 +61,14 @@ export class Roles {
     public async list(
         id: string,
         userId: string,
-        request: Management.organizations.members.ListOrganizationMemberRolesRequestParameters = {},
+        request: Management.ListOrganizationMemberRolesRequestParameters = {},
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.Page<Management.Role>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.organizations.members.ListOrganizationMemberRolesRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent>> => {
-                const { page, per_page: perPage = 50, include_totals: includeTotals = true } = request;
+                const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -79,6 +79,11 @@ export class Roles {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -87,11 +92,7 @@ export class Roles {
                         `organizations/${encodeURIComponent(id)}/members/${encodeURIComponent(userId)}/roles`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -150,7 +151,7 @@ export class Roles {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent, Management.Role>(
             {
@@ -173,7 +174,7 @@ export class Roles {
      *
      * @param {string} id - Organization identifier.
      * @param {string} userId - ID of the user to associate roles with.
-     * @param {Management.organizations.members.AssignOrganizationMemberRolesRequestContent} request
+     * @param {Management.AssignOrganizationMemberRolesRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -190,7 +191,7 @@ export class Roles {
     public assign(
         id: string,
         userId: string,
-        request: Management.organizations.members.AssignOrganizationMemberRolesRequestContent,
+        request: Management.AssignOrganizationMemberRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__assign(id, userId, request, requestOptions));
@@ -199,9 +200,14 @@ export class Roles {
     private async __assign(
         id: string,
         userId: string,
-        request: Management.organizations.members.AssignOrganizationMemberRolesRequestContent,
+        request: Management.AssignOrganizationMemberRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -210,11 +216,7 @@ export class Roles {
                 `organizations/${encodeURIComponent(id)}/members/${encodeURIComponent(userId)}/roles`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -274,7 +276,7 @@ export class Roles {
      *
      * @param {string} id - Organization identifier.
      * @param {string} userId - User ID of the organization member to remove roles from.
-     * @param {Management.organizations.members.DeleteOrganizationMemberRolesRequestContent} request
+     * @param {Management.DeleteOrganizationMemberRolesRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -290,7 +292,7 @@ export class Roles {
     public delete(
         id: string,
         userId: string,
-        request: Management.organizations.members.DeleteOrganizationMemberRolesRequestContent,
+        request: Management.DeleteOrganizationMemberRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, userId, request, requestOptions));
@@ -299,9 +301,14 @@ export class Roles {
     private async __delete(
         id: string,
         userId: string,
-        request: Management.organizations.members.DeleteOrganizationMemberRolesRequestContent,
+        request: Management.DeleteOrganizationMemberRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -310,11 +317,7 @@ export class Roles {
                 `organizations/${encodeURIComponent(id)}/members/${encodeURIComponent(userId)}/roles`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

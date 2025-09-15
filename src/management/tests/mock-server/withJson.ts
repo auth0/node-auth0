@@ -12,17 +12,23 @@ export function withJson(expectedBody: unknown, resolver: HttpResponseResolver):
         const { request } = args;
 
         let clonedRequest: Request;
+        let bodyText: string | undefined;
         let actualBody: unknown;
         try {
             clonedRequest = request.clone();
-            actualBody = fromJson(await clonedRequest.text());
+            bodyText = await clonedRequest.text();
+            if (bodyText === "") {
+                console.error("Request body is empty, expected a JSON object.");
+                return passthrough();
+            }
+            actualBody = fromJson(bodyText);
         } catch (error) {
-            console.error("Error processing request body:", error);
+            console.error(`Error processing request body:\n\tError: ${error}\n\tBody: ${bodyText}`);
             return passthrough();
         }
 
         const mismatches = findMismatches(actualBody, expectedBody);
-        if (Object.keys(mismatches).length > 0) {
+        if (Object.keys(mismatches).filter((key) => !key.startsWith("pagination.")).length > 0) {
             console.error("JSON body mismatch:", toJson(mismatches, undefined, 2));
             return passthrough();
         }

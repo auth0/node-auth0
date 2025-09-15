@@ -61,6 +61,11 @@ export class PushNotification {
     private async __getApnsProvider(
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderApnsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -69,11 +74,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/apns",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -146,6 +147,11 @@ export class PushNotification {
         request: Management.SetGuardianFactorsProviderPushNotificationApnsRequestContent,
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationApnsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -154,11 +160,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/apns",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -234,6 +236,11 @@ export class PushNotification {
         request: Management.SetGuardianFactorsProviderPushNotificationFcmRequestContent,
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -242,11 +249,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/fcm",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -322,6 +325,11 @@ export class PushNotification {
         request: Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent,
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -330,11 +338,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/fcmv1",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -407,6 +411,11 @@ export class PushNotification {
     private async __getSnsProvider(
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderSnsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -415,11 +424,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/sns",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -471,7 +476,7 @@ export class PushNotification {
     /**
      * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
      *
-     * @param {Management.guardian.factors.SetGuardianFactorsProviderPushNotificationSnsRequestContent} request
+     * @param {Management.SetGuardianFactorsProviderPushNotificationSnsRequestContent} request
      * @param {PushNotification.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -482,16 +487,21 @@ export class PushNotification {
      *     await client.guardian.factors.pushNotification.setSnsProvider()
      */
     public setSnsProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPushNotificationSnsRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationSnsRequestContent = {},
         requestOptions?: PushNotification.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPushNotificationSnsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setSnsProvider(request, requestOptions));
     }
 
     private async __setSnsProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPushNotificationSnsRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationSnsRequestContent = {},
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationSnsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -500,11 +510,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/sns",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -559,7 +565,7 @@ export class PushNotification {
     /**
      * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
      *
-     * @param {Management.guardian.factors.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent} request
+     * @param {Management.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent} request
      * @param {PushNotification.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -570,16 +576,21 @@ export class PushNotification {
      *     await client.guardian.factors.pushNotification.updateSnsProvider()
      */
     public updateSnsProvider(
-        request: Management.guardian.factors.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent = {},
+        request: Management.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent = {},
         requestOptions?: PushNotification.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateGuardianFactorsProviderPushNotificationSnsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__updateSnsProvider(request, requestOptions));
     }
 
     private async __updateSnsProvider(
-        request: Management.guardian.factors.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent = {},
+        request: Management.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent = {},
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateGuardianFactorsProviderPushNotificationSnsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -588,11 +599,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/providers/sns",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -665,6 +672,11 @@ export class PushNotification {
     private async __getSelectedProvider(
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderPushNotificationResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -673,11 +685,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/selected-provider",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -729,7 +737,7 @@ export class PushNotification {
     /**
      * Modify the push notification provider configured for your tenant. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure Push Notifications for MFA</a>.
      *
-     * @param {Management.guardian.factors.SetGuardianFactorsProviderPushNotificationRequestContent} request
+     * @param {Management.SetGuardianFactorsProviderPushNotificationRequestContent} request
      * @param {PushNotification.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -742,16 +750,21 @@ export class PushNotification {
      *     })
      */
     public setProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPushNotificationRequestContent,
+        request: Management.SetGuardianFactorsProviderPushNotificationRequestContent,
         requestOptions?: PushNotification.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPushNotificationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setProvider(request, requestOptions));
     }
 
     private async __setProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPushNotificationRequestContent,
+        request: Management.SetGuardianFactorsProviderPushNotificationRequestContent,
         requestOptions?: PushNotification.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -760,11 +773,7 @@ export class PushNotification {
                 "guardian/factors/push-notification/selected-provider",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

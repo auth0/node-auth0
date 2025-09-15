@@ -3,7 +3,7 @@
  */
 
 /**
- * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+ * Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
  */
 export type EmailTemplateNameEnum =
     | "verify_email"
@@ -17,7 +17,8 @@ export type EmailTemplateNameEnum =
     | "mfa_oob_code"
     | "user_invitation"
     | "change_password"
-    | "password_reset";
+    | "password_reset"
+    | "async_approval";
 export const EmailTemplateNameEnum = {
     VerifyEmail: "verify_email",
     VerifyEmailByCode: "verify_email_by_code",
@@ -31,4 +32,5 @@ export const EmailTemplateNameEnum = {
     UserInvitation: "user_invitation",
     ChangePassword: "change_password",
     PasswordReset: "password_reset",
+    AsyncApproval: "async_approval",
 } as const;

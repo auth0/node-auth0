@@ -7,8 +7,4 @@ import * as Management from "../index.js";
 /**
  * Client array filter items
  */
-export interface AculClientFilter {
-    /** Client ID */
-    id?: string;
-    metadata?: Management.AculClientMetadata;
-}
+export type AculClientFilter = Management.AculClientFilterById | Management.AculClientFilterByMetadata;

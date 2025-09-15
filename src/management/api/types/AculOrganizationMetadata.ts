@@ -3,6 +3,6 @@
  */
 
 /**
- * Client metadata key/value pairs
+ * Organization metadata key/value pairs
  */
 export type AculOrganizationMetadata = Record<string, unknown>;

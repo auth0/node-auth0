@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("VerificationEmail", () => {
-    test("create", async () => {
+    test("create (9e906ea7)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
@@ -29,5 +30,137 @@ describe("VerificationEmail", () => {
             created_at: "created_at",
             id: "id",
         });
+    });
+
+    test("create (64ecdc13)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            user_id: "google-oauth2|1234",
+            client_id: undefined,
+            identity: undefined,
+            organization_id: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/jobs/verification-email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.jobs.verificationEmail.create({
+                user_id: "google-oauth2|1234",
+                client_id: undefined,
+                identity: undefined,
+                organization_id: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (63416363)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            user_id: "google-oauth2|1234",
+            client_id: undefined,
+            identity: undefined,
+            organization_id: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/jobs/verification-email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.jobs.verificationEmail.create({
+                user_id: "google-oauth2|1234",
+                client_id: undefined,
+                identity: undefined,
+                organization_id: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (ca7cd50f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            user_id: "google-oauth2|1234",
+            client_id: undefined,
+            identity: undefined,
+            organization_id: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/jobs/verification-email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.jobs.verificationEmail.create({
+                user_id: "google-oauth2|1234",
+                client_id: undefined,
+                identity: undefined,
+                organization_id: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (1e345257)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            user_id: "google-oauth2|1234",
+            client_id: undefined,
+            identity: undefined,
+            organization_id: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/jobs/verification-email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.jobs.verificationEmail.create({
+                user_id: "google-oauth2|1234",
+                client_id: undefined,
+                identity: undefined,
+                organization_id: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

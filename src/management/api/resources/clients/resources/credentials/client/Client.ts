@@ -67,6 +67,11 @@ export class Credentials {
         clientId: string,
         requestOptions?: Credentials.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ClientCredential[]>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -75,11 +80,7 @@ export class Credentials {
                 `clients/${encodeURIComponent(clientId)}/credentials`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -163,7 +164,7 @@ export class Credentials {
      * </ul>
      *
      * @param {string} clientId - ID of the client.
-     * @param {Management.clients.PostClientCredentialRequestContent} request
+     * @param {Management.PostClientCredentialRequestContent} request
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -179,7 +180,7 @@ export class Credentials {
      */
     public create(
         clientId: string,
-        request: Management.clients.PostClientCredentialRequestContent,
+        request: Management.PostClientCredentialRequestContent,
         requestOptions?: Credentials.RequestOptions,
     ): core.HttpResponsePromise<Management.PostClientCredentialResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(clientId, request, requestOptions));
@@ -187,9 +188,14 @@ export class Credentials {
 
     private async __create(
         clientId: string,
-        request: Management.clients.PostClientCredentialRequestContent,
+        request: Management.PostClientCredentialRequestContent,
         requestOptions?: Credentials.RequestOptions,
     ): Promise<core.WithRawResponse<Management.PostClientCredentialResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -198,11 +204,7 @@ export class Credentials {
                 `clients/${encodeURIComponent(clientId)}/credentials`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -288,6 +290,11 @@ export class Credentials {
         credentialId: string,
         requestOptions?: Credentials.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetClientCredentialResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -296,11 +303,7 @@ export class Credentials {
                 `clients/${encodeURIComponent(clientId)}/credentials/${encodeURIComponent(credentialId)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -379,6 +382,11 @@ export class Credentials {
         credentialId: string,
         requestOptions?: Credentials.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -387,11 +395,7 @@ export class Credentials {
                 `clients/${encodeURIComponent(clientId)}/credentials/${encodeURIComponent(credentialId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -444,7 +448,7 @@ export class Credentials {
      *
      * @param {string} clientId - ID of the client.
      * @param {string} credentialId - ID of the credential.
-     * @param {Management.clients.PatchClientCredentialRequestContent} request
+     * @param {Management.PatchClientCredentialRequestContent} request
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -459,7 +463,7 @@ export class Credentials {
     public update(
         clientId: string,
         credentialId: string,
-        request: Management.clients.PatchClientCredentialRequestContent = {},
+        request: Management.PatchClientCredentialRequestContent = {},
         requestOptions?: Credentials.RequestOptions,
     ): core.HttpResponsePromise<Management.PatchClientCredentialResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(clientId, credentialId, request, requestOptions));
@@ -468,9 +472,14 @@ export class Credentials {
     private async __update(
         clientId: string,
         credentialId: string,
-        request: Management.clients.PatchClientCredentialRequestContent = {},
+        request: Management.PatchClientCredentialRequestContent = {},
         requestOptions?: Credentials.RequestOptions,
     ): Promise<core.WithRawResponse<Management.PatchClientCredentialResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -479,11 +488,7 @@ export class Credentials {
                 `clients/${encodeURIComponent(clientId)}/credentials/${encodeURIComponent(credentialId)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

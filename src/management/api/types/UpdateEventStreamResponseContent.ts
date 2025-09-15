@@ -6,4 +6,5 @@ import * as Management from "../index.js";
 
 export type UpdateEventStreamResponseContent =
     | Management.EventStreamWebhookResponseContent
-    | Management.EventStreamEventBridgeResponseContent;
+    | Management.EventStreamEventBridgeResponseContent
+    | Management.EventStreamActionResponseContent;

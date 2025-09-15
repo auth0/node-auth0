@@ -33,4 +33,7 @@ export interface GetResourceServerResponseContent {
     consent_policy?: Management.ResourceServerConsentPolicyEnum | undefined;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    /** The client ID of the client that this resource server is linked to */
+    client_id?: string;
 }

@@ -7,12 +7,8 @@
  *     {}
  */
 export interface ListActionVersionsRequestParameters {
-    /**
-     * Use this field to request a specific page of the list results.
-     */
+    /** Use this field to request a specific page of the list results. */
     page?: number;
-    /**
-     * This field specify the maximum number of results to be returned by the server. 20 by default
-     */
+    /** This field specify the maximum number of results to be returned by the server. 20 by default */
     per_page?: number;
 }

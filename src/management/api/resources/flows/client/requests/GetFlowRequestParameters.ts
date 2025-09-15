@@ -9,8 +9,6 @@ import * as Management from "../../../../index.js";
  *     {}
  */
 export interface GetFlowRequestParameters {
-    /**
-     * hydration param
-     */
+    /** hydration param */
     hydrate?: Management.GetFlowRequestParametersHydrateEnum | Management.GetFlowRequestParametersHydrateEnum[];
 }

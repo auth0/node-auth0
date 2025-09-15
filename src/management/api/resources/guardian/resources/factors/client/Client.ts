@@ -83,6 +83,11 @@ export class Factors {
     private async __list(
         requestOptions?: Factors.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GuardianFactor[]>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -91,11 +96,7 @@ export class Factors {
                 "guardian/factors",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -143,7 +144,7 @@ export class Factors {
      * Update the status (i.e., enabled or disabled) of a specific multi-factor authentication factor.
      *
      * @param {Management.GuardianFactorNameEnum} name - Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
-     * @param {Management.guardian.SetGuardianFactorRequestContent} request
+     * @param {Management.SetGuardianFactorRequestContent} request
      * @param {Factors.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -157,7 +158,7 @@ export class Factors {
      */
     public set(
         name: Management.GuardianFactorNameEnum,
-        request: Management.guardian.SetGuardianFactorRequestContent,
+        request: Management.SetGuardianFactorRequestContent,
         requestOptions?: Factors.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(name, request, requestOptions));
@@ -165,9 +166,14 @@ export class Factors {
 
     private async __set(
         name: Management.GuardianFactorNameEnum,
-        request: Management.guardian.SetGuardianFactorRequestContent,
+        request: Management.SetGuardianFactorRequestContent,
         requestOptions?: Factors.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -176,11 +182,7 @@ export class Factors {
                 `guardian/factors/${encodeURIComponent(name)}`,
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
