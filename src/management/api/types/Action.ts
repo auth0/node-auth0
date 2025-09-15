@@ -21,7 +21,7 @@ export interface Action {
     code?: string;
     /** The list of third party npm modules, and their versions, that this action depends on. */
     dependencies?: Management.ActionVersionDependency[];
-    /** The Node runtime. For example: `node12`, defaults to `node12` */
+    /** The Node runtime. For example: `node22`, defaults to `node22` */
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretResponse[];

@@ -4,9 +4,149 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Clients", () => {
-    test("update", async () => {
+    test("get (e24df5f6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { clients: [{ client_id: "client_id" }], next: "next" };
+        server
+            .mockEndpoint()
+            .get("/connections/id/clients")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            clients: [
+                {
+                    client_id: "client_id",
+                },
+            ],
+            next: "next",
+        };
+        const page = await client.connections.clients.get("id");
+        expect(expected.clients).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.clients).toEqual(nextPage.data);
+    });
+
+    test("get (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections/id/clients")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.get("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections/id/clients")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections/id/clients")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections/id/clients")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections/id/clients")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (1f0972fc)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ client_id: "client_id", status: true }];
@@ -26,5 +166,180 @@ describe("Clients", () => {
             },
         ]);
         expect(response).toEqual(undefined);
+    });
+
+    test("update (41c86f41)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { client_id: "client_id", status: true },
+            { client_id: "client_id", status: true },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/connections/id/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.update("id", [
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (4d8ee141)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { client_id: "client_id", status: true },
+            { client_id: "client_id", status: true },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/connections/id/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.update("id", [
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (75dfa67d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { client_id: "client_id", status: true },
+            { client_id: "client_id", status: true },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/connections/id/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.update("id", [
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (b253166d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { client_id: "client_id", status: true },
+            { client_id: "client_id", status: true },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/connections/id/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.update("id", [
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (3dad9965)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { client_id: "client_id", status: true },
+            { client_id: "client_id", status: true },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/connections/id/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.clients.update("id", [
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+                {
+                    client_id: "client_id",
+                    status: true,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

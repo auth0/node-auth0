@@ -50,7 +50,7 @@ export class Logs {
      * Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations">limits the number of logs</a> you can return by search criteria to 100 logs per request. Furthermore, you may only paginate through up to 1,000 search results. If you exceed this threshold, please redefine your search.
      *
      * @param {string} id - ID of the user of the logs to retrieve
-     * @param {Management.users.ListUserLogsRequestParameters} request
+     * @param {Management.ListUserLogsRequestParameters} request
      * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -63,14 +63,14 @@ export class Logs {
      */
     public async list(
         id: string,
-        request: Management.users.ListUserLogsRequestParameters = {},
+        request: Management.ListUserLogsRequestParameters = {},
         requestOptions?: Logs.RequestOptions,
     ): Promise<core.Page<Management.Log>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.users.ListUserLogsRequestParameters,
             ): Promise<core.WithRawResponse<Management.UserListLogOffsetPaginatedResponseContent>> => {
-                const { page, per_page: perPage = 50, sort, include_totals: includeTotals = true } = request;
+                const { page = 0, per_page: perPage = 50, sort, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -84,6 +84,11 @@ export class Logs {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -92,11 +97,7 @@ export class Logs {
                         `users/${encodeURIComponent(id)}/logs`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -153,7 +154,7 @@ export class Logs {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.UserListLogOffsetPaginatedResponseContent, Management.Log>({
             response: dataWithRawResponse.data,

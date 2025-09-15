@@ -62,7 +62,7 @@ export class Users {
      * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
      *
      * @param {string} id - ID of the role to retrieve a list of users associated with.
-     * @param {Management.roles.ListRoleUsersRequestParameters} request
+     * @param {Management.ListRoleUsersRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -76,7 +76,7 @@ export class Users {
      */
     public async list(
         id: string,
-        request: Management.roles.ListRoleUsersRequestParameters = {},
+        request: Management.ListRoleUsersRequestParameters = {},
         requestOptions?: Users.RequestOptions,
     ): Promise<core.Page<Management.RoleUser>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -91,6 +91,11 @@ export class Users {
                 if (take != null) {
                     _queryParams["take"] = take.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -99,11 +104,7 @@ export class Users {
                         `roles/${encodeURIComponent(id)}/users`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -181,7 +182,7 @@ export class Users {
      * <b>Note</b>: New roles cannot be created through this action.
      *
      * @param {string} id - ID of the role to assign users to.
-     * @param {Management.roles.AssignRoleUsersRequestContent} request
+     * @param {Management.AssignRoleUsersRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -197,7 +198,7 @@ export class Users {
      */
     public assign(
         id: string,
-        request: Management.roles.AssignRoleUsersRequestContent,
+        request: Management.AssignRoleUsersRequestContent,
         requestOptions?: Users.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__assign(id, request, requestOptions));
@@ -205,9 +206,14 @@ export class Users {
 
     private async __assign(
         id: string,
-        request: Management.roles.AssignRoleUsersRequestContent,
+        request: Management.AssignRoleUsersRequestContent,
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -216,11 +222,7 @@ export class Users {
                 `roles/${encodeURIComponent(id)}/users`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

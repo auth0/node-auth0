@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("SsoTicket", () => {
-    test("create", async () => {
+    test("create (e8e0410f)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -26,7 +27,163 @@ describe("SsoTicket", () => {
         });
     });
 
-    test("revoke", async () => {
+    test("create (beaeebc4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            connection_id: undefined,
+            connection_config: undefined,
+            enabled_clients: undefined,
+            enabled_organizations: undefined,
+            ttl_sec: undefined,
+            domain_aliases_config: undefined,
+            provisioning_config: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/id/sso-ticket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.create("id", {
+                connection_id: undefined,
+                connection_config: undefined,
+                enabled_clients: undefined,
+                enabled_organizations: undefined,
+                ttl_sec: undefined,
+                domain_aliases_config: undefined,
+                provisioning_config: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (f783ccec)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            connection_id: undefined,
+            connection_config: undefined,
+            enabled_clients: undefined,
+            enabled_organizations: undefined,
+            ttl_sec: undefined,
+            domain_aliases_config: undefined,
+            provisioning_config: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/id/sso-ticket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.create("id", {
+                connection_id: undefined,
+                connection_config: undefined,
+                enabled_clients: undefined,
+                enabled_organizations: undefined,
+                ttl_sec: undefined,
+                domain_aliases_config: undefined,
+                provisioning_config: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (7607ae70)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            connection_id: undefined,
+            connection_config: undefined,
+            enabled_clients: undefined,
+            enabled_organizations: undefined,
+            ttl_sec: undefined,
+            domain_aliases_config: undefined,
+            provisioning_config: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/id/sso-ticket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.create("id", {
+                connection_id: undefined,
+                connection_config: undefined,
+                enabled_clients: undefined,
+                enabled_organizations: undefined,
+                ttl_sec: undefined,
+                domain_aliases_config: undefined,
+                provisioning_config: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (484e01fc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            connection_id: undefined,
+            connection_config: undefined,
+            enabled_clients: undefined,
+            enabled_organizations: undefined,
+            ttl_sec: undefined,
+            domain_aliases_config: undefined,
+            provisioning_config: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/id/sso-ticket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.create("id", {
+                connection_id: undefined,
+                connection_config: undefined,
+                enabled_clients: undefined,
+                enabled_organizations: undefined,
+                ttl_sec: undefined,
+                domain_aliases_config: undefined,
+                provisioning_config: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revoke (489f5f99)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -39,5 +196,71 @@ describe("SsoTicket", () => {
 
         const response = await client.selfServiceProfiles.ssoTicket.revoke("profileId", "id");
         expect(response).toEqual(undefined);
+    });
+
+    test("revoke (7b7425a0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/profileId/sso-ticket/id/revoke")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.revoke("profileId", "id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revoke (326e0144)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/profileId/sso-ticket/id/revoke")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.revoke("profileId", "id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("revoke (e228e50)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/self-service-profiles/profileId/sso-ticket/id/revoke")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.selfServiceProfiles.ssoTicket.revoke("profileId", "id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

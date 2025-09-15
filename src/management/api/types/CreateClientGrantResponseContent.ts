@@ -18,4 +18,7 @@ export interface CreateClientGrantResponseContent {
     allow_any_organization?: boolean;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean;
+    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    authorization_details_types?: string[];
 }

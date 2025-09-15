@@ -7,16 +7,10 @@
  *     {}
  */
 export interface ListNetworkAclsRequestParameters {
-    /**
-     * Use this field to request a specific page of the list results.
-     */
+    /** Use this field to request a specific page of the list results. */
     page?: number;
-    /**
-     * The amount of results per page.
-     */
+    /** The amount of results per page. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
 }

@@ -7,8 +7,6 @@ import * as Management from "../index.js";
 /**
  * Organizations array filter items
  */
-export interface AculOrganizationFilter {
-    /** Organization ID */
-    id?: string;
-    metadata?: Management.AculOrganizationMetadata;
-}
+export type AculOrganizationFilter =
+    | Management.AculOrganizationFilterById
+    | Management.AculOrganizationFilterByMetadata;

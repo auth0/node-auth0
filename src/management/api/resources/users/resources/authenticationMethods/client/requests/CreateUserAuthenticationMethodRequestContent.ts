@@ -23,7 +23,7 @@ export interface CreateUserAuthenticationMethodRequestContent {
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
     /** Applies to webauthn authentication methods only. The id of the credential. */
     key_id?: string;
-    /** Applies to webauthn authentication methods only. The public key. */
+    /** Applies to webauthn authentication methods only. The public key, which is encoded as base64. */
     public_key?: string;
     /** Applies to webauthn authentication methods only. The relying party identifier. */
     relying_party_identifier?: string;

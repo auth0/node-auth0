@@ -32,6 +32,8 @@ export interface BrandingThemeColors {
     primary_button: string;
     /** Primary button label */
     primary_button_label: string;
+    /** Read only background */
+    read_only_background?: string;
     /** Secondary button border */
     secondary_button_border: string;
     /** Secondary button label */

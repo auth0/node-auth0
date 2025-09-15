@@ -31,6 +31,7 @@ import { RulesConfigs } from "./api/resources/rulesConfigs/client/Client.js";
 import { SelfServiceProfiles } from "./api/resources/selfServiceProfiles/client/Client.js";
 import { Sessions } from "./api/resources/sessions/client/Client.js";
 import { Stats } from "./api/resources/stats/client/Client.js";
+import { SupplementalSignals } from "./api/resources/supplementalSignals/client/Client.js";
 import { Tickets } from "./api/resources/tickets/client/Client.js";
 import { TokenExchangeProfiles } from "./api/resources/tokenExchangeProfiles/client/Client.js";
 import { UserBlocks } from "./api/resources/userBlocks/client/Client.js";
@@ -38,8 +39,10 @@ import { Users } from "./api/resources/users/client/Client.js";
 import { Anomaly } from "./api/resources/anomaly/client/Client.js";
 import { AttackProtection } from "./api/resources/attackProtection/client/Client.js";
 import { Emails } from "./api/resources/emails/client/Client.js";
+import { Groups } from "./api/resources/groups/client/Client.js";
 import { Guardian } from "./api/resources/guardian/client/Client.js";
 import { Keys } from "./api/resources/keys/client/Client.js";
+import { RiskAssessments } from "./api/resources/riskAssessments/client/Client.js";
 import { Tenants } from "./api/resources/tenants/client/Client.js";
 import { VerifiableCredentials } from "./api/resources/verifiableCredentials/client/Client.js";
 
@@ -97,6 +100,7 @@ export class ManagementClient {
     protected _selfServiceProfiles: SelfServiceProfiles | undefined;
     protected _sessions: Sessions | undefined;
     protected _stats: Stats | undefined;
+    protected _supplementalSignals: SupplementalSignals | undefined;
     protected _tickets: Tickets | undefined;
     protected _tokenExchangeProfiles: TokenExchangeProfiles | undefined;
     protected _userBlocks: UserBlocks | undefined;
@@ -104,8 +108,10 @@ export class ManagementClient {
     protected _anomaly: Anomaly | undefined;
     protected _attackProtection: AttackProtection | undefined;
     protected _emails: Emails | undefined;
+    protected _groups: Groups | undefined;
     protected _guardian: Guardian | undefined;
     protected _keys: Keys | undefined;
+    protected _riskAssessments: RiskAssessments | undefined;
     protected _tenants: Tenants | undefined;
     protected _verifiableCredentials: VerifiableCredentials | undefined;
 
@@ -221,6 +227,10 @@ export class ManagementClient {
         return (this._stats ??= new Stats(this._options));
     }
 
+    public get supplementalSignals(): SupplementalSignals {
+        return (this._supplementalSignals ??= new SupplementalSignals(this._options));
+    }
+
     public get tickets(): Tickets {
         return (this._tickets ??= new Tickets(this._options));
     }
@@ -249,12 +259,20 @@ export class ManagementClient {
         return (this._emails ??= new Emails(this._options));
     }
 
+    public get groups(): Groups {
+        return (this._groups ??= new Groups(this._options));
+    }
+
     public get guardian(): Guardian {
         return (this._guardian ??= new Guardian(this._options));
     }
 
     public get keys(): Keys {
         return (this._keys ??= new Keys(this._options));
+    }
+
+    public get riskAssessments(): RiskAssessments {
+        return (this._riskAssessments ??= new RiskAssessments(this._options));
     }
 
     public get tenants(): Tenants {

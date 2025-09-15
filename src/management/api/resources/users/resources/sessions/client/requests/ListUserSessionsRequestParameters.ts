@@ -7,12 +7,8 @@
  *     {}
  */
 export interface ListUserSessionsRequestParameters {
-    /**
-     * An optional cursor from which to start the selection (exclusive).
-     */
+    /** An optional cursor from which to start the selection (exclusive). */
     from?: string;
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     take?: number;
 }

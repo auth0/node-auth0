@@ -71,7 +71,7 @@ export class Identities {
      * </ul>
      *
      * @param {string} id - ID of the primary user account to link a second user account to.
-     * @param {Management.users.LinkUserIdentityRequestContent} request
+     * @param {Management.LinkUserIdentityRequestContent} request
      * @param {Identities.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -85,7 +85,7 @@ export class Identities {
      */
     public link(
         id: string,
-        request: Management.users.LinkUserIdentityRequestContent = {},
+        request: Management.LinkUserIdentityRequestContent = {},
         requestOptions?: Identities.RequestOptions,
     ): core.HttpResponsePromise<Management.UserIdentity[]> {
         return core.HttpResponsePromise.fromPromise(this.__link(id, request, requestOptions));
@@ -93,9 +93,14 @@ export class Identities {
 
     private async __link(
         id: string,
-        request: Management.users.LinkUserIdentityRequestContent = {},
+        request: Management.LinkUserIdentityRequestContent = {},
         requestOptions?: Identities.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UserIdentity[]>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -104,11 +109,7 @@ export class Identities {
                 `users/${encodeURIComponent(id)}/identities`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -192,6 +193,11 @@ export class Identities {
         userId: string,
         requestOptions?: Identities.RequestOptions,
     ): Promise<core.WithRawResponse<Management.DeleteUserIdentityResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -200,11 +206,7 @@ export class Identities {
                 `users/${encodeURIComponent(id)}/identities/${encodeURIComponent(provider)}/${encodeURIComponent(userId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

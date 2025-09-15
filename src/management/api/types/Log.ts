@@ -41,6 +41,7 @@ export interface Log {
     details?: Management.LogDetails;
     /** User agent string from the client device that caused the event. */
     user_agent?: string;
+    security_context?: Management.LogSecurityContext;
     location_info?: Management.LogLocationInfo;
     /** Accepts any additional properties */
     [key: string]: any;

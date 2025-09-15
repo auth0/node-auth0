@@ -142,6 +142,18 @@ export type OauthScope =
      * Delete Connections */
     | "delete:connections"
     /**
+     * Read Directory Provisionings */
+    | "read:directory_provisionings"
+    /**
+     * Create Directory Provisionings */
+    | "create:directory_provisionings"
+    /**
+     * Update Directory Provisionings */
+    | "update:directory_provisionings"
+    /**
+     * Delete Directory Provisionings */
+    | "delete:directory_provisionings"
+    /**
      * Read Users */
     | "read:users"
     /**
@@ -304,6 +316,12 @@ export type OauthScope =
      * Delete Grants */
     | "delete:grants"
     /**
+     * Read Groups */
+    | "read:groups"
+    /**
+     * Read Group Members */
+    | "read:group_members"
+    /**
      * Create Guardian Enrollment Tickets */
     | "create:guardian_enrollment_tickets"
     /**
@@ -462,6 +480,18 @@ export type OauthScope =
     /**
      * Delete Organization Connections */
     | "delete:organization_connections"
+    /**
+     * Read Organization Discovery Domains */
+    | "read:organization_discovery_domains"
+    /**
+     * Create Organization Discovery Domains */
+    | "create:organization_discovery_domains"
+    /**
+     * Update Organization Discovery Domains */
+    | "update:organization_discovery_domains"
+    /**
+     * Delete Organization Discovery Domains */
+    | "delete:organization_discovery_domains"
     /**
      * Read Organization Invitations */
     | "read:organization_invitations"
@@ -761,6 +791,10 @@ export const OauthScope = {
     CreateConnections: "create:connections",
     UpdateConnections: "update:connections",
     DeleteConnections: "delete:connections",
+    ReadDirectoryProvisionings: "read:directory_provisionings",
+    CreateDirectoryProvisionings: "create:directory_provisionings",
+    UpdateDirectoryProvisionings: "update:directory_provisionings",
+    DeleteDirectoryProvisionings: "delete:directory_provisionings",
     ReadUsers: "read:users",
     ReadConnectionsKeys: "read:connections_keys",
     CreateConnectionsKeys: "create:connections_keys",
@@ -815,6 +849,8 @@ export const OauthScope = {
     DeleteForms: "delete:forms",
     ReadGrants: "read:grants",
     DeleteGrants: "delete:grants",
+    ReadGroups: "read:groups",
+    ReadGroupMembers: "read:group_members",
     CreateGuardianEnrollmentTickets: "create:guardian_enrollment_tickets",
     ReadGuardianEnrollments: "read:guardian_enrollments",
     DeleteGuardianEnrollments: "delete:guardian_enrollments",
@@ -868,6 +904,10 @@ export const OauthScope = {
     ReadOrganizationConnections: "read:organization_connections",
     UpdateOrganizationConnections: "update:organization_connections",
     DeleteOrganizationConnections: "delete:organization_connections",
+    ReadOrganizationDiscoveryDomains: "read:organization_discovery_domains",
+    CreateOrganizationDiscoveryDomains: "create:organization_discovery_domains",
+    UpdateOrganizationDiscoveryDomains: "update:organization_discovery_domains",
+    DeleteOrganizationDiscoveryDomains: "delete:organization_discovery_domains",
     ReadOrganizationInvitations: "read:organization_invitations",
     CreateOrganizationInvitations: "create:organization_invitations",
     DeleteOrganizationInvitations: "delete:organization_invitations",

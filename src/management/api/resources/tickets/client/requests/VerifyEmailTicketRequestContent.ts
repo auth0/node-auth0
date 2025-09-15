@@ -11,7 +11,7 @@ import * as Management from "../../../../index.js";
  *     }
  */
 export interface VerifyEmailTicketRequestContent {
-    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. */
+    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using client_id or organization_id. */
     result_url?: string;
     /** user_id of for whom the ticket should be created. */
     user_id: string;

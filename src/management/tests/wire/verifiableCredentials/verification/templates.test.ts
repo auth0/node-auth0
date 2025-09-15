@@ -4,9 +4,154 @@
 
 import { mockServerPool } from "../../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../../Client.js";
+import * as Management from "../../../../api/index.js";
 
 describe("Templates", () => {
-    test("create", async () => {
+    test("list (7452f08f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            next: "next",
+            templates: [
+                {
+                    id: "id",
+                    name: "name",
+                    type: "type",
+                    dialect: "dialect",
+                    presentation: { "org.iso.18013.5.1.mDL": { "org.iso.18013.5.1": {} } },
+                    custom_certificate_authority: "custom_certificate_authority",
+                    well_known_trusted_issuers: "well_known_trusted_issuers",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+        };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            next: "next",
+            templates: [
+                {
+                    id: "id",
+                    name: "name",
+                    type: "type",
+                    dialect: "dialect",
+                    presentation: {
+                        "org.iso.18013.5.1.mDL": {
+                            "org.iso.18013.5.1": {},
+                        },
+                    },
+                    custom_certificate_authority: "custom_certificate_authority",
+                    well_known_trusted_issuers: "well_known_trusted_issuers",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+        };
+        const page = await client.verifiableCredentials.verification.templates.list();
+        expect(expected.templates).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.templates).toEqual(nextPage.data);
+    });
+
+    test("list (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.list();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (4259b620)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -64,7 +209,452 @@ describe("Templates", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (e6d1c4a4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            type: "x",
+            dialect: "dialect",
+            presentation: {
+                "org.iso.18013.5.1.mDL": {
+                    "org.iso.18013.5.1": {
+                        family_name: undefined,
+                        given_name: undefined,
+                        birth_date: undefined,
+                        issue_date: undefined,
+                        expiry_date: undefined,
+                        issuing_country: undefined,
+                        issuing_authority: undefined,
+                        portrait: undefined,
+                        driving_privileges: undefined,
+                        resident_address: undefined,
+                        portrait_capture_date: undefined,
+                        age_in_years: undefined,
+                        age_birth_year: undefined,
+                        issuing_jurisdiction: undefined,
+                        nationality: undefined,
+                        resident_city: undefined,
+                        resident_state: undefined,
+                        resident_postal_code: undefined,
+                        resident_country: undefined,
+                        family_name_national_character: undefined,
+                        given_name_national_character: undefined,
+                    },
+                },
+            },
+            custom_certificate_authority: undefined,
+            well_known_trusted_issuers: "x",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/verifiable-credentials/verification/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.create({
+                name: "x",
+                type: "x",
+                dialect: "dialect",
+                presentation: {
+                    "org.iso.18013.5.1.mDL": {
+                        "org.iso.18013.5.1": {
+                            family_name: undefined,
+                            given_name: undefined,
+                            birth_date: undefined,
+                            issue_date: undefined,
+                            expiry_date: undefined,
+                            issuing_country: undefined,
+                            issuing_authority: undefined,
+                            portrait: undefined,
+                            driving_privileges: undefined,
+                            resident_address: undefined,
+                            portrait_capture_date: undefined,
+                            age_in_years: undefined,
+                            age_birth_year: undefined,
+                            issuing_jurisdiction: undefined,
+                            nationality: undefined,
+                            resident_city: undefined,
+                            resident_state: undefined,
+                            resident_postal_code: undefined,
+                            resident_country: undefined,
+                            family_name_national_character: undefined,
+                            given_name_national_character: undefined,
+                        },
+                    },
+                },
+                custom_certificate_authority: undefined,
+                well_known_trusted_issuers: "x",
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (a7d171cc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            type: "x",
+            dialect: "dialect",
+            presentation: {
+                "org.iso.18013.5.1.mDL": {
+                    "org.iso.18013.5.1": {
+                        family_name: undefined,
+                        given_name: undefined,
+                        birth_date: undefined,
+                        issue_date: undefined,
+                        expiry_date: undefined,
+                        issuing_country: undefined,
+                        issuing_authority: undefined,
+                        portrait: undefined,
+                        driving_privileges: undefined,
+                        resident_address: undefined,
+                        portrait_capture_date: undefined,
+                        age_in_years: undefined,
+                        age_birth_year: undefined,
+                        issuing_jurisdiction: undefined,
+                        nationality: undefined,
+                        resident_city: undefined,
+                        resident_state: undefined,
+                        resident_postal_code: undefined,
+                        resident_country: undefined,
+                        family_name_national_character: undefined,
+                        given_name_national_character: undefined,
+                    },
+                },
+            },
+            custom_certificate_authority: undefined,
+            well_known_trusted_issuers: "x",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/verifiable-credentials/verification/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.create({
+                name: "x",
+                type: "x",
+                dialect: "dialect",
+                presentation: {
+                    "org.iso.18013.5.1.mDL": {
+                        "org.iso.18013.5.1": {
+                            family_name: undefined,
+                            given_name: undefined,
+                            birth_date: undefined,
+                            issue_date: undefined,
+                            expiry_date: undefined,
+                            issuing_country: undefined,
+                            issuing_authority: undefined,
+                            portrait: undefined,
+                            driving_privileges: undefined,
+                            resident_address: undefined,
+                            portrait_capture_date: undefined,
+                            age_in_years: undefined,
+                            age_birth_year: undefined,
+                            issuing_jurisdiction: undefined,
+                            nationality: undefined,
+                            resident_city: undefined,
+                            resident_state: undefined,
+                            resident_postal_code: undefined,
+                            resident_country: undefined,
+                            family_name_national_character: undefined,
+                            given_name_national_character: undefined,
+                        },
+                    },
+                },
+                custom_certificate_authority: undefined,
+                well_known_trusted_issuers: "x",
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (fe134cd0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            type: "x",
+            dialect: "dialect",
+            presentation: {
+                "org.iso.18013.5.1.mDL": {
+                    "org.iso.18013.5.1": {
+                        family_name: undefined,
+                        given_name: undefined,
+                        birth_date: undefined,
+                        issue_date: undefined,
+                        expiry_date: undefined,
+                        issuing_country: undefined,
+                        issuing_authority: undefined,
+                        portrait: undefined,
+                        driving_privileges: undefined,
+                        resident_address: undefined,
+                        portrait_capture_date: undefined,
+                        age_in_years: undefined,
+                        age_birth_year: undefined,
+                        issuing_jurisdiction: undefined,
+                        nationality: undefined,
+                        resident_city: undefined,
+                        resident_state: undefined,
+                        resident_postal_code: undefined,
+                        resident_country: undefined,
+                        family_name_national_character: undefined,
+                        given_name_national_character: undefined,
+                    },
+                },
+            },
+            custom_certificate_authority: undefined,
+            well_known_trusted_issuers: "x",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/verifiable-credentials/verification/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.create({
+                name: "x",
+                type: "x",
+                dialect: "dialect",
+                presentation: {
+                    "org.iso.18013.5.1.mDL": {
+                        "org.iso.18013.5.1": {
+                            family_name: undefined,
+                            given_name: undefined,
+                            birth_date: undefined,
+                            issue_date: undefined,
+                            expiry_date: undefined,
+                            issuing_country: undefined,
+                            issuing_authority: undefined,
+                            portrait: undefined,
+                            driving_privileges: undefined,
+                            resident_address: undefined,
+                            portrait_capture_date: undefined,
+                            age_in_years: undefined,
+                            age_birth_year: undefined,
+                            issuing_jurisdiction: undefined,
+                            nationality: undefined,
+                            resident_city: undefined,
+                            resident_state: undefined,
+                            resident_postal_code: undefined,
+                            resident_country: undefined,
+                            family_name_national_character: undefined,
+                            given_name_national_character: undefined,
+                        },
+                    },
+                },
+                custom_certificate_authority: undefined,
+                well_known_trusted_issuers: "x",
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (570b17e8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            type: "x",
+            dialect: "dialect",
+            presentation: {
+                "org.iso.18013.5.1.mDL": {
+                    "org.iso.18013.5.1": {
+                        family_name: undefined,
+                        given_name: undefined,
+                        birth_date: undefined,
+                        issue_date: undefined,
+                        expiry_date: undefined,
+                        issuing_country: undefined,
+                        issuing_authority: undefined,
+                        portrait: undefined,
+                        driving_privileges: undefined,
+                        resident_address: undefined,
+                        portrait_capture_date: undefined,
+                        age_in_years: undefined,
+                        age_birth_year: undefined,
+                        issuing_jurisdiction: undefined,
+                        nationality: undefined,
+                        resident_city: undefined,
+                        resident_state: undefined,
+                        resident_postal_code: undefined,
+                        resident_country: undefined,
+                        family_name_national_character: undefined,
+                        given_name_national_character: undefined,
+                    },
+                },
+            },
+            custom_certificate_authority: undefined,
+            well_known_trusted_issuers: "x",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/verifiable-credentials/verification/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.create({
+                name: "x",
+                type: "x",
+                dialect: "dialect",
+                presentation: {
+                    "org.iso.18013.5.1.mDL": {
+                        "org.iso.18013.5.1": {
+                            family_name: undefined,
+                            given_name: undefined,
+                            birth_date: undefined,
+                            issue_date: undefined,
+                            expiry_date: undefined,
+                            issuing_country: undefined,
+                            issuing_authority: undefined,
+                            portrait: undefined,
+                            driving_privileges: undefined,
+                            resident_address: undefined,
+                            portrait_capture_date: undefined,
+                            age_in_years: undefined,
+                            age_birth_year: undefined,
+                            issuing_jurisdiction: undefined,
+                            nationality: undefined,
+                            resident_city: undefined,
+                            resident_state: undefined,
+                            resident_postal_code: undefined,
+                            resident_country: undefined,
+                            family_name_national_character: undefined,
+                            given_name_national_character: undefined,
+                        },
+                    },
+                },
+                custom_certificate_authority: undefined,
+                well_known_trusted_issuers: "x",
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (93203adc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            type: "x",
+            dialect: "dialect",
+            presentation: {
+                "org.iso.18013.5.1.mDL": {
+                    "org.iso.18013.5.1": {
+                        family_name: undefined,
+                        given_name: undefined,
+                        birth_date: undefined,
+                        issue_date: undefined,
+                        expiry_date: undefined,
+                        issuing_country: undefined,
+                        issuing_authority: undefined,
+                        portrait: undefined,
+                        driving_privileges: undefined,
+                        resident_address: undefined,
+                        portrait_capture_date: undefined,
+                        age_in_years: undefined,
+                        age_birth_year: undefined,
+                        issuing_jurisdiction: undefined,
+                        nationality: undefined,
+                        resident_city: undefined,
+                        resident_state: undefined,
+                        resident_postal_code: undefined,
+                        resident_country: undefined,
+                        family_name_national_character: undefined,
+                        given_name_national_character: undefined,
+                    },
+                },
+            },
+            custom_certificate_authority: undefined,
+            well_known_trusted_issuers: "x",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/verifiable-credentials/verification/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.create({
+                name: "x",
+                type: "x",
+                dialect: "dialect",
+                presentation: {
+                    "org.iso.18013.5.1.mDL": {
+                        "org.iso.18013.5.1": {
+                            family_name: undefined,
+                            given_name: undefined,
+                            birth_date: undefined,
+                            issue_date: undefined,
+                            expiry_date: undefined,
+                            issuing_country: undefined,
+                            issuing_authority: undefined,
+                            portrait: undefined,
+                            driving_privileges: undefined,
+                            resident_address: undefined,
+                            portrait_capture_date: undefined,
+                            age_in_years: undefined,
+                            age_birth_year: undefined,
+                            issuing_jurisdiction: undefined,
+                            nationality: undefined,
+                            resident_city: undefined,
+                            resident_state: undefined,
+                            resident_postal_code: undefined,
+                            resident_country: undefined,
+                            family_name_national_character: undefined,
+                            given_name_national_character: undefined,
+                        },
+                    },
+                },
+                custom_certificate_authority: undefined,
+                well_known_trusted_issuers: "x",
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (ca2a3e16)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -105,7 +695,117 @@ describe("Templates", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.get("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -120,7 +820,95 @@ describe("Templates", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.delete("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/verifiable-credentials/verification/templates/id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (5bc46ab5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -160,5 +948,190 @@ describe("Templates", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         });
+    });
+
+    test("update (bdb2fc50)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: undefined,
+            dialect: undefined,
+            presentation: undefined,
+            well_known_trusted_issuers: undefined,
+            version: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/verifiable-credentials/verification/templates/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.update("id", {
+                name: undefined,
+                type: undefined,
+                dialect: undefined,
+                presentation: undefined,
+                well_known_trusted_issuers: undefined,
+                version: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (f15da378)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: undefined,
+            dialect: undefined,
+            presentation: undefined,
+            well_known_trusted_issuers: undefined,
+            version: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/verifiable-credentials/verification/templates/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.update("id", {
+                name: undefined,
+                type: undefined,
+                dialect: undefined,
+                presentation: undefined,
+                well_known_trusted_issuers: undefined,
+                version: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (d3351a7c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: undefined,
+            dialect: undefined,
+            presentation: undefined,
+            well_known_trusted_issuers: undefined,
+            version: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/verifiable-credentials/verification/templates/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.update("id", {
+                name: undefined,
+                type: undefined,
+                dialect: undefined,
+                presentation: undefined,
+                well_known_trusted_issuers: undefined,
+                version: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (ef4f43d4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: undefined,
+            dialect: undefined,
+            presentation: undefined,
+            well_known_trusted_issuers: undefined,
+            version: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/verifiable-credentials/verification/templates/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.update("id", {
+                name: undefined,
+                type: undefined,
+                dialect: undefined,
+                presentation: undefined,
+                well_known_trusted_issuers: undefined,
+                version: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (b488d448)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            type: undefined,
+            dialect: undefined,
+            presentation: undefined,
+            well_known_trusted_issuers: undefined,
+            version: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/verifiable-credentials/verification/templates/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.verifiableCredentials.verification.templates.update("id", {
+                name: undefined,
+                type: undefined,
+                dialect: undefined,
+                presentation: undefined,
+                well_known_trusted_issuers: undefined,
+                version: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

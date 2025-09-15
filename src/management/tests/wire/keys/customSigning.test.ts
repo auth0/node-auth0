@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("CustomSigning", () => {
-    test("get", async () => {
+    test("get (4382a1a8)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -61,7 +62,95 @@ describe("CustomSigning", () => {
         });
     });
 
-    test("set", async () => {
+    test("get (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/keys/custom-signing")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.get();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/keys/custom-signing")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.get();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (c29c5807)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/keys/custom-signing")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.get();
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/keys/custom-signing")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.get();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (861bb62b)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { keys: [{ kty: "EC" }] };
@@ -123,7 +212,379 @@ describe("CustomSigning", () => {
         });
     });
 
-    test("delete", async () => {
+    test("set (70e3d361)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            keys: [
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/keys/custom-signing")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.set({
+                keys: [
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (5a1d1961)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            keys: [
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/keys/custom-signing")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.set({
+                keys: [
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (5ef29f1d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            keys: [
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/keys/custom-signing")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.set({
+                keys: [
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (7a4b7805)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            keys: [
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+                {
+                    kty: "EC",
+                    kid: undefined,
+                    use: undefined,
+                    key_ops: undefined,
+                    alg: undefined,
+                    n: undefined,
+                    e: undefined,
+                    crv: undefined,
+                    x: undefined,
+                    y: undefined,
+                    x5u: undefined,
+                    x5c: undefined,
+                    x5t: undefined,
+                    "x5t#S256": undefined,
+                },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/keys/custom-signing")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.set({
+                keys: [
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                    {
+                        kty: "EC",
+                        kid: undefined,
+                        use: undefined,
+                        key_ops: undefined,
+                        alg: undefined,
+                        n: undefined,
+                        e: undefined,
+                        crv: undefined,
+                        x: undefined,
+                        y: undefined,
+                        x5u: undefined,
+                        x5c: undefined,
+                        x5t: undefined,
+                        "x5t#S256": undefined,
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (5465b825)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -131,5 +592,71 @@ describe("CustomSigning", () => {
 
         const response = await client.keys.customSigning.delete();
         expect(response).toEqual(undefined);
+    });
+
+    test("delete (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/keys/custom-signing")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.delete();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/keys/custom-signing")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.delete();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/keys/custom-signing")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.customSigning.delete();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

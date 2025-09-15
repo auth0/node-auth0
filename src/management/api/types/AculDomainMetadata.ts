@@ -3,6 +3,6 @@
  */
 
 /**
- * Client metadata key/value pairs
+ * Domain metadata key/value pairs
  */
 export type AculDomainMetadata = Record<string, unknown>;

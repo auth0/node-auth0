@@ -41,7 +41,7 @@ export class Templates {
     }
 
     /**
-     * @param {Management.branding.phone.ListPhoneTemplatesRequestParameters} request
+     * @param {Management.ListPhoneTemplatesRequestParameters} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -53,14 +53,14 @@ export class Templates {
      *     await client.branding.phone.templates.list()
      */
     public list(
-        request: Management.branding.phone.ListPhoneTemplatesRequestParameters = {},
+        request: Management.ListPhoneTemplatesRequestParameters = {},
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<Management.ListPhoneTemplatesResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
-        request: Management.branding.phone.ListPhoneTemplatesRequestParameters = {},
+        request: Management.ListPhoneTemplatesRequestParameters = {},
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListPhoneTemplatesResponseContent>> {
         const { disabled } = request;
@@ -69,6 +69,11 @@ export class Templates {
             _queryParams["disabled"] = disabled.toString();
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -77,11 +82,7 @@ export class Templates {
                 "branding/phone/templates",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -131,7 +132,7 @@ export class Templates {
     }
 
     /**
-     * @param {Management.branding.phone.CreatePhoneTemplateRequestContent} request
+     * @param {Management.CreatePhoneTemplateRequestContent} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -144,16 +145,21 @@ export class Templates {
      *     await client.branding.phone.templates.create()
      */
     public create(
-        request: Management.branding.phone.CreatePhoneTemplateRequestContent = {},
+        request: Management.CreatePhoneTemplateRequestContent = {},
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<Management.CreatePhoneTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.branding.phone.CreatePhoneTemplateRequestContent = {},
+        request: Management.CreatePhoneTemplateRequestContent = {},
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreatePhoneTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -162,11 +168,7 @@ export class Templates {
                 "branding/phone/templates",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -246,6 +248,11 @@ export class Templates {
         id: string,
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetPhoneTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -254,11 +261,7 @@ export class Templates {
                 `branding/phone/templates/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -329,6 +332,11 @@ export class Templates {
     }
 
     private async __delete(id: string, requestOptions?: Templates.RequestOptions): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -337,11 +345,7 @@ export class Templates {
                 `branding/phone/templates/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -393,7 +397,7 @@ export class Templates {
 
     /**
      * @param {string} id
-     * @param {Management.branding.phone.UpdatePhoneTemplateRequestContent} request
+     * @param {Management.UpdatePhoneTemplateRequestContent} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -407,7 +411,7 @@ export class Templates {
      */
     public update(
         id: string,
-        request: Management.branding.phone.UpdatePhoneTemplateRequestContent = {},
+        request: Management.UpdatePhoneTemplateRequestContent = {},
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdatePhoneTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -415,9 +419,14 @@ export class Templates {
 
     private async __update(
         id: string,
-        request: Management.branding.phone.UpdatePhoneTemplateRequestContent = {},
+        request: Management.UpdatePhoneTemplateRequestContent = {},
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdatePhoneTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -426,11 +435,7 @@ export class Templates {
                 `branding/phone/templates/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -514,6 +519,11 @@ export class Templates {
         request?: Management.ResetPhoneTemplateRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ResetPhoneTemplateResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -522,11 +532,7 @@ export class Templates {
                 `branding/phone/templates/${encodeURIComponent(id)}/reset`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -582,7 +588,7 @@ export class Templates {
 
     /**
      * @param {string} id
-     * @param {Management.branding.phone.CreatePhoneTemplateTestNotificationRequestContent} request
+     * @param {Management.CreatePhoneTemplateTestNotificationRequestContent} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -598,7 +604,7 @@ export class Templates {
      */
     public test(
         id: string,
-        request: Management.branding.phone.CreatePhoneTemplateTestNotificationRequestContent,
+        request: Management.CreatePhoneTemplateTestNotificationRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<Management.CreatePhoneTemplateTestNotificationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__test(id, request, requestOptions));
@@ -606,9 +612,14 @@ export class Templates {
 
     private async __test(
         id: string,
-        request: Management.branding.phone.CreatePhoneTemplateTestNotificationRequestContent,
+        request: Management.CreatePhoneTemplateTestNotificationRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreatePhoneTemplateTestNotificationResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -617,11 +628,7 @@ export class Templates {
                 `branding/phone/templates/${encodeURIComponent(id)}/try`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

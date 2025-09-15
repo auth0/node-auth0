@@ -44,7 +44,7 @@ export class Sessions {
      * Retrieve details for a user's sessions.
      *
      * @param {string} userId - ID of the user to get sessions for
-     * @param {Management.users.ListUserSessionsRequestParameters} request
+     * @param {Management.ListUserSessionsRequestParameters} request
      * @param {Sessions.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
@@ -57,7 +57,7 @@ export class Sessions {
      */
     public async list(
         userId: string,
-        request: Management.users.ListUserSessionsRequestParameters = {},
+        request: Management.ListUserSessionsRequestParameters = {},
         requestOptions?: Sessions.RequestOptions,
     ): Promise<core.Page<Management.SessionResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -72,6 +72,11 @@ export class Sessions {
                 if (take != null) {
                     _queryParams["take"] = take.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -80,11 +85,7 @@ export class Sessions {
                         `users/${encodeURIComponent(userId)}/sessions`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -179,6 +180,11 @@ export class Sessions {
         userId: string,
         requestOptions?: Sessions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -187,11 +193,7 @@ export class Sessions {
                 `users/${encodeURIComponent(userId)}/sessions`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

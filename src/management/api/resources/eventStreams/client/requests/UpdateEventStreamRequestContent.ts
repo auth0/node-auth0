@@ -13,6 +13,6 @@ export interface UpdateEventStreamRequestContent {
     name?: string;
     /** List of event types subscribed to in this stream. */
     subscriptions?: Management.EventStreamSubscription[];
-    destination?: Management.EventStreamWebhookDestination;
+    destination?: Management.EventStreamDestinationPatch;
     status?: Management.EventStreamStatusEnum;
 }

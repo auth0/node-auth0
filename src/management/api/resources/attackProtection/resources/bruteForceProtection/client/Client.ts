@@ -61,6 +61,11 @@ export class BruteForceProtection {
     private async __get(
         requestOptions?: BruteForceProtection.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetBruteForceSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -69,11 +74,7 @@ export class BruteForceProtection {
                 "attack-protection/brute-force-protection",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -125,7 +126,7 @@ export class BruteForceProtection {
     /**
      * Update the Brute-force Protection configuration of your tenant.
      *
-     * @param {Management.attackProtection.UpdateBruteForceSettingsRequestContent} request
+     * @param {Management.UpdateBruteForceSettingsRequestContent} request
      * @param {BruteForceProtection.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -137,16 +138,21 @@ export class BruteForceProtection {
      *     await client.attackProtection.bruteForceProtection.update()
      */
     public update(
-        request: Management.attackProtection.UpdateBruteForceSettingsRequestContent = {},
+        request: Management.UpdateBruteForceSettingsRequestContent = {},
         requestOptions?: BruteForceProtection.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateBruteForceSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.attackProtection.UpdateBruteForceSettingsRequestContent = {},
+        request: Management.UpdateBruteForceSettingsRequestContent = {},
         requestOptions?: BruteForceProtection.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateBruteForceSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -155,11 +161,7 @@ export class BruteForceProtection {
                 "attack-protection/brute-force-protection",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

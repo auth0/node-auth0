@@ -9,24 +9,16 @@ import * as Management from "../../../../index.js";
  *     {}
  */
 export interface ListClientGrantsRequestParameters {
-    /**
-     * Optional Id from which to start selection.
-     */
+    /** Optional Id from which to start selection. */
     from?: string;
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     take?: number;
-    /**
-     * Optional filter on audience.
-     */
+    /** Optional filter on audience. */
     audience?: string;
-    /**
-     * Optional filter on client_id.
-     */
+    /** Optional filter on client_id. */
     client_id?: string;
-    /**
-     * Optional filter on allow_any_organization.
-     */
+    /** Optional filter on allow_any_organization. */
     allow_any_organization?: Management.ClientGrantAllowAnyOrganizationEnum;
+    /** The type of application access the client grant allows. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href="https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    subject_type?: Management.ClientGrantSubjectTypeEnum;
 }

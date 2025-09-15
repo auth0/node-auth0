@@ -63,6 +63,11 @@ export class Tokens {
         id: string,
         requestOptions?: Tokens.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetScimTokensResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -71,11 +76,7 @@ export class Tokens {
                 `connections/${encodeURIComponent(id)}/scim-configuration/tokens`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -126,7 +127,7 @@ export class Tokens {
      * Create a scim token for a scim client.
      *
      * @param {string} id - The id of the connection to create its SCIM token
-     * @param {Management.connections.scimConfiguration.CreateScimTokenRequestContent} request
+     * @param {Management.CreateScimTokenRequestContent} request
      * @param {Tokens.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -138,7 +139,7 @@ export class Tokens {
      */
     public create(
         id: string,
-        request: Management.connections.scimConfiguration.CreateScimTokenRequestContent = {},
+        request: Management.CreateScimTokenRequestContent = {},
         requestOptions?: Tokens.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateScimTokenResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -146,9 +147,14 @@ export class Tokens {
 
     private async __create(
         id: string,
-        request: Management.connections.scimConfiguration.CreateScimTokenRequestContent = {},
+        request: Management.CreateScimTokenRequestContent = {},
         requestOptions?: Tokens.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateScimTokenResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -157,11 +163,7 @@ export class Tokens {
                 `connections/${encodeURIComponent(id)}/scim-configuration/tokens`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -235,6 +237,11 @@ export class Tokens {
         tokenId: string,
         requestOptions?: Tokens.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -243,11 +250,7 @@ export class Tokens {
                 `connections/${encodeURIComponent(id)}/scim-configuration/tokens/${encodeURIComponent(tokenId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

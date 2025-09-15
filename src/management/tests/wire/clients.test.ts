@@ -4,9 +4,204 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("Clients", () => {
-    test("create", async () => {
+    test("list (82bb6102)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            clients: [
+                {
+                    client_id: "client_id",
+                    tenant: "tenant",
+                    name: "name",
+                    description: "description",
+                    global: true,
+                    client_secret: "client_secret",
+                    app_type: "native",
+                    logo_uri: "logo_uri",
+                    is_first_party: true,
+                    oidc_conformant: true,
+                    callbacks: ["callbacks"],
+                    allowed_origins: ["allowed_origins"],
+                    web_origins: ["web_origins"],
+                    client_aliases: ["client_aliases"],
+                    allowed_clients: ["allowed_clients"],
+                    allowed_logout_urls: ["allowed_logout_urls"],
+                    grant_types: ["grant_types"],
+                    signing_keys: [{}],
+                    sso: true,
+                    sso_disabled: true,
+                    cross_origin_authentication: true,
+                    cross_origin_loc: "cross_origin_loc",
+                    custom_login_page_on: true,
+                    custom_login_page: "custom_login_page",
+                    custom_login_page_preview: "custom_login_page_preview",
+                    form_template: "form_template",
+                    token_endpoint_auth_method: "none",
+                    client_metadata: { key: "value" },
+                    initiate_login_uri: "initiate_login_uri",
+                    refresh_token: { rotation_type: "rotating", expiration_type: "expiring" },
+                    default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
+                    organization_usage: "deny",
+                    organization_require_behavior: "no_prompt",
+                    organization_discovery_methods: ["email"],
+                    require_pushed_authorization_requests: true,
+                    require_proof_of_possession: true,
+                    compliance_level: "compliance_level",
+                    par_request_expiry: 1,
+                    token_quota: { client_credentials: {} },
+                    my_organization_configuration: {
+                        allowed_strategies: ["pingfederate"],
+                        connection_deletion_behavior: "allow",
+                    },
+                    resource_server_identifier: "resource_server_identifier",
+                },
+            ],
+        };
+        server.mockEndpoint().get("/clients").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            clients: [
+                {
+                    client_id: "client_id",
+                    tenant: "tenant",
+                    name: "name",
+                    description: "description",
+                    global: true,
+                    client_secret: "client_secret",
+                    app_type: "native",
+                    logo_uri: "logo_uri",
+                    is_first_party: true,
+                    oidc_conformant: true,
+                    callbacks: ["callbacks"],
+                    allowed_origins: ["allowed_origins"],
+                    web_origins: ["web_origins"],
+                    client_aliases: ["client_aliases"],
+                    allowed_clients: ["allowed_clients"],
+                    allowed_logout_urls: ["allowed_logout_urls"],
+                    grant_types: ["grant_types"],
+                    signing_keys: [{}],
+                    sso: true,
+                    sso_disabled: true,
+                    cross_origin_authentication: true,
+                    cross_origin_loc: "cross_origin_loc",
+                    custom_login_page_on: true,
+                    custom_login_page: "custom_login_page",
+                    custom_login_page_preview: "custom_login_page_preview",
+                    form_template: "form_template",
+                    token_endpoint_auth_method: "none",
+                    client_metadata: {
+                        key: "value",
+                    },
+                    initiate_login_uri: "initiate_login_uri",
+                    refresh_token: {
+                        rotation_type: "rotating",
+                        expiration_type: "expiring",
+                    },
+                    default_organization: {
+                        organization_id: "organization_id",
+                        flows: ["client_credentials"],
+                    },
+                    organization_usage: "deny",
+                    organization_require_behavior: "no_prompt",
+                    organization_discovery_methods: ["email"],
+                    require_pushed_authorization_requests: true,
+                    require_proof_of_possession: true,
+                    compliance_level: "compliance_level",
+                    par_request_expiry: 1,
+                    token_quota: {
+                        client_credentials: {},
+                    },
+                    my_organization_configuration: {
+                        allowed_strategies: ["pingfederate"],
+                        connection_deletion_behavior: "allow",
+                    },
+                    resource_server_identifier: "resource_server_identifier",
+                },
+            ],
+        };
+        const page = await client.clients.list();
+        expect(expected.clients).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.clients).toEqual(nextPage.data);
+    });
+
+    test("list (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.list();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (de559b40)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
@@ -17,7 +212,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -38,6 +233,7 @@ describe("Clients", () => {
             oidc_logout: {
                 backchannel_logout_urls: ["backchannel_logout_urls"],
                 backchannel_logout_initiators: { mode: "custom", selected_initiators: ["rp-logout"] },
+                backchannel_logout_session_metadata: { include: true },
             },
             grant_types: ["grant_types"],
             jwt_configuration: { lifetime_in_seconds: 1, secret_encoded: true, scopes: { key: "value" }, alg: "HS256" },
@@ -170,6 +366,7 @@ describe("Clients", () => {
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: { credentials: [{ id: "id" }] },
                 tls_client_auth: { credentials: [{ id: "id" }] },
@@ -181,6 +378,14 @@ describe("Clients", () => {
             compliance_level: "compliance_level",
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         };
         server
             .mockEndpoint()
@@ -201,7 +406,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -224,6 +429,9 @@ describe("Clients", () => {
                 backchannel_logout_initiators: {
                     mode: "custom",
                     selected_initiators: ["rp-logout"],
+                },
+                backchannel_logout_session_metadata: {
+                    include: true,
                 },
             },
             grant_types: ["grant_types"],
@@ -432,6 +640,7 @@ describe("Clients", () => {
             },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: {
                     credentials: [
@@ -474,10 +683,603 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         });
     });
 
-    test("get", async () => {
+    test("create (b6910a5d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            description: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            grant_types: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            token_quota: undefined,
+            resource_server_identifier: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.create({
+                name: "name",
+                description: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                grant_types: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                token_quota: undefined,
+                resource_server_identifier: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (466d3cd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            description: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            grant_types: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            token_quota: undefined,
+            resource_server_identifier: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.create({
+                name: "name",
+                description: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                grant_types: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                token_quota: undefined,
+                resource_server_identifier: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (b9c2ae99)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            description: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            grant_types: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            token_quota: undefined,
+            resource_server_identifier: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.create({
+                name: "name",
+                description: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                grant_types: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                token_quota: undefined,
+                resource_server_identifier: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (5559a6b1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            description: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            grant_types: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            token_quota: undefined,
+            resource_server_identifier: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.create({
+                name: "name",
+                description: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                grant_types: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                token_quota: undefined,
+                resource_server_identifier: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (70fc7571)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            description: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            grant_types: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            token_quota: undefined,
+            resource_server_identifier: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.create({
+                name: "name",
+                description: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                grant_types: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                token_quota: undefined,
+                resource_server_identifier: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (46e9ffff)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -488,7 +1290,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -509,6 +1311,7 @@ describe("Clients", () => {
             oidc_logout: {
                 backchannel_logout_urls: ["backchannel_logout_urls"],
                 backchannel_logout_initiators: { mode: "custom", selected_initiators: ["rp-logout"] },
+                backchannel_logout_session_metadata: { include: true },
             },
             grant_types: ["grant_types"],
             jwt_configuration: { lifetime_in_seconds: 1, secret_encoded: true, scopes: { key: "value" }, alg: "HS256" },
@@ -641,6 +1444,7 @@ describe("Clients", () => {
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: { credentials: [{ id: "id" }] },
                 tls_client_auth: { credentials: [{ id: "id" }] },
@@ -652,6 +1456,14 @@ describe("Clients", () => {
             compliance_level: "compliance_level",
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -663,7 +1475,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -686,6 +1498,9 @@ describe("Clients", () => {
                 backchannel_logout_initiators: {
                     mode: "custom",
                     selected_initiators: ["rp-logout"],
+                },
+                backchannel_logout_session_metadata: {
+                    include: true,
                 },
             },
             grant_types: ["grant_types"],
@@ -894,6 +1709,7 @@ describe("Clients", () => {
             },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: {
                     credentials: [
@@ -936,10 +1752,98 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         });
     });
 
-    test("delete", async () => {
+    test("get (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.get("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/clients/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -949,7 +1853,71 @@ describe("Clients", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/clients/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.delete("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/clients/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/clients/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/clients/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clients.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (a303213e)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -960,7 +1928,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -981,6 +1949,7 @@ describe("Clients", () => {
             oidc_logout: {
                 backchannel_logout_urls: ["backchannel_logout_urls"],
                 backchannel_logout_initiators: { mode: "custom", selected_initiators: ["rp-logout"] },
+                backchannel_logout_session_metadata: { include: true },
             },
             grant_types: ["grant_types"],
             jwt_configuration: { lifetime_in_seconds: 1, secret_encoded: true, scopes: { key: "value" }, alg: "HS256" },
@@ -1113,6 +2082,7 @@ describe("Clients", () => {
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: { credentials: [{ id: "id" }] },
                 tls_client_auth: { credentials: [{ id: "id" }] },
@@ -1124,6 +2094,14 @@ describe("Clients", () => {
             compliance_level: "compliance_level",
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         };
         server
             .mockEndpoint()
@@ -1142,7 +2120,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -1165,6 +2143,9 @@ describe("Clients", () => {
                 backchannel_logout_initiators: {
                     mode: "custom",
                     selected_initiators: ["rp-logout"],
+                },
+                backchannel_logout_session_metadata: {
+                    include: true,
                 },
             },
             grant_types: ["grant_types"],
@@ -1373,6 +2354,7 @@ describe("Clients", () => {
             },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: {
                     credentials: [
@@ -1415,10 +2397,603 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         });
     });
 
-    test("rotateSecret", async () => {
+    test("update (f06f957e)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            client_secret: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            grant_types: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            token_quota: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/clients/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.update("id", {
+                name: undefined,
+                description: undefined,
+                client_secret: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                grant_types: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                token_quota: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (46274c86)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            client_secret: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            grant_types: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            token_quota: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/clients/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.update("id", {
+                name: undefined,
+                description: undefined,
+                client_secret: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                grant_types: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                token_quota: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (7fbb04a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            client_secret: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            grant_types: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            token_quota: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/clients/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.update("id", {
+                name: undefined,
+                description: undefined,
+                client_secret: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                grant_types: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                token_quota: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (b21d2782)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            client_secret: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            grant_types: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            token_quota: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/clients/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.update("id", {
+                name: undefined,
+                description: undefined,
+                client_secret: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                grant_types: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                token_quota: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (f248d2e6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            client_secret: undefined,
+            logo_uri: undefined,
+            callbacks: undefined,
+            oidc_logout: undefined,
+            oidc_backchannel_logout: undefined,
+            session_transfer: undefined,
+            allowed_origins: undefined,
+            web_origins: undefined,
+            grant_types: undefined,
+            client_aliases: undefined,
+            allowed_clients: undefined,
+            allowed_logout_urls: undefined,
+            jwt_configuration: undefined,
+            encryption_key: undefined,
+            sso: undefined,
+            cross_origin_authentication: undefined,
+            cross_origin_loc: undefined,
+            sso_disabled: undefined,
+            custom_login_page_on: undefined,
+            token_endpoint_auth_method: undefined,
+            app_type: undefined,
+            is_first_party: undefined,
+            oidc_conformant: undefined,
+            custom_login_page: undefined,
+            custom_login_page_preview: undefined,
+            token_quota: undefined,
+            form_template: undefined,
+            addons: undefined,
+            client_metadata: undefined,
+            mobile: undefined,
+            initiate_login_uri: undefined,
+            native_social_login: undefined,
+            refresh_token: undefined,
+            default_organization: undefined,
+            organization_usage: undefined,
+            organization_require_behavior: undefined,
+            organization_discovery_methods: undefined,
+            client_authentication_methods: undefined,
+            require_pushed_authorization_requests: undefined,
+            require_proof_of_possession: undefined,
+            signed_request_object: undefined,
+            compliance_level: undefined,
+            par_request_expiry: undefined,
+            my_organization_configuration: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/clients/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.update("id", {
+                name: undefined,
+                description: undefined,
+                client_secret: undefined,
+                logo_uri: undefined,
+                callbacks: undefined,
+                oidc_logout: undefined,
+                oidc_backchannel_logout: undefined,
+                session_transfer: undefined,
+                allowed_origins: undefined,
+                web_origins: undefined,
+                grant_types: undefined,
+                client_aliases: undefined,
+                allowed_clients: undefined,
+                allowed_logout_urls: undefined,
+                jwt_configuration: undefined,
+                encryption_key: undefined,
+                sso: undefined,
+                cross_origin_authentication: undefined,
+                cross_origin_loc: undefined,
+                sso_disabled: undefined,
+                custom_login_page_on: undefined,
+                token_endpoint_auth_method: undefined,
+                app_type: undefined,
+                is_first_party: undefined,
+                oidc_conformant: undefined,
+                custom_login_page: undefined,
+                custom_login_page_preview: undefined,
+                token_quota: undefined,
+                form_template: undefined,
+                addons: undefined,
+                client_metadata: undefined,
+                mobile: undefined,
+                initiate_login_uri: undefined,
+                native_social_login: undefined,
+                refresh_token: undefined,
+                default_organization: undefined,
+                organization_usage: undefined,
+                organization_require_behavior: undefined,
+                organization_discovery_methods: undefined,
+                client_authentication_methods: undefined,
+                require_pushed_authorization_requests: undefined,
+                require_proof_of_possession: undefined,
+                signed_request_object: undefined,
+                compliance_level: undefined,
+                par_request_expiry: undefined,
+                my_organization_configuration: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("rotateSecret (46e9ffff)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -1429,7 +3004,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -1450,6 +3025,7 @@ describe("Clients", () => {
             oidc_logout: {
                 backchannel_logout_urls: ["backchannel_logout_urls"],
                 backchannel_logout_initiators: { mode: "custom", selected_initiators: ["rp-logout"] },
+                backchannel_logout_session_metadata: { include: true },
             },
             grant_types: ["grant_types"],
             jwt_configuration: { lifetime_in_seconds: 1, secret_encoded: true, scopes: { key: "value" }, alg: "HS256" },
@@ -1582,6 +3158,7 @@ describe("Clients", () => {
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: { credentials: [{ id: "id" }] },
                 tls_client_auth: { credentials: [{ id: "id" }] },
@@ -1593,6 +3170,14 @@ describe("Clients", () => {
             compliance_level: "compliance_level",
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         };
         server
             .mockEndpoint()
@@ -1610,7 +3195,7 @@ describe("Clients", () => {
             description: "description",
             global: true,
             client_secret: "client_secret",
-            app_type: "app_type",
+            app_type: "native",
             logo_uri: "logo_uri",
             is_first_party: true,
             oidc_conformant: true,
@@ -1633,6 +3218,9 @@ describe("Clients", () => {
                 backchannel_logout_initiators: {
                     mode: "custom",
                     selected_initiators: ["rp-logout"],
+                },
+                backchannel_logout_session_metadata: {
+                    include: true,
                 },
             },
             grant_types: ["grant_types"],
@@ -1841,6 +3429,7 @@ describe("Clients", () => {
             },
             organization_usage: "deny",
             organization_require_behavior: "no_prompt",
+            organization_discovery_methods: ["email"],
             client_authentication_methods: {
                 private_key_jwt: {
                     credentials: [
@@ -1883,6 +3472,124 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            my_organization_configuration: {
+                connection_profile_id: "connection_profile_id",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                allowed_strategies: ["pingfederate"],
+                connection_deletion_behavior: "allow",
+                invitation_landing_client_id: "invitation_landing_client_id",
+            },
+            resource_server_identifier: "resource_server_identifier",
         });
+    });
+
+    test("rotateSecret (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/id/rotate-secret")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.rotateSecret("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("rotateSecret (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/id/rotate-secret")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.rotateSecret("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("rotateSecret (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/id/rotate-secret")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.rotateSecret("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("rotateSecret (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/id/rotate-secret")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.rotateSecret("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("rotateSecret (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/id/rotate-secret")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.rotateSecret("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

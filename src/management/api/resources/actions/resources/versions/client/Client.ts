@@ -44,7 +44,7 @@ export class Versions {
      * Retrieve all of an action's versions. An action version is created whenever an action is deployed. An action version is immutable, once created.
      *
      * @param {string} actionId - The ID of the action.
-     * @param {Management.actions.ListActionVersionsRequestParameters} request
+     * @param {Management.ListActionVersionsRequestParameters} request
      * @param {Versions.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -57,14 +57,14 @@ export class Versions {
      */
     public async list(
         actionId: string,
-        request: Management.actions.ListActionVersionsRequestParameters = {},
+        request: Management.ListActionVersionsRequestParameters = {},
         requestOptions?: Versions.RequestOptions,
     ): Promise<core.Page<Management.ActionVersion>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.actions.ListActionVersionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListActionVersionsPaginatedResponseContent>> => {
-                const { page, per_page: perPage = 50 } = request;
+                const { page = 0, per_page: perPage = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -72,6 +72,11 @@ export class Versions {
                 if (perPage != null) {
                     _queryParams["per_page"] = perPage.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -80,11 +85,7 @@ export class Versions {
                         `actions/actions/${encodeURIComponent(actionId)}/versions`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -143,7 +144,7 @@ export class Versions {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.ListActionVersionsPaginatedResponseContent, Management.ActionVersion>({
             response: dataWithRawResponse.data,
@@ -186,6 +187,11 @@ export class Versions {
         id: string,
         requestOptions?: Versions.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetActionVersionResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -194,11 +200,7 @@ export class Versions {
                 `actions/actions/${encodeURIComponent(actionId)}/versions/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -282,6 +284,11 @@ export class Versions {
         request?: Management.DeployActionVersionRequestContent | undefined,
         requestOptions?: Versions.RequestOptions,
     ): Promise<core.WithRawResponse<Management.DeployActionVersionResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -290,11 +297,7 @@ export class Versions {
                 `actions/actions/${encodeURIComponent(actionId)}/versions/${encodeURIComponent(id)}/deploy`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

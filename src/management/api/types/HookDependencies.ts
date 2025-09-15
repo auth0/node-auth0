@@ -5,4 +5,4 @@
 /**
  * Dependencies of this hook used by webtask server.
  */
-export type HookDependencies = Record<string, unknown>;
+export type HookDependencies = Record<string, string>;

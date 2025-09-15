@@ -7,7 +7,7 @@ import { ManagementClient } from "../../../../Client.js";
 import * as Management from "../../../../api/index.js";
 
 describe("PushNotification", () => {
-    test("getApnsProvider", async () => {
+    test("getApnsProvider (e71df9aa)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -28,7 +28,73 @@ describe("PushNotification", () => {
         });
     });
 
-    test("setApnsProvider", async () => {
+    test("getApnsProvider (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/providers/apns")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getApnsProvider();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getApnsProvider (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/providers/apns")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getApnsProvider();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getApnsProvider (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/providers/apns")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getApnsProvider();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setApnsProvider (d64d78d4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -49,7 +115,88 @@ describe("PushNotification", () => {
         });
     });
 
-    test("setFcmProvider", async () => {
+    test("setApnsProvider (18893c3f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { sandbox: undefined, bundle_id: undefined, p12: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/apns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setApnsProvider({
+                sandbox: undefined,
+                bundle_id: undefined,
+                p12: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setApnsProvider (2639abcf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { sandbox: undefined, bundle_id: undefined, p12: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/apns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setApnsProvider({
+                sandbox: undefined,
+                bundle_id: undefined,
+                p12: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setApnsProvider (8bf2f71b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { sandbox: undefined, bundle_id: undefined, p12: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/apns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setApnsProvider({
+                sandbox: undefined,
+                bundle_id: undefined,
+                p12: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setFcmProvider (8093684b)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -69,7 +216,82 @@ describe("PushNotification", () => {
         });
     });
 
-    test("setFcmv1Provider", async () => {
+    test("setFcmProvider (e13a3115)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { server_key: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/fcm")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setFcmProvider({
+                server_key: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setFcmProvider (7c48e605)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { server_key: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/fcm")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setFcmProvider({
+                server_key: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setFcmProvider (875fafd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { server_key: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/fcm")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setFcmProvider({
+                server_key: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setFcmv1Provider (8093684b)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -89,7 +311,82 @@ describe("PushNotification", () => {
         });
     });
 
-    test("getSnsProvider", async () => {
+    test("setFcmv1Provider (d2005a53)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { server_credentials: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/fcmv1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setFcmv1Provider({
+                server_credentials: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setFcmv1Provider (847052a3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { server_credentials: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/fcmv1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setFcmv1Provider({
+                server_credentials: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setFcmv1Provider (66e3c94f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { server_credentials: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/fcmv1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setFcmv1Provider({
+                server_credentials: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSnsProvider (37487858)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -118,7 +415,73 @@ describe("PushNotification", () => {
         });
     });
 
-    test("setSnsProvider", async () => {
+    test("getSnsProvider (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/providers/sns")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getSnsProvider();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSnsProvider (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/providers/sns")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getSnsProvider();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSnsProvider (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/providers/sns")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getSnsProvider();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setSnsProvider (283b6363)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -148,7 +511,112 @@ describe("PushNotification", () => {
         });
     });
 
-    test("updateSnsProvider", async () => {
+    test("setSnsProvider (836aca22)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            aws_access_key_id: undefined,
+            aws_secret_access_key: undefined,
+            aws_region: undefined,
+            sns_apns_platform_application_arn: undefined,
+            sns_gcm_platform_application_arn: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/push-notification/providers/sns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setSnsProvider({
+                aws_access_key_id: undefined,
+                aws_secret_access_key: undefined,
+                aws_region: undefined,
+                sns_apns_platform_application_arn: undefined,
+                sns_gcm_platform_application_arn: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setSnsProvider (70d3f13a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            aws_access_key_id: undefined,
+            aws_secret_access_key: undefined,
+            aws_region: undefined,
+            sns_apns_platform_application_arn: undefined,
+            sns_gcm_platform_application_arn: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/push-notification/providers/sns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setSnsProvider({
+                aws_access_key_id: undefined,
+                aws_secret_access_key: undefined,
+                aws_region: undefined,
+                sns_apns_platform_application_arn: undefined,
+                sns_gcm_platform_application_arn: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setSnsProvider (d9c789fe)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            aws_access_key_id: undefined,
+            aws_secret_access_key: undefined,
+            aws_region: undefined,
+            sns_apns_platform_application_arn: undefined,
+            sns_gcm_platform_application_arn: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/push-notification/providers/sns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setSnsProvider({
+                aws_access_key_id: undefined,
+                aws_secret_access_key: undefined,
+                aws_region: undefined,
+                sns_apns_platform_application_arn: undefined,
+                sns_gcm_platform_application_arn: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("updateSnsProvider (283b6363)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -178,7 +646,112 @@ describe("PushNotification", () => {
         });
     });
 
-    test("getSelectedProvider", async () => {
+    test("updateSnsProvider (836aca22)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            aws_access_key_id: undefined,
+            aws_secret_access_key: undefined,
+            aws_region: undefined,
+            sns_apns_platform_application_arn: undefined,
+            sns_gcm_platform_application_arn: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/sns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.updateSnsProvider({
+                aws_access_key_id: undefined,
+                aws_secret_access_key: undefined,
+                aws_region: undefined,
+                sns_apns_platform_application_arn: undefined,
+                sns_gcm_platform_application_arn: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("updateSnsProvider (70d3f13a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            aws_access_key_id: undefined,
+            aws_secret_access_key: undefined,
+            aws_region: undefined,
+            sns_apns_platform_application_arn: undefined,
+            sns_gcm_platform_application_arn: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/sns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.updateSnsProvider({
+                aws_access_key_id: undefined,
+                aws_secret_access_key: undefined,
+                aws_region: undefined,
+                sns_apns_platform_application_arn: undefined,
+                sns_gcm_platform_application_arn: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("updateSnsProvider (d9c789fe)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            aws_access_key_id: undefined,
+            aws_secret_access_key: undefined,
+            aws_region: undefined,
+            sns_apns_platform_application_arn: undefined,
+            sns_gcm_platform_application_arn: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/guardian/factors/push-notification/providers/sns")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.updateSnsProvider({
+                aws_access_key_id: undefined,
+                aws_secret_access_key: undefined,
+                aws_region: undefined,
+                sns_apns_platform_application_arn: undefined,
+                sns_gcm_platform_application_arn: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSelectedProvider (23f6cc2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -197,7 +770,73 @@ describe("PushNotification", () => {
         });
     });
 
-    test("setProvider", async () => {
+    test("getSelectedProvider (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/selected-provider")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getSelectedProvider();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSelectedProvider (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/selected-provider")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getSelectedProvider();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSelectedProvider (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/push-notification/selected-provider")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.getSelectedProvider();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setProvider (277ecd47)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "guardian" };
@@ -217,5 +856,80 @@ describe("PushNotification", () => {
         expect(response).toEqual({
             provider: "guardian",
         });
+    });
+
+    test("setProvider (ccb41335)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider: "guardian" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/push-notification/selected-provider")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setProvider({
+                provider: "guardian",
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setProvider (41db1825)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider: "guardian" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/push-notification/selected-provider")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setProvider({
+                provider: "guardian",
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setProvider (9d3e93f1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider: "guardian" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/push-notification/selected-provider")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.pushNotification.setProvider({
+                provider: "guardian",
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
     });
 });

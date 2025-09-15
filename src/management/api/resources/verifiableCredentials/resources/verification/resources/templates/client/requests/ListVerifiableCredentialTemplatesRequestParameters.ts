@@ -7,12 +7,8 @@
  *     {}
  */
 export interface ListVerifiableCredentialTemplatesRequestParameters {
-    /**
-     * Optional Id from which to start selection.
-     */
+    /** Optional Id from which to start selection. */
     from?: string;
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     take?: number;
 }

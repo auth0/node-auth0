@@ -7,12 +7,8 @@
  *     {}
  */
 export interface ListActionTriggerBindingsRequestParameters {
-    /**
-     * Use this field to request a specific page of the list results.
-     */
+    /** Use this field to request a specific page of the list results. */
     page?: number;
-    /**
-     * The maximum number of results to be returned in a single request. 20 by default
-     */
+    /** The maximum number of results to be returned in a single request. 20 by default */
     per_page?: number;
 }

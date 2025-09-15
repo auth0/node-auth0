@@ -26,7 +26,7 @@ export interface UpdateClientRequestContent {
     allowed_origins?: string[];
     /** A set of URLs that represents valid web origins for use with web message response mode */
     web_origins?: string[];
-    /** A set of grant types that the client is authorized to use. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, and `urn:ietf:params:oauth:grant-type:device_code`. */
+    /** A set of grant types that the client is authorized to use. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[];
     /** List of audiences for SAML protocol */
     client_aliases?: string[];
@@ -68,6 +68,8 @@ export interface UpdateClientRequestContent {
     default_organization?: Management.ClientDefaultOrganization;
     organization_usage?: Management.ClientOrganizationUsagePatchEnum | undefined;
     organization_require_behavior?: Management.ClientOrganizationRequireBehaviorPatchEnum | undefined;
+    /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
     client_authentication_methods?: Management.ClientAuthenticationMethod;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
     require_pushed_authorization_requests?: boolean;
@@ -77,4 +79,5 @@ export interface UpdateClientRequestContent {
     compliance_level?: Management.ClientComplianceLevelEnum | undefined;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number;
+    my_organization_configuration?: Management.ClientMyOrganizationConfiguration;
 }

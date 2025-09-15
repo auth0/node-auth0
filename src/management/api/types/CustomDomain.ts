@@ -11,7 +11,7 @@ export interface CustomDomain {
     domain: string;
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
-    status: Management.CustomDomainStatusEnum;
+    status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     /** Intermediate address. */
     origin_domain_name?: string;

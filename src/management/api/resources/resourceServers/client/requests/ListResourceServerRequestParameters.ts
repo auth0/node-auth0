@@ -7,24 +7,14 @@
  *     {}
  */
 export interface ListResourceServerRequestParameters {
-    /**
-     * An optional filter on the resource server identifier. Must be URL encoded and may be specified multiple times (max 10).<br /><b>e.g.</b> <i>../resource-servers?identifiers=id1&identifiers=id2</i>
-     */
+    /** An optional filter on the resource server identifier. Must be URL encoded and may be specified multiple times (max 10).<br /><b>e.g.</b> <i>../resource-servers?identifiers=id1&identifiers=id2</i> */
     identifiers?: string | string[];
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Number of results per page.
-     */
+    /** Number of results per page. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * Whether specified fields are to be included (true) or excluded (false).
-     */
+    /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean;
 }

@@ -9,8 +9,6 @@
  *     }
  */
 export interface DeleteUserGrantByUserIdRequestParameters {
-    /**
-     * user_id of the grant to delete.
-     */
+    /** user_id of the grant to delete. */
     user_id: string;
 }

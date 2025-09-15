@@ -7,28 +7,16 @@
  *     {}
  */
 export interface ListUserGrantsRequestParameters {
-    /**
-     * Number of results per page.
-     */
+    /** Number of results per page. */
     per_page?: number;
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * user_id of the grants to retrieve.
-     */
+    /** user_id of the grants to retrieve. */
     user_id?: string;
-    /**
-     * client_id of the grants to retrieve.
-     */
+    /** client_id of the grants to retrieve. */
     client_id?: string;
-    /**
-     * audience of the grants to retrieve.
-     */
+    /** audience of the grants to retrieve. */
     audience?: string;
 }

@@ -22,4 +22,7 @@ export interface CreateClientGrantRequestContent {
     allow_any_organization?: boolean;
     /** Scopes allowed for this client grant. */
     scope: string[];
+    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    authorization_details_types?: string[];
 }

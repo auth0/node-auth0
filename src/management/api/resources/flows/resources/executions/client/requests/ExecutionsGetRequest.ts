@@ -7,8 +7,6 @@
  *     {}
  */
 export interface ExecutionsGetRequest {
-    /**
-     * Hydration param
-     */
+    /** Hydration param */
     hydrate?: "debug" | "debug"[];
 }

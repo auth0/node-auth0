@@ -7,20 +7,12 @@
  *     {}
  */
 export interface ListRolesRequestParameters {
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     per_page?: number;
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * Optional filter on name (case-insensitive).
-     */
+    /** Optional filter on name (case-insensitive). */
     name_filter?: string;
 }

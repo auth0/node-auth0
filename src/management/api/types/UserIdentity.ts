@@ -7,7 +7,7 @@ import * as Management from "../index.js";
 export interface UserIdentity {
     /** Connection name of this identity. */
     connection: string;
-    user_id: Management.UserIdEnum;
+    user_id: Management.UserId;
     /** Type of identity provider. */
     provider: string;
     profileData?: Management.UserProfileData;

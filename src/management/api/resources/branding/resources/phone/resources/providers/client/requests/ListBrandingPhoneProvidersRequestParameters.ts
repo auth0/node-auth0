@@ -7,8 +7,6 @@
  *     {}
  */
 export interface ListBrandingPhoneProvidersRequestParameters {
-    /**
-     * Whether the provider is enabled (false) or disabled (true).
-     */
+    /** Whether the provider is enabled (false) or disabled (true). */
     disabled?: boolean;
 }

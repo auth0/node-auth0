@@ -8,7 +8,6 @@
  */
 export interface ListUserBlocksRequestParameters {
     /**
-     *
      *           If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
      *           If true and Brute Force Protection is disabled, will return an empty list.
      *

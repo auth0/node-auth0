@@ -42,7 +42,7 @@ export class Deliveries {
 
     /**
      * @param {string} id - Unique identifier for the event stream.
-     * @param {Management.eventStreams.ListEventStreamDeliveriesRequestParameters} request
+     * @param {Management.ListEventStreamDeliveriesRequestParameters} request
      * @param {Deliveries.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -56,7 +56,7 @@ export class Deliveries {
      */
     public list(
         id: string,
-        request: Management.eventStreams.ListEventStreamDeliveriesRequestParameters = {},
+        request: Management.ListEventStreamDeliveriesRequestParameters = {},
         requestOptions?: Deliveries.RequestOptions,
     ): core.HttpResponsePromise<Management.EventStreamDelivery[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(id, request, requestOptions));
@@ -64,7 +64,7 @@ export class Deliveries {
 
     private async __list(
         id: string,
-        request: Management.eventStreams.ListEventStreamDeliveriesRequestParameters = {},
+        request: Management.ListEventStreamDeliveriesRequestParameters = {},
         requestOptions?: Deliveries.RequestOptions,
     ): Promise<core.WithRawResponse<Management.EventStreamDelivery[]>> {
         const {
@@ -100,6 +100,11 @@ export class Deliveries {
             _queryParams["take"] = take.toString();
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -108,11 +113,7 @@ export class Deliveries {
                 `event-streams/${encodeURIComponent(id)}/deliveries`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -188,6 +189,11 @@ export class Deliveries {
         eventId: string,
         requestOptions?: Deliveries.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetEventStreamDeliveryHistoryResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -196,11 +202,7 @@ export class Deliveries {
                 `event-streams/${encodeURIComponent(id)}/deliveries/${encodeURIComponent(eventId)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

@@ -44,7 +44,7 @@ export class RefreshToken {
      * Retrieve details for a user's refresh tokens.
      *
      * @param {string} userId - ID of the user to get refresh tokens for
-     * @param {Management.users.ListRefreshTokensRequestParameters} request
+     * @param {Management.ListRefreshTokensRequestParameters} request
      * @param {RefreshToken.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
@@ -57,7 +57,7 @@ export class RefreshToken {
      */
     public async list(
         userId: string,
-        request: Management.users.ListRefreshTokensRequestParameters = {},
+        request: Management.ListRefreshTokensRequestParameters = {},
         requestOptions?: RefreshToken.RequestOptions,
     ): Promise<core.Page<Management.RefreshTokenResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -72,6 +72,11 @@ export class RefreshToken {
                 if (take != null) {
                     _queryParams["take"] = take.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -80,11 +85,7 @@ export class RefreshToken {
                         `users/${encodeURIComponent(userId)}/refresh-tokens`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -179,6 +180,11 @@ export class RefreshToken {
         userId: string,
         requestOptions?: RefreshToken.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -187,11 +193,7 @@ export class RefreshToken {
                 `users/${encodeURIComponent(userId)}/refresh-tokens`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

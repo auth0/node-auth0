@@ -44,7 +44,7 @@ export class UsersImports {
     /**
      * Import users from a <a href="https://auth0.com/docs/users/references/bulk-import-database-schema-examples">formatted file</a> into a connection via a long-running job. When importing users, with or without upsert, the `email_verified` is set to `false` when the email address is added or updated. Users must verify their email address. To avoid this behavior, set `email_verified` to `true` in the imported data.
      *
-     * @param {Management.jobs.CreateImportUsersRequestContent} request
+     * @param {Management.CreateImportUsersRequestContent} request
      * @param {UsersImports.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -62,14 +62,14 @@ export class UsersImports {
      *     })
      */
     public create(
-        request: Management.jobs.CreateImportUsersRequestContent,
+        request: Management.CreateImportUsersRequestContent,
         requestOptions?: UsersImports.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateImportUsersResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.jobs.CreateImportUsersRequestContent,
+        request: Management.CreateImportUsersRequestContent,
         requestOptions?: UsersImports.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateImportUsersResponseContent>> {
         const _request = await core.newFormData();
@@ -88,6 +88,14 @@ export class UsersImports {
         }
 
         const _maybeEncodedRequest = await _request.getRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({
+                Authorization: await this._getAuthorizationHeader(),
+                ..._maybeEncodedRequest.headers,
+            }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -96,14 +104,7 @@ export class UsersImports {
                 "jobs/users-imports",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    Authorization: await this._getAuthorizationHeader(),
-                    ..._maybeEncodedRequest.headers,
-                }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             requestType: "file",
             duplex: _maybeEncodedRequest.duplex,
