@@ -176,7 +176,7 @@ The tables below show all method changes organized by category. Note these metho
 ## Drastic Changes - Method Name Changes
 
 | Before                                                     | After                                                     |
-| ---------------------------------------------------------- | --------------------------------------------------------- | --- |
+| ---------------------------------------------------------- | --------------------------------------------------------- |
 | `actions.getAll()`                                         | `actions.list()`                                          |
 | `actions.getVersions()`                                    | `actions.versions.list()`                                 |
 | `actions.getVersion()`                                     | `actions.versions.get()`                                  |
@@ -342,7 +342,7 @@ The tables below show all method changes organized by category. Note these metho
 | `users.getEnrollments()`                                   | `users.enrollments.get()`                                 |
 | `users.unlink()`                                           | `users.identities.delete()`                               |
 | `users.getLogs()`                                          | `users.logs.list()`                                       |
-| `users.clearRiskAssessors()`                               | `users.riskAssessments.clear()`                           |     |
+| `users.clearRiskAssessors()`                               | `users.riskAssessments.clear()`                           |
 | `users.deleteMultifactorProvider()`                        | `users.multifactor.deleteProvider()`                      |
 | `users.getUserOrganizations()`                             | `users.organizations.list()`                              |
 | `users.getPermissions()`                                   | `users.permissions.list()`                                |
