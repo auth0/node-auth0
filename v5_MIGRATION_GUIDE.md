@@ -176,7 +176,7 @@ The tables below show all method changes organized by category. Note these metho
 ## Drastic Changes - Method Name Changes
 
 | Before                                                     | After                                                     |
-| ---------------------------------------------------------- | --------------------------------------------------------- |
+| ---------------------------------------------------------- | --------------------------------------------------------- | --- |
 | `actions.getAll()`                                         | `actions.list()`                                          |
 | `actions.getVersions()`                                    | `actions.versions.list()`                                 |
 | `actions.getVersion()`                                     | `actions.versions.get()`                                  |
@@ -229,6 +229,16 @@ The tables below show all method changes organized by category. Note these metho
 | `flows.getAllExecutions()`                                 | `flows.executions.list()`                                 |
 | `flows.getExecution()`                                     | `flows.executions.get()`                                  |
 | `flows.deleteExecution()`                                  | `flows.executions.delete()`                               |
+| `flows.getAllConnections()`                                | `flows.vault.connections.list()`                          |
+| `flows.createConnection()`                                 | `flows.vault.connections.create()`                        |
+| `flows.getConnection()`                                    | `flows.vault.connections.get()`                           |
+| `flows.deleteConnection()`                                 | `flows.vault.connections.delete()`                        |
+| `flows.updateConnection()`                                 | `flows.vault.connections.update()`                        |
+| `branding.resetTemplate()`                                 | `branding.phone.templates.reset()`                        |
+| `riskAssessments.getSettings()`                            | `riskAssessments.settings.get()`                          |
+| `riskAssessments.updateSettings()`                         | `riskAssessments.settings.update()`                       |
+| `riskAssessments.getNewDeviceSettings()`                   | `riskAssessments.settings.newDevice.get()`                |
+| `riskAssessments.updateNewDeviceSettings()`                | `riskAssessments.settings.newDevice.update()`             |
 | `forms.getAll()`                                           | `forms.list()`                                            |
 | `grants.getAll()`                                          | `userGrants.list()`                                       |
 | `guardian.createEnrollmentTicket()`                        | `guardian.enrollments.createTicket()`                     |
@@ -332,6 +342,7 @@ The tables below show all method changes organized by category. Note these metho
 | `users.getEnrollments()`                                   | `users.enrollments.get()`                                 |
 | `users.unlink()`                                           | `users.identities.delete()`                               |
 | `users.getLogs()`                                          | `users.logs.list()`                                       |
+| `users.clearRiskAssessors()`                               | `users.riskAssessments.clear()`                           |     |
 | `users.deleteMultifactorProvider()`                        | `users.multifactor.deleteProvider()`                      |
 | `users.getUserOrganizations()`                             | `users.organizations.list()`                              |
 | `users.getPermissions()`                                   | `users.permissions.list()`                                |
@@ -413,21 +424,10 @@ The tables below show all method changes organized by category. Note these metho
 
 ## Removed Methods from v4
 
-| Before                                      | After                  |
-| ------------------------------------------- | ---------------------- |
-| `blacklists.getAll()`                       | `Missing method in v5` |
-| `blacklists.add()`                          | `Missing method in v5` |
-| `flows.getAllConnections()`                 | `Missing method in v5` |
-| `flows.createConnection()`                  | `Missing method in v5` |
-| `flows.getConnection()`                     | `Missing method in v5` |
-| `flows.deleteConnection()`                  | `Missing method in v5` |
-| `flows.updateConnection()`                  | `Missing method in v5` |
-| `branding.resetTemplate()`                  | `Missing method in v5` |
-| `riskAssessments.getSettings()`             | `Missing method in v5` |
-| `riskAssessments.updateSettings()`          | `Missing method in v5` |
-| `riskAssessments.getNewDeviceSettings()`    | `Missing method in v5` |
-| `riskAssessments.updateNewDeviceSettings()` | `Missing method in v5` |
-| `users.clearRiskAssessors()`                | `Missing method in v5` |
+| Before                | After                  |
+| --------------------- | ---------------------- |
+| `blacklists.getAll()` | `Missing method in v5` |
+| `blacklists.add()`    | `Missing method in v5` |
 
 </details>
 
