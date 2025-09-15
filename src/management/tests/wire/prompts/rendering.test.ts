@@ -4,9 +4,132 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Rendering", () => {
-    test("get", async () => {
+    test("list (50ff3a1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            configs: [
+                {
+                    rendering_mode: "advanced",
+                    context_configuration: ["context_configuration"],
+                    default_head_tags_disabled: true,
+                    head_tags: [{}],
+                    use_page_template: true,
+                },
+            ],
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+        };
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const expected = {
+            configs: [
+                {
+                    rendering_mode: "advanced",
+                    context_configuration: ["context_configuration"],
+                    default_head_tags_disabled: true,
+                    head_tags: [{}],
+                    use_page_template: true,
+                },
+            ],
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+        };
+        const page = await client.prompts.rendering.list();
+        expect(expected.configs).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.configs).toEqual(nextPage.data);
+    });
+
+    test("list (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.list();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (67cb641b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(402).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.list();
+        }).rejects.toThrow(
+            new Management.PaymentRequiredError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (f450973f)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -18,7 +141,12 @@ describe("Rendering", () => {
             context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
             head_tags: [{ tag: "tag", content: "content" }],
-            filters: { match_type: "includes_any", clients: [{}], organizations: [{}], domains: [{}] },
+            filters: {
+                match_type: "includes_any",
+                clients: [{ id: "id" }],
+                organizations: [{ id: "id" }],
+                domains: [{ id: "id" }],
+            },
             use_page_template: true,
         };
         server
@@ -45,15 +173,159 @@ describe("Rendering", () => {
             ],
             filters: {
                 match_type: "includes_any",
-                clients: [{}],
-                organizations: [{}],
-                domains: [{}],
+                clients: [
+                    {
+                        id: "id",
+                    },
+                ],
+                organizations: [
+                    {
+                        id: "id",
+                    },
+                ],
+                domains: [
+                    {
+                        id: "id",
+                    },
+                ],
             },
             use_page_template: true,
         });
     });
 
-    test("update", async () => {
+    test("get (b549b753)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/prompts/login/screen/login/rendering")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.get("login", "login");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (8a4aefa3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/prompts/login/screen/login/rendering")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.get("login", "login");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (12a5dcf3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/prompts/login/screen/login/rendering")
+            .respondWith()
+            .statusCode(402)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.get("login", "login");
+        }).rejects.toThrow(
+            new Management.PaymentRequiredError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (189ae4f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/prompts/login/screen/login/rendering")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.get("login", "login");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (f4a7aeff)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/prompts/login/screen/login/rendering")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.get("login", "login");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (fb9ff497)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/prompts/login/screen/login/rendering")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.get("login", "login");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (c47cbe54)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -62,7 +334,12 @@ describe("Rendering", () => {
             context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
             head_tags: [{ tag: "tag", content: "content" }],
-            filters: { match_type: "includes_any", clients: [{}], organizations: [{}], domains: [{}] },
+            filters: {
+                match_type: "includes_any",
+                clients: [{ id: "id" }],
+                organizations: [{ id: "id" }],
+                domains: [{ id: "id" }],
+            },
             use_page_template: true,
         };
         server
@@ -87,11 +364,208 @@ describe("Rendering", () => {
             ],
             filters: {
                 match_type: "includes_any",
-                clients: [{}],
-                organizations: [{}],
-                domains: [{}],
+                clients: [
+                    {
+                        id: "id",
+                    },
+                ],
+                organizations: [
+                    {
+                        id: "id",
+                    },
+                ],
+                domains: [
+                    {
+                        id: "id",
+                    },
+                ],
             },
             use_page_template: true,
         });
+    });
+
+    test("update (ee9afc03)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            rendering_mode: undefined,
+            context_configuration: undefined,
+            default_head_tags_disabled: undefined,
+            head_tags: undefined,
+            filters: undefined,
+            use_page_template: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/prompts/login/screen/login/rendering")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.update("login", "login", {
+                rendering_mode: undefined,
+                context_configuration: undefined,
+                default_head_tags_disabled: undefined,
+                head_tags: undefined,
+                filters: undefined,
+                use_page_template: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (e2bc0413)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            rendering_mode: undefined,
+            context_configuration: undefined,
+            default_head_tags_disabled: undefined,
+            head_tags: undefined,
+            filters: undefined,
+            use_page_template: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/prompts/login/screen/login/rendering")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.update("login", "login", {
+                rendering_mode: undefined,
+                context_configuration: undefined,
+                default_head_tags_disabled: undefined,
+                head_tags: undefined,
+                filters: undefined,
+                use_page_template: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (58367d23)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            rendering_mode: undefined,
+            context_configuration: undefined,
+            default_head_tags_disabled: undefined,
+            head_tags: undefined,
+            filters: undefined,
+            use_page_template: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/prompts/login/screen/login/rendering")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(402)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.update("login", "login", {
+                rendering_mode: undefined,
+                context_configuration: undefined,
+                default_head_tags_disabled: undefined,
+                head_tags: undefined,
+                filters: undefined,
+                use_page_template: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.PaymentRequiredError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (cbb157f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            rendering_mode: undefined,
+            context_configuration: undefined,
+            default_head_tags_disabled: undefined,
+            head_tags: undefined,
+            filters: undefined,
+            use_page_template: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/prompts/login/screen/login/rendering")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.update("login", "login", {
+                rendering_mode: undefined,
+                context_configuration: undefined,
+                default_head_tags_disabled: undefined,
+                head_tags: undefined,
+                filters: undefined,
+                use_page_template: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (e573f447)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            rendering_mode: undefined,
+            context_configuration: undefined,
+            default_head_tags_disabled: undefined,
+            head_tags: undefined,
+            filters: undefined,
+            use_page_template: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/prompts/login/screen/login/rendering")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.prompts.rendering.update("login", "login", {
+                rendering_mode: undefined,
+                context_configuration: undefined,
+                default_head_tags_disabled: undefined,
+                head_tags: undefined,
+                filters: undefined,
+                use_page_template: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

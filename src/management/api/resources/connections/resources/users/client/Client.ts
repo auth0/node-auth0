@@ -44,7 +44,7 @@ export class Users {
      * Deletes a specified connection user by its email (you cannot delete all users from specific connection). Currently, only Database Connections are supported.
      *
      * @param {string} id - The id of the connection (currently only database connections are supported)
-     * @param {Management.connections.DeleteConnectionUsersByEmailQueryParameters} request
+     * @param {Management.DeleteConnectionUsersByEmailQueryParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -59,7 +59,7 @@ export class Users {
      */
     public deleteByEmail(
         id: string,
-        request: Management.connections.DeleteConnectionUsersByEmailQueryParameters,
+        request: Management.DeleteConnectionUsersByEmailQueryParameters,
         requestOptions?: Users.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__deleteByEmail(id, request, requestOptions));
@@ -67,12 +67,17 @@ export class Users {
 
     private async __deleteByEmail(
         id: string,
-        request: Management.connections.DeleteConnectionUsersByEmailQueryParameters,
+        request: Management.DeleteConnectionUsersByEmailQueryParameters,
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { email } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         _queryParams["email"] = email;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -81,11 +86,7 @@ export class Users {
                 `connections/${encodeURIComponent(id)}/users`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

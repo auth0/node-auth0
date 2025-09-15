@@ -44,7 +44,7 @@ export class EnabledConnections {
      * Retrieve details about a specific connection currently enabled for an Organization. Information returned includes details such as connection ID, name, strategy, and whether the connection automatically grants membership upon login.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.ListOrganizationConnectionsRequestParameters} request
+     * @param {Management.ListOrganizationConnectionsRequestParameters} request
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -57,14 +57,14 @@ export class EnabledConnections {
      */
     public async list(
         id: string,
-        request: Management.organizations.ListOrganizationConnectionsRequestParameters = {},
+        request: Management.ListOrganizationConnectionsRequestParameters = {},
         requestOptions?: EnabledConnections.RequestOptions,
     ): Promise<core.Page<Management.OrganizationConnection>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.organizations.ListOrganizationConnectionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationConnectionsOffsetPaginatedResponseContent>> => {
-                const { page, per_page: perPage = 50, include_totals: includeTotals = true } = request;
+                const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -75,6 +75,11 @@ export class EnabledConnections {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -83,11 +88,7 @@ export class EnabledConnections {
                         `organizations/${encodeURIComponent(id)}/enabled_connections`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -146,7 +147,7 @@ export class EnabledConnections {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<
             Management.ListOrganizationConnectionsOffsetPaginatedResponseContent,
@@ -169,7 +170,7 @@ export class EnabledConnections {
      * <a href="https://auth0.com/docs/authenticate/identity-providers">Connections</a> represent the relationship between Auth0 and a source of users. Available types of connections include database, enterprise, and social.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.AddOrganizationConnectionRequestContent} request
+     * @param {Management.AddOrganizationConnectionRequestContent} request
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -184,7 +185,7 @@ export class EnabledConnections {
      */
     public add(
         id: string,
-        request: Management.organizations.AddOrganizationConnectionRequestContent,
+        request: Management.AddOrganizationConnectionRequestContent,
         requestOptions?: EnabledConnections.RequestOptions,
     ): core.HttpResponsePromise<Management.AddOrganizationConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__add(id, request, requestOptions));
@@ -192,9 +193,14 @@ export class EnabledConnections {
 
     private async __add(
         id: string,
-        request: Management.organizations.AddOrganizationConnectionRequestContent,
+        request: Management.AddOrganizationConnectionRequestContent,
         requestOptions?: EnabledConnections.RequestOptions,
     ): Promise<core.WithRawResponse<Management.AddOrganizationConnectionResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -203,11 +209,7 @@ export class EnabledConnections {
                 `organizations/${encodeURIComponent(id)}/enabled_connections`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -288,6 +290,11 @@ export class EnabledConnections {
         connectionId: string,
         requestOptions?: EnabledConnections.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetOrganizationConnectionResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -296,11 +303,7 @@ export class EnabledConnections {
                 `organizations/${encodeURIComponent(id)}/enabled_connections/${encodeURIComponent(connectionId)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -379,6 +382,11 @@ export class EnabledConnections {
         connectionId: string,
         requestOptions?: EnabledConnections.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -387,11 +395,7 @@ export class EnabledConnections {
                 `organizations/${encodeURIComponent(id)}/enabled_connections/${encodeURIComponent(connectionId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -444,7 +448,7 @@ export class EnabledConnections {
      *
      * @param {string} id - Organization identifier.
      * @param {string} connectionId - Connection identifier.
-     * @param {Management.organizations.UpdateOrganizationConnectionRequestContent} request
+     * @param {Management.UpdateOrganizationConnectionRequestContent} request
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -458,7 +462,7 @@ export class EnabledConnections {
     public update(
         id: string,
         connectionId: string,
-        request: Management.organizations.UpdateOrganizationConnectionRequestContent = {},
+        request: Management.UpdateOrganizationConnectionRequestContent = {},
         requestOptions?: EnabledConnections.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateOrganizationConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, connectionId, request, requestOptions));
@@ -467,9 +471,14 @@ export class EnabledConnections {
     private async __update(
         id: string,
         connectionId: string,
-        request: Management.organizations.UpdateOrganizationConnectionRequestContent = {},
+        request: Management.UpdateOrganizationConnectionRequestContent = {},
         requestOptions?: EnabledConnections.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateOrganizationConnectionResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -478,11 +487,7 @@ export class EnabledConnections {
                 `organizations/${encodeURIComponent(id)}/enabled_connections/${encodeURIComponent(connectionId)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

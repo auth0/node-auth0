@@ -4,9 +4,190 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Invitations", () => {
-    test("create", async () => {
+    test("list (ee28cb44)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            invitations: [
+                {
+                    id: "id",
+                    organization_id: "organization_id",
+                    inviter: { name: "name" },
+                    invitee: { email: "email" },
+                    invitation_url: "invitation_url",
+                    created_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    client_id: "client_id",
+                    connection_id: "connection_id",
+                    app_metadata: { key: "value" },
+                    user_metadata: { key: "value" },
+                    roles: ["roles"],
+                    ticket_id: "ticket_id",
+                },
+            ],
+        };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            invitations: [
+                {
+                    id: "id",
+                    organization_id: "organization_id",
+                    inviter: {
+                        name: "name",
+                    },
+                    invitee: {
+                        email: "email",
+                    },
+                    invitation_url: "invitation_url",
+                    created_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    client_id: "client_id",
+                    connection_id: "connection_id",
+                    app_metadata: {
+                        key: "value",
+                    },
+                    user_metadata: {
+                        key: "value",
+                    },
+                    roles: ["roles"],
+                    ticket_id: "ticket_id",
+                },
+            ],
+        };
+        const page = await client.organizations.invitations.list("id");
+        expect(expected.invitations).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.invitations).toEqual(nextPage.data);
+    });
+
+    test("list (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.list("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.list("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.list("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.list("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.list("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (b5b45b8d)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { inviter: { name: "name" }, invitee: { email: "email" }, client_id: "client_id" };
@@ -68,7 +249,242 @@ describe("Invitations", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (97e2d76a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            inviter: { name: "Jane Doe" },
+            invitee: { email: "john.doe@gmail.com" },
+            client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            connection_id: undefined,
+            app_metadata: undefined,
+            user_metadata: undefined,
+            ttl_sec: undefined,
+            roles: undefined,
+            send_invitation_email: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/organizations/id/invitations")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.create("id", {
+                inviter: {
+                    name: "Jane Doe",
+                },
+                invitee: {
+                    email: "john.doe@gmail.com",
+                },
+                client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+                connection_id: undefined,
+                app_metadata: undefined,
+                user_metadata: undefined,
+                ttl_sec: undefined,
+                roles: undefined,
+                send_invitation_email: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (aafe4c2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            inviter: { name: "Jane Doe" },
+            invitee: { email: "john.doe@gmail.com" },
+            client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            connection_id: undefined,
+            app_metadata: undefined,
+            user_metadata: undefined,
+            ttl_sec: undefined,
+            roles: undefined,
+            send_invitation_email: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/organizations/id/invitations")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.create("id", {
+                inviter: {
+                    name: "Jane Doe",
+                },
+                invitee: {
+                    email: "john.doe@gmail.com",
+                },
+                client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+                connection_id: undefined,
+                app_metadata: undefined,
+                user_metadata: undefined,
+                ttl_sec: undefined,
+                roles: undefined,
+                send_invitation_email: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (168577a6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            inviter: { name: "Jane Doe" },
+            invitee: { email: "john.doe@gmail.com" },
+            client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            connection_id: undefined,
+            app_metadata: undefined,
+            user_metadata: undefined,
+            ttl_sec: undefined,
+            roles: undefined,
+            send_invitation_email: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/organizations/id/invitations")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.create("id", {
+                inviter: {
+                    name: "Jane Doe",
+                },
+                invitee: {
+                    email: "john.doe@gmail.com",
+                },
+                client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+                connection_id: undefined,
+                app_metadata: undefined,
+                user_metadata: undefined,
+                ttl_sec: undefined,
+                roles: undefined,
+                send_invitation_email: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (6ba6dbde)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            inviter: { name: "Jane Doe" },
+            invitee: { email: "john.doe@gmail.com" },
+            client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            connection_id: undefined,
+            app_metadata: undefined,
+            user_metadata: undefined,
+            ttl_sec: undefined,
+            roles: undefined,
+            send_invitation_email: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/organizations/id/invitations")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.create("id", {
+                inviter: {
+                    name: "Jane Doe",
+                },
+                invitee: {
+                    email: "john.doe@gmail.com",
+                },
+                client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+                connection_id: undefined,
+                app_metadata: undefined,
+                user_metadata: undefined,
+                ttl_sec: undefined,
+                roles: undefined,
+                send_invitation_email: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (2391d3b2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            inviter: { name: "Jane Doe" },
+            invitee: { email: "john.doe@gmail.com" },
+            client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            connection_id: undefined,
+            app_metadata: undefined,
+            user_metadata: undefined,
+            ttl_sec: undefined,
+            roles: undefined,
+            send_invitation_email: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/organizations/id/invitations")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.create("id", {
+                inviter: {
+                    name: "Jane Doe",
+                },
+                invitee: {
+                    email: "john.doe@gmail.com",
+                },
+                client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+                connection_id: undefined,
+                app_metadata: undefined,
+                user_metadata: undefined,
+                ttl_sec: undefined,
+                roles: undefined,
+                send_invitation_email: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (781daf21)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -121,7 +537,117 @@ describe("Invitations", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (26c8f4b7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.get("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (ba053b07)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.get("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (60f3b413)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.get("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (9583bb73)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.get("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (640230b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.get("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (cfeea1a9)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -134,5 +660,93 @@ describe("Invitations", () => {
 
         const response = await client.organizations.invitations.delete("id", "invitation_id");
         expect(response).toEqual(undefined);
+    });
+
+    test("delete (ba053b07)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.delete("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (60f3b413)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.delete("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (9583bb73)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.delete("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (640230b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/organizations/id/invitations/invitation_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.invitations.delete("id", "invitation_id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

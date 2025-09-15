@@ -12,7 +12,7 @@ export interface LinkUserIdentityRequestContent {
     provider?: Management.UserIdentityProviderEnum;
     /** connection_id of the secondary user account being linked when more than one `auth0` database provider exists. */
     connection_id?: string;
-    user_id?: Management.UserIdEnum;
+    user_id?: Management.UserId;
     /** JWT for the secondary account being linked. If sending this parameter, `provider`, `user_id`, and `connection_id` must not be sent. */
     link_with?: string;
 }

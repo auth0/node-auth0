@@ -9,8 +9,6 @@
  *     }
  */
 export interface DeleteUserBlocksByIdentifierRequestParameters {
-    /**
-     * Should be any of a username, phone number, or email.
-     */
+    /** Should be any of a username, phone number, or email. */
     identifier: string;
 }

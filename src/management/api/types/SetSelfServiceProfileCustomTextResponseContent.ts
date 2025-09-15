@@ -5,4 +5,4 @@
 /**
  * The resulting list of custom text keys and values.
  */
-export type SetSelfServiceProfileCustomTextResponseContent = Record<string, unknown>;
+export type SetSelfServiceProfileCustomTextResponseContent = Record<string, string>;

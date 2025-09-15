@@ -7,8 +7,6 @@
  *     {}
  */
 export interface DeleteActionRequestParameters {
-    /**
-     * Force action deletion detaching bindings
-     */
+    /** Force action deletion detaching bindings */
     force?: boolean;
 }

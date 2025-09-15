@@ -43,7 +43,7 @@ export class Provider {
     /**
      * Retrieve details of the <a href="https://auth0.com/docs/customize/email/smtp-email-providers">email provider configuration</a> in your tenant. A list of fields to include or exclude may also be specified.
      *
-     * @param {Management.emails.GetEmailProviderRequestParameters} request
+     * @param {Management.GetEmailProviderRequestParameters} request
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -56,14 +56,14 @@ export class Provider {
      *     await client.emails.provider.get()
      */
     public get(
-        request: Management.emails.GetEmailProviderRequestParameters = {},
+        request: Management.GetEmailProviderRequestParameters = {},
         requestOptions?: Provider.RequestOptions,
     ): core.HttpResponsePromise<Management.GetEmailProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: Management.emails.GetEmailProviderRequestParameters = {},
+        request: Management.GetEmailProviderRequestParameters = {},
         requestOptions?: Provider.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetEmailProviderResponseContent>> {
         const { fields, include_fields: includeFields } = request;
@@ -76,6 +76,11 @@ export class Provider {
             _queryParams["include_fields"] = includeFields.toString();
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -84,11 +89,7 @@ export class Provider {
                 "emails/provider",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -183,7 +184,7 @@ export class Provider {
      *   </li>
      * </ul>
      *
-     * @param {Management.emails.CreateEmailProviderRequestContent} request
+     * @param {Management.CreateEmailProviderRequestContent} request
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -201,16 +202,21 @@ export class Provider {
      *     })
      */
     public create(
-        request: Management.emails.CreateEmailProviderRequestContent,
+        request: Management.CreateEmailProviderRequestContent,
         requestOptions?: Provider.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateEmailProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.emails.CreateEmailProviderRequestContent,
+        request: Management.CreateEmailProviderRequestContent,
         requestOptions?: Provider.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateEmailProviderResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -219,11 +225,7 @@ export class Provider {
                 "emails/provider",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -296,6 +298,11 @@ export class Provider {
     }
 
     private async __delete(requestOptions?: Provider.RequestOptions): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -304,11 +311,7 @@ export class Provider {
                 "emails/provider",
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -398,7 +401,7 @@ export class Provider {
      *   </li>
      * </ul>
      *
-     * @param {Management.emails.UpdateEmailProviderRequestContent} request
+     * @param {Management.UpdateEmailProviderRequestContent} request
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -412,16 +415,21 @@ export class Provider {
      *     await client.emails.provider.update()
      */
     public update(
-        request: Management.emails.UpdateEmailProviderRequestContent = {},
+        request: Management.UpdateEmailProviderRequestContent = {},
         requestOptions?: Provider.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateEmailProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.emails.UpdateEmailProviderRequestContent = {},
+        request: Management.UpdateEmailProviderRequestContent = {},
         requestOptions?: Provider.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateEmailProviderResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -430,11 +438,7 @@ export class Provider {
                 "emails/provider",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

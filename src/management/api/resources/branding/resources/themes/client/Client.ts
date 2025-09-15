@@ -43,7 +43,7 @@ export class Themes {
     /**
      * Create branding theme.
      *
-     * @param {Management.branding.CreateBrandingThemeRequestContent} request
+     * @param {Management.CreateBrandingThemeRequestContent} request
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -127,16 +127,21 @@ export class Themes {
      *     })
      */
     public create(
-        request: Management.branding.CreateBrandingThemeRequestContent,
+        request: Management.CreateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateBrandingThemeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.branding.CreateBrandingThemeRequestContent,
+        request: Management.CreateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateBrandingThemeResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -145,11 +150,7 @@ export class Themes {
                 "branding/themes",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -225,6 +226,11 @@ export class Themes {
     private async __getDefault(
         requestOptions?: Themes.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetBrandingDefaultThemeResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -233,11 +239,7 @@ export class Themes {
                 "branding/themes/default",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -311,6 +313,11 @@ export class Themes {
         themeId: string,
         requestOptions?: Themes.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetBrandingThemeResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -319,11 +326,7 @@ export class Themes {
                 `branding/themes/${encodeURIComponent(themeId)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -396,6 +399,11 @@ export class Themes {
         themeId: string,
         requestOptions?: Themes.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -404,11 +412,7 @@ export class Themes {
                 `branding/themes/${encodeURIComponent(themeId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -460,7 +464,7 @@ export class Themes {
      * Update branding theme.
      *
      * @param {string} themeId - The ID of the theme
-     * @param {Management.branding.UpdateBrandingThemeRequestContent} request
+     * @param {Management.UpdateBrandingThemeRequestContent} request
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -545,7 +549,7 @@ export class Themes {
      */
     public update(
         themeId: string,
-        request: Management.branding.UpdateBrandingThemeRequestContent,
+        request: Management.UpdateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateBrandingThemeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(themeId, request, requestOptions));
@@ -553,9 +557,14 @@ export class Themes {
 
     private async __update(
         themeId: string,
-        request: Management.branding.UpdateBrandingThemeRequestContent,
+        request: Management.UpdateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateBrandingThemeResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -564,11 +573,7 @@ export class Themes {
                 `branding/themes/${encodeURIComponent(themeId)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

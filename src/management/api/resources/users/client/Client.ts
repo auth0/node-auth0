@@ -11,11 +11,13 @@ import { AuthenticationMethods } from "../resources/authenticationMethods/client
 import { Authenticators } from "../resources/authenticators/client/Client.js";
 import { Enrollments } from "../resources/enrollments/client/Client.js";
 import { FederatedConnectionsTokensets } from "../resources/federatedConnectionsTokensets/client/Client.js";
+import { Groups } from "../resources/groups/client/Client.js";
 import { Identities } from "../resources/identities/client/Client.js";
 import { Logs } from "../resources/logs/client/Client.js";
 import { Multifactor } from "../resources/multifactor/client/Client.js";
 import { Organizations } from "../resources/organizations/client/Client.js";
 import { Permissions } from "../resources/permissions/client/Client.js";
+import { RiskAssessments } from "../resources/riskAssessments/client/Client.js";
 import { Roles } from "../resources/roles/client/Client.js";
 import { RefreshToken } from "../resources/refreshToken/client/Client.js";
 import { Sessions } from "../resources/sessions/client/Client.js";
@@ -51,11 +53,13 @@ export class Users {
     protected _authenticators: Authenticators | undefined;
     protected _enrollments: Enrollments | undefined;
     protected _federatedConnectionsTokensets: FederatedConnectionsTokensets | undefined;
+    protected _groups: Groups | undefined;
     protected _identities: Identities | undefined;
     protected _logs: Logs | undefined;
     protected _multifactor: Multifactor | undefined;
     protected _organizations: Organizations | undefined;
     protected _permissions: Permissions | undefined;
+    protected _riskAssessments: RiskAssessments | undefined;
     protected _roles: Roles | undefined;
     protected _refreshToken: RefreshToken | undefined;
     protected _sessions: Sessions | undefined;
@@ -80,6 +84,10 @@ export class Users {
         return (this._federatedConnectionsTokensets ??= new FederatedConnectionsTokensets(this._options));
     }
 
+    public get groups(): Groups {
+        return (this._groups ??= new Groups(this._options));
+    }
+
     public get identities(): Identities {
         return (this._identities ??= new Identities(this._options));
     }
@@ -98,6 +106,10 @@ export class Users {
 
     public get permissions(): Permissions {
         return (this._permissions ??= new Permissions(this._options));
+    }
+
+    public get riskAssessments(): RiskAssessments {
+        return (this._riskAssessments ??= new RiskAssessments(this._options));
     }
 
     public get roles(): Roles {
@@ -149,7 +161,7 @@ export class Users {
                 request: Management.ListUsersRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListUsersOffsetPaginatedResponseContent>> => {
                 const {
-                    page,
+                    page = 0,
                     per_page: perPage = 50,
                     include_totals: includeTotals = true,
                     sort,
@@ -191,6 +203,11 @@ export class Users {
                 if (primaryOrder != null) {
                     _queryParams["primary_order"] = primaryOrder.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -199,11 +216,7 @@ export class Users {
                         "users",
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -265,7 +278,7 @@ export class Users {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<Management.ListUsersOffsetPaginatedResponseContent, Management.UserResponseSchema>({
             response: dataWithRawResponse.data,
@@ -309,6 +322,11 @@ export class Users {
         request: Management.CreateUserRequestContent,
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateUserResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -317,11 +335,7 @@ export class Users {
                 "users",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -414,6 +428,11 @@ export class Users {
         }
 
         _queryParams["email"] = email;
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -422,11 +441,7 @@ export class Users {
                 "users-by-email",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -511,6 +526,11 @@ export class Users {
             _queryParams["include_fields"] = includeFields.toString();
         }
 
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -519,11 +539,7 @@ export class Users {
                 `users/${encodeURIComponent(id)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -590,6 +606,11 @@ export class Users {
     }
 
     private async __delete(id: string, requestOptions?: Users.RequestOptions): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -598,11 +619,7 @@ export class Users {
                 `users/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -746,6 +763,11 @@ export class Users {
         request: Management.UpdateUserRequestContent = {},
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateUserResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -754,11 +776,7 @@ export class Users {
                 `users/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -834,6 +852,11 @@ export class Users {
         id: string,
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<Management.RegenerateUsersRecoveryCodeResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -842,11 +865,7 @@ export class Users {
                 `users/${encodeURIComponent(id)}/recovery-code-regeneration`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -925,6 +944,11 @@ export class Users {
         request: Management.RevokeUserAccessRequestContent = {},
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -933,11 +957,7 @@ export class Users {
                 `users/${encodeURIComponent(id)}/revoke-access`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

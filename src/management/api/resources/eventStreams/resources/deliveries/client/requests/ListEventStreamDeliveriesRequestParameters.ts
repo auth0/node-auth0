@@ -7,28 +7,16 @@
  *     {}
  */
 export interface ListEventStreamDeliveriesRequestParameters {
-    /**
-     * Comma-separated list of statuses by which to filter
-     */
+    /** Comma-separated list of statuses by which to filter */
     statuses?: string;
-    /**
-     * Comma-separated list of event types by which to filter
-     */
+    /** Comma-separated list of event types by which to filter */
     event_types?: string;
-    /**
-     * An RFC-3339 date-time for redelivery start, inclusive. Does not allow sub-second precision.
-     */
+    /** An RFC-3339 date-time for redelivery start, inclusive. Does not allow sub-second precision. */
     date_from?: string;
-    /**
-     * An RFC-3339 date-time for redelivery end, exclusive. Does not allow sub-second precision.
-     */
+    /** An RFC-3339 date-time for redelivery end, exclusive. Does not allow sub-second precision. */
     date_to?: string;
-    /**
-     * Optional Id from which to start selection.
-     */
+    /** Optional Id from which to start selection. */
     from?: string;
-    /**
-     * Number of results per page. Defaults to 50.
-     */
+    /** Number of results per page. Defaults to 50. */
     take?: number;
 }

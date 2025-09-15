@@ -61,6 +61,11 @@ export class Phone {
     private async __getMessageTypes(
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorPhoneMessageTypesResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -69,11 +74,7 @@ export class Phone {
                 "guardian/factors/phone/message-types",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -125,7 +126,7 @@ export class Phone {
     /**
      * Replace the list of <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">phone-type MFA factors</a> (i.e., sms and voice) that are enabled for your tenant.
      *
-     * @param {Management.guardian.factors.SetGuardianFactorPhoneMessageTypesRequestContent} request
+     * @param {Management.SetGuardianFactorPhoneMessageTypesRequestContent} request
      * @param {Phone.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -139,16 +140,21 @@ export class Phone {
      *     })
      */
     public setMessageTypes(
-        request: Management.guardian.factors.SetGuardianFactorPhoneMessageTypesRequestContent,
+        request: Management.SetGuardianFactorPhoneMessageTypesRequestContent,
         requestOptions?: Phone.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorPhoneMessageTypesResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setMessageTypes(request, requestOptions));
     }
 
     private async __setMessageTypes(
-        request: Management.guardian.factors.SetGuardianFactorPhoneMessageTypesRequestContent,
+        request: Management.SetGuardianFactorPhoneMessageTypesRequestContent,
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorPhoneMessageTypesResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -157,11 +163,7 @@ export class Phone {
                 "guardian/factors/phone/message-types",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -236,6 +238,11 @@ export class Phone {
     private async __getTwilioProvider(
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderPhoneTwilioResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -244,11 +251,7 @@ export class Phone {
                 "guardian/factors/phone/providers/twilio",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -300,7 +303,7 @@ export class Phone {
     /**
      * Update the configuration of a Twilio phone provider that has been set up in your tenant. To learn more, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-sms-voice-notifications-mfa">Configure SMS and Voice Notifications for MFA</a>.
      *
-     * @param {Management.guardian.factors.SetGuardianFactorsProviderPhoneTwilioRequestContent} request
+     * @param {Management.SetGuardianFactorsProviderPhoneTwilioRequestContent} request
      * @param {Phone.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -311,16 +314,21 @@ export class Phone {
      *     await client.guardian.factors.phone.setTwilioProvider()
      */
     public setTwilioProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPhoneTwilioRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPhoneTwilioRequestContent = {},
         requestOptions?: Phone.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPhoneTwilioResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setTwilioProvider(request, requestOptions));
     }
 
     private async __setTwilioProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPhoneTwilioRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPhoneTwilioRequestContent = {},
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPhoneTwilioResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -329,11 +337,7 @@ export class Phone {
                 "guardian/factors/phone/providers/twilio",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -406,6 +410,11 @@ export class Phone {
     private async __getSelectedProvider(
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorsProviderPhoneResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -414,11 +423,7 @@ export class Phone {
                 "guardian/factors/phone/selected-provider",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -468,7 +473,7 @@ export class Phone {
     }
 
     /**
-     * @param {Management.guardian.factors.SetGuardianFactorsProviderPhoneRequestContent} request
+     * @param {Management.SetGuardianFactorsProviderPhoneRequestContent} request
      * @param {Phone.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -481,16 +486,21 @@ export class Phone {
      *     })
      */
     public setProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPhoneRequestContent,
+        request: Management.SetGuardianFactorsProviderPhoneRequestContent,
         requestOptions?: Phone.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPhoneResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setProvider(request, requestOptions));
     }
 
     private async __setProvider(
-        request: Management.guardian.factors.SetGuardianFactorsProviderPhoneRequestContent,
+        request: Management.SetGuardianFactorsProviderPhoneRequestContent,
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPhoneResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -499,11 +509,7 @@ export class Phone {
                 "guardian/factors/phone/selected-provider",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -576,6 +582,11 @@ export class Phone {
     private async __getTemplates(
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorPhoneTemplatesResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -584,11 +595,7 @@ export class Phone {
                 "guardian/factors/phone/templates",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -640,7 +647,7 @@ export class Phone {
     /**
      * Customize the messages sent to complete phone enrollment and verification (subscription required).
      *
-     * @param {Management.guardian.factors.SetGuardianFactorPhoneTemplatesRequestContent} request
+     * @param {Management.SetGuardianFactorPhoneTemplatesRequestContent} request
      * @param {Phone.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -654,16 +661,21 @@ export class Phone {
      *     })
      */
     public setTemplates(
-        request: Management.guardian.factors.SetGuardianFactorPhoneTemplatesRequestContent,
+        request: Management.SetGuardianFactorPhoneTemplatesRequestContent,
         requestOptions?: Phone.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorPhoneTemplatesResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setTemplates(request, requestOptions));
     }
 
     private async __setTemplates(
-        request: Management.guardian.factors.SetGuardianFactorPhoneTemplatesRequestContent,
+        request: Management.SetGuardianFactorPhoneTemplatesRequestContent,
         requestOptions?: Phone.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorPhoneTemplatesResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -672,11 +684,7 @@ export class Phone {
                 "guardian/factors/phone/templates",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

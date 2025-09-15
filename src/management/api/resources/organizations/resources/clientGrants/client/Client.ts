@@ -42,7 +42,7 @@ export class ClientGrants {
 
     /**
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.ListOrganizationClientGrantsRequestParameters} request
+     * @param {Management.ListOrganizationClientGrantsRequestParameters} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -55,7 +55,7 @@ export class ClientGrants {
      */
     public async list(
         id: string,
-        request: Management.organizations.ListOrganizationClientGrantsRequestParameters = {},
+        request: Management.ListOrganizationClientGrantsRequestParameters = {},
         requestOptions?: ClientGrants.RequestOptions,
     ): Promise<core.Page<Management.OrganizationClientGrant>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -66,7 +66,7 @@ export class ClientGrants {
                     audience,
                     client_id: clientId,
                     grant_ids: grantIds,
-                    page,
+                    page = 0,
                     per_page: perPage = 50,
                     include_totals: includeTotals = true,
                 } = request;
@@ -93,6 +93,11 @@ export class ClientGrants {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -101,11 +106,7 @@ export class ClientGrants {
                         `organizations/${encodeURIComponent(id)}/client-grants`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -164,7 +165,7 @@ export class ClientGrants {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<
             Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent,
@@ -183,7 +184,7 @@ export class ClientGrants {
 
     /**
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.AssociateOrganizationClientGrantRequestContent} request
+     * @param {Management.AssociateOrganizationClientGrantRequestContent} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -200,7 +201,7 @@ export class ClientGrants {
      */
     public create(
         id: string,
-        request: Management.organizations.AssociateOrganizationClientGrantRequestContent,
+        request: Management.AssociateOrganizationClientGrantRequestContent,
         requestOptions?: ClientGrants.RequestOptions,
     ): core.HttpResponsePromise<Management.AssociateOrganizationClientGrantResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -208,9 +209,14 @@ export class ClientGrants {
 
     private async __create(
         id: string,
-        request: Management.organizations.AssociateOrganizationClientGrantRequestContent,
+        request: Management.AssociateOrganizationClientGrantRequestContent,
         requestOptions?: ClientGrants.RequestOptions,
     ): Promise<core.WithRawResponse<Management.AssociateOrganizationClientGrantResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -219,11 +225,7 @@ export class ClientGrants {
                 `organizations/${encodeURIComponent(id)}/client-grants`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -308,6 +310,11 @@ export class ClientGrants {
         grantId: string,
         requestOptions?: ClientGrants.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -316,11 +323,7 @@ export class ClientGrants {
                 `organizations/${encodeURIComponent(id)}/client-grants/${encodeURIComponent(grantId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("EmailTemplates", () => {
-    test("create", async () => {
+    test("create (57a851c3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
@@ -46,7 +47,222 @@ describe("EmailTemplates", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (2950673f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/email-templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.create({
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (d5a196cf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/email-templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.create({
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (2fe2da1b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/email-templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.create({
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (87f15e93)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/email-templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.create({
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (785c8ed3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/email-templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.create({
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (f7f2f263)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -83,7 +299,95 @@ describe("EmailTemplates", () => {
         });
     });
 
-    test("set", async () => {
+    test("get (7b91a5cf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/email-templates/verify_email")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.get("verify_email");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (fbc4e15f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/email-templates/verify_email")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.get("verify_email");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (5f38062b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/email-templates/verify_email")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.get("verify_email");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (d9541e23)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/email-templates/verify_email")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.get("verify_email");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (514c2a72)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
@@ -123,7 +427,222 @@ describe("EmailTemplates", () => {
         });
     });
 
-    test("update", async () => {
+    test("set (5ae28ccb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.set("verify_email", {
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (2e3a953b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.set("verify_email", {
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (b42c4f27)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.set("verify_email", {
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (ac443757)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.set("verify_email", {
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (3465cd0f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: "verify_email",
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.set("verify_email", {
+                template: "verify_email",
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (eaf199e)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -159,5 +678,220 @@ describe("EmailTemplates", () => {
             includeEmailInRedirect: true,
             enabled: true,
         });
+    });
+
+    test("update (2fc11c8a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: undefined,
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.update("verify_email", {
+                template: undefined,
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (81cf60e2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: undefined,
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.update("verify_email", {
+                template: undefined,
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (2c22746)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: undefined,
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.update("verify_email", {
+                template: undefined,
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (f30efdfe)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: undefined,
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.update("verify_email", {
+                template: undefined,
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (f25f3052)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            template: undefined,
+            body: undefined,
+            from: undefined,
+            resultUrl: undefined,
+            subject: undefined,
+            syntax: undefined,
+            urlLifetimeInSeconds: undefined,
+            includeEmailInRedirect: undefined,
+            enabled: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/email-templates/verify_email")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.emailTemplates.update("verify_email", {
+                template: undefined,
+                body: undefined,
+                from: undefined,
+                resultUrl: undefined,
+                subject: undefined,
+                syntax: undefined,
+                urlLifetimeInSeconds: undefined,
+                includeEmailInRedirect: undefined,
+                enabled: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

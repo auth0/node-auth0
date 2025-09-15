@@ -44,7 +44,7 @@ export class AuthenticationMethods {
      * Retrieve detailed list of authentication methods associated with a specified user.
      *
      * @param {string} id - The ID of the user in question.
-     * @param {Management.users.ListUserAuthenticationMethodsRequestParameters} request
+     * @param {Management.ListUserAuthenticationMethodsRequestParameters} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -58,7 +58,7 @@ export class AuthenticationMethods {
      */
     public async list(
         id: string,
-        request: Management.users.ListUserAuthenticationMethodsRequestParameters = {},
+        request: Management.ListUserAuthenticationMethodsRequestParameters = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.Page<Management.UserAuthenticationMethod>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -67,7 +67,7 @@ export class AuthenticationMethods {
             ): Promise<
                 core.WithRawResponse<Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent>
             > => {
-                const { page, per_page: perPage = 50, include_totals: includeTotals = true } = request;
+                const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
                     _queryParams["page"] = page.toString();
@@ -78,6 +78,11 @@ export class AuthenticationMethods {
                 if (includeTotals != null) {
                     _queryParams["include_totals"] = includeTotals.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -86,11 +91,7 @@ export class AuthenticationMethods {
                         `users/${encodeURIComponent(id)}/authentication-methods`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -151,7 +152,7 @@ export class AuthenticationMethods {
                 }
             },
         );
-        let _offset = request?.page != null ? request?.page : 1;
+        let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
         return new core.Pageable<
             Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent,
@@ -172,7 +173,7 @@ export class AuthenticationMethods {
      * Create an authentication method. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
      *
      * @param {string} id - The ID of the user to whom the new authentication method will be assigned.
-     * @param {Management.users.CreateUserAuthenticationMethodRequestContent} request
+     * @param {Management.CreateUserAuthenticationMethodRequestContent} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -189,7 +190,7 @@ export class AuthenticationMethods {
      */
     public create(
         id: string,
-        request: Management.users.CreateUserAuthenticationMethodRequestContent,
+        request: Management.CreateUserAuthenticationMethodRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateUserAuthenticationMethodResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -197,9 +198,14 @@ export class AuthenticationMethods {
 
     private async __create(
         id: string,
-        request: Management.users.CreateUserAuthenticationMethodRequestContent,
+        request: Management.CreateUserAuthenticationMethodRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateUserAuthenticationMethodResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -208,11 +214,7 @@ export class AuthenticationMethods {
                 `users/${encodeURIComponent(id)}/authentication-methods`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -303,6 +305,11 @@ export class AuthenticationMethods {
         request: Management.SetUserAuthenticationMethodsRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetUserAuthenticationMethodResponseContent[]>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -311,11 +318,7 @@ export class AuthenticationMethods {
                 `users/${encodeURIComponent(id)}/authentication-methods`,
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -396,6 +399,11 @@ export class AuthenticationMethods {
         id: string,
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -404,11 +412,7 @@ export class AuthenticationMethods {
                 `users/${encodeURIComponent(id)}/authentication-methods`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -483,6 +487,11 @@ export class AuthenticationMethods {
         authenticationMethodId: string,
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetUserAuthenticationMethodResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -491,11 +500,7 @@ export class AuthenticationMethods {
                 `users/${encodeURIComponent(id)}/authentication-methods/${encodeURIComponent(authenticationMethodId)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -577,6 +582,11 @@ export class AuthenticationMethods {
         authenticationMethodId: string,
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -585,11 +595,7 @@ export class AuthenticationMethods {
                 `users/${encodeURIComponent(id)}/authentication-methods/${encodeURIComponent(authenticationMethodId)}`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -644,7 +650,7 @@ export class AuthenticationMethods {
      *
      * @param {string} id - The ID of the user in question.
      * @param {string} authenticationMethodId - The ID of the authentication method to update.
-     * @param {Management.users.UpdateUserAuthenticationMethodRequestContent} request
+     * @param {Management.UpdateUserAuthenticationMethodRequestContent} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -659,7 +665,7 @@ export class AuthenticationMethods {
     public update(
         id: string,
         authenticationMethodId: string,
-        request: Management.users.UpdateUserAuthenticationMethodRequestContent = {},
+        request: Management.UpdateUserAuthenticationMethodRequestContent = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateUserAuthenticationMethodResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, authenticationMethodId, request, requestOptions));
@@ -668,9 +674,14 @@ export class AuthenticationMethods {
     private async __update(
         id: string,
         authenticationMethodId: string,
-        request: Management.users.UpdateUserAuthenticationMethodRequestContent = {},
+        request: Management.UpdateUserAuthenticationMethodRequestContent = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateUserAuthenticationMethodResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -679,11 +690,7 @@ export class AuthenticationMethods {
                 `users/${encodeURIComponent(id)}/authentication-methods/${encodeURIComponent(authenticationMethodId)}`,
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

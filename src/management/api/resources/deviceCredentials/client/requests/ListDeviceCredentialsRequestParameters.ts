@@ -9,36 +9,20 @@ import * as Management from "../../../../index.js";
  *     {}
  */
 export interface ListDeviceCredentialsRequestParameters {
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Number of results per page.  There is a maximum of 1000 results allowed from this endpoint.
-     */
+    /** Number of results per page.  There is a maximum of 1000 results allowed from this endpoint. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Whether specified fields are to be included (true) or excluded (false).
-     */
+    /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean;
-    /**
-     * user_id of the devices to retrieve.
-     */
+    /** user_id of the devices to retrieve. */
     user_id?: string;
-    /**
-     * client_id of the devices to retrieve.
-     */
+    /** client_id of the devices to retrieve. */
     client_id?: string;
-    /**
-     * Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested
-     */
+    /** Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested */
     type?: Management.DeviceCredentialTypeEnum;
 }

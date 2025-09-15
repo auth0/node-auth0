@@ -61,6 +61,11 @@ export class SuspiciousIpThrottling {
     private async __get(
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetSuspiciousIpThrottlingSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -69,11 +74,7 @@ export class SuspiciousIpThrottling {
                 "attack-protection/suspicious-ip-throttling",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -125,7 +126,7 @@ export class SuspiciousIpThrottling {
     /**
      * Update the details of the Suspicious IP Throttling configuration of your tenant.
      *
-     * @param {Management.attackProtection.UpdateSuspiciousIpThrottlingSettingsRequestContent} request
+     * @param {Management.UpdateSuspiciousIpThrottlingSettingsRequestContent} request
      * @param {SuspiciousIpThrottling.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -137,16 +138,21 @@ export class SuspiciousIpThrottling {
      *     await client.attackProtection.suspiciousIpThrottling.update()
      */
     public update(
-        request: Management.attackProtection.UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
+        request: Management.UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateSuspiciousIpThrottlingSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.attackProtection.UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
+        request: Management.UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateSuspiciousIpThrottlingSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -155,11 +161,7 @@ export class SuspiciousIpThrottling {
                 "attack-protection/suspicious-ip-throttling",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

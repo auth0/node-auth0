@@ -61,6 +61,11 @@ export class Settings {
     private async __get(
         requestOptions?: Settings.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetGuardianFactorDuoSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -69,11 +74,7 @@ export class Settings {
                 "guardian/factors/duo/settings",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -125,7 +126,7 @@ export class Settings {
     /**
      * Set the DUO account configuration and other properties specific to this factor.
      *
-     * @param {Management.guardian.factors.duo.SetGuardianFactorDuoSettingsRequestContent} request
+     * @param {Management.SetGuardianFactorDuoSettingsRequestContent} request
      * @param {Settings.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -136,16 +137,21 @@ export class Settings {
      *     await client.guardian.factors.duo.settings.set()
      */
     public set(
-        request: Management.guardian.factors.duo.SetGuardianFactorDuoSettingsRequestContent = {},
+        request: Management.SetGuardianFactorDuoSettingsRequestContent = {},
         requestOptions?: Settings.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorDuoSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(request, requestOptions));
     }
 
     private async __set(
-        request: Management.guardian.factors.duo.SetGuardianFactorDuoSettingsRequestContent = {},
+        request: Management.SetGuardianFactorDuoSettingsRequestContent = {},
         requestOptions?: Settings.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorDuoSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -154,11 +160,7 @@ export class Settings {
                 "guardian/factors/duo/settings",
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -211,7 +213,7 @@ export class Settings {
     }
 
     /**
-     * @param {Management.guardian.factors.duo.UpdateGuardianFactorDuoSettingsRequestContent} request
+     * @param {Management.UpdateGuardianFactorDuoSettingsRequestContent} request
      * @param {Settings.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -222,16 +224,21 @@ export class Settings {
      *     await client.guardian.factors.duo.settings.update()
      */
     public update(
-        request: Management.guardian.factors.duo.UpdateGuardianFactorDuoSettingsRequestContent = {},
+        request: Management.UpdateGuardianFactorDuoSettingsRequestContent = {},
         requestOptions?: Settings.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateGuardianFactorDuoSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.guardian.factors.duo.UpdateGuardianFactorDuoSettingsRequestContent = {},
+        request: Management.UpdateGuardianFactorDuoSettingsRequestContent = {},
         requestOptions?: Settings.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateGuardianFactorDuoSettingsResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -240,11 +247,7 @@ export class Settings {
                 "guardian/factors/duo/settings",
             ),
             method: "PATCH",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

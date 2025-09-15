@@ -43,7 +43,7 @@ export class UsersExports {
     /**
      * Export all users to a file via a long-running job.
      *
-     * @param {Management.jobs.CreateExportUsersRequestContent} request
+     * @param {Management.CreateExportUsersRequestContent} request
      * @param {UsersExports.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -55,16 +55,21 @@ export class UsersExports {
      *     await client.jobs.usersExports.create()
      */
     public create(
-        request: Management.jobs.CreateExportUsersRequestContent = {},
+        request: Management.CreateExportUsersRequestContent = {},
         requestOptions?: UsersExports.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateExportUsersResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.jobs.CreateExportUsersRequestContent = {},
+        request: Management.CreateExportUsersRequestContent = {},
         requestOptions?: UsersExports.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateExportUsersResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -73,11 +78,7 @@ export class UsersExports {
                 "jobs/users-exports",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

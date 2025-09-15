@@ -11,6 +11,7 @@ export interface ClientOidcBackchannelLogoutSettings {
     /** Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed. */
     backchannel_logout_urls?: string[];
     backchannel_logout_initiators?: Management.ClientOidcBackchannelLogoutInitiators;
+    backchannel_logout_session_metadata?: Management.ClientOidcBackchannelLogoutSessionMetadata;
     /** Accepts any additional properties */
     [key: string]: any;
 }

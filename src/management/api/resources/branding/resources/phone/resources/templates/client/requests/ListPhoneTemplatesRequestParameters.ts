@@ -7,8 +7,6 @@
  *     {}
  */
 export interface ListPhoneTemplatesRequestParameters {
-    /**
-     * Whether the template is enabled (false) or disabled (true).
-     */
+    /** Whether the template is enabled (false) or disabled (true). */
     disabled?: boolean;
 }

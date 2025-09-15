@@ -9,36 +9,20 @@ import * as Management from "../../../../../../index.js";
  *     {}
  */
 export interface ListAculsRequestParameters {
-    /**
-     * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Whether specified fields are to be included (default: true) or excluded (false).
-     */
+    /** Whether specified fields are to be included (default: true) or excluded (false). */
     include_fields?: boolean;
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Number of results per page. Maximum value is 100, default value is 50.
-     */
+    /** Number of results per page. Maximum value is 100, default value is 50. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total configuration count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total configuration count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * Name of the prompt to filter by
-     */
+    /** Name of the prompt to filter by */
     prompt?: string;
-    /**
-     * Name of the screen to filter by
-     */
+    /** Name of the screen to filter by */
     screen?: string;
-    /**
-     * Rendering mode to filter by
-     */
+    /** Rendering mode to filter by */
     rendering_mode?: Management.AculRenderingModeEnum;
 }

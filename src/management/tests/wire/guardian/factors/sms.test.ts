@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../../Client.js";
+import * as Management from "../../../../api/index.js";
 
 describe("Sms", () => {
-    test("getTwilioProvider", async () => {
+    test("getTwilioProvider (86b63684)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -33,7 +34,73 @@ describe("Sms", () => {
         });
     });
 
-    test("setTwilioProvider", async () => {
+    test("getTwilioProvider (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/providers/twilio")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getTwilioProvider();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getTwilioProvider (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/providers/twilio")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getTwilioProvider();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getTwilioProvider (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/providers/twilio")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getTwilioProvider();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setTwilioProvider (64fae5af)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -61,7 +128,106 @@ describe("Sms", () => {
         });
     });
 
-    test("getSelectedProvider", async () => {
+    test("setTwilioProvider (ca700db5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            from: undefined,
+            messaging_service_sid: undefined,
+            auth_token: undefined,
+            sid: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/providers/twilio")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setTwilioProvider({
+                from: undefined,
+                messaging_service_sid: undefined,
+                auth_token: undefined,
+                sid: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setTwilioProvider (2f4ab2a5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            from: undefined,
+            messaging_service_sid: undefined,
+            auth_token: undefined,
+            sid: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/providers/twilio")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setTwilioProvider({
+                from: undefined,
+                messaging_service_sid: undefined,
+                auth_token: undefined,
+                sid: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setTwilioProvider (6934b271)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            from: undefined,
+            messaging_service_sid: undefined,
+            auth_token: undefined,
+            sid: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/providers/twilio")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setTwilioProvider({
+                from: undefined,
+                messaging_service_sid: undefined,
+                auth_token: undefined,
+                sid: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSelectedProvider (bcb0d021)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -80,7 +246,73 @@ describe("Sms", () => {
         });
     });
 
-    test("setProvider", async () => {
+    test("getSelectedProvider (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/selected-provider")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getSelectedProvider();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSelectedProvider (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/selected-provider")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getSelectedProvider();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getSelectedProvider (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/selected-provider")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getSelectedProvider();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setProvider (c7bcf6c3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
@@ -102,7 +334,82 @@ describe("Sms", () => {
         });
     });
 
-    test("getTemplates", async () => {
+    test("setProvider (6d89e675)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider: "auth0" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/selected-provider")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setProvider({
+                provider: "auth0",
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setProvider (e8607965)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider: "auth0" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/selected-provider")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setProvider({
+                provider: "auth0",
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setProvider (64b1f931)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider: "auth0" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/selected-provider")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setProvider({
+                provider: "auth0",
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getTemplates (e6b85352)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -125,7 +432,73 @@ describe("Sms", () => {
         });
     });
 
-    test("setTemplates", async () => {
+    test("getTemplates (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/templates")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getTemplates();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getTemplates (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/templates")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getTemplates();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getTemplates (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/guardian/factors/sms/templates")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.getTemplates();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setTemplates (a5593c87)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -153,5 +526,98 @@ describe("Sms", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         });
+    });
+
+    test("setTemplates (566065d0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            enrollment_message:
+                "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+            verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setTemplates({
+                enrollment_message:
+                    "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+                verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setTemplates (45786cf8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            enrollment_message:
+                "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+            verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setTemplates({
+                enrollment_message:
+                    "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+                verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("setTemplates (73d7fffc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            enrollment_message:
+                "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+            verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/guardian/factors/sms/templates")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.guardian.factors.sms.setTemplates({
+                enrollment_message:
+                    "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
+                verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
     });
 });

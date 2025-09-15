@@ -9,12 +9,9 @@
  *     }
  */
 export interface ListUserBlocksByIdentifierRequestParameters {
-    /**
-     * Should be any of a username, phone number, or email.
-     */
+    /** Should be any of a username, phone number, or email. */
     identifier: string;
     /**
-     *
      *           If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
      *           If true and Brute Force Protection is disabled, will return an empty list.
      *

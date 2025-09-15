@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Themes", () => {
-    test("create", async () => {
+    test("create (6c69f93)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -90,6 +91,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -230,6 +232,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -282,7 +285,792 @@ describe("Themes", () => {
         });
     });
 
-    test("getDefault", async () => {
+    test("create (198de0cc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/branding/themes")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.create({
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (8ce8fcd4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/branding/themes")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.create({
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (952cc9b8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/branding/themes")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.create({
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (4f966b50)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/branding/themes")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.create({
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (9a077d84)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/branding/themes")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.create({
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getDefault (6419cd01)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -313,6 +1101,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -381,6 +1170,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -433,7 +1223,95 @@ describe("Themes", () => {
         });
     });
 
-    test("get", async () => {
+    test("getDefault (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/default")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.getDefault();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getDefault (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/default")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.getDefault();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getDefault (c29c5807)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/default")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.getDefault();
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("getDefault (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/default")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.getDefault();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (3d39a7ed)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -464,6 +1342,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -532,6 +1411,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -584,7 +1464,95 @@ describe("Themes", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (3692e5c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.get("themeId");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (5c1d1520)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.get("themeId");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e9ce5fd8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.get("themeId");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (3019492c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.get("themeId");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c8b74ba1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -594,7 +1562,95 @@ describe("Themes", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (3692e5c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.delete("themeId");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (5c1d1520)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.delete("themeId");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (e9ce5fd8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.delete("themeId");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (3019492c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/branding/themes/themeId")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.delete("themeId");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (8d79fd57)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -678,6 +1734,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -818,6 +1875,7 @@ describe("Themes", () => {
                 links_focused_components: "links_focused_components",
                 primary_button: "primary_button",
                 primary_button_label: "primary_button_label",
+                read_only_background: "read_only_background",
                 secondary_button_border: "secondary_button_border",
                 secondary_button_label: "secondary_button_label",
                 success: "success",
@@ -868,5 +1926,790 @@ describe("Themes", () => {
                 social_buttons_layout: "bottom",
             },
         });
+    });
+
+    test("update (9ed9e803)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/branding/themes/themeId")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.update("themeId", {
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (7a8df013)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/branding/themes/themeId")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.update("themeId", {
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (da76e17f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/branding/themes/themeId")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.update("themeId", {
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (3b51e3af)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/branding/themes/themeId")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.update("themeId", {
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (eb8c8047)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            borders: {
+                button_border_radius: 1.1,
+                button_border_weight: 1.1,
+                buttons_style: "pill",
+                input_border_radius: 1.1,
+                input_border_weight: 1.1,
+                inputs_style: "pill",
+                show_widget_shadow: true,
+                widget_border_weight: 1.1,
+                widget_corner_radius: 1.1,
+            },
+            colors: {
+                base_focus_color: undefined,
+                base_hover_color: undefined,
+                body_text: "body_text",
+                captcha_widget_theme: undefined,
+                error: "error",
+                header: "header",
+                icons: "icons",
+                input_background: "input_background",
+                input_border: "input_border",
+                input_filled_text: "input_filled_text",
+                input_labels_placeholders: "input_labels_placeholders",
+                links_focused_components: "links_focused_components",
+                primary_button: "primary_button",
+                primary_button_label: "primary_button_label",
+                read_only_background: undefined,
+                secondary_button_border: "secondary_button_border",
+                secondary_button_label: "secondary_button_label",
+                success: "success",
+                widget_background: "widget_background",
+                widget_border: "widget_border",
+            },
+            displayName: undefined,
+            fonts: {
+                body_text: { bold: true, size: 1.1 },
+                buttons_text: { bold: true, size: 1.1 },
+                font_url: "font_url",
+                input_labels: { bold: true, size: 1.1 },
+                links: { bold: true, size: 1.1 },
+                links_style: "normal",
+                reference_text_size: 1.1,
+                subtitle: { bold: true, size: 1.1 },
+                title: { bold: true, size: 1.1 },
+            },
+            page_background: {
+                background_color: "background_color",
+                background_image_url: "background_image_url",
+                page_layout: "center",
+            },
+            widget: {
+                header_text_alignment: "center",
+                logo_height: 1.1,
+                logo_position: "center",
+                logo_url: "logo_url",
+                social_buttons_layout: "bottom",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/branding/themes/themeId")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.branding.themes.update("themeId", {
+                borders: {
+                    button_border_radius: 1.1,
+                    button_border_weight: 1.1,
+                    buttons_style: "pill",
+                    input_border_radius: 1.1,
+                    input_border_weight: 1.1,
+                    inputs_style: "pill",
+                    show_widget_shadow: true,
+                    widget_border_weight: 1.1,
+                    widget_corner_radius: 1.1,
+                },
+                colors: {
+                    base_focus_color: undefined,
+                    base_hover_color: undefined,
+                    body_text: "body_text",
+                    captcha_widget_theme: undefined,
+                    error: "error",
+                    header: "header",
+                    icons: "icons",
+                    input_background: "input_background",
+                    input_border: "input_border",
+                    input_filled_text: "input_filled_text",
+                    input_labels_placeholders: "input_labels_placeholders",
+                    links_focused_components: "links_focused_components",
+                    primary_button: "primary_button",
+                    primary_button_label: "primary_button_label",
+                    read_only_background: undefined,
+                    secondary_button_border: "secondary_button_border",
+                    secondary_button_label: "secondary_button_label",
+                    success: "success",
+                    widget_background: "widget_background",
+                    widget_border: "widget_border",
+                },
+                displayName: undefined,
+                fonts: {
+                    body_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    buttons_text: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    font_url: "font_url",
+                    input_labels: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    links_style: "normal",
+                    reference_text_size: 1.1,
+                    subtitle: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                    title: {
+                        bold: true,
+                        size: 1.1,
+                    },
+                },
+                page_background: {
+                    background_color: "background_color",
+                    background_image_url: "background_image_url",
+                    page_layout: "center",
+                },
+                widget: {
+                    header_text_alignment: "center",
+                    logo_height: 1.1,
+                    logo_position: "center",
+                    logo_url: "logo_url",
+                    social_buttons_layout: "bottom",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

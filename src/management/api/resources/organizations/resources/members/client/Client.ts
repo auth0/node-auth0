@@ -71,7 +71,7 @@ export class Members {
      * To search by checkpoint, use the following parameters: - from: Optional id from which to start selection. - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50. Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.ListOrganizationMembersRequestParameters} request
+     * @param {Management.ListOrganizationMembersRequestParameters} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -84,7 +84,7 @@ export class Members {
      */
     public async list(
         id: string,
-        request: Management.organizations.ListOrganizationMembersRequestParameters = {},
+        request: Management.ListOrganizationMembersRequestParameters = {},
         requestOptions?: Members.RequestOptions,
     ): Promise<core.Page<Management.OrganizationMember>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -105,6 +105,11 @@ export class Members {
                 if (includeFields != null) {
                     _queryParams["include_fields"] = includeFields.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -113,11 +118,7 @@ export class Members {
                         `organizations/${encodeURIComponent(id)}/members`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -198,7 +199,7 @@ export class Members {
      * To add a user to an Organization through this action, the user must already exist in your tenant. If a user does not yet exist, you can <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">invite them to create an account</a>, manually create them through the Auth0 Dashboard, or use the Management API.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.CreateOrganizationMemberRequestContent} request
+     * @param {Management.CreateOrganizationMemberRequestContent} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -213,7 +214,7 @@ export class Members {
      */
     public create(
         id: string,
-        request: Management.organizations.CreateOrganizationMemberRequestContent,
+        request: Management.CreateOrganizationMemberRequestContent,
         requestOptions?: Members.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -221,9 +222,14 @@ export class Members {
 
     private async __create(
         id: string,
-        request: Management.organizations.CreateOrganizationMemberRequestContent,
+        request: Management.CreateOrganizationMemberRequestContent,
         requestOptions?: Members.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -232,11 +238,7 @@ export class Members {
                 `organizations/${encodeURIComponent(id)}/members`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -289,7 +291,7 @@ export class Members {
 
     /**
      * @param {string} id - Organization identifier.
-     * @param {Management.organizations.DeleteOrganizationMembersRequestContent} request
+     * @param {Management.DeleteOrganizationMembersRequestContent} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -304,7 +306,7 @@ export class Members {
      */
     public delete(
         id: string,
-        request: Management.organizations.DeleteOrganizationMembersRequestContent,
+        request: Management.DeleteOrganizationMembersRequestContent,
         requestOptions?: Members.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -312,9 +314,14 @@ export class Members {
 
     private async __delete(
         id: string,
-        request: Management.organizations.DeleteOrganizationMembersRequestContent,
+        request: Management.DeleteOrganizationMembersRequestContent,
         requestOptions?: Members.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -323,11 +330,7 @@ export class Members {
                 `organizations/${encodeURIComponent(id)}/members`,
             ),
             method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

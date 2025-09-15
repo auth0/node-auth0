@@ -33,4 +33,5 @@ export interface CreateResourceServerRequestContent {
     consent_policy?: Management.ResourceServerConsentPolicyEnum | undefined;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
 }

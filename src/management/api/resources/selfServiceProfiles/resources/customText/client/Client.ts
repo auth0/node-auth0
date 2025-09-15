@@ -71,6 +71,11 @@ export class CustomText {
         page: Management.SelfServiceProfileCustomTextPageEnum,
         requestOptions?: CustomText.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListSelfServiceProfileCustomTextResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -79,11 +84,7 @@ export class CustomText {
                 `self-service-profiles/${encodeURIComponent(id)}/custom-text/${encodeURIComponent(language)}/${encodeURIComponent(page)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -170,6 +171,11 @@ export class CustomText {
         request: Management.SetSelfServiceProfileCustomTextRequestContent,
         requestOptions?: CustomText.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetSelfServiceProfileCustomTextResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -178,11 +184,7 @@ export class CustomText {
                 `self-service-profiles/${encodeURIComponent(id)}/custom-text/${encodeURIComponent(language)}/${encodeURIComponent(page)}`,
             ),
             method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

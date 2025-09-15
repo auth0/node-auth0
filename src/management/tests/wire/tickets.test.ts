@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("Tickets", () => {
-    test("verifyEmail", async () => {
+    test("verifyEmail (8eec3f8f)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
@@ -28,7 +29,202 @@ describe("Tickets", () => {
         });
     });
 
-    test("changePassword", async () => {
+    test("verifyEmail (e828e90d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: "user_id",
+            client_id: undefined,
+            organization_id: undefined,
+            ttl_sec: undefined,
+            includeEmailInRedirect: undefined,
+            identity: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/email-verification")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.verifyEmail({
+                result_url: undefined,
+                user_id: "user_id",
+                client_id: undefined,
+                organization_id: undefined,
+                ttl_sec: undefined,
+                includeEmailInRedirect: undefined,
+                identity: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("verifyEmail (425913fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: "user_id",
+            client_id: undefined,
+            organization_id: undefined,
+            ttl_sec: undefined,
+            includeEmailInRedirect: undefined,
+            identity: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/email-verification")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.verifyEmail({
+                result_url: undefined,
+                user_id: "user_id",
+                client_id: undefined,
+                organization_id: undefined,
+                ttl_sec: undefined,
+                includeEmailInRedirect: undefined,
+                identity: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("verifyEmail (93e079c9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: "user_id",
+            client_id: undefined,
+            organization_id: undefined,
+            ttl_sec: undefined,
+            includeEmailInRedirect: undefined,
+            identity: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/email-verification")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.verifyEmail({
+                result_url: undefined,
+                user_id: "user_id",
+                client_id: undefined,
+                organization_id: undefined,
+                ttl_sec: undefined,
+                includeEmailInRedirect: undefined,
+                identity: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("verifyEmail (d4b76229)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: "user_id",
+            client_id: undefined,
+            organization_id: undefined,
+            ttl_sec: undefined,
+            includeEmailInRedirect: undefined,
+            identity: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/email-verification")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.verifyEmail({
+                result_url: undefined,
+                user_id: "user_id",
+                client_id: undefined,
+                organization_id: undefined,
+                ttl_sec: undefined,
+                includeEmailInRedirect: undefined,
+                identity: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("verifyEmail (7d127c61)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: "user_id",
+            client_id: undefined,
+            organization_id: undefined,
+            ttl_sec: undefined,
+            includeEmailInRedirect: undefined,
+            identity: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/email-verification")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.verifyEmail({
+                result_url: undefined,
+                user_id: "user_id",
+                client_id: undefined,
+                organization_id: undefined,
+                ttl_sec: undefined,
+                includeEmailInRedirect: undefined,
+                identity: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("changePassword (9982f3f9)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -46,5 +242,220 @@ describe("Tickets", () => {
         expect(response).toEqual({
             ticket: "ticket",
         });
+    });
+
+    test("changePassword (b1708264)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: undefined,
+            client_id: undefined,
+            organization_id: undefined,
+            connection_id: undefined,
+            email: undefined,
+            ttl_sec: undefined,
+            mark_email_as_verified: undefined,
+            includeEmailInRedirect: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/password-change")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.changePassword({
+                result_url: undefined,
+                user_id: undefined,
+                client_id: undefined,
+                organization_id: undefined,
+                connection_id: undefined,
+                email: undefined,
+                ttl_sec: undefined,
+                mark_email_as_verified: undefined,
+                includeEmailInRedirect: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("changePassword (c8264b8c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: undefined,
+            client_id: undefined,
+            organization_id: undefined,
+            connection_id: undefined,
+            email: undefined,
+            ttl_sec: undefined,
+            mark_email_as_verified: undefined,
+            includeEmailInRedirect: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/password-change")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.changePassword({
+                result_url: undefined,
+                user_id: undefined,
+                client_id: undefined,
+                organization_id: undefined,
+                connection_id: undefined,
+                email: undefined,
+                ttl_sec: undefined,
+                mark_email_as_verified: undefined,
+                includeEmailInRedirect: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("changePassword (307e8490)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: undefined,
+            client_id: undefined,
+            organization_id: undefined,
+            connection_id: undefined,
+            email: undefined,
+            ttl_sec: undefined,
+            mark_email_as_verified: undefined,
+            includeEmailInRedirect: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/password-change")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.changePassword({
+                result_url: undefined,
+                user_id: undefined,
+                client_id: undefined,
+                organization_id: undefined,
+                connection_id: undefined,
+                email: undefined,
+                ttl_sec: undefined,
+                mark_email_as_verified: undefined,
+                includeEmailInRedirect: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("changePassword (66e68fc8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: undefined,
+            client_id: undefined,
+            organization_id: undefined,
+            connection_id: undefined,
+            email: undefined,
+            ttl_sec: undefined,
+            mark_email_as_verified: undefined,
+            includeEmailInRedirect: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/password-change")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.changePassword({
+                result_url: undefined,
+                user_id: undefined,
+                client_id: undefined,
+                organization_id: undefined,
+                connection_id: undefined,
+                email: undefined,
+                ttl_sec: undefined,
+                mark_email_as_verified: undefined,
+                includeEmailInRedirect: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("changePassword (aae02b9c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            result_url: undefined,
+            user_id: undefined,
+            client_id: undefined,
+            organization_id: undefined,
+            connection_id: undefined,
+            email: undefined,
+            ttl_sec: undefined,
+            mark_email_as_verified: undefined,
+            includeEmailInRedirect: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/tickets/password-change")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tickets.changePassword({
+                result_url: undefined,
+                user_id: undefined,
+                client_id: undefined,
+                organization_id: undefined,
+                connection_id: undefined,
+                email: undefined,
+                ttl_sec: undefined,
+                mark_email_as_verified: undefined,
+                includeEmailInRedirect: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

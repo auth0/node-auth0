@@ -45,7 +45,7 @@ export class VerificationEmail {
      *
      * Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
      *
-     * @param {Management.jobs.CreateVerificationEmailRequestContent} request
+     * @param {Management.CreateVerificationEmailRequestContent} request
      * @param {VerificationEmail.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -59,16 +59,21 @@ export class VerificationEmail {
      *     })
      */
     public create(
-        request: Management.jobs.CreateVerificationEmailRequestContent,
+        request: Management.CreateVerificationEmailRequestContent,
         requestOptions?: VerificationEmail.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateVerificationEmailResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.jobs.CreateVerificationEmailRequestContent,
+        request: Management.CreateVerificationEmailRequestContent,
         requestOptions?: VerificationEmail.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateVerificationEmailResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -77,11 +82,7 @@ export class VerificationEmail {
                 "jobs/verification-email",
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",

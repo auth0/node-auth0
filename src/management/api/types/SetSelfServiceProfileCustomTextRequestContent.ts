@@ -5,4 +5,4 @@
 /**
  * The list of text keys and values to customize the self-service SSO page. Values can be plain text or rich HTML content limited to basic styling tags and hyperlinks.
  */
-export type SetSelfServiceProfileCustomTextRequestContent = Record<string, unknown>;
+export type SetSelfServiceProfileCustomTextRequestContent = Record<string, string>;

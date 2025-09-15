@@ -13,9 +13,9 @@ export interface GetActionVersionResponseContent {
     code?: string;
     /** The list of third party npm modules, and their versions, that this specific version depends on. */
     dependencies?: Management.ActionVersionDependency[];
-    /** Indicates if this speciic version is the currently one deployed. */
+    /** Indicates if this specific version is the currently one deployed. */
     deployed?: boolean;
-    /** The Node runtime. For example: `node12` */
+    /** The Node runtime. For example: `node22` */
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretResponse[];

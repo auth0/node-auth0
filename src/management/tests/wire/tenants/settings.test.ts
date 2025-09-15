@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Settings", () => {
-    test("get", async () => {
+    test("get (e4f93e66)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -169,7 +170,71 @@ describe("Settings", () => {
         });
     });
 
-    test("update", async () => {
+    test("get (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.tenants.settings.get();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.tenants.settings.get();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.tenants.settings.get();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.tenants.settings.get();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (8969b2c1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -337,5 +402,345 @@ describe("Settings", () => {
             pushed_authorization_requests_supported: true,
             authorization_response_iss_parameter_supported: true,
         });
+    });
+
+    test("update (c3027d90)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            change_password: undefined,
+            device_flow: undefined,
+            guardian_mfa_page: undefined,
+            default_audience: undefined,
+            default_directory: undefined,
+            error_page: undefined,
+            default_token_quota: undefined,
+            flags: undefined,
+            friendly_name: undefined,
+            picture_url: undefined,
+            support_email: undefined,
+            support_url: undefined,
+            allowed_logout_urls: undefined,
+            session_lifetime: undefined,
+            idle_session_lifetime: undefined,
+            ephemeral_session_lifetime: undefined,
+            idle_ephemeral_session_lifetime: undefined,
+            sandbox_version: undefined,
+            legacy_sandbox_version: undefined,
+            default_redirection_uri: undefined,
+            enabled_locales: undefined,
+            session_cookie: undefined,
+            sessions: undefined,
+            oidc_logout: undefined,
+            customize_mfa_in_postlogin_action: undefined,
+            allow_organization_name_in_authentication_api: undefined,
+            acr_values_supported: undefined,
+            mtls: undefined,
+            pushed_authorization_requests_supported: undefined,
+            authorization_response_iss_parameter_supported: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/tenants/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tenants.settings.update({
+                change_password: undefined,
+                device_flow: undefined,
+                guardian_mfa_page: undefined,
+                default_audience: undefined,
+                default_directory: undefined,
+                error_page: undefined,
+                default_token_quota: undefined,
+                flags: undefined,
+                friendly_name: undefined,
+                picture_url: undefined,
+                support_email: undefined,
+                support_url: undefined,
+                allowed_logout_urls: undefined,
+                session_lifetime: undefined,
+                idle_session_lifetime: undefined,
+                ephemeral_session_lifetime: undefined,
+                idle_ephemeral_session_lifetime: undefined,
+                sandbox_version: undefined,
+                legacy_sandbox_version: undefined,
+                default_redirection_uri: undefined,
+                enabled_locales: undefined,
+                session_cookie: undefined,
+                sessions: undefined,
+                oidc_logout: undefined,
+                customize_mfa_in_postlogin_action: undefined,
+                allow_organization_name_in_authentication_api: undefined,
+                acr_values_supported: undefined,
+                mtls: undefined,
+                pushed_authorization_requests_supported: undefined,
+                authorization_response_iss_parameter_supported: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (967318b8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            change_password: undefined,
+            device_flow: undefined,
+            guardian_mfa_page: undefined,
+            default_audience: undefined,
+            default_directory: undefined,
+            error_page: undefined,
+            default_token_quota: undefined,
+            flags: undefined,
+            friendly_name: undefined,
+            picture_url: undefined,
+            support_email: undefined,
+            support_url: undefined,
+            allowed_logout_urls: undefined,
+            session_lifetime: undefined,
+            idle_session_lifetime: undefined,
+            ephemeral_session_lifetime: undefined,
+            idle_ephemeral_session_lifetime: undefined,
+            sandbox_version: undefined,
+            legacy_sandbox_version: undefined,
+            default_redirection_uri: undefined,
+            enabled_locales: undefined,
+            session_cookie: undefined,
+            sessions: undefined,
+            oidc_logout: undefined,
+            customize_mfa_in_postlogin_action: undefined,
+            allow_organization_name_in_authentication_api: undefined,
+            acr_values_supported: undefined,
+            mtls: undefined,
+            pushed_authorization_requests_supported: undefined,
+            authorization_response_iss_parameter_supported: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/tenants/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tenants.settings.update({
+                change_password: undefined,
+                device_flow: undefined,
+                guardian_mfa_page: undefined,
+                default_audience: undefined,
+                default_directory: undefined,
+                error_page: undefined,
+                default_token_quota: undefined,
+                flags: undefined,
+                friendly_name: undefined,
+                picture_url: undefined,
+                support_email: undefined,
+                support_url: undefined,
+                allowed_logout_urls: undefined,
+                session_lifetime: undefined,
+                idle_session_lifetime: undefined,
+                ephemeral_session_lifetime: undefined,
+                idle_ephemeral_session_lifetime: undefined,
+                sandbox_version: undefined,
+                legacy_sandbox_version: undefined,
+                default_redirection_uri: undefined,
+                enabled_locales: undefined,
+                session_cookie: undefined,
+                sessions: undefined,
+                oidc_logout: undefined,
+                customize_mfa_in_postlogin_action: undefined,
+                allow_organization_name_in_authentication_api: undefined,
+                acr_values_supported: undefined,
+                mtls: undefined,
+                pushed_authorization_requests_supported: undefined,
+                authorization_response_iss_parameter_supported: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (ad473ebc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            change_password: undefined,
+            device_flow: undefined,
+            guardian_mfa_page: undefined,
+            default_audience: undefined,
+            default_directory: undefined,
+            error_page: undefined,
+            default_token_quota: undefined,
+            flags: undefined,
+            friendly_name: undefined,
+            picture_url: undefined,
+            support_email: undefined,
+            support_url: undefined,
+            allowed_logout_urls: undefined,
+            session_lifetime: undefined,
+            idle_session_lifetime: undefined,
+            ephemeral_session_lifetime: undefined,
+            idle_ephemeral_session_lifetime: undefined,
+            sandbox_version: undefined,
+            legacy_sandbox_version: undefined,
+            default_redirection_uri: undefined,
+            enabled_locales: undefined,
+            session_cookie: undefined,
+            sessions: undefined,
+            oidc_logout: undefined,
+            customize_mfa_in_postlogin_action: undefined,
+            allow_organization_name_in_authentication_api: undefined,
+            acr_values_supported: undefined,
+            mtls: undefined,
+            pushed_authorization_requests_supported: undefined,
+            authorization_response_iss_parameter_supported: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/tenants/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tenants.settings.update({
+                change_password: undefined,
+                device_flow: undefined,
+                guardian_mfa_page: undefined,
+                default_audience: undefined,
+                default_directory: undefined,
+                error_page: undefined,
+                default_token_quota: undefined,
+                flags: undefined,
+                friendly_name: undefined,
+                picture_url: undefined,
+                support_email: undefined,
+                support_url: undefined,
+                allowed_logout_urls: undefined,
+                session_lifetime: undefined,
+                idle_session_lifetime: undefined,
+                ephemeral_session_lifetime: undefined,
+                idle_ephemeral_session_lifetime: undefined,
+                sandbox_version: undefined,
+                legacy_sandbox_version: undefined,
+                default_redirection_uri: undefined,
+                enabled_locales: undefined,
+                session_cookie: undefined,
+                sessions: undefined,
+                oidc_logout: undefined,
+                customize_mfa_in_postlogin_action: undefined,
+                allow_organization_name_in_authentication_api: undefined,
+                acr_values_supported: undefined,
+                mtls: undefined,
+                pushed_authorization_requests_supported: undefined,
+                authorization_response_iss_parameter_supported: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (5524f088)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            change_password: undefined,
+            device_flow: undefined,
+            guardian_mfa_page: undefined,
+            default_audience: undefined,
+            default_directory: undefined,
+            error_page: undefined,
+            default_token_quota: undefined,
+            flags: undefined,
+            friendly_name: undefined,
+            picture_url: undefined,
+            support_email: undefined,
+            support_url: undefined,
+            allowed_logout_urls: undefined,
+            session_lifetime: undefined,
+            idle_session_lifetime: undefined,
+            ephemeral_session_lifetime: undefined,
+            idle_ephemeral_session_lifetime: undefined,
+            sandbox_version: undefined,
+            legacy_sandbox_version: undefined,
+            default_redirection_uri: undefined,
+            enabled_locales: undefined,
+            session_cookie: undefined,
+            sessions: undefined,
+            oidc_logout: undefined,
+            customize_mfa_in_postlogin_action: undefined,
+            allow_organization_name_in_authentication_api: undefined,
+            acr_values_supported: undefined,
+            mtls: undefined,
+            pushed_authorization_requests_supported: undefined,
+            authorization_response_iss_parameter_supported: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/tenants/settings")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tenants.settings.update({
+                change_password: undefined,
+                device_flow: undefined,
+                guardian_mfa_page: undefined,
+                default_audience: undefined,
+                default_directory: undefined,
+                error_page: undefined,
+                default_token_quota: undefined,
+                flags: undefined,
+                friendly_name: undefined,
+                picture_url: undefined,
+                support_email: undefined,
+                support_url: undefined,
+                allowed_logout_urls: undefined,
+                session_lifetime: undefined,
+                idle_session_lifetime: undefined,
+                ephemeral_session_lifetime: undefined,
+                idle_ephemeral_session_lifetime: undefined,
+                sandbox_version: undefined,
+                legacy_sandbox_version: undefined,
+                default_redirection_uri: undefined,
+                enabled_locales: undefined,
+                session_cookie: undefined,
+                sessions: undefined,
+                oidc_logout: undefined,
+                customize_mfa_in_postlogin_action: undefined,
+                allow_organization_name_in_authentication_api: undefined,
+                acr_values_supported: undefined,
+                mtls: undefined,
+                pushed_authorization_requests_supported: undefined,
+                authorization_response_iss_parameter_supported: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

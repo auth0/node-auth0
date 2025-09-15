@@ -17,8 +17,7 @@ export interface CreateClientResponseContent {
     global?: boolean;
     /** Client secret (which you must not make public). */
     client_secret?: string;
-    /** Type of client used to determine which settings are applicable. Can be `spa`, `native`, `non_interactive`, or `regular_web`. */
-    app_type?: string;
+    app_type?: Management.ClientAppTypeEnum;
     /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
     logo_uri?: string;
     /** Whether this client a first party client (true) or not (false). */
@@ -39,7 +38,7 @@ export interface CreateClientResponseContent {
     allowed_logout_urls?: string[];
     session_transfer?: Management.ClientSessionTransferConfiguration;
     oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
-    /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, and `urn:ietf:params:oauth:grant-type:device_code`. */
+    /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[];
     jwt_configuration?: Management.ClientJwtConfiguration;
     signing_keys?: Management.ClientSigningKeys;
@@ -70,6 +69,8 @@ export interface CreateClientResponseContent {
     default_organization?: Management.ClientDefaultOrganization;
     organization_usage?: Management.ClientOrganizationUsageEnum;
     organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
     client_authentication_methods?: Management.ClientAuthenticationMethod;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
     require_pushed_authorization_requests?: boolean;
@@ -80,6 +81,9 @@ export interface CreateClientResponseContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number;
     token_quota?: Management.TokenQuota;
+    my_organization_configuration?: Management.ClientMyOrganizationConfiguration;
+    /** The identifier of the resource server that this client is linked to. */
+    resource_server_identifier?: string;
     /** Accepts any additional properties */
     [key: string]: any;
 }

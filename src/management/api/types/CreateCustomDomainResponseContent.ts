@@ -11,7 +11,7 @@ export interface CreateCustomDomainResponseContent {
     domain: string;
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
-    status: Management.CustomDomainStatusEnum;
+    status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     verification: Management.DomainVerification;
     /** The HTTP header to fetch the client's IP address */

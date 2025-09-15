@@ -4,9 +4,166 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("Permissions", () => {
-    test("create", async () => {
+    test("list (13f93d13)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            permissions: [
+                {
+                    resource_server_identifier: "resource_server_identifier",
+                    permission_name: "permission_name",
+                    resource_server_name: "resource_server_name",
+                    description: "description",
+                },
+            ],
+        };
+        server
+            .mockEndpoint()
+            .get("/users/id/permissions")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            permissions: [
+                {
+                    resource_server_identifier: "resource_server_identifier",
+                    permission_name: "permission_name",
+                    resource_server_name: "resource_server_name",
+                    description: "description",
+                },
+            ],
+        };
+        const page = await client.users.permissions.list("id");
+        expect(expected.permissions).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.permissions).toEqual(nextPage.data);
+    });
+
+    test("list (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/permissions")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.list("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/permissions")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.list("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/permissions")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.list("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/permissions")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.list("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/permissions")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.list("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (7044cab6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -34,7 +191,163 @@ describe("Permissions", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("delete", async () => {
+    test("create (4cfc2db5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.create("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (dd1ed2a5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.create("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (9d65d271)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.create("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (fa8483c9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.create("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (7044cab6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -60,5 +373,161 @@ describe("Permissions", () => {
             ],
         });
         expect(response).toEqual(undefined);
+    });
+
+    test("delete (4cfc2db5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.delete("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (dd1ed2a5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.delete("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (9d65d271)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.delete("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (fa8483c9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.delete("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

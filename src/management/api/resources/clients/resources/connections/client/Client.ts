@@ -52,7 +52,7 @@ export class Connections {
      * </ul>
      *
      * @param {string} id - ID of the client for which to retrieve enabled connections.
-     * @param {Management.clients.ConnectionsGetRequest} request
+     * @param {Management.ConnectionsGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -66,7 +66,7 @@ export class Connections {
      */
     public async get(
         id: string,
-        request: Management.clients.ConnectionsGetRequest = {},
+        request: Management.ConnectionsGetRequest = {},
         requestOptions?: Connections.RequestOptions,
     ): Promise<core.Page<Management.ConnectionForList>> {
         const list = core.HttpResponsePromise.interceptFunction(
@@ -94,6 +94,11 @@ export class Connections {
                 if (includeFields != null) {
                     _queryParams["include_fields"] = includeFields.toString();
                 }
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    this._options?.headers,
+                    mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+                    requestOptions?.headers,
+                );
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: core.url.join(
                         (await core.Supplier.get(this._options.baseUrl)) ??
@@ -102,11 +107,7 @@ export class Connections {
                         `clients/${encodeURIComponent(id)}/connections`,
                     ),
                     method: "GET",
-                    headers: mergeHeaders(
-                        this._options?.headers,
-                        mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                        requestOptions?.headers,
-                    ),
+                    headers: _headers,
                     queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,

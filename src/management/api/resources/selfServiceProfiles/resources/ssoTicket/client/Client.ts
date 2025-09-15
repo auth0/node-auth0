@@ -44,7 +44,7 @@ export class SsoTicket {
      * Creates an SSO access ticket to initiate the Self Service SSO Flow using a self-service profile.
      *
      * @param {string} id - The id of the self-service profile to retrieve
-     * @param {Management.selfServiceProfiles.CreateSelfServiceProfileSsoTicketRequestContent} request
+     * @param {Management.CreateSelfServiceProfileSsoTicketRequestContent} request
      * @param {SsoTicket.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -57,7 +57,7 @@ export class SsoTicket {
      */
     public create(
         id: string,
-        request: Management.selfServiceProfiles.CreateSelfServiceProfileSsoTicketRequestContent = {},
+        request: Management.CreateSelfServiceProfileSsoTicketRequestContent = {},
         requestOptions?: SsoTicket.RequestOptions,
     ): core.HttpResponsePromise<Management.CreateSelfServiceProfileSsoTicketResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -65,9 +65,14 @@ export class SsoTicket {
 
     private async __create(
         id: string,
-        request: Management.selfServiceProfiles.CreateSelfServiceProfileSsoTicketRequestContent = {},
+        request: Management.CreateSelfServiceProfileSsoTicketRequestContent = {},
         requestOptions?: SsoTicket.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateSelfServiceProfileSsoTicketResponseContent>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -76,11 +81,7 @@ export class SsoTicket {
                 `self-service-profiles/${encodeURIComponent(id)}/sso-ticket`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
@@ -162,6 +163,11 @@ export class SsoTicket {
         id: string,
         requestOptions?: SsoTicket.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
+            requestOptions?.headers,
+        );
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -170,11 +176,7 @@ export class SsoTicket {
                 `self-service-profiles/${encodeURIComponent(profileId)}/sso-ticket/${encodeURIComponent(id)}/revoke`,
             ),
             method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
             queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

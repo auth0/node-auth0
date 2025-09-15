@@ -7,20 +7,12 @@
  *     {}
  */
 export interface ListUserLogsRequestParameters {
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Number of results per page. Paging is disabled if parameter not sent.
-     */
+    /** Number of results per page. Paging is disabled if parameter not sent. */
     per_page?: number;
-    /**
-     * Field to sort by. Use `fieldname:1` for ascending order and `fieldname:-1` for descending.
-     */
+    /** Field to sort by. Use `fieldname:1` for ascending order and `fieldname:-1` for descending. */
     sort?: string;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
 }

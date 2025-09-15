@@ -4,9 +4,118 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("Forms", () => {
-    test("create", async () => {
+    test("list (ac62b2b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            forms: [
+                {
+                    id: "id",
+                    name: "name",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    embedded_at: "embedded_at",
+                    submitted_at: "submitted_at",
+                },
+            ],
+        };
+        server.mockEndpoint().get("/forms").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            forms: [
+                {
+                    id: "id",
+                    name: "name",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    embedded_at: "embedded_at",
+                    submitted_at: "submitted_at",
+                },
+            ],
+        };
+        const page = await client.forms.list();
+        expect(expected.forms).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.forms).toEqual(nextPage.data);
+    });
+
+    test("list (c60dd33b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.list();
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (be2e52c4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
@@ -15,7 +124,7 @@ describe("Forms", () => {
             name: "name",
             messages: { errors: { key: "value" }, custom: { key: "value" } },
             languages: { primary: "primary", default: "default" },
-            translations: { key: "value" },
+            translations: { key: { key: "value" } },
             nodes: [
                 { id: "id", type: "FLOW", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
             ],
@@ -60,7 +169,9 @@ describe("Forms", () => {
                 default: "default",
             },
             translations: {
-                key: "value",
+                key: {
+                    key: "value",
+                },
             },
             nodes: [
                 {
@@ -112,7 +223,171 @@ describe("Forms", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (23664f69)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/forms")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.create({
+                name: "x",
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (e22e6749)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/forms")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.create({
+                name: "x",
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (f0ea1aa5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/forms")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.create({
+                name: "x",
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (e9650aed)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "x",
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/forms")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.create({
+                name: "x",
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (f0b309fd)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -121,7 +396,7 @@ describe("Forms", () => {
             name: "name",
             messages: { errors: { key: "value" }, custom: { key: "value" } },
             languages: { primary: "primary", default: "default" },
-            translations: { key: "value" },
+            translations: { key: { key: "value" } },
             nodes: [
                 { id: "id", type: "FLOW", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
             ],
@@ -157,7 +432,9 @@ describe("Forms", () => {
                 default: "default",
             },
             translations: {
-                key: "value",
+                key: {
+                    key: "value",
+                },
             },
             nodes: [
                 {
@@ -209,7 +486,87 @@ describe("Forms", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.get("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/forms/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -219,7 +576,71 @@ describe("Forms", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/forms/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.delete("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/forms/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/forms/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/forms/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.forms.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (e44eb82)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -228,7 +649,7 @@ describe("Forms", () => {
             name: "name",
             messages: { errors: { key: "value" }, custom: { key: "value" } },
             languages: { primary: "primary", default: "default" },
-            translations: { key: "value" },
+            translations: { key: { key: "value" } },
             nodes: [
                 { id: "id", type: "FLOW", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
             ],
@@ -271,7 +692,9 @@ describe("Forms", () => {
                 default: "default",
             },
             translations: {
-                key: "value",
+                key: {
+                    key: "value",
+                },
             },
             nodes: [
                 {
@@ -321,5 +744,128 @@ describe("Forms", () => {
             embedded_at: "embedded_at",
             submitted_at: "submitted_at",
         });
+    });
+
+    test("update (74a1ba4a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/forms/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.update("id", {
+                name: undefined,
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (ceee290e)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/forms/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.update("id", {
+                name: undefined,
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (f75bec9a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            messages: undefined,
+            languages: undefined,
+            translations: undefined,
+            nodes: undefined,
+            start: undefined,
+            ending: undefined,
+            style: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/forms/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.forms.update("id", {
+                name: undefined,
+                messages: undefined,
+                languages: undefined,
+                translations: undefined,
+                nodes: undefined,
+                start: undefined,
+                ending: undefined,
+                style: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

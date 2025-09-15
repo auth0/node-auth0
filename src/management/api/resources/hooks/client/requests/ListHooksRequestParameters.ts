@@ -9,28 +9,16 @@ import * as Management from "../../../../index.js";
  *     {}
  */
 export interface ListHooksRequestParameters {
-    /**
-     * Page index of the results to return. First page is 0.
-     */
+    /** Page index of the results to return. First page is 0. */
     page?: number;
-    /**
-     * Number of results per page.
-     */
+    /** Number of results per page. */
     per_page?: number;
-    /**
-     * Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).
-     */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean;
-    /**
-     * Optional filter on whether a hook is enabled (true) or disabled (false).
-     */
+    /** Optional filter on whether a hook is enabled (true) or disabled (false). */
     enabled?: boolean;
-    /**
-     * Comma-separated list of fields to include in the result. Leave empty to retrieve all fields.
-     */
+    /** Comma-separated list of fields to include in the result. Leave empty to retrieve all fields. */
     fields?: string;
-    /**
-     * Retrieves hooks that match the trigger
-     */
+    /** Retrieves hooks that match the trigger */
     triggerId?: Management.HookTriggerIdEnum;
 }

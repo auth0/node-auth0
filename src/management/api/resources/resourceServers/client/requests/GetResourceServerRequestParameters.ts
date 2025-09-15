@@ -7,8 +7,6 @@
  *     {}
  */
 export interface GetResourceServerRequestParameters {
-    /**
-     * Whether specified fields are to be included (true) or excluded (false).
-     */
+    /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean;
 }

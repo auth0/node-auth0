@@ -4,9 +4,194 @@
 
 import { mockServerPool } from "../../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../../Client.js";
+import * as Management from "../../../api/index.js";
 
 describe("AuthenticationMethods", () => {
-    test("create", async () => {
+    test("list (f6a276c9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            authenticators: [
+                {
+                    id: "id",
+                    type: "recovery-code",
+                    confirmed: true,
+                    name: "name",
+                    authentication_methods: [{}],
+                    preferred_authentication_method: "voice",
+                    link_id: "link_id",
+                    phone_number: "phone_number",
+                    email: "email",
+                    key_id: "key_id",
+                    public_key: "public_key",
+                    created_at: "2024-01-15T09:30:00Z",
+                    enrolled_at: "2024-01-15T09:30:00Z",
+                    last_auth_at: "2024-01-15T09:30:00Z",
+                    credential_device_type: "credential_device_type",
+                    credential_backed_up: true,
+                    identity_user_id: "identity_user_id",
+                    user_agent: "user_agent",
+                },
+            ],
+        };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            authenticators: [
+                {
+                    id: "id",
+                    type: "recovery-code",
+                    confirmed: true,
+                    name: "name",
+                    authentication_methods: [{}],
+                    preferred_authentication_method: "voice",
+                    link_id: "link_id",
+                    phone_number: "phone_number",
+                    email: "email",
+                    key_id: "key_id",
+                    public_key: "public_key",
+                    created_at: "2024-01-15T09:30:00Z",
+                    enrolled_at: "2024-01-15T09:30:00Z",
+                    last_auth_at: "2024-01-15T09:30:00Z",
+                    credential_device_type: "credential_device_type",
+                    credential_backed_up: true,
+                    identity_user_id: "identity_user_id",
+                    user_agent: "user_agent",
+                },
+            ],
+        };
+        const page = await client.users.authenticationMethods.list("id");
+        expect(expected.authenticators).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.authenticators).toEqual(nextPage.data);
+    });
+
+    test("list (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.list("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.list("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.list("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.list("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.list("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (4484867a)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
@@ -57,7 +242,265 @@ describe("AuthenticationMethods", () => {
         });
     });
 
-    test("set", async () => {
+    test("create (ae666d0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            type: "phone",
+            name: undefined,
+            totp_secret: undefined,
+            phone_number: undefined,
+            email: undefined,
+            preferred_authentication_method: undefined,
+            key_id: undefined,
+            public_key: undefined,
+            relying_party_identifier: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.create("id", {
+                type: "phone",
+                name: undefined,
+                totp_secret: undefined,
+                phone_number: undefined,
+                email: undefined,
+                preferred_authentication_method: undefined,
+                key_id: undefined,
+                public_key: undefined,
+                relying_party_identifier: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (8300adf8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            type: "phone",
+            name: undefined,
+            totp_secret: undefined,
+            phone_number: undefined,
+            email: undefined,
+            preferred_authentication_method: undefined,
+            key_id: undefined,
+            public_key: undefined,
+            relying_party_identifier: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.create("id", {
+                type: "phone",
+                name: undefined,
+                totp_secret: undefined,
+                phone_number: undefined,
+                email: undefined,
+                preferred_authentication_method: undefined,
+                key_id: undefined,
+                public_key: undefined,
+                relying_party_identifier: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (686c28fc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            type: "phone",
+            name: undefined,
+            totp_secret: undefined,
+            phone_number: undefined,
+            email: undefined,
+            preferred_authentication_method: undefined,
+            key_id: undefined,
+            public_key: undefined,
+            relying_party_identifier: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.create("id", {
+                type: "phone",
+                name: undefined,
+                totp_secret: undefined,
+                phone_number: undefined,
+                email: undefined,
+                preferred_authentication_method: undefined,
+                key_id: undefined,
+                public_key: undefined,
+                relying_party_identifier: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (1dcd23c4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            type: "phone",
+            name: undefined,
+            totp_secret: undefined,
+            phone_number: undefined,
+            email: undefined,
+            preferred_authentication_method: undefined,
+            key_id: undefined,
+            public_key: undefined,
+            relying_party_identifier: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.create("id", {
+                type: "phone",
+                name: undefined,
+                totp_secret: undefined,
+                phone_number: undefined,
+                email: undefined,
+                preferred_authentication_method: undefined,
+                key_id: undefined,
+                public_key: undefined,
+                relying_party_identifier: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (e4e63e54)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            type: "phone",
+            name: undefined,
+            totp_secret: undefined,
+            phone_number: undefined,
+            email: undefined,
+            preferred_authentication_method: undefined,
+            key_id: undefined,
+            public_key: undefined,
+            relying_party_identifier: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.create("id", {
+                type: "phone",
+                name: undefined,
+                totp_secret: undefined,
+                phone_number: undefined,
+                email: undefined,
+                preferred_authentication_method: undefined,
+                key_id: undefined,
+                public_key: undefined,
+                relying_party_identifier: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (6f5ccac8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            type: "phone",
+            name: undefined,
+            totp_secret: undefined,
+            phone_number: undefined,
+            email: undefined,
+            preferred_authentication_method: undefined,
+            key_id: undefined,
+            public_key: undefined,
+            relying_party_identifier: undefined,
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.create("id", {
+                type: "phone",
+                name: undefined,
+                totp_secret: undefined,
+                phone_number: undefined,
+                email: undefined,
+                preferred_authentication_method: undefined,
+                key_id: undefined,
+                public_key: undefined,
+                relying_party_identifier: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (2ea23b4f)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ type: "phone" }];
@@ -109,7 +552,292 @@ describe("AuthenticationMethods", () => {
         ]);
     });
 
-    test("deleteAll", async () => {
+    test("set (d6db401b)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.set("id", [
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (1086bccb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.set("id", [
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (219a5077)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.set("id", [
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (9f555c0f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.set("id", [
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (8c1e401f)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+            {
+                type: "phone",
+                preferred_authentication_method: undefined,
+                name: undefined,
+                phone_number: undefined,
+                email: undefined,
+                totp_secret: undefined,
+            },
+        ];
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/users/id/authentication-methods")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.set("id", [
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+                {
+                    type: "phone",
+                    preferred_authentication_method: undefined,
+                    name: undefined,
+                    phone_number: undefined,
+                    email: undefined,
+                    totp_secret: undefined,
+                },
+            ]);
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteAll (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -119,7 +847,95 @@ describe("AuthenticationMethods", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("get", async () => {
+    test("deleteAll (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.deleteAll("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteAll (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.deleteAll("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteAll (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.deleteAll("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("deleteAll (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.deleteAll("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (de81e963)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -179,7 +995,117 @@ describe("AuthenticationMethods", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (7f9e01a0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.get("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (996e4788)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.get("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (5df7280c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.get("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (79163d54)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.get("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (abbc8758)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.get("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (ec2f2501)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -194,7 +1120,117 @@ describe("AuthenticationMethods", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (7f9e01a0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.delete("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (996e4788)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.delete("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (5df7280c)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.delete("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (79163d54)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.delete("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (abbc8758)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/users/id/authentication-methods/authentication_method_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.delete("id", "authentication_method_id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (bdd8d44e)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -241,5 +1277,135 @@ describe("AuthenticationMethods", () => {
             relying_party_identifier: "relying_party_identifier",
             created_at: "2024-01-15T09:30:00Z",
         });
+    });
+
+    test("update (26e458c5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, preferred_authentication_method: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id/authentication-methods/authentication_method_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.update("id", "authentication_method_id", {
+                name: undefined,
+                preferred_authentication_method: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (8eb1e975)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, preferred_authentication_method: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id/authentication-methods/authentication_method_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.update("id", "authentication_method_id", {
+                name: undefined,
+                preferred_authentication_method: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (ea1b8f41)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, preferred_authentication_method: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id/authentication-methods/authentication_method_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.update("id", "authentication_method_id", {
+                name: undefined,
+                preferred_authentication_method: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (edb089c1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, preferred_authentication_method: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id/authentication-methods/authentication_method_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.update("id", "authentication_method_id", {
+                name: undefined,
+                preferred_authentication_method: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (ad436019)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, preferred_authentication_method: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/users/id/authentication-methods/authentication_method_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.authenticationMethods.update("id", "authentication_method_id", {
+                name: undefined,
+                preferred_authentication_method: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });

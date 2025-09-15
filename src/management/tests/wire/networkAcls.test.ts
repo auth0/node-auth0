@@ -4,9 +4,123 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool.js";
 import { ManagementClient } from "../../Client.js";
+import * as Management from "../../api/index.js";
 
 describe("NetworkAcls", () => {
-    test("create", async () => {
+    test("list (f9c0d692)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            network_acls: [
+                {
+                    id: "id",
+                    description: "description",
+                    active: true,
+                    priority: 1.1,
+                    rule: { action: {}, scope: "management" },
+                    created_at: "created_at",
+                    updated_at: "updated_at",
+                },
+            ],
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+        };
+        server.mockEndpoint().get("/network-acls").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const expected = {
+            network_acls: [
+                {
+                    id: "id",
+                    description: "description",
+                    active: true,
+                    priority: 1.1,
+                    rule: {
+                        action: {},
+                        scope: "management",
+                    },
+                    created_at: "created_at",
+                    updated_at: "updated_at",
+                },
+            ],
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+        };
+        const page = await client.networkAcls.list();
+        expect(expected.network_acls).toEqual(page.data);
+
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.network_acls).toEqual(nextPage.data);
+    });
+
+    test("list (1e230aeb)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.list();
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (af841397)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.list();
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (c29c5807)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.list();
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("list (ee1e23bf)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.list();
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (ea903a5f)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -30,7 +144,337 @@ describe("NetworkAcls", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("get", async () => {
+    test("create (c2e283a4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.create({
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (ee0ff0cc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.create({
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (1c23e3d0)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.create({
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (e59936e8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.create({
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.ConflictError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (5d4241dc)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.create({
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("create (27b83a80)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.create({
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.InternalServerError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (f3f30785)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -109,7 +553,71 @@ describe("NetworkAcls", () => {
         });
     });
 
-    test("set", async () => {
+    test("get (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.get("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.get("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.get("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("get (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.networkAcls.get("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (1acfd4fb)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -208,7 +716,282 @@ describe("NetworkAcls", () => {
         });
     });
 
-    test("delete", async () => {
+    test("set (17f2ed2a)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.set("id", {
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (299f5a82)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.set("id", {
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (57a63466)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.set("id", {
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (313cc19e)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.set("id", {
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("set (1f543e72)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            description: "description",
+            active: true,
+            priority: 1.1,
+            rule: {
+                action: {
+                    block: undefined,
+                    allow: undefined,
+                    log: undefined,
+                    redirect: undefined,
+                    redirect_uri: undefined,
+                },
+                match: undefined,
+                not_match: undefined,
+                scope: "management",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.set("id", {
+                description: "description",
+                active: true,
+                priority: 1.1,
+                rule: {
+                    action: {
+                        block: undefined,
+                        allow: undefined,
+                        log: undefined,
+                        redirect: undefined,
+                        redirect_uri: undefined,
+                    },
+                    match: undefined,
+                    not_match: undefined,
+                    scope: "management",
+                },
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (c7f0a6bf)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
 
@@ -218,7 +1001,117 @@ describe("NetworkAcls", () => {
         expect(response).toEqual(undefined);
     });
 
-    test("update", async () => {
+    test("delete (fcf9dbd1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/network-acls/id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.delete("id");
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (49d52691)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/network-acls/id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.delete("id");
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (2428808d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/network-acls/id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.delete("id");
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (e55ce3fd)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/network-acls/id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.delete("id");
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("delete (27b44cb5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/network-acls/id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.delete("id");
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (bb550618)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -302,5 +1195,145 @@ describe("NetworkAcls", () => {
             created_at: "created_at",
             updated_at: "updated_at",
         });
+    });
+
+    test("update (1f4f3271)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { description: undefined, active: undefined, priority: undefined, rule: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.update("id", {
+                description: undefined,
+                active: undefined,
+                priority: undefined,
+                rule: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.BadRequestError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (4db2a2b1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { description: undefined, active: undefined, priority: undefined, rule: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.update("id", {
+                description: undefined,
+                active: undefined,
+                priority: undefined,
+                rule: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.UnauthorizedError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (fa32ecad)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { description: undefined, active: undefined, priority: undefined, rule: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.update("id", {
+                description: undefined,
+                active: undefined,
+                priority: undefined,
+                rule: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.ForbiddenError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (fa01531d)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { description: undefined, active: undefined, priority: undefined, rule: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.update("id", {
+                description: undefined,
+                active: undefined,
+                priority: undefined,
+                rule: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.NotFoundError({
+                key: "value",
+            }),
+        );
+    });
+
+    test("update (18eac855)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const rawRequestBody = { description: undefined, active: undefined, priority: undefined, rule: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/network-acls/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.networkAcls.update("id", {
+                description: undefined,
+                active: undefined,
+                priority: undefined,
+                rule: undefined,
+            });
+        }).rejects.toThrow(
+            new Management.TooManyRequestsError({
+                key: "value",
+            }),
+        );
     });
 });
