@@ -1,4 +1,4 @@
-(function () {
+(function() {
     addIcons();
     function addIcons() {
         if (document.readyState === "loading") return document.addEventListener("DOMContentLoaded", addIcons);
@@ -9,10 +9,10 @@
     }
 
     function updateUseElements() {
-        document.querySelectorAll("use").forEach((el) => {
+        document.querySelectorAll("use").forEach(el => {
             if (el.getAttribute("href").includes("#icon-")) {
                 el.setAttribute("href", el.getAttribute("href").replace(/.*#/, "#"));
             }
         });
     }
-})();
+})()
