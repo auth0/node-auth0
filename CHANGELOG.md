@@ -1,5 +1,24 @@
 # Change Log
 
+## [v5.0.0](https://github.com/auth0/node-auth0/tree/v5.0.0) (2025-09-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.29.0...v5.0.0)
+
+🎉 **General Availability of v5.0.0**
+
+This release promotes the v5 beta to a stable release.
+If you are upgrading from v4.x, please review the [Migration Guide](https://github.com/auth0/node-auth0/blob/master/v5_MIGRATION_GUIDE.md) before upgrading.
+
+### Highlights
+
+- Complete rewrite of the **Management API client** using Fern code generation
+- Significantly improved **TypeScript support** with stronger types and standardized error handling
+- Modular **sub-client architecture** for better API discoverability and consistency
+- Fully compatible **Authentication API client** — no breaking changes
+- Optional **v4.x-compatible legacy client** available at `auth0/legacy`
+- Updated **minimum Node.js version** to `^20.19.0 || ^22.12.0 || ^24.0.0`
+- Introduced **modern package exports** with support for CommonJS and ESM
+
 ## [v4.29.0](https://github.com/auth0/node-auth0/tree/v4.29.0) (2025-09-01)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.28.0...v4.29.0)

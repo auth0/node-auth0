@@ -21,6 +21,7 @@ tests/
 v5_MIGRATION_GUIDE.md
 CHANGELOG.md
 .version
+docs/
 
 # @todo auto-delete .mock folder
 
